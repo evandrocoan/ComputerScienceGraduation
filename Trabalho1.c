@@ -9,124 +9,130 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NTHREADS 4
-#define VECSIZE 16
+#define NTHREADS 100
+#define VECSIZE 100
 
-pthread_t threads[NTHREADS];//threads que faram o calculo
-pthread_mutex_t mutex;//mutex para exclusao mutua
+//threads que faram o calculo
+pthread_t threads[NTHREADS];
+
+//mutex para exclusao mutua
+pthread_mutex_t mutex;
+
+//vetores para o cálculo
 int a[VECSIZE], b[VECSIZE];
-int sum, tamanho;//variaveis para auxiliar a soma
+
+//variaveis para auxiliar a soma
+int sum, tamanho;
 
 /**
- * Faz o produto escalar da thread.
- *
- * \param índice do arranjo da thread. Serve para saber onde a thread começa a fazer o cálculo
+ * Imprime os vetores os atributos 'A' e 'B'  
  */
-void *produtoEscalar(void *arg) { //funcao para calcular o produto escalar
+void printArray()
+{
+   int cont =0;
+   printf("\nA = ");
 
-	// inicialização de variaveis
-	int i, inicio, fim;
-	long numThread;
-	int produtoEscalarParcial, *x, *y;
-	numThread = (long) arg;
-	//pthread_mutex_lock(&mutex);
+   //imprime o vetor A
+   while (cont < VECSIZE) 
+   {
+       printf("%d, ", a[cont]);
+       cont++;        
+   }
+   cont = 0;
+   printf("\nB = ");
+   while (cont < VECSIZE) 
 
-    //------------ lançar um exeção para NTHREADS & VECTOR SIZE == 0, EVANDRO
-
-	// numero de posições que cada thread calculará
-	int quant = VECSIZE / NTHREADS;
-
-	// separa entre um numero de vetores compativel com o número de threads
-	// ou seja, enter o caso de haver divisão inteira entre o número de thread e o número de posiçõe no vetor
-	if(quant%1==0){
-	// retira-se 1 de inicio para a proxima thread não pegar o final da anterior
-	inicio = numThread * quant - 1; //thread pega limite baseada no seu numero
-	fim = inicio + quant;
-	x = a;
-	y = b;
-
-	inicio++; // incrementa-se para não iniciar o arranjo em -1
-
-	} else { // calcula quando a não há uma divisão inteira
-
-		int quant_resto = VECSIZE % NTHREADS;
-
-		// separa a última thread das demais
-		if( NTHREADS == numThread )
-		{
-			numThread = numThread - 1; //
-
-			inicio = numThread * quant - 1; //thread pega limite baseada no seu numero
-
-		} else{
-			numThread = numThread - 1; //
-
-			inicio = numThread * quant - 1; //thread pega limite baseada no seu numero
-
-			fim = inicio + quant;
-			x = a;
-			y = b;
-
-			inicio++; // ajusta a posição correta
-
-		}
-
-	}
-
-	produtoEscalarParcial = 0;
-	for (i = inicio; i <= fim; i++) {//calcula o produto escalar parcial de cada thread
-		produtoEscalarParcial += (x[i] * y[i]);
-	}
-
-	// impede que as thread alterem o valor da soma ao mesmo tempo
-	pthread_mutex_lock(&mutex); //da lock para uma thread de cada vez fazer a soma
-	sum += produtoEscalarParcial;
-	printf("\nThread %ld calculou de %d a %d: produto escalar parcial = %d",
-			numThread, inicio, fim, produtoEscalarParcial);
-	pthread_mutex_unlock(&mutex);// libera o lock
-
-	// mata a thread quando ela termina o trabalho
-	pthread_exit((void*) 0);
-
+   //imprime o vetor B
+   {
+       printf("%d, ", b[cont]);
+       cont++;    
+   }
 }
 
 /**
- *
- *
+ * Realiza o produto escalar 
+ * 
+ * @param arg o numero da thread que está executando
+ */
+void *produtoEscalar(void *arg) 
+{
+   int i, inicio, fim;
+   long numThread;
+   int produtoEscalarParcial = 0, *x, *y;
+   numThread = (long) arg;
+   int quant = VECSIZE / NTHREADS;
+
+   //thread pega limite baseada no seu numero
+   inicio = numThread * quant - 1; 
+   fim = inicio + quant;
+   x = a;
+   y = b;
+
+   inicio++;
+
+   //calcula o produto escalar parcial de cada thread
+   for (i = inicio; i <= fim; i++) 
+   {
+     produtoEscalarParcial += (x[i] * y[i]);
+   }
+
+   //da lock para uma thread de cada vez fazer a soma
+   pthread_mutex_lock(&mutex); 
+   
+   //realiza a soma e imprime
+   sum += produtoEscalarParcial;
+   printf("\nThread %ld calculou de %d a %d: produto escalar parcial = %d",
+           numThread, inicio, fim, produtoEscalarParcial);
+   
+   //libera o lock
+   pthread_mutex_unlock(&mutex);
+   pthread_exit((void*) 0);
+}
+/**
+ * 
+ * @param argc não tem funcionalidade neste programa
+ * @param argv não tem funcionalidade neste programa
+ * @return se o programa foi executado corretamente chegando ao final de sua 
+ * execução
  */
 int main(int argc, char *argv[]) {
-	srand(time(NULL));
-	long i;
-	int cont = 0;
+   srand(time(NULL));
+   long i;
+   if(VECSIZE%NTHREADS!=0 || VECSIZE < NTHREADS)
+   {
+      printf("\nDivisão não inteira");
+      exit(0);
+   }
+   //gera o vetor random
+   for (i = 0; i < VECSIZE; i++) 
+   {
+      a[i] = rand() % 10;
+      b[i] = rand() % 10;
+   }
 
-	for (i = 0; i < VECSIZE; i++) {//gera o vetor random
-		a[i] = rand() % 10;
-		b[i] = rand() % 10;
-	}
+   //imprime os vetores
+   printArray();
 
-	pthread_mutex_init(&mutex, NULL);//inicializa o mutex
+   //inicializa o mutex
+   pthread_mutex_init(&mutex, NULL);
 
-	printf("A = ");
-	while (cont < VECSIZE) {//imprime o vetor A
-		printf("%d, ", a[cont]);
-		cont++;
-	}
-	cont = 0;
-	printf("\nB = ");
-	while (cont < VECSIZE) {//imprime o vetor B
-		printf("%d, ", b[cont]);
-		cont++;
-	}
-	for (i = 0; i < NTHREADS; i++) {//cria as threads
-		pthread_create(&threads[i], NULL, produtoEscalar, (void *) i);
-		pthread_join(threads[i], NULL);
-	}/*
-	for (i = 0; i < NTHREADS; i++) {//aguarda a execução das threads filhas
-		pthread_join(threads[i], NULL);
-	}*/
-	printf("\nProduto escalar =  %d \n", sum);//imprime o resultado final
-	if(sum!=3974)
-		printf("=====================================================================================");
-	pthread_mutex_destroy(&mutex);//destrói o mutex
-	pthread_exit(NULL);
+   //cria as threads
+   for (i = 0; i < NTHREADS; i++) 
+   {
+      pthread_create(&threads[i], NULL, produtoEscalar, (void *) i);
+   }
+
+   //aguarda a execução das threads
+   for (i = 0; i < NTHREADS; i++) {
+      pthread_join(threads[i], NULL);
+   }
+
+   //imprime o resultado final
+   printf("\nProduto escalar =  %d \n", sum);
+
+   //destrói o mutex
+   pthread_mutex_destroy(&mutex);
+
+   //fecha a thread
+   pthread_exit(NULL);
 }
