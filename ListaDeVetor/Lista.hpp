@@ -83,7 +83,7 @@ Lista<T>::Lista()
 	dados = new T[tamLista];
 	ultimo = -1;
 }
-/*
+
 template<typename T>
 Lista<T>::Lista(int t)
 {
@@ -91,15 +91,6 @@ Lista<T>::Lista(int t)
 	dados = new T[tamLista];
 	ultimo = -1;
 }
-*/
-template<typename T>
-explicit Lista<T>::Lista(int t)
-{
-	tamLista = t;
-	dados = new T[tamLista];
-	ultimo = -1;
-}
-
 
 template<typename T>
 void Lista<T>::destroiLista()
