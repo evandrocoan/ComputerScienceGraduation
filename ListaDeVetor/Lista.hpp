@@ -15,7 +15,7 @@ using namespace std;
 #define ERROLISTACHEIA -1
 #define ERROLISTAVAZIA -2
 #define ERROPOSICAO -3
-
+/*
 template<typename T>
 class Lista
 {
@@ -45,6 +45,36 @@ class Lista
 		bool menor(T dado1,T dado2);
 
 };
+*/
+template<typename T>
+class Lista
+{
+	private:
+			int ultimo;
+			int tamLista;
+			T *dados;
+
+	public:
+			Lista();
+			explicit Lista(int tam);
+			void adiciona(T dado);
+			void adicionaNoInicio(T dado);
+			void adicionaNaPosicao(T dado, int posicao);
+			void adicionaEmOrdem(T dado);
+			T retira();
+			T retiraDoInicio();
+			T retiraDaPosicao(int posicao);
+			T retiraEspecifico(T dado);
+			int posicao(T dado);
+			bool contem(T dado);
+			bool igual(T dado1, T dado2);
+			bool maior(T dado1, T dado2);
+			bool menor(T dado1, T dado2);
+			bool listaCheia();
+			bool listaVazia();
+			void destroiLista() ;
+};
+
 
 template<typename T>
 Lista<T>::Lista()
@@ -53,7 +83,7 @@ Lista<T>::Lista()
 	dados = new T[tamLista];
 	ultimo = -1;
 }
-
+/*
 template<typename T>
 Lista<T>::Lista(int t)
 {
@@ -61,6 +91,15 @@ Lista<T>::Lista(int t)
 	dados = new T[tamLista];
 	ultimo = -1;
 }
+*/
+template<typename T>
+explicit Lista<T>::Lista(int t)
+{
+	tamLista = t;
+	dados = new T[tamLista];
+	ultimo = -1;
+}
+
 
 template<typename T>
 void Lista<T>::destroiLista()
@@ -85,7 +124,7 @@ bool Lista<T>::listaVazia()
 }
 
 template<typename T>
-int Lista<T>::adiciona(T dado)
+void Lista<T>::adiciona(T dado)
 {
 	if (this->listaCheia())
 	{
@@ -95,7 +134,7 @@ int Lista<T>::adiciona(T dado)
 	{
 		ultimo++;
 		dados[ultimo] = dado;
-		return ultimo;
+		//return ultimo;
 	}
 
 }
@@ -114,7 +153,7 @@ T Lista<T>::retira()
 }
 
 template<typename T>
-int Lista<T>::adicionaNoInicio(T dado)
+void Lista<T>::adicionaNoInicio(T dado)
 {
 	int posicao;
 
@@ -130,7 +169,7 @@ int Lista<T>::adicionaNoInicio(T dado)
 			posicao--;
 		}
 		dados[0] = dado;
-		return 0;
+		//return 0;
 	}
 }
 
@@ -158,7 +197,7 @@ T Lista<T>::retiraDoInicio()
 }
 
 template<typename T>
-int Lista<T>::adicionaNaPosicao(T dado, int destino)
+void Lista<T>::adicionaNaPosicao(T dado, int destino)
 {
 	int posicao;
 
@@ -176,7 +215,7 @@ int Lista<T>::adicionaNaPosicao(T dado, int destino)
 			 posicao--;
 		}
 		 dados[destino] = dado;
-		 return destino;
+		 //return destino;
 	}
 }
 
@@ -216,7 +255,7 @@ bool Lista<T>::maior(T dado1, T dado2)
 }
 
 template<typename T>
-int Lista<T>::adicionaEmOrdem(T dado)
+void Lista<T>::adicionaEmOrdem(T dado)
 {
 	int posicao;
 
@@ -263,24 +302,39 @@ T Lista<T>::retiraEspecifico(T dado)
 
 }
 
-
-//metodos nossos
 template<typename T>
 bool Lista<T>::contem(T dado)
 {
+	if(this-> listaVazia())
+		throw ERROLISTAVAZIA;
+	else
+	{
+		for(int i=0; i<=ultimo; i++)
+		{
+			if(this->igual(dados[i],dado))
+				return true;
+		}
+	}
+	return false;
+
 
 }
 
 template<typename T>
 bool Lista<T>::igual(T dado1,T dado2)
 {
+	if(dado1 == dado2)
+		return true;
+	return false;
 
 }
 
 template<typename T>
 bool Lista<T>::menor(T dado1,T dado2)
 {
-
+	if(dado1 < dado2)
+		return true;
+	return false;
 }
 
 #endif /* LISTA_HPP_ */
