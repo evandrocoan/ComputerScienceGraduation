@@ -1,4 +1,4 @@
 Semestre-2014-2
 ===============
 
-Trabalhos feitos no segundo semestre de 2014
+Repositório para trabalhos da disciplina de Estrutura de Dados.
