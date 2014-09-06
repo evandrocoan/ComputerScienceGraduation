@@ -15,37 +15,7 @@ using namespace std;
 #define ERROLISTACHEIA -1
 #define ERROLISTAVAZIA -2
 #define ERROPOSICAO -3
-/*
-template<typename T>
-class Lista
-{
-	private:
-		int ultimo;
-		int tamLista;
-		T *dados;
 
-	public:
-		Lista();
-		Lista<T>(int t);
-		void destroiLista();
-		bool listaCheia();
-		bool listaVazia();
-		int adiciona(T dado);
-		T retira();
-		int adicionaNoInicio(T dado);
-		T retiraDoInicio();
-		int adicionaNaPosicao(T dado, int posicao);
-		T retiraDaPosicao(int posicao);
-		bool maior(T dado1,T dado2);
-		int  adicionaEmOrdem(T dado);
-		int posicao(T dado);
-		T  retiraEspecifico(T dado);
-		bool contem(T dado);
-		bool igual(T dado1,T dado2);
-		bool menor(T dado1,T dado2);
-
-};
-*/
 template<typename T>
 class Lista
 {
@@ -56,7 +26,7 @@ class Lista
 
 	public:
 			Lista();
-			explicit Lista(int tam);
+			Lista<T>(int tam);
 			void adiciona(T dado);
 			void adicionaNoInicio(T dado);
 			void adicionaNaPosicao(T dado, int posicao);
@@ -101,7 +71,7 @@ void Lista<T>::destroiLista()
 template<typename T>
 bool Lista<T>::listaCheia()
 {
-	if (ultimo == MAXLISTA - 1)
+	if (ultimo == tamLista - 1)
 		return true;
 	return false;
 }
@@ -138,7 +108,7 @@ T Lista<T>::retira()
 	else
 	{
 		ultimo--;
-		return (dados(ultimo + 1));
+		return (dados[ultimo + 1]);
 	}
 
 }
