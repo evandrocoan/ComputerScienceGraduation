@@ -11,41 +11,93 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * Define o tamanho máximo da lista
+ */
 #define MAXLISTA 100
+
+/**
+ * Código do erro retornado pelo método quando a exceção Lista Cheia é lançada
+ */
 #define ERROLISTACHEIA -1
+
+/**
+ * Código do erro retornado pelo método quando a exceção Lista Vazia é lançada
+ */
 #define ERROLISTAVAZIA -2
+
+/**
+ * Código do errr retornado pelo método quando a é lançada a exceção onde
+ * foi tentado acessar uma posição de memória fora dos limites do array
+ */
 #define ERROPOSICAO -3
 
+/**
+ * Classe que implementa um lista
+ */
 template<typename T>
 class Lista
 {
 	private:
-			int ultimo;
-			int tamLista;
-			T *dados;
+        /**
+         * Atributo que representa o último elemento da lista
+         */
+        int ultimo;
+        
+        /**
+         * Atributo que representa o tamanho máximo que a lista pode ter
+         */
+        int tamLista;
+        
+        /**
+         * Atributo no qual se armazenam os dados da lista em forma de um 
+         * vetor
+         */
+        T *dados;
 
 	public:
-			Lista();
-			Lista<T>(int tam);
-			void adiciona(T dado);
-			void adicionaNoInicio(T dado);
-			void adicionaNaPosicao(T dado, int posicao);
-			void adicionaEmOrdem(T dado);
-			T retira();
-			T retiraDoInicio();
-			T retiraDaPosicao(int posicao);
-			T retiraEspecifico(T dado);
-			int posicao(T dado);
-			bool contem(T dado);
-			bool igual(T dado1, T dado2);
-			bool maior(T dado1, T dado2);
-			bool menor(T dado1, T dado2);
-			bool listaCheia();
-			bool listaVazia();
-			void destroiLista() ;
+        /**
+         * Construtor padrão que cria uma lista vazia. O tamanho da lista 
+         * é o valor definido na diretiva de compilação MAXLISTA
+         */
+        Lista();
+        
+        /**
+         * Construtor que cria uma lista vazia do tamanho desejado.
+         * 
+         * @param tam um interio que representa o tamanho da lista a ser criada
+         */
+        
+        /**
+         * Método que retira todos os elementos da lista sem destruílos
+         */
+        void destroiLista() ;
+        
+        /**
+         * 
+         * @param tam
+         */
+        Lista<T>(int tam);
+        void adiciona(T dado);
+        void adicionaNoInicio(T dado);
+        void adicionaNaPosicao(T dado, int posicao);
+        void adicionaEmOrdem(T dado);
+        T retira();
+        T retiraDoInicio();
+        T retiraDaPosicao(int posicao);
+        T retiraEspecifico(T dado);
+        int posicao(T dado);
+        bool contem(T dado);
+        bool igual(T dado1, T dado2);
+        bool maior(T dado1, T dado2);
+        bool menor(T dado1, T dado2);
+        bool listaCheia();
+        bool listaVazia();
 };
 
-
+/**
+ * \copydoc Lista<T>::Lista()
+ */
 template<typename T>
 Lista<T>::Lista()
 {
