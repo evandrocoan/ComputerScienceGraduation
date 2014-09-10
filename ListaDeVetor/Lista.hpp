@@ -67,6 +67,7 @@ class Lista
          * 
          * @param tam um interio que representa o tamanho da lista a ser criada
          */
+        Lista<T>(int tam);
         
         /**
          * Método que retira todos os elementos da lista sem destruílos
@@ -74,25 +75,145 @@ class Lista
         void destroiLista() ;
         
         /**
+         * Informa se a lista chegou na capacidade máxima de elementos
          * 
-         * @param tam
+         * @return true se a lista está cheira, false caso contrário
          */
-        Lista<T>(int tam);
-        void adiciona(T dado);
-        void adicionaNoInicio(T dado);
-        void adicionaNaPosicao(T dado, int posicao);
-        void adicionaEmOrdem(T dado);
-        T retira();
-        T retiraDoInicio();
-        T retiraDaPosicao(int posicao);
-        T retiraEspecifico(T dado);
-        int posicao(T dado);
-        bool contem(T dado);
-        bool igual(T dado1, T dado2);
-        bool maior(T dado1, T dado2);
-        bool menor(T dado1, T dado2);
         bool listaCheia();
+        
+        /**
+         * Informa se a lista representada por este objetos está vazia
+         * 
+         * @return true se a lista está vazia, false caso contrário
+         */
         bool listaVazia();
+        
+        /**
+         * Adiciona um dado do tipo instanciado da lista.
+         * 
+         * @param dado do tipo instânciado a ser adicionado
+         * @throws erro -1 caso o dado não possa ser adicionado
+         */
+        void adiciona(T dado);
+        
+        /**
+         * Retira um dado da lista, assim abrindo uma nova posição
+         * 
+         * @return o dado retirado da lista, do mesmo tipo em que a lista foi
+         * instânciada
+         * @throws erro -2 caso a lista esteja vazia
+         */
+        T retira();
+        
+        /**
+         * Adiciona um dado do tipo instânciado da lista no inicio dela
+         * 
+         * @param dado a ser adicionado no inicio da lista
+         * @throw erro -1 caso a lista esteja cheia
+         */
+        void adicionaNoInicio(T dado);
+        
+        /**
+         * Retira do dado do tipo da pilha do seu início
+         * 
+         * @return o dado retirado da pilha
+         * @throw erro -2 caso a lista esteja vazia
+         */
+        T retiraDoInicio(); 
+        
+        /**
+         * Adiciona um dado do tipo desta lista em um posição especicifica.
+         * 
+         * @param dado a ser adicionado na lista
+         * @param posicao em que o dado será adicionado, de 0 à tamanho - 1
+         * @throw erro '-1' caso a lista esteja cheia
+         * @throw erro '-3' caso a posição seja inválida
+         */
+        void adicionaNaPosicao(T dado, int posicao);
+        
+        /**
+         * Retira um elemento especificado como parâmetro e retorna ele do tipo
+         * do objeto que esta lista representa.
+         * 
+         * @param posicao a ter o elemento retirado
+         * @return o elemento retirado
+         * @throw erro '-3' caso se tente retirar de uma posição inválida
+         * @throw erro '-2' caso a lista esteja vazia
+         */
+        T retiraDaPosicao(int posicao);
+        
+        /**
+         * Retorna um bool informando se o primeiro parâmetro é estritamente 
+         * maior que o segundo.
+         * 
+         * @param dado1 do tipo desta lista para ser comparado com o segundo
+         * @param dado2 do tipo desta lista para ser comprado com o primeiro
+         * @return true se o primeiro parâmetro é maior que o segundo, retorna
+         * false caso contrário
+         */
+        bool maior(T dado1, T dado2);
+        
+        /**
+         * Adicina um dado do tipo desta lista na ordem sobrecarregada pelo 
+         * tipo do objeto desta lista.
+         * 
+         * @param dado a ser adicionado em ordem na lista
+         * @throw erro '-1' caso a lista esteja cheia
+         */
+        void adicionaEmOrdem(T dado);
+        
+        /**
+         * Retorna um inteiro informando a posição do elemento do tipo que 
+         * essa lista representa.
+         * 
+         * @param dado a ter a posição encontrada
+         * @return a posição do elemento passado com parâmetro
+         * @throw erro '-3' caso a posição a inserir não seja válida
+         */
+        int posicao(T dado);
+        
+        /**
+         * Retira um objeto do tipo desta lista fornecido como parâmetro.
+         * 
+         * @param dado a ser retirado
+         * @return o dado fornecido como parâmetro
+         * @throw erro '-3' caso o dado não seja encontrado
+         * @throw erro '-2' caso a lista esteja vazia
+         */
+        T retiraEspecifico(T dado); 
+        
+        /**
+         * Verifica se o dado do tipo que esta lista representa está contido 
+         * nesta lista.
+         * 
+         * @param dado a ser verificado a existência na lista
+         * @return true caso a lista contenha o dado, false caso contrário
+         * @throw erro '-2' caso a lista esteja vazia
+         */
+        bool contem(T dado);
+        
+        /**
+         * Verifica se os dois dados do mesmo tipo dessa lista passados como 
+         * parâmetros são iguais.
+         * 
+         * @param dado1 a ser verificado a igualdade
+         * @param dado2 a ser verificado a igualdade
+         * @return true se os dados são iguais, false caso contrário
+         */
+        bool igual(T dado1, T dado2);
+
+        /**
+         * Verifica se o primeiro parâmetro do mesmo tipo de dado que esta 
+         * lista representa é estritamente menor que o segundo dado passado 
+         * como parâmetro.
+         * 
+         * @param dado1 é o primeiro dado a ser verificado
+         * @param dado2 e o segundo dado a ser verificado
+         * @return true se o primeiro parâmetro é estritamente menor que o 
+         * segundo parâmetro
+         */
+        bool menor(T dado1, T dado2);
+
 };
 
 /**
@@ -106,6 +227,9 @@ Lista<T>::Lista()
 	ultimo = -1;
 }
 
+/**
+ * \copydoc Lista<T>::Lista(int t)
+ */
 template<typename T>
 Lista<T>::Lista(int t)
 {
@@ -114,12 +238,18 @@ Lista<T>::Lista(int t)
 	ultimo = -1;
 }
 
+/**
+ * \copydoc Lista<T>::destroiLista()
+ */
 template<typename T>
 void Lista<T>::destroiLista()
 {
 	ultimo = -1;
 }
 
+/**
+ * \copydoc Lista<T>::listaCheia()
+ */
 template<typename T>
 bool Lista<T>::listaCheia()
 {
@@ -128,6 +258,9 @@ bool Lista<T>::listaCheia()
 	return false;
 }
 
+/**
+ * \copydoc Lista<T>::listaVazia()
+ */
 template<typename T>
 bool Lista<T>::listaVazia()
 {
@@ -136,6 +269,9 @@ bool Lista<T>::listaVazia()
 	return false;
 }
 
+/**
+ * \copydoc Lista<T>::adiciona(T dado)
+ */
 template<typename T>
 void Lista<T>::adiciona(T dado)
 {
@@ -152,6 +288,9 @@ void Lista<T>::adiciona(T dado)
 
 }
 
+/**
+ * \copydoc Lista<T>::retira()
+ */
 template<typename T>
 T Lista<T>::retira()
 {
@@ -165,6 +304,9 @@ T Lista<T>::retira()
 
 }
 
+/**
+ * \copydoc Lista<T>::adicionaNoInicio(T dado)
+ */
 template<typename T>
 void Lista<T>::adicionaNoInicio(T dado)
 {
@@ -186,6 +328,9 @@ void Lista<T>::adicionaNoInicio(T dado)
 	}
 }
 
+/**
+ * \copydoc Lista<T>::retiraDoInicio()
+ */
 template<typename T>
 T Lista<T>::retiraDoInicio()
 {
@@ -209,6 +354,9 @@ T Lista<T>::retiraDoInicio()
 	}
 }
 
+/**
+ * \copydoc Lista<T>::adicionaNaPosicao(T dado, int destino)
+ */
 template<typename T>
 void Lista<T>::adicionaNaPosicao(T dado, int destino)
 {
@@ -232,6 +380,9 @@ void Lista<T>::adicionaNaPosicao(T dado, int destino)
 	}
 }
 
+/**
+ * \copydoc Lista<T>::retiraDaPosicao(int fonte)
+ */
 template<typename T>
 T Lista<T>::retiraDaPosicao(int fonte)
 {
@@ -258,6 +409,9 @@ T Lista<T>::retiraDaPosicao(int fonte)
 	}
 }
 
+/**
+ * \copydoc Lista<T>::maior(T dado1, T dado2)
+ */
 template<typename T>
 bool Lista<T>::maior(T dado1, T dado2)
 {
@@ -267,6 +421,9 @@ bool Lista<T>::maior(T dado1, T dado2)
 
 }
 
+/**
+ * \copydoc Lista<T>::adicionaEmOrdem(T dado)
+ */
 template<typename T>
 void Lista<T>::adicionaEmOrdem(T dado)
 {
@@ -284,6 +441,9 @@ void Lista<T>::adicionaEmOrdem(T dado)
 
 }
 
+/**
+ * \copydoc Lista<T>::posicao(T dado)
+ */
 template<typename T>
 int Lista<T>::posicao(T dado)
 {
@@ -297,6 +457,9 @@ int Lista<T>::posicao(T dado)
 		return posicao;
 }
 
+/**
+ * \copydoc Lista<T>::retiraEspecifico(T dado)
+ */
 template<typename T>
 T Lista<T>::retiraEspecifico(T dado)
 {
@@ -315,6 +478,9 @@ T Lista<T>::retiraEspecifico(T dado)
 
 }
 
+/**
+ * \copydoc Lista<T>::contem(T dado)
+ */
 template<typename T>
 bool Lista<T>::contem(T dado)
 {
@@ -333,6 +499,9 @@ bool Lista<T>::contem(T dado)
 
 }
 
+/**
+ * \copydoc Lista<T>::igual(T dado1,T dado2)
+ */
 template<typename T>
 bool Lista<T>::igual(T dado1,T dado2)
 {
@@ -342,6 +511,9 @@ bool Lista<T>::igual(T dado1,T dado2)
 
 }
 
+/**
+ * \copydoc Lista<T>::menor(T dado1,T dado2)
+ */
 template<typename T>
 bool Lista<T>::menor(T dado1,T dado2)
 {
