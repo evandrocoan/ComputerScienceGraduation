@@ -5,7 +5,7 @@
  * ===============
  * Problema para o Projeto I: Simulação de Tráfego
  * 
- * Uma simulação gráfica, com alguns parâmetros a mais na simulação, como:
+ * Uma simulação via texto, com alguns parâmetros como:
  * 'o tempo de chegada de novos carros' de forma a existir a possibilidade 
  * de ocorrer "retrobloqueio" de um cruzamento em função de acúmulo de carros 
  * no trecho após o sinal.
@@ -124,7 +124,7 @@
 #include <iostream>
 using namespace std;
 
-int main() 
+int main()
 {
     cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
     return 0;
