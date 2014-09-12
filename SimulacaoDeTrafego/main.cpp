@@ -1,9 +1,5 @@
-/**
+/*
  * Projeto I: Simulação de Tráfego
- * 
- * Semestre-2014-2
- * ===============
- * Problema para o Projeto I: Simulação de Tráfego
  * 
  * Uma simulação via texto, com alguns parâmetros como:
  * 'o tempo de chegada de novos carros' de forma a existir a possibilidade 
@@ -117,14 +113,24 @@
  * intervalo, 8, ao resultado. Para que voce possa usar este numero 
  * ainda falta truncar, pegando so a parte inteira. Para isto basta 
  * fazer um typecasting: inteiro = (int) real;
- * 
- * @author Evandro  Coan, Charles Borges de Lima
  */
 
+/**
+ * Responsável pelas operações de entrada e saída de informações
+ */
 #include <iostream>
+
+/**
+ * Torna padrão os meios de entrada e saida
+ */
 using namespace std;
 
-int main()
+/**
+ * Classe principal que inicia a execução da simulação
+ * 
+ * @authors Evandro  Coan, Charles Borges de Lima
+ */
+void main()
 {
     cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
     return 0;

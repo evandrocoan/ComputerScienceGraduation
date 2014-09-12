@@ -1,11 +1,6 @@
 Semestre-2014-2
 ===============
-
 Projeto I: Simulação de Tráfego
-
-Semestre-2014-2
-===============
-Problema para o Projeto I: Simulação de Tráfego
 
 Uma simulação via texto, com alguns parâmetros como:
 'o tempo de chegada de novos carros' de forma a existir a possibilidade 
