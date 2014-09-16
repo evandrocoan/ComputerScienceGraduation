@@ -16,22 +16,18 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include "queue.h"
-
 /**
  * Define o número total de clientes
  */
 #define TOTAL_CLIENTES 10
-
 /**
  * Define o número total de funcionários
  */
 #define TOTAL_FUNCIONARIOS 2
-
 /**
  * Define o tamanho da fila
  */
 #define CADEIRAS 4
-
 /**
  * Semáforo para fazer a sincronização entre o cliente e o funcionário
  */
@@ -44,13 +40,11 @@ sem_t semCliente[ TOTAL_CLIENTES ];
  */
 sem_t cheio;
 sem_t vazio;
-
 /**
  * Semáforo binário para o acesso à região crítica.
  */
 sem_t lock_Cliente;
 sem_t lock_Funcionario;
-
 /**
  * Define a fila onde estarão os clientes
  */
