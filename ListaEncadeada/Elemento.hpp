@@ -8,37 +8,47 @@
 #ifndef ELEMENTO_HPP_
 #define ELEMENTO_HPP_
 
-template<typename T>
+template< typename T >
 class Elemento
 {
-	private:
-		T *info;				//ponteiro para o tipo de informação que vai ser armazenada
-		Elemento<T>* _next;		//ponteiro para o próximo elemento da lista
+    private:
+        /**
+         * Ponteiro para o tipo de informação que vai ser armazenada
+         */
+        T *info;
 
-	public:
-		Elemento(const T& info, Elemento<T>* next) : info(new T(info)), _next(next) {}
+        /**
+         * Ponteiro para o próximo elemento da lista
+         */
+        Elemento< T >* _next;
 
-	//-----------------------------------------------------------------
-	~Elemento()
-	{
-		delete info;
-	}
-	//-----------------------------------------------------------------
-	Elemento<T>* getProximo() const
-	{
-		return _next;
-	}
-	//-----------------------------------------------------------------
-	T getInfo() const
-	{
-		return *info;
-	}
-	//-----------------------------------------------------------------
-	void setProximo(Elemento<T>* next)
-	{
-		_next = next;
-	}
-	//-----------------------------------------------------------------
+    public:
+        Elemento( const T& info, Elemento< T >* next ) :
+                info( new T( info ) ), _next( next )
+        {
+        }
+        
+        //-----------------------------------------------------------------
+        ~Elemento()
+        {
+            delete info;
+        }
+        //-----------------------------------------------------------------
+        Elemento< T >* getProximo() const
+        {
+            return _next;
+        }
+        //-----------------------------------------------------------------
+        T getInfo() const
+        {
+            return *info;
+        }
+        //-----------------------------------------------------------------
+        void setProximo( Elemento< T >* next )
+        {
+            _next = next;
+        }
+        //-----------------------------------------------------------------
 };
 
 #endif /* ELEMENTO_HPP_ */

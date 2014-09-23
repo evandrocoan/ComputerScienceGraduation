@@ -130,8 +130,9 @@ using namespace std;
  * 
  * @authors Evandro  Coan, Charles Borges de Lima
  */
-void main()
+int main()
 {
     cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+
     return 0;
 }

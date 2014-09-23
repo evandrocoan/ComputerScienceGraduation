@@ -1,11 +1,8 @@
-/*
- /*
+/**
  * ListaEnc.hpp
- *
- *  Created on: 13/09/2014
- *      Author: Carcara
+ * 
+ * \authors Evandro  Coan, Charles Borges de Lima
  */
-//MEUUUUUUUUU ULTIMOOOOOOOOO))))
 #ifndef LISTAENC_HPP_
 #define LISTAENC_HPP_
 #include <stdio.h>
@@ -16,26 +13,59 @@
 #define ERRODEPOSICAO -3
 
 /**
- * Header de 
+ * Header para um lista encadeada
  */
 template< typename T >
 class ListaEnc
 {
     private:
-        Elemento< T >* head; //ponteiro para o primeiro elemento da lista
-        int size; //numero de elementos da lista
+        /**
+         * Ponteiro para o primeiro elemento da lista
+         */
+        Elemento< T >* head;
+
+        /**
+         * Número de elementos da lista
+         */
+        int size;
+
     public:
         
         /**
          * Construtor padrão que cria uma lista encadeada vazia
          */
         ListaEnc();
+
+        /**
+         * Destrutor padrão que destrói os ponteiros da lista e marca o 
+         * tamanho da lista para zero
+         */
         ~ListaEnc();
-        //****************************
+
+        /**
+         * Informa o tamanho atual da lista encadeada. 
+         * 
+         * @return um inteiro informando o tamnha da lista encadeada
+         */
+        int tamanho();
+
+/*
+        // ****************************
         ListaEnc< T >* criaLista();
-        //****************************
-        // inicio
+        // ****************************
+*/
+        /**
+         * Adiciona um dado recebido como parâmetro no início da lista
+         * 
+         * @param dado
+         */
         void adicionaNoInicio( const T& dado );
+        
+        /**
+         * 
+         * 
+         * @return
+         */
         T retiraDoInicio();
         int eliminaDoInicio();
         // posicao
@@ -57,6 +87,8 @@ class ListaEnc
         void destroiLista();
         bool posicaoInvalida( int p );
 };
+
+
 //-----------------------------------------------------------------
 template< typename T >
 ListaEnc< T >::ListaEnc()
@@ -69,20 +101,21 @@ ListaEnc< T >::ListaEnc()
 template< typename T >
 ListaEnc< T >::~ListaEnc()
 {
-    destroiLista(); //***error: expected primary-expression before ‘;’ token
+
 }
 //-----------------------------------------------------------------
 template< typename T >
 void ListaEnc< T >::adicionaNoInicio( const T& dado )
 {
-    Elemento< T > *novo;
+    Elemento< T > *novo = new Elemento< T >( dado, head );
     
-    novo = new Elemento< T >( dado, head );
-    if ( novo == NULL )
+    if( novo == NULL )
         throw ERROLISTACHEIA;
     else
     {
-        //novo->setProximo(head);  //novo->setProximo(dados); poderia ser feito diretamente em Elemento<T>(dado,head);
+        //poderia ser feito diretamente em Elemento<T>(dado,head);
+        //novo->setProximo(dados); 
+        //novo->setProximo(head);  
         head = novo;
         size++;
     }
@@ -93,9 +126,9 @@ void ListaEnc< T >::adicionaNoInicio( const T& dado )
 template< typename T >
 T ListaEnc< T >::retiraDoInicio()
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
-        return NULL;
+        return 0;
     }
     Elemento< T >* saiu = head;
     T volta = saiu->getInfo();
@@ -109,7 +142,7 @@ T ListaEnc< T >::retiraDoInicio()
 template< typename T >
 int ListaEnc< T >::eliminaDoInicio()
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         throw ERROLISTAVAZIA;
     }
@@ -118,6 +151,12 @@ int ListaEnc< T >::eliminaDoInicio()
     size--;
     delete saiu;
     return size;
+}
+
+template< typename T >
+int ListaEnc< T >::tamanho()
+{
+    return this->size;
 }
 
 /**
@@ -131,47 +170,59 @@ template< typename T >
 void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 {
     // verifica se está tentando adicionar em uma posição inexistente
-    if ( pos > size + 1 )
+    if( posicaoInvalida( pos ) )
     {
         throw ERRODEPOSICAO;
-    } else
-    {
-        // caso seja a primeia posição, chama o método que manipula a cabeça
-        if ( pos == 0 )
-        {
-            return adicionaNoInicio( dado );
-        }
-
-        Elemento< T >* novo = new Elemento< T >( dado, 0 );
-        if ( novo == NULL )
-        {
-            throw ERROLISTACHEIA;
-        }
-        
-        
-        Elemento< T >* anterior = head;
-        for ( int i = 0; i < pos - 2; i++ )
-        {
-            anterior = anterior->getProximo();
-        }
-        
-        novo->setProximo( anterior->getProximo() );
-        anterior->setProximo( novo );
-        size++;
     }
+    
+    // caso seja a primeia posição, chama o método que manipula a cabeça
+    if( pos == 0 )
+    {
+        return adicionaNoInicio( dado );
+    }
+    
+    // caso seja a última posição, chama o método que manipula a calda
+//    if( pos == size )
+//    {
+//        return adiciona
+//    }
+    
+    // aloca um elemento no inicio da lista
+    Elemento< T >* novo = new Elemento< T >( dado, 0 );
+    
+    // verifica se ela está cheia
+    if( novo == 0 )
+    {
+        throw ERROLISTACHEIA;
+    }
+    
+    // salva o ponterio da cabeça da lista
+    Elemento< T >* anterior = head;
+    
+    //
+    for( int i = 0; i < pos - 1; i++ )
+    {
+        anterior = anterior->getProximo();
+    }
+    
+    // 
+    novo->setProximo( anterior->getProximo() );
+    
+    anterior->setProximo( novo );
+    size++;
 }
 //-----------------------------------------------------------------
 template< typename T >
 int ListaEnc< T >::posicao( const T& dado ) const
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         throw -4; //ExcecaoListaVazia();
     }
     Elemento< T >* atual = head;
-    for ( int i = 0; i < size; i++ )
+    for( int i = 0; i < size; i++ )
     {
-        if ( dado == atual->getInfo() )
+        if( dado == atual->getInfo() )
         {
             return i;
         }
@@ -183,13 +234,13 @@ int ListaEnc< T >::posicao( const T& dado ) const
 template< typename T >
 T* ListaEnc< T >::posicaoMem( const T& dado ) const
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         throw -1; //ExcecaoListaVazia();
     }
     int posicao = posicao( dado );
     Elemento< T >* atual = head;
-    for ( int i = 0; i < posicao; i++ )
+    for( int i = 0; i < posicao; i++ )
     {
         atual = atual->getProximo();
     }
@@ -199,14 +250,14 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
 template< typename T >
 bool ListaEnc< T >::contem( const T& dado )
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         throw -2; //ExcecaoListaVazia();
     }
     Elemento< T >* atual = head;
-    for ( int i = 0; i < size; i++ )
+    for( int i = 0; i < size; i++ )
     {
-        if ( igual( dado, atual->getInfo() ) )
+        if( igual( dado, atual->getInfo() ) )
         {
             return true;
         }
@@ -215,28 +266,40 @@ bool ListaEnc< T >::contem( const T& dado )
     return false;
 }
 //-----------------------------------------------------------------
+//Elimina o elemento da posição de uma lista.
+//Retorna a informação do elemento eliminado ou NULO.
 template< typename T >
 T ListaEnc< T >::retiraDaPosicao( int posicao )
 {
-    if ( posicaoInvalida( posicao ) )
+    //Variável auxiliar para elemento.
+    //Elemento< T >* anterior, eliminar;
+    
+    if( posicaoInvalida( posicao ) )
     {
         throw ERRODEPOSICAO;
-    }
-    if ( posicao == 0 )
+    } else
     {
-        return retiraDoInicio();
+        if( posicao == 0 )
+        {
+            return retiraDoInicio();
+        } else
+        {
+            Elemento< T >* anterior = head;
+            
+            for( int i = 0; i < posicao - 1; i++ )
+            {
+                anterior = anterior->getProximo();
+            }
+            Elemento< T >* eliminar = anterior->getProximo();
+            
+            //Variável auxiliar para o dado retornado
+            T volta = eliminar->getInfo();
+            anterior->setProximo( eliminar->getProximo() );
+            size--;
+            delete eliminar;
+            return volta;
+        }
     }
-    Elemento< T >* anterior = head;
-    for ( int i = 0; i < posicao - 2; i++ )
-    {
-        anterior = anterior->getProximo();
-    }
-    Elemento< T >* eliminar = anterior->getProximo();
-    T volta = eliminar->getInfo();
-    anterior->setProximo( eliminar->getProximo() );
-    size--;
-    delete eliminar;
-    return volta;
 }
 //-----------------------------------------------------------------
 template< typename T >
@@ -248,13 +311,13 @@ void ListaEnc< T >::adiciona( const T& dado )
 template< typename T >
 T ListaEnc< T >::retira()
 {
-    return retiraDaPosicao( size );
+    return retiraDaPosicao( size - 1 );
 }
 //-----------------------------------------------------------------
 template< typename T >
 T ListaEnc< T >::retiraEspecifico( const T& dado )
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         throw -3; //ExcecaoListaVazia();
     }
@@ -264,7 +327,7 @@ T ListaEnc< T >::retiraEspecifico( const T& dado )
 template< typename T >
 void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 {
-    if ( listaVazia() )
+    if( listaVazia() )
     {
         return adicionaNoInicio( dado );
     }
@@ -275,7 +338,7 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
         atual = atual->getProximo();
         posicao++;
     }
-    if ( maior( dado, atual->getInfo() ) )
+    if( maior( dado, atual->getInfo() ) )
     {
         return adicionaNaPosicao( dado, posicao + 1 );
     }
@@ -286,7 +349,7 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 template< typename T >
 bool ListaEnc< T >::listaVazia() const
 {
-    if ( size == 0 )
+    if( size == 0 )
         return true;
     return false;
 }
@@ -308,38 +371,52 @@ bool ListaEnc< T >::menor( T dado1, T dado2 )
 {
     return dado1 < dado2;
 }
-//-----------------------------------------------------------------
-template< typename T >
-void ListaEnc< T >::destroiLista()
-{
-    Elemento< T >* atual;
-    while( head )
-    {
-        atual = head;
-        head = head->getProximo();
-        delete atual;
-    }
-    size = 0;
-}
+
 //------------------------------------------------------------------
 template< typename T >
 bool ListaEnc< T >::posicaoInvalida( int p )
 {
     return ( p >= size + 1 || p < 0 );
 }
-//******************************************************************
+
+/* // ******************************************************************
 template< typename T >
 ListaEnc< T >* ListaEnc< T >::criaLista()
 {
     ListaEnc* aLista;
     aLista = new ListaEnc();
-    if ( aLista != NULL )
+    if( aLista != NULL )
     {
         aLista->size = 0;
         aLista->head = NULL;
     }
     return aLista;
-}
+}*/
+
 //******************************************************************
+/**
+ * 
+ */
+template< typename T >
+void ListaEnc< T >::destroiLista()
+{
+    // pula se a lista já está vazia
+    if( head != 0 )
+    {
+        while( head )
+        {
+            delete head;
+            
+            // evitar acessar um null pointer
+            if(head != 0)
+            {
+               head = head->getProximo();
+            }
+        }
+
+        size = 0;
+    }
+}
+
 //-----------------------------------------------------------------
 #endif /* LISTAENC_HPP_ */
