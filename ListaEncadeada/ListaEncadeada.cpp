@@ -7,6 +7,8 @@
 //============================================================================
 
 #include <iostream>
+#include "ListaEnc.hpp"
+
 using namespace std;
 
 int main() {
