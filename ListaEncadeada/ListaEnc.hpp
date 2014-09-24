@@ -3,11 +3,23 @@
  * 
  * \authors Evandro  Coan, Charles Borges de Lima
  */
+
+/**
+ * Evita incluir esta classe mais de uma vez no processo de compilação
+ */
 #ifndef LISTAENC_HPP_
 #define LISTAENC_HPP_
+
+/**
+ * Bibliotecas utilizadas
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "Elemento.hpp"
+
+/**
+ * Códigos de erros definidos
+ */
 #define ERROLISTACHEIA -1
 #define ERROLISTAVAZIA -2
 #define ERRODEPOSICAO -3
