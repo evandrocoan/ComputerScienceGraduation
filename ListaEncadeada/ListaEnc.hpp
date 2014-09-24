@@ -62,34 +62,152 @@ class ListaEnc
         void adicionaNoInicio( const T& dado );
         
         /**
+         * Retira o elemento da cabeça da lista encadeada
          * 
-         * 
-         * @return
+         * @return o elemento na cabeça da lista encadeada
          */
         T retiraDoInicio();
+        
+        /**
+         * Deleta o elemento no ínicio na cabeça da lista encadeada
+         * 
+         * @return o tamanho da lista encadeada após a remoção da cabeça
+         */
         int eliminaDoInicio();
-        // posicao
+        
+        /**
+         * Adiciona um elemento em uma posição específica.
+         * 
+         * @param dado a ser adicionado
+         * @param pos a posição para adicionar o dado
+         * @throw erro de posição se a posição é inexistente
+         */
         void adicionaNaPosicao( const T& dado, int pos );
+        
+        /**
+         * Retorna a posição de um elemento fornecido como parâmetro. 
+         * A posição nesta lista encadeada começa em 0, para o primeiro 
+         * elemento.
+         * 
+         * @param dado a ter a posição encontrada
+         * @return a posição do dado encontrado com um inteiro
+         */
         int posicao( const T& dado ) const;
+        
+        /**
+         * Descobre qual o ponteiro para um determinado elemento na lista.
+         * 
+         * @param dado a ser procurado um ponteiro
+         * @return o ponteiro para o dado passado como parâmetro
+         */
         T* posicaoMem( const T& dado ) const;
+        
+        /**
+         * Informa se a lista encadeada contém o dado passado como parâmetro.
+         * 
+         * @param dado a ser encontrado
+         * @return true se a lista encadeada contém o dada passado como 
+         * parâmetro, false caso contrário.
+         */
         bool contem( const T& dado );
+        
+        /**
+         * Elimina um elemento de uma certa posição nesta lista encadeada.
+         * 
+         * @param a posição do elemento a ser retirado
+         * @return o elemento retirado da posição
+         */
         T retiraDaPosicao( int pos );
-        //fim
+
+        /**
+         * Adiciona um elemento no final da lista encadeada
+         * 
+         * @param dado a ser adicionado
+         */
         void adiciona( const T& dado );
+        
+        /**
+         * Retira o elemento pertencente ao final da lista encadeada
+         * 
+         * @return o dado retirado da lista encadeada
+         */
         T retira();
-        // especifico
+
+        /**
+         * Retira a primeiro ocorrência do dado fornecidado como parâmetro
+         * 
+         * @param dado a ter a primeira ocorrência retirada
+         * @return a primeira ocorrência do dado retirado
+         */
         T retiraEspecifico( const T& dado );
+        
+        /**
+         * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
+         * de objeto que essa lista encadeada reprensenta
+         * 
+         * @param dado a ser adicionada em ordem
+         */
         void adicionaEmOrdem( const T& data );
+        
+        /**
+         * Informa se a lista encadeada está vazia
+         * 
+         * @return true se a lista encadeada está vazia, false caso contrário
+         */
         bool listaVazia() const;
+        
+        /**
+         * Informa se dois dados são iguais. Utiliza o operador de igualdade 
+         * do tipo do objeto que essa lista encadeada representa para 
+         * determinar se eles são iguais.
+         * 
+         * @param dado1 a ser comparado
+         * @param dado2 a ser comparado
+         * @return true se os parametrôs são iguais, false caso contrário
+         */
         bool igual( T dado1, T dado2 );
+        
+        /**
+         * Informa se o primeiro parâmetro é maior que o segundo. Utiliza o 
+         * operador de igualdade do tipo do objeto que essa lista encadeada 
+         * representa para determinar se eles são iguais.
+         * 
+         * @param dado1 a ser comparado
+         * @param dado2 a ser comparado
+         * @return true se o primeiro parâmetro é maior que o segundo, 
+         * false caso contrário
+         */
         bool maior( T dado1, T dado2 );
+        
+        /**
+         * Informa se o primeiro parâmetro é menor que o segundo. Utiliza o 
+         * operador de igualdade do tipo do objeto que essa lista encadeada 
+         * representa para determinar se eles são iguais.
+         * 
+         * @param dado1 a ser comparado
+         * @param dado2 a ser comparado
+         * @return true se o primeiro parâmetro é menor que o segundo, 
+         * false caso contrário
+         */
         bool menor( T dado1, T dado2 );
+        
+        /**
+         * Destrói todos os ponteiros da lista e ajusta seu tamanho para 0
+         */
         void destroiLista();
+        
+        /**
+         * Informa se uma determinada posição válida.
+         * 
+         * @param a posição a ser verificada
+         * @return true se a posição é válida, false caso contrário
+         */
         bool posicaoInvalida( int p );
 };
 
-
-//-----------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::ListaEnc()
+ */
 template< typename T >
 ListaEnc< T >::ListaEnc()
 {
@@ -97,13 +215,18 @@ ListaEnc< T >::ListaEnc()
     size = 0;
 }
 
-//-----------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::~ListaEnc()
+ */
 template< typename T >
 ListaEnc< T >::~ListaEnc()
 {
 
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::adicionaNoInicio( const T& dado )
+ */
 template< typename T >
 void ListaEnc< T >::adicionaNoInicio( const T& dado )
 {
@@ -120,9 +243,10 @@ void ListaEnc< T >::adicionaNoInicio( const T& dado )
         size++;
     }
 }
-//-------------------------------------------------------------------
 
-//-----------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::retiraDoInicio()
+ */
 template< typename T >
 T ListaEnc< T >::retiraDoInicio()
 {
@@ -138,7 +262,9 @@ T ListaEnc< T >::retiraDoInicio()
     return volta;
 }
 
-//-----------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::eliminaDoInicio()
+ */
 template< typename T >
 int ListaEnc< T >::eliminaDoInicio()
 {
@@ -153,6 +279,9 @@ int ListaEnc< T >::eliminaDoInicio()
     return size;
 }
 
+/**
+ * \copydoc ListaEnc< T >::tamanho()
+ */
 template< typename T >
 int ListaEnc< T >::tamanho()
 {
@@ -160,11 +289,7 @@ int ListaEnc< T >::tamanho()
 }
 
 /**
- * Adiciona um elemento em uma posição específica.
- * 
- * @param dado a ser adicionado
- * @param pos a posição para adicionar o dado
- * @throw erro de posição se a posição é inexistente
+ * \copydoc ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
  */
 template< typename T >
 void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
@@ -211,7 +336,10 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
     anterior->setProximo( novo );
     size++;
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::posicao( const T& dado ) const
+ */
 template< typename T >
 int ListaEnc< T >::posicao( const T& dado ) const
 {
@@ -230,7 +358,10 @@ int ListaEnc< T >::posicao( const T& dado ) const
     }
     throw -5; //ExcecaoDadoNaoEncontrado();
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::posicaoMem( const T& dado ) const
+ */
 template< typename T >
 T* ListaEnc< T >::posicaoMem( const T& dado ) const
 {
@@ -246,7 +377,10 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
     }
     return atual->getInfo();
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::contem( const T& dado )
+ */
 template< typename T >
 bool ListaEnc< T >::contem( const T& dado )
 {
@@ -265,9 +399,10 @@ bool ListaEnc< T >::contem( const T& dado )
     }
     return false;
 }
-//-----------------------------------------------------------------
-//Elimina o elemento da posição de uma lista.
-//Retorna a informação do elemento eliminado ou NULO.
+
+/**
+ * \copydoc ListaEnc< T >::retiraDaPosicao( int posicao )
+ */
 template< typename T >
 T ListaEnc< T >::retiraDaPosicao( int posicao )
 {
@@ -301,19 +436,28 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
         }
     }
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::adiciona( const T& dado )
+ */
 template< typename T >
 void ListaEnc< T >::adiciona( const T& dado )
 {
     return adicionaNaPosicao( dado, size );
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::retira()
+ */
 template< typename T >
 T ListaEnc< T >::retira()
 {
     return retiraDaPosicao( size - 1 );
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::retiraEspecifico( const T& dado )
+ */
 template< typename T >
 T ListaEnc< T >::retiraEspecifico( const T& dado )
 {
@@ -323,7 +467,10 @@ T ListaEnc< T >::retiraEspecifico( const T& dado )
     }
     return retiraDaPosicao( posicao( dado ) + 1 );
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::adicionaEmOrdem( const T& dado )
+ */
 template< typename T >
 void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 {
@@ -345,7 +492,9 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
     adicionaNaPosicao( dado, posicao );
 }
 
-//-----------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::listaVazia() const
+ */
 template< typename T >
 bool ListaEnc< T >::listaVazia() const
 {
@@ -353,26 +502,37 @@ bool ListaEnc< T >::listaVazia() const
         return true;
     return false;
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::igual( T dado1, T dado2 )
+ */
 template< typename T >
 bool ListaEnc< T >::igual( T dado1, T dado2 )
 {
     return dado1 == dado2;
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::maior( T dado1, T dado2 )
+ */
 template< typename T >
 bool ListaEnc< T >::maior( T dado1, T dado2 )
 {
     return dado2 < dado1;
 }
-//-----------------------------------------------------------------
+
+/**
+ * \copydoc ListaEnc< T >::menor( T dado1, T dado2 )
+ */
 template< typename T >
 bool ListaEnc< T >::menor( T dado1, T dado2 )
 {
     return dado1 < dado2;
 }
 
-//------------------------------------------------------------------
+/**
+ * \copydoc ListaEnc< T >::posicaoInvalida( int p )
+ */
 template< typename T >
 bool ListaEnc< T >::posicaoInvalida( int p )
 {
@@ -393,9 +553,8 @@ ListaEnc< T >* ListaEnc< T >::criaLista()
     return aLista;
 }*/
 
-//******************************************************************
 /**
- * 
+ * \copydoc ListaEnc< T >::destroiLista()
  */
 template< typename T >
 void ListaEnc< T >::destroiLista()
@@ -403,20 +562,22 @@ void ListaEnc< T >::destroiLista()
     // pula se a lista já está vazia
     if( head != 0 )
     {
+        Elemento< T > * atual = head;
+        
         while( head )
         {
             delete head;
             
             // evitar acessar um null pointer
-            if(head != 0)
+            if(atual != 0)
             {
-               head = head->getProximo();
+               atual = atual->getProximo();
             }
         }
-
+        
+        delete atual;
         size = 0;
     }
 }
 
-//-----------------------------------------------------------------
 #endif /* LISTAENC_HPP_ */
