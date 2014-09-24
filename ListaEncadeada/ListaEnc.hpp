@@ -33,7 +33,7 @@ class ListaEnc
     private:
         /**
          * Ponteiro para o primeiro elemento da lista
-         */
+         */ 
         Elemento< T >* head;
 
         /**
