@@ -9,7 +9,7 @@
 #define ELEMENTO_HPP_
 
 template< typename T >
-class ElementoDuplo
+class Elemento
 {
     private:
         /**
@@ -20,21 +20,21 @@ class ElementoDuplo
         /**
          * Ponteiro para o próximo elemento da lista
          */
-        ElementoDuplo< T >* _next;
+        Elemento< T >* _next;
 
     public:
-        Elemento( const T& info, ElementoDuplo< T >* next ) :
+        Elemento( const T& info, Elemento< T >* next ) :
                 info( new T( info ) ), _next( next )
         {
         }
         
         //-----------------------------------------------------------------
-        ~ElementoDuplo()
+        ~Elemento()
         {
             delete info;
         }
         //-----------------------------------------------------------------
-        ElementoDuplo< T >* getProximo() const
+        Elemento< T >* getProximo() const
         {
             return _next;
         }
@@ -44,7 +44,7 @@ class ElementoDuplo
             return *info;
         }
         //-----------------------------------------------------------------
-        void setProximo( ElementoDuplo< T >* next )
+        void setProximo( Elemento< T >* next )
         {
             _next = next;
         }

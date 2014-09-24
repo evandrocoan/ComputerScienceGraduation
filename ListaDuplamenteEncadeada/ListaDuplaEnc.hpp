@@ -34,7 +34,7 @@ class ListaEnc
         /**
          * Ponteiro para o primeiro elemento da lista
          */ 
-        ElementoDuplo< T >* head;
+        Elemento< T >* head;
 
         /**
          * Número de elementos da lista
@@ -242,7 +242,7 @@ ListaEnc< T >::~ListaEnc()
 template< typename T >
 void ListaEnc< T >::adicionaNoInicio( const T& dado )
 {
-    ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, head );
+    Elemento< T > *novo = new Elemento< T >( dado, head );
     
     if( novo == NULL )
         throw ERROLISTADUPLACHEIA;
@@ -266,7 +266,7 @@ T ListaEnc< T >::retiraDoInicio()
     {
         return 0;
     }
-    ElementoDuplo< T >* saiu = head;
+    Elemento< T >* saiu = head;
     T volta = saiu->getInfo();
     head = saiu->getProximo();
     size--;
@@ -284,7 +284,7 @@ int ListaEnc< T >::eliminaDoInicio()
     {
         throw ERROLISTADUPLAVAZIA;
     }
-    ElementoDuplo< T >* saiu = head;
+    Elemento< T >* saiu = head;
     head = saiu->getProximo();
     size--;
     delete saiu;
@@ -325,7 +325,7 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 //    }
     
     // aloca um elemento no inicio da lista
-    ElementoDuplo< T >* novo = new ElementoDuplo< T >( dado, 0 );
+    Elemento< T >* novo = new Elemento< T >( dado, 0 );
     
     // verifica se ela está cheia
     if( novo == 0 )
@@ -334,7 +334,7 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
     }
     
     // salva o ponterio da cabeça da lista
-    ElementoDuplo< T >* anterior = head;
+    Elemento< T >* anterior = head;
     
     //
     for( int i = 0; i < pos - 1; i++ )
@@ -359,7 +359,7 @@ int ListaEnc< T >::posicao( const T& dado ) const
     {
         throw -4; //ExcecaoListaVazia();
     }
-    ElementoDuplo< T >* atual = head;
+    Elemento< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
         if( dado == atual->getInfo() )
@@ -382,7 +382,7 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
         throw -1; //ExcecaoListaVazia();
     }
     int posicao = posicao( dado );
-    ElementoDuplo< T >* atual = head;
+    Elemento< T >* atual = head;
     for( int i = 0; i < posicao; i++ )
     {
         atual = atual->getProximo();
@@ -400,7 +400,7 @@ bool ListaEnc< T >::contem( const T& dado )
     {
         throw -2; //ExcecaoListaVazia();
     }
-    ElementoDuplo< T >* atual = head;
+    Elemento< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
         if( igual( dado, atual->getInfo() ) )
@@ -431,13 +431,13 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
             return retiraDoInicio();
         } else
         {
-            ElementoDuplo< T >* anterior = head;
+            Elemento< T >* anterior = head;
             
             for( int i = 0; i < posicao - 1; i++ )
             {
                 anterior = anterior->getProximo();
             }
-            ElementoDuplo< T >* eliminar = anterior->getProximo();
+            Elemento< T >* eliminar = anterior->getProximo();
             
             //Variável auxiliar para o dado retornado
             T volta = eliminar->getInfo();
@@ -490,7 +490,7 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
     {
         return adicionaNoInicio( dado );
     }
-    ElementoDuplo< T >* atual = head;
+    Elemento< T >* atual = head;
     int posicao = 1;
     while( atual->getProximo() != 0 && maior( dado, atual->getInfo() ) )
     {
@@ -574,7 +574,7 @@ void ListaEnc< T >::destroiLista()
     // pula se a lista já está vazia
     if( head != 0 )
     {
-        ElementoDuplo< T > * atual = head;
+        Elemento< T > * atual = head;
         
         while( head )
         {
