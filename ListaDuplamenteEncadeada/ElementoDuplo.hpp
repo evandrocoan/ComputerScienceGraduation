@@ -9,7 +9,7 @@
 #define ELEMENTO_HPP_
 
 template< typename T >
-class Elemento
+class ElementoDuplo
 {
     private:
         /**
@@ -20,16 +20,16 @@ class Elemento
         /**
          * Ponteiro para o próximo elemento da lista
          */
-        Elemento< T >* _next;
+        ElementoDuplo< T >* _next;
 
         /**
          * Ponteiro para o elemento elemento anterior da lista
          */
-        Elemento< T >* _previous;
+        ElementoDuplo< T >* _previous;
 
     public:
-        Elemento( const T& info, Elemento< T >* next, 
-                  Elemento< T >* previous ) :
+        ElementoDuplo( const T& info, ElementoDuplo< T >* next, 
+                  ElementoDuplo< T >* previous ) :
                 info( new T( info ) ), _next( next ), _previous( previous )
         {
         }
@@ -37,7 +37,7 @@ class Elemento
         /**
          * Destrói o ponteiro para o elemento que esse nó ponta
          */
-        ~Elemento()
+        ~ElementoDuplo()
         {
             delete info;
         }
@@ -47,7 +47,7 @@ class Elemento
          * 
          * @return um ponteiro para o próximo elemento, NULL caso não exista.
          */
-        Elemento< T >* getProximo() const
+        ElementoDuplo< T >* getProximo() const
         {
             return _next;
         }
@@ -58,7 +58,7 @@ class Elemento
          * @return um ponteiro para o elemento anterior deste nó, NULL caso 
          * não exista.
          */
-        Elemento< T >* getAnterior() const
+        ElementoDuplo< T >* getAnterior() const
         {
             return _previous;
         }
@@ -78,7 +78,7 @@ class Elemento
          * 
          * @param um ponteiro para o próximo nó
          */
-        void setProximo( Elemento< T >* next )
+        void setProximo( ElementoDuplo< T >* next )
         {
             _next = next;
         }
@@ -88,7 +88,7 @@ class Elemento
          * 
          * @param um ponteiro para nó anterior
          */
-        void setAnterior( Elemento< T >* previous )
+        void setAnterior( ElementoDuplo< T >* previous )
         {
             _previous = previous;
         }
