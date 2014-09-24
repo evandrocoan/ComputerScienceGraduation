@@ -43,7 +43,7 @@ class ListaEnc
 
     public:
         
-        /**
+        /** 
          * Construtor padrão que cria uma lista encadeada vazia
          */
         ListaEnc();
