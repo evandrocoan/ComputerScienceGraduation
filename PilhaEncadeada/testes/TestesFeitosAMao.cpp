@@ -8,7 +8,7 @@
 /**
  * Classe que representa a lista encadeada
  */
-#include "../ListaDuplaEnc.hpp"
+#include "../PilhaEnc.hpp"
 
 /**
  * Cuida das operações de entrada e saíde de texto

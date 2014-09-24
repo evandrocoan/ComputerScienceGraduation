@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "ListaDuplaEnc.hpp"
+#include "PilhaEnc.hpp"
 #include "testes/testesFeitosAMao.cpp"
 
 using namespace std;

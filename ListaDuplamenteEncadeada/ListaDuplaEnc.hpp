@@ -20,12 +20,12 @@
 /**
  * Códigos de erros definidos
  */
-#define ERROLISTACHEIA -1
-#define ERROLISTAVAZIA -2
+#define ERROLISTADUPLACHEIA -1
+#define ERROLISTADUPLAVAZIA -2
 #define ERRODEPOSICAO -3
 
 /**
- * Header para um lista encadeada
+ * Header para um lista duplamente encadeada
  */
 template< typename T >
 class ListaEnc
@@ -34,7 +34,7 @@ class ListaEnc
         /**
          * Ponteiro para o primeiro elemento da lista
          */ 
-        Elemento< T >* head;
+        ElementoDuplo< T >* head;
 
         /**
          * Número de elementos da lista
@@ -44,7 +44,7 @@ class ListaEnc
     public:
         
         /**
-         * Construtor padrão que cria uma lista encadeada vazia
+         * Construtor padrão que cria uma lista duplamente encadeada vazia
          */
         ListaEnc();
 
@@ -55,9 +55,9 @@ class ListaEnc
         ~ListaEnc();
 
         /**
-         * Informa o tamanho atual da lista encadeada. 
+         * Informa o tamanho atual da lista duplamente encadeada. 
          * 
-         * @return um inteiro informando o tamnha da lista encadeada
+         * @return um inteiro informando o tamanho da lista encadeada
          */
         int tamanho();
 
@@ -242,10 +242,10 @@ ListaEnc< T >::~ListaEnc()
 template< typename T >
 void ListaEnc< T >::adicionaNoInicio( const T& dado )
 {
-    Elemento< T > *novo = new Elemento< T >( dado, head );
+    ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, head );
     
     if( novo == NULL )
-        throw ERROLISTACHEIA;
+        throw ERROLISTADUPLACHEIA;
     else
     {
         //poderia ser feito diretamente em Elemento<T>(dado,head);
@@ -266,7 +266,7 @@ T ListaEnc< T >::retiraDoInicio()
     {
         return 0;
     }
-    Elemento< T >* saiu = head;
+    ElementoDuplo< T >* saiu = head;
     T volta = saiu->getInfo();
     head = saiu->getProximo();
     size--;
@@ -282,9 +282,9 @@ int ListaEnc< T >::eliminaDoInicio()
 {
     if( listaVazia() )
     {
-        throw ERROLISTAVAZIA;
+        throw ERROLISTADUPLAVAZIA;
     }
-    Elemento< T >* saiu = head;
+    ElementoDuplo< T >* saiu = head;
     head = saiu->getProximo();
     size--;
     delete saiu;
@@ -325,16 +325,16 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 //    }
     
     // aloca um elemento no inicio da lista
-    Elemento< T >* novo = new Elemento< T >( dado, 0 );
+    ElementoDuplo< T >* novo = new ElementoDuplo< T >( dado, 0 );
     
     // verifica se ela está cheia
     if( novo == 0 )
     {
-        throw ERROLISTACHEIA;
+        throw ERROLISTADUPLACHEIA;
     }
     
     // salva o ponterio da cabeça da lista
-    Elemento< T >* anterior = head;
+    ElementoDuplo< T >* anterior = head;
     
     //
     for( int i = 0; i < pos - 1; i++ )
@@ -359,7 +359,7 @@ int ListaEnc< T >::posicao( const T& dado ) const
     {
         throw -4; //ExcecaoListaVazia();
     }
-    Elemento< T >* atual = head;
+    ElementoDuplo< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
         if( dado == atual->getInfo() )
@@ -382,7 +382,7 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
         throw -1; //ExcecaoListaVazia();
     }
     int posicao = posicao( dado );
-    Elemento< T >* atual = head;
+    ElementoDuplo< T >* atual = head;
     for( int i = 0; i < posicao; i++ )
     {
         atual = atual->getProximo();
@@ -400,7 +400,7 @@ bool ListaEnc< T >::contem( const T& dado )
     {
         throw -2; //ExcecaoListaVazia();
     }
-    Elemento< T >* atual = head;
+    ElementoDuplo< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
         if( igual( dado, atual->getInfo() ) )
@@ -431,13 +431,13 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
             return retiraDoInicio();
         } else
         {
-            Elemento< T >* anterior = head;
+            ElementoDuplo< T >* anterior = head;
             
             for( int i = 0; i < posicao - 1; i++ )
             {
                 anterior = anterior->getProximo();
             }
-            Elemento< T >* eliminar = anterior->getProximo();
+            ElementoDuplo< T >* eliminar = anterior->getProximo();
             
             //Variável auxiliar para o dado retornado
             T volta = eliminar->getInfo();
@@ -490,7 +490,7 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
     {
         return adicionaNoInicio( dado );
     }
-    Elemento< T >* atual = head;
+    ElementoDuplo< T >* atual = head;
     int posicao = 1;
     while( atual->getProximo() != 0 && maior( dado, atual->getInfo() ) )
     {
@@ -574,7 +574,7 @@ void ListaEnc< T >::destroiLista()
     // pula se a lista já está vazia
     if( head != 0 )
     {
-        Elemento< T > * atual = head;
+        ElementoDuplo< T > * atual = head;
         
         while( head )
         {

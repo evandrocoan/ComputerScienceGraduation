@@ -9,7 +9,7 @@
 #define ELEMENTO_HPP_
 
 template< typename T >
-class Elemento
+class ElementoDuplo
 {
     private:
         /**
@@ -20,33 +20,77 @@ class Elemento
         /**
          * Ponteiro para o próximo elemento da lista
          */
-        Elemento< T >* _next;
+        ElementoDuplo< T >* _next;
+
+        /**
+         * Ponteiro para o elemento elemento anterior da lista
+         */
+        ElementoDuplo< T >* _previous;
 
     public:
-        Elemento( const T& info, Elemento< T >* next ) :
-                info( new T( info ) ), _next( next )
+        ElementoDuplo( const T& info, ElementoDuplo< T >* next, 
+                  ElementoDuplo< T >* previous ) :
+                info( new T( info ) ), _next( next ), _previous( previous )
         {
         }
         
-        //-----------------------------------------------------------------
-        ~Elemento()
+        /**
+         * Destrói o ponteiro para o elemento que esse nó ponta
+         */
+        ~ElementoDuplo()
         {
             delete info;
         }
-        //-----------------------------------------------------------------
-        Elemento< T >* getProximo() const
+        
+        /**
+         *  Retorna um ponterio para o próximo elemento deste nó.
+         * 
+         * @return um ponteiro para o próximo elemento, NULL caso não exista.
+         */
+        ElementoDuplo< T >* getProximo() const
         {
             return _next;
         }
-        //-----------------------------------------------------------------
+        
+        /**
+         *  Retorna um ponterio para o elemento anterior deste nó.
+         * 
+         * @return um ponteiro para o elemento anterior deste nó, NULL caso 
+         * não exista.
+         */
+        ElementoDuplo< T >* getAnterior() const
+        {
+            return _previous;
+        }
+        
+        /**
+         * Retorna um ponteiro para o elemento que este nó armazena
+         * 
+         * @return um ponteiro para o elemento que este nó armazena
+         */
         T getInfo() const
         {
             return *info;
         }
-        //-----------------------------------------------------------------
-        void setProximo( Elemento< T >* next )
+        
+        /**
+         * Altera qual o proximo elemento que este nó aponta
+         * 
+         * @param um ponteiro para o próximo nó
+         */
+        void setProximo( ElementoDuplo< T >* next )
         {
             _next = next;
+        }
+        
+        /**
+         * Altera qual o elemento anterior que este nó aponta
+         * 
+         * @param um ponteiro para nó anterior
+         */
+        void setAnterior( ElementoDuplo< T >* previous )
+        {
+            _previous = previous;
         }
         //-----------------------------------------------------------------
 };
