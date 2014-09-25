@@ -7,6 +7,7 @@
 *.sublime-workspace
 *.sublime-project
 *.db
+ListaEncadeada/main.cpp
 
 # Compiled Dynamic libraries
 *.so

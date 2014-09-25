@@ -16,6 +16,7 @@ class Elemento
          * Ponteiro para o tipo de informação que vai ser armazenada
          */
         T *info;
+        //EVANDRO MANÉ!
 
         /**
          * Ponteiro para o próximo elemento da lista
