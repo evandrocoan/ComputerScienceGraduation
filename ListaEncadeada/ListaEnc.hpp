@@ -571,24 +571,21 @@ ListaEnc< T >* ListaEnc< T >::criaLista()
 template< typename T >
 void ListaEnc< T >::destroiLista()
 {
-    // pula se a lista já está vazia
-    if( head != 0 )
+    while( head )
     {
         Elemento< T > * atual = head;
         
-        while( head )
-        {
-            delete head;
-            
-            // evitar acessar um null pointer
-            if(atual != 0)
-            {
-               atual = atual->getProximo();
-            }
-        }
+        head = head->getProximo();
         
         delete atual;
-        size = 0;
+        
+        this->size--;
+        
+        // evitar acessar um null pointer
+        if(atual != 0)
+        {
+           atual = atual->getProximo();
+        }
     }
 }
 
