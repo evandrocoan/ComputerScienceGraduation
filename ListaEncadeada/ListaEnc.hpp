@@ -20,8 +20,8 @@
 /**
  * Códigos de erros definidos
  */
-#define ERROLISTADUPLACHEIA -1
-#define ERROLISTADUPLAVAZIA -2
+#define ERROLISTACHEIA -1
+#define ERROLISTAVAZIA -2
 #define ERRODEPOSICAO -3
 
 /**
@@ -233,7 +233,7 @@ ListaEnc< T >::ListaEnc()
 template< typename T >
 ListaEnc< T >::~ListaEnc()
 {
-
+    this->destroiLista();
 }
 
 /**
@@ -245,7 +245,7 @@ void ListaEnc< T >::adicionaNoInicio( const T& dado )
     Elemento< T > *novo = new Elemento< T >( dado, head );
     
     if( novo == NULL )
-        throw ERROLISTADUPLACHEIA;
+        throw ERROLISTACHEIA;
     else
     {
         //poderia ser feito diretamente em Elemento<T>(dado,head);
@@ -264,7 +264,7 @@ T ListaEnc< T >::retiraDoInicio()
 {
     if( listaVazia() )
     {
-        return 0;
+        throw ERROLISTACHEIA;
     }
     Elemento< T >* saiu = head;
     T volta = saiu->getInfo();
@@ -282,7 +282,7 @@ int ListaEnc< T >::eliminaDoInicio()
 {
     if( listaVazia() )
     {
-        throw ERROLISTADUPLAVAZIA;
+        throw ERROLISTAVAZIA;
     }
     Elemento< T >* saiu = head;
     head = saiu->getProximo();
@@ -330,7 +330,7 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
     // verifica se ela está cheia
     if( novo == 0 )
     {
-        throw ERROLISTADUPLACHEIA;
+        throw ERROLISTACHEIA;
     }
     
     // salva o ponterio da cabeça da lista
@@ -475,9 +475,9 @@ T ListaEnc< T >::retiraEspecifico( const T& dado )
 {
     if( listaVazia() )
     {
-        throw -3; //ExcecaoListaVazia();
+        throw ERROLISTAVAZIA; //ExcecaoListaVazia();
     }
-    return retiraDaPosicao( posicao( dado ) + 1 );
+    return retiraDaPosicao( posicao( dado ) );
 }
 
 /**
