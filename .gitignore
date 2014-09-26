@@ -4,6 +4,8 @@
 *.o
 *.obj
 *nppBackup
+*.sublime-workspace
+*.sublime-project
 
 # Compiled Dynamic libraries
 *.so
