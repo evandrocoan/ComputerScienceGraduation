@@ -71,21 +71,20 @@ class ListaEnc
          * 
          * @param dado
          */
-        void adicionaNoInicio( const T& dado );
+        void adicionaNoInicioDuplo( const T& dado );
         
         /**
          * Retira o elemento da cabeça da lista encadeada
          * 
          * @return o elemento na cabeça da lista encadeada
          */
-        T retiraDoInicio();
+        T retiraDoInicioDuplo();
         
         /**
          * Deleta o elemento no ínicio na cabeça da lista encadeada
          * 
-         * @return o tamanho da lista encadeada após a remoção da cabeça
          */
-        int eliminaDoInicio();
+        void eliminaDoInicioDuplo();
         
         /**
          * Adiciona um elemento em uma posição específica.
@@ -94,7 +93,7 @@ class ListaEnc
          * @param pos a posição para adicionar o dado
          * @throw erro de posição se a posição é inexistente
          */
-        void adicionaNaPosicao( const T& dado, int pos );
+        void adicionaNaPosicaoDuplo( const T& dado, int pos );
         
         /**
          * Retorna a posição de um elemento fornecido como parâmetro. 
@@ -104,7 +103,7 @@ class ListaEnc
          * @param dado a ter a posição encontrada
          * @return a posição do dado encontrado com um inteiro
          */
-        int posicao( const T& dado ) const;
+        int posicaoDuplo( const T& dado ) const;
         
         /**
          * Descobre qual o ponteiro para um determinado elemento na lista.
@@ -112,7 +111,7 @@ class ListaEnc
          * @param dado a ser procurado um ponteiro
          * @return o ponteiro para o dado passado como parâmetro
          */
-        T* posicaoMem( const T& dado ) const;
+        T* posicaoMemDuplo( const T& dado ) const;
         
         /**
          * Informa se a lista encadeada contém o dado passado como parâmetro.
@@ -121,7 +120,7 @@ class ListaEnc
          * @return true se a lista encadeada contém o dada passado como 
          * parâmetro, false caso contrário.
          */
-        bool contem( const T& dado );
+        bool contemDuplo( const T& dado );
         
         /**
          * Elimina um elemento de uma certa posição nesta lista encadeada.
@@ -129,21 +128,21 @@ class ListaEnc
          * @param a posição do elemento a ser retirado
          * @return o elemento retirado da posição
          */
-        T retiraDaPosicao( int pos );
+        T retiraDaPosicaoDuplo( int pos );
 
         /**
          * Adiciona um elemento no final da lista encadeada
          * 
          * @param dado a ser adicionado
          */
-        void adiciona( const T& dado );
+        void adicionaDuplo( const T& dado );
         
         /**
          * Retira o elemento pertencente ao final da lista encadeada
          * 
          * @return o dado retirado da lista encadeada
          */
-        T retira();
+        T retiraDuplo();
 
         /**
          * Retira a primeiro ocorrência do dado fornecidado como parâmetro
@@ -151,7 +150,7 @@ class ListaEnc
          * @param dado a ter a primeira ocorrência retirada
          * @return a primeira ocorrência do dado retirado
          */
-        T retiraEspecifico( const T& dado );
+        T retiraEspecificoDuplo( const T& dado );
         
         /**
          * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
@@ -206,7 +205,7 @@ class ListaEnc
         /**
          * Destrói todos os ponteiros da lista e ajusta seu tamanho para 0
          */
-        void destroiLista();
+        void destroiListaDuplo();
         
         /**
          * Informa se uma determinada posição válida.
@@ -215,6 +214,21 @@ class ListaEnc
          * @return true se a posição é válida, false caso contrário
          */
         bool posicaoInvalida( int p );
+        
+        /**
+         * Mostra qual elemento está em uma posição específica.
+         * 
+         * @param posição do elemento a ser visto
+         * @return o elemento encontrado na posição requerida
+         */
+        T mostra(int pos);
+        
+        /**
+         * Mostra qual o último elemento da lista duplamente encadeada.
+         * 
+         * @return o último elemento da lista encadeada
+         */
+        int verUltimo();
 };
 
 /**
@@ -237,10 +251,10 @@ ListaEnc< T >::~ListaEnc()
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNoInicio( const T& dado )
+ * \copydoc ListaEnc< T >::adicionaNoInicioDuplo( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNoInicio( const T& dado )
+void ListaEnc< T >::adicionaNoInicioDuplo( const T& dado )
 {
     ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, 0, head );
     
@@ -257,10 +271,10 @@ void ListaEnc< T >::adicionaNoInicio( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDoInicio()
+ * \copydoc ListaEnc< T >::retiraDoInicioDuplo()
  */
 template< typename T >
-T ListaEnc< T >::retiraDoInicio()
+T ListaEnc< T >::retiraDoInicioDuplo()
 {
     if( listaVazia() )
     {
@@ -275,10 +289,10 @@ T ListaEnc< T >::retiraDoInicio()
 }
 
 /**
- * \copydoc ListaEnc< T >::eliminaDoInicio()
+ * \copydoc ListaEnc< T >::eliminaDoInicioDuplo()
  */
 template< typename T >
-int ListaEnc< T >::eliminaDoInicio()
+void ListaEnc< T >::eliminaDoInicioDuplo()
 {
     if( listaVazia() )
     {
@@ -301,10 +315,10 @@ int ListaEnc< T >::tamanho()
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
+ * \copydoc ListaEnc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
+void ListaEnc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
 {
     // verifica se está tentando adicionar em uma posição inexistente
     if( posicaoInvalida( pos ) )
@@ -315,7 +329,7 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
     // caso seja a primeia posição, chama o método que manipula a cabeça
     if( pos == 0 )
     {
-        return adicionaNoInicio( dado );
+        return adicionaNoInicioDuplo( dado );
     }
     
     // caso seja a última posição, chama o método que manipula a calda
@@ -350,10 +364,10 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 }
 
 /**
- * \copydoc ListaEnc< T >::posicao( const T& dado ) const
+ * \copydoc ListaEnc< T >::posicaoDuplo( const T& dado ) const
  */
 template< typename T >
-int ListaEnc< T >::posicao( const T& dado ) const
+int ListaEnc< T >::posicaoDuplo( const T& dado ) const
 {
     if( listaVazia() )
     {
@@ -372,16 +386,16 @@ int ListaEnc< T >::posicao( const T& dado ) const
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoMem( const T& dado ) const
+ * \copydoc ListaEnc< T >::posicaoMemDuplo( const T& dado ) const
  */
 template< typename T >
-T* ListaEnc< T >::posicaoMem( const T& dado ) const
+T* ListaEnc< T >::posicaoMemDuplo( const T& dado ) const
 {
     if( listaVazia() )
     {
         throw -1; //ExcecaoListaVazia();
     }
-    int posicao = posicao( dado );
+    int posicao = posicaoDuplo( dado );
     ElementoDuplo< T >* atual = head;
     for( int i = 0; i < posicao; i++ )
     {
@@ -391,10 +405,10 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
 }
 
 /**
- * \copydoc ListaEnc< T >::contem( const T& dado )
+ * \copydoc ListaEnc< T >::contemDuplo( const T& dado )
  */
 template< typename T >
-bool ListaEnc< T >::contem( const T& dado )
+bool ListaEnc< T >::contemDuplo( const T& dado )
 {
     if( listaVazia() )
     {
@@ -413,10 +427,10 @@ bool ListaEnc< T >::contem( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDaPosicao( int posicao )
+ * \copydoc ListaEnc< T >::retiraDaPosicaoDuplo( int posicao )
  */
 template< typename T >
-T ListaEnc< T >::retiraDaPosicao( int posicao )
+T ListaEnc< T >::retiraDaPosicaoDuplo( int posicao )
 {
     //Variável auxiliar para elemento.
     //Elemento< T >* anterior, eliminar;
@@ -428,7 +442,7 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
     {
         if( posicao == 0 )
         {
-            return retiraDoInicio();
+            return retiraDoInicioDuplo();
         } else
         {
             ElementoDuplo< T >* anterior = head;
@@ -450,34 +464,34 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
 }
 
 /**
- * \copydoc ListaEnc< T >::adiciona( const T& dado )
+ * \copydoc ListaEnc< T >::adicionaDuplo( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adiciona( const T& dado )
+void ListaEnc< T >::adicionaDuplo( const T& dado )
 {
-    return adicionaNaPosicao( dado, size );
+    return adicionaNaPosicaoDuplo( dado, size );
 }
 
 /**
- * \copydoc ListaEnc< T >::retira()
+ * \copydoc ListaEnc< T >::retiraDuplo()
  */
 template< typename T >
-T ListaEnc< T >::retira()
+T ListaEnc< T >::retiraDuplo()
 {
-    return retiraDaPosicao( size - 1 );
+    return retiraDaPosicaoDuplo( size - 1 );
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraEspecifico( const T& dado )
+ * \copydoc ListaEnc< T >::retiraEspecificoDuplo( const T& dado )
  */
 template< typename T >
-T ListaEnc< T >::retiraEspecifico( const T& dado )
+T ListaEnc< T >::retiraEspecificoDuplo( const T& dado )
 {
     if( listaVazia() )
     {
         throw -3; //ExcecaoListaVazia();
     }
-    return retiraDaPosicao( posicao( dado ) + 1 );
+    return retiraDaPosicaoDuplo( posicaoDuplo( dado ) + 1 );
 }
 
 /**
@@ -488,7 +502,7 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 {
     if( listaVazia() )
     {
-        return adicionaNoInicio( dado );
+        return adicionaNoInicioDuplo( dado );
     }
     ElementoDuplo< T >* atual = head;
     int posicao = 1;
@@ -499,9 +513,9 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
     }
     if( maior( dado, atual->getInfo() ) )
     {
-        return adicionaNaPosicao( dado, posicao + 1 );
+        return adicionaNaPosicaoDuplo( dado, posicao + 1 );
     }
-    adicionaNaPosicao( dado, posicao );
+    adicionaNaPosicaoDuplo( dado, posicao );
 }
 
 /**
@@ -566,10 +580,10 @@ ListaEnc< T >* ListaEnc< T >::criaLista()
 }*/
 
 /**
- * \copydoc ListaEnc< T >::destroiLista()
+ * \copydoc ListaEnc< T >::destroiListaDuplo()
  */
 template< typename T >
-void ListaEnc< T >::destroiLista()
+void ListaEnc< T >::destroiListaDuplo()
 {
     // pula se a lista já está vazia
     if( head != 0 )
@@ -590,6 +604,30 @@ void ListaEnc< T >::destroiLista()
         delete atual;
         size = 0;
     }
+}
+
+/**
+ * \copydoc T ListaEnc< T >::mostra(int pos)
+ */
+template< typename T >
+T ListaEnc< T >::mostra(int pos)
+{
+    T elemento;
+    
+    elemento = this->retiraDaPosicaoDuplo( pos );
+    
+    this->adicionaNaPosicaoDuplo( elemento, pos );
+    
+    return elemento;
+}
+
+/**
+ * \copydoc ListaEnc< T >::verUltimo();
+ */
+template< typename T >
+int ListaEnc< T >::verUltimo()
+{
+    return this->tamanho();
 }
 
 #endif /* LISTAENC_HPP_ */

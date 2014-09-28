@@ -49,8 +49,7 @@ class ListaEnc
         ListaEnc();
 
         /**
-         * Destrutor padrão que destrói os ponteiros da lista e marca o 
-         * tamanho da lista para zero
+         * Destrutor padrão que destrói os dados que aponta a lista encadeada
          */
         ~ListaEnc();
 
