@@ -1,8 +1,8 @@
-/*
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
+/**
  * Elemento.hpp
- *
- *  Created on: 13/09/2014
- *      Author: Carcara
+ * 
+ * \authors Evandro  Coan, Charles Borges de Lima
  */
 
 #ifndef ELEMENTO_HPP_
