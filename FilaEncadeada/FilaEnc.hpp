@@ -1,15 +1,15 @@
 //! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
- * ListaEnc.hpp
- * 
+ * FilaEnc.hpp
+ *
  * \authors Evandro  Coan, Charles Borges de Lima
  */
 
 /**
  * Evita incluir esta classe mais de uma vez no processo de compilação
  */
-#ifndef LISTAENC_HPP_
-#define LISTAENC_HPP_
+#ifndef FILAENC_HPP_
+#define FILAENC_HPP_
 
 /**
  * Bibliotecas utilizadas
@@ -21,316 +21,314 @@
 /**
  * Códigos de erros definidos
  */
-#define ERROLISTACHEIA -1
-#define ERROLISTAVAZIA -2
+#define ERROFILACHEIA -1
+#define ERROFILAVAZIA -2
 #define ERRODEPOSICAO -3
 
 /**
- * Header para um lista encadeada
+ * Header para um fila encadeada
  */
 template< typename T >
-class PilhaEnc
+class FilaEnc
 {
-
+    
 private:
     /**
-     * Ponteiro para o primeiro elemento da lista
+     * Ponteiro para o primeiro elemento da fila
      */
     Elemento< T >* head;
 
     /**
-     * Número de elementos da lista
+     * Número de elementos da fila
      */
     int size;
 
     /**
-     * Adiciona um dado recebido como parâmetro no início da lista
-     * 
+     * Adiciona um dado recebido como parâmetro no início da fila
+     *
      * @param dado
      */
     void adicionaNoInicio( const T& dado );
 
     /**
      * Informa se uma determinada posição válida.
-     * 
+     *
      * @param a posição a ser verificada
      * @return true se a posição é válida, false caso contrário
      */
     bool posicaoInvalida( int p );
 
     /**
-     * Elimina um elemento de uma certa posição nesta lista encadeada.
-     * 
+     * Elimina um elemento de uma certa posição nesta fila encadeada.
+     *
      * @param a posição do elemento a ser retirado
      * @return o elemento retirado da posição
      */
     T retiraDaPosicao( int pos );
 
     /**
-     * Retira o elemento da cabeça da lista encadeada
-     * 
-     * @return o elemento na cabeça da lista encadeada
+     * Retira o elemento da cabeça da fila encadeada
+     *
+     * @return o elemento na cabeça da fila encadeada
      */
-    T retiraDoInicio( );
+    T retiraDoInicio();
 
 public:
-
+    
     /**
-     * Construtor padrão que cria uma pilha encadeada vazia
+     * Construtor padrão que cria uma fila encadeada vazia
      */
-    PilhaEnc( );
+    FilaEnc();
 
     /**
-     * Destrutor padrão que destrói os dados que aponta a pilha encadeada
+     * Destrutor padrão que destrói os dados que aponta a fila encadeada
      */
-    ~PilhaEnc( );
+    ~FilaEnc();
 
     /**
-     * Adiciona empilha um elemento na pilha.
-     * 
+     * Adiciona emfila um elemento na fila.
+     *
      * @param dado a ser adicionado
      */
-    void empilha( const T& dado );
+    void inclui( const T& dado );
 
     /**
-     * Retira o elemento pertencente ao final da lista encadeada
-     * 
-     * @return o dado retirado da lista encadeada
+     * Retira o elemento pertencente ao início da fila encadeada
+     *
+     * @return o dado retirado da fila encadeada
      */
-    T desempilha( );
+    T retira();
 
     /**
-     * Destrói todos os ponteiros da pilha e ajusta seu tamanho para 0
+     * Destrói todos os ponteiros da fila e ajusta seu tamanho para 0
      */
-    void limparPilha( );
+    void limparFila();
 
     /**
-     * Informa se a lista encadeada está vazia
-     * 
-     * @return true se a lista encadeada está vazia, false caso contrário
+     * Informa se a fila encadeada está vazia
+     *
+     * @return true se a fila encadeada está vazia, false caso contrário
      */
-    bool PilhaVazia( );
+    bool filaVazia();
 
     /**
-     * Retorna o elemento que se encontra no topo da pilha sem retirá-lo 
-     * da pilha.
-     * 
-     * @return o elemento no topo da pilha
+     * Retorna o elemento que se encontra no final da fila sem retirá-lo
+     * da fila.
+     *
+     * @return o elemento no final da fila
      */
-    T topo( );
+    T ultimo();
 };
 
 /**
- * \copydoc PilhaEnc< T >::PilhaEnc()
+ * \copydoc FilaEnc< T >::FilaEnc()
  */
 template< typename T >
-PilhaEnc< T >::PilhaEnc( )
+FilaEnc< T >::FilaEnc()
 {
     head = NULL;
     size = 0;
 }
 
 /**
- * \copydoc PilhaEnc< T >::~PilhaEnc()
+ * \copydoc FilaEnc< T >::~FilaEnc()
  */
 template< typename T >
-PilhaEnc< T >::~PilhaEnc( )
+FilaEnc< T >::~FilaEnc()
 {
-    this->limparPilha( );
+    this->limparFila();
 }
 
 /**
- * \copydoc PilhaEnc< T >::posicaoInvalida( int p )
+ * \copydoc FilaEnc< T >::posicaoInvalida( int p )
  */
 template< typename T >
-bool PilhaEnc< T >::posicaoInvalida( int p )
+bool FilaEnc< T >::posicaoInvalida( int p )
 {
-    return( p >= size + 1 || p < 0 );
+    return ( p >= size + 1 || p < 0 );
 }
 
 /**
- * \copydoc PilhaEnc< T >::empilha( const T& dado, int pos )
+ * \copydoc FilaEnc< T >::inclui( const T& dado, int pos )
  */
 template< typename T >
-void PilhaEnc< T >::empilha( const T& dado )
+void FilaEnc< T >::inclui( const T& dado )
 {
     int pos = this->size;
-
+    
     // verifica se está tentando adicionar em uma posição inexistente
     if( posicaoInvalida( pos ) )
     {
-	throw ERRODEPOSICAO;
+        throw ERRODEPOSICAO;
     }
-
+    
     // caso seja a primeia posição, chama o método que manipula a cabeça
     if( pos == 0 )
     {
-	return adicionaNoInicio( dado );
+        return adicionaNoInicio( dado );
     }
-
+    
     // caso seja a última posição, chama o método que manipula a calda
     //    if( pos == size )
     //    {
     //        return adiciona
     //    }
-
-    // aloca um elemento no inicio da lista
+    
+    // aloca um elemento no inicio da fila
     Elemento< T >* novo = new Elemento< T >( dado, 0 );
-
+    
     // verifica se ela está cheia
     if( novo == 0 )
     {
-	throw ERROLISTACHEIA;
+        throw ERROFILACHEIA;
     }
-
-    // salva o ponterio da cabeça da lista
+    
+    // salva o ponterio da cabeça da fila
     Elemento< T >* anterior = head;
-
+    
     //
     for( int i = 0; i < pos - 1; i++ )
     {
-	anterior = anterior->getProximo( );
+        anterior = anterior->getProximo();
     }
-
+    
     // 
-    novo->setProximo( anterior->getProximo( ) );
-
+    novo->setProximo( anterior->getProximo() );
+    
     anterior->setProximo( novo );
     size++;
 }
 
 /**
- * \copydoc PilhaEnc< T >::retira()
+ * \copydoc FilaEnc< T >::retira()
  */
 template< typename T >
-T PilhaEnc< T >::desempilha( )
+T FilaEnc< T >::retira()
 {
-    return retiraDaPosicao( size - 1 );
+    return retiraDaPosicao( 0 );
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDaPosicao( int posicao )
+ * \copydoc FilaEnc< T >::retiraDaPosicao( int posicao )
  */
 template< typename T >
-T PilhaEnc< T >::retiraDaPosicao( int posicao )
+T FilaEnc< T >::retiraDaPosicao( int posicao )
 {
     //Variável auxiliar para elemento.
     //Elemento< T >* anterior, eliminar;
-
+    
     if( posicaoInvalida( posicao ) )
     {
-	throw ERRODEPOSICAO;
-    }
-    else
+        throw ERRODEPOSICAO;
+    } else
     {
-	if( posicao == 0 )
-	{
-	    return retiraDoInicio( );
-	}
-	else
-	{
-	    Elemento< T >* anterior = head;
-
-	    for( int i = 0; i < posicao - 1; i++ )
-	    {
-		anterior = anterior->getProximo( );
-	    }
-	    Elemento< T >* eliminar = anterior->getProximo( );
-
-	    //Variável auxiliar para o dado retornado
-	    T volta = eliminar->getInfo( );
-	    anterior->setProximo( eliminar->getProximo( ) );
-	    size--;
-	    delete eliminar;
-	    return volta;
-	}
+        if( posicao == 0 )
+        {
+            return retiraDoInicio();
+        } else
+        {
+            Elemento< T >* anterior = head;
+            
+            for( int i = 0; i < posicao - 1; i++ )
+            {
+                anterior = anterior->getProximo();
+            }
+            Elemento< T >* eliminar = anterior->getProximo();
+            
+            //Variável auxiliar para o dado retornado
+            T volta = eliminar->getInfo();
+            anterior->setProximo( eliminar->getProximo() );
+            size--;
+            delete eliminar;
+            return volta;
+        }
     }
 }
 
 /**
- * \copydoc PilhaEnc< T >::retiraDoInicio()
+ * \copydoc FilaEnc< T >::retiraDoInicio()
  */
 template< typename T >
-T PilhaEnc< T >::retiraDoInicio( )
+T FilaEnc< T >::retiraDoInicio()
 {
-    if( PilhaVazia( ) )
+    if( filaVazia() )
     {
-	throw ERROLISTACHEIA;
+        throw ERROFILACHEIA;
     }
     Elemento< T >* saiu = head;
-    T volta = saiu->getInfo( );
-    head = saiu->getProximo( );
+    T volta = saiu->getInfo();
+    head = saiu->getProximo();
     size--;
     delete saiu;
     return volta;
 }
 
 /**
- * \copydoc PilhaEnc< T >::topo()
+ * \copydoc FilaEnc< T >::topo()
  */
 template< typename T >
-T PilhaEnc< T >::topo( )
+T FilaEnc< T >::ultimo()
 {
-    T elemento = this->desempilha( );
-
-    this->empilha( elemento );
-
+    T elemento = this->retiraDaPosicao( size - 1);
+    
+    this->inclui( elemento );
+    
     return elemento;
 }
 
 /**
- * \copydoc PilhaEnc< T >::PilhaVazia() const
+ * \copydoc FilaEnc< T >::filaVazia() const
  */
 template< typename T >
-bool PilhaEnc< T >::PilhaVazia( )
+bool FilaEnc< T >::filaVazia()
 {
     if( size == 0 )
-	return true;
+        return true;
     return false;
 }
 
 /**
- * \copydoc PilhaEnc< T >::adicionaNoInicio( const T& dado )
+ * \copydoc FilaEnc< T >::adicionaNoInicio( const T& dado )
  */
 template< typename T >
-void PilhaEnc< T >::adicionaNoInicio( const T& dado )
+void FilaEnc< T >::adicionaNoInicio( const T& dado )
 {
     Elemento< T > *novo = new Elemento< T >( dado, head );
-
+    
     if( novo == NULL )
-	throw ERROLISTACHEIA;
+        throw ERROFILACHEIA;
     else
     {
-	//poderia ser feito diretamente em Elemento<T>(dado,head);
-	//novo->setProximo(dados); 
-	//novo->setProximo(head);  
-	head = novo;
-	size++;
+        //poderia ser feito diretamente em Elemento<T>(dado,head);
+        //novo->setProximo(dados); 
+        //novo->setProximo(head);  
+        head = novo;
+        size++;
     }
 }
 
 /**
- * \copydoc PilhaEnc< T >::destroiPilha()
+ * \copydoc FilaEnc< T >::destroiFila()
  */
 template< typename T >
-void PilhaEnc< T >::limparPilha( )
+void FilaEnc< T >::limparFila()
 {
     while( head )
     {
-	Elemento< T > * atual = head;
-
-	head = head->getProximo( );
-
-	delete atual;
-
-	this->size--;
-
-	// evitar acessar um null pointer
-	if( atual != 0 )
-	{
-	    atual = atual->getProximo( );
-	}
+        Elemento< T > * atual = head;
+        
+        head = head->getProximo();
+        
+        delete atual;
+        
+        this->size--;
+        
+        // evitar acessar um null pointer
+        if( atual != 0 )
+        {
+            atual = atual->getProximo();
+        }
     }
 }
 
-#endif /* LISTAENC_HPP_ */
+#endif /* FILAENC_HPP_ */
