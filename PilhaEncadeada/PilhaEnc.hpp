@@ -1,5 +1,6 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
- * ListaEnc.hpp
+ * PilhaEnc.hpp
  * 
  * \authors Evandro  Coan, Charles Borges de Lima
  */
@@ -7,8 +8,8 @@
 /**
  * Evita incluir esta classe mais de uma vez no processo de compilação
  */
-#ifndef LISTAENC_HPP_
-#define LISTAENC_HPP_
+#ifndef PILHAENC_HPP_
+#define PILHAENC_HPP_
 
 /**
  * Bibliotecas utilizadas
@@ -20,292 +21,141 @@
 /**
  * Códigos de erros definidos
  */
-#define ERROLISTADUPLACHEIA -1
-#define ERROLISTADUPLAVAZIA -2
+#define ERROPILHACHEIA -1
+#define ERROPILHAVAZIA -2
 #define ERRODEPOSICAO -3
 
 /**
- * Header para um lista encadeada
+ * Header para um pilha encadeada
  */
 template< typename T >
-class ListaEnc
+class PilhaEnc
 {
-    private:
-        /**
-         * Ponteiro para o primeiro elemento da lista
-         */ 
-        Elemento< T >* head;
+    
+private:
+    /**
+     * Ponteiro para o primeiro elemento da pilha
+     */
+    Elemento< T >* head;
 
-        /**
-         * Número de elementos da lista
-         */
-        int size;
+    /**
+     * Número de elementos da pilha
+     */
+    int size;
 
-    public:
-        
-        /**
-         * Construtor padrão que cria uma lista encadeada vazia
-         */
-        ListaEnc();
+    /**
+     * Adiciona um dado recebido como parâmetro no início da pilha
+     * 
+     * @param dado
+     */
+    void adicionaNoInicio( const T& dado );
 
-        /**
-         * Destrutor padrão que destrói os ponteiros da lista e marca o 
-         * tamanho da lista para zero
-         */
-        ~ListaEnc();
+    /**
+     * Informa se uma determinada posição válida.
+     * 
+     * @param a posição a ser verificada
+     * @return true se a posição é válida, false caso contrário
+     */
+    bool posicaoInvalida( int p );
 
-        /**
-         * Informa o tamanho atual da lista encadeada. 
-         * 
-         * @return um inteiro informando o tamnha da lista encadeada
-         */
-        int tamanho();
+    /**
+     * Elimina um elemento de uma certa posição nesta pilha encadeada.
+     * 
+     * @param a posição do elemento a ser retirado
+     * @return o elemento retirado da posição
+     */
+    T retiraDaPosicao( int pos );
 
-/*
-        // ****************************
-        ListaEnc< T >* criaLista();
-        // ****************************
-*/
-        /**
-         * Adiciona um dado recebido como parâmetro no início da lista
-         * 
-         * @param dado
-         */
-        void adicionaNoInicio( const T& dado );
-        
-        /**
-         * Retira o elemento da cabeça da lista encadeada
-         * 
-         * @return o elemento na cabeça da lista encadeada
-         */
-        T retiraDoInicio();
-        
-        /**
-         * Deleta o elemento no ínicio na cabeça da lista encadeada
-         * 
-         * @return o tamanho da lista encadeada após a remoção da cabeça
-         */
-        int eliminaDoInicio();
-        
-        /**
-         * Adiciona um elemento em uma posição específica.
-         * 
-         * @param dado a ser adicionado
-         * @param pos a posição para adicionar o dado
-         * @throw erro de posição se a posição é inexistente
-         */
-        void adicionaNaPosicao( const T& dado, int pos );
-        
-        /**
-         * Retorna a posição de um elemento fornecido como parâmetro. 
-         * A posição nesta lista encadeada começa em 0, para o primeiro 
-         * elemento.
-         * 
-         * @param dado a ter a posição encontrada
-         * @return a posição do dado encontrado com um inteiro
-         */
-        int posicao( const T& dado ) const;
-        
-        /**
-         * Descobre qual o ponteiro para um determinado elemento na lista.
-         * 
-         * @param dado a ser procurado um ponteiro
-         * @return o ponteiro para o dado passado como parâmetro
-         */
-        T* posicaoMem( const T& dado ) const;
-        
-        /**
-         * Informa se a lista encadeada contém o dado passado como parâmetro.
-         * 
-         * @param dado a ser encontrado
-         * @return true se a lista encadeada contém o dada passado como 
-         * parâmetro, false caso contrário.
-         */
-        bool contem( const T& dado );
-        
-        /**
-         * Elimina um elemento de uma certa posição nesta lista encadeada.
-         * 
-         * @param a posição do elemento a ser retirado
-         * @return o elemento retirado da posição
-         */
-        T retiraDaPosicao( int pos );
+    /**
+     * Retira o elemento da cabeça da pilha encadeada
+     * 
+     * @return o elemento na cabeça da pilha encadeada
+     */
+    T retiraDoInicio();
 
-        /**
-         * Adiciona um elemento no final da lista encadeada
-         * 
-         * @param dado a ser adicionado
-         */
-        void adiciona( const T& dado );
-        
-        /**
-         * Retira o elemento pertencente ao final da lista encadeada
-         * 
-         * @return o dado retirado da lista encadeada
-         */
-        T retira();
+public:
+    
+    /**
+     * Construtor padrão que cria uma pilha encadeada vazia
+     */
+    PilhaEnc();
 
-        /**
-         * Retira a primeiro ocorrência do dado fornecidado como parâmetro
-         * 
-         * @param dado a ter a primeira ocorrência retirada
-         * @return a primeira ocorrência do dado retirado
-         */
-        T retiraEspecifico( const T& dado );
-        
-        /**
-         * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
-         * de objeto que essa lista encadeada reprensenta
-         * 
-         * @param dado a ser adicionada em ordem
-         */
-        void adicionaEmOrdem( const T& data );
-        
-        /**
-         * Informa se a lista encadeada está vazia
-         * 
-         * @return true se a lista encadeada está vazia, false caso contrário
-         */
-        bool listaVazia() const;
-        
-        /**
-         * Informa se dois dados são iguais. Utiliza o operador de igualdade 
-         * do tipo do objeto que essa lista encadeada representa para 
-         * determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se os parametrôs são iguais, false caso contrário
-         */
-        bool igual( T dado1, T dado2 );
-        
-        /**
-         * Informa se o primeiro parâmetro é maior que o segundo. Utiliza o 
-         * operador de igualdade do tipo do objeto que essa lista encadeada 
-         * representa para determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se o primeiro parâmetro é maior que o segundo, 
-         * false caso contrário
-         */
-        bool maior( T dado1, T dado2 );
-        
-        /**
-         * Informa se o primeiro parâmetro é menor que o segundo. Utiliza o 
-         * operador de igualdade do tipo do objeto que essa lista encadeada 
-         * representa para determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se o primeiro parâmetro é menor que o segundo, 
-         * false caso contrário
-         */
-        bool menor( T dado1, T dado2 );
-        
-        /**
-         * Destrói todos os ponteiros da lista e ajusta seu tamanho para 0
-         */
-        void destroiLista();
-        
-        /**
-         * Informa se uma determinada posição válida.
-         * 
-         * @param a posição a ser verificada
-         * @return true se a posição é válida, false caso contrário
-         */
-        bool posicaoInvalida( int p );
+    /**
+     * Destrutor padrão que destrói os dados que aponta a pilha encadeada
+     */
+    ~PilhaEnc();
+
+    /**
+     * Adiciona empilha um elemento na pilha.
+     * 
+     * @param dado a ser adicionado
+     */
+    void empilha( const T& dado );
+
+    /**
+     * Retira o elemento pertencente ao final da pilha encadeada
+     * 
+     * @return o dado retirado da pilha encadeada
+     */
+    T desempilha();
+
+    /**
+     * Destrói todos os ponteiros da pilha e ajusta seu tamanho para 0
+     */
+    void limparPilha();
+
+    /**
+     * Informa se a pilha encadeada está vazia
+     * 
+     * @return true se a pilha encadeada está vazia, false caso contrário
+     */
+    bool PilhaVazia();
+
+    /**
+     * Retorna o elemento que se encontra no topo da pilha sem retirá-lo 
+     * da pilha.
+     * 
+     * @return o elemento no topo da pilha
+     */
+    T topo();
 };
 
 /**
- * \copydoc ListaEnc< T >::ListaEnc()
+ * \copydoc PilhaEnc< T >::PilhaEnc()
  */
 template< typename T >
-ListaEnc< T >::ListaEnc()
+PilhaEnc< T >::PilhaEnc()
 {
     head = NULL;
     size = 0;
 }
 
 /**
- * \copydoc ListaEnc< T >::~ListaEnc()
+ * \copydoc PilhaEnc< T >::~PilhaEnc()
  */
 template< typename T >
-ListaEnc< T >::~ListaEnc()
+PilhaEnc< T >::~PilhaEnc()
 {
-
+    this->limparPilha();
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNoInicio( const T& dado )
+ * \copydoc PilhaEnc< T >::posicaoInvalida( int p )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNoInicio( const T& dado )
+bool PilhaEnc< T >::posicaoInvalida( int p )
 {
-    Elemento< T > *novo = new Elemento< T >( dado, head );
+    return ( p >= size + 1 || p < 0 );
+}
+
+/**
+ * \copydoc PilhaEnc< T >::empilha( const T& dado, int pos )
+ */
+template< typename T >
+void PilhaEnc< T >::empilha( const T& dado )
+{
+    int pos = this->size;
     
-    if( novo == NULL )
-        throw ERROLISTADUPLACHEIA;
-    else
-    {
-        //poderia ser feito diretamente em Elemento<T>(dado,head);
-        //novo->setProximo(dados); 
-        //novo->setProximo(head);  
-        head = novo;
-        size++;
-    }
-}
-
-/**
- * \copydoc ListaEnc< T >::retiraDoInicio()
- */
-template< typename T >
-T ListaEnc< T >::retiraDoInicio()
-{
-    if( listaVazia() )
-    {
-        return 0;
-    }
-    Elemento< T >* saiu = head;
-    T volta = saiu->getInfo();
-    head = saiu->getProximo();
-    size--;
-    delete saiu;
-    return volta;
-}
-
-/**
- * \copydoc ListaEnc< T >::eliminaDoInicio()
- */
-template< typename T >
-int ListaEnc< T >::eliminaDoInicio()
-{
-    if( listaVazia() )
-    {
-        throw ERROLISTADUPLAVAZIA;
-    }
-    Elemento< T >* saiu = head;
-    head = saiu->getProximo();
-    size--;
-    delete saiu;
-    return size;
-}
-
-/**
- * \copydoc ListaEnc< T >::tamanho()
- */
-template< typename T >
-int ListaEnc< T >::tamanho()
-{
-    return this->size;
-}
-
-/**
- * \copydoc ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
- */
-template< typename T >
-void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
-{
     // verifica se está tentando adicionar em uma posição inexistente
     if( posicaoInvalida( pos ) )
     {
@@ -319,21 +169,21 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
     }
     
     // caso seja a última posição, chama o método que manipula a calda
-//    if( pos == size )
-//    {
-//        return adiciona
-//    }
+    //    if( pos == size )
+    //    {
+    //        return adiciona
+    //    }
     
-    // aloca um elemento no inicio da lista
+    // aloca um elemento no inicio da pilha
     Elemento< T >* novo = new Elemento< T >( dado, 0 );
     
     // verifica se ela está cheia
     if( novo == 0 )
     {
-        throw ERROLISTADUPLACHEIA;
+        throw ERROPILHACHEIA;
     }
     
-    // salva o ponterio da cabeça da lista
+    // salva o ponterio da cabeça da pilha
     Elemento< T >* anterior = head;
     
     //
@@ -350,73 +200,19 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 }
 
 /**
- * \copydoc ListaEnc< T >::posicao( const T& dado ) const
+ * \copydoc PilhaEnc< T >::retira()
  */
 template< typename T >
-int ListaEnc< T >::posicao( const T& dado ) const
+T PilhaEnc< T >::desempilha()
 {
-    if( listaVazia() )
-    {
-        throw -4; //ExcecaoListaVazia();
-    }
-    Elemento< T >* atual = head;
-    for( int i = 0; i < size; i++ )
-    {
-        if( dado == atual->getInfo() )
-        {
-            return i;
-        }
-        atual = atual->getProximo();
-    }
-    throw -5; //ExcecaoDadoNaoEncontrado();
+    return retiraDaPosicao( size - 1 );
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoMem( const T& dado ) const
+ * \copydoc PilhaEnc< T >::retiraDaPosicao( int posicao )
  */
 template< typename T >
-T* ListaEnc< T >::posicaoMem( const T& dado ) const
-{
-    if( listaVazia() )
-    {
-        throw -1; //ExcecaoListaVazia();
-    }
-    int posicao = posicao( dado );
-    Elemento< T >* atual = head;
-    for( int i = 0; i < posicao; i++ )
-    {
-        atual = atual->getProximo();
-    }
-    return atual->getInfo();
-}
-
-/**
- * \copydoc ListaEnc< T >::contem( const T& dado )
- */
-template< typename T >
-bool ListaEnc< T >::contem( const T& dado )
-{
-    if( listaVazia() )
-    {
-        throw -2; //ExcecaoListaVazia();
-    }
-    Elemento< T >* atual = head;
-    for( int i = 0; i < size; i++ )
-    {
-        if( igual( dado, atual->getInfo() ) )
-        {
-            return true;
-        }
-        atual = atual->getProximo();
-    }
-    return false;
-}
-
-/**
- * \copydoc ListaEnc< T >::retiraDaPosicao( int posicao )
- */
-template< typename T >
-T ListaEnc< T >::retiraDaPosicao( int posicao )
+T PilhaEnc< T >::retiraDaPosicao( int posicao )
 {
     //Variável auxiliar para elemento.
     //Elemento< T >* anterior, eliminar;
@@ -450,65 +246,41 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
 }
 
 /**
- * \copydoc ListaEnc< T >::adiciona( const T& dado )
+ * \copydoc PilhaEnc< T >::retiraDoInicio()
  */
 template< typename T >
-void ListaEnc< T >::adiciona( const T& dado )
+T PilhaEnc< T >::retiraDoInicio()
 {
-    return adicionaNaPosicao( dado, size );
+    if( PilhaVazia() )
+    {
+        throw ERROPILHACHEIA;
+    }
+    Elemento< T >* saiu = head;
+    T volta = saiu->getInfo();
+    head = saiu->getProximo();
+    size--;
+    delete saiu;
+    return volta;
 }
 
 /**
- * \copydoc ListaEnc< T >::retira()
+ * \copydoc PilhaEnc< T >::topo()
  */
 template< typename T >
-T ListaEnc< T >::retira()
+T PilhaEnc< T >::topo()
 {
-    return retiraDaPosicao( size - 1 );
+    T elemento = this->desempilha();
+    
+    this->empilha( elemento );
+    
+    return elemento;
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraEspecifico( const T& dado )
+ * \copydoc PilhaEnc< T >::PilhaVazia() const
  */
 template< typename T >
-T ListaEnc< T >::retiraEspecifico( const T& dado )
-{
-    if( listaVazia() )
-    {
-        throw -3; //ExcecaoListaVazia();
-    }
-    return retiraDaPosicao( posicao( dado ) + 1 );
-}
-
-/**
- * \copydoc ListaEnc< T >::adicionaEmOrdem( const T& dado )
- */
-template< typename T >
-void ListaEnc< T >::adicionaEmOrdem( const T& dado )
-{
-    if( listaVazia() )
-    {
-        return adicionaNoInicio( dado );
-    }
-    Elemento< T >* atual = head;
-    int posicao = 1;
-    while( atual->getProximo() != 0 && maior( dado, atual->getInfo() ) )
-    {
-        atual = atual->getProximo();
-        posicao++;
-    }
-    if( maior( dado, atual->getInfo() ) )
-    {
-        return adicionaNaPosicao( dado, posicao + 1 );
-    }
-    adicionaNaPosicao( dado, posicao );
-}
-
-/**
- * \copydoc ListaEnc< T >::listaVazia() const
- */
-template< typename T >
-bool ListaEnc< T >::listaVazia() const
+bool PilhaEnc< T >::PilhaVazia()
 {
     if( size == 0 )
         return true;
@@ -516,80 +288,47 @@ bool ListaEnc< T >::listaVazia() const
 }
 
 /**
- * \copydoc ListaEnc< T >::igual( T dado1, T dado2 )
+ * \copydoc PilhaEnc< T >::adicionaNoInicio( const T& dado )
  */
 template< typename T >
-bool ListaEnc< T >::igual( T dado1, T dado2 )
+void PilhaEnc< T >::adicionaNoInicio( const T& dado )
 {
-    return dado1 == dado2;
-}
+    Elemento< T > *novo = new Elemento< T >( dado, head );
 
-/**
- * \copydoc ListaEnc< T >::maior( T dado1, T dado2 )
- */
-template< typename T >
-bool ListaEnc< T >::maior( T dado1, T dado2 )
-{
-    return dado2 < dado1;
-}
-
-/**
- * \copydoc ListaEnc< T >::menor( T dado1, T dado2 )
- */
-template< typename T >
-bool ListaEnc< T >::menor( T dado1, T dado2 )
-{
-    return dado1 < dado2;
-}
-
-/**
- * \copydoc ListaEnc< T >::posicaoInvalida( int p )
- */
-template< typename T >
-bool ListaEnc< T >::posicaoInvalida( int p )
-{
-    return ( p >= size + 1 || p < 0 );
-}
-
-/* // ******************************************************************
-template< typename T >
-ListaEnc< T >* ListaEnc< T >::criaLista()
-{
-    ListaEnc* aLista;
-    aLista = new ListaEnc();
-    if( aLista != NULL )
+    if( novo == NULL )
+	throw ERROPILHACHEIA;
+    else
     {
-        aLista->size = 0;
-        aLista->head = NULL;
+	//poderia ser feito diretamente em Elemento<T>(dado,head);
+	//novo->setProximo(dados); 
+	//novo->setProximo(head);  
+	head = novo;
+	size++;
     }
-    return aLista;
-}*/
+}
 
 /**
- * \copydoc ListaEnc< T >::destroiLista()
+ * \copydoc PilhaEnc< T >::destroiPilha()
  */
 template< typename T >
-void ListaEnc< T >::destroiLista()
+void PilhaEnc< T >::limparPilha()
 {
-    // pula se a lista já está vazia
-    if( head != 0 )
+    while( head )
     {
         Elemento< T > * atual = head;
         
-        while( head )
-        {
-            delete head;
-            
-            // evitar acessar um null pointer
-            if(atual != 0)
-            {
-               atual = atual->getProximo();
-            }
-        }
+        head = head->getProximo();
         
         delete atual;
-        size = 0;
+        
+        this->size--;
+        
+        // evitar acessar um null pointer
+        if( atual != 0 )
+        {
+            atual = atual->getProximo();
+        }
     }
 }
 
-#endif /* LISTAENC_HPP_ */
+#endif /* PILHAENC_HPP_ */

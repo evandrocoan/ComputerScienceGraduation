@@ -1,57 +1,69 @@
-//============================================================================
-// Name        : ListaEncadeada.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+/* Copyright [2014] <Jean Martina>
+ * TesteFilaEnc.cpp
+ */
 
+#include <stdio.h>
 #include <gtest/gtest.h>
 #include "FilaEnc.hpp"
-#include "testes/testesFeitosAMao.cpp"
 
-using namespace std;
 
-int main( int argc, char* argv[] )
-{
-    cout << "!!!Hello World!!!\n" << endl; // prints !!!Hello World!!!
-    
-    // variável de retorno do sucesso da execução do programa
-    int a = 0;
-    
-    // chama o google test
-    testing::InitGoogleTest( &argc, argv );
-    a = RUN_ALL_TESTS();
-
-    /*// chama os testes feitos a mão
-    TestesFeitoAMao a;
-    a.testePricipal();*/
-
-    //getchar(); // keep console window open until Return keystroke
-    
-    
+int main(int argc, char* argv[]) {
+    ::testing::InitGoogleTest(&argc, argv);
+    int a = RUN_ALL_TESTS();
     return a;
 }
-;
 
-class TesteListaEnc: public ::testing::Test
-{
-    protected:
-        ListaEnc< int > lista;
+class Objeto{
 };
 
-TEST( sample_test_case, sample_test )
-{
-    EXPECT_EQ( 1, 1 );
+class TesteFila: public ::testing::Test{
+ protected:
+    FilaEnc<int> p;
+    FilaEnc<Objeto> pobj;;
+};
+
+TEST_F(TesteFila, FilaVazia) {
+    ASSERT_TRUE(p.filaVazia());
 }
 
-TEST_F( TesteListaEnc, ListaVazia )
-{
-    ASSERT_TRUE( lista.listaVazia() );
+
+TEST_F(TesteFila, InsereElemento) {
+    p.inclui(0);
+    ASSERT_EQ(0, p.ultimo());
 }
 
-TEST_F( TesteListaEnc, teste )
-{
-    lista.adicionaNaPosicao( 2, 0 );
-    ASSERT_EQ( lista.tamanho(), 2 );
+TEST_F(TesteFila, Retira) {
+    p.inclui(0);
+    p.inclui(1);
+    p.inclui(2);
+    ASSERT_EQ(0, p.retira());
+    ASSERT_EQ(2, p.ultimo());
+}
+
+TEST_F(TesteFila, Ultimo) {
+    p.inclui(0);
+    p.inclui(1);
+    ASSERT_EQ(1, p.ultimo());
+}
+
+TEST_F(TesteFila, PosicaoUltimo) {
+    p.inclui(0);
+    p.inclui(1);
+    p.inclui(2);
+    ASSERT_EQ(2, p.ultimo());
+}
+
+TEST_F(TesteFila, ExcecaoFilaVazia) {
+    EXPECT_ANY_THROW(p.retira());
+}
+
+TEST_F(TesteFila, LimpaFila) {
+    p.inclui(0);
+    p.inclui(1);
+    p.inclui(2);
+    p.inclui(3);
+    p.inclui(4);
+    p.inclui(5);
+    p.limparFila();
+    EXPECT_ANY_THROW(p.ultimo());
 }

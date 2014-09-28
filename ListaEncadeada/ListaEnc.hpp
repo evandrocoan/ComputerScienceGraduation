@@ -30,190 +30,191 @@
 template< typename T >
 class ListaEnc
 {
-    private:
-        /**
-         * Ponteiro para o primeiro elemento da lista
-         */ 
-        Elemento< T >* head;
+private:
+    /**
+     * Ponteiro para o primeiro elemento da lista
+     */
+    Elemento< T >* head;
 
-        /**
-         * Número de elementos da lista
-         */
-        int size;
+    /**
+     * Número de elementos da lista
+     */
+    int size;
 
-    public:
-        
-        /**
-         * Construtor padrão que cria uma lista encadeada vazia
-         */
-        ListaEnc();
+public:
+    
+    /**
+     * Construtor padrão que cria uma lista encadeada vazia
+     */
+    ListaEnc();
 
-        /**
-         * Destrutor padrão que destrói os dados que aponta a lista encadeada
-         */
-        ~ListaEnc();
+    /**
+     * Destrutor padrão que destrói os dados que aponta a lista encadeada
+     */
+    ~ListaEnc();
 
-        /**
-         * Informa o tamanho atual da lista encadeada. 
-         * 
-         * @return um inteiro informando o tamnha da lista encadeada
-         */
-        int tamanho();
+    /**
+     * Informa o tamanho atual da lista encadeada. 
+     * 
+     * @return um inteiro informando o tamnha da lista encadeada
+     */
+    int tamanho();
 
-/*
-        // ****************************
-        ListaEnc< T >* criaLista();
-        // ****************************
-*/
-        /**
-         * Adiciona um dado recebido como parâmetro no início da lista
-         * 
-         * @param dado
-         */
-        void adicionaNoInicio( const T& dado );
-        
-        /**
-         * Retira o elemento da cabeça da lista encadeada
-         * 
-         * @return o elemento na cabeça da lista encadeada
-         */
-        T retiraDoInicio();
-        
-        /**
-         * Deleta o elemento no ínicio na cabeça da lista encadeada
-         * 
-         * @return o tamanho da lista encadeada após a remoção da cabeça
-         */
-        int eliminaDoInicio();
-        
-        /**
-         * Adiciona um elemento em uma posição específica.
-         * 
-         * @param dado a ser adicionado
-         * @param pos a posição para adicionar o dado
-         * @throw erro de posição se a posição é inexistente
-         */
-        void adicionaNaPosicao( const T& dado, int pos );
-        
-        /**
-         * Retorna a posição de um elemento fornecido como parâmetro. 
-         * A posição nesta lista encadeada começa em 0, para o primeiro 
-         * elemento.
-         * 
-         * @param dado a ter a posição encontrada
-         * @return a posição do dado encontrado com um inteiro
-         */
-        int posicao( const T& dado ) const;
-        
-        /**
-         * Descobre qual o ponteiro para um determinado elemento na lista.
-         * 
-         * @param dado a ser procurado um ponteiro
-         * @return o ponteiro para o dado passado como parâmetro
-         */
-        T* posicaoMem( const T& dado ) const;
-        
-        /**
-         * Informa se a lista encadeada contém o dado passado como parâmetro.
-         * 
-         * @param dado a ser encontrado
-         * @return true se a lista encadeada contém o dada passado como 
-         * parâmetro, false caso contrário.
-         */
-        bool contem( const T& dado );
-        
-        /**
-         * Elimina um elemento de uma certa posição nesta lista encadeada.
-         * 
-         * @param a posição do elemento a ser retirado
-         * @return o elemento retirado da posição
-         */
-        T retiraDaPosicao( int pos );
+    /*
+     // ****************************
+     ListaEnc< T >* criaLista();
+     // ****************************
+     */
+    
+    /**
+     * Adiciona um dado recebido como parâmetro no início da lista
+     * 
+     * @param dado
+     */
+    void adicionaNoInicio( const T& dado );
 
-        /**
-         * Adiciona um elemento no final da lista encadeada
-         * 
-         * @param dado a ser adicionado
-         */
-        void adiciona( const T& dado );
-        
-        /**
-         * Retira o elemento pertencente ao final da lista encadeada
-         * 
-         * @return o dado retirado da lista encadeada
-         */
-        T retira();
+    /**
+     * Retira o elemento da cabeça da lista encadeada
+     * 
+     * @return o elemento na cabeça da lista encadeada
+     */
+    T retiraDoInicio();
 
-        /**
-         * Retira a primeiro ocorrência do dado fornecidado como parâmetro
-         * 
-         * @param dado a ter a primeira ocorrência retirada
-         * @return a primeira ocorrência do dado retirado
-         */
-        T retiraEspecifico( const T& dado );
-        
-        /**
-         * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
-         * de objeto que essa lista encadeada reprensenta
-         * 
-         * @param dado a ser adicionada em ordem
-         */
-        void adicionaEmOrdem( const T& data );
-        
-        /**
-         * Informa se a lista encadeada está vazia
-         * 
-         * @return true se a lista encadeada está vazia, false caso contrário
-         */
-        bool listaVazia() const;
-        
-        /**
-         * Informa se dois dados são iguais. Utiliza o operador de igualdade 
-         * do tipo do objeto que essa lista encadeada representa para 
-         * determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se os parametrôs são iguais, false caso contrário
-         */
-        bool igual( T dado1, T dado2 );
-        
-        /**
-         * Informa se o primeiro parâmetro é maior que o segundo. Utiliza o 
-         * operador de igualdade do tipo do objeto que essa lista encadeada 
-         * representa para determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se o primeiro parâmetro é maior que o segundo, 
-         * false caso contrário
-         */
-        bool maior( T dado1, T dado2 );
-        
-        /**
-         * Informa se o primeiro parâmetro é menor que o segundo. Utiliza o 
-         * operador de igualdade do tipo do objeto que essa lista encadeada 
-         * representa para determinar se eles são iguais.
-         * 
-         * @param dado1 a ser comparado
-         * @param dado2 a ser comparado
-         * @return true se o primeiro parâmetro é menor que o segundo, 
-         * false caso contrário
-         */
-        bool menor( T dado1, T dado2 );
-        
-        /**
-         * Destrói todos os ponteiros da lista e ajusta seu tamanho para 0
-         */
-        void destroiLista();
-        
-        /**
-         * Informa se uma determinada posição válida.
-         * 
-         * @param a posição a ser verificada
-         * @return true se a posição é válida, false caso contrário
-         */
-        bool posicaoInvalida( int p );
+    /**
+     * Deleta o elemento no ínicio na cabeça da lista encadeada
+     * 
+     * @return o tamanho da lista encadeada após a remoção da cabeça
+     */
+    int eliminaDoInicio();
+
+    /**
+     * Adiciona um elemento em uma posição específica.
+     * 
+     * @param dado a ser adicionado
+     * @param pos a posição para adicionar o dado
+     * @throw erro de posição se a posição é inexistente
+     */
+    void adicionaNaPosicao( const T& dado, int pos );
+
+    /**
+     * Retorna a posição de um elemento fornecido como parâmetro. 
+     * A posição nesta lista encadeada começa em 0, para o primeiro 
+     * elemento.
+     * 
+     * @param dado a ter a posição encontrada
+     * @return a posição do dado encontrado com um inteiro
+     */
+    int posicao( const T& dado ) const;
+
+    /**
+     * Descobre qual o ponteiro para um determinado elemento na lista.
+     * 
+     * @param dado a ser procurado um ponteiro
+     * @return o ponteiro para o dado passado como parâmetro
+     */
+    T* posicaoMem( const T& dado ) const;
+
+    /**
+     * Informa se a lista encadeada contém o dado passado como parâmetro.
+     * 
+     * @param dado a ser encontrado
+     * @return true se a lista encadeada contém o dada passado como 
+     * parâmetro, false caso contrário.
+     */
+    bool contem( const T& dado );
+
+    /**
+     * Elimina um elemento de uma certa posição nesta lista encadeada.
+     * 
+     * @param a posição do elemento a ser retirado
+     * @return o elemento retirado da posição
+     */
+    T retiraDaPosicao( int pos );
+
+    /**
+     * Adiciona um elemento no final da lista encadeada
+     * 
+     * @param dado a ser adicionado
+     */
+    void adiciona( const T& dado );
+
+    /**
+     * Retira o elemento pertencente ao final da lista encadeada
+     * 
+     * @return o dado retirado da lista encadeada
+     */
+    T retira();
+
+    /**
+     * Retira a primeiro ocorrência do dado fornecidado como parâmetro
+     * 
+     * @param dado a ter a primeira ocorrência retirada
+     * @return a primeira ocorrência do dado retirado
+     */
+    T retiraEspecifico( const T& dado );
+
+    /**
+     * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
+     * de objeto que essa lista encadeada reprensenta
+     * 
+     * @param dado a ser adicionada em ordem
+     */
+    void adicionaEmOrdem( const T& data );
+
+    /**
+     * Informa se a lista encadeada está vazia
+     * 
+     * @return true se a lista encadeada está vazia, false caso contrário
+     */
+    bool listaVazia() const;
+
+    /**
+     * Informa se dois dados são iguais. Utiliza o operador de igualdade 
+     * do tipo do objeto que essa lista encadeada representa para 
+     * determinar se eles são iguais.
+     * 
+     * @param dado1 a ser comparado
+     * @param dado2 a ser comparado
+     * @return true se os parametrôs são iguais, false caso contrário
+     */
+    bool igual( T dado1, T dado2 );
+
+    /**
+     * Informa se o primeiro parâmetro é maior que o segundo. Utiliza o 
+     * operador de igualdade do tipo do objeto que essa lista encadeada 
+     * representa para determinar se eles são iguais.
+     * 
+     * @param dado1 a ser comparado
+     * @param dado2 a ser comparado
+     * @return true se o primeiro parâmetro é maior que o segundo, 
+     * false caso contrário
+     */
+    bool maior( T dado1, T dado2 );
+
+    /**
+     * Informa se o primeiro parâmetro é menor que o segundo. Utiliza o 
+     * operador de igualdade do tipo do objeto que essa lista encadeada 
+     * representa para determinar se eles são iguais.
+     * 
+     * @param dado1 a ser comparado
+     * @param dado2 a ser comparado
+     * @return true se o primeiro parâmetro é menor que o segundo, 
+     * false caso contrário
+     */
+    bool menor( T dado1, T dado2 );
+
+    /**
+     * Destrói todos os ponteiros da lista e ajusta seu tamanho para 0
+     */
+    void destroiLista();
+
+    /**
+     * Informa se uma determinada posição válida.
+     * 
+     * @param a posição a ser verificada
+     * @return true se a posição é válida, false caso contrário
+     */
+    bool posicaoInvalida( int p );
 };
 
 /**
@@ -551,18 +552,18 @@ bool ListaEnc< T >::posicaoInvalida( int p )
 }
 
 /* // ******************************************************************
-template< typename T >
-ListaEnc< T >* ListaEnc< T >::criaLista()
-{
-    ListaEnc* aLista;
-    aLista = new ListaEnc();
-    if( aLista != NULL )
-    {
-        aLista->size = 0;
-        aLista->head = NULL;
-    }
-    return aLista;
-}*/
+ template< typename T >
+ ListaEnc< T >* ListaEnc< T >::criaLista()
+ {
+ ListaEnc* aLista;
+ aLista = new ListaEnc();
+ if( aLista != NULL )
+ {
+ aLista->size = 0;
+ aLista->head = NULL;
+ }
+ return aLista;
+ }*/
 
 /**
  * \copydoc ListaEnc< T >::destroiLista()
@@ -581,9 +582,9 @@ void ListaEnc< T >::destroiLista()
         this->size--;
         
         // evitar acessar um null pointer
-        if(atual != 0)
+        if( atual != 0 )
         {
-           atual = atual->getProximo();
+            atual = atual->getProximo();
         }
     }
 }

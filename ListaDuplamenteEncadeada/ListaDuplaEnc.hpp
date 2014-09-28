@@ -28,7 +28,7 @@
  * Header para um lista duplamente encadeada
  */
 template< typename T >
-class ListaEnc
+class ListaDupla
 {
     private:
         /**
@@ -46,13 +46,13 @@ class ListaEnc
         /**
          * Construtor padrão que cria uma lista duplamente encadeada vazia
          */
-        ListaEnc();
+        ListaDupla();
 
         /**
          * Destrutor padrão que destrói os ponteiros da lista e marca o 
          * tamanho da lista para zero
          */
-        ~ListaEnc();
+        ~ListaDupla();
 
         /**
          * Informa o tamanho atual da lista duplamente encadeada. 
@@ -232,29 +232,29 @@ class ListaEnc
 };
 
 /**
- * \copydoc ListaEnc< T >::ListaEnc()
+ * \copydoc ListaDupla< T >::ListaEnc()
  */
 template< typename T >
-ListaEnc< T >::ListaEnc()
+ListaDupla< T >::ListaDupla()
 {
     head = NULL;
     size = 0;
 }
 
 /**
- * \copydoc ListaEnc< T >::~ListaEnc()
+ * \copydoc ListaDupla< T >::~ListaEnc()
  */
 template< typename T >
-ListaEnc< T >::~ListaEnc()
+ListaDupla< T >::~ListaDupla()
 {
 
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNoInicioDuplo( const T& dado )
+ * \copydoc ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNoInicioDuplo( const T& dado )
+void ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
 {
     ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, 0, head );
     
@@ -271,14 +271,14 @@ void ListaEnc< T >::adicionaNoInicioDuplo( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDoInicioDuplo()
+ * \copydoc ListaDupla< T >::retiraDoInicioDuplo()
  */
 template< typename T >
-T ListaEnc< T >::retiraDoInicioDuplo()
+T ListaDupla< T >::retiraDoInicioDuplo()
 {
     if( listaVazia() )
     {
-        return 0;
+        throw ERROLISTADUPLAVAZIA;
     }
     ElementoDuplo< T >* saiu = head;
     T volta = saiu->getInfo();
@@ -289,10 +289,10 @@ T ListaEnc< T >::retiraDoInicioDuplo()
 }
 
 /**
- * \copydoc ListaEnc< T >::eliminaDoInicioDuplo()
+ * \copydoc ListaDupla< T >::eliminaDoInicioDuplo()
  */
 template< typename T >
-void ListaEnc< T >::eliminaDoInicioDuplo()
+void ListaDupla< T >::eliminaDoInicioDuplo()
 {
     if( listaVazia() )
     {
@@ -306,19 +306,19 @@ void ListaEnc< T >::eliminaDoInicioDuplo()
 }
 
 /**
- * \copydoc ListaEnc< T >::tamanho()
+ * \copydoc ListaDupla< T >::tamanho()
  */
 template< typename T >
-int ListaEnc< T >::tamanho()
+int ListaDupla< T >::tamanho()
 {
     return this->size;
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
+ * \copydoc ListaDupla< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
+void ListaDupla< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
 {
     // verifica se está tentando adicionar em uma posição inexistente
     if( posicaoInvalida( pos ) )
@@ -364,10 +364,10 @@ void ListaEnc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoDuplo( const T& dado ) const
+ * \copydoc ListaDupla< T >::posicaoDuplo( const T& dado ) const
  */
 template< typename T >
-int ListaEnc< T >::posicaoDuplo( const T& dado ) const
+int ListaDupla< T >::posicaoDuplo( const T& dado ) const
 {
     if( listaVazia() )
     {
@@ -386,10 +386,10 @@ int ListaEnc< T >::posicaoDuplo( const T& dado ) const
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoMemDuplo( const T& dado ) const
+ * \copydoc ListaDupla< T >::posicaoMemDuplo( const T& dado ) const
  */
 template< typename T >
-T* ListaEnc< T >::posicaoMemDuplo( const T& dado ) const
+T* ListaDupla< T >::posicaoMemDuplo( const T& dado ) const
 {
     if( listaVazia() )
     {
@@ -405,10 +405,10 @@ T* ListaEnc< T >::posicaoMemDuplo( const T& dado ) const
 }
 
 /**
- * \copydoc ListaEnc< T >::contemDuplo( const T& dado )
+ * \copydoc ListaDupla< T >::contemDuplo( const T& dado )
  */
 template< typename T >
-bool ListaEnc< T >::contemDuplo( const T& dado )
+bool ListaDupla< T >::contemDuplo( const T& dado )
 {
     if( listaVazia() )
     {
@@ -427,10 +427,10 @@ bool ListaEnc< T >::contemDuplo( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDaPosicaoDuplo( int posicao )
+ * \copydoc ListaDupla< T >::retiraDaPosicaoDuplo( int posicao )
  */
 template< typename T >
-T ListaEnc< T >::retiraDaPosicaoDuplo( int posicao )
+T ListaDupla< T >::retiraDaPosicaoDuplo( int posicao )
 {
     //Variável auxiliar para elemento.
     //Elemento< T >* anterior, eliminar;
@@ -464,41 +464,41 @@ T ListaEnc< T >::retiraDaPosicaoDuplo( int posicao )
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaDuplo( const T& dado )
+ * \copydoc ListaDupla< T >::adicionaDuplo( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaDuplo( const T& dado )
+void ListaDupla< T >::adicionaDuplo( const T& dado )
 {
     return adicionaNaPosicaoDuplo( dado, size );
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDuplo()
+ * \copydoc ListaDupla< T >::retiraDuplo()
  */
 template< typename T >
-T ListaEnc< T >::retiraDuplo()
+T ListaDupla< T >::retiraDuplo()
 {
     return retiraDaPosicaoDuplo( size - 1 );
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraEspecificoDuplo( const T& dado )
+ * \copydoc ListaDupla< T >::retiraEspecificoDuplo( const T& dado )
  */
 template< typename T >
-T ListaEnc< T >::retiraEspecificoDuplo( const T& dado )
+T ListaDupla< T >::retiraEspecificoDuplo( const T& dado )
 {
     if( listaVazia() )
     {
-        throw -3; //ExcecaoListaVazia();
+        throw ERROLISTADUPLAVAZIA; //ExcecaoListaVazia();
     }
-    return retiraDaPosicaoDuplo( posicaoDuplo( dado ) + 1 );
+    return retiraDaPosicaoDuplo( posicaoDuplo( dado ) );
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaEmOrdem( const T& dado )
+ * \copydoc ListaDupla< T >::adicionaEmOrdem( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaEmOrdem( const T& dado )
+void ListaDupla< T >::adicionaEmOrdem( const T& dado )
 {
     if( listaVazia() )
     {
@@ -519,10 +519,10 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::listaVazia() const
+ * \copydoc ListaDupla< T >::listaVazia() const
  */
 template< typename T >
-bool ListaEnc< T >::listaVazia() const
+bool ListaDupla< T >::listaVazia() const
 {
     if( size == 0 )
         return true;
@@ -530,44 +530,44 @@ bool ListaEnc< T >::listaVazia() const
 }
 
 /**
- * \copydoc ListaEnc< T >::igual( T dado1, T dado2 )
+ * \copydoc ListaDupla< T >::igual( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::igual( T dado1, T dado2 )
+bool ListaDupla< T >::igual( T dado1, T dado2 )
 {
     return dado1 == dado2;
 }
 
 /**
- * \copydoc ListaEnc< T >::maior( T dado1, T dado2 )
+ * \copydoc ListaDupla< T >::maior( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::maior( T dado1, T dado2 )
+bool ListaDupla< T >::maior( T dado1, T dado2 )
 {
     return dado2 < dado1;
 }
 
 /**
- * \copydoc ListaEnc< T >::menor( T dado1, T dado2 )
+ * \copydoc ListaDupla< T >::menor( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::menor( T dado1, T dado2 )
+bool ListaDupla< T >::menor( T dado1, T dado2 )
 {
     return dado1 < dado2;
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoInvalida( int p )
+ * \copydoc ListaDupla< T >::posicaoInvalida( int p )
  */
 template< typename T >
-bool ListaEnc< T >::posicaoInvalida( int p )
+bool ListaDupla< T >::posicaoInvalida( int p )
 {
     return ( p >= size + 1 || p < 0 );
 }
 
 /* // ******************************************************************
 template< typename T >
-ListaEnc< T >* ListaEnc< T >::criaLista()
+ListaEnc< T >* ListaDupla< T >::criaLista()
 {
     ListaEnc* aLista;
     aLista = new ListaEnc();
@@ -580,37 +580,34 @@ ListaEnc< T >* ListaEnc< T >::criaLista()
 }*/
 
 /**
- * \copydoc ListaEnc< T >::destroiListaDuplo()
+ * \copydoc ListaDupla< T >::destroiListaDuplo()
  */
 template< typename T >
-void ListaEnc< T >::destroiListaDuplo()
+void ListaDupla< T >::destroiListaDuplo()
 {
-    // pula se a lista já está vazia
-    if( head != 0 )
+    while( head )
     {
         ElementoDuplo< T > * atual = head;
         
-        while( head )
-        {
-            delete head;
-            
-            // evitar acessar um null pointer
-            if(atual != 0)
-            {
-               atual = atual->getProximo();
-            }
-        }
+        head = head->getProximo();
         
         delete atual;
-        size = 0;
+        
+        this->size--;
+        
+        // evitar acessar um null pointer
+        if(atual != 0)
+        {
+           atual = atual->getProximo();
+        }
     }
 }
 
 /**
- * \copydoc T ListaEnc< T >::mostra(int pos)
+ * \copydoc T ListaDupla< T >::mostra(int pos)
  */
 template< typename T >
-T ListaEnc< T >::mostra(int pos)
+T ListaDupla< T >::mostra(int pos)
 {
     T elemento;
     
@@ -622,10 +619,10 @@ T ListaEnc< T >::mostra(int pos)
 }
 
 /**
- * \copydoc ListaEnc< T >::verUltimo();
+ * \copydoc ListaDupla< T >::verUltimo();
  */
 template< typename T >
-int ListaEnc< T >::verUltimo()
+int ListaDupla< T >::verUltimo()
 {
     return this->tamanho();
 }

@@ -1,57 +1,76 @@
-//============================================================================
-// Name        : ListaEncadeada.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+/* Copyright [2014] <Jean Martina>
+ * TestePilhaEnc.cpp
+ */
 
+#include <stdio.h>
 #include <gtest/gtest.h>
 #include "PilhaEnc.hpp"
-#include "testes/testesFeitosAMao.cpp"
-
-using namespace std;
 
 int main( int argc, char* argv[] )
 {
-    cout << "!!!Hello World!!!\n" << endl; // prints !!!Hello World!!!
-    
-    // variável de retorno do sucesso da execução do programa
-    int a = 0;
-    
-    // chama o google test
-    testing::InitGoogleTest( &argc, argv );
-    a = RUN_ALL_TESTS();
-
-    /*// chama os testes feitos a mão
-    TestesFeitoAMao a;
-    a.testePricipal();*/
-
-    //getchar(); // keep console window open until Return keystroke
-    
-    
+    ::testing::InitGoogleTest( &argc, argv );
+    int a = RUN_ALL_TESTS();
     return a;
 }
-;
 
-class TesteListaEnc: public ::testing::Test
+class Objeto
 {
-    protected:
-        ListaEnc< int > lista;
 };
 
-TEST( sample_test_case, sample_test )
+class TestePilha: public ::testing::Test
 {
-    EXPECT_EQ( 1, 1 );
+    protected:
+        PilhaEnc< int > p;
+        PilhaEnc< Objeto > pobj;
+};
+
+TEST_F(TestePilha, PilhaVazia)
+{
+    ASSERT_TRUE( p.PilhaVazia() );
 }
 
-TEST_F( TesteListaEnc, ListaVazia )
+TEST_F(TestePilha, InsereElemento)
 {
-    ASSERT_TRUE( lista.listaVazia() );
+    p.empilha( 0 );
+    ASSERT_EQ( 0, p.topo() );
 }
 
-TEST_F( TesteListaEnc, teste )
+TEST_F(TestePilha, Desempilha)
 {
-    lista.adicionaNaPosicao( 2, 0 );
-    ASSERT_EQ( lista.tamanho(), 2 );
+    p.empilha( 0 );
+    p.empilha( 1 );
+    p.desempilha();
+    ASSERT_EQ( 0, p.topo() );
+}
+
+TEST_F(TestePilha, Topo)
+{
+    p.empilha( 0 );
+    p.empilha( 1 );
+    ASSERT_EQ( 1, p.topo() );
+}
+
+TEST_F(TestePilha, PosicaoTopo)
+{
+    p.empilha( 0 );
+    p.empilha( 1 );
+    p.empilha( 2 );
+    ASSERT_EQ( 2, p.topo() );
+}
+
+TEST_F(TestePilha, ExcecaoPilhaVazia)
+{
+    EXPECT_ANY_THROW( p.desempilha() );
+}
+
+TEST_F(TestePilha, LimpaPilha)
+{
+    p.empilha( 0 );
+    p.empilha( 1 );
+    p.empilha( 2 );
+    p.empilha( 3 );
+    p.empilha( 4 );
+    p.empilha( 5 );
+    p.limparPilha();
+    EXPECT_ANY_THROW( p.topo() );
 }
