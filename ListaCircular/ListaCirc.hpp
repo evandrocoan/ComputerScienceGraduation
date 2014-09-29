@@ -1,6 +1,6 @@
 //! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
- * ListaEnc.hpp
+ * ListaCirc.hpp
  * 
  * \authors Evandro  Coan, Charles Borges de Lima
  */
@@ -8,8 +8,8 @@
 /**
  * Evita incluir esta classe mais de uma vez no processo de compilação
  */
-#ifndef LISTAENC_HPP_
-#define LISTAENC_HPP_
+#ifndef LISTACIRC_HPP_
+#define LISTACIRC_HPP_
 
 /**
  * Bibliotecas utilizadas
@@ -26,10 +26,10 @@
 #define ERRODEPOSICAO -3
 
 /**
- * Header para um lista encadeada
+ * Header para um lista circadeada
  */
 template< typename T >
-class ListaEnc
+class ListaCirc
 {
 private:
     /**
@@ -45,25 +45,25 @@ private:
 public:
     
     /**
-     * Construtor padrão que cria uma lista encadeada vazia
+     * Construtor padrão que cria uma lista circadeada vazia
      */
-    ListaEnc();
+    ListaCirc();
 
     /**
-     * Destrutor padrão que destrói os dados que aponta a lista encadeada
+     * Destrutor padrão que destrói os dados que aponta a lista circadeada
      */
-    ~ListaEnc();
+    ~ListaCirc();
 
     /**
-     * Informa o tamanho atual da lista encadeada. 
+     * Informa o tamanho atual da lista circadeada. 
      * 
-     * @return um inteiro informando o tamnha da lista encadeada
+     * @return um inteiro informando o tamnha da lista circadeada
      */
     int tamanho();
 
     /*
      // ****************************
-     ListaEnc< T >* criaLista();
+     ListaCirc< T >* criaLista();
      // ****************************
      */
 
@@ -75,16 +75,16 @@ public:
     void adicionaNoInicio( const T& dado );
 
     /**
-     * Retira o elemento da cabeça da lista encadeada
+     * Retira o elemento da cabeça da lista circadeada
      * 
-     * @return o elemento na cabeça da lista encadeada
+     * @return o elemento na cabeça da lista circadeada
      */
     T retiraDoInicio();
 
     /**
-     * Deleta o elemento no ínicio na cabeça da lista encadeada
+     * Deleta o elemento no ínicio na cabeça da lista circadeada
      * 
-     * @return o tamanho da lista encadeada após a remoção da cabeça
+     * @return o tamanho da lista circadeada após a remoção da cabeça
      */
     int eliminaDoInicio();
 
@@ -99,11 +99,11 @@ public:
 
     /**
      * Retorna a posição de um elemento fornecido como parâmetro. 
-     * A posição nesta lista encadeada começa em 0, para o primeiro 
+     * A posição nesta lista circadeada começa em 0, para o primeiro 
      * elemento.
      * 
-     * @param dado a ter a posição encontrada
-     * @return a posição do dado encontrado com um inteiro
+     * @param dado a ter a posição circontrada
+     * @return a posição do dado circontrado com um inteiro
      */
     int posicao( const T& dado ) const;
 
@@ -116,16 +116,16 @@ public:
     T* posicaoMem( const T& dado ) const;
 
     /**
-     * Informa se a lista encadeada contém o dado passado como parâmetro.
+     * Informa se a lista circadeada contém o dado passado como parâmetro.
      * 
-     * @param dado a ser encontrado
-     * @return true se a lista encadeada contém o dada passado como 
+     * @param dado a ser circontrado
+     * @return true se a lista circadeada contém o dada passado como 
      * parâmetro, false caso contrário.
      */
     bool contem( const T& dado );
 
     /**
-     * Elimina um elemento de uma certa posição nesta lista encadeada.
+     * Elimina um elemento de uma certa posição nesta lista circadeada.
      * 
      * @param a posição do elemento a ser retirado
      * @return o elemento retirado da posição
@@ -133,16 +133,16 @@ public:
     T retiraDaPosicao( int pos );
 
     /**
-     * Adiciona um elemento no final da lista encadeada
+     * Adiciona um elemento no final da lista circadeada
      * 
      * @param dado a ser adicionado
      */
     void adiciona( const T& dado );
 
     /**
-     * Retira o elemento pertencente ao final da lista encadeada
+     * Retira o elemento pertcircente ao final da lista circadeada
      * 
-     * @return o dado retirado da lista encadeada
+     * @return o dado retirado da lista circadeada
      */
     T retira();
 
@@ -155,23 +155,23 @@ public:
     T retiraEspecifico( const T& dado );
 
     /**
-     * Adiciona um dado a lista encadeada, na ordem definida pelo tipo
-     * de objeto que essa lista encadeada reprensenta
+     * Adiciona um dado a lista circadeada, na ordem definida pelo tipo
+     * de objeto que essa lista circadeada reprensenta
      * 
      * @param dado a ser adicionada em ordem
      */
     void adicionaEmOrdem( const T& data );
 
     /**
-     * Informa se a lista encadeada está vazia
+     * Informa se a lista circadeada está vazia
      * 
-     * @return true se a lista encadeada está vazia, false caso contrário
+     * @return true se a lista circadeada está vazia, false caso contrário
      */
     bool listaVazia() const;
 
     /**
      * Informa se dois dados são iguais. Utiliza o operador de igualdade 
-     * do tipo do objeto que essa lista encadeada representa para 
+     * do tipo do objeto que essa lista circadeada representa para 
      * determinar se eles são iguais.
      * 
      * @param dado1 a ser comparado
@@ -182,7 +182,7 @@ public:
 
     /**
      * Informa se o primeiro parâmetro é maior que o segundo. Utiliza o 
-     * operador de igualdade do tipo do objeto que essa lista encadeada 
+     * operador de igualdade do tipo do objeto que essa lista circadeada 
      * representa para determinar se eles são iguais.
      * 
      * @param dado1 a ser comparado
@@ -194,7 +194,7 @@ public:
 
     /**
      * Informa se o primeiro parâmetro é menor que o segundo. Utiliza o 
-     * operador de igualdade do tipo do objeto que essa lista encadeada 
+     * operador de igualdade do tipo do objeto que essa lista circadeada 
      * representa para determinar se eles são iguais.
      * 
      * @param dado1 a ser comparado
@@ -219,29 +219,29 @@ public:
 };
 
 /**
- * \copydoc ListaEnc< T >::ListaEnc()
+ * \copydoc ListaCirc< T >::ListaCirc()
  */
 template< typename T >
-ListaEnc< T >::ListaEnc()
+ListaCirc< T >::ListaCirc()
 {
     head = NULL;
     size = 0;
 }
 
 /**
- * \copydoc ListaEnc< T >::~ListaEnc()
+ * \copydoc ListaCirc< T >::~ListaCirc()
  */
 template< typename T >
-ListaEnc< T >::~ListaEnc()
+ListaCirc< T >::~ListaCirc()
 {
     this->destroiLista();
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNoInicio( const T& dado )
+ * \copydoc ListaCirc< T >::adicionaNoInicio( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNoInicio( const T& dado )
+void ListaCirc< T >::adicionaNoInicio( const T& dado )
 {
     Elemento< T > *novo = new Elemento< T >( dado, head );
     
@@ -258,10 +258,10 @@ void ListaEnc< T >::adicionaNoInicio( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDoInicio()
+ * \copydoc ListaCirc< T >::retiraDoInicio()
  */
 template< typename T >
-T ListaEnc< T >::retiraDoInicio()
+T ListaCirc< T >::retiraDoInicio()
 {
     if( listaVazia() )
     {
@@ -276,10 +276,10 @@ T ListaEnc< T >::retiraDoInicio()
 }
 
 /**
- * \copydoc ListaEnc< T >::eliminaDoInicio()
+ * \copydoc ListaCirc< T >::eliminaDoInicio()
  */
 template< typename T >
-int ListaEnc< T >::eliminaDoInicio()
+int ListaCirc< T >::eliminaDoInicio()
 {
     if( listaVazia() )
     {
@@ -293,19 +293,19 @@ int ListaEnc< T >::eliminaDoInicio()
 }
 
 /**
- * \copydoc ListaEnc< T >::tamanho()
+ * \copydoc ListaCirc< T >::tamanho()
  */
 template< typename T >
-int ListaEnc< T >::tamanho()
+int ListaCirc< T >::tamanho()
 {
     return this->size;
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
+ * \copydoc ListaCirc< T >::adicionaNaPosicao( const T& dado, int pos )
  */
 template< typename T >
-void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
+void ListaCirc< T >::adicionaNaPosicao( const T& dado, int pos )
 {
     // verifica se está tentando adicionar em uma posição inexistente
     if( posicaoInvalida( pos ) )
@@ -351,10 +351,10 @@ void ListaEnc< T >::adicionaNaPosicao( const T& dado, int pos )
 }
 
 /**
- * \copydoc ListaEnc< T >::posicao( const T& dado ) const
+ * \copydoc ListaCirc< T >::posicao( const T& dado ) const
  */
 template< typename T >
-int ListaEnc< T >::posicao( const T& dado ) const
+int ListaCirc< T >::posicao( const T& dado ) const
 {
     if( listaVazia() )
     {
@@ -369,14 +369,14 @@ int ListaEnc< T >::posicao( const T& dado ) const
         }
         atual = atual->getProximo();
     }
-    throw -5; //ExcecaoDadoNaoEncontrado();
+    throw -5; //ExcecaoDadoNaoCircontrado();
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoMem( const T& dado ) const
+ * \copydoc ListaCirc< T >::posicaoMem( const T& dado ) const
  */
 template< typename T >
-T* ListaEnc< T >::posicaoMem( const T& dado ) const
+T* ListaCirc< T >::posicaoMem( const T& dado ) const
 {
     if( listaVazia() )
     {
@@ -392,10 +392,10 @@ T* ListaEnc< T >::posicaoMem( const T& dado ) const
 }
 
 /**
- * \copydoc ListaEnc< T >::contem( const T& dado )
+ * \copydoc ListaCirc< T >::contem( const T& dado )
  */
 template< typename T >
-bool ListaEnc< T >::contem( const T& dado )
+bool ListaCirc< T >::contem( const T& dado )
 {
     if( listaVazia() )
     {
@@ -414,10 +414,10 @@ bool ListaEnc< T >::contem( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraDaPosicao( int posicao )
+ * \copydoc ListaCirc< T >::retiraDaPosicao( int posicao )
  */
 template< typename T >
-T ListaEnc< T >::retiraDaPosicao( int posicao )
+T ListaCirc< T >::retiraDaPosicao( int posicao )
 {
     //Variável auxiliar para elemento.
     //Elemento< T >* anterior, eliminar;
@@ -451,28 +451,28 @@ T ListaEnc< T >::retiraDaPosicao( int posicao )
 }
 
 /**
- * \copydoc ListaEnc< T >::adiciona( const T& dado )
+ * \copydoc ListaCirc< T >::adiciona( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adiciona( const T& dado )
+void ListaCirc< T >::adiciona( const T& dado )
 {
     return adicionaNaPosicao( dado, size );
 }
 
 /**
- * \copydoc ListaEnc< T >::retira()
+ * \copydoc ListaCirc< T >::retira()
  */
 template< typename T >
-T ListaEnc< T >::retira()
+T ListaCirc< T >::retira()
 {
     return retiraDaPosicao( size - 1 );
 }
 
 /**
- * \copydoc ListaEnc< T >::retiraEspecifico( const T& dado )
+ * \copydoc ListaCirc< T >::retiraEspecifico( const T& dado )
  */
 template< typename T >
-T ListaEnc< T >::retiraEspecifico( const T& dado )
+T ListaCirc< T >::retiraEspecifico( const T& dado )
 {
     if( listaVazia() )
     {
@@ -482,10 +482,10 @@ T ListaEnc< T >::retiraEspecifico( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::adicionaEmOrdem( const T& dado )
+ * \copydoc ListaCirc< T >::adicionaEmOrdem( const T& dado )
  */
 template< typename T >
-void ListaEnc< T >::adicionaEmOrdem( const T& dado )
+void ListaCirc< T >::adicionaEmOrdem( const T& dado )
 {
     if( listaVazia() )
     {
@@ -506,10 +506,10 @@ void ListaEnc< T >::adicionaEmOrdem( const T& dado )
 }
 
 /**
- * \copydoc ListaEnc< T >::listaVazia() const
+ * \copydoc ListaCirc< T >::listaVazia() const
  */
 template< typename T >
-bool ListaEnc< T >::listaVazia() const
+bool ListaCirc< T >::listaVazia() const
 {
     if( size == 0 )
         return true;
@@ -517,47 +517,47 @@ bool ListaEnc< T >::listaVazia() const
 }
 
 /**
- * \copydoc ListaEnc< T >::igual( T dado1, T dado2 )
+ * \copydoc ListaCirc< T >::igual( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::igual( T dado1, T dado2 )
+bool ListaCirc< T >::igual( T dado1, T dado2 )
 {
     return dado1 == dado2;
 }
 
 /**
- * \copydoc ListaEnc< T >::maior( T dado1, T dado2 )
+ * \copydoc ListaCirc< T >::maior( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::maior( T dado1, T dado2 )
+bool ListaCirc< T >::maior( T dado1, T dado2 )
 {
     return dado2 < dado1;
 }
 
 /**
- * \copydoc ListaEnc< T >::menor( T dado1, T dado2 )
+ * \copydoc ListaCirc< T >::menor( T dado1, T dado2 )
  */
 template< typename T >
-bool ListaEnc< T >::menor( T dado1, T dado2 )
+bool ListaCirc< T >::menor( T dado1, T dado2 )
 {
     return dado1 < dado2;
 }
 
 /**
- * \copydoc ListaEnc< T >::posicaoInvalida( int p )
+ * \copydoc ListaCirc< T >::posicaoInvalida( int p )
  */
 template< typename T >
-bool ListaEnc< T >::posicaoInvalida( int p )
+bool ListaCirc< T >::posicaoInvalida( int p )
 {
     return ( p >= size + 1 || p < 0 );
 }
 
 /* // ******************************************************************
  template< typename T >
- ListaEnc< T >* ListaEnc< T >::criaLista()
+ ListaCirc< T >* ListaCirc< T >::criaLista()
  {
- ListaEnc* aLista;
- aLista = new ListaEnc();
+ ListaCirc* aLista;
+ aLista = new ListaCirc();
  if( aLista != NULL )
  {
  aLista->size = 0;
@@ -567,10 +567,10 @@ bool ListaEnc< T >::posicaoInvalida( int p )
  }*/
 
 /**
- * \copydoc ListaEnc< T >::destroiLista()
+ * \copydoc ListaCirc< T >::destroiLista()
  */
 template< typename T >
-void ListaEnc< T >::destroiLista()
+void ListaCirc< T >::destroiLista()
 {
     while( head )
     {
@@ -590,4 +590,4 @@ void ListaEnc< T >::destroiLista()
     }
 }
 
-#endif /* LISTAENC_HPP_ */
+#endif /* LISTACIRC_HPP_ */
