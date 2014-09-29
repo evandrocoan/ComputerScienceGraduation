@@ -7,8 +7,8 @@
 /**
  * Evita incluir esta classe mais de uma vez no processo de compilação
  */
-#ifndef LISTAENC_HPP_
-#define LISTAENC_HPP_
+#ifndef LISTADUPLAENC_HPP_
+#define LISTADUPLAENC_HPP_
 
 /**
  * Bibliotecas utilizadas
@@ -256,7 +256,7 @@ ListaDupla< T >::~ListaDupla()
 template< typename T >
 void ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
 {
-    ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, 0, head );
+    ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, NULL, head );
     
     if( novo == NULL )
         throw ERROLISTADUPLACHEIA;
@@ -265,6 +265,11 @@ void ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
         //poderia ser feito diretamente em Elemento<T>(dado,head);
         //novo->setProximo(dados); 
         //novo->setProximo(head);  
+        
+        if( novo->getProximo() != NULL )
+        {
+            novo->getProximo()->setAnterior( novo );
+        }
         head = novo;
         size++;
     }
@@ -627,4 +632,4 @@ int ListaDupla< T >::verUltimo()
     return this->tamanho();
 }
 
-#endif /* LISTAENC_HPP_ */
+#endif /* LISTADUPLAENC_HPP_ */
