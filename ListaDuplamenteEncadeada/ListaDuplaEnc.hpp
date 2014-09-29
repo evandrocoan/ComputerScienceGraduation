@@ -288,6 +288,12 @@ T ListaDupla< T >::retiraDoInicioDuplo()
     ElementoDuplo< T >* saiu = head;
     T volta = saiu->getInfo();
     head = saiu->getProximo();
+
+    if( head->getProximo( ) != NULL )
+    {
+        head->setAnterior( NULL );
+    }
+    
     size--;
     delete saiu;
     return volta;
