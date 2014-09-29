@@ -266,9 +266,9 @@ void ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
         //novo->setProximo(dados); 
         //novo->setProximo(head);  
         
-        if( novo->getProximo() != NULL )
+        if( novo->getProximo( ) != NULL )
         {
-            novo->getProximo()->setAnterior( novo );
+            novo->getProximo( )->setAnterior( novo );
         }
         head = novo;
         size++;
@@ -281,15 +281,15 @@ void ListaDupla< T >::adicionaNoInicioDuplo( const T& dado )
 template< typename T >
 T ListaDupla< T >::retiraDoInicioDuplo()
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTADUPLAVAZIA;
     }
     ElementoDuplo< T >* saiu = head;
-    T volta = saiu->getInfo();
-    head = saiu->getProximo();
+    T volta = saiu->getInfo( );
+    head = saiu->getProximo( );
     
-    if( head->getProximo() != NULL )
+    if( head->getProximo( ) != NULL )
     {
         head->setAnterior( NULL );
     }
@@ -305,12 +305,12 @@ T ListaDupla< T >::retiraDoInicioDuplo()
 template< typename T >
 void ListaDupla< T >::eliminaDoInicioDuplo()
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTADUPLAVAZIA;
     }
     ElementoDuplo< T >* saiu = head;
-    head = saiu->getProximo();
+    head = saiu->getProximo( );
     size--;
     delete saiu;
     return size;
@@ -358,17 +358,17 @@ void ListaDupla< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
     // faz a troca dos elementos
     for( int i = 0; i < pos - 1; i++ )
     {
-        anterior = anterior->getProximo();
+        anterior = anterior->getProximo( );
     }
     
     // emenda a cabeça na lista (anterior) no novo elemento
-    novo->setProximo( anterior->getProximo() );
+    novo->setProximo( anterior->getProximo( ) );
     
     //Se o novo não é o último da lista…
-    if( novo->getProximo() != NULL )
+    if( novo->getProximo( ) != NULL )
     {
         //Faço o antecessor do sucessor do novo.
-        novo->getProximo()->setAnterior( novo );
+        novo->getProximo( )->setAnterior( novo );
     }
     
     anterior->setProximo( novo );
@@ -384,18 +384,18 @@ void ListaDupla< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
 template< typename T >
 int ListaDupla< T >::posicaoDuplo( const T& dado ) const
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -4; //ExcecaoListaVazia();
     }
     ElementoDuplo< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
-        if( dado == atual->getInfo() )
+        if( dado == atual->getInfo( ) )
         {
             return i;
         }
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
     throw -5; //ExcecaoDadoNaoEncontrado();
 }
@@ -406,7 +406,7 @@ int ListaDupla< T >::posicaoDuplo( const T& dado ) const
 template< typename T >
 T* ListaDupla< T >::posicaoMemDuplo( const T& dado ) const
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -1; //ExcecaoListaVazia();
     }
@@ -414,9 +414,9 @@ T* ListaDupla< T >::posicaoMemDuplo( const T& dado ) const
     ElementoDuplo< T >* atual = head;
     for( int i = 0; i < posicao; i++ )
     {
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
-    return atual->getInfo();
+    return atual->getInfo( );
 }
 
 /**
@@ -425,18 +425,18 @@ T* ListaDupla< T >::posicaoMemDuplo( const T& dado ) const
 template< typename T >
 bool ListaDupla< T >::contemDuplo( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -2; //ExcecaoListaVazia();
     }
     ElementoDuplo< T >* atual = head;
     for( int i = 0; i < size; i++ )
     {
-        if( igual( dado, atual->getInfo() ) )
+        if( igual( dado, atual->getInfo( ) ) )
         {
             return true;
         }
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
     return false;
 }
@@ -457,25 +457,25 @@ T ListaDupla< T >::retiraDaPosicaoDuplo( int posicao )
     {
         if( posicao == 0 )
         {
-            return retiraDoInicioDuplo();
+            return retiraDoInicioDuplo( );
         } else
         {
             ElementoDuplo< T >* anterior = head;
             
             for( int i = 0; i < posicao - 1; i++ )
             {
-                anterior = anterior->getProximo();
+                anterior = anterior->getProximo( );
             }
-            ElementoDuplo< T >* eliminar = anterior->getProximo();
+            ElementoDuplo< T >* eliminar = anterior->getProximo( );
             
             //Variável auxiliar para o dado retornado
-            T volta = eliminar->getInfo();
+            T volta = eliminar->getInfo( );
             
-            anterior->setProximo( eliminar->getProximo() );
+            anterior->setProximo( eliminar->getProximo( ) );
             
-            if( eliminar->getProximo() != NULL )
+            if( eliminar->getProximo( ) != NULL )
             {
-                eliminar->getProximo()->setAnterior( anterior );
+                eliminar->getProximo( )->setAnterior( anterior );
             }
             
             size--;
@@ -509,7 +509,7 @@ T ListaDupla< T >::retiraDuplo()
 template< typename T >
 T ListaDupla< T >::retiraEspecificoDuplo( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTADUPLAVAZIA; //ExcecaoListaVazia();
     }
@@ -522,7 +522,7 @@ T ListaDupla< T >::retiraEspecificoDuplo( const T& dado )
 template< typename T >
 void ListaDupla< T >::adicionaEmOrdem( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         return adicionaNoInicioDuplo( dado );
     }
@@ -530,14 +530,14 @@ void ListaDupla< T >::adicionaEmOrdem( const T& dado )
     ElementoDuplo< T >* atual = head;
     int posicao = 1;
     
-    while( atual->getProximo() != NULL && maior( dado, atual->getInfo() ) )
+    while( atual->getProximo( ) != NULL && maior( dado, atual->getInfo( ) ) )
     {
         //Encontrar posição para inserir.
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
         posicao++;
     }
     
-    if( maior( dado, atual->getInfo() ) )
+    if( maior( dado, atual->getInfo( ) ) )
     {
         return adicionaNaPosicaoDuplo( dado, posicao + 1 );
     }
@@ -616,7 +616,7 @@ void ListaDupla< T >::destroiListaDuplo()
     {
         ElementoDuplo< T > * atual = head;
         
-        head = head->getProximo();
+        head = head->getProximo( );
         
         delete atual;
         
@@ -645,7 +645,7 @@ T ListaDupla< T >::mostra( int pos )
 template< typename T >
 int ListaDupla< T >::verUltimo()
 {
-    return this->tamanho();
+    return this->tamanho( );
 }
 
 #endif /* LISTADUPLAENC_HPP_ */
