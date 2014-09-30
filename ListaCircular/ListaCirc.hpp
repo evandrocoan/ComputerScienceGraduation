@@ -593,17 +593,16 @@ bool ListaCirc< T >::posicaoInvalida( int p )
 template< typename T >
 void ListaCirc< T >::destroiLista()
 {
-//    while( head->getProximo( )->getInfo( ) != NULL )
-//    {
-//        Elemento< T > * atual = head->getProximo();
-//        
-//        delete atual;
-//        
-//        this->size--;
-//    }
-    
-//    head = new Elemento< T >( NULL, NULL );
-//    size = 0;
+    while( size > 0 )
+    {
+        Elemento< T > * atual = head->getProximo();
+        
+        head->setProximo( atual->getProximo() );
+        
+        delete atual;
+        
+        this->size--;
+    }
 }
 
 #endif /* LISTACIRC_HPP_ */
