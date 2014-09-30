@@ -31,6 +31,7 @@
 template< typename T >
 class ListaCirc
 {
+    
 private:
     /**
      * Ponteiro para o primeiro elemento da lista
@@ -224,7 +225,8 @@ public:
 template< typename T >
 ListaCirc< T >::ListaCirc()
 {
-    head = NULL;
+    // cria-se o nodo sentinela
+    head = new Elemento< T >( NULL, NULL );
     size = 0;
 }
 
@@ -234,7 +236,7 @@ ListaCirc< T >::ListaCirc()
 template< typename T >
 ListaCirc< T >::~ListaCirc()
 {
-    this->destroiLista();
+    this->destroiLista( );
 }
 
 /**
@@ -243,16 +245,32 @@ ListaCirc< T >::~ListaCirc()
 template< typename T >
 void ListaCirc< T >::adicionaNoInicio( const T& dado )
 {
-    Elemento< T > *novo = new Elemento< T >( dado, head );
-    
-    if( novo == NULL )
-        throw ERROLISTACHEIA;
-    else
+    // quando se adiciona pela primeira vez
+    if( this->size == 0 )
     {
-        //poderia ser feito diretamente em Elemento<T>(dado,head);
-        //novo->setProximo(dados); 
-        //novo->setProximo(head);  
-        head = novo;
+        Elemento< T > *novo = new Elemento< T >( dado, head );
+        
+        head->setProximo( novo );
+        
+        size++;
+    } else
+    {
+        // salva o segundo (futuro terceiro) dado da lista
+        // para emendar com novo segundo dado
+        Elemento< T >* segundoDado = head->getProximo( );
+        
+        // aloca um elemento no inicio da lista
+        Elemento< T >* novoSegundoDado = new Elemento< T >( dado, segundoDado );
+        
+        // verifica se ela está cheia
+        if( novoSegundoDado == 0 )
+        {
+            throw ERROLISTACHEIA;
+        }
+        
+        // agora faz o head apontar para o novo segundo dado
+        head->setProximo( novoSegundoDado );
+        
         size++;
     }
 }
@@ -263,13 +281,13 @@ void ListaCirc< T >::adicionaNoInicio( const T& dado )
 template< typename T >
 T ListaCirc< T >::retiraDoInicio()
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTACHEIA;
     }
-    Elemento< T >* saiu = head;
-    T volta = saiu->getInfo();
-    head = saiu->getProximo();
+    Elemento< T >* saiu = head->getProximo();
+    T volta = saiu->getInfo( );
+    head->setProximo( saiu->getProximo( ) );
     size--;
     delete saiu;
     return volta;
@@ -281,12 +299,12 @@ T ListaCirc< T >::retiraDoInicio()
 template< typename T >
 int ListaCirc< T >::eliminaDoInicio()
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTAVAZIA;
     }
-    Elemento< T >* saiu = head;
-    head = saiu->getProximo();
+    Elemento< T >* saiu = head->getProximo();
+    head->setProximo( saiu->getProximo( ) );
     size--;
     delete saiu;
     return size;
@@ -320,10 +338,10 @@ void ListaCirc< T >::adicionaNaPosicao( const T& dado, int pos )
     }
     
     // caso seja a última posição, chama o método que manipula a calda
-//    if( pos == size )
-//    {
-//        return adiciona
-//    }
+    //    if( pos == size )
+    //    {
+    //        return adiciona
+    //    }
     
     // aloca um elemento no inicio da lista
     Elemento< T >* novo = new Elemento< T >( dado, 0 );
@@ -335,16 +353,19 @@ void ListaCirc< T >::adicionaNaPosicao( const T& dado, int pos )
     }
     
     // salva o ponterio da cabeça da lista
-    Elemento< T >* anterior = head;
+    Elemento< T >* anterior = head->getProximo();
     
-    //
+    // navega até o penúltimo elemento
+    // pois o último aponta para NULL
+    // caso se navegar até o último elemento, e ele apontar para o elemento
+    // sentinela, então, 
     for( int i = 0; i < pos - 1; i++ )
     {
-        anterior = anterior->getProximo();
+        anterior = anterior->getProximo( );
     }
     
     // 
-    novo->setProximo( anterior->getProximo() );
+    novo->setProximo( anterior->getProximo( ) );
     
     anterior->setProximo( novo );
     size++;
@@ -356,18 +377,18 @@ void ListaCirc< T >::adicionaNaPosicao( const T& dado, int pos )
 template< typename T >
 int ListaCirc< T >::posicao( const T& dado ) const
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -4; //ExcecaoListaVazia();
     }
-    Elemento< T >* atual = head;
+    Elemento< T >* atual = head->getProximo();
     for( int i = 0; i < size; i++ )
     {
-        if( dado == atual->getInfo() )
+        if( dado == atual->getInfo( ) )
         {
             return i;
         }
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
     throw -5; //ExcecaoDadoNaoCircontrado();
 }
@@ -378,17 +399,17 @@ int ListaCirc< T >::posicao( const T& dado ) const
 template< typename T >
 T* ListaCirc< T >::posicaoMem( const T& dado ) const
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -1; //ExcecaoListaVazia();
     }
     int posicao = posicao( dado );
-    Elemento< T >* atual = head;
+    Elemento< T >* atual = head->getProximo();
     for( int i = 0; i < posicao; i++ )
     {
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
-    return atual->getInfo();
+    return atual->getInfo( );
 }
 
 /**
@@ -397,18 +418,18 @@ T* ListaCirc< T >::posicaoMem( const T& dado ) const
 template< typename T >
 bool ListaCirc< T >::contem( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw -2; //ExcecaoListaVazia();
     }
-    Elemento< T >* atual = head;
+    Elemento< T >* atual = head->getProximo();
     for( int i = 0; i < size; i++ )
     {
-        if( igual( dado, atual->getInfo() ) )
+        if( igual( dado, atual->getInfo( ) ) )
         {
             return true;
         }
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
     }
     return false;
 }
@@ -429,20 +450,20 @@ T ListaCirc< T >::retiraDaPosicao( int posicao )
     {
         if( posicao == 0 )
         {
-            return retiraDoInicio();
+            return retiraDoInicio( );
         } else
         {
-            Elemento< T >* anterior = head;
+            Elemento< T >* anterior = head->getProximo();
             
             for( int i = 0; i < posicao - 1; i++ )
             {
-                anterior = anterior->getProximo();
+                anterior = anterior->getProximo( );
             }
-            Elemento< T >* eliminar = anterior->getProximo();
+            Elemento< T >* eliminar = anterior->getProximo( );
             
             //Variável auxiliar para o dado retornado
-            T volta = eliminar->getInfo();
-            anterior->setProximo( eliminar->getProximo() );
+            T volta = eliminar->getInfo( );
+            anterior->setProximo( eliminar->getProximo( ) );
             size--;
             delete eliminar;
             return volta;
@@ -474,7 +495,7 @@ T ListaCirc< T >::retira()
 template< typename T >
 T ListaCirc< T >::retiraEspecifico( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         throw ERROLISTAVAZIA; //ExcecaoListaVazia();
     }
@@ -487,18 +508,18 @@ T ListaCirc< T >::retiraEspecifico( const T& dado )
 template< typename T >
 void ListaCirc< T >::adicionaEmOrdem( const T& dado )
 {
-    if( listaVazia() )
+    if( listaVazia( ) )
     {
         return adicionaNoInicio( dado );
     }
-    Elemento< T >* atual = head;
+    Elemento< T >* atual = head->getProximo();
     int posicao = 1;
-    while( atual->getProximo() != 0 && maior( dado, atual->getInfo() ) )
+    while( atual->getProximo( ) != 0 && maior( dado, atual->getInfo( ) ) )
     {
-        atual = atual->getProximo();
+        atual = atual->getProximo( );
         posicao++;
     }
-    if( maior( dado, atual->getInfo() ) )
+    if( maior( dado, atual->getInfo( ) ) )
     {
         return adicionaNaPosicao( dado, posicao + 1 );
     }
@@ -572,22 +593,17 @@ bool ListaCirc< T >::posicaoInvalida( int p )
 template< typename T >
 void ListaCirc< T >::destroiLista()
 {
-    while( head )
-    {
-        Elemento< T > * atual = head;
-        
-        head = head->getProximo();
-        
-        delete atual;
-        
-        this->size--;
-        
-        // evitar acessar um null pointer
-        if( atual != 0 )
-        {
-            atual = atual->getProximo();
-        }
-    }
+//    while( head->getProximo( )->getInfo( ) != NULL )
+//    {
+//        Elemento< T > * atual = head->getProximo();
+//        
+//        delete atual;
+//        
+//        this->size--;
+//    }
+    
+//    head = new Elemento< T >( NULL, NULL );
+//    size = 0;
 }
 
 #endif /* LISTACIRC_HPP_ */
