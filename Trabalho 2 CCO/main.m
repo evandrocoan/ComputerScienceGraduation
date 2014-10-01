@@ -5,7 +5,7 @@
 %limpa o interpretador
 clc
 clear
-%format long
+format long
 
 erroMax = 1.e-6;
 
