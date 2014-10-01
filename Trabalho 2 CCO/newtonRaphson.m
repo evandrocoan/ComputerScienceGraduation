@@ -3,10 +3,10 @@ function  x  = newtonRaphson( a, b, erroMax)
 	cont = 0;
    xi = (a + b)/2;
 	while ( ( erro > erroMax ) && ( cont < 100 ) )
-	cont = cont + 1
+	cont = cont + 1;
 %inicio do n?cleo do m?todo (nunca mexa!)
 		%calcula a m?dia entre os pontos
-	   dX = - f(xi)/df(xi)
+	   dX = - f(xi)/df(xi);
       x = xi + dX;
 		% erro = abs(dX);
       xi = x;

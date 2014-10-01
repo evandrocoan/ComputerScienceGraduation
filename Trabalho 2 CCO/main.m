@@ -9,18 +9,21 @@ clear
 
 erroMax = 1.e-6;
 
-%definimos regi√£o os faremos o c√°lculo das ra√≠zes
+%definimos regi„o os faremos o c·lculo das raÌzes
 a = 0;
 b = 50 * pi;
 
-%tamanho do nosso vetor de ra√≠zes
+%tamanho do nosso vetor de raÌzes
 n = 10;
 
-%√≠ndice das ra√≠zes (o n√∫mero identificador da ra√≠z no vetor)
+%Ìndice das raÌzes (o n˙mero identificador da raÌz no vetor)
 ir = 1;
 
-[ xInicio xFinal ] = localizaRaiz( a, b )
+[ xInicio, xFinal ] = localizaRaiz( a, b )
 
-%while( ir < n )
-  %raiz(ir) = newtonRaphson( xInicio, xFinal, erroMax ); 
-%end
+while( ir < n + 1 )
+  raiz(ir) = newtonRaphson( xInicio(ir), xFinal(ir), erroMax );
+  ir++;
+end
+
+raiz
