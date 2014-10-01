@@ -1,3 +1,7 @@
+% Autores
+% Joao Marcus Alves (07132067) 
+% Evandro  Coan
+
 %limpa o interpretador
 clc
 clear
