@@ -1,3 +1,4 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
  * Implementa uma fila usando Templates. E com um numero de elementos 
  * variavel definido na instanciacao.

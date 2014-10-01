@@ -1,3 +1,4 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /*
  * Pista.hpp
  * 

@@ -1,3 +1,4 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
  * ListaEnc.hpp
  * 
@@ -238,7 +239,8 @@ public:
 template< typename T >
 ListaDuplaCirc< T >::ListaDuplaCirc()
 {
-    head = NULL;
+    // cria-se o nodo sentinela
+    head = new ElementoDuplo< T >( NULL, NULL , NULL);
     size = 0;
 }
 
@@ -248,6 +250,7 @@ ListaDuplaCirc< T >::ListaDuplaCirc()
 template< typename T >
 ListaDuplaCirc< T >::~ListaDuplaCirc()
 {
+    this->destroiListaDuplo( );
 }
 
 /**
@@ -256,21 +259,33 @@ ListaDuplaCirc< T >::~ListaDuplaCirc()
 template< typename T >
 void ListaDuplaCirc< T >::adicionaNoInicioDuplo( const T& dado )
 {
-    ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, NULL, head );
-    
-    if( novo == NULL )
-        throw ERROLISTADUPLACHEIA;
-    else
+    // quando se adiciona pela primeira vez
+    if( this->size == 0 )
     {
-        //poderia ser feito diretamente em Elemento<T>(dado,head);
-        //novo->setProximo(dados); 
-        //novo->setProximo(head);  
+        ElementoDuplo< T > *novo = new ElementoDuplo< T >( dado, head, head );
         
-        if( novo->getProximo( ) != NULL )
+        head->setProximo( novo );
+        head->setAnterior( novo );
+        
+        size++;
+    } else
+    {
+        // salva o segundo (futuro terceiro) dado da lista
+        // para emendar com novo segundo dado
+        ElementoDuplo< T >* segundoDado = head->getProximo( );
+        
+        // aloca um elemento no inicio da lista
+        ElementoDuplo< T >* novoSegundoDado = new ElementoDuplo< T >( dado, segundoDado, head );
+        
+        // verifica se ela está cheia
+        if( novoSegundoDado == 0 )
         {
-            novo->getProximo( )->setAnterior( novo );
+            throw ERROLISTADUPLACHEIA;
         }
-        head = novo;
+        
+        // agora faz o head apontar para o novo segundo dado
+        head->setProximo( novoSegundoDado );
+        
         size++;
     }
 }
@@ -283,17 +298,11 @@ T ListaDuplaCirc< T >::retiraDoInicioDuplo()
 {
     if( listaVazia( ) )
     {
-        throw ERROLISTADUPLAVAZIA;
+        throw ERROLISTADUPLACHEIA;
     }
-    ElementoDuplo< T >* saiu = head;
+    ElementoDuplo< T >* saiu = head->getProximo();
     T volta = saiu->getInfo( );
-    head = saiu->getProximo( );
-    
-    if( head->getProximo( ) != NULL )
-    {
-        head->setAnterior( NULL );
-    }
-    
+    head->setProximo( saiu->getProximo( ) );
     size--;
     delete saiu;
     return volta;
@@ -307,13 +316,13 @@ void ListaDuplaCirc< T >::eliminaDoInicioDuplo()
 {
     if( listaVazia( ) )
     {
-        throw ERROLISTADUPLAVAZIA;
+        throw ERROLISTADUPLACHEIA;
     }
-    ElementoDuplo< T >* saiu = head;
-    head = saiu->getProximo( );
+    ElementoDuplo< T >* saiu = head->getProximo();
+    T volta = saiu->getInfo( );
+    head->setProximo( saiu->getProximo( ) );
     size--;
     delete saiu;
-    return size;
 }
 
 /**
@@ -353,7 +362,7 @@ void ListaDuplaCirc< T >::adicionaNaPosicaoDuplo( const T& dado, int pos )
     }
     
     // salva o ponterio da cabeça da lista
-    ElementoDuplo< T >* anterior = head;
+    ElementoDuplo< T >* anterior = head->getProximo();
     
     // faz a troca dos elementos
     for( int i = 0; i < pos - 1; i++ )
@@ -388,7 +397,7 @@ int ListaDuplaCirc< T >::posicaoDuplo( const T& dado ) const
     {
         throw -4; //ExcecaoListaVazia();
     }
-    ElementoDuplo< T >* atual = head;
+    ElementoDuplo< T >* atual = head->getProximo();
     for( int i = 0; i < size; i++ )
     {
         if( dado == atual->getInfo( ) )
@@ -411,7 +420,7 @@ T* ListaDuplaCirc< T >::posicaoMemDuplo( const T& dado ) const
         throw -1; //ExcecaoListaVazia();
     }
     int posicao = posicaoDuplo( dado );
-    ElementoDuplo< T >* atual = head;
+    ElementoDuplo< T >* atual = head->getProximo();
     for( int i = 0; i < posicao; i++ )
     {
         atual = atual->getProximo( );
@@ -429,7 +438,7 @@ bool ListaDuplaCirc< T >::contemDuplo( const T& dado )
     {
         throw -2; //ExcecaoListaVazia();
     }
-    ElementoDuplo< T >* atual = head;
+    ElementoDuplo< T >* atual = head->getProximo();
     for( int i = 0; i < size; i++ )
     {
         if( igual( dado, atual->getInfo( ) ) )
@@ -460,7 +469,7 @@ T ListaDuplaCirc< T >::retiraDaPosicaoDuplo( int posicao )
             return retiraDoInicioDuplo( );
         } else
         {
-            ElementoDuplo< T >* anterior = head;
+            ElementoDuplo< T >* anterior = head->getProximo();
             
             for( int i = 0; i < posicao - 1; i++ )
             {
@@ -527,7 +536,7 @@ void ListaDuplaCirc< T >::adicionaEmOrdem( const T& dado )
         return adicionaNoInicioDuplo( dado );
     }
     
-    ElementoDuplo< T >* atual = head;
+    ElementoDuplo< T >* atual = head->getProximo();
     int posicao = 1;
     
     while( atual->getProximo( ) != NULL && maior( dado, atual->getInfo( ) ) )
@@ -612,11 +621,11 @@ bool ListaDuplaCirc< T >::posicaoInvalida( int p )
 template< typename T >
 void ListaDuplaCirc< T >::destroiListaDuplo()
 {
-    while( head )
+    while( size > 0 )
     {
-        ElementoDuplo< T > * atual = head;
+        ElementoDuplo< T > * atual = head->getProximo();
         
-        head = head->getProximo( );
+        head->setProximo( atual->getProximo() );
         
         delete atual;
         
