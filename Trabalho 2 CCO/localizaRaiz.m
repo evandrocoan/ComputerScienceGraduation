@@ -14,13 +14,13 @@ function [ xInicio xFinal ] = localizaRaiz( A, B )
   p = 1;
 
   %enquano bzinho não atingir o o bzão
-  while( b < B - h & ir < 11 & passos < 10000 )
+  while( b < B - h && ir < 11 && passos < 10000 )
     passos = passos + 1;
       
     %verifica se uma raíz foi encontrada
     produto = f(a) * f(b);
 
-    if( ( produto < 0 ) & ( fRegiaoCritica( f(a), f(a), h ) ) )
+    if( ( produto < 0 ) && ( fRegiaoCritica( f(a), f(a), h ) ) )
       % incrementa a raíz 
       %ir++;
       xInicio(ir) = a;

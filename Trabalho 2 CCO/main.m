@@ -23,7 +23,7 @@ ir = 1;
 
 while( ir < n + 1 )
   raiz(ir) = newtonRaphson( xInicio(ir), xFinal(ir), erroMax );
-  ir++;
+  ir = ir + 1;
 end
 
 raiz
