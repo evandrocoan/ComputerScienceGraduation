@@ -1,4 +1,6 @@
 % Script principal
+% João Marcus Alves
+% Evandro  Coan
 clear
 clc
 format long
