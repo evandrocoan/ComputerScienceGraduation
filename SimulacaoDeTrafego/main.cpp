@@ -119,6 +119,29 @@ using namespace std;
  */
 #include <time.h>      
 
+//-----------------------------------------------------------------
+//Organização dos dados conforme numeração das pistas - dados das pistas
+//  filas:
+//             |   |                     |   |
+//       500m v|   |^ 500m         500m v|   |^ 500m
+//-------------    ----------------------    --------------
+//      2000m <-   <- 300m             <-     <- 400m
+//      2000m ->   -> 300m             ->     -> 400m
+//-------------    ----------------------    --------------
+//       500m v|   |^ 500m         500m v|   |^ 500m
+//             |   |                     |   |
+
+// menor comprimento de veiculo = 2m (deve existir 2m entre os carros)
+//determina o tamanho da fila para o pior caso
+
+//ORGANIZACAO NUMÉRICA DAS PISTAS
+/*
+ *     6  5            13 12
+ --- 7      4 ------ 4       11 -------
+ --- 0      3 ------ 3       10 -------
+ *     1  2            8   9
+ */
+//-----------------------------------------------------------------
 /** 
  * Velocidade das pistas de acordo com a numeração de cada pista 
  */
@@ -248,72 +271,73 @@ struct Pistas
      * (2m + 2m) )
      */
     int veiculo[ 500 ];
-    
+
     /**
      * Defini-se a velocidade que a pista terá
      */
     int velocidade;
-    
+
     /**
-     * Define o número máximo de veiculos que saem da pista
+     * Número total de veículos que deixam a pista
      */
     int nrOutVeiculos;
-    
+
     /**
-     * 
+     * Número total de veículos que estão em uma pista
      */
     int nrVeiculos;
-    
+
     /**
-     * 
+     * A frequência de geração de veículos para as pistas fonte (as pistas que 
+     * geram veículos)
      */
     int freqIn[ 2 ];
-    
+
     /**
-     * 
+     * O tamanho em metros de uma pista
      */
     int tamanho;
-    
+
     /**
-     * 
+     * As possíveis direções que um veículo pode seguir na simulação
      */
     int destino[ 3 ];
-    
+
     /**
-     * 
+     * As probabilidades de desvio para um determinada pista
      */
     int probDirecao[ 3 ];
-    
+
     /**
      * Define-se o nome da pista
      */
     string nome;
 
     /**
-     * Somatorio do tamanho dos veiculos
+     * Somatorio do tamanho dos veiculos na pista
      */
     int somaTamanhos;
-    
+
     /**
      * Indica a posicao de inicio da fila de veiculos
      */
     int inicio;
-    
+
     /**
      * Indica a posicao de fim da fila de veiculos 
      */
     int fim;
-    
+
     /**
      * Indica se a pista esta cheia
      */
-    bool cheia;  
+    bool cheia;
 };
 
 /**
  * Cria as 14 pistas a serem utilizadas na simulação
  */
-static Pistas pista[ 14 ];  
+static Pistas pista[ 14 ];
 
 /**
  * Carrega as pistas com seus respectivos atributos para uso no simulação
@@ -353,26 +377,26 @@ void inicializaPistas()
  * @param pista a ter um veículo adicionado
  * @param tamanho do veículo a entrar na pista
  */
-void colocaVeiculo( int p, int tam ) 
+void colocaVeiculo( int p, int tam )
 {
     int espaco = pista[ p ].tamanho - ( pista[ p ].somaTamanhos + tam );
     
     //se tem espaço coloca veiculo
-    if( espaco >= 0 )  
+    if( espaco >= 0 )
     {
         //se chegou ao final do vetor volta a escrever no inicio 
         //(buffer circular) 
-        if( pista[ p ].fim == 500 ) 
+        if( pista[ p ].fim == 500 )
             pista[ p ].fim = 0;
         
         //coloca o carro na fila (armazena o tamanho do carro) 
-        pista[ p ].veiculo[ pista[ p ].fim ] = tam; 
+        pista[ p ].veiculo[ pista[ p ].fim ] = tam;
         pista[ p ].nrVeiculos++;
         pista[ p ].fim++;
         
         //armazena o novo tamanho total da fila (coloca carro na fila 
-        pista[ p ].somaTamanhos += tam; 
-                
+        pista[ p ].somaTamanhos += tam;
+        
         if( espaco == 0 )
             pista[ p ].cheia = true;
         else
@@ -408,8 +432,8 @@ bool pistaValida( int p )
  * @return o tamanho do veículo retirado da pista, 0 caso não se possa retirar
  * um veículo
  */
-int retiraVeiculo( int p ) 
-{ 
+int retiraVeiculo( int p )
+{
     //o inicio nao ultrapassa o fim porque so retira veiculo se exister 
     int tamVeic;
     
@@ -419,7 +443,7 @@ int retiraVeiculo( int p )
     }
     
     //so retira veiculo se existir 
-    if( pista[ p ].nrVeiculos > 0 ) 
+    if( pista[ p ].nrVeiculos > 0 )
     {
         pista[ p ].nrVeiculos--;
         
@@ -432,14 +456,14 @@ int retiraVeiculo( int p )
         tamVeic = pista[ p ].veiculo[ pista[ p ].inicio ];
         
         //retira o carro do inicio da fila 
-        pista[ p ].somaTamanhos -= tamVeic; 
+        pista[ p ].somaTamanhos -= tamVeic;
         pista[ p ].inicio++;
         pista[ p ].nrOutVeiculos++;
         
         //cout << "tam Veicul" << tamVeic << endl; 
         
         //retorna o tamanho do carro retirado da pista 
-        return tamVeic; 
+        return tamVeic;
         
     }
     
@@ -449,12 +473,14 @@ int retiraVeiculo( int p )
 
 /**
  * Sorteio de um numero inteiro entre max e min - uso para a 
- * frequencia de geracao dos veiculos 
+ * frequencia de geracao dos veiculos.
+ * Exemplo: Um veículo deve ser gerado a cada 10 +- 2s. Essa função gera um 
+ * número entre e 8 e 12.
  * 
- * @param p
- * @return ---------------------------------------------------------------
+ * @param p pista que terá o tempo sorteado para a geração do veículo
+ * @return o tempo após o qual o veículo será gerado para pista 'p'
  */
-int sorteioFreq( int p ) 
+int sorteioFreq( int p )
 {
     int min, max;
     //ex. freqIn[2]={10,2} 10 +- 2 
@@ -468,26 +494,29 @@ int sorteioFreq( int p )
  * Método de Monte Carlo. 
  * Não confere se entrou com dados errados! 
  * 
- * @param nrClasses deve ser o número de probabilidades definidos em prob[], os 
- * quais devem somar 100
- * @param prob
- * @return ------------------------------------------------------------------
+ * @param nrClasses deve ser o número de probabilidades definidos em prob[], 
+ * ou seja, o tamanho do vetor prob[].
+ * @param vetor com as probabilidades os quais devem somar 100. Exemplo: 
+ * Para este exemplo, o nrClasses = 3 e prob = { 10, 70, 20 }
+ * @return um número entre 0 e o nrClasses - 1. Para o exemplo apresentado, 
+ * o número 0 terá probabilidade de 10%, o número 1 terá probabilidade de 70% e
+ * o número 2 terá probabilidade de 20%
  */
 int mmc( int nrClasses, int prob[ ] )
 {
     //sorteio de um nr inteiro entre 1 e 100 
-    int x = rand( ) % 100 + 1; 
+    int x = rand( ) % 100 + 1;
     
     //vetor para valores de comparação do Método de Monte Carlo 
-    int valorComp[ nrClasses ]; 
+    int valorComp[ nrClasses ];
     
     //o primeiro valor de comparacao é a primeira probabilidade 
-    valorComp[ 0 ] = prob[ 0 ]; 
-            
+    valorComp[ 0 ] = prob[ 0 ];
+    
     for( int i = 1; i < nrClasses; i++ )
     {
         //soma as faixas de comparação 
-        valorComp[ i ] = valorComp[ i - 1 ] + prob[ i ]; 
+        valorComp[ i ] = valorComp[ i - 1 ] + prob[ i ];
     }
     
     for( int j = 0; j < nrClasses; j++ )
@@ -499,8 +528,7 @@ int mmc( int nrClasses, int prob[ ] )
 }
 
 /**
- * ---------------------------------------------------------------------------
- * Retira todos os carros necessários dos sumidouros 
+ * Retira todos os carros necessários dos sumidouros (pista de saída)
  */
 void retiraVeiculosSumidouros()
 {
@@ -509,10 +537,10 @@ void retiraVeiculosSumidouros()
     for( int i = 0; i < 6; i++ )
     {
         //tamanho que tem que ser retirado (veiculos conforme tamanho)- m/s 
-        x = pista[ sumidouro[ i ] ].velocidade; 
+        x = pista[ sumidouro[ i ] ].velocidade;
         
         //pode retirar veiculos resultando em tamanhos maiores que x 
-        while( ( pista[ sumidouro[ i ] ].nrVeiculos > 0 ) && ( x > 0 ) ) 
+        while( ( pista[ sumidouro[ i ] ].nrVeiculos > 0 ) && ( x > 0 ) )
         {
             x = x - retiraVeiculo( sumidouro[ i ] );
             
@@ -523,40 +551,45 @@ void retiraVeiculosSumidouros()
 }
 
 /**
+ * De acordo com os dados recebido como parâmetro, a pista fonte, sorteia para
+ * qual pista o veículo deve ir, e desloca o veículo para essa pista. Caso 
+ * a pista esteja cheia, o veículo não é movido e é sinalizado como 
+ * "Travou na Pista".
  * 
- * 
- * @param pF
- * @return
+ * @param pFonte é um número que representa a pista da qual um ou mais veículos
+ * devem sair 
+ * @return true se foi possível completar a operação, false caso contrário
  */
-bool moveVeiculoPista( int pF )
+bool moveVeiculoPista( int pFonte )
 {
     //leitura da velocidade da pista fonte (para saber quantos veiculos 
     //devem ser movidos) 
-    int xF = pista[ pF ].velocidade; 
+    int xFonte = pista[ pFonte ].velocidade;
     
     //pista destino, tamanho veiculo retirado 
-    int pD, tamV;
-            
+    int pDestino, tamV;
+    
     do
     {
         //sorteio da pista destino 
-        pD = pista[ pF ].destino[ mmc( 3, pista[ pF ].probDirecao ) ]; 
+        pDestino =
+                pista[ pFonte ].destino[ mmc( 3, pista[ pFonte ].probDirecao ) ];
         
         //se tem veiculos a retirar e destino tem espaco 
-        if( ( pista[ pF ].nrVeiculos > 0 ) && ( pista[ pD ].cheia == false ) )
+        if( ( pista[ pFonte ].nrVeiculos > 0 ) && ( pista[ pDestino ].cheia
+                == false ) )
         {
-            tamV = retiraVeiculo( pF );
-            colocaVeiculo( pD, tamV );
-            xF = xF - tamV;
-            //cout << "Cheguei Aqui!" << xF << endl; 
+            tamV = retiraVeiculo( pFonte );
+            colocaVeiculo( pDestino, tamV );
+            xFonte = xFonte - tamV;
         } else
         {
-            if( pista[ pD ].cheia )
-                cout << "Travou na Pista" << pD << endl;
+            if( pista[ pDestino ].cheia )
+                cout << "Travou na Pista" << pDestino << endl;
             return false;
         }
         
-    } while( xF > 0 );
+    } while( xFonte > 0 );
     
     return true;
 }
@@ -569,34 +602,45 @@ bool moveVeiculoPista( int pF )
 int main()
 {
     //tempo da simulacao em segundos 
-    int tSimulacao = 100000; 
+    int tSimulacao = 10000;
     
     //tempo de abertura das sinaleiras em segundos 
-    int tAberturaSinal = 100; 
+    int tAberturaSinal = 100;
     
+    // para fazer a abertura das sinaleiras no tempo certo
     int contSinal = 0;
+    
+    // indica qual sinaleira vai ser aberta
     int qualSinal = 0;
     
+    // tamanho do veículo sorteado
+    int tamV;
+    
+    // geração de aleatoriedade a cada execução do programa
+    srand( time( 0 ) );
+    
     //inicializacao das pistas 
-    inicializaPistas( ); 
+    inicializaPistas( );
     
     //Geracao de todos os tempos de chegada das pistas 
     //Pior caso para o tamanho do vetor, um carro gerado a cada 8 s 
-    int tamVt = tSimulacao / 8; 
+    int tamVt = tSimulacao / 8;
     
     //sao 6 pistas que recebem carros 
-    int vt[ 6 ][ tamVt ]; 
+    int vt[ 6 ][ tamVt ];
     
     //vetor com o valor atual de comparacao para geracao dos veiculos 
     //atualizado a cada geracao 
-    int tCompAtual[ 6 ]; 
+    int tCompAtual[ 6 ];
     
+    // somador para fazer a geração dos carros de acordo com o tempo de 
+    // geração
     int indiceCompAtual[ 6 ] =
     { 0, 0, 0, 0, 0, 0 };
-    int tamV;
     
+    // gera todos possíveis tempo de chegada das pistas
     for( int i = 0; i < tamVt; i++ )
-    { 
+    {
         //pista que sao fontes de carros (entrada de carros no sistema) 
         vt[ 0 ][ i ] = sorteioFreq( 0 ); //pista 0 
         vt[ 1 ][ i ] = sorteioFreq( 2 ); //pista 2 
@@ -605,7 +649,7 @@ int main()
         vt[ 4 ][ i ] = sorteioFreq( 11 ); //pista 11 
         vt[ 5 ][ i ] = sorteioFreq( 13 ); //pista 13 
                 
-    } 
+    }
     
     //Todos os tempos de geracao de carros estao armazenados conforme
     //aleatoriedade (muitos nao serao utilizados) 
@@ -620,14 +664,14 @@ int main()
     {
         //geracao dos carros 
         //verifica o tempo de geracao para as 6 pistas que fornecem carros 
-        for( int n = 0; n < 6; n++ ) 
+        for( int n = 0; n < 6; n++ )
         {
             //se o tempo de geracao da pista n for igual ao da simulacao, 
             //gera carro 
-            if( tCompAtual[ n ] == t ) 
+            if( tCompAtual[ n ] == t )
             {
                 //sorteia o tamanho do veiculo conforme porcentagens 
-                tamV = tamVeiculo[ mmc( 4, porctVeiculo ) ]; 
+                tamV = tamVeiculo[ mmc( 4, porctVeiculo ) ];
                 switch( n )
                 {
                     case 0:
@@ -651,9 +695,9 @@ int main()
                 }
                 indiceCompAtual[ n ]++;
                 tCompAtual[ n ] = tCompAtual[ n ]
-                        + vt[ n ][ indiceCompAtual[ n ] ]; 
-                        //pega o proximo tempo de comparacao 
-            } 
+                        + vt[ n ][ indiceCompAtual[ n ] ];
+                //pega o proximo tempo de comparacao 
+            }
             // termina o if que gera tempos quando o tempo de simulação
             // da pista é igual ao tempo da simulação
             
@@ -668,8 +712,6 @@ int main()
                 qualSinal = 0;
         }
         contSinal++;
-        
-        //cout << "Cheguei Aqui!" << endl; 
         
         retiraVeiculosSumidouros( );
         
