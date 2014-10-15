@@ -1,12 +1,23 @@
 //! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
 /**
-* ListaEnc.hpp
+* Arquivo que contém a implementação de uma árvore binária que utiliza 
+* templates.
 *
 * \authors Evandro  Coan, Charles Borges de Lima
 */
 
 #ifndef ELEMENTO_HPP_
 #define ELEMENTO_HPP_
+
+
+struct node
+{
+    int element;
+    node *left;
+    node *right;
+    int height;
+};
+typedef struct node *nodeptr;
 
 /**
 * Classe que representa um nó de uma árvore binária

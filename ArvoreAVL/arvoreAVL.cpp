@@ -1,5 +1,5 @@
 // Inserting a node
-void bstree::insert( int x, nodeptr &p )
+void ArvoreBinaria::insert( int x, nodeptr &p )
 {
     if( p == NULL )
     {
@@ -53,7 +53,7 @@ void bstree::insert( int x, nodeptr &p )
     p->height = d + 1;
 }
 // Finding the Smallest
-nodeptr bstree::findmin( nodeptr p )
+nodeptr ArvoreBinaria::findmin( nodeptr p )
 {
     if( p == NULL )
     {
@@ -70,7 +70,7 @@ nodeptr bstree::findmin( nodeptr p )
     }
 }
 // Finding the Largest node
-nodeptr bstree::findmax( nodeptr p )
+nodeptr ArvoreBinaria::findmax( nodeptr p )
 {
     if( p == NULL )
     {
@@ -87,7 +87,7 @@ nodeptr bstree::findmax( nodeptr p )
     }
 }
 // Finding an element
-void bstree::find( int x, nodeptr &p )
+void ArvoreBinaria::find( int x, nodeptr &p )
 {
     if( p == NULL )
     {
@@ -110,13 +110,13 @@ void bstree::find( int x, nodeptr &p )
     }
 }
 // Copy a tree
-void bstree::copy( nodeptr &p, nodeptr &p1 )
+void ArvoreBinaria::copy( nodeptr &p, nodeptr &p1 )
 {
     makeempty( p1 );
     p1 = nodecopy( p );
 }
 // Make a tree empty
-void bstree::makeempty( nodeptr &p )
+void ArvoreBinaria::makeempty( nodeptr &p )
 {
     nodeptr d;
     if( p != NULL )
@@ -129,7 +129,7 @@ void bstree::makeempty( nodeptr &p )
     }
 }
 // Copy the nodes
-nodeptr bstree::nodecopy( nodeptr &p )
+nodeptr ArvoreBinaria::nodecopy( nodeptr &p )
 {
     nodeptr temp;
     if( p == NULL )
@@ -146,7 +146,7 @@ nodeptr bstree::nodecopy( nodeptr &p )
 }
 
 // Deleting a node
-void bstree::del( int x, nodeptr &p )
+void ArvoreBinaria::del( int x, nodeptr &p )
 {
     nodeptr d;
     if( p == NULL )
@@ -187,7 +187,7 @@ void bstree::del( int x, nodeptr &p )
                         }
 }
 
-int bstree::deletemin( nodeptr &p )
+int ArvoreBinaria::deletemin( nodeptr &p )
 {
     int c;
     cout << "inside deltemin\n" << endl;
@@ -202,7 +202,7 @@ int bstree::deletemin( nodeptr &p )
         return c;
     }
 }
-void bstree::preorder( nodeptr p )
+void ArvoreBinaria::preorder( nodeptr p )
 {
     if( p != NULL )
     {
@@ -213,7 +213,7 @@ void bstree::preorder( nodeptr p )
 }
 
 // Inorder Printing
-void bstree::inorder( nodeptr p )
+void ArvoreBinaria::inorder( nodeptr p )
 {
     if( p != NULL )
     {
@@ -224,7 +224,7 @@ void bstree::inorder( nodeptr p )
 }
 
 // PostOrder Printing
-void bstree::postorder( nodeptr p )
+void ArvoreBinaria::postorder( nodeptr p )
 {
     if( p != NULL )
     {
@@ -234,11 +234,11 @@ void bstree::postorder( nodeptr p )
     }
 }
 
-int bstree::max( int value1, int value2 )
+int ArvoreBinaria::max( int value1, int value2 )
 {
     return ( ( value1 > value2 ) ? value1 : value2 );
 }
-int bstree::bsheight( nodeptr p )
+int ArvoreBinaria::bsheight( nodeptr p )
 {
     int t;
     if( p == NULL )
@@ -251,7 +251,7 @@ int bstree::bsheight( nodeptr p )
     }
 }
 
-nodeptr bstree::srl( nodeptr &p1 )
+nodeptr ArvoreBinaria::srl( nodeptr &p1 )
 {
     nodeptr p2;
     p2 = p1->left;
@@ -261,7 +261,7 @@ nodeptr bstree::srl( nodeptr &p1 )
     p2->height = max( bsheight( p2->left ), p1->height ) + 1;
     return p2;
 }
-nodeptr bstree::srr( nodeptr &p1 )
+nodeptr ArvoreBinaria::srr( nodeptr &p1 )
 {
     nodeptr p2;
     p2 = p1->right;
@@ -271,18 +271,18 @@ nodeptr bstree::srr( nodeptr &p1 )
     p2->height = max( p1->height, bsheight( p2->right ) ) + 1;
     return p2;
 }
-nodeptr bstree::drl( nodeptr &p1 )
+nodeptr ArvoreBinaria::drl( nodeptr &p1 )
 {
     p1->left = srr( p1->left );
     return srl( p1 );
 }
-nodeptr bstree::drr( nodeptr &p1 )
+nodeptr ArvoreBinaria::drr( nodeptr &p1 )
 {
     p1->right = srl( p1->right );
     return srr( p1 );
 }
 
-int bstree::nonodes( nodeptr p )
+int ArvoreBinaria::nonodes( nodeptr p )
 {
     int count = 0;
     if( p != NULL )

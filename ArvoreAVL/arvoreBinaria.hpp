@@ -1,18 +1,19 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
+/**
+* Arquivo que contém as assinaturas do métodos que manipulam uma árvore 
+* binária de busca que utiliza templates.
+*
+* \authors Evandro  Coan, Charles Borges de Lima
+*/
+
 #include <iostream>
 #include <cctype>
 #include <stdlib.h>
+#include "arvoreBinaria.cpp"
 
 using namespace std;
 
-struct node
-{
-    int element;
-    node *left;
-    node *right;
-    int height;
-};
-typedef struct node *nodeptr;
-class bstree
+class ArvoreBinaria
 {
 public:
     void insert( int, nodeptr & );
