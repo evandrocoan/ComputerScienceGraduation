@@ -1,13 +1,16 @@
-/*
- * Elemento.hpp
- *
- *  Created on: 13/09/2014
- *      Author: Carcara
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
+/**
+ * ListaEnc.hpp
+ * 
+ * \authors Evandro  Coan, Charles Borges de Lima
  */
 
 #ifndef ELEMENTO_HPP_
 #define ELEMENTO_HPP_
 
+/**
+ * Classe que representa um nó de uma lista encadeada
+ */
 template< typename T >
 class Elemento
 {
@@ -16,7 +19,6 @@ class Elemento
          * Ponteiro para o tipo de informação que vai ser armazenada
          */
         T *info;
-        //EVANDRO MANÉ!
 
         /**
          * Ponteiro para o próximo elemento da lista
