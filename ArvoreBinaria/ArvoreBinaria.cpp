@@ -1,9 +1,19 @@
+//! Copyright year [2014] <Evandro  Coan, Charles Borges de Lima>
+/**
+ * Arquivo que contém as implementações das assinaturas dos métodos de uma 
+ * árvore binária utilizando templates.
+ *
+ * \authors Evandro  Coan, Charles Borges de Lima
+ */
+#include "ArvoreBinaria.hpp"
+
 // Inserting a node
-void ArvoreBinaria::insert( int x, nodeptr &p )
+template< typename T >
+void ArvoreBinaria< T >::insert( int x, NodeArvore< T > &p )
 {
     if( p == NULL )
     {
-        p = new node;
+        p = NodeArvore;
         p->element = x;
         p->left = NULL;
         p->right = NULL;
@@ -52,8 +62,10 @@ void ArvoreBinaria::insert( int x, nodeptr &p )
     d = max( m, n );
     p->height = d + 1;
 }
+
 // Finding the Smallest
-nodeptr ArvoreBinaria::findmin( nodeptr p )
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::findmin( NodeArvore< T > p )
 {
     if( p == NULL )
     {
@@ -69,8 +81,10 @@ nodeptr ArvoreBinaria::findmin( nodeptr p )
         return p;
     }
 }
+
 // Finding the Largest node
-nodeptr ArvoreBinaria::findmax( nodeptr p )
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::findmax( NodeArvore< T > p )
 {
     if( p == NULL )
     {
@@ -86,8 +100,10 @@ nodeptr ArvoreBinaria::findmax( nodeptr p )
         return p;
     }
 }
+
 // Finding an element
-void ArvoreBinaria::find( int x, nodeptr &p )
+template< typename T >
+void ArvoreBinaria< T >::find( int x, NodeArvore< T > &p )
 {
     if( p == NULL )
     {
@@ -109,16 +125,20 @@ void ArvoreBinaria::find( int x, nodeptr &p )
         }
     }
 }
+
 // Copy a tree
-void ArvoreBinaria::copy( nodeptr &p, nodeptr &p1 )
+template< typename T >
+void ArvoreBinaria< T >::copy( NodeArvore< T > &p, NodeArvore< T > &p1 )
 {
     makeempty( p1 );
     p1 = nodecopy( p );
 }
+
 // Make a tree empty
-void ArvoreBinaria::makeempty( nodeptr &p )
+template< typename T >
+void ArvoreBinaria< T >::makeempty( NodeArvore< T > &p )
 {
-    nodeptr d;
+    NodeArvore< T > d;
     if( p != NULL )
     {
         makeempty( p->left );
@@ -129,9 +149,10 @@ void ArvoreBinaria::makeempty( nodeptr &p )
     }
 }
 // Copy the nodes
-nodeptr ArvoreBinaria::nodecopy( nodeptr &p )
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::nodecopy( NodeArvore< T > &p )
 {
-    nodeptr temp;
+    NodeArvore< T > temp;
     if( p == NULL )
     {
         return p;
@@ -146,9 +167,10 @@ nodeptr ArvoreBinaria::nodecopy( nodeptr &p )
 }
 
 // Deleting a node
-void ArvoreBinaria::del( int x, nodeptr &p )
+template< typename T >
+void ArvoreBinaria< T >::del( int x, NodeArvore< T > &p )
 {
-    nodeptr d;
+    NodeArvore< T > d;
     if( p == NULL )
     {
         cout << "Sorry! element not found\n" << endl;
@@ -187,7 +209,8 @@ void ArvoreBinaria::del( int x, nodeptr &p )
                         }
 }
 
-int ArvoreBinaria::deletemin( nodeptr &p )
+template< typename T >
+int ArvoreBinaria< T >::deletemin( NodeArvore< T > &p )
 {
     int c;
     cout << "inside deltemin\n" << endl;
@@ -202,7 +225,9 @@ int ArvoreBinaria::deletemin( nodeptr &p )
         return c;
     }
 }
-void ArvoreBinaria::preorder( nodeptr p )
+
+template< typename T >
+void ArvoreBinaria< T >::preorder( NodeArvore< T > p )
 {
     if( p != NULL )
     {
@@ -213,7 +238,8 @@ void ArvoreBinaria::preorder( nodeptr p )
 }
 
 // Inorder Printing
-void ArvoreBinaria::inorder( nodeptr p )
+template< typename T >
+void ArvoreBinaria< T >::inorder( NodeArvore< T > p )
 {
     if( p != NULL )
     {
@@ -224,7 +250,8 @@ void ArvoreBinaria::inorder( nodeptr p )
 }
 
 // PostOrder Printing
-void ArvoreBinaria::postorder( nodeptr p )
+template< typename T >
+void ArvoreBinaria< T >::postorder( NodeArvore< T > p )
 {
     if( p != NULL )
     {
@@ -234,11 +261,14 @@ void ArvoreBinaria::postorder( nodeptr p )
     }
 }
 
-int ArvoreBinaria::max( int value1, int value2 )
+template< typename T >
+int ArvoreBinaria< T >::max( int value1, int value2 )
 {
     return ( ( value1 > value2 ) ? value1 : value2 );
 }
-int ArvoreBinaria::bsheight( nodeptr p )
+
+template< typename T >
+int ArvoreBinaria< T >::bsheight( NodeArvore< T > p )
 {
     int t;
     if( p == NULL )
@@ -251,9 +281,10 @@ int ArvoreBinaria::bsheight( nodeptr p )
     }
 }
 
-nodeptr ArvoreBinaria::srl( nodeptr &p1 )
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::srl( NodeArvore< T > &p1 )
 {
-    nodeptr p2;
+    NodeArvore< T > p2;
     p2 = p1->left;
     p1->left = p2->right;
     p2->right = p1;
@@ -261,9 +292,11 @@ nodeptr ArvoreBinaria::srl( nodeptr &p1 )
     p2->height = max( bsheight( p2->left ), p1->height ) + 1;
     return p2;
 }
-nodeptr ArvoreBinaria::srr( nodeptr &p1 )
+
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::srr( NodeArvore< T > &p1 )
 {
-    nodeptr p2;
+    NodeArvore< T > p2;
     p2 = p1->right;
     p1->right = p2->left;
     p2->left = p1;
@@ -271,18 +304,23 @@ nodeptr ArvoreBinaria::srr( nodeptr &p1 )
     p2->height = max( p1->height, bsheight( p2->right ) ) + 1;
     return p2;
 }
-nodeptr ArvoreBinaria::drl( nodeptr &p1 )
+
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::drl( NodeArvore< T > &p1 )
 {
     p1->left = srr( p1->left );
     return srl( p1 );
 }
-nodeptr ArvoreBinaria::drr( nodeptr &p1 )
+
+template< typename T >
+NodeArvore< T > ArvoreBinaria< T >::drr( NodeArvore< T > &p1 )
 {
     p1->right = srl( p1->right );
     return srr( p1 );
 }
 
-int ArvoreBinaria::nonodes( nodeptr p )
+template< typename T >
+int ArvoreBinaria< T >::nonodes( NodeArvore< T > p )
 {
     int count = 0;
     if( p != NULL )

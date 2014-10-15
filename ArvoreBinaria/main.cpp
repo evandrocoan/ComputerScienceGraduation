@@ -5,7 +5,8 @@
 /**
  * Inclui as assinaturas dos métodos utilizados nos testes
  */
-#include "arvoreBinaria.hpp"
+#include "ArvoreBinaria.cpp"
+#include "ArvoreBinaria.hpp"
 
 /**
  * Função principal que realiza a chamada dos testes a serem executados.
@@ -26,13 +27,13 @@ void testesCout()
 {
     
     //clrscr();
-    nodeptr root, root1, min, max; //,flag;
+    NodeArvore< int > root, root1, min, max; //,flag;
     int a, choice, findele, delele;
     char ch = 'y';
-    bstree bst;
+    ArvoreBinaria bst;
     
     //system("clear");
-    root = NULL;
+    root = 0;
     root1 = NULL;
     cout << "\n\t\t\t\tWELCOME TO AVL TREE" << endl;
     cout << "\t\t\t\t:::::::::::::::::::\n" << endl;
