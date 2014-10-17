@@ -6,15 +6,27 @@
  * \authors Evandro  Coan, Charles Borges de Lima
  */
 
-#ifndef NODEARVORE_HPP_
-#define NODEARVORE_HPP_
+/**
+ * Evita que esta classe seja incluida mais de uma vez em um arquivo
+ */
+#ifndef NOBINARIO_HPP_
+#define NOBINARIO_HPP_
 
 /**
- * Classe que representa um nó de uma árvore binária
+ * Inclui as bibliotecas padrão utilizadas nesta implementação
+ */
+#include <cstdio>
+#include <vector>
+
+/**
+ * Classe que representa um nó e uma arvore binaria simultaniamente.
+ * Cada no é por si só uma arvore quando sua a informação que ele aponta é 
+ * nula ele é o nó raíz.
  */
 template< typename T >
-class NodeArvore
+class NoBinario
 {
+    
 private:
     /**
      * Ponteiro para o tipo de informação que vai ser armazenada
@@ -22,32 +34,26 @@ private:
     T *info;
 
     /**
-     * Ponteiro para o próximo elemento da árvore
-     */
-    NodeArvore< T >* _right;
-
-    /**
      * Ponteiro para o elemento elemento anterior da árvore
      */
-    NodeArvore< T >* _left;
+    NoBinario< T >* esquerda;
 
     /**
-     *  Inteiro que armazena a altura (nível do nodo)
+     * Ponteiro para o próximo elemento da árvore
      */
-    int height;
+    NoBinario< T >* direita;
 
 public:
-    NodeArvore( const T& info, NodeArvore< T >* next,
-                NodeArvore< T >* previous, int height ) :
-            info( new T( info ) ), _right( next ), _left( previous ), 
-            height( height )
+    
+    NoBinario< T >( const T& dado ) :
+            dado( new T( dado ) ), esquerda( NULL ), direita( NULL )
     {
     }
     
     /**
      * Destrói o ponteiro para o elemento que esse nó ponta
      */
-    ~NodeArvore()
+    ~NoBinario()
     {
         delete info;
     }
@@ -57,9 +63,9 @@ public:
      * 
      * @return um ponteiro para o próximo elemento, NULL caso não exista.
      */
-    NodeArvore< T >* getProximo() const
+    NoBinario< T >* getProximo() const
     {
-        return _right;
+        return direita;
     }
     
     /**
@@ -68,9 +74,9 @@ public:
      * @return um ponteiro para o elemento anterior deste nó, NULL caso 
      * não exista.
      */
-    NodeArvore< T >* getAnterior() const
+    NoBinario< T >* getAnterior() const
     {
-        return _left;
+        return esquerda;
     }
     
     /**
@@ -88,9 +94,9 @@ public:
      * 
      * @param um ponteiro para o próximo nó
      */
-    void setProximo( NodeArvore< T >* next )
+    void setProximo( NoBinario< T >* next )
     {
-        _right = next;
+        direita = next;
     }
     
     /**
@@ -98,30 +104,10 @@ public:
      * 
      * @param um ponteiro para nó anterior
      */
-    void setAnterior( NodeArvore< T >* previous )
+    void setAnterior( NoBinario< T >* previous )
     {
-        _left = previous;
-    }
-    
-    /**
-     * Retorna a altura no nodo com um inteiro
-     * 
-     * @return um inteiro representando a altura do nó
-     */
-    int getHeight() const
-    {
-        return height;
-    }
-    
-    /**
-     * Ajusta a altura do nó.
-     * 
-     * @param um inteiro informando qual a altura do nó
-     */
-    void setHeight( int height )
-    {
-        this->height = height;
+        esquerda = previous;
     }
 };
 
-#endif /* NODEARVORE_HPP_ */
+#endif /* NOBINARIO_HPP_ */
