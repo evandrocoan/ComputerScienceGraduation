@@ -31,7 +31,7 @@ private:
     /**
      * Ponteiro para o tipo de informação que vai ser armazenada
      */
-    T *info;
+    T *dado;
 
     /**
      * Ponteiro para o elemento elemento anterior da árvore
@@ -43,8 +43,43 @@ private:
      */
     NoBinario< T >* direita;
 
+    /**
+     * // Para ajudar nos herancas
+     * 
+     * @param arv
+     * @return 
+     */
+    virtual NoBinario< T >* balanco_insere( NoBinario< T >* arv )
+    {
+        return arv;
+    }
+    ;
+
+    /**
+     * // Para ajudar nos herancas
+     * 
+     * @param arv
+     * @return 
+     */
+    virtual NoBinario< T >* balanco_remove( NoBinario< T >* arv )
+    {
+        return arv;
+    }
+    ;
+
+    /**
+     * // No lugar dos prints 
+     */
+    std::vector< NoBinario< T > > elementos;
+
 public:
     
+    /**
+     * Constrói uma nó de uma árvore binária caso algum dado seja fornecido.
+     * Caso receba null, cria uma nova árvore.
+     * 
+     * @param dado a ser inserido na arvore
+     */
     NoBinario< T >( const T& dado ) :
             dado( new T( dado ) ), esquerda( NULL ), direita( NULL )
     {
@@ -55,7 +90,31 @@ public:
      */
     ~NoBinario()
     {
-        delete info;
+        delete dado;
+    }
+    
+    /**
+     * Insere um nó em uma árvore de busca binária. Esta é um método chamado
+     * recursivamente e ao inserir o novo nó, ele retorna o nó completo.
+     * 
+     * @param dado a ser inserido recursivamente pela árvore.
+     * @param arvore binária a ter o elemento inserido, e durante a recursão, o
+     *  nó a ter o elemento a ser inserido.
+     * @return a árvore binária como o nó inserido na última chamada da 
+     * recusão. Durante o processo recursivo, retorna os nós completos com 
+     * o objeto inserido.
+     */
+    NoBinario< T >* inserir( const T& dado, NoBinario< T >* arv )
+    {
+        //caso o dado seja seja menor do que a raiz atual
+        if( dado < arv->getDado() )
+        {
+            //faz a inserção a esquerda
+            if( arv->getEsquerda() == NULL )
+            {
+                
+            }
+        }
     }
     
     /**
@@ -63,7 +122,7 @@ public:
      * 
      * @return um ponteiro para o próximo elemento, NULL caso não exista.
      */
-    NoBinario< T >* getProximo() const
+    NoBinario< T >* getDireita() const
     {
         return direita;
     }
@@ -74,7 +133,7 @@ public:
      * @return um ponteiro para o elemento anterior deste nó, NULL caso 
      * não exista.
      */
-    NoBinario< T >* getAnterior() const
+    NoBinario< T >* getEsquerda() const
     {
         return esquerda;
     }
@@ -84,9 +143,9 @@ public:
      * 
      * @return um ponteiro para o elemento que este nó armazena
      */
-    T getInfo() const
+    T getDado() const
     {
-        return *info;
+        return this->*dado;
     }
     
     /**
@@ -94,7 +153,7 @@ public:
      * 
      * @param um ponteiro para o próximo nó
      */
-    void setProximo( NoBinario< T >* next )
+    void setDireita( NoBinario< T >* next )
     {
         direita = next;
     }
@@ -104,9 +163,19 @@ public:
      * 
      * @param um ponteiro para nó anterior
      */
-    void setAnterior( NoBinario< T >* previous )
+    void setEsquerda( NoBinario< T >* previous )
     {
         esquerda = previous;
+    }
+    
+    /**
+     * Altera qual o dado que este nó referencia
+     * 
+     * @param o novo dado a ser referenciado por este nó
+     */
+    void setDado( const T& dado )
+    {
+        this->dado = dado;
     }
 };
 
