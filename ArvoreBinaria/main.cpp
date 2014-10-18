@@ -38,7 +38,7 @@ void testesCout()
 {
     
     //clrscr();
-    NoBinario< int > arvore(1, NULL, NULL, 0);
+    NoBinario< int > arvore(1);
     
     cout << "\n\t\tADDING NEW NODE" << endl;
     cout << "\t\t:::::::::::::\n" << endl;
