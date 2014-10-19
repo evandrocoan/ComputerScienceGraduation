@@ -2,6 +2,46 @@
  * Arquivo que contém testes aplicados à uma árvore bináira.
  */
 
+/*
+ * #ifndef NOBINARIO_H_
+ * #define NOBINARIO_H_
+ * 
+ * #include <cstdio>
+ * #include <vector>
+ * 
+ * template<typename T>
+ * class NoBinario {
+ * 
+ * private:
+ *     T* dado;
+ *     NoBinario<T>* esquerda;
+ *     NoBinario<T>* direita;
+ * 
+ *     // Para  ajudar nos herancas
+ *     virtual NoBinario<T>* balanco_insere(NoBinario<T>* arv) { return arv; }; 
+ * 
+ *     // P*ar a  ajudar nos herancas
+ *     virtual NoBinario<T>* balanco_remove(NoBinario<T>* arv) { return arv; }; 
+ * 
+ *     std::vector<NoBinario<T> > elementos; // No lugar dos prints
+ * 
+ * public:
+ *     NoBinario<T>(const T& dado): dado(new T(dado)), esquerda(NULL), 
+ *                                                     direita(NULL) {} 
+ *     virtual ~NoBinario<T>() {}
+ *     T* getDado(){}
+ *     NoBinario<T>* getElementos(){}
+ *     T* busca(const T& dado, NoBinario<T>* arv) {}
+ *     NoBinario<T>* inserir(const T& dado, NoBinario<T>* arv) {}
+ *     NoBinario<T>* remover(NoBinario<T>* arv, const T& dado) {}
+ *     NoBinario<T>* minimo(NoBinario<T>* nodo) {}
+ *     void preOrdem(NoBinario<T>* nodo) {}
+ *     void emOrdem(NoBinario<T>* nodo) {}
+ *     void posOrdem(NoBinario<T>* nodo) {}
+ * };
+ * 
+ * #endif /* NOBINARIO_HPP_ */
+
 /**
  * Inclui os métodos utilizados nos testes
  */
