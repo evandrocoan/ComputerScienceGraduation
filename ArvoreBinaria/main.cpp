@@ -78,12 +78,12 @@ void testesCout()
 {
     
     //clrscr();
-    NoBinario< int > arvore(1);
+    NoBinario< int >* arvore = new NoBinario< int >(1);
     
     cout << "\n\t\tADDING NEW NODE" << endl;
     cout << "\t\t:::::::::::::\n" << endl;
     cout << "int = 1";
-    //arvore.insert( 1, root );
+    arvore->inserir( 2, arvore );
     cout << "\nThe new value have been added to your tree successfully\n"
          << endl;
 
