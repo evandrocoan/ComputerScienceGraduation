@@ -104,15 +104,90 @@ public:
      * recusão. Durante o processo recursivo, retorna os nós completos com 
      * o objeto inserido.
      */
-    NoBinario< T >* inserir( const T& dado, NoBinario< T >* arv )
+    NoBinario< T >* inserir( const T& info, NoBinario< T >* raiz )
     {
         //caso o dado seja seja menor do que a raiz atual
-        if( dado < arv->getDado() )
+        if( info < * ( raiz->getDado( ) ) )
         {
             //faz a inserção a esquerda
-            if( arv->getEsquerda() == NULL )
+            if( raiz->getEsquerda( ) == NULL )
             {
-                
+                /* oNovo < -aloque( tNodo );
+                 * oNovo->info < -info;
+                 * oNovo->filhoÀEsquerda < -NULO;
+                 * oNovo->filhoÀDireita < -NULO;
+                 * raiz->filhoÀEsquerda < -oNovo
+                 */
+                NoBinario< T >* oNovo = new NoBinario< T >( info );
+                raiz->setEsquerda( oNovo );
+                return raiz;
+            } else
+            {
+                /*raiz <- inserção(raiz->filhoÀEsquerda, info);
+                 */
+                raiz->inserir( info, raiz->getEsquerda( ) );
+                return raiz;
+            }
+        } else
+        {
+            /*// Inserção à direita.
+             * se (raiz->filhoÀDireita = NULO) então
+             * oNovo <- aloque(tNodo);
+             * oNovo->info <- info;
+             * oNovo->filhoÀEsquerda <- NULO;
+             * raiz->filhoÀDireita <- oNovo;
+             */
+            if( raiz->getDireita( ) == NULL )
+            {
+                NoBinario< T >* oNovo = new NoBinario< T >( info );
+                raiz->setDireita( oNovo );
+                return raiz;
+            } else
+            {
+                /* senão
+                 * raiz <- inserção(raiz->filhoÀDireita, info);
+                 */
+                raiz->inserir( info, raiz->getDireita( ) );
+                return raiz;
+            }
+        }
+    }
+    
+    /**
+     * Remove um dado fornecido da árvore fornecida e retorna a árvore 
+     * atualizada com a remoção
+     * 
+     * @param árvore a ter o dado removido
+     * @param dado a ser removido da árvore
+     * @return
+     */
+    NoBinario< T >* remover( NoBinario< T >* raiz, const T& info )
+    {
+        /*se (arv = NULO) então
+         retorne arv*/
+        if( raiz->getDado( ) == NULL )
+        {
+            return raiz;
+        } else
+        {
+            /*senão
+             se (info < arv->info) // Vá à esquerda.*/
+            if( info < * ( raiz->getDado( ) ) )
+            {
+                /*arv->filhoÀEsquerda <- delete(info, arv->filhoÀEsquerda);
+                 retorne arv;*/
+                raiz->setEsquerda( delete ( info, raiz->getEsquerda( ) ) );
+            } else
+            {
+                /*senão
+                 se (info > arv->info) // Vá à direita.*/
+                if( info > raiz->getDado( ) )
+                {
+                    /*arv->filhoÀDireita <- delete(info, arv->filhoÀDireita);
+                     retorne arv;*/
+                    raiz->setDireita( delete ( info, raiz->getDireita( ) ) );
+                    return raiz;
+                }
             }
         }
     }
@@ -143,9 +218,9 @@ public:
      * 
      * @return um ponteiro para o elemento que este nó armazena
      */
-    T getDado() const
+    T* getDado() const
     {
-        return this->*dado;
+        return this->dado;
     }
     
     /**
