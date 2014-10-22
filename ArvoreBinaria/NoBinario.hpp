@@ -94,6 +94,18 @@ public:
     }
     
     /**
+     * Busca um elemento fornecido na árvore fornecida.
+     * 
+     * @param dado a ser encontrado na árvore fornecida
+     * @param arvore fornecida para ter o dado procurado
+     * @return o dado procurado na arvore fornecida, NULL caso não seja 
+     * encontrado
+     */
+    T* busca( const T& dado, NoBinario< T >* arv )
+    {
+    }
+    
+    /**
      * Insere um nó em uma árvore de busca binária. Esta é um método chamado
      * recursivamente e ao inserir o novo nó, ele retorna o nó completo.
      * 
@@ -161,35 +173,103 @@ public:
      * @param dado a ser removido da árvore
      * @return
      */
-    NoBinario< T >* remover( NoBinario< T >* raiz, const T& info )
+    NoBinario< T >* remover( NoBinario< T >* arv, const T& info )
     {
         /*se (arv = NULO) então
          retorne arv*/
-        if( raiz->getDado( ) == NULL )
+        if( arv->getDado( ) == NULL )
         {
-            return raiz;
+            return arv;
         } else
         {
             /*senão
              se (info < arv->info) // Vá à esquerda.*/
-            if( info < * ( raiz->getDado( ) ) )
+            if( info < *( arv->getDado( ) ) )
             {
                 /*arv->filhoÀEsquerda <- delete(info, arv->filhoÀEsquerda);
                  retorne arv;*/
-                raiz->setEsquerda( delete ( info, raiz->getEsquerda( ) ) );
+                arv->setEsquerda( delete ( info, arv->getEsquerda( ) ) );
+                return arv;
             } else
             {
                 /*senão
                  se (info > arv->info) // Vá à direita.*/
-                if( info > raiz->getDado( ) )
+                if( info > arv->getDado( ) )
                 {
                     /*arv->filhoÀDireita <- delete(info, arv->filhoÀDireita);
                      retorne arv;*/
-                    raiz->setDireita( delete ( info, raiz->getDireita( ) ) );
-                    return raiz;
+                    arv->setDireita( delete ( info, arv->getDireita( ) ) );
+                    return arv;
+                } else
+                {
+                    /*senão // Encontrei elemento que quero deletar.*/
+                    // 2 filhos.
+                    /*se (arv->filhoÀDireita ~= NULO E arv->filhoÀEsquerda ~= NULO)
+                     tmp <- mínimo(arv->filhoÀDireita);
+                     arv->info <- tmp->info;
+                     arv->filhoÀDireita <- delete(arv->info, arv->filhoÀDireita);
+                     retorne arv;*/
+                    if( arv->getDireita( ) != NULL && arv->getEsquerda( )
+                            != NULL )
+                    {
+                        NoBinario< T > tmp = this->minimo( arv );
+                        arv->setDado( tmp.getDado( ) );
+                        arv->setDireita(
+                                delete ( arv->getDado( ), arv->getDireita( ) ) );
+                        return arv;
+                    } else
+                    {
+                        /*senão // 1 filho.
+                         tmp <- arv;*/
+                        NoBinario< T > tmp = arv;
+                        
+                        /*se (arv->filhoÀDireita ~= NULO) então 
+                         * // Filho à direita.
+                         filho <- arv->filhoÀDireita;
+                         retorne filho;*/
+                        if( arv->getDireita( ) != NULL )
+                        {
+                            NoBinario< T > filho = arv->getDireita( );
+                            return filho;
+                        } else
+                        {
+                            /*senão
+                             * // Filho à esquerda.
+                             se (arv->filhoÀEsquerda ~= NULO) então 
+                             filho <- arv->filhoÀEsquerda;
+                             retorne filho;*/
+                            if( arv->getEsquerda( ) != NULL )
+                            {
+                                NoBinario< T > filho = arv->getEsquerda( );
+                                return filho;
+                            } else
+                            {
+                                /*senão // Folha.
+                                 libere arv;
+                                 retorne NULO;*/
+                                delete ( arv );
+                                return NULL;
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+    
+    /**
+     * Retorna o menor nó de uma árvore.
+     * 
+     * @param um ponteiro para a arvore a ter o menor nó encontrado
+     * @return um ponteiro para o menor nó encontrado
+     */
+    NoBinario< T >* minimo( NoBinario< T >* nodo )
+    {
+        if( nodo->getDireita( ) < nodo->getEsquerda( ) )
+        {
+            return nodo->getDireita( );
+        }
+        return nodo->getEsquerda( );
     }
     
     /**
