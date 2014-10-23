@@ -94,18 +94,6 @@ public:
     }
     
     /**
-     * Busca um elemento fornecido na árvore fornecida.
-     * 
-     * @param dado a ser encontrado na árvore fornecida
-     * @param arvore fornecida para ter o dado procurado
-     * @return o dado procurado na arvore fornecida, NULL caso não seja 
-     * encontrado
-     */
-    T* busca( const T& dado, NoBinario< T >* arv )
-    {
-    }
-    
-    /**
      * Insere um nó em uma árvore de busca binária. Esta é um método chamado
      * recursivamente e ao inserir o novo nó, ele retorna o nó completo.
      * 
@@ -184,7 +172,7 @@ public:
         {
             /*senão
              se (info < arv->info) // Vá à esquerda.*/
-            if( info < *( arv->getDado( ) ) )
+            if( info < * ( arv->getDado( ) ) )
             {
                 /*arv->filhoÀEsquerda <- delete(info, arv->filhoÀEsquerda);
                  retorne arv;*/
@@ -331,6 +319,64 @@ public:
     void setDado( const T& dado )
     {
         this->dado = dado;
+    }
+    
+    /**
+     * Busca um elemento fornecido na árvore fornecida.
+     * 
+     * @param dado a ser encontrado na árvore fornecida
+     * @param arvore fornecida para ter o dado procurado
+     * @return o dado procurado na arvore fornecida, NULL caso não seja 
+     * encontrado
+     */
+    T* busca( const T& chave, NoBinario< T >* ptr )
+    {
+        /*enquanto (ptr ~= NULO
+         E ptr->info ~= chave) faça
+         // Esquerda ou direita*/
+        while( ptr != NULL && ptr->getDado( ) != chave )
+        {
+            /*se (ptr->info < chave) então
+             ptr <- ptr->filhoÀDireita*/
+            if( ptr->getDado( ) < chave )
+            {
+                ptr = ptr->getDireita( );
+            } else
+            {
+                /*senão
+                 ptr <- ptr->filhoÀEsquerda;*/
+                ptr = ptr->getEsquerda( );
+            }
+        }
+        return ptr;
+    }
+    
+    NoBinario< T >* getElementos()
+    {
+        //return this->elementos;
+    }
+    
+    void preOrdem( NoBinario< T >* raiz )
+    {
+        /*se raiz != NULO então
+         imprime(raiz->info);
+         Preordem(raiz->filhoEsquerda);
+         Preordem(raiz->filhoDireita);
+         fim se*/
+        if( raiz != NULL )
+        {
+            this->elementos.push_back( *( raiz->getDado() ) );
+            this->preOrdem( raiz->getDireita());
+            this->preOrdem(raiz->getEsquerda());
+        }
+    }
+    
+    void emOrdem( NoBinario< T >* nodo )
+    {
+    }
+    
+    void posOrdem( NoBinario< T >* nodo )
+    {
     }
 };
 
