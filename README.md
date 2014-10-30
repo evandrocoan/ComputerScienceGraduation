@@ -1,4 +1,4 @@
-2014-2_ProgramacaoConcorrente
+ï»¿2014-2_ProgramacaoConcorrente
 ===========================
 
-Repositório para trabalhos da disciplina de programação concorrente.
+RepositÃ³rio para trabalhos da disciplina de programaÃ§Ã£o concorrente.
