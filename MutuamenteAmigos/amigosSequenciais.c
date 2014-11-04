@@ -1,6 +1,10 @@
 #include <stdio.h>
-#include <
+#include <pthread.h>
+#include <stdlib.h>
 
+/**
+ * 
+ */
 int mdc( int u, int v)
 {
 	if (v == 0)
@@ -15,16 +19,19 @@ int mdc( int u, int v)
  * @param arg2 o final da faixa de busca
  * @return um array de inteiros contendos os pares dos amigos
  */
-int[] amigos( int arg1, int arg2 )
+int* amigos( int arg1, int arg2 )
 {
-
+	int *vet;
+	vet = (int *) malloc(sizeof(int) * N_ELEM);
+	
+	return vet;
 }
 
 /*
  * Imprime os amigos
  * @param amigos um array que contém os amigos aos pares começando em zero.
  */
-void imprimirAmigos( int[] amigos )
+void imprimirAmigos( int *amigos )
 {
 
 }
@@ -40,7 +47,8 @@ int main( int argc, char** argv)
 	int a = atoi(argv[1]);
 	int b = atoi(argv[2]);
 
-	int[] c = amigos( a, b );
+	int *c = amigos( a, b );
+
 	imprimirAmigos( c );
 
 	return 0;
