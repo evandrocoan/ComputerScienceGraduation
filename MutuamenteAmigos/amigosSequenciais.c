@@ -1,25 +1,5 @@
-/*
- * Protótipos utilizados
- */
-int mdc( int u, int v);
-int[] amigos( int argc, int argv );
-
-int main( int argc, char** argv)
-{
-	if( argc != 3)
-	{
-		printf("\nPARÂMETROS ERRADOS (insira dois parâmetros.\n" );
-		return 1;
-	}
-
-	int a = atoi(argv[1]);
-	int b = atoi(argv[2]);  
-
-	int[] c = amigos( a, b );
-	imprimirAmigos( c );
-
-	return 0;
-}
+#include <stdio.h>
+#include <
 
 int mdc( int u, int v)
 {
@@ -48,3 +28,21 @@ void imprimirAmigos( int[] amigos )
 {
 
 }
+
+int main( int argc, char** argv)
+{
+	if( argc != 3)
+	{
+		printf("\nPARÂMETROS ERRADOS (insira dois parâmetros.\n" );
+		return 1;
+	}
+
+	int a = atoi(argv[1]);
+	int b = atoi(argv[2]);
+
+	int[] c = amigos( a, b );
+	imprimirAmigos( c );
+
+	return 0;
+}
+
