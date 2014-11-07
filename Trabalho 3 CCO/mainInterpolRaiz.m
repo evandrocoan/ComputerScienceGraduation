@@ -1,7 +1,7 @@
-% Determine fun√ß√µes aproximadoras de f(x)=sqrt(x), com x entre 1 e 2, atrav√©s de Interpolador Polinomial, de s√©ries de MacLaurin, Chebyschev e Pad√© (encontre a melhor combina√ß√£o 'n' e 'm' de Pad√©), com erro m√°ximo EXATO da ordem de 1e-6.
-% Lembre-se de primeiramente de fazer mudan√ßa de vari√°veis de x entre [1;2] para t entre[-1;+1], fazendo todos as aproxima√ß√µes em t, e somente no final, retorne as vari√°veis de t para x, apresentando a forma final das s√©ries em fun√ß√£o de x.
-% Imprima o erro m√°ximo em cada aproxima√ß√£o.
-% Plote gr√°ficos comparativos das fun√ß√µes aproximadoras e dos erros em rela√ß√£o √† fun√ß√£o exata.
+% Determine funÁıes aproximadoras de f(x)=sqrt(x), com x entre 1 e 2, atravÈs de Interpolador Polinomial, de sÈries de MacLaurin, Chebyschev e PadÈ (encontre a melhor combinaÁ„o 'n' e 'm' de PadÈ), com erro m·ximo EXATO da ordem de 1e-6.
+% Lembre-se de primeiramente de fazer mudanÁa de vari·veis de x entre [1;2] para t entre[-1;+1], fazendo todos as aproximaÁıes em t, e somente no final, retorne as vari·veis de t para x, apresentando a forma final das sÈries em funÁ„o de x.
+% Imprima o erro m·ximo em cada aproximaÁ„o.
+% Plote gr·ficos comparativos das funÁıes aproximadoras e dos erros em relaÁ„o ‡ funÁ„o exata.
 
 clc
 clear
@@ -11,39 +11,38 @@ format long
 a = 1;
 b = 2;
 
-n = 4;			%numero de subdivis√µes do intervalo [a,b] (grau do polinomio)
-h = ( b - a ) / n;	% espa√ßamento entre as subdivis√µes
-x = a : h : b;		%vetor x de pontos para plotar o gr√°fico
-y = sqrt(x);		%vetor y de pontos para plotar o gr√°fico
+n = 4;			%numero de subdivisıes do intervalo [a,b] (grau do polinomio)
+h = ( b - a ) / n;	% espaÁamento entre as subdivisıes
+x = a : h : b;		%vetor x de pontos para plotar o gr·fico
+y = sqrt(x);		%vetor y de pontos para plotar o gr·fico
 
-%matriz que resulta de uma fun√ß√£o diferen√ßas divididas
-difDiv = fDifDiv( n, x, y )
+%matriz que resulta de uma funÁ„o diferenÁas divididas
+difDiv = fDifDiv( n, x, y );
 difDiv(n+1,n) = 0;
-[x' y' difDiv ]
+[x' y' difDiv ];
 
 %plotagem dos pontos 
-nPlotagem = 50 * n; %n intervalos dividos em 20 vezes
+nPlotagem = 20 * n; %n intervalos dividos em 20 vezes
 aPlot = a;
 bPlot = b;
 hPlotagem = ( bPlot - aPlot ) / nPlotagem;
 xP = aPlot: hPlotagem : bPlot; % 31 pontos para n = 3
 
-yE = log(xP);
+yE = sqrt(xP);
 
 for i = 1 : nPlotagem + 1
-	%yP(i) = fPnLagrange( n, x, y, xP(i) );
 	yP(i) = fPnGregNew( n, x, y, difDiv, xP(i) );
 end
-erro = abs( yE .- yP )
+erro = abs( yE .- yP );
 
 ErroMaxInter = max(erro)
 
-%Aproxima√ß√£o em s√©ries de Maclaurin com n = 14
-nMaclaurin = 2
-cMaclaurin = fCoefMaclaurin( nMaclaurin, a, b ); %coeficientes da s√©rie de Maclaurin em t
+%AproximaÁ„o em sÈries de Maclaurin com n = 14
+nMaclaurin = 4
+cMaclaurin = fCoefMaclaurin( nMaclaurin, a, b ); %coeficientes da sÈrie de Maclaurin em t
 %fMac(t) = c(1) + c(2) * t^1 + c(3) * t^2 + ...
 
-%plotagem dos pontos da s√©rie de Maclaurin
+%plotagem dos pontos da sÈrie de Maclaurin
 for i = 1 : nPlotagem + 1
 	tP(i) = ( 2 * xP(i) - ( b+a ) ) / (b - a);
 	yMac(i) = fPnBrio( nMaclaurin, cMaclaurin, tP(i) );
@@ -51,5 +50,5 @@ end
 erroMaclaurin = abs( yE .- yMac );
 erroMaximoMaclaurin =  max( erroMaclaurin )
 
-plot( x, y, "*;f(x) = ln;", xP, yE, "r;f(x)=ln(x);", xP, yP, "b;g(x) = Pn(x) de Lagrange;", xP, yMac, "k;S√©rie de Maclaurin;" );
+plot( x, y, "*;f(x) = ln;", xP, yMac, "k;Serie de Maclaurin;" );
 %plot( xP, erro, "k;Erro(x) = |f(x) - Pn(x)|;" );
