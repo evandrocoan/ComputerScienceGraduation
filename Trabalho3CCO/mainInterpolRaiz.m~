@@ -47,7 +47,7 @@ yMac;
 erroMac = abs( yE .- yMac );
 erroMaximoMac =  max( erroMac )
 
- plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;");
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;");
 
 % plot(xPlot, erroGregNew, "b;Erro Gregory Newton;")	% Erro Gregory-Newton
-% plot(xPlot, erroMac, "r;Erro MacLaurin;");		% Erro Maclaurin
+ plot(xPlot, erroMac, "r;Erro MacLaurin;");		% Erro Maclaurin

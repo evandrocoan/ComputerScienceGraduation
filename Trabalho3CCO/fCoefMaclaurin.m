@@ -1,12 +1,18 @@
-function cMaclaurin = fCoefMaclaurin( nMaclaurin, a, b )
+function cMac = fCoefMaclaurin( nMaclaurin, a, b )
 	%tB = 0; ( Maclaurin )
-	j = 1;
-	cMaclaurin(1) = ( 0.5 * (b - a) * 0 + .5 * (b + a) )^(1/2);
-	for i = 2 : nMaclaurin + 1
+	aux = 1;
+	k = 1;
+	cMac(1) = ( 0.5 * (b - a) * 0 + .5 * (b + a) )^(1/2);
+	
+	fi = ((aux)/(2)) * ((0.5*(b+a))^(-(0.5*((2)-1)))) * ((0.5*(b-a)));
+	cMac(2) = fi;
+	
+	for i = 3 : nMaclaurin + 1
 		k = 2 * i - 3;
-		aux = k * j;
-		% CM(i+1) = f'(x(t=0))/i!
-		cMaclaurin(i) = (((-1)^i) * ((aux)/(2^i)) * ((.5*(b+a))^(-(2*i-1)/2)) * (.5*(b-a))^i) / factorial(i);
-		j = aux;
+		iO = (i-1);
+		aux = k * aux;
+		% CM(i+1) = fi(x(t=0))/i!
+		fi = ((-1)^i) * ((aux)/(2^iO)) * ((0.5*(b+a))^(-(0.5*((2*iO)-1)))) * ((0.5*(b-a))^(iO));
+		cMac(i) = fi/factorial(i);
 	end
 end
