@@ -34,20 +34,34 @@ erroMaxGregNew = max(erroGregNew)
 
 % 2. Interpolação por series de Maclaurin
 nMac = 5
-cMac = fCoefMaclaurin( nMac, a, b ) %coeficientes da serie de Maclaurin em t=0
+cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
 %plotagem dos pontos da serie de Maclaurin
 for i = 1 : nPlotagem + 1
-	tP(i) = ( 2 * xPlot(i) - ( b+a ) ) / (b - a);
-	yMac(i) = fPnBrio( nMac, cMac, tP(i) );
+	tP(i) = (2*xPlot(i)-(b+a)) / (b-a);
+	yMac(i) = fPnBrio(nMac, cMac, tP(i));
 end
-tP;
-xPlot;
-yMac;
 erroMac = abs( yE .- yMac );
 erroMaximoMac =  max( erroMac )
 
- plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;");
+% 3. Interpolação por Chebyshev
+%PnMaclaurin(t) = 1.22474487139159*t^0+0.204124145231932*t^1-0.0170103454359943*t^2+0.00354382196583214*t^3-8.26891792027500e-04*t^4
+% → 1.22474487139159 + 0.204124145231932*t - 0.0170103454359943*t^2 + 0.00354382196583214*t^3 - 0.000826891792027500*t^4
+% 1.22474487139159*T0+0.204124145231932*T1-0.0170103454359943*(T2+T0)+0.00354382196583214*((T3+3*T1)/4)-0.000826891792027500*((T4+4*T2+3*T0)/8)
+% → 1.20742444153359*T0+0.206782011706306*T1-0.0174237913320081*T2+0.000885955491458035*T3-0.000103361474003438*T4
 
-% plot(xPlot, erroGregNew, "b;Erro Gregory Newton;")	% Erro Gregory-Newton
-% plot(xPlot, erroMac, "r;Erro MacLaurin;");		% Erro Maclaurin
+nCheb = 4
+cCheb = [1.20742444153359 0.206782011706306 -0.0174237913320081 0.000885955491458035 -0.000103361474003438];
+
+%plotagem dos pontos da série de Chebychev
+for i = 1 : nPlotagem + 1
+	tP(i) = (2*xPlot(i)-(b+a)) / (b-a);
+	yCheb(i) = fPnBrio(nCheb, cCheb, tP(i));
+end
+erroCheb = abs(yE .- yCheb);
+erroMaxCheb =  max(erroCheb)
+
+
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+
+ plot(xPlot, erroMac, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");		% Erro Chebyshev
