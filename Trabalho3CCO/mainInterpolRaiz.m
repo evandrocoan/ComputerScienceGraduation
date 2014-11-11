@@ -6,7 +6,7 @@ format long
 a = 1;
 b = 2;
 
-n = 6				%numero de subdivisoes do intervalo [a,b] (grau do polinomio)
+n = 3				%numero de subdivisoes do intervalo [a,b] (grau do polinomio)
 h = ( b - a ) / n;	%espacaento entre as subdivisao x = a : h : b;
 x = a : h : b;		%vetor x de pontos para plotar o gráfico		
 y = sqrt(x);		%vetor y de pontos para plotar o grafico
@@ -33,8 +33,8 @@ erroGregNew = abs( yE .- yGregNew );
 erroMaxGregNew = max(erroGregNew)
 
 % 2. Interpolação por series de Maclaurin
-nMac = 6
-cMac = fCoefMaclaurin( nMac, a, b ) %coeficientes da serie de Maclaurin em t=0
+nMac = 5
+cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
 %plotagem dos pontos da serie de Maclaurin
 for i = 1 : nPlotagem + 1
@@ -69,6 +69,6 @@ erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
 
 
- plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
 
 % plot(xPlot, erroMac, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");		% Erro Chebyshev
