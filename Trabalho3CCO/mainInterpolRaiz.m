@@ -32,9 +32,9 @@ end
 erroGregNew = abs( yE .- yGregNew );
 erroMaxGregNew = max(erroGregNew)
 
-% 2. Interpolação por series de Maclaurin
+% 2. Aproximação por series de Maclaurin
 nMac = 5
-cMac = fCoefMaclaurin( nMac, a, b ) %coeficientes da serie de Maclaurin em t=0
+cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
 %plotagem dos pontos da serie de Maclaurin
 for i = 1 : nPlotagem + 1
@@ -44,7 +44,7 @@ end
 erroMac = abs( yE .- yMac );
 erroMaximoMac =  max( erroMac )
 
-% 3. Interpolação por Chebyshev
+% 3. Aproximação por Chebyshev
 % cMac:
 % 1.22474487139159e+00   2.04124145231932e-01  -1.70103454359943e-02   2.83505757266572e-03  -5.90636994305357e-04   1.37815298671250e-04
 % cMac aplicado em t:
@@ -53,9 +53,10 @@ erroMaximoMac =  max( erroMac )
 % 1.21601820980073*T0+0.206336572973101*T1-0.0088004912151498*T2+0.00075183167400120*T3-0.000073829624288170*T4+8.6134561669531e-6*T5
 % Retornando ao t:
 % 1.2247448713916+0.20412414523193*t-0.017010345435994*t^2+0.0028350575726657*t^3-0.0005906369943054*t^4+0.00013781529867125*t^5
+% Foi desprezado o último coeficiente pois o erro permanece ainda aceitável.
 
-nCheb = 5
-cCheb = [1.2247448713916 0.20412414523193 -0.017010345435994 0.0028350575726657 -0.0005906369943054 +0.00013781529867125];
+nCheb = 4
+cCheb = [1.2247448713916 0.20412414523193 -0.017010345435994 0.0028350575726657 -0.0005906369943054];
 
 %plotagem dos pontos da série de Chebychev
 for i = 1 : nPlotagem + 1
@@ -65,7 +66,43 @@ end
 erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
 
+%aproximação racional de Padé
+c = cMaclaurin
+M = nMaclaurin %M = 5 
+n = 3 % R32 (Padé)
+m = 2 %
 
-plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+%Primeiro determinamos os coeficiente de bj
+%A = [ c(n-m+1), c(n-m+2), -c(n+1);
+%		c(M-m),   c(M-1),   -c(M)  ; ]
+A = [ c(n-m+1+1), c(n-m+2+1), -c(n+1+1);
+		c(M-m+1),   c(M-1+1),   -c(M+1)  ; ]
+baux = fGauss(m, A)
+bp = flipud(baux')
 
-% plot(xPlot, erroMac, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");		% Erro Chebyshev
+bp(3) = 0; %porque o polinomio de denominador é igual a 2 (m)
+% ap = aPade
+ap(0+1) = c(0+1);
+ap(1+1) = bp(1) * c(0+1) + c(1+1);
+ap(2+1) = bp(2) * c(0+1) + bp(1) * c(1+1) + c(2+1);
+ap(3+1) = bp(3) * c(0+1) + bp(2) * c(1+1) + bp(1) * c(2+1) + c(3+1);
+
+ap
+bp = [ 1; bp]'
+
+%plotagem dos pontos da série de Padé
+for i = 1 : nPlotagem + 1
+	%é necessario determiniar os tP correspondentes aos xP anteriores
+	%tP = tê de Plotagem correspondente ao xîs
+	tP(i) = ( 2 * xP(i) - ( b+a ) ) / (b - a);
+	%polinomio de maclaurin -> fMac(t) = c(1) + c(2) * t^1 + c(3) * t^2 + ...
+	%calcula a serie racional de Padé no ponto tP
+	yPade(i) = fPnBrio( n, ap, tP(i) ) / fPnBrio( m, bp, tP(i) ); 
+end
+
+erroPade = abs( yE .- yPade );
+erroMaximoPade =  max( erroPade )
+
+%plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+
+ plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");

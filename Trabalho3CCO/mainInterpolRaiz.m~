@@ -34,7 +34,7 @@ erroMaxGregNew = max(erroGregNew)
 
 % 2. Interpolação por series de Maclaurin
 nMac = 5
-cMac = fCoefMaclaurin( nMac, a, b ) %coeficientes da serie de Maclaurin em t=0
+cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
 %plotagem dos pontos da serie de Maclaurin
 for i = 1 : nPlotagem + 1
@@ -53,10 +53,10 @@ erroMaximoMac =  max( erroMac )
 % 1.21601820980073*T0+0.206336572973101*T1-0.0088004912151498*T2+0.00075183167400120*T3-0.000073829624288170*T4+8.6134561669531e-6*T5
 % Retornando ao t:
 % 1.2247448713916+0.20412414523193*t-0.017010345435994*t^2+0.0028350575726657*t^3-0.0005906369943054*t^4+0.00013781529867125*t^5
+% Foi desprezado o último coeficiente pois o erro permanece ainda aceitável.
 
-
-nCheb = 5
-cCheb = [1.2247448713916 0.20412414523193 -0.017010345435994 0.0028350575726657 -0.0005906369943054 +0.00013781529867125];
+nCheb = 4
+cCheb = [1.2247448713916 0.20412414523193 -0.017010345435994 0.0028350575726657 -0.0005906369943054];
 
 %plotagem dos pontos da série de Chebychev
 for i = 1 : nPlotagem + 1
@@ -66,7 +66,6 @@ end
 erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
 
+%plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
 
-plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
-
-% plot(xPlot, erroMac, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");		% Erro Chebyshev
+ plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");
