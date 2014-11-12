@@ -32,7 +32,7 @@ end
 erroGregNew = abs( yE .- yGregNew );
 erroMaxGregNew = max(erroGregNew)
 
-% 2. Interpolação por series de Maclaurin
+% 2. Aproximação por series de Maclaurin
 nMac = 5
 cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
@@ -44,7 +44,7 @@ end
 erroMac = abs( yE .- yMac );
 erroMaximoMac =  max( erroMac )
 
-% 3. Interpolação por Chebyshev
+% 3. Aproximação por Chebyshev
 % cMac:
 % 1.22474487139159e+00   2.04124145231932e-01  -1.70103454359943e-02   2.83505757266572e-03  -5.90636994305357e-04   1.37815298671250e-04
 % cMac aplicado em t:
@@ -66,6 +66,42 @@ end
 erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
 
-%plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+% 4. Aproximação racional de Padé
+c = cMac;
+M = nMac;
+nPad = 3 % R32 (Padé)
+mPad = 2 %
 
- plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");
+%Primeiro determinamos os coeficiente de bj
+%A = [ c(n-m+1), c(n-m+2), -c(n+1);
+%		c(M-m),   c(M-1),   -c(M)  ; ]
+A = [ c(nPad-mPad+1+1), c(nPad-mPad+2+1), -c(nPad+1+1);
+	c(M-mPad+1),   c(M-1+1),   -c(M+1)  ; ];
+baux = fGauss(mPad, A);
+bp = flipud(baux');
+
+bp(3) = 0; %porque o polinomio de denominador é igual a 2 (m)
+% ap = aPade
+ap(0+1) = c(0+1);
+ap(1+1) = bp(1) * c(0+1) + c(1+1);
+ap(2+1) = bp(2) * c(0+1) + bp(1) * c(1+1) + c(2+1);
+ap(3+1) = bp(3) * c(0+1) + bp(2) * c(1+1) + bp(1) * c(2+1) + c(3+1);
+
+bp = [ 1; bp]';
+
+%plotagem dos pontos da série de Padé
+for i = 1 : nPlotagem + 1
+	%é necessario determiniar os tP correspondentes aos xP anteriores
+	%tP = tê de Plotagem correspondente ao xîs
+	tPlot(i) = ( 2 * xPlot(i) - ( b+a ) ) / (b - a);
+	%polinomio de maclaurin -> fMac(t) = c(1) + c(2) * t^1 + c(3) * t^2 + ...
+	%calcula a serie racional de Padé no ponto tP
+	yPad(i) = fPnBrio( nPad, ap, tP(i) ) / fPnBrio( mPad, bp, tP(i) ); 
+end
+
+erroPad = abs( yE .- yPad );
+erroMaxPad =  max( erroPad )
+
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;", xPlot, yPad, "m;g(x) = Pn(x) de Padé;");
+
+ plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;");

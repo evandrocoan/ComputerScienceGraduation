@@ -66,19 +66,19 @@ end
 erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
 
-%aproximação racional de Padé
-c = cMaclaurin
-M = nMaclaurin %M = 5 
-n = 3 % R32 (Padé)
-m = 2 %
+% 4. Aproximação racional de Padé
+c = cMac;
+M = nMac;
+nPad = 3 % R32 (Padé)
+mPad = 2 %
 
 %Primeiro determinamos os coeficiente de bj
 %A = [ c(n-m+1), c(n-m+2), -c(n+1);
 %		c(M-m),   c(M-1),   -c(M)  ; ]
-A = [ c(n-m+1+1), c(n-m+2+1), -c(n+1+1);
-		c(M-m+1),   c(M-1+1),   -c(M+1)  ; ]
-baux = fGauss(m, A)
-bp = flipud(baux')
+A = [ c(nPad-mPad+1+1), c(nPad-mPad+2+1), -c(nPad+1+1);
+	c(M-mPad+1),   c(M-1+1),   -c(M+1)  ; ];
+baux = fGauss(mPad, A);
+bp = flipud(baux');
 
 bp(3) = 0; %porque o polinomio de denominador é igual a 2 (m)
 % ap = aPade
@@ -87,22 +87,21 @@ ap(1+1) = bp(1) * c(0+1) + c(1+1);
 ap(2+1) = bp(2) * c(0+1) + bp(1) * c(1+1) + c(2+1);
 ap(3+1) = bp(3) * c(0+1) + bp(2) * c(1+1) + bp(1) * c(2+1) + c(3+1);
 
-ap
-bp = [ 1; bp]'
+bp = [ 1; bp]';
 
 %plotagem dos pontos da série de Padé
 for i = 1 : nPlotagem + 1
 	%é necessario determiniar os tP correspondentes aos xP anteriores
 	%tP = tê de Plotagem correspondente ao xîs
-	tP(i) = ( 2 * xP(i) - ( b+a ) ) / (b - a);
+	tPlot(i) = ( 2 * xPlot(i) - ( b+a ) ) / (b - a);
 	%polinomio de maclaurin -> fMac(t) = c(1) + c(2) * t^1 + c(3) * t^2 + ...
 	%calcula a serie racional de Padé no ponto tP
-	yPade(i) = fPnBrio( n, ap, tP(i) ) / fPnBrio( m, bp, tP(i) ); 
+	yPad(i) = fPnBrio( nPad, ap, tP(i) ) / fPnBrio( mPad, bp, tP(i) ); 
 end
 
-erroPade = abs( yE .- yPade );
-erroMaximoPade =  max( erroPade )
+erroPad = abs( yE .- yPad );
+erroMaxPad =  max( erroPad )
 
-%plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;");
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;", xPlot, yPad, "m;g(x) = Pn(x) de Padé;");
 
- plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;");
+ plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;");
