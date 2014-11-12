@@ -42,7 +42,7 @@ for i = 1 : nPlotagem + 1
 	yMac(i) = fPnBrio(nMac, cMac, tP(i));
 end
 erroMac = abs( yE .- yMac );
-erroMaximoMac =  max( erroMac )
+erroMaxMac =  max( erroMac )
 
 % 3. Aproximação por Chebyshev
 % cMac:
@@ -102,6 +102,19 @@ end
 erroPad = abs( yE .- yPad );
 erroMaxPad =  max( erroPad )
 
+% 5 Interpolação Polinomial usando Newton-Raphson
+nNR = 3
+cNR = fInterCoef( nNR, x, y );
+
+%plotagem dos pontos
+for i = 1 : nPlotagem + 1
+	yNR(i) = fPnBrio(nNR, cNR, xPlot(i));
+end
+erroNR = abs( yE .- yNR );
+erroMaxNR =  max( erroNR )
+
+plot(x, y, "b;f(x) = x(sqrt);", xPlot, yNR, "c;g(x) = Interpolador Polinomial;")
+
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;", xPlot, yPad, "m;g(x) = Pn(x) de Padé;");
 
- plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;");
+% plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;");
