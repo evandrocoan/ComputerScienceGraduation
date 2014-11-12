@@ -24,7 +24,7 @@
  * nula ele é o nó raíz.
  */
 template< typename T >
-class NoBinario
+class NoBinarioAVL
 {
     
 private:
@@ -36,12 +36,12 @@ private:
     /**
      * Ponteiro para o elemento elemento anterior da árvore
      */
-    NoBinario< T >* esquerda;
+    NoBinarioAVL< T >* esquerda;
 
     /**
      * Ponteiro para o próximo elemento da árvore
      */
-    NoBinario< T >* direita;
+    NoBinarioAVL< T >* direita;
 
     /**
      * // Para ajudar nos herancas
@@ -49,7 +49,7 @@ private:
      * @param arv
      * @return 
      */
-    virtual NoBinario< T >* balanco_insere( NoBinario< T >* arv )
+    virtual NoBinarioAVL< T >* balanco_insere( NoBinarioAVL< T >* arv )
     {
         return arv;
     }
@@ -61,7 +61,7 @@ private:
      * @param arv
      * @return 
      */
-    virtual NoBinario< T >* balanco_remove( NoBinario< T >* arv )
+    virtual NoBinarioAVL< T >* balanco_remove( NoBinarioAVL< T >* arv )
     {
         return arv;
     }
@@ -70,9 +70,31 @@ private:
     /**
      * // No lugar dos prints 
      */
-    std::vector< NoBinario< T > > elementos;
+    std::vector< NoBinarioAVL< T > > elementos;
+    
+    /**
+     * Altura do nó da árvore AVL
+     */
+     int alt;
 
 public:
+
+    /**
+     * Informa a altura do nó da árvore
+     * 
+     * @return um inteiro que representa a altura da árvore
+     */
+     int altura( NoBinarioAVL nodoAVL )
+     {
+        if( nodoAVL->altura() == 0 )
+        {
+            return -1; /* A altura de uma subárvore
+            inexistente é definida como -1 */
+        }else
+        {
+            return this->alt;
+        } 
+     }
     
     /**
      * Constrói uma nó de uma árvore binária caso algum dado seja fornecido.
@@ -80,15 +102,15 @@ public:
      * 
      * @param dado a ser inserido na arvore
      */
-    NoBinario< T >( const T& dado ) :
-            dado( new T( dado ) ), esquerda( NULL ), direita( NULL )
+    NoBinarioAVL< T >( const T& dado ) :
+            dado( new T( dado ) ), esquerda( NULL ), direita( NULL ), alt( 0 )
     {
     }
     
     /**
      * Destrói o ponteiro para o elemento que esse nó ponta
      */
-    ~NoBinario()
+    ~NoBinarioAVL()
     {
         delete dado;
     }
@@ -104,7 +126,7 @@ public:
      * recusão. Durante o processo recursivo, retorna os nós completos com 
      * o objeto inserido.
      */
-    NoBinario< T >* inserir( const T& info, NoBinario< T >* raiz )
+    NoBinarioAVL< T >* inserir( const T& info, NoBinarioAVL< T >* raiz )
     {
         //caso o dado seja seja menor do que a raiz atual
         if( info < * ( raiz->getDado( ) ) )
@@ -118,7 +140,7 @@ public:
                  * oNovo->filhoÀDireita < -NULO;
                  * raiz->filhoÀEsquerda < -oNovo
                  */
-                NoBinario< T >* oNovo = new NoBinario< T >( info );
+                NoBinarioAVL< T >* oNovo = new NoBinarioAVL< T >( info );
                 raiz->setEsquerda( oNovo );
                 return raiz;
             } else
@@ -139,7 +161,7 @@ public:
              */
             if( raiz->getDireita( ) == NULL )
             {
-                NoBinario< T >* oNovo = new NoBinario< T >( info );
+                NoBinarioAVL< T >* oNovo = new NoBinarioAVL< T >( info );
                 raiz->setDireita( oNovo );
                 return raiz;
             } else
@@ -161,7 +183,7 @@ public:
      * @param dado a ser removido da árvore
      * @return
      */
-    NoBinario< T >* remover( NoBinario< T >* arv, const T& info )
+    NoBinarioAVL< T >* remover( NoBinarioAVL< T >* arv, const T& info )
     {
         /*se (arv = NULO) então
          retorne arv*/
@@ -200,7 +222,7 @@ public:
                     if( arv->getDireita( ) != NULL && arv->getEsquerda( )
                             != NULL )
                     {
-                        NoBinario< T > tmp = this->minimo( arv );
+                        NoBinarioAVL< T > tmp = this->minimo( arv );
                         arv->setDado( tmp.getDado( ) );
                         arv->setDireita(
                                 delete ( arv->getDado( ), arv->getDireita( ) ) );
@@ -209,7 +231,7 @@ public:
                     {
                         /*senão // 1 filho.
                          tmp <- arv;*/
-                        NoBinario< T > tmp = arv;
+                        NoBinarioAVL< T > tmp = arv;
                         
                         /*se (arv->filhoÀDireita ~= NULO) então 
                          * // Filho à direita.
@@ -217,7 +239,7 @@ public:
                          retorne filho;*/
                         if( arv->getDireita( ) != NULL )
                         {
-                            NoBinario< T > filho = arv->getDireita( );
+                            NoBinarioAVL< T > filho = arv->getDireita( );
                             return filho;
                         } else
                         {
@@ -228,7 +250,7 @@ public:
                              retorne filho;*/
                             if( arv->getEsquerda( ) != NULL )
                             {
-                                NoBinario< T > filho = arv->getEsquerda( );
+                                NoBinarioAVL< T > filho = arv->getEsquerda( );
                                 return filho;
                             } else
                             {
@@ -251,7 +273,7 @@ public:
      * @param um ponteiro para a arvore a ter o menor nó encontrado
      * @return um ponteiro para o menor nó encontrado
      */
-    NoBinario< T >* minimo( NoBinario< T >* nodo )
+    NoBinarioAVL< T >* minimo( NoBinarioAVL< T >* nodo )
     {
         if( nodo->getDireita( ) < nodo->getEsquerda( ) )
         {
@@ -265,7 +287,7 @@ public:
      * 
      * @return um ponteiro para o próximo elemento, NULL caso não exista.
      */
-    NoBinario< T >* getDireita() const
+    NoBinarioAVL< T >* getDireita() const
     {
         return direita;
     }
@@ -276,7 +298,7 @@ public:
      * @return um ponteiro para o elemento anterior deste nó, NULL caso 
      * não exista.
      */
-    NoBinario< T >* getEsquerda() const
+    NoBinarioAVL< T >* getEsquerda() const
     {
         return esquerda;
     }
@@ -296,7 +318,7 @@ public:
      * 
      * @param um ponteiro para o próximo nó
      */
-    void setDireita( NoBinario< T >* next )
+    void setDireita( NoBinarioAVL< T >* next )
     {
         direita = next;
     }
@@ -306,7 +328,7 @@ public:
      * 
      * @param um ponteiro para nó anterior
      */
-    void setEsquerda( NoBinario< T >* previous )
+    void setEsquerda( NoBinarioAVL< T >* previous )
     {
         esquerda = previous;
     }
@@ -329,7 +351,7 @@ public:
      * @return o dado procurado na arvore fornecida, NULL caso não seja 
      * encontrado
      */
-    T* busca( const T& chave, NoBinario< T >* ptr )
+    T* busca( const T& chave, NoBinarioAVL< T >* ptr )
     {
         /*enquanto (ptr ~= NULO
          E ptr->info ~= chave) faça
@@ -351,12 +373,12 @@ public:
         return ptr;
     }
     
-    NoBinario< T >* getElementos()
+    NoBinarioAVL< T >* getElementos()
     {
         //return this->elementos;
     }
     
-    void preOrdem( NoBinario< T >* raiz )
+    void preOrdem( NoBinarioAVL< T >* raiz )
     {
         /*se raiz != NULO então
          imprime(raiz->info);
@@ -371,11 +393,11 @@ public:
         }
     }
     
-    void emOrdem( NoBinario< T >* nodo )
+    void emOrdem( NoBinarioAVL< T >* nodo )
     {
     }
     
-    void posOrdem( NoBinario< T >* nodo )
+    void posOrdem( NoBinarioAVL< T >* nodo )
     {
     }
 };
