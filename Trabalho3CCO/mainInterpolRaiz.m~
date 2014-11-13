@@ -144,14 +144,14 @@ printf("\n--------------------------------------------------\n")
 printf("Plotando os Gráficos... \n");
 
 % Plot das Interpolações
-%plot(xPlot, yCheb, "y;Chebyshev;", xPlot, yMac, "r;MacLaurin;", xPlot, yGregNew, "g;Gregory-Newton;", xPlot, yPad, "m;Padé;", xPlot, yGauss, "c;Gauß;", xPlot, yNR, "k;Newton-Raphson;");
 
+plot(xPlot, yCheb, "y;Chebyshev;", xPlot, yMac, "r;MacLaurin;", xPlot, yGregNew, "g;Gregory-Newton;", xPlot, yPad, "m;Padé;", xPlot, yGauss, "c;Gauß;", xPlot, yNR, "k;Newton-Raphson;");
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;")	 		- verde
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;")	 		- vermelho
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;") 		 		- amarelo
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yPad, "m;g(x) = Pn(x) de Padé;")			 		- rosa
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGauss, "c;g(x) = Interpolador Polinomial (Gauß);") 		- azul claro
- plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);") 	- preto
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);") 	- preto
 
 % Plot de erros
 % plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;", xPlot, erroGauss, "c;g(x) = Erro Gauß;", xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;");

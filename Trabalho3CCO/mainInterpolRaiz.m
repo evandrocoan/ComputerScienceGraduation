@@ -1,3 +1,10 @@
+% Trabalho 3 - Interpolação e Aproximação Polinomial
+% INE5409 - Calculo Numérico para Computação
+% Professor: Sérgio Peters
+% Equipe:
+% João Marcus Alves	- 07132067
+% Evandro Coan		- 
+
 clc
 clear
 format long
