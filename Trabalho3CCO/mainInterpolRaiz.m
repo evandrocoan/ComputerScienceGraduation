@@ -149,6 +149,7 @@ erroMaxNR =  max( erroNR )
 printf("\n--------------------------------------------------\n")
 
 printf("Plotando os Gráficos... \n");
+printf("Para trocar o gráfico plotado, trocar comentário na classe mainInterpolRaiz.m \n");
 
 % Plot das Interpolações
 
