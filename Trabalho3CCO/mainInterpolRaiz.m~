@@ -6,13 +6,15 @@ format long
 a = 1;
 b = 2;
 
-n = 3				%numero de subdivisoes do intervalo [a,b] (grau do polinomio)
+n = 3;			%numero de subdivisoes do intervalo [a,b] (grau do polinomio)
 h = ( b - a ) / n;	%espacaento entre as subdivisao x = a : h : b;
 x = a : h : b;		%vetor x de pontos para plotar o gráfico		
 y = sqrt(x);		%vetor y de pontos para plotar o grafico
 
 
 % 1. Interpolacao por Gregory-Newton
+printf("1. Interpolação pelo método de Gregory-Newton\n");
+n
 %matriz que resulta de uma funcao de diferencas divididas
 difDiv = fDifDiv( n, x, y );
 difDiv(n+1,n) = 0;
@@ -31,8 +33,10 @@ for i = 1 : nPlotagem + 1
 end
 erroGregNew = abs( yE .- yGregNew );
 erroMaxGregNew = max(erroGregNew)
+printf("\n-------------------------\n")
 
 % 2. Aproximação por series de Maclaurin
+printf("2. Aproximação por Séries de Maclaurin\n");
 nMac = 5
 cMac = fCoefMaclaurin( nMac, a, b ); %coeficientes da serie de Maclaurin em t=0
 
@@ -43,8 +47,10 @@ for i = 1 : nPlotagem + 1
 end
 erroMac = abs( yE .- yMac );
 erroMaxMac =  max( erroMac )
+printf("\n-------------------------\n")
 
 % 3. Aproximação por Chebyshev
+printf("3. Aproximação por Séries de Chebyshev\n");
 % cMac:
 % 1.22474487139159e+00   2.04124145231932e-01  -1.70103454359943e-02   2.83505757266572e-03  -5.90636994305357e-04   1.37815298671250e-04
 % cMac aplicado em t:
@@ -65,8 +71,10 @@ for i = 1 : nPlotagem + 1
 end
 erroCheb = abs(yE .- yCheb);
 erroMaxCheb =  max(erroCheb)
+printf("\n-------------------------\n")
 
 % 4. Aproximação racional de Padé
+printf("4. Aproximação Racional de Padé\n");
 c = cMac;
 M = nMac;
 nPad = 3 % R32 (Padé)
@@ -101,8 +109,10 @@ end
 
 erroPad = abs( yE .- yPad );
 erroMaxPad =  max( erroPad )
+printf("\n-------------------------\n")
 
 % 5 Interpolação Polinomial usando Gauß
+printf("5. Interpolação Polinomial usando método de Gauß\n");
 nGauss = 3
 cGauss = fInterCoef( nGauss, x, y );
 
@@ -112,23 +122,30 @@ for i = 1 : nPlotagem + 1
 end
 erroGauss = abs( yE .- yGauss );
 erroMaxGauss =  max( erroGauss )
+printf("\n-------------------------\n")
 
 % 6 Interpolação Polinomial usando Newton-Raphson
+printf("6. Interpolação Polinomial usando método de Newton-Raphson\n");
 %plotagem dos pontos
-erroPropNR = 1.e-1;
+erroPropNR = 1.e-2;
 for i = 1 : nPlotagem + 1
 	yNR(i) = fSqrtNR(xPlot(i), erroPropNR);
 end
 erroNR = abs( yE .- yNR );
 erroMaxNR =  max( erroNR )
+printf("\n-------------------------\n")
+
+printf("Plotando os Gráficos");
 
 % Plot das Interpolações
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;")
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;")
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;")
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yPad, "m;g(x) = Pn(x) de Padé;")
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGauss, "c;g(x) = Interpolador Polinomial (Gauß);");
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);")
+plot(xPlot, yCheb, "y;Chebyshev;", xPlot, yMac, "r;MacLaurin;", xPlot, yGregNew, "g;Gregory-Newton;", xPlot, yPad, "m;Padé;", xPlot, yGauss, "c;Gauß;", xPlot, yNR, "k;Newton-Raphson;");
+
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;")	 		- verde
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;")	 		- vermelho
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;") 		 		- amarelo
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yPad, "m;g(x) = Pn(x) de Padé;")			 		- rosa
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGauss, "c;g(x) = Interpolador Polinomial (Gauß);") 		- azul claro
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);") 	- preto
 
 % Plot de erros
 plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;", xPlot, erroGauss, "c;g(x) = Erro Gauß;", xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;");
