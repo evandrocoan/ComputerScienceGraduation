@@ -102,19 +102,33 @@ end
 erroPad = abs( yE .- yPad );
 erroMaxPad =  max( erroPad )
 
-% 5 Interpolação Polinomial usando Newton-Raphson
-nNR = 3
-cNR = fInterCoef( nNR, x, y );
+% 5 Interpolação Polinomial usando Gauß
+nGauss = 3
+cGauss = fInterCoef( nGauss, x, y );
 
 %plotagem dos pontos
 for i = 1 : nPlotagem + 1
-	yNR(i) = fPnBrio(nNR, cNR, xPlot(i));
+	yGauss(i) = fPnBrio(nGauss, cGauss, xPlot(i));
+end
+erroGauss = abs( yE .- yGauss );
+erroMaxGauss =  max( erroGauss )
+
+% 6 Interpolação Polinomial usando Newton-Raphson
+%plotagem dos pontos
+erroPropNR = 1.e-1;
+for i = 1 : nPlotagem + 1
+	yNR(i) = fSqrtNR(xPlot(i), erroPropNR);
 end
 erroNR = abs( yE .- yNR );
 erroMaxNR =  max( erroNR )
 
-plot(x, y, "b;f(x) = x(sqrt);", xPlot, yNR, "c;g(x) = Interpolador Polinomial;")
+% Plot das Interpolações
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;")
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;")
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;")
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yPad, "m;g(x) = Pn(x) de Padé;")
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGauss, "c;g(x) = Interpolador Polinomial (Gauß);");
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);")
 
-% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGregNew, "g;g(x) = Pn(x) de Gregory-Newton;", xPlot, yMac, "r;g(x) = Pn(x) de serie de Maclaurin;", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;", xPlot, yPad, "m;g(x) = Pn(x) de Padé;");
-
-% plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;");
+% Plot de erros
+plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;", xPlot, erroGauss, "c;g(x) = Erro Gauß;", xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;");
