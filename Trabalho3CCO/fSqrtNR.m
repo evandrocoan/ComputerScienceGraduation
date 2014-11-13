@@ -1,9 +1,10 @@
 function x=fSqrtNR(C, erroPropNR)
       %sqrt(C)=x=>? ; f(x)=x^2-C; f'(x)=2*x
       %x=xi-f(xi)/df(xi); x=x-(x^2-C)/(2*x);  x=0.5*(x*x+C)/x;
-      if(C>1) x=1+eps;
-      else x=0+eps;
-      end
+      %if(C>1) x=1+eps;
+      %else x=0+eps;
+      %end
+      x=1.20710678118655; %Valor entre sqrt(1) e sqrt(2);
       cont=0;erro=1;
       while(erro>erroPropNR && cont<100)
          cont++;
