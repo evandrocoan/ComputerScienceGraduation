@@ -71,30 +71,30 @@ private:
      * // No lugar dos prints 
      */
     std::vector< NoBinarioAVL< T > > elementos;
-    
+
     /**
      * Altura do nó da árvore AVL
      */
-     int alt;
+    int alt;
 
 public:
-
+    
     /**
      * Informa a altura do nó da árvore
      * 
      * @return um inteiro que representa a altura da árvore
      */
-     int altura( NoBinarioAVL nodoAVL )
-     {
-        if( nodoAVL->altura() == 0 )
+    int altura( NoBinarioAVL nodoAVL )
+    {
+        if( nodoAVL->altura( ) == 0 )
         {
             return -1; /* A altura de uma subárvore
-            inexistente é definida como -1 */
-        }else
+             inexistente é definida como -1 */
+        } else
         {
             return this->alt;
-        } 
-     }
+        }
+    }
     
     /**
      * Constrói uma nó de uma árvore binária caso algum dado seja fornecido.
@@ -387,9 +387,9 @@ public:
          fim se*/
         if( raiz != NULL )
         {
-            this->elementos.push_back( *( raiz->getDado() ) );
-            this->preOrdem( raiz->getDireita());
-            this->preOrdem(raiz->getEsquerda());
+            this->elementos.push_back( * ( raiz->getDado( ) ) );
+            this->preOrdem( raiz->getDireita( ) );
+            this->preOrdem( raiz->getEsquerda( ) );
         }
     }
     

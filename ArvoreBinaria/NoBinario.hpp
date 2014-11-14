@@ -365,9 +365,9 @@ public:
          fim se*/
         if( raiz != NULL )
         {
-            this->elementos.push_back( *( raiz->getDado() ) );
-            this->preOrdem( raiz->getDireita());
-            this->preOrdem(raiz->getEsquerda());
+            this->elementos.push_back( * ( raiz->getDado( ) ) );
+            this->preOrdem( raiz->getDireita( ) );
+            this->preOrdem( raiz->getEsquerda( ) );
         }
     }
     
