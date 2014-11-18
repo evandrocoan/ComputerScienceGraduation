@@ -4,11 +4,11 @@
 
 int main( int argc, char **argv )
 {
-    
+    //valores maximos e minimos fornecidos pelo usuario
     int minimo = atoi( argv[ 1 ] );
     int maximo = atoi( argv[ 2 ] );
-//	printf("minimo: %d", minimo);
-    //printf("maximo: %d", maximo);
+
+    // variáveis para utilizar em for's
     int i, j;
     double fracaoA, fracaoB;
     

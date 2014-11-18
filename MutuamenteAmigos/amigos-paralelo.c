@@ -2,15 +2,32 @@
 #include <stdlib.h>
 #include <math.h>       /* sqrt */
 
+/**
+ * Função principal que inicia a execução do programa que encotra os números
+ * multuamente amigos.
+ * 
+ * @param argc o tamanho do vetor fornecido
+ * @param argv um vetor de char's que deve conter 2 elementos que representam
+ * os limites de busca para encontrar os números multuamente amigos. E o 
+ * ternceiro elemento deve ser o número de threads que este programa tenrá 
+ * ulizar caso estejam disponíveis recursos de hardware
+ * @return o código que representa se a execução do programa ocorreu com 
+ * sucesso.
+ */
 int main( int argc, char **argv )
 {
-    
+    // pega o primeiro limite da busca
     int minimo = atoi( argv[ 1 ] );
+    
+    // pega o segundo limite da busca
     int maximo = atoi( argv[ 2 ] );
+    
+    // pega o número de threads que executaram o cálculo
     int numThreads = atoi( argv[ 3 ] );
-    //printf("minimo: %d", minimo);
-    //printf("maximo: %d", maximo);
+    
+    // calcula a amplitude da busca
     int range = maximo - minimo;
+    
     int i, j;
     double amigos[ range ];
     double fracaoA;
