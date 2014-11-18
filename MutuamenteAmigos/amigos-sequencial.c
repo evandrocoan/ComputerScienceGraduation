@@ -30,27 +30,27 @@ int main( int argc, char **argv )
     double fracaoA;
     
     // variáveis para utilizar em for's
-    int i, j;
+    int j, i;
     
-    // este for calcula a razao da soma dos divisores de todos os 
+    // calcula a razao da soma dos divisores de todos os 
     // numeros do intervalo pelo proprio numero e armazena este 
     // numero no array amigos
-    for( i = minimo; i <= maximo; i++ )
+    for( j = minimo; j <= maximo; j++ )
     {
-        fracaoA = (double) somaDivisores( i ) / i;
-        amigos[ i - minimo ] = fracaoA;
+        fracaoA = (double) somaDivisores( j ) / j;
+        amigos[ j - minimo ] = fracaoA;
     }
     
-    // este for percorre o array e compara para ver se os resultados são 
-    // iguais, caso sim, são mutuamente amigos.
-    for( j = 0; j <= range; j++ )
+    // percorre o array e compara para ver se os resultados são 
+    // iguais, caso sim, são mutuamente amigos
+    for( i = 0; i <= range; i++ )
     {
-        for( i = j + 1; i <= range; i++ )
+        for( j = i + 1; j <= range; j++ )
         {
-            if( amigos[ j ] == amigos[ i ] )
+            if( amigos[ i ] == amigos[ j ] )
             {
-                printf( "Os numeros %d e %d são mutuamente amigos.\n",
-                        ( minimo + i ), ( minimo + j ) );
+//                printf( "Os numeros %d e %d são mutuamente amigos.\n",
+//                        ( minimo + j ), ( minimo + i ) );
             }
         }
     }
@@ -60,6 +60,9 @@ int main( int argc, char **argv )
 /** 
  * Método que soma os divisores de um numero. Utiliza uma propriedade 
  * matematica para diminuir a complexidade do algoritmo.
+ * 
+ * @param valor até qual será realizada a soma dos divisores
+ * @return a soma dos divisores de um número
  */ 
 int somaDivisores( int valor )
 {
@@ -70,8 +73,7 @@ int somaDivisores( int valor )
         if( valor % j == 0 )
         {
             divid = valor / j;
-            //	printf("\nDivisores de %d: %d",valor, j);
-            //printf("\nDivisores de %d: %d",valor, valor/j);
+
             if( ( valor / j ) == j )
                 divid = 0;
             soma += j + divid;

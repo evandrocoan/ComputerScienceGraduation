@@ -28,11 +28,24 @@ int main( int argc, char **argv )
     // calcula a amplitude da busca
     int range = maximo - minimo;
     
+    // variáveis para utilizar em for's
     int i, j;
+    
+    // array para armazenar o resultado da razão da soma dos divisores de 
+    // um numero pelo numero
     double amigos[ range ];
+    
+    // variavel para auxiliar o calculo
     double fracaoA;
     
+    // define o número de threads que realizaram o processamento
     omp_set_num_threads( numThreads );
+
+// define o inicio da execução paralela
+//#pragma omp parallel for schedule(static)
+    // calcula a razao da soma dos divisores de todos os 
+    // numeros do intervalo pelo proprio numero e armazena este 
+    // numero no array amigos
     for( i = minimo; i <= maximo; i++ )
     {
         fracaoA = (double) somaDivisores( i ) / i;
@@ -41,14 +54,17 @@ int main( int argc, char **argv )
     
     for( j = 0; j <= range; j++ )
     {
-        
+
+// define o inicio da execução paralela
 #pragma omp parallel for schedule(static)
+        // percorre o array e compara para ver se os resultados são 
+        // iguais, caso sim, são mutuamente amigos
         for( i = j + 1; i <= range; i++ )
         {
             if( amigos[ j ] == amigos[ i ] )
             {
-                printf( "Os numeros %d e %d são mutuamente amigos.\n",
-                        ( minimo + i ), ( minimo + j ) );
+//                printf( "Os numeros %d e %d são mutuamente amigos.\n",
+//                        ( minimo + i ), ( minimo + j ) );
             }
         }
         
@@ -56,6 +72,13 @@ int main( int argc, char **argv )
     return 0;
 }
 
+/** 
+ * Método que soma os divisores de um numero. Utiliza uma propriedade 
+ * matematica para diminuir a complexidade do algoritmo.
+ * 
+ * @param valor até qual será realizada a soma dos divisores
+ * @return a soma dos divisores de um número
+ */ 
 int somaDivisores( int valor )
 {
     int extra = (int) sqrt( valor ), j, divid, soma = 0;
@@ -64,8 +87,7 @@ int somaDivisores( int valor )
         if( valor % j == 0 )
         {
             divid = valor / j;
-            //	printf("\nDivisores de %d: %d",valor, j);
-            //printf("\nDivisores de %d: %d",valor, valor/j);
+
             if( ( valor / j ) == j )
                 divid = 0;
             soma += j + divid;
