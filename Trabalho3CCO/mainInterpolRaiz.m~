@@ -160,12 +160,12 @@ printf("Para trocar o gráfico plotado, trocar comentário na classe mainInterpo
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yCheb, "y;g(x) = Pn(x) de Chebyshev;") 		 		%- amarelo
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yPad, "m;g(x) = Pn(x) de Padé;")			 		%- rosa
 % plot(x, y, "b;f(x) = sqrt(x);", xPlot, yGauss, "c;g(x) = Interpolador Polinomial (Gauß);") 		%- azul claro
- plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);") 	%- preto
+% plot(x, y, "b;f(x) = sqrt(x);", xPlot, yNR, "k;g(x) = Interpolador Polinomial (Newton-Raphson);") 	%- preto
 
 % Plot de erros
-% plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;", xPlot, erroGauss, "c;g(x) = Erro Gauß;", xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;");
+ plot(xPlot, erroCheb, "y;Erro Chebyshev;", xPlot, erroMac, "r;Erro MacLaurin;", xPlot, erroGregNew, "g;Erro Gregory Newton;", xPlot, erroPad, "m;Erro Padé;", xPlot, erroGauss, "c;g(x) = Erro Gauß;", xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;");
 
 %plot(xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;")
 
-print NewRaph.png
+%print Comparacao_Todos.png
 
