@@ -63,8 +63,8 @@ int main( int argc, char **argv )
         {
             if( amigos[ j ] == amigos[ i ] )
             {
-//                printf( "Os numeros %d e %d são mutuamente amigos.\n",
-//                        ( minimo + i ), ( minimo + j ) );
+                printf( "Os numeros %d e %d são mutuamente amigos.\n",
+                        ( minimo + i ), ( minimo + j ) );
             }
         }
         
