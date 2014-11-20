@@ -167,5 +167,5 @@ printf("Para trocar o gráfico plotado, trocar comentário na classe mainInterpo
 
 %plot(xPlot, erroNR, "k;g(x) = Erro Newton-Raphson;")
 
-print comp_todos_erro.png
+%print Comparacao_Todos.png
 
