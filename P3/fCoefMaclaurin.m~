@@ -1,0 +1,8 @@
+function mac = fCoefMaclaurin( n, a, b, t )
+
+	mac = 1;
+	
+	for i = 1 : n
+		mac +=  (((-1)^i)*(t^(2*i)))/(factorial(2*i));
+	end
+end

@@ -29,7 +29,6 @@ end
 
 n
 erroMax
-cMac
 
 
  plot( x, y, "b;f(x) = cos(x);", x, yMac, "k;Série de Maclaurin;" );

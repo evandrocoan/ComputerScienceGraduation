@@ -26,6 +26,7 @@ while ( ( erroMax > erroPermitido )  && ( passos < 1000 ) )
 	bPlot = b;
 	hPlotagem = ( bPlot - aPlot ) / nPlotagem;
 	xP = aPlot: hPlotagem : bPlot; 
+
 	yE = f(xP);
 
 	for i = 1 : nPlotagem + 1
