@@ -9,5 +9,5 @@ function coef = fInterCoef( n, x, y )
 		P(i, nP + 1) = y(i);
 	end	
 	P;
-	coef = fNewtonRaphson(nP, P);
+	coef = fGauss(nP, P);
 end
