@@ -1,0 +1,5 @@
+Resolver de duas formas: 
+1) Evitando que ocorram os deadlocks;
+2) Uma vez que estas situações existam, os processos devem devolver os recursos, 
+retornando ao estado inicial e começando o sistema do zero.
+
