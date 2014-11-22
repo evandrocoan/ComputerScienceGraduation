@@ -17,20 +17,28 @@ while ( ( erroMax > erroPermitido )  && ( passos < 1000 ) )
 	x = a : h : b;
 	y = cos(x);
 	
-	cMac = fMaclaurin(n);
+	cMac = fCoefMaclaurin(n);
 	
-	for i = 1 : n + 1
-		yMac(i) = fPnBrio(n, cMac, x(i));
+	
+	nPlot = 50 * n; 
+	aPlot = a;
+	bPlot = b;
+	hPlot = ( bPlot - aPlot ) / nPlot;
+	xP = aPlot: hPlot : bPlot; 
+	yE = f(xP);
+	
+	for i = 1 : nPlot + 1
+		yMac(i) = fPnBrio(n, cMac, xP(i));
 	end
 	
-	erroMac = abs( y .- yMac );
+	erroMac = abs( yE .- yMac );
 	erroMax =  max( erroMac );
 end
 
 n
 erroMax
-cMac
 
 
- plot( x, y, "b;f(x) = cos(x);", x, yMac, "k;Série de Maclaurin;" );
-%plot( x, erroMac, "k;Erro(x) = |f(x) - Pn(x)|;" );
+% plot( xP, yE, "b;f(x) = cos(x);", xP, yMac, "k;Série de Maclaurin;" );
+plot( xP, erroMac, "k;Erro(x) = |f(x) - Pn(x)|;" );
+print Que2_G2.png

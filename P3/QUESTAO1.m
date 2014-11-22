@@ -8,7 +8,7 @@ passos = 0;
 erroMax = 1;
 erroPermitido = sqrt(10) * 1e-4;
 
-while ( ( erroMax > erroPermitido )  && ( passos < 1000 ) )
+while ((erroMax > erroPermitido))
 	passos = passos + 1;
 	n = n + 1;
 	
@@ -40,3 +40,5 @@ n
 
 %plot( xP, yE, "r;f(x) = cos(x);", xP, yP, "b;g(x) = Pn(x) de Gregory-Newton;" );
 plot( xP, erro, "k;Erro(x) = |f(x) - Pn(x)|;" );
+
+print Que1_G2.png

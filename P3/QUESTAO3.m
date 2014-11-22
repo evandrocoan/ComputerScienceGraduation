@@ -12,7 +12,7 @@ x = a : h : b;
 y = cos(x);
 nPad = 2;
 mPad = 2;
-c = fMaclaurin(M);
+c = fCoefMaclaurin(M);
 
 
 A = [ c(nPad-mPad+1+1), c(nPad-mPad+2+1), -c(nPad+1+1);
@@ -27,16 +27,24 @@ ap(2+1) = bp(2) * c(0+1) + bp(1) * c(1+1) + c(2+1);
 
 bp = [ 1; bp]';
 
-for i = 1 : n + 1
-	yPade(i) = fPnBrio( nPad, ap, x(i) ) / fPnBrio( mPad, bp, x(i) ); 
+nPlot = 50 * n; 
+aPlot = a;
+bPlot = b;
+hPlot = ( bPlot - aPlot ) / nPlot;
+xP = aPlot: hPlot : bPlot; 
+yE = f(xP);
+	
+for i = 1 : nPlot + 1
+	yPade(i) = fPnBrio( nPad, ap, xP(i) ) / fPnBrio( mPad, bp, xP(i) ); 
 end
 
-
-erroPade = abs( y .- yPade );
+erroPade = abs( yE .- yPade );
 erroMax =  max( erroPade )
 
+ap
+bp
 
+% plot( xP, yE, "b;f(x) = cos(x);", xP, yPade, "k;Série de Pade;" );
+plot( xP, erroPade, "k;Erro(x) = |f(x) - Pn(x)|;" );
 
-
- plot( x, y, "b;f(x) = cos(x);", x, yPade, "k;Série de Pade;" );
-%plot( x, erroPade, "k;Erro(x) = |f(x) - Pn(x)|;" );
+print Que3_G2.png
