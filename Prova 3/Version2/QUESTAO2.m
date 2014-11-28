@@ -7,11 +7,11 @@ b = 1;
 n = 0; %numero de subdivisÃµes do intervalo [a,b] (grau do polinomio)
 passos = 0;
 erroMax = 1;
-erroPermitido = sqrt(10) * 1e-4;
+erroPermitido = sqrt(10) * 1e-6;
 
 while ( ( erroMax > erroPermitido )  && ( passos < 100 ) )
-	n = n + 1;
-	passos = passos + 1;
+	n += 1;
+	passos+=1;
 	
 	h = ( b - a ) / n; 
 	x = a : h : b;
@@ -30,7 +30,7 @@ while ( ( erroMax > erroPermitido )  && ( passos < 100 ) )
 		yMac(i) = fPnBrio(n, cMac, xP(i));
 	end
 	
-	erroMac = abs( yE - yMac );
+	erroMac = abs( yE .- yMac );
 	erroMax =  max( erroMac );
 end
 
@@ -39,14 +39,4 @@ erroMax
 
 
 % plot( xP, yE, "b;f(x) = cos(x);", xP, yMac, "k;SÃ©rie de Maclaurin;" );
-%plot( xP, yE, xP, yMac ); %"k;Erro(x) = |f(x) - Pn(x)|;"
-%title('Função Original vs. Aproximação por Série de Maclaurin')
-%xlabel('xP')
-%ylabel('yP')
-%hleg1 = legend('f(x) = cos(x)','Série de Maclaurin');
-
-plot( xP, erroMac ); %"k;Erro(x) = |f(x) - Pn(x)|;"
-title('Gráfico do Erro da Série de Maclaurin')
-xlabel('xP')
-ylabel('yP')
-hleg1 = legend('Erro(x) = |f(x) - Maclaurin(x)|');
+plot( xP, erroMac, "k;Erro(x) = |f(x) - Pn(x)|;" );
