@@ -18,7 +18,7 @@ c = fCoefMaclaurin(M);
 A = [ c(nPad-mPad+1+1),      c(nPad-mPad+2+1),     -c(nPad+1+1);
 	     c(M-mPad+1),               c(M-1+1),                    -c(M+1)         ; 
 		];
-baux = fGauss(mPad, A);
+baux = fGaussMatlab(mPad, A);
 bp = flipud(baux');
 
 % ap = aPade
@@ -41,11 +41,24 @@ for i = 1 : nPlot + 1
 	yPade(i) = fPnBrio( nPad, ap, xP(i) ) / fPnBrio( mPad, bp, xP(i) ); 
 end
 
-erroPade = abs( yE .- yPade );
-erroMax =  max( erroPade )
+erroPade = abs( yE - yPade );
+erroMax =  max( erroPade );
 
+erroMax
 ap
 bp
 
 % plot( xP, yE, "b;f(x) = cos(x);", xP, yPade, "k;SÃ©rie de Pade;" );
-plot( xP, erroPade, "k;Erro(x) = |f(x) - Pn(x)|;" );
+%plot( xP, erroPade ) %"k;Erro(x) = |f(x) - Pn(x)|;"
+
+%plot( xP, yE, xP, yPade ); %"k;Erro(x) = |f(x) - Pn(x)|;"
+%title('Função Original vs. Aproximação Racional de Padé')
+%xlabel('xP')
+%ylabel('yP')
+%hleg1 = legend('f(x) = cos(x)','Aproximação Racional de Padé');
+
+plot( xP, yE, xP, yPade ); %"k;Erro(x) = |f(x) - Pn(x)|;"
+title('Gráfico do Erro da Aproximação Racional de Padé')
+xlabel('xP')
+ylabel('yP')
+hleg1 = legend('Erro(x) = |f(x) - Pn(x)|');

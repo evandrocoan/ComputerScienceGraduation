@@ -2,7 +2,7 @@ function A = fEscalona(n, A)
 	% Complexidade O(n³)
 	for k = 1: n - 1
 		k;
-		A = fPermutacao(k, n, A );
+		A = fPermutacaoMatlab(k, n, A );
 	  	for i = k + 1: n
 		    	aux = A(i,k) / A(k,k);
 		    	A(i,k) = 0;
