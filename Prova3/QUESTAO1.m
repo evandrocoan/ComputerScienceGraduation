@@ -6,10 +6,10 @@ a = -1;
 b = 1;
 n = 0; %numero de subdivisões do intervalo [a,b] (grau do polinomio)
 passos = 0;
-erroMax = 1;
+erroMax1 = 1;
 erroPermitido = sqrt(10) * 1e-4;
 
-while ( (erroMax > erroPermitido) && ( passos < 100 ) ) 
+while ( (erroMax1 > erroPermitido) && ( passos < 100 ) ) 
 	passos = passos + 1;
 	n = n + 1;
 	
@@ -35,11 +35,11 @@ while ( (erroMax > erroPermitido) && ( passos < 100 ) )
 	
 	%cálculo do erro por 
 	erro1 = abs( yE .- yP );
-	erroMax1 = max(erro);
+	erroMax1 = max(erro1);
 end
 
-erroMax
+erroMax1
 n
 
 %plot( xP, yE, "r;f(x) = cos(x);", xP, yP, "b;g(x) = Pn(x) de Gregory-Newton;" );
-plot( xP, erro, "k;Erro(x) = |f(x) - Pn(x)|;" );
+%plot( xP, erro1, "k;Erro(x) = |f(x) - Pn(x)|;" );

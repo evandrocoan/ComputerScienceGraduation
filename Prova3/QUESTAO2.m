@@ -7,7 +7,7 @@ b = 1;
 n = 0; %numero de subdivisões do intervalo [a,b] (grau do polinomio)
 passos = 0;
 erroMax = 1;
-erroPermitido = sqrt(10) * 1e-6;
+erroPermitido = sqrt(10) * 1e-4;
 
 while ( ( erroMax > erroPermitido )  && ( passos < 100 ) )
 	n += 1;
@@ -39,4 +39,4 @@ erroMax
 
 
 % plot( xP, yE, "b;f(x) = cos(x);", xP, yMac, "k;Série de Maclaurin;" );
-plot( xP, erroMac, "k;Erro(x) = |f(x) - Pn(x)|;" );
+%plot( xP, erroMac, "k;Erro(x) = |f(x) - Pn(x)|;" );
