@@ -1,0 +1,15 @@
+function resMax = fResiduo(original)
+
+n = length(original(:,1));
+
+for i = 1 : n
+    aux = 0;
+    for j = 1 : n
+        aux = aux + original(i,j) * X(j);
+    end
+    res(i) = abs(aux - original(i,n + 1));
+end
+
+resMax = max( res );
+
+end
