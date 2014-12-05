@@ -4,16 +4,16 @@ clear
 a = 1;
 b = 2;
 
-pontos = 10;
+pontos = 100;
 h = abs( a - b ) / pontos;
 x = a : h : b;
-y = log( x );
+y = cos( x );
 
 n = 2; %grau do polinomio interpolador
 D = 1;
 passos = 0;
 
-while ( D > 1.e-6 * sqrt(10) ) && ( passos < 100 )
+while ( D > 1.e-6 * sqrt(10) ) && ( passos < 10 )
 	passos = passos + 1
 	n = n + 1;
 
@@ -34,7 +34,7 @@ while ( D > 1.e-6 * sqrt(10) ) && ( passos < 100 )
 		A(i, numEq + 1) = somatorio;
 	end
 
-	coefs = fGauss( numEq, A );
+	coefs = fGauss( numEq, A )
 
 	%calculo do erro
 	for i = 1 : pontos
