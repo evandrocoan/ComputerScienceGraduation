@@ -1,7 +1,4 @@
-function x = fGauss(n, A)
-
-	A = fEscalona(n, A);
-
-	x = fRetroSubs(n, A);
-
+function x = fgauss(n,A)
+	A = fescalona(n,A);
+	x = fsubst(n,A);
 end

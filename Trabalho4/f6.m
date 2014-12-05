@@ -1,3 +1,3 @@
-function y = f6(C1, C2, C3, X1, X2, X3)
-	y = C1*X1^5 + C2*X2^5 + C3*X3^5;
+function y = f6(C, X)
+	y = C(1)*X(1)^5 + C(2)*X(2)^5 + C(3)*X(3)^5;
 end

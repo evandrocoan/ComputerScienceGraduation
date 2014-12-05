@@ -1,3 +1,3 @@
-function y = f1(C1, C2, C3)
-	y = C1 + C2 + C3 - 2;
+function y = f1(C, X)
+	y = C(1) + C(2) + C(3) - 2;
 end
