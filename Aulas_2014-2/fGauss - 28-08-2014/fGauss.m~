@@ -1,7 +1,0 @@
-function x = fGauss(A)
-
-	A = fEscalona(A);
-
-	x = fRetroSubs(A);
-
-end
