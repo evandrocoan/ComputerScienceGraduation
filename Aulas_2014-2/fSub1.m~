@@ -5,7 +5,7 @@ function x = fSub1( n, A, b )
 		for r = 1: i - 1
 			aux = aux + A(i, r) * c(r);
 		end
-		c(i) = ( b(i) - aux ) / A(i, i)
+		c(i) = ( b(i) - aux ) / A(i, i);
 	end
 	x(n) = c(n);	
 	for i = n - 1 : -1: 1
@@ -13,6 +13,6 @@ function x = fSub1( n, A, b )
 		for r = i + 1: n 
 			aux = aux + A(i, r) * x(r);
 		end
-		x(i) = c(i) - aux;
+		x(i) = c(i) - aux;	
 	end
 end

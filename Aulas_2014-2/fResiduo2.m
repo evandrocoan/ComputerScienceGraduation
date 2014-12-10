@@ -1,5 +1,5 @@
 function resMax = fResiduo2(n, Aaux, x)
-	for k = 1 : columns( x )
+	for k = 1 : size( x )
 		% Cálculo do resíduo
 		for i = 1: n
 		  aux = 0;

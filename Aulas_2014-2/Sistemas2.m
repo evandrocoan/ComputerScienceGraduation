@@ -1,6 +1,6 @@
 % método de escalonamento de Gauss
-
-A = [	0 2 3; 
+format long
+A = [	1 2 3; 
 		1 -2 1; 
 		1 0 -2; ]
 
@@ -10,9 +10,9 @@ b = [ -1 1  1  1;
 		5 5  5  5;
 	]
 
-n = rows( A );
+n = size( A, 1 )
 Aaux = [ A b ];
-[A b] = fLUCrout(n, A, b)
+A= fLUCrout(n, A)
 %Resolve o sistema
 x = fSub2( n, A, b )
 resMax = fResiduo2(n, Aaux, x)

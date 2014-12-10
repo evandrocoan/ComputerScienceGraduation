@@ -1,5 +1,5 @@
 function x = fSub2( n, A, b )
-	for k = 1 : columns(b)
+	for k = 1 : size(b)
 		c(1, k) = b(1, k) / A(1, 1);
 		for i = 2 : n
 			aux = 0;

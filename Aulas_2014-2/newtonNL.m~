@@ -11,7 +11,7 @@ while (erro > erromax && passo < lim)
 	dx = fGauss (n, A);
 
 	x = xi.+dx;
-	xi = x;
+	x'
 	%fim do núcleo do método de newton
 	erro = max(abs(dx));
 end
