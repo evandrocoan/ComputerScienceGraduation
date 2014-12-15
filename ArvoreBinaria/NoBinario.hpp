@@ -88,7 +88,7 @@ public:
     /**
      * Destrói o ponteiro para o elemento que esse nó ponta
      */
-    ~NoBinario()
+    virtual ~NoBinario()
     {
         delete dado;
     }
@@ -353,7 +353,7 @@ public:
     
     NoBinario< T >* getElementos()
     {
-        //return this->elementos;
+        return this->elementos;
     }
     
     void preOrdem( NoBinario< T >* raiz )

@@ -110,7 +110,7 @@ public:
     /**
      * Destrói o ponteiro para o elemento que esse nó ponta
      */
-    ~NoBinarioAVL()
+    virtual ~NoBinarioAVL()
     {
         delete dado;
     }
@@ -375,7 +375,7 @@ public:
     
     NoBinarioAVL< T >* getElementos()
     {
-        //return this->elementos;
+        return this->elementos;
     }
     
     void preOrdem( NoBinarioAVL< T >* raiz )
