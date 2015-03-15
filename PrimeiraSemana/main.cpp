@@ -1,8 +1,9 @@
 #include <iostream>
 #include "SimpleApplication.h"
 
-void main()
+int main()
 {
     SimpleApplication *app = new SimpleApplication();
-    app­>run();
+    app->run();
+    return 0;
 }

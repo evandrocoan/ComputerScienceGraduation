@@ -23,13 +23,17 @@ void SimpleApplication::run()
     readyProcesses.push( p3 );
 
     // (iv) manipulate queue
-    p = readyProcesses.front();
-    std::cout << "O primeiro processo da fila tem Id=" << p->getPID()
-              << ". Movendo para o final. " << std::endl;
-    readyProcesses.push( p );
-    readyProcesses.pop();
-// completar
+    for ( int i = 0; i < 4; i++ )
+    {
+        p = readyProcesses.front();
+        std::cout << "O primeiro processo da fila tem Id=" << p->getPID()
+                  << ". Movendo para o final. " << std::endl;
+        readyProcesses.push( p );
+        readyProcesses.pop();
+    }
+
     // (v) do something stupid
     int a = 2, b = 0;
+    std::cout << "I will do something very stupid ^_^ " << endl;
     std::cout << a / b << std::endl;
 }
