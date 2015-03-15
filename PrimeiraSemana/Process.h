@@ -6,6 +6,14 @@
 class Process
 {
 public:
+    /**
+     * @param pid process id
+     * @param ppid ?
+     * @param *code_addr pointer to a address memory range to allocate the
+     * program itself
+     * @param *globaldata_addr point to a address memory range to allocate
+     * data
+     */
     Process( ProcessId pid, ProcessId ppid, AddressRegion *code_addr,
              AddressRegion *globaldata_addr ) :
             _pid( pid ), _ppid( ppid ), _code_addr( code_addr ),
