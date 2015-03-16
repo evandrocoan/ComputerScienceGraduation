@@ -8,8 +8,7 @@ public:
     SimpleApplication()
     {
         cout << "Hello World! I'm the SimpleApplication "
-             "Constructor"
-             << endl;
+             "Constructor" << endl;
     }
     void run();
 private:

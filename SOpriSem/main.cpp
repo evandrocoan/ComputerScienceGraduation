@@ -6,4 +6,4 @@ int main()
     SimpleApplication *app = new SimpleApplication();
     app->run();
     return 0;
-}
+};
