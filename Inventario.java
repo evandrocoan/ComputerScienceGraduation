@@ -18,7 +18,7 @@ public class Inventario
         String enviar = "\n";
         for ( Acao  i : acoes )
         {
-            enviar = enviar + "\n" + i.acaoNames() + " ";
+            enviar = enviar + "\n" + i.getAcaoNome() + " ";
         }
         return enviar;
     }
