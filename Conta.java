@@ -88,7 +88,7 @@ public class Conta
      * Retorna o inventário do cliente. Este contém todas as ações compradas 
      * por ele.
      */
-    public Inventario getInventario
+    public Inventario getInventario()
     {
         return this.inventario;
     }

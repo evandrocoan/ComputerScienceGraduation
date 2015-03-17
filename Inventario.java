@@ -5,19 +5,20 @@ import java.util.ArrayList;
  */
 public class Inventario
 {
-    private ArrayList<Acao> acoes = new ArrayList<Acao>();
+    private ArrayList< Acao > acoes = new ArrayList< Acao >();
     
     /**
-     * Retorna o inventário representado como uma String. Essa String é 
-     * composta pelos nomes das ações no inventário.
+     * Retorna o inventário representado como uma String. Essa String é composta
+     * pelos nomes das ações no inventário.
+     * 
      * @return inventario o inventário reprensentado como um String
      */
     public String inventarioToString()
     {
         String enviar = "\n";
-        for( ArrayList<Acao> i : acoes )
+        for ( Acao  i : acoes )
         {
-            enviar = enviar + "\n" + acoes[i].acaoNames() + " ";
+            enviar = enviar + "\n" + i.acaoNames() + " ";
         }
         return enviar;
     }
