@@ -70,10 +70,10 @@ namespace BOOOS
             if ( this->length() == 0 )
             {
                 element->next( this->head() );
-                this->head()->prev( element );
+                _head.prev( element );
                 
                 element->prev( this->head() );
-                this->head()->next( element );
+                _head.next( element );
                 
                 this->_length++;
             } else

@@ -50,18 +50,20 @@ void print_queue( Queue & q )
 
 int main()
 {
+    
+
     cout << "Welcome to BOOOS - Basic Object Oriented Operating System!"
     << endl;
     cout << "This program will test the class: Queue" << endl;
     
     Queue queue;
     
-    MyElement * person1 = new MyElement( "João" );
+    MyElement * person1 = new MyElement( "Joao" );
     MyElement * person2 = new MyElement( "Pedro" );
     MyElement * person3 = new MyElement( "Augusto" );
-    MyElement * person4 = new MyElement( "Fábio" );
+    MyElement * person4 = new MyElement( "Fabio" );
     
-    cout << "\nComeçou Print 1\n" << endl;
+    cout << "\nComecou Print 1\n" << endl;
     print_queue( queue );
     cout << "\nTerminou Print 1\n" << endl;
     
@@ -70,16 +72,16 @@ int main()
     queue.insert( person3 );
     queue.insert( person4 );
     
-    cout << "\nComeçou Print 1\n" << endl;
+    cout << "\nComecou Print 2\n" << endl;
     print_queue( queue );
-    cout << "\nTerminou Print 1\n" << endl;
+    cout << "\nTerminou Print 2\n" << endl;
     
     MyElement * removed_person = dynamic_cast< MyElement * >( queue.remove() );
     delete removed_person; // Which element was removed?
     
-    cout << "\nComeçou Print 1\n" << endl;
+    cout << "\nComecou Print 3\n" << endl;
     print_queue( queue );
-    cout << "\nTerminou Print 1\n" << endl;
+    cout << "\nTerminou Print 3\n" << endl;
     
     return 0;
 }
