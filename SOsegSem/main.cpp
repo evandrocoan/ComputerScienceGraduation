@@ -11,6 +11,10 @@
 
 // COMPLETAR COM OS INCLUDES PARA AS CHAMADAS DE SISTEMA
 // #include ...
+#include <syscall.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
 
 using namespace std;
 

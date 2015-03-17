@@ -44,7 +44,7 @@ void print_queue( Queue & q )
         } while( elem != q.head()->next() );
     }
     
-    cout << "==============================" << endl;
+    cout << "===============Terminou um print queue===============" << endl;
 }
 
 int main()
@@ -60,13 +60,25 @@ int main()
     MyElement * person3 = new MyElement( "Augusto" );
     MyElement * person4 = new MyElement( "Fábio" );
     
+    cout << "\nComeçou Print 1\n" << endl;
+    print_queue( queue );
+    cout << "\nTerminou Print 1\n" << endl;
+    
     queue.insert( person1 );
     queue.insert( person2 );
     queue.insert( person3 );
     queue.insert( person4 );
     
+    cout << "\nComeçou Print 1\n" << endl;
+    print_queue( queue );
+    cout << "\nTerminou Print 1\n" << endl;
+    
     MyElement * removed_person = dynamic_cast< MyElement * >( queue.remove() );
     delete removed_person; // Which element was removed?
+    
+    cout << "\nComeçou Print 1\n" << endl;
+    print_queue( queue );
+    cout << "\nTerminou Print 1\n" << endl;
     
     return 0;
 }

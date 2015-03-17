@@ -12,9 +12,15 @@ namespace BOOOS
     class Queue
     {
     public:
-        Queue();
-        virtual ~Queue();
-
+        Queue()
+        {
+            this->_length = 0;
+        }
+        virtual ~Queue()
+        {
+            
+        }
+        
         class Element
         {
         public:
