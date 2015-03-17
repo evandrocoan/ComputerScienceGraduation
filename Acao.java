@@ -2,6 +2,8 @@
  * Representa um ação do mercado de valores. Cada objeto desta classe representa
  * uma ação com um nome e valor de mercado. Cada objeto contém também o número
  * de ações que ele representa.
+ * 
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class Acao
 {
@@ -67,7 +69,7 @@ public class Acao
     
     /**
      * Retorna um String com o nome dessa ação.
-     * @return
+     * @return nome um String com o nome da ação
      */
     public String getAcaoNome()
     {

@@ -1,5 +1,7 @@
 /**
  * Representa uma conta de um usário/administrador em um homebroker.
+ * 
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class Conta
 {

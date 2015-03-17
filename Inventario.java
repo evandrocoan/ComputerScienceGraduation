@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 /**
  * Representa um inventário de um cliente.
+ * 
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class Inventario
 {
@@ -15,10 +17,10 @@ public class Inventario
      */
     public String inventarioToString()
     {
-        String enviar = "\n";
+        String enviar = new String();
         for ( Acao  i : acoes )
         {
-            enviar = enviar + "\n" + i.getAcaoNome() + " ";
+            enviar = enviar  + i.getAcaoNome() + ", ";
         }
         return enviar;
     }
