@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "queue.h"
+#include <string>
 
 using namespace std;
 using namespace BOOOS;
