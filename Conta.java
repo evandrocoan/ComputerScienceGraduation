@@ -15,6 +15,7 @@ public class Conta
     /**
      * Define no nome do cliente. Somente o administrador tem acesso a essa
      * funcionanlidade.
+     * 
      * @param nome o nome do cliente a ser definido
      */
     public void setNome( String nome )
@@ -28,6 +29,7 @@ public class Conta
     /**
      * Define a senha do cliente. Somente o administrador tem acesso a essa
      * funcionanlidade.
+     * 
      * @param nome o nome do cliente a ser definido
      */
     public void setSenha( String senha )
@@ -40,6 +42,7 @@ public class Conta
     
     /**
      * Define um valor para o saldo. Tal comando é pertencente ao administrador.
+     * 
      * @param saldo o saldo da conta do cliente
      */
     public void setSaldo( double saldo )
@@ -52,6 +55,7 @@ public class Conta
     
     /**
      * Withdraw dinheiro da conta.
+     * 
      * @param a quantidade de saldo a ser retirada da conta. Caso o saldo seja 
      * insuficiente não realiza a operação
      * @return true caso seja realizada a transação, false caso contrário.
@@ -71,6 +75,7 @@ public class Conta
     
     /**
      * Deposit Money.
+     * 
      * @param amount a quantidade de saldo a ser colocada na conta.
      * @return true caso seja realizada a transação, false caso contrário
      */
@@ -97,6 +102,7 @@ public class Conta
     
     /**
      * Retorna se a senha para esse usuário confere com a solicitada.
+     * 
      * @return true se a senha confere, false caso contrário.
      */
     public boolean checkSenha( String senha )
@@ -106,6 +112,7 @@ public class Conta
     
     /**
      * Retorna o nome do cliente.
+     * 
      * @return o nome do cliente.
      */
     public String getNome()
@@ -115,6 +122,7 @@ public class Conta
     
     /**
      * Retorna no saldo da conta do cliente.
+     * 
      * @return o saldo da conta do cliente.
      */
     public double getSaldo()

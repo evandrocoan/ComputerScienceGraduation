@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Inventario
 {
-    private ArrayList< Acao > acoes = new ArrayList< Acao >();
+    private ArrayList< Acao > inventario = new ArrayList< Acao >();
     
     /**
      * Retorna o inventário representado como uma String. Essa String é composta
@@ -18,10 +18,34 @@ public class Inventario
     public String inventarioToString()
     {
         String enviar = new String();
-        for ( Acao  i : acoes )
+        for ( Acao i : inventario )
         {
-            enviar = enviar  + i.getAcaoNome() + ", ";
+            enviar = enviar + i.getAcaoNome() + ", ";
         }
         return enviar;
+    }
+    
+    /**
+     * Adiciona um ação do inventario de ações do cliente.
+     * 
+     * @param acao a ação para se adicionar
+     * @return true caso possa adicionar a ação ao inventário, false caso
+     *         contrário
+     */
+    public boolean adicionarAoInventario( Acao acao )
+    {
+        return this.inventario.add( acao );
+    }
+    
+    /**
+     * Remove uma ação do inventario de ações do cliente.
+     * 
+     * @param acao a ação para se remover
+     * @return true caso possa remover a ação do inventário, false caso
+     *         contrário
+     */
+    public boolean removerDoInventario( Acao acao )
+    {
+        return this.inventario.remove( acao );
     }
 }

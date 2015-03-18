@@ -23,6 +23,7 @@ public class Acao
     
     /**
      * Construtor que cria uma ação completa.
+     * 
      * @param preco o preço da ação
      * @param quantidade a quantidade de ações que este objeto representa
      * @param nome o nome da ação que este objeto representa
@@ -36,7 +37,8 @@ public class Acao
     
     /**
      * Define um preço para a ação.
-     * @param preco
+     * 
+     * @param preco o novo preço da ação
      */
     public void setPrice( double preco )
     {
@@ -45,6 +47,7 @@ public class Acao
     
     /**
      * Retorna o preço da ação.
+     * 
      * @return preco o preço da ação
      */
     public double getPrice()
@@ -54,6 +57,7 @@ public class Acao
     
     /**
      * Refine a quantidade de ações.
+     * 
      * @param quantidade a quantidade de ações que este objeto representa
      * @return true caso tenha sucesso, false caso contrário
      */
@@ -69,6 +73,7 @@ public class Acao
     
     /**
      * Retorna um String com o nome dessa ação.
+     * 
      * @return nome um String com o nome da ação
      */
     public String getAcaoNome()
