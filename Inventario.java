@@ -18,7 +18,7 @@ public class Inventario
     public String inventarioToString()
     {
         String enviar = new String();
-        for ( Acao i : inventario )
+        for( Acao i: inventario )
         {
             enviar = enviar + i.getAcaoNome() + ", ";
         }

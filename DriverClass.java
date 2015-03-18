@@ -14,7 +14,13 @@ public class DriverClass
      */
     public static void main( String[] args )
     {
+        Conta contaTeste =
+                new Conta( "Evandro", "123", 2000.5, true, new Inventario() );
         
+        contaTeste.getInventario().adicionarAoInventario(
+                new Acao( 20.2, 1000, "Tabajara SA" ) );
+        String teste = contaTeste.getInventario().inventarioToString();
+        
+        System.out.println( teste );
     }
-    
 }
