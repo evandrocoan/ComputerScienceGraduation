@@ -11,6 +11,26 @@ public class Conta
     private boolean administrador;
     private Inventario inventario;
     
+    /**
+     * Cosntrutor padrão que cria um objeto da classe, sem reslizar nenhum tipo
+     * de restrição com os parâmetros que ele recebe.
+     * 
+     * @param nome
+     * @param senha
+     * @param saldo
+     * @param administrador
+     * @param inventario
+     */
+    public Conta( String nome, String senha, double saldo,
+            boolean administrador, Inventario inventario )
+    {
+        this.nome = nome;
+        this.senha = senha;
+        this.saldo = saldo;
+        this.administrador = administrador;
+        this.inventario = inventario;
+    }
+    
     // #################################### Administrador Access ##########
     /**
      * Define no nome do cliente. Somente o administrador tem acesso a essa
@@ -20,7 +40,7 @@ public class Conta
      */
     public void setNome( String nome )
     {
-        if( administrador )
+        if ( administrador )
         {
             this.nome = nome;
         }
@@ -34,7 +54,7 @@ public class Conta
      */
     public void setSenha( String senha )
     {
-        if( administrador )
+        if ( administrador )
         {
             this.senha = senha;
         }
@@ -47,7 +67,7 @@ public class Conta
      */
     public void setSaldo( double saldo )
     {
-        if( administrador )
+        if ( administrador )
         {
             this.saldo = saldo;
         }
@@ -56,15 +76,15 @@ public class Conta
     /**
      * Withdraw dinheiro da conta.
      * 
-     * @param a quantidade de saldo a ser retirada da conta. Caso o saldo seja 
-     * insuficiente não realiza a operação
+     * @param a quantidade de saldo a ser retirada da conta. Caso o saldo seja
+     *            insuficiente não realiza a operação
      * @return true caso seja realizada a transação, false caso contrário.
      */
     public boolean withdraw( double amount )
     {
-        if( administrador )
+        if ( administrador )
         {
-            if( saldo >= amount )
+            if ( saldo >= amount )
             {
                 this.saldo = this.saldo - amount;
             }
@@ -79,9 +99,9 @@ public class Conta
      * @param amount a quantidade de saldo a ser colocada na conta.
      * @return true caso seja realizada a transação, false caso contrário
      */
-        public boolean depositMoney( double amount )
+    public boolean depositMoney( double amount )
     {
-        if( administrador )
+        if ( administrador )
         {
             this.saldo = this.saldo + amount;
         }
@@ -92,8 +112,8 @@ public class Conta
     // #################################### Client Access ##########
     
     /**
-     * Retorna o inventário do cliente. Este contém todas as ações compradas 
-     * por ele.
+     * Retorna o inventário do cliente. Este contém todas as ações compradas por
+     * ele.
      */
     public Inventario getInventario()
     {
@@ -107,7 +127,7 @@ public class Conta
      */
     public boolean checkSenha( String senha )
     {
-        return this.senha.equals(senha);
+        return this.senha.equals( senha );
     }
     
     /**
