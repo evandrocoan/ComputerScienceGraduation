@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+
 /**
  * Esta classe serve como utiliário que realiza uma serie de test para com a
  * primeira interação do HomeBroker.
@@ -15,11 +16,12 @@ public class DriverClass
      */
     public static void main( String[] args )
     {
-        String command = new String("Bem-vindo ao sistema " +
-       "tabajara de cadastro de ações\n " +
-        "Digite 'sair' para fechar o programa.\n" +
-        "Digite 'v' para para ver o inventario\n"+
-        "Digite 'c' para para criar uma conta!\n");
+        String command =
+                new String( "Bem-vindo ao sistema "
+                        + "tabajara de cadastro de ações\n "
+                        + "Digite 'sair' para fechar o programa.\n"
+                        + "Digite 'v' para para ver o inventario\n"
+                        + "Digite 'c' para para criar uma conta!\n" );
         JOptionPane.showMessageDialog( null, command );
         
         // ######################## Cria um conta para apresentação do sistema
@@ -37,23 +39,26 @@ public class DriverClass
                 new Acao( 2000.2, 10000, "Tabajara ST" ) );
         contaTeste.getInventario().adicionarAoInventario(
                 new Acao( 200006.2, 10000, "Tabajara SS" ) );
-        
-        while( !command.equals("sair") )
+
+        while( !command.equals( "sair" ) )
         {
-            command = JOptionPane.showInputDialog("Selecione o comando");
+            command = JOptionPane.showInputDialog( "Selecione o comando" );
             
             switch( command )
             {
-                case "sair": return;
-                case "v": 
-                    String teste = contaTeste.getInventario().inventarioToString();
-                    JOptionPane.showMessageDialog( null, teste );
-                    break;
-                case "c": 
-                   String nome = JOptionPane.showInputDialog("Digite seu nome:");
-                   String senha = JOptionPane.showInputDialog("Digite sua senha:");
-                   Conta c = new Conta(nome,senha,0,0,new Inventario());
-                 //  ( String nome, String senha, double saldo,boolean administrador, Inventario inventario )
+            case "sair":
+                return;
+            case "v":
+                String teste = contaTeste.getInventario().inventarioToString();
+                JOptionPane.showMessageDialog( null, teste );
+                break;
+            case "c":
+                String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
+                String senha =
+                        JOptionPane.showInputDialog( "Digite sua senha:" );
+                Conta c = new Conta( nome, senha, 0, false, new Inventario() );
+                // ( String nome, String senha, double saldo,boolean
+                // administrador, Inventario inventario )
             }
         }
     }
