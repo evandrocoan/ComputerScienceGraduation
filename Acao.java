@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Representa um ação do mercado de valores. Cada objeto desta classe representa
  * uma ação com um nome e valor de mercado. Cada objeto contém também o número
@@ -7,77 +9,38 @@
  */
 public class Acao
 {
-    private double preco;
-    private int quantidade;
-    private String nome;
+    ArrayList< String > listOfNames;
+    String nome;
+    double preco;
     
-    /**
-     * Construtor padrão.
-     */
-    public Acao()
+    public Acao( ArrayList< String > listOfNames )
     {
-        this.preco = 0;
-        this.quantidade = 0;
-        this.nome = "generico";
+        Random rand = new Random();
+        
+        pickAName( rand, listOfNames );
+        double truncar = (int) ( rand.nextDouble() * 1000000 );
+        this.preco = truncar / 1000;
+        
     }
     
-    /**
-     * Construtor que cria uma ação completa.
-     * 
-     * @param preco o preço da ação
-     * @param quantidade a quantidade de ações que este objeto representa
-     * @param nome o nome da ação que este objeto representa
-     */
-    public Acao( double preco, int quantidade, String nome )
+    public String getNome()
     {
-        this.preco = preco;
-        this.quantidade = quantidade;
-        this.nome = nome;
+        return this.nome;
     }
     
-    /**
-     * Define um preço para a ação.
-     * 
-     * @param preco o novo preço da ação
-     */
-    public void setPrice( double preco )
-    {
-        this.preco = preco;
-    }
-    
-    /**
-     * Retorna o preço da ação.
-     * 
-     * @return preco o preço da ação
-     */
-    public double getPrice()
+    public double getPreco()
     {
         return this.preco;
     }
     
-    /**
-     * Refine a quantidade de ações.
-     * 
-     * @param quantidade a quantidade de ações que este objeto representa
-     * @return true caso tenha sucesso, false caso contrário
-     */
-    public boolean setQuantidade( int quantidade )
+    public void newPrice( double preco )
     {
-        if ( this.quantidade >= Math.abs( quantidade ) )
-        {
-            this.quantidade += quantidade;
-            return true;
-        }
-        return false;
+        this.preco = preco;
     }
     
-    /**
-     * Retorna um String com o nome dessa ação.
-     * 
-     * @return nome um String com o nome da ação
-     */
-    public String getAcaoNome()
+    public void pickAName( Random rand, ArrayList< String > listOfNames )
     {
-        return this.nome;
+        this.nome = listOfNames.get( rand.nextInt( listOfNames.size() ) );
+        listOfNames.remove( this.nome );
     }
 }

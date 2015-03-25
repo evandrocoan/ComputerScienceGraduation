@@ -20,7 +20,7 @@ public class Inventario
         String enviar = new String();
         for( Acao i: inventario )
         {
-            enviar = enviar + i.getAcaoNome() + ", ";
+            enviar = enviar + i.getNome() + ", ";
         }
         return enviar;
     }
