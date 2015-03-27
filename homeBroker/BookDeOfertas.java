@@ -86,27 +86,16 @@ public class BookDeOfertas implements Runnable
      */
     private void atualizarBookDeOfertas()
     {
-        this.subPainelPrincipal.setBackground( Color.black );
-        this.subPainelPrincipal.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
-        
         this.jLabelTemp =
                 new JLabel( this.ações.get( this.ofertasVisualizadas )
                         .getNome(), SwingConstants.CENTER );
-        this.nomes.add( this.jLabelTemp );
         this.subPainelPrincipal.add( this.jLabelTemp );
-        
-        this.nomes.get( this.ofertasVisualizadas ).setOpaque( true );
-        this.nomes.get( this.ofertasVisualizadas ).setBackground( Color.white );
         
         this.jLabelTemp =
                 new JLabel( "Quantidade: "
                         + this.ações.get( this.ofertasVisualizadas )
                                 .getQuantidade(), SwingConstants.CENTER );
         this.subPainelPrincipal.add( this.jLabelTemp );
-        
-        this.quantidades.get( this.ofertasVisualizadas ).setOpaque( true );
-        this.quantidades.get( this.ofertasVisualizadas ).setBackground(
-                Color.white );
         
         this.jLabelTemp =
                 new JLabel(
@@ -115,11 +104,16 @@ public class BookDeOfertas implements Runnable
                                         .getPreço(), SwingConstants.CENTER );
         this.subPainelPrincipal.add( this.jLabelTemp );
         
+        this.subPainelPrincipal.setBackground( Color.black );
+        this.subPainelPrincipal.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
+        this.nomes.get( this.ofertasVisualizadas ).setOpaque( true );
+        this.nomes.get( this.ofertasVisualizadas ).setBackground( Color.white );
+        this.quantidades.get( this.ofertasVisualizadas ).setOpaque( true );
+        this.quantidades.get( this.ofertasVisualizadas ).setBackground(
+                Color.white );
         this.preços.get( this.ofertasVisualizadas ).setOpaque( true );
         this.preços.get( this.ofertasVisualizadas ).setBackground( Color.white );
-        
         this.painelPrincipal.add( this.subPainelPrincipal );
-        
         this.ofertasVisualizadas++;
     }
     
