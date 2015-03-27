@@ -1,3 +1,4 @@
+package homeBroker;
 /**
  * Representa uma conta de um usário/administrador em um homebroker.
  * 
@@ -40,7 +41,7 @@ public class Conta
      */
     public void setNome( String nome )
     {
-        if ( administrador )
+        if( this.administrador )
         {
             this.nome = nome;
         }
@@ -50,11 +51,11 @@ public class Conta
      * Define a senha do cliente. Somente o administrador tem acesso a essa
      * funcionanlidade.
      * 
-     * @param nome o nome do cliente a ser definido
+     * @param senha a senha do cliente a ser definida
      */
     public void setSenha( String senha )
     {
-        if ( administrador )
+        if( this.administrador )
         {
             this.senha = senha;
         }
@@ -67,26 +68,26 @@ public class Conta
      */
     public void setSaldo( double saldo )
     {
-        if ( administrador )
+        if( this.administrador )
         {
             this.saldo = saldo;
         }
     }
     
     /**
-     * Withdraw dinheiro da conta.
+     * Retira dinheiro da conta.
      * 
-     * @param a quantidade de saldo a ser retirada da conta. Caso o saldo seja
-     *            insuficiente não realiza a operação
+     * @param quantidade a quantidade de saldo a ser retirada da conta. Caso o
+     *            saldo seja insuficiente não realiza a operação
      * @return true caso seja realizada a transação, false caso contrário.
      */
-    public boolean withdraw( double amount )
+    public boolean retirarDinheiro( double quantidade )
     {
-        if ( administrador )
+        if( this.administrador )
         {
-            if ( saldo >= amount )
+            if( this.saldo >= quantidade )
             {
-                this.saldo = this.saldo - amount;
+                this.saldo = this.saldo - quantidade;
             }
         }
         
@@ -101,7 +102,7 @@ public class Conta
      */
     public boolean depositMoney( double amount )
     {
-        if ( administrador )
+        if( this.administrador )
         {
             this.saldo = this.saldo + amount;
         }
@@ -114,6 +115,9 @@ public class Conta
     /**
      * Retorna o inventário do cliente. Este contém todas as ações compradas por
      * ele.
+     * 
+     * @return inventario o inventário do cliente como objeto da classe
+     *         inventário.
      */
     public Inventario getInventario()
     {
@@ -123,6 +127,7 @@ public class Conta
     /**
      * Retorna se a senha para esse usuário confere com a solicitada.
      * 
+     * @param senha a senha para ser verificada com a conta.
      * @return true se a senha confere, false caso contrário.
      */
     public boolean checkSenha( String senha )
