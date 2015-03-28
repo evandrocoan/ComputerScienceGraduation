@@ -18,11 +18,8 @@ public class Biblioteca
     public static int gerarNumeroAleatorio()
     {
         double random = Math.random();
-        
         double x = random * 100 + 1;
-        
         int y = (int) x;
-        
         return y;
     }
 }
