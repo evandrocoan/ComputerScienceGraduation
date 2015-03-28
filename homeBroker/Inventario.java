@@ -53,7 +53,21 @@ public class Inventario
         String enviar = new String();
         for( Ação i: this.listaDeAções )
         {
-            enviar = enviar + i.getNome() + ", ";
+            enviar = enviar + i.getNome() + "; ";
+            
+            int contadorDeChar = 0;
+            for( char caractere: enviar.toCharArray() )
+            {
+                if( caractere == ';' )
+                {
+                    contadorDeChar++;
+                }
+            }
+            
+            if( contadorDeChar % 10 == 9 )
+            {
+                enviar = enviar + "\n";
+            }
         }
         return enviar;
     }
