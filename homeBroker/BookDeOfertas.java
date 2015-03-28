@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 /**
  * 
@@ -106,15 +105,6 @@ public class BookDeOfertas implements Runnable
                                         .getPreço(), SwingConstants.CENTER );
         this.subPainelPrincipal.add( this.jLabelTemp );
         
-        this.subPainelPrincipal.setBackground( Color.black );
-        this.subPainelPrincipal.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
-        this.nomes.get( this.ofertasVisualizadas ).setOpaque( true );
-        this.nomes.get( this.ofertasVisualizadas ).setBackground( Color.white );
-        this.quantidades.get( this.ofertasVisualizadas ).setOpaque( true );
-        this.quantidades.get( this.ofertasVisualizadas ).setBackground(
-                Color.white );
-        this.preços.get( this.ofertasVisualizadas ).setOpaque( true );
-        this.preços.get( this.ofertasVisualizadas ).setBackground( Color.white );
         this.painelPrincipal.add( this.subPainelPrincipal );
         this.ofertasVisualizadas++;
     }

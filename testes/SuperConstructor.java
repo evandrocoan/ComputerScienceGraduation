@@ -139,7 +139,7 @@ public class SuperConstructor extends JFrame
             setLocation( 300, 50 );
             setModal( modal );
             setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-            setTitle( "SecondDialog " + ( i++ ) );
+            setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
             JButton bClose = new JButton( "Close" );
             bClose.addActionListener( new ActionListener()
             {

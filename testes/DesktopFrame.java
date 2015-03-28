@@ -45,8 +45,8 @@ public class DesktopFrame extends JFrame
         bar.add( addMenu ); // add Add menu to menu bar
         setJMenuBar( bar ); // set menu bar for this application
         
-        theDesktop = new JDesktopPane(); // create desktop pane
-        add( theDesktop ); // add desktop pane to frame
+        this.theDesktop = new JDesktopPane(); // create desktop pane
+        add( this.theDesktop ); // add desktop pane to frame
         
         // set up listener for newFrame menu item
         newFrame.addActionListener(
@@ -67,7 +67,8 @@ public class DesktopFrame extends JFrame
                 frame.add( panel, BorderLayout.CENTER ); // add panel
                 frame.pack(); // set internal frame to size of contents
                 
-                theDesktop.add( frame ); // attach internal frame
+                DesktopFrame.this.theDesktop.add( frame ); // attach internal
+                                                           // frame
                 frame.setVisible( true ); // show internal frame
             } // end method actionPerformed
         } // end anonymous inner class
@@ -91,7 +92,7 @@ class MyJPanel extends JPanel
     public MyJPanel()
     {
         int randomNumber = generator.nextInt( 5 );
-        picture = new ImageIcon( images[randomNumber] ); // set icon
+        this.picture = new ImageIcon( this.images[randomNumber] ); // set icon
     } // end MyJPanel constructor
     
     // display imageIcon on panel
@@ -99,14 +100,15 @@ class MyJPanel extends JPanel
     public void paintComponent( Graphics g )
     {
         super.paintComponent( g );
-        picture.paintIcon( this, g, 0, 0 ); // display icon
+        this.picture.paintIcon( this, g, 0, 0 ); // display icon
     } // end method paintComponent
     
     // return image dimensions
     @Override
     public Dimension getPreferredSize()
     {
-        return new Dimension( picture.getIconWidth(), picture.getIconHeight() );
+        return new Dimension( this.picture.getIconWidth(),
+                this.picture.getIconHeight() );
     } // end method getPreferredSize
 } // end class MyJPanel
 

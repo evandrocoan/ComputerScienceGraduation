@@ -8,7 +8,7 @@ import homeBroker.Biblioteca;
 import homeBroker.BookDeOfertas;
 import homeBroker.Conta;
 import homeBroker.Inventario;
-import homeBroker.Principal;
+import homeBroker.Motor;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,7 +40,7 @@ public class DriverClass
      */
     public static void main( String[] args )
     {
-        DriverClass.testarBookDeOfertas( 15 );
+        DriverClass.testarBookDeOfertas( 150 );
     }
     
     /**
@@ -53,16 +53,20 @@ public class DriverClass
     {
         ArrayList< Conta > contasTeste =
                 DriverClass.criarContasFicticia( quantidade, "123" );
+        Conta contaParaTestar = contasTeste.remove( 0 );
         
-        int i = 0;
         for( Conta conta: contasTeste )
         {
-            BookDeOfertas.getInstance().adicionarOfertaDeVenda(
-                    conta.getInventario().getListaDeAções().get( i ) );
-            i++;
+            ArrayList< Ação > listaDeAções =
+                    conta.getInventario().getListaDeAções();
+            
+            for( Ação ação: listaDeAções )
+            {
+                BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
+            }
         }
         
-        Principal.menuPrincipal( contasTeste.get( 0 ), contasTeste );
+        new Motor().menuPrincipal( contaParaTestar, contasTeste );
     }
     
     /**
@@ -78,11 +82,11 @@ public class DriverClass
         
         // faz login no sistema
         Conta conta =
-                Principal.loginNoSistema( contasTeste,
+                new Motor().loginNoSistema( contasTeste,
                         DriverClass.contasTesteToString( contasTeste )
                                 + "Senha geral: 123" );
         
-        Principal.menuPrincipal( conta, contasTeste );
+        new Motor().menuPrincipal( conta, contasTeste );
     }
     
     /**
