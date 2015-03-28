@@ -15,9 +15,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 /**
- * @author Professional
+ * @author http://stackoverflow.com/users/714968/mkorbel
  *
  */
 public class SuperConstructor extends JFrame
@@ -38,6 +39,7 @@ public class SuperConstructor extends JFrame
         b.addActionListener( new ActionListener()
         {
             
+            @SuppressWarnings( "unused" )
             @Override
             public void actionPerformed( ActionEvent evt )
             {
@@ -50,6 +52,7 @@ public class SuperConstructor extends JFrame
         bClose.addActionListener( new ActionListener()
         {
             
+            @SuppressWarnings( "unused" )
             @Override
             public void actionPerformed( ActionEvent evt )
             {
@@ -69,6 +72,7 @@ public class SuperConstructor extends JFrame
         EventQueue.invokeLater( new Runnable()
         {
             
+            @SuppressWarnings( "unused" )
             @Override
             public void run()
             {
@@ -87,12 +91,13 @@ public class SuperConstructor extends JFrame
             super( parent, "FirstDialog" );
             setPreferredSize( new Dimension( 200, 200 ) );
             setLocationRelativeTo( parent );
-            setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
+            setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
             setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
             JButton bNext = new JButton( "Show next dialog" );
             bNext.addActionListener( new ActionListener()
             {
                 
+                @SuppressWarnings( "unused" )
                 @Override
                 public void actionPerformed( ActionEvent evt )
                 {
@@ -105,6 +110,7 @@ public class SuperConstructor extends JFrame
             bClose.addActionListener( new ActionListener()
             {
                 
+                @SuppressWarnings( "unused" )
                 @Override
                 public void actionPerformed( ActionEvent evt )
                 {
@@ -124,6 +130,7 @@ public class SuperConstructor extends JFrame
         
         private static final long serialVersionUID = 1L;
         
+        @SuppressWarnings( { "unused", "static-access" } )
         SecondDialog( final Frame parent, boolean modal )
         {
             // super(parent); // < --- Makes this dialog

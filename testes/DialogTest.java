@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * @author Professional
+ * @author http://stackoverflow.com/users/3973/binil-thomas
  *
  */
 public class DialogTest

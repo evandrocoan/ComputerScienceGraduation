@@ -6,7 +6,9 @@ package homeBroker;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -126,21 +128,23 @@ public class BookDeOfertas implements Runnable
     @Override
     public void run()
     {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        
         this.painelPrincipal.setBackground( Color.WHITE );
-        this.painelPrincipal.setBounds( 300, 300, 300, 300 );
+        this.painelPrincipal.setBounds( 0, 0, width, height );
+        this.painelPrincipal.setSize( screenSize );
+        this.graphical.setBounds( 50, 50, width - 100, height - 100 );
+        
         this.graphical.add( new Canvas() );
         this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
         this.graphical.setVisible( true );
-        this.graphical.requestFocus();
-        this.graphical.requestFocusInWindow();
         
         while( true )
         {
-            System.out.println( "Oi " + this.ofertasNãoVisualizadas );
-            
             if( this.ofertasNãoVisualizadas > this.ofertasVisualizadas )
             {
-                System.out.println( "TôAquê " + this.ofertasNãoVisualizadas );
                 this.atualizarBookDeOfertas();
             }
             try
@@ -152,6 +156,5 @@ public class BookDeOfertas implements Runnable
             }
             this.painelPrincipal.validate();
         }
-        
     }
 }

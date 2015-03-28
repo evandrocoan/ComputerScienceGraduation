@@ -40,6 +40,14 @@ public class DriverClass
      */
     public static void main( String[] args )
     {
+        DriverClass.testarBookDeOfertas();
+    }
+    
+    /**
+     * Realiza teste na interface do book de ofertas.
+     */
+    public static void testarBookDeOfertas()
+    {
         ArrayList< Conta > contasTeste =
                 DriverClass.criarContasFicticia( 11, "123" );
         
