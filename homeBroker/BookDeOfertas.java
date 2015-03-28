@@ -131,6 +131,8 @@ public class BookDeOfertas implements Runnable
         this.graphical.add( new Canvas() );
         this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
         this.graphical.setVisible( true );
+        this.graphical.requestFocus();
+        this.graphical.requestFocusInWindow();
         
         while( true )
         {

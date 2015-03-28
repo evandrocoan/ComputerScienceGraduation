@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote que contém a classe principal de testes.
  */
 package testes;
 
