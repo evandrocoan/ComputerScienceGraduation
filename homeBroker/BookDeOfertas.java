@@ -110,6 +110,14 @@ public class BookDeOfertas implements Runnable
     }
     
     /**
+     * 
+     */
+    public void exibirBookDeOfertas()
+    {
+        this.graphical.setVisible( true );
+    }
+    
+    /**
      * Implementa uma thread que atualiza o book de ofertas em intervalos de
      * 1000 milisegundos caso haja mudanças.
      * 
@@ -129,7 +137,7 @@ public class BookDeOfertas implements Runnable
         
         this.graphical.add( new Canvas() );
         this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
-        this.graphical.setVisible( true );
+        this.graphical.setVisible( false );
         
         while( true )
         {

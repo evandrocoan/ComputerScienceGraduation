@@ -43,6 +43,7 @@ public class Principal extends JFrame
     
     // liga os motores
     private BookDeOfertas bookDeOfertas = BookDeOfertas.getInstance();
+    private Thread threadPrincipal = new Thread( this.bookDeOfertas );
     
     /**
      * As contasTeste que serão utilizadas para simular a adição de contas no
@@ -85,6 +86,7 @@ public class Principal extends JFrame
             public void run()
             {
                 Principal principal = new Principal();
+                principal.threadPrincipal.start();
                 principal.criarInterfaceGráficaPrincipal();
             }
         } );
@@ -238,8 +240,7 @@ public class Principal extends JFrame
         // contasTeste.add( novaConta );
         // break;
         case "m":
-            Thread threadPrincipal = new Thread( BookDeOfertas.getInstance() );
-            threadPrincipal.start();
+            this.bookDeOfertas.exibirBookDeOfertas();
             break;
         default:
             JOptionPane.showMessageDialog( null, "Você digitou uma "
