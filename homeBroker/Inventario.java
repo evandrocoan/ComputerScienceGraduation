@@ -2,8 +2,6 @@ package homeBroker;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 /**
  * Representa um inventário de um cliente.
  * 
@@ -11,17 +9,6 @@ import javax.swing.JOptionPane;
  */
 public class Inventario
 {
-    /**
-     * Exibe na tela o inventário do usuário
-     * 
-     * @param conta a conta para qual será exibido o inventário
-     */
-    public static void exibirInventario( Conta conta )
-    {
-        String teste = conta.getInventario().inventarioToString();
-        JOptionPane.showMessageDialog( null, teste );
-    }
-    
     private ArrayList< Ação > listaDeAções = new ArrayList<>();
     
     /**

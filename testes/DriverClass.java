@@ -8,7 +8,7 @@ import homeBroker.Biblioteca;
 import homeBroker.BookDeOfertas;
 import homeBroker.Conta;
 import homeBroker.Inventario;
-import homeBroker.Motor;
+import homeBroker.Principal;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,8 +31,18 @@ import javax.swing.SpringLayout;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class DriverClass
+public class DriverClass extends Principal
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * 
+     */
+    public static Principal principal = new Principal();
+    
     /**
      * Método principal que inicia a execução dos testes
      * 
@@ -65,8 +75,7 @@ public class DriverClass
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        
-        new Motor().menuPrincipal( contaParaTestar, contasTeste );
+        DriverClass.principal.menuPrincipal( null );
     }
     
     /**
@@ -81,12 +90,10 @@ public class DriverClass
                 DriverClass.criarContasFicticia( 11, "123" );
         
         // faz login no sistema
-        Conta conta =
-                new Motor().loginNoSistema( contasTeste,
-                        DriverClass.contasTesteToString( contasTeste )
-                                + "Senha geral: 123" );
+        DriverClass.principal.loginNoSistema( DriverClass
+                .contasTesteToString( contasTeste ) + "Senha geral: 123" );
         
-        new Motor().menuPrincipal( conta, contasTeste );
+        principal.menuPrincipal( null );
     }
     
     /**
