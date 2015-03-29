@@ -36,11 +36,6 @@ public class DriverClass extends Principal
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * 
-     */
     public static Principal principal = new Principal();
     
     /**
@@ -48,9 +43,9 @@ public class DriverClass extends Principal
      * 
      * @param args os argumentos passados por linha de comando
      */
-    public static void main( String[] args )
+    public static void main( String... args )
     {
-        DriverClass.testarBookDeOfertas( 150 );
+        new DriverClass().testarBookDeOfertas( 150 );
     }
     
     /**
@@ -59,11 +54,10 @@ public class DriverClass extends Principal
      * @param quantidade a quantidade de contas fictícias usadas para testar o
      *            sistema.
      */
-    public static void testarBookDeOfertas( int quantidade )
+    public void testarBookDeOfertas( int quantidade )
     {
         ArrayList< Conta > contasTeste =
                 DriverClass.criarContasFicticia( quantidade, "123" );
-        Conta contaParaTestar = contasTeste.remove( 0 );
         
         for( Conta conta: contasTeste )
         {
@@ -75,7 +69,7 @@ public class DriverClass extends Principal
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        DriverClass.principal.criarInterfaceGráficaPrincipal();
+        principal.criarInterfaceGráficaPrincipal();
     }
     
     /**

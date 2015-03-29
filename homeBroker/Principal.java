@@ -4,8 +4,6 @@
 package homeBroker;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -33,48 +31,53 @@ import testes.DriverClass;
  */
 public class Principal extends JFrame
 {
+    private JFrame janelaPrincipal;
+    private Thread threadDoBookDeOfertas;
+    private String opçõesDeComando;
+    private BookDeOfertas bookDeOfertas;
+    
     /**
-     * 
+     * A conta para qual se estará operando o inventário e no merdado de ações.
      */
-    private static final long serialVersionUID = 1L;
-    
-    // Cria uma janeta para a aplicação principal
-    private JFrame janelaPrincipal = new JFrame( "HomeBroker Tabajara" );
-    
-    // liga os motores
-    private BookDeOfertas bookDeOfertas = BookDeOfertas.getInstance();
-    private Thread threadPrincipal = new Thread( this.bookDeOfertas );
+    private Conta conta;
     
     /**
      * As contasTeste que serão utilizadas para simular a adição de contas no
      * sistema, isto é, as contas criadas somente existirão temporariamente.
      */
-    private ArrayList< Conta > contasTeste = DriverClass.criarContasFicticia(
-            150, "123" );
+    private ArrayList< Conta > contasTeste;
     
     /**
-     * A conta para qual se estará operando o inventário e no merdado de ações.
+     * Configura a janela principal
      */
-    private Conta conta = this.contasTeste.get( 0 );
-    
-    private String opçõesDeComando = new String( "Bem-vindo ao sistema "
-            + "tabajara de cadastro de ações!\n"
-            + "Digite 's' para fechar o programa.\n"
-            + "Digite 'v' para para ver o inventario\n"
-            // + "Digite 'c' para para criar uma conta!\n"
-            + "Digite 'm' para ver o mercado!\n" );
+    public Principal()
+    {
+        // Cria uma janela para a aplicação principal
+        this.janelaPrincipal = new JFrame( "HomeBroker Tabajara" );
+        
+        // Liga os motores
+        this.bookDeOfertas = BookDeOfertas.getInstance();
+        this.threadDoBookDeOfertas = new Thread( this.bookDeOfertas );
+        this.contasTeste = DriverClass.criarContasFicticia( 150, "123" );
+        
+        this.opçõesDeComando =
+                new String( "Bem-vindo ao sistema "
+                        + "tabajara de cadastro de ações!\n"
+                        + "Digite 's' para fechar o programa.\n"
+                        + "Digite 'v' para para ver o inventario\n"
+                        // + "Digite 'c' para para criar uma conta!\n"
+                        + "Digite 'm' para ver o mercado!\n" );
+    }
     
     /**
-     * @param args
+     * Método principal que inicia a execução do programa. Este programa não
+     * reconhece nenhum tipo de argumento.
+     * 
+     * @param args um array de argumentos do tipo String passados por linha de
+     *            comando.
      */
     public static void main( String... args )
     {
-        // faz login
-        // motor.menuPrincipal(
-        // motor.loginNoSistema( contasTeste,
-        // DriverClass.contasTesteToString( contasTeste ) ),
-        // contasTeste );
-        
         /*
          * Here we are Secheduling a JOB for Event Dispatcher Thread, since
          * Swing is not Thread Safe. This is used to place the code which is
@@ -86,8 +89,14 @@ public class Principal extends JFrame
             public void run()
             {
                 Principal principal = new Principal();
-                principal.threadPrincipal.start();
-                principal.criarInterfaceGráficaPrincipal();
+                
+                // Faz login
+                principal.loginNoSistema( null );
+                
+                if( principal.conta != null )
+                {
+                    principal.criarInterfaceGráficaPrincipal();
+                }
             }
         } );
     }
@@ -97,6 +106,8 @@ public class Principal extends JFrame
      */
     public void criarInterfaceGráficaPrincipal()
     {
+        this.threadDoBookDeOfertas.start();
+        
         // Used to close the JFrame graciously.
         this.janelaPrincipal
                 .setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
@@ -108,94 +119,13 @@ public class Principal extends JFrame
         this.janelaPrincipal.setLocation( 50, 50 );
         this.janelaPrincipal.setExtendedState( java.awt.Frame.MAXIMIZED_BOTH );
         
-        // Cria um painel para colocar os botões, caixas de texto, ...
-        JPanel painelPrincipal = new JPanel( true );
-        
-        // Cria um campo de texto para entrada de comandos para o programa
-        JTextField caixaDeTextoPrincipal =
-                new JTextField( "  Insira qual seu comando  " );
-        caixaDeTextoPrincipal.addActionListener( new ActionListener()
-        {
-            @SuppressWarnings( "unused" )
-            @Override
-            public void actionPerformed( ActionEvent ae )
-            {
-                Principal.this.menuPrincipal( caixaDeTextoPrincipal.getText() );
-            }
-        } );
-        
-        // Limpa a caixa de texto ao clicar com o mouse.
-        caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
-        {
-            @SuppressWarnings( "unused" )
-            @Override
-            public void mouseClicked( MouseEvent e )
-            {
-                caixaDeTextoPrincipal.setText( "" );
-            }
-        } );
-        
-        caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
-        {
-            @Override
-            public void keyPressed( KeyEvent evt )
-            {
-                if( evt.getKeyCode() != KeyEvent.VK_ENTER )
-                {
-                    caixaDeTextoPrincipal.setText( "" );
-                }
-            }
-        } );
-        
-        // Configura a caixaDeTextoPrincipal
-        caixaDeTextoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
-        
-        // Button to show the second JFrame.
-        JButton botãoPrincipal = new JButton( "Enviar comando" );
-        botãoPrincipal.addActionListener( new ActionListener()
-        {
-            @SuppressWarnings( "unused" )
-            @Override
-            public void actionPerformed( ActionEvent ae )
-            {
-                Principal.this.menuPrincipal( caixaDeTextoPrincipal.getText() );
-            }
-        } );
-        
-        // Configura o botão principal
-        botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
-        botãoPrincipal.setFocusable( false );
-        
-        // Adiciona uma caixa de texto com as opções de comandos
-        JTextArea comandosDisponíveis = new JTextArea( this.opçõesDeComando );
-        comandosDisponíveis.setEditable( false );
-        comandosDisponíveis.setFocusable( false );
-        
-        // Adiciona os componentes ao painel principal
-        this.setLayout( new BorderLayout() );
-        painelPrincipal.add( botãoPrincipal, BorderLayout.WEST );
-        painelPrincipal.add( caixaDeTextoPrincipal, BorderLayout.SOUTH );
-        painelPrincipal.add( comandosDisponíveis, BorderLayout.EAST );
-        this.changeFont( painelPrincipal, new Font( getName(), NORMAL, 20 ) );
-        
-        // Adiciona o painelPrincipal na janelaPrincipal
-        this.janelaPrincipal.add( painelPrincipal );
+        // Cria e adiciona o painelPrincipal na janelaPrincipal
+        PainelPrincipal painelPrincipal = new PainelPrincipal();
+        this.janelaPrincipal.add( painelPrincipal.getPainelPrincipal() );
         
         // Ajusta a janela ao tamanho dos elementos.
         this.janelaPrincipal.pack();
         this.janelaPrincipal.setVisible( true );
-    }
-    
-    private void changeFont( Component component, Font font )
-    {
-        component.setFont( font );
-        if( component instanceof Container )
-        {
-            for( Component child: ( (Container) component ).getComponents() )
-            {
-                changeFont( child, font );
-            }
-        }
     }
     
     /**
@@ -243,8 +173,9 @@ public class Principal extends JFrame
             this.bookDeOfertas.exibirBookDeOfertas();
             break;
         default:
-            JOptionPane.showMessageDialog( null, "Você digitou uma "
-                    + "opção inválida!\n\n" + this.opçõesDeComando );
+            JOptionPane.showMessageDialog( this.janelaPrincipal,
+                    "Você digitou uma " + "opção inválida!\n\n"
+                            + this.opçõesDeComando );
             break;
         }
         
@@ -257,7 +188,6 @@ public class Principal extends JFrame
      *            ela serve para exibir quais contas estão disponiveis para
      *            login e sua senha
      */
-    @SuppressWarnings( "null" )
     public void loginNoSistema( String dica )
     {
         Conta login = null;
@@ -270,7 +200,9 @@ public class Principal extends JFrame
             {
                 dica = "(" + dica + ")";
             }
-            
+        } else
+        {
+            dica = "";
         }
         
         while( !command.equals( "sair" ) && !usuario.equals( "sair" )
@@ -279,8 +211,7 @@ public class Principal extends JFrame
             usuario =
                     JOptionPane.showInputDialog( ( inputError
                             ? "Usuário ou senha inválidos\n\n" : "" )
-                            + "Insira qual conta será feito login: "
-                            + ( dica.equals( null )? "" : dica ) );
+                            + "Insira qual conta será feito login: " + dica );
             if( usuario == null )
             {
                 break;
@@ -315,5 +246,134 @@ public class Principal extends JFrame
             inputError = true;
         }
         this.conta = login;
+    }
+    
+    /**
+     * Representa o painel principal da janela principal
+     * 
+     * @author Professional
+     */
+    private class PainelPrincipal extends Principal
+    {
+        JPanel painelPrincipal;
+        JTextField caixaDeTextoPrincipal;
+        JButton botãoPrincipal;
+        JTextArea comandosDisponíveis;
+        
+        /**
+         * Cria um painel para colocar os botões, caixas de texto, ...
+         */
+        public PainelPrincipal()
+        {
+            // Cria os compomentos
+            this.painelPrincipal = new JPanel( true );
+            this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
+            this.botãoPrincipal = this.botãoPrincipal();
+            this.comandosDisponíveis = new JTextArea( super.opçõesDeComando );
+            
+            // Configura os componentes
+            super.setLayout( new BorderLayout() );
+            this.comandosDisponíveis.setEditable( false );
+            this.comandosDisponíveis.setFocusable( false );
+            
+            // Adiciona os componentes ao painel principal
+            this.painelPrincipal.add( this.botãoPrincipal, BorderLayout.WEST );
+            
+            this.painelPrincipal.add( this.caixaDeTextoPrincipal,
+                    BorderLayout.SOUTH );
+            
+            this.painelPrincipal.add( this.comandosDisponíveis,
+                    BorderLayout.EAST );
+            
+            Biblioteca.trocarFontes( this.painelPrincipal, new Font( getName(),
+                    NORMAL, 20 ) );
+        }
+        
+        public JPanel getPainelPrincipal()
+        {
+            return this.painelPrincipal;
+        }
+        
+        /**
+         * Cria o botão principal para enviar os comandos da caixa de texto
+         * principal
+         * 
+         * @return botãoPrincipal o botãoPrincipal que envia os comandas da
+         *         caixa de texto principal.
+         */
+        private JButton botãoPrincipal()
+        {
+            // Button to show the second JFrame.
+            JButton botãoPrincipal = new JButton( "Enviar comando" );
+            botãoPrincipal.addActionListener( new ActionListener()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent ae )
+                {
+                    Principal.this
+                            .menuPrincipal( PainelPrincipal.this.caixaDeTextoPrincipal
+                                    .getText() );
+                }
+            } );
+            
+            // Configura o botão principal
+            botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            botãoPrincipal.setFocusable( false );
+            
+            return botãoPrincipal;
+        }
+        
+        /**
+         * Cria um campo de texto para entrada de comandos para o programa
+         * 
+         * @return caixaDeTextoPrincipal a caixaDeTextoPrincial para a entrada
+         *         de comandos
+         */
+        private JTextField caixaDeTextoPrincipal()
+        {
+            // Cria um campo de texto para entrada de comandos para o programa
+            JTextField caixaDeTextoPrincipal =
+                    new JTextField( "  Insira qual seu comando  " );
+            caixaDeTextoPrincipal.addActionListener( new ActionListener()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent ae )
+                {
+                    Principal.this.menuPrincipal( caixaDeTextoPrincipal
+                            .getText() );
+                }
+            } );
+            
+            // Limpa a caixa de texto ao clicar com o mouse.
+            caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void mouseClicked( MouseEvent e )
+                {
+                    caixaDeTextoPrincipal.setText( "" );
+                }
+            } );
+            
+            // Limpa a caixa de texto ao digital algo
+            caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
+            {
+                @Override
+                public void keyPressed( KeyEvent evt )
+                {
+                    if( evt.getKeyCode() != KeyEvent.VK_ENTER )
+                    {
+                        caixaDeTextoPrincipal.setText( "" );
+                    }
+                }
+            } );
+            
+            // Configura a caixaDeTextoPrincipal
+            caixaDeTextoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            
+            return caixaDeTextoPrincipal;
+        }
     }
 }

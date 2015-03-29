@@ -26,25 +26,36 @@ public class BookDeOfertas implements Runnable
 {
     private static final BookDeOfertas INSTANCE = new BookDeOfertas();
     
-    private int ofertasVisualizadas = 0;
-    private int ofertasNãoVisualizadas = 0;
+    private int ofertasVisualizadas;
+    private int ofertasNãoVisualizadas;
     
-    private ArrayList< Ação > ações = new ArrayList<>();
-    private ArrayList< JLabel > quantidades = new ArrayList<>();
-    private ArrayList< JLabel > preços = new ArrayList<>();
-    private ArrayList< JLabel > nomes = new ArrayList<>();
+    private ArrayList< Ação > ações;
+    private ArrayList< JLabel > quantidades;
+    private ArrayList< JLabel > preços;
+    private ArrayList< JLabel > nomes;
     
-    private GraphicalUserInterface graphical = new GraphicalUserInterface();
-    private JPanel painelPrincipal = new JPanel();
-    private JPanel subPainelPrincipal =
-            new JPanel( new GridLayout( 4, 0, 2, 2 ) );
-    private JLabel jLabelTemp = new JLabel();
+    private GraphicalUserInterface graphical;
+    private JPanel painelPrincipal;
+    private JPanel subPainelPrincipal;
+    private JLabel jLabelTemp;
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
      */
     private BookDeOfertas()
     {
+        this.ofertasVisualizadas = 0;
+        this.ofertasNãoVisualizadas = 0;
+        
+        this.ações = new ArrayList<>();
+        this.quantidades = new ArrayList<>();
+        this.preços = new ArrayList<>();
+        this.nomes = new ArrayList<>();
+        
+        this.graphical = new GraphicalUserInterface();
+        this.painelPrincipal = new JPanel();
+        this.subPainelPrincipal = new JPanel( new GridLayout( 4, 0, 2, 2 ) );
+        this.jLabelTemp = new JLabel();
     }
     
     /**
@@ -134,6 +145,8 @@ public class BookDeOfertas implements Runnable
         this.painelPrincipal.setBounds( 0, 0, width, height );
         this.painelPrincipal.setSize( screenSize );
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
+        
+        System.out.println( "Hi" );
         
         this.graphical.add( new Canvas() );
         this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
