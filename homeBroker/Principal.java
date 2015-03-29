@@ -41,9 +41,6 @@ public class Principal extends JFrame
     // Cria uma janeta para a aplicação principal
     private JFrame janelaPrincipal = new JFrame( "HomeBroker Tabajara" );
     
-    // Declaring our second JFrame.
-    private JFrame janelaDoBookDeOfertas;
-    
     // liga os motores
     private BookDeOfertas bookDeOfertas = BookDeOfertas.getInstance();
     
@@ -87,8 +84,8 @@ public class Principal extends JFrame
             @Override
             public void run()
             {
-                Principal tf = new Principal();
-                tf.createAndDisplayGUI();
+                Principal principal = new Principal();
+                principal.criarInterfaceGráficaPrincipal();
             }
         } );
     }
@@ -96,25 +93,18 @@ public class Principal extends JFrame
     /**
      * 
      */
-    public void createAndDisplayGUI()
+    public void criarInterfaceGráficaPrincipal()
     {
-        // Calling this method to create our frame2.
-        this.makeNewFrame();
-        
         // Used to close the JFrame graciously.
         this.janelaPrincipal
-                .setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+                .setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         
         // Used to position the JFrame at the middle of the screen.
         this.janelaPrincipal.setLocationRelativeTo( null );
         
         // Abre o frame maximizado
-        // Dimension dimensão = Toolkit.getDefaultToolkit().getScreenSize();
         this.janelaPrincipal.setLocation( 50, 50 );
         this.janelaPrincipal.setExtendedState( java.awt.Frame.MAXIMIZED_BOTH );
-        
-        // Use this instead for placing windows, as determined by the OS.
-        // this.frame1.setLocationByPlatform( true );
         
         // Cria um painel para colocar os botões, caixas de texto, ...
         JPanel painelPrincipal = new JPanel( true );
@@ -204,36 +194,6 @@ public class Principal extends JFrame
                 changeFont( child, font );
             }
         }
-    }
-    
-    private void makeNewFrame()
-    {
-        this.janelaDoBookDeOfertas = new JFrame( "FRAME 2" );
-        this.janelaDoBookDeOfertas
-                .setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        this.janelaDoBookDeOfertas.setLocationByPlatform( true );
-        
-        // abre o frame maximizado
-        this.janelaPrincipal.setExtendedState( java.awt.Frame.MAXIMIZED_BOTH );
-        
-        // Creating a JButton to be shown on the JFrame.
-        JButton hideButton = new JButton( "HIDE FRAME" );
-        hideButton.addActionListener( new ActionListener()
-        {
-            @SuppressWarnings( "unused" )
-            @Override
-            public void actionPerformed( ActionEvent ae )
-            {
-                // On the click of this button, frame2 will
-                // disappear and HAI will be displayed on the console.
-                Principal.this.janelaDoBookDeOfertas.dispose();
-                // System.out.println( "HAI" );
-            }
-        } );
-        
-        // Adding the button to the South side of the frame1.
-        this.janelaDoBookDeOfertas.add( hideButton, BorderLayout.PAGE_END );
-        this.janelaDoBookDeOfertas.pack();
     }
     
     /**

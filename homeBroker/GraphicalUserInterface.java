@@ -1,8 +1,10 @@
 package homeBroker;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -22,7 +24,7 @@ public class GraphicalUserInterface extends JFrame
      */
     public GraphicalUserInterface()
     {
-        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
         setBounds( 100, 100, 450, 300 );
         this.contentPane = new JPanel();
         this.contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );

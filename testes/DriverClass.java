@@ -75,7 +75,7 @@ public class DriverClass extends Principal
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        DriverClass.principal.menuPrincipal( null );
+        DriverClass.principal.criarInterfaceGráficaPrincipal();
     }
     
     /**
