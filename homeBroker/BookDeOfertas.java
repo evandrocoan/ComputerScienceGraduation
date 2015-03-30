@@ -109,14 +109,15 @@ public class BookDeOfertas implements Runnable
     @Override
     public void run()
     {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
-        screenSize = new Dimension( width - 100, height - 100 );
+        Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) tamanhoDaJanela.getWidth();
+        int height = (int) tamanhoDaJanela.getHeight();
+        Dimension tamanhoDaJanelaReduzido =
+                new Dimension( width - 100, height - 100 );
         
-        // this.painelPrincipal.setBackground( Color.WHITE );
+        this.painelPrincipal.setSize( tamanhoDaJanelaReduzido );
         this.painelPrincipal.setBounds( 50, 50, width - 100, height - 100 );
-        this.painelPrincipal.setSize( screenSize );
+        
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
         
         this.graphical.add( new Canvas() );
