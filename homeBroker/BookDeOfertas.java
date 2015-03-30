@@ -9,13 +9,15 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 
 /**
  * 
@@ -36,6 +38,9 @@ public class BookDeOfertas implements Runnable
     
     private ArrayList< JTextArea > blocoDeAção;
     private ArrayList< Ação > ações;
+    
+    DefaultListModel< JButton > model = new DefaultListModel<>();
+    JList< JButton > list = new JList<>( this.model );
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -69,9 +74,9 @@ public class BookDeOfertas implements Runnable
     public void adicionarOfertaDeVenda( Ação ação )
     {
         String blocoDeAção =
-                "Ordem de venda\nNome da ação: " + ação.getNome()
-                        + "       \nPreço: " + ação.getPreço()
-                        + "\nQuantidade: " + ação.getQuantidade() + "\n";
+                "Ordem de venda - Nome da ação: " + ação.getNome()
+                        + " - Preço: " + ação.getPreço() + " - Quantidade: "
+                        + ação.getQuantidade();
         
         JTextArea texto = new JTextArea( blocoDeAção );
         texto.setEditable( false );
@@ -91,7 +96,7 @@ public class BookDeOfertas implements Runnable
     {
         JTextArea texto = this.blocoDeAção.get( this.ofertasVisualizadas );
         
-        this.painelPrincipal.add( texto, new GridLayout() );
+        this.model.addElement( new JButton( texto.getText() ) );
         
         this.ofertasVisualizadas++;
     }
@@ -149,7 +154,7 @@ public class BookDeOfertas implements Runnable
         this.graphical.setPreferredSize( tamanhoDaJanelaReduzido );
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
         
-        JScrollPane painelRolável = new JScrollPane( this.painelPrincipal );
+        JScrollPane painelRolável = new JScrollPane( this.list );
         painelRolável
                 .setHorizontalScrollBarPolicy( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         painelRolável.setAutoscrolls( true );
@@ -172,10 +177,9 @@ public class BookDeOfertas implements Runnable
         public GraphicalUserInterface()
         {
             this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-            this.setBounds( 100, 100, 450, 300 );
+            this.setBounds( 500, 500, 500, 500 );
             this.contentPane = new JPanel();
-            this.contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
-            this.contentPane.setLayout( new BorderLayout() );
+            this.contentPane.setLayout( new GridLayout( 0, 1 ) );
             this.setContentPane( this.contentPane );
         }
     }
