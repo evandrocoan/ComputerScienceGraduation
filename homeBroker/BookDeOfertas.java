@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
 /**
@@ -32,13 +31,14 @@ public class BookDeOfertas implements Runnable
     private int ofertasNãoVisualizadas;
     
     private GraphicalUserInterface graphical;
-    private JPanel painelPrincipal;
     
-    private ArrayList< String > blocoDeAção;
-    private ArrayList< Ação > ações;
+    private ArrayList< OfertaDoMercado > ofertasDoMercado;
     
-    private DefaultListModel< String > model = new DefaultListModel<>();
-    private JList< String > list = new JList<>( this.model );
+    private DefaultListModel< String > modeloPadrãoDeLista =
+            new DefaultListModel<>();
+    
+    private JList< String > listaDeOfertas = new JList<>(
+            this.modeloPadrãoDeLista );
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -49,9 +49,8 @@ public class BookDeOfertas implements Runnable
         this.ofertasNãoVisualizadas = 0;
         
         this.graphical = new GraphicalUserInterface();
-        this.painelPrincipal = new JPanel();
-        this.blocoDeAção = new ArrayList<>();
-        this.ações = new ArrayList<>();
+        
+        this.ofertasDoMercado = new ArrayList<>();
     }
     
     /**
@@ -71,15 +70,28 @@ public class BookDeOfertas implements Runnable
      */
     public void adicionarOfertaDeVenda( Ação ação )
     {
-        String blocoDeAção =
-                "Ordem de venda - Nome da ação: " + ação.getNome()
-                        + " - Preço: " + ação.getPreço() + " - Quantidade: "
-                        + ação.getQuantidade();
-        
-        this.blocoDeAção.add( blocoDeAção );
-        this.ações.add( ação );
+        OfertaDoMercado ofertaDoMercado = new OfertaDoMercado( ação, "Venda" );
+        this.ofertasDoMercado.add( ofertaDoMercado );
         this.ofertasNãoVisualizadas++;
-        // this.atualizarBookDeOfertas();
+    }
+    
+    /**
+     * @param indice
+     * @return
+     */
+    private String ofertaToString( int indice )
+    {
+        OfertaDoMercado ofertaDoMercado = this.ofertasDoMercado.get( indice );
+        
+        String açãoEmOferta =
+                "Ordem de " + ofertaDoMercado.getTipoDeOferta()
+                        + " - Nome da ação: "
+                        + ofertaDoMercado.getAçãoEmOferta().getNome()
+                        + " - Preço: "
+                        + ofertaDoMercado.getAçãoEmOferta().getPreço()
+                        + " - Quantidade: "
+                        + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
+        return açãoEmOferta;
     }
     
     /**
@@ -88,10 +100,8 @@ public class BookDeOfertas implements Runnable
     private void atualizarBookDeOfertas()
     {
         int indice = this.ofertasVisualizadas;
-        String ação = this.blocoDeAção.get( indice );
-        
-        this.model.addElement( ação );
-        
+        String ofertaDoMercado = this.ofertaToString( indice );
+        this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
         this.ofertasVisualizadas++;
     }
     
@@ -112,7 +122,7 @@ public class BookDeOfertas implements Runnable
     @Override
     public void run()
     {
-        this.configurarJanelas();
+        this.configurarJanela();
         
         while( true )
         {
@@ -127,11 +137,10 @@ public class BookDeOfertas implements Runnable
             {
                 // TODO
             }
-            this.painelPrincipal.validate();
         }
     }
     
-    private void configurarJanelas()
+    private void configurarJanela()
     {
         Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) tamanhoDaJanela.getWidth();
@@ -140,21 +149,13 @@ public class BookDeOfertas implements Runnable
         Dimension tamanhoDaJanelaReduzido =
                 new Dimension( width - 100, height - 100 );
         
-        this.painelPrincipal.setSize( tamanhoDaJanelaReduzido );
-        this.painelPrincipal.setPreferredSize( tamanhoDaJanelaReduzido );
-        this.painelPrincipal.setBounds( 50, 50, width - 100, height - 100 );
-        
         this.graphical.setSize( tamanhoDaJanelaReduzido );
         this.graphical.setPreferredSize( tamanhoDaJanelaReduzido );
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
-        
-        JScrollPane painelRolável = new JScrollPane( this.list );
-        painelRolável
-                .setHorizontalScrollBarPolicy( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-        painelRolável.setAutoscrolls( true );
-        
-        this.graphical.add( painelRolável, BorderLayout.CENTER );
         this.graphical.setVisible( false );
+        
+        JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
+        this.graphical.add( painelRolável, BorderLayout.CENTER );
     }
     
     /**
