@@ -1,12 +1,14 @@
+/**
+ * Pacote que contém a classe principal de testes.
+ */
 package testes;
 
-// Fig. 22.12: DesktopTest.java
-// Demonstrating JDesktopPane.
 import javax.swing.JFrame;
 
 /**
- * @author Professional
- *
+ * // Fig. 22.12: DesktopTest.java // Demonstrating JDesktopPane.
+ * 
+ * @author Deitel & Associates
  */
 public class DesktopTest
 {

@@ -1,7 +1,8 @@
+/**
+ * Pacote que contém a classe principal de testes.
+ */
 package testes;
 
-// Fig. 22.11: DesktopFrame.java
-// Demonstrating JDesktopPane.
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,8 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 /**
- * @author Professional
- *
+ * Fig. 22.11: DesktopFrame.java // Demonstrating JDesktopPane.
+ * 
+ * @author Deitel & Associates
  */
 public class DesktopFrame extends JFrame
 {

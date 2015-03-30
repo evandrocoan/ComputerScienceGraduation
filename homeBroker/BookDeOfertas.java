@@ -37,8 +37,8 @@ public class BookDeOfertas implements Runnable
     private ArrayList< String > blocoDeAção;
     private ArrayList< Ação > ações;
     
-    private DefaultListModel< String > model;
-    private JList< String > list;
+    private DefaultListModel< String > model = new DefaultListModel<>();
+    private JList< String > list = new JList<>( this.model );
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -52,9 +52,6 @@ public class BookDeOfertas implements Runnable
         this.painelPrincipal = new JPanel();
         this.blocoDeAção = new ArrayList<>();
         this.ações = new ArrayList<>();
-        
-        this.model = new DefaultListModel<>();
-        this.list = new JList<>( this.model );
     }
     
     /**

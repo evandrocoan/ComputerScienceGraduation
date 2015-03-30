@@ -20,8 +20,10 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 
 /**
- * @author Professional
- *
+ * @author http://stackoverflow.com/users/714968/mkorbel
+ * @see <a
+ *      href="http://stackoverflow.com/questions/10315536/mouse-wheel-listener-not-working-in-jscrollbar/10315718">
+ *      mouse wheel listener not working in jscrollbar</a>
  */
 public class ListPanel extends JFrame
 {

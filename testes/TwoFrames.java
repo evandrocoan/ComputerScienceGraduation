@@ -13,10 +13,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /**
- * <a href=http://stackoverflow.com/questions/9443161/swing-multiple-screens-
- * transfer-of-control>
- * 
  * @author http://stackoverflow.com/users/1057230/nice-cow
+ * @see <a
+ *      href="http://stackoverflow.com/questions/9443161/swing-multiple-screens-transfer-of-control">
+ *      Swing , Multiple Screens , Transfer of control</a>
  */
 public class TwoFrames
 {

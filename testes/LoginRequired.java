@@ -21,7 +21,9 @@ import javax.swing.event.AncestorListener;
 
 /**
  * @author http://stackoverflow.com/users/418556/andrew-thompson
- *
+ * @see <a
+ *      href="http://stackoverflow.com/questions/10773132/how-to-unfocus-a-jtextfield">How
+ *      to UnFocus a JTextField</a>
  */
 public class LoginRequired
 {

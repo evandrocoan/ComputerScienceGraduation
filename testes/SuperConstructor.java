@@ -19,7 +19,9 @@ import javax.swing.WindowConstants;
 
 /**
  * @author http://stackoverflow.com/users/714968/mkorbel
- *
+ * @see <a
+ *      href="http://stackoverflow.com/questions/8976874/show-two-dialogs-on-top-of-each-other-using-java-swing">
+ *      show two dialogs on top of each other using java swing</a>
  */
 public class SuperConstructor extends JFrame
 {

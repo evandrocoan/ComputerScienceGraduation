@@ -18,7 +18,9 @@ import javax.swing.JPanel;
 
 /**
  * @author http://stackoverflow.com/users/3973/binil-thomas
- *
+ * @see <a
+ *      href="http://stackoverflow.com/questions/6083963/is-it-possible-to-have-multiple-joptionpane-dialogs">
+ *      is it possible to have multiple JOptionPane dialogs?</a>
  */
 public class DialogTest
 {
