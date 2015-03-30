@@ -8,7 +8,8 @@ import homeBroker.Biblioteca;
 import homeBroker.BookDeOfertas;
 import homeBroker.Conta;
 import homeBroker.Inventario;
-import homeBroker.Principal;
+import homeBroker.JanelaPrincipal;
+import homeBroker.ProgramaPrincipal;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,12 +32,13 @@ import javax.swing.SpringLayout;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class DriverClass extends Principal
+public class DriverClass
 {
     /**
      * 
      */
-    public static Principal principal = new Principal();
+    public static ProgramaPrincipal programaPrincipal = ProgramaPrincipal
+            .getInstance();
     
     /**
      * Método principal que inicia a execução dos testes
@@ -45,21 +47,15 @@ public class DriverClass extends Principal
      */
     public static void main( String... args )
     {
-        new DriverClass().testarBookDeOfertas( 15 );
+        new DriverClass().testarBookDeOfertas();
     }
     
     /**
      * Realiza teste na interface do book de ofertas.
-     * 
-     * @param quantidade a quantidade de contas fictícias usadas para testar o
-     *            sistema.
      */
-    public void testarBookDeOfertas( int quantidade )
+    public void testarBookDeOfertas()
     {
-        ArrayList< Conta > contasTeste =
-                DriverClass.criarContasFicticia( quantidade, "123" );
-        
-        for( Conta conta: contasTeste )
+        for( Conta conta: programaPrincipal.contasTeste )
         {
             ArrayList< Ação > listaDeAções =
                     conta.getInventario().getListaDeAções();
@@ -69,25 +65,29 @@ public class DriverClass extends Principal
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        principal.criarInterfaceGráficaPrincipal();
+        JOptionPane.showMessageDialog( null, "Estou em testarBookDeOfertas" );
+        
+        // Cria uma janela para a aplicação principal.
+        new JanelaPrincipal( "HomeBroker Tabajara" );
     }
     
     /**
      * Método responsável por testar o sistema de login. Ele cria contas de
      * teste, exibe o sistema de login com dica de conta
      */
-    public static void testarContas()
+    public void testarContas()
     {
         // ######################## Cria um conta para apresentação do sistema
         // ao usuario ########################################################
-        ArrayList< Conta > contasTeste =
-                DriverClass.criarContasFicticia( 11, "123" );
+        // ArrayList< Conta > contasTeste =
+        // DriverClass.criarContasFicticia( 11, "123" );
         
         // faz login no sistema
-        DriverClass.principal.loginNoSistema( DriverClass
-                .contasTesteToString( contasTeste ) + "Senha geral: 123" );
+        DriverClass.programaPrincipal.loginNoSistema( DriverClass
+                .contasTesteToString( programaPrincipal.contasTeste )
+                + "Senha geral: 123" );
         
-        principal.menuPrincipal( null );
+        programaPrincipal.menuPrincipal( null );
     }
     
     /**
@@ -130,7 +130,8 @@ public class DriverClass extends Principal
             
             contasTeste.add( contaTeste );
         }
-        
+        JOptionPane.showMessageDialog( null, "Estou em criarContasFictícias "
+                + contasTeste.get( 0 ).getNome() );
         return contasTeste;
     }
     
