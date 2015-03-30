@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -147,7 +149,12 @@ public class BookDeOfertas implements Runnable
         this.graphical.setPreferredSize( tamanhoDaJanelaReduzido );
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
         
-        this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
+        JScrollPane painelRolável = new JScrollPane( this.painelPrincipal );
+        painelRolável
+                .setHorizontalScrollBarPolicy( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+        painelRolável.setAutoscrolls( true );
+        
+        this.graphical.add( painelRolável, BorderLayout.CENTER );
         this.graphical.setVisible( false );
     }
     
@@ -168,9 +175,8 @@ public class BookDeOfertas implements Runnable
             this.setBounds( 100, 100, 450, 300 );
             this.contentPane = new JPanel();
             this.contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
-            this.contentPane.setLayout( new BorderLayout( 0, 0 ) );
+            this.contentPane.setLayout( new BorderLayout() );
             this.setContentPane( this.contentPane );
         }
-        
     }
 }
