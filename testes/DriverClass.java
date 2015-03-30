@@ -45,7 +45,7 @@ public class DriverClass extends Principal
      */
     public static void main( String... args )
     {
-        new DriverClass().testarBookDeOfertas( 150 );
+        new DriverClass().testarBookDeOfertas( 15 );
     }
     
     /**

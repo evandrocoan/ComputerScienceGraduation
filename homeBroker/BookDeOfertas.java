@@ -5,15 +5,13 @@ package homeBroker;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
 
 /**
  * 
@@ -29,15 +27,11 @@ public class BookDeOfertas implements Runnable
     private int ofertasVisualizadas;
     private int ofertasNãoVisualizadas;
     
-    private ArrayList< Ação > ações;
-    private ArrayList< JLabel > quantidades;
-    private ArrayList< JLabel > preços;
-    private ArrayList< JLabel > nomes;
-    
     private GraphicalUserInterface graphical;
     private JPanel painelPrincipal;
-    private JPanel subPainelPrincipal;
-    private JLabel jLabelTemp;
+    
+    private ArrayList< JTextArea > blocoDeAção;
+    private ArrayList< Ação > ações;
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -47,15 +41,10 @@ public class BookDeOfertas implements Runnable
         this.ofertasVisualizadas = 0;
         this.ofertasNãoVisualizadas = 0;
         
-        this.ações = new ArrayList<>();
-        this.quantidades = new ArrayList<>();
-        this.preços = new ArrayList<>();
-        this.nomes = new ArrayList<>();
-        
         this.graphical = new GraphicalUserInterface();
         this.painelPrincipal = new JPanel();
-        this.subPainelPrincipal = new JPanel( new GridLayout( 4, 0, 2, 2 ) );
-        this.jLabelTemp = new JLabel();
+        this.blocoDeAção = new ArrayList<>();
+        this.ações = new ArrayList<>();
     }
     
     /**
@@ -75,19 +64,17 @@ public class BookDeOfertas implements Runnable
      */
     public void adicionarOfertaDeVenda( Ação ação )
     {
-        this.jLabelTemp =
-                new JLabel( "Nome: " + ação.getNome(), SwingConstants.CENTER );
-        this.nomes.add( this.jLabelTemp );
+        String blocoDeAção =
+                "Ordem de venda\nNome da ação: " + ação.getNome()
+                        + "       \nPreço: " + ação.getPreço()
+                        + "\nQuantidade: " + ação.getQuantidade() + "\n";
         
-        this.jLabelTemp =
-                new JLabel( "Preço: " + ação.getPreço(), SwingConstants.CENTER );
-        this.preços.add( this.jLabelTemp );
+        JTextArea texto = new JTextArea( blocoDeAção );
+        texto.setEditable( false );
+        texto.setFocusable( true );
+        // texto.setPreferredSize( new Dimension( 100, 50 ) );
         
-        this.jLabelTemp =
-                new JLabel( "Quantidade: " + ação.getQuantidade(),
-                        SwingConstants.CENTER );
-        this.quantidades.add( this.jLabelTemp );
-        
+        this.blocoDeAção.add( texto );
         this.ações.add( ação );
         this.ofertasNãoVisualizadas++;
         // this.atualizarBookDeOfertas();
@@ -98,25 +85,10 @@ public class BookDeOfertas implements Runnable
      */
     private void atualizarBookDeOfertas()
     {
-        this.jLabelTemp =
-                new JLabel( this.ações.get( this.ofertasVisualizadas )
-                        .getNome(), SwingConstants.CENTER );
-        this.subPainelPrincipal.add( this.jLabelTemp );
+        JTextArea texto = this.blocoDeAção.get( this.ofertasVisualizadas );
         
-        this.jLabelTemp =
-                new JLabel( "Quantidade: "
-                        + this.ações.get( this.ofertasVisualizadas )
-                                .getQuantidade(), SwingConstants.CENTER );
-        this.subPainelPrincipal.add( this.jLabelTemp );
+        this.painelPrincipal.add( texto, new GridLayout() );
         
-        this.jLabelTemp =
-                new JLabel(
-                        "Preço: R$"
-                                + this.ações.get( this.ofertasVisualizadas )
-                                        .getPreço(), SwingConstants.CENTER );
-        this.subPainelPrincipal.add( this.jLabelTemp );
-        
-        this.painelPrincipal.add( this.subPainelPrincipal );
         this.ofertasVisualizadas++;
     }
     
@@ -140,13 +112,12 @@ public class BookDeOfertas implements Runnable
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
+        screenSize = new Dimension( width - 100, height - 100 );
         
-        this.painelPrincipal.setBackground( Color.WHITE );
-        this.painelPrincipal.setBounds( 0, 0, width, height );
+        // this.painelPrincipal.setBackground( Color.WHITE );
+        this.painelPrincipal.setBounds( 50, 50, width - 100, height - 100 );
         this.painelPrincipal.setSize( screenSize );
         this.graphical.setBounds( 50, 50, width - 100, height - 100 );
-        
-        System.out.println( "Hi" );
         
         this.graphical.add( new Canvas() );
         this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
@@ -160,7 +131,7 @@ public class BookDeOfertas implements Runnable
             }
             try
             {
-                Thread.sleep( 1000 );
+                Thread.sleep( 200 );
             } catch( InterruptedException e )
             {
                 // TODO

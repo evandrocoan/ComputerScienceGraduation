@@ -37,6 +37,11 @@ public class Inventario
      */
     public String inventarioToString()
     {
+        if( this.listaDeAções.size() == 0 )
+        {
+            return "Não há ações nesta conta";
+        }
+        
         String enviar = new String();
         for( Ação i: this.listaDeAções )
         {

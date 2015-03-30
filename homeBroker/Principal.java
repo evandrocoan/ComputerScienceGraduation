@@ -52,13 +52,16 @@ public class Principal extends JFrame
      */
     public Principal()
     {
-        // Cria uma janela para a aplicação principal
+        // Cria uma janela para a aplicação principal.
         this.janelaPrincipal = new JFrame( "HomeBroker Tabajara" );
         
-        // Liga os motores
+        // Liga os motores.
         this.bookDeOfertas = BookDeOfertas.getInstance();
         this.threadDoBookDeOfertas = new Thread( this.bookDeOfertas );
         this.contasTeste = DriverClass.criarContasFicticia( 150, "123" );
+        
+        // Login temporário para testes.
+        this.conta = this.contasTeste.get( 0 );
         
         this.opçõesDeComando =
                 new String( "Bem-vindo ao sistema "
@@ -162,6 +165,12 @@ public class Principal extends JFrame
             System.exit( 0 );
             break;
         case "v":
+            if( this.conta == null )
+            {
+                JOptionPane.showMessageDialog( this.janelaPrincipal, "Não há "
+                        + "nenhuma conta carregada no sistema!" );
+                break;
+            }
             JOptionPane.showMessageDialog( this.janelaPrincipal, this.conta
                     .getInventario().inventarioToString() );
             break;
@@ -289,6 +298,12 @@ public class Principal extends JFrame
                     NORMAL, 20 ) );
         }
         
+        /**
+         * Retorna o paineilPrincipal construído.
+         * 
+         * @return painelPrincipal o painelPrincipal quem com os componemtes
+         *         principais.
+         */
         public JPanel getPainelPrincipal()
         {
             return this.painelPrincipal;
@@ -325,10 +340,10 @@ public class Principal extends JFrame
         }
         
         /**
-         * Cria um campo de texto para entrada de comandos para o programa
+         * Cria um campo de texto para entrada de comandos para o programa.
          * 
          * @return caixaDeTextoPrincipal a caixaDeTextoPrincial para a entrada
-         *         de comandos
+         *         de comandos.
          */
         private JTextField caixaDeTextoPrincipal()
         {
