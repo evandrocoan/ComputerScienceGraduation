@@ -10,12 +10,10 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
@@ -36,11 +34,11 @@ public class BookDeOfertas implements Runnable
     private GraphicalUserInterface graphical;
     private JPanel painelPrincipal;
     
-    private ArrayList< JTextArea > blocoDeAção;
+    private ArrayList< String > blocoDeAção;
     private ArrayList< Ação > ações;
     
-    DefaultListModel< JButton > model = new DefaultListModel<>();
-    JList< JButton > list = new JList<>( this.model );
+    private DefaultListModel< String > model;
+    private JList< String > list;
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -54,6 +52,9 @@ public class BookDeOfertas implements Runnable
         this.painelPrincipal = new JPanel();
         this.blocoDeAção = new ArrayList<>();
         this.ações = new ArrayList<>();
+        
+        this.model = new DefaultListModel<>();
+        this.list = new JList<>( this.model );
     }
     
     /**
@@ -78,12 +79,7 @@ public class BookDeOfertas implements Runnable
                         + " - Preço: " + ação.getPreço() + " - Quantidade: "
                         + ação.getQuantidade();
         
-        JTextArea texto = new JTextArea( blocoDeAção );
-        texto.setEditable( false );
-        texto.setFocusable( true );
-        // texto.setPreferredSize( new Dimension( 100, 50 ) );
-        
-        this.blocoDeAção.add( texto );
+        this.blocoDeAção.add( blocoDeAção );
         this.ações.add( ação );
         this.ofertasNãoVisualizadas++;
         // this.atualizarBookDeOfertas();
@@ -94,9 +90,10 @@ public class BookDeOfertas implements Runnable
      */
     private void atualizarBookDeOfertas()
     {
-        JTextArea texto = this.blocoDeAção.get( this.ofertasVisualizadas );
+        int indice = this.ofertasVisualizadas;
+        String ação = this.blocoDeAção.get( indice );
         
-        this.model.addElement( new JButton( texto.getText() ) );
+        this.model.addElement( ação );
         
         this.ofertasVisualizadas++;
     }
