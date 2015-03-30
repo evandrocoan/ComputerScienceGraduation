@@ -4,14 +4,16 @@
 package homeBroker;
 
 import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 /**
  * 
@@ -109,20 +111,7 @@ public class BookDeOfertas implements Runnable
     @Override
     public void run()
     {
-        Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) tamanhoDaJanela.getWidth();
-        int height = (int) tamanhoDaJanela.getHeight();
-        Dimension tamanhoDaJanelaReduzido =
-                new Dimension( width - 100, height - 100 );
-        
-        this.painelPrincipal.setSize( tamanhoDaJanelaReduzido );
-        this.painelPrincipal.setBounds( 50, 50, width - 100, height - 100 );
-        
-        this.graphical.setBounds( 50, 50, width - 100, height - 100 );
-        
-        this.graphical.add( new Canvas() );
-        this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
-        this.graphical.setVisible( false );
+        this.configurarJanelas();
         
         while( true )
         {
@@ -139,5 +128,49 @@ public class BookDeOfertas implements Runnable
             }
             this.painelPrincipal.validate();
         }
+    }
+    
+    private void configurarJanelas()
+    {
+        Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) tamanhoDaJanela.getWidth();
+        int height = (int) tamanhoDaJanela.getHeight();
+        
+        Dimension tamanhoDaJanelaReduzido =
+                new Dimension( width - 100, height - 100 );
+        
+        this.painelPrincipal.setSize( tamanhoDaJanelaReduzido );
+        this.painelPrincipal.setPreferredSize( tamanhoDaJanelaReduzido );
+        this.painelPrincipal.setBounds( 50, 50, width - 100, height - 100 );
+        
+        this.graphical.setSize( tamanhoDaJanelaReduzido );
+        this.graphical.setPreferredSize( tamanhoDaJanelaReduzido );
+        this.graphical.setBounds( 50, 50, width - 100, height - 100 );
+        
+        this.graphical.add( this.painelPrincipal, BorderLayout.CENTER );
+        this.graphical.setVisible( false );
+    }
+    
+    /**
+     * @author Professional
+     *
+     */
+    private class GraphicalUserInterface extends JFrame
+    {
+        private JPanel contentPane;
+        
+        /**
+         * 
+         */
+        public GraphicalUserInterface()
+        {
+            this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+            this.setBounds( 100, 100, 450, 300 );
+            this.contentPane = new JPanel();
+            this.contentPane.setBorder( new EmptyBorder( 5, 5, 5, 5 ) );
+            this.contentPane.setLayout( new BorderLayout( 0, 0 ) );
+            this.setContentPane( this.contentPane );
+        }
+        
     }
 }
