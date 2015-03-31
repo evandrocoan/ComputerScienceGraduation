@@ -75,15 +75,14 @@ public class JanelaDoBook extends JFrame implements Runnable
         {
             if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
             {
-                JOptionPane
-                        .showMessageDialog(
-                                null,
-                                "Estou em JanelaDoBook chamando o teste \n\n"
-                                        + "this.bookDeOfertas.existemNovasOfertas( "
-                                        + "this.modeloPadrãoDeLista.getSize() ) = "
-                                        + this.bookDeOfertas
-                                                .existemNovasOfertas( this.modeloPadrãoDeLista
-                                                        .getSize() ) );
+                String texto =
+                        "Estou em JanelaDoBook chamando o teste \n\n"
+                                + "this.bookDeOfertas.existemNovasOfertas( "
+                                + "this.modeloPadrãoDeLista.getSize() ) = "
+                                + this.bookDeOfertas
+                                        .existemNovasOfertas( this.modeloPadrãoDeLista
+                                                .getSize() );
+                JOptionPane.showMessageDialog( null, texto );
             }
             if( this.bookDeOfertas
                     .existemNovasOfertas( this.modeloPadrãoDeLista.getSize() ) )
