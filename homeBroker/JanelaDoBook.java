@@ -128,7 +128,11 @@ public class JanelaDoBook extends JFrame implements Runnable
         int indice = this.modeloPadrãoDeLista.getSize();
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
-        System.out.println( ofertaDoMercado );
+        
+        if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+        {
+            System.out.println( ofertaDoMercado );
+        }
     }
     
     /**
