@@ -29,7 +29,7 @@ public class ProgramaPrincipal
     /**
      * 
      */
-    private JanelaDoBook janelaDoBook;
+    private static JanelaDoBook janelaDoBook;
     
     /**
      * Processo que mantém o book de ofertas funcionando enquanto a interface
@@ -57,8 +57,8 @@ public class ProgramaPrincipal
                 "Estou no construtor de ProgramaPrincipal()" );
         
         // Liga o book de ofertas
-        this.janelaDoBook = new JanelaDoBook();
-        this.processoDoBook = new Thread( this.janelaDoBook );
+        ProgramaPrincipal.janelaDoBook = JanelaDoBook.getInstance();
+        this.processoDoBook = new Thread( ProgramaPrincipal.janelaDoBook );
         this.processoDoBook.start();
         
         // Cria contas fictícias
@@ -114,7 +114,7 @@ public class ProgramaPrincipal
                 // Cria uma janela para a aplicação principal.
                 ProgramaPrincipal.janelaPrincipal =
                         new JanelaPrincipal( "HomeBroker Tabajara",
-                                programaPrincipal );
+                                programaPrincipal, janelaDoBook );
             }
         } );
     }

@@ -8,6 +8,7 @@ import homeBroker.Biblioteca;
 import homeBroker.BookDeOfertas;
 import homeBroker.Conta;
 import homeBroker.Inventario;
+import homeBroker.JanelaDoBook;
 import homeBroker.JanelaPrincipal;
 import homeBroker.ProgramaPrincipal;
 
@@ -40,13 +41,21 @@ public class DriverClass
     public static ProgramaPrincipal programaPrincipal;
     
     /**
+     * 
+     */
+    public static JanelaDoBook janelaDoBook;
+    
+    /**
      * Método principal que inicia a execução dos testes
      * 
      * @param args os argumentos passados por linha de comando
      */
     public static void main( String... args )
     {
+        // Inicializa as interfaces gráficas para se realizar os testes.
         DriverClass.programaPrincipal = ProgramaPrincipal.getInstance();
+        DriverClass.janelaDoBook = JanelaDoBook.getInstance();
+        
         DriverClass.testarBookDeOfertas();
     }
     
@@ -67,7 +76,8 @@ public class DriverClass
         }
         JOptionPane.showMessageDialog( null, "Estou em testarBookDeOfertas" );
         ProgramaPrincipal.janelaPrincipal =
-                new JanelaPrincipal( "HomeBroker Tabajara", programaPrincipal );
+                new JanelaPrincipal( "HomeBroker Tabajara", programaPrincipal,
+                        janelaDoBook );
     }
     
     /**

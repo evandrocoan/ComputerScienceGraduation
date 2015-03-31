@@ -2,12 +2,15 @@ package homeBroker;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
@@ -19,6 +22,8 @@ import javax.swing.WindowConstants;
  */
 public class JanelaDoBook extends JFrame implements Runnable
 {
+    private static final JanelaDoBook INSTANCE = new JanelaDoBook();
+    
     private JPanel contentPane;
     
     private BookDeOfertas bookDeOfertas;
@@ -32,8 +37,9 @@ public class JanelaDoBook extends JFrame implements Runnable
     /**
      * 
      */
-    public JanelaDoBook()
+    private JanelaDoBook()
     {
+        JOptionPane.showMessageDialog( null, "Sou construtor da JanelaDoBook!" );
         this.bookDeOfertas = BookDeOfertas.getInstance();
         
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
@@ -42,6 +48,14 @@ public class JanelaDoBook extends JFrame implements Runnable
         this.contentPane.setLayout( new GridLayout( 0, 1 ) );
         this.setContentPane( this.contentPane );
         this.configurarJanela();
+    }
+    
+    /**
+     * @return the instance
+     */
+    public static JanelaDoBook getInstance()
+    {
+        return INSTANCE;
     }
     
     /**
@@ -95,6 +109,8 @@ public class JanelaDoBook extends JFrame implements Runnable
         
         JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
         this.add( painelRolável, BorderLayout.CENTER );
+        
+        Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL, 30 ) );
     }
     
     /**

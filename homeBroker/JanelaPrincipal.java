@@ -37,13 +37,15 @@ public class JanelaPrincipal extends JFrame
      * @param títuloDaJanela o títuloDaJanela que será criada.
      * @param programaPrincipal uma instância do programaPrincipal para realizar
      *            suas funções
+     * @param janelaDoBook uma instância da janelaDoBook para ele poder ser
+     *            acessada através do menu principal.
      * 
      */
     public JanelaPrincipal( String títuloDaJanela,
-            ProgramaPrincipal programaPrincipal )
+            ProgramaPrincipal programaPrincipal, JanelaDoBook janelaDoBook )
     {
         super( títuloDaJanela );
-        this.janelaDoBook = new JanelaDoBook();
+        this.janelaDoBook = janelaDoBook;
         
         // Cria o painelJanelaPrincipal
         this.painelJanelaPrincipal =
