@@ -60,18 +60,19 @@ public class DriverClass
     {
         // Inicializa as interfaces gráficas para se realizar os testes.
         DriverClass.programaPrincipal = ProgramaPrincipal.getInstance();
-        DriverClass.janelaPrincipal = ProgramaPrincipal.getJanelaPrincipal();
         DriverClass.janelaDoBook = JanelaDoBook.getInstance();
         
-        DriverClass.testarBookDeOfertas();
+        DriverClass.testarBookDeOfertas( programaPrincipal.contasTeste );
     }
     
     /**
      * Realiza teste na interface do book de ofertas.
+     * 
+     * @param contasTeste um ArrayList< Conta > com as contas para testar
      */
-    public static void testarBookDeOfertas()
+    public static void testarBookDeOfertas( ArrayList< Conta > contasTeste )
     {
-        for( Conta conta: programaPrincipal.contasTeste )
+        for( Conta conta: contasTeste )
         {
             ArrayList< Ação > listaDeAções =
                     conta.getInventario().getListaDeAções();

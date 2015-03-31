@@ -75,12 +75,15 @@ public class ProgramaPrincipal
         
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
+        
+        // Cria ofertas de compra e venda para fíctícias
+        
     }
     
     /**
      * @return janelaPrincipal a janelaPrincipal deste programa.
      */
-    public static JanelaPrincipal getJanelaPrincipal()
+    private static JanelaPrincipal getJanelaPrincipal()
     {
         if( janelaPrincipal == null )
         {
@@ -103,6 +106,7 @@ public class ProgramaPrincipal
         {
             return new ProgramaPrincipal();
         }
+        janelaPrincipal = getJanelaPrincipal();
         return ProgramaPrincipal.INSTANCE;
     }
     
