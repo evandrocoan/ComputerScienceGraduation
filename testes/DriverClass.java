@@ -130,6 +130,9 @@ public class DriverClass
             String senha )
     {
         ArrayList< Conta > contasTeste = new ArrayList<>();
+        contasTeste.add( new Conta( "admin", "admin",
+                2000.5 * homeBroker.Biblioteca.gerarNumeroAleatorio(), true,
+                new Inventario() ) );
         
         for( int i = 0; i < quantidade; i++ )
         {
