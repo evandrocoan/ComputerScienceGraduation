@@ -35,6 +35,7 @@ import javax.swing.SpringLayout;
  */
 public class DriverClass
 {
+    private static boolean DEBUG = false;
     /**
      * 
      */
@@ -74,7 +75,7 @@ public class DriverClass
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        if( ProgramaPrincipal.DEBUG )
+        if( ProgramaPrincipal.DEBUG || DriverClass.DEBUG )
         {
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
@@ -134,6 +135,8 @@ public class DriverClass
                 2000.5 * homeBroker.Biblioteca.gerarNumeroAleatorio(), true,
                 new Inventario() ) );
         
+        DriverClass.criarInventarioFicticio( contasTeste.get( 0 ), quantidade );
+        
         for( int i = 0; i < quantidade; i++ )
         {
             Conta contaTeste =
@@ -146,7 +149,7 @@ public class DriverClass
             
             contasTeste.add( contaTeste );
         }
-        if( ProgramaPrincipal.DEBUG )
+        if( ProgramaPrincipal.DEBUG || DriverClass.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou em criarContasFictícias "
