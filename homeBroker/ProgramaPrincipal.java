@@ -23,7 +23,7 @@ public class ProgramaPrincipal
     /**
      * Janela principal que contém a interface gráfica inicial do programa.
      */
-    public static JanelaPrincipal janelaPrincipal;
+    private static JanelaPrincipal janelaPrincipal;
     
     /**
      * 
@@ -48,12 +48,14 @@ public class ProgramaPrincipal
     public ArrayList< Conta > contasTeste;
     
     /**
-     * Define se os programa executará em mode de DEBUG.
+     * Define se o programa executará em mode de DEBUG.
      */
     public static final boolean DEBUG = false;
     
     /**
-     * Construtor que inicializa a janela principal.
+     * Construtor que inicializa a o programa principal e implementa o padrão
+     * sigleton. O atributo JanelaPrincipal.janelaPricipal não é inicializado
+     * devio a sua construção necessitar de um objeto deste construtor.
      */
     private ProgramaPrincipal()
     {
@@ -73,6 +75,20 @@ public class ProgramaPrincipal
         
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
+    }
+    
+    /**
+     * @return janelaPrincipal a janelaPrincipal deste programa.
+     */
+    public static JanelaPrincipal getJanelaPrincipal()
+    {
+        if( janelaPrincipal == null )
+        {
+            janelaPrincipal =
+                    new JanelaPrincipal( "HomeBroker Tabajara",
+                            ProgramaPrincipal.getInstance(), janelaDoBook );
+        }
+        return janelaPrincipal;
     }
     
     /**

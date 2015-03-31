@@ -47,6 +47,11 @@ public class DriverClass
     public static JanelaDoBook janelaDoBook;
     
     /**
+     * 
+     */
+    public static JanelaPrincipal janelaPrincipal;
+    
+    /**
      * Método principal que inicia a execução dos testes
      * 
      * @param args os argumentos passados por linha de comando
@@ -55,6 +60,7 @@ public class DriverClass
     {
         // Inicializa as interfaces gráficas para se realizar os testes.
         DriverClass.programaPrincipal = ProgramaPrincipal.getInstance();
+        DriverClass.janelaPrincipal = ProgramaPrincipal.getJanelaPrincipal();
         DriverClass.janelaDoBook = JanelaDoBook.getInstance();
         
         DriverClass.testarBookDeOfertas();
@@ -80,9 +86,6 @@ public class DriverClass
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
         }
-        ProgramaPrincipal.janelaPrincipal =
-                new JanelaPrincipal( "HomeBroker Tabajara", programaPrincipal,
-                        janelaDoBook );
     }
     
     /**
