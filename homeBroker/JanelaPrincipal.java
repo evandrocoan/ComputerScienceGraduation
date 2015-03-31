@@ -50,9 +50,10 @@ public class JanelaPrincipal extends JFrame
         // Cria o painelJanelaPrincipal
         this.painelJanelaPrincipal =
                 new PainelJanelaPrincipal( programaPrincipal );
+        this.painelJanelaPrincipal.setDoubleBuffered( true );
         
         // Adiciona o painelJanelaPrincipal na janelaPrincipal
-        this.add( this.painelJanelaPrincipal.getPainelPrincipal() );
+        this.add( this.painelJanelaPrincipal );
         
         // Used to close the JFrame graciously.
         this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
@@ -75,7 +76,6 @@ public class JanelaPrincipal extends JFrame
     {
         private ProgramaPrincipal programaPrincipal;
         
-        private JPanel painelPrincipal;
         private JTextField caixaDeTextoPrincipal;
         private JButton botãoPrincipal;
         private JTextArea comandosDisponíveis;
@@ -90,7 +90,6 @@ public class JanelaPrincipal extends JFrame
             this.programaPrincipal = programaPrincipal;
             
             // Cria os compomentos
-            this.painelPrincipal = new JPanel( true );
             this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
             this.botãoPrincipal = this.botãoPrincipal();
             this.comandosDisponíveis =
@@ -107,27 +106,14 @@ public class JanelaPrincipal extends JFrame
             this.comandosDisponíveis.setFocusable( false );
             
             // Adiciona os componentes ao painel principal
-            this.painelPrincipal.add( this.botãoPrincipal, BorderLayout.WEST );
+            this.add( this.botãoPrincipal, BorderLayout.WEST );
             
-            this.painelPrincipal.add( this.caixaDeTextoPrincipal,
-                    BorderLayout.SOUTH );
+            this.add( this.caixaDeTextoPrincipal, BorderLayout.SOUTH );
             
-            this.painelPrincipal.add( this.comandosDisponíveis,
-                    BorderLayout.EAST );
+            this.add( this.comandosDisponíveis, BorderLayout.EAST );
             
-            Biblioteca.trocarFontes( this.painelPrincipal, new Font( getName(),
-                    Frame.NORMAL, 20 ) );
-        }
-        
-        /**
-         * Retorna o paineilPrincipal construído.
-         * 
-         * @return painelPrincipal o painelPrincipal quem com os componemtes
-         *         principais.
-         */
-        public JPanel getPainelPrincipal()
-        {
-            return this.painelPrincipal;
+            Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL,
+                    20 ) );
         }
         
         /**
