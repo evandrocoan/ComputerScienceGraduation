@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homeBroker;
+package homebroker;
 
 /**
  * Representa uma oferta de venta ou compra.

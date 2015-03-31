@@ -1,7 +1,7 @@
 /**
  * Pacote que contém a classe principal de testes.
  */
-package testes;
+package testes.interfaces.gráficas;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
