@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -34,15 +35,19 @@ public class JanelaPrincipal extends JFrame
      * Construtor que cria a janela principal do programa.
      * 
      * @param títuloDaJanela o títuloDaJanela que será criada.
+     * @param programaPrincipal uma instância do programaPrincipal para realizar
+     *            suas funções
+     * 
      */
-    public JanelaPrincipal( String títuloDaJanela )
+    public JanelaPrincipal( String títuloDaJanela,
+            ProgramaPrincipal programaPrincipal )
     {
         super( títuloDaJanela );
         this.janelaDoBook = new JanelaDoBook();
         
         // Cria o painelJanelaPrincipal
         this.painelJanelaPrincipal =
-                new PainelJanelaPrincipal( ProgramaPrincipal.getInstance() );
+                new PainelJanelaPrincipal( programaPrincipal );
         
         // Adiciona o painelJanelaPrincipal na janelaPrincipal
         this.add( this.painelJanelaPrincipal.getPainelPrincipal() );
@@ -170,6 +175,11 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
+                    if( PainelJanelaPrincipal.this.programaPrincipal == null )
+                    {
+                        JOptionPane.showMessageDialog( null,
+                                "programaPrincipal é null!" );
+                    }
                     PainelJanelaPrincipal.this.programaPrincipal
                             .menuPrincipal( caixaDeTextoPrincipal.getText() );
                 }

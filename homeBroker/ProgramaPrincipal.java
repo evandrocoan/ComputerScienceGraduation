@@ -19,12 +19,12 @@ public class ProgramaPrincipal
     /**
      * Está é a única instância da classe principal.
      */
-    private static final ProgramaPrincipal INSTANCE = new ProgramaPrincipal();
+    private static ProgramaPrincipal INSTANCE;
     
     /**
      * Janela principal que contém a interface gráfica inicial do programa.
      */
-    private static JanelaPrincipal janelaPrincipal;
+    public static JanelaPrincipal janelaPrincipal;
     
     /**
      * 
@@ -53,13 +53,16 @@ public class ProgramaPrincipal
      */
     private ProgramaPrincipal()
     {
+        JOptionPane.showMessageDialog( null,
+                "Estou no construtor de ProgramaPrincipal()" );
+        
         // Liga o book de ofertas
         this.janelaDoBook = new JanelaDoBook();
         this.processoDoBook = new Thread( this.janelaDoBook );
         this.processoDoBook.start();
         
         // Cria contas fictícias
-        this.contasTeste = DriverClass.criarContasFicticia( 150, "123" );
+        this.contasTeste = DriverClass.criarContasFicticia( 5, "123" );
         
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
@@ -73,6 +76,10 @@ public class ProgramaPrincipal
      */
     public static ProgramaPrincipal getInstance()
     {
+        if( ProgramaPrincipal.INSTANCE == null )
+        {
+            return new ProgramaPrincipal();
+        }
         return ProgramaPrincipal.INSTANCE;
     }
     
@@ -98,15 +105,16 @@ public class ProgramaPrincipal
             @Override
             public void run()
             {
-                // Faz login
-                ProgramaPrincipal.INSTANCE.loginNoSistema( null );
+                ProgramaPrincipal programaPrincipal =
+                        ProgramaPrincipal.getInstance();
                 
-                if( ProgramaPrincipal.INSTANCE.contaAutenticada != null )
-                {
-                    // Cria uma janela para a aplicação principal.
-                    ProgramaPrincipal.janelaPrincipal =
-                            new JanelaPrincipal( "HomeBroker Tabajara" );
-                }
+                // Faz login
+                programaPrincipal.loginNoSistema( null );
+                
+                // Cria uma janela para a aplicação principal.
+                ProgramaPrincipal.janelaPrincipal =
+                        new JanelaPrincipal( "HomeBroker Tabajara",
+                                programaPrincipal );
             }
         } );
     }
@@ -118,6 +126,7 @@ public class ProgramaPrincipal
      */
     public Conta criarUsuario()
     {
+        // TODO
         String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
         String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
         Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
@@ -155,11 +164,20 @@ public class ProgramaPrincipal
             JOptionPane.showMessageDialog( ProgramaPrincipal.janelaPrincipal,
                     this.contaAutenticada.getInventario().inventarioToString() );
             break;
+        // TODO
         // case "c":
         // Conta novaConta = Principal.criarUsuario();
         // contasTeste.add( novaConta );
         // break;
         case "m":
+            if( ProgramaPrincipal.janelaPrincipal == null )
+            {
+                JOptionPane.showMessageDialog( null, "janelaPrincipal é null!" );
+            }
+            if( ProgramaPrincipal.janelaPrincipal.janelaDoBook == null )
+            {
+                JOptionPane.showMessageDialog( null, "janelaDoBook é null!" );
+            }
             ProgramaPrincipal.janelaPrincipal.janelaDoBook
                     .exibirBookDeOfertas();
             break;
@@ -238,6 +256,10 @@ public class ProgramaPrincipal
                 }
             }
             inputError = true;
+        }
+        if( login == null )
+        {
+            System.exit( 0 );
         }
         this.contaAutenticada = login;
     }

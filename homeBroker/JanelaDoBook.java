@@ -93,7 +93,7 @@ public class JanelaDoBook extends JFrame implements Runnable
      */
     private void atualizarListaDeOfertas()
     {
-        int indice = this.modeloPadrãoDeLista.getSize() + 1;
+        int indice = this.modeloPadrãoDeLista.getSize();
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
     }

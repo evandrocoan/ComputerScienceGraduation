@@ -37,8 +37,7 @@ public class DriverClass
     /**
      * 
      */
-    public static ProgramaPrincipal programaPrincipal = ProgramaPrincipal
-            .getInstance();
+    public static ProgramaPrincipal programaPrincipal;
     
     /**
      * Método principal que inicia a execução dos testes
@@ -47,13 +46,14 @@ public class DriverClass
      */
     public static void main( String... args )
     {
-        new DriverClass().testarBookDeOfertas();
+        DriverClass.programaPrincipal = ProgramaPrincipal.getInstance();
+        DriverClass.testarBookDeOfertas();
     }
     
     /**
      * Realiza teste na interface do book de ofertas.
      */
-    public void testarBookDeOfertas()
+    public static void testarBookDeOfertas()
     {
         for( Conta conta: programaPrincipal.contasTeste )
         {
@@ -66,9 +66,8 @@ public class DriverClass
             }
         }
         JOptionPane.showMessageDialog( null, "Estou em testarBookDeOfertas" );
-        
-        // Cria uma janela para a aplicação principal.
-        new JanelaPrincipal( "HomeBroker Tabajara" );
+        ProgramaPrincipal.janelaPrincipal =
+                new JanelaPrincipal( "HomeBroker Tabajara", programaPrincipal );
     }
     
     /**
