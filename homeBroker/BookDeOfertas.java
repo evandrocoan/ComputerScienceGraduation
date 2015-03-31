@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class BookDeOfertas
 {
     private static final BookDeOfertas INSTANCE = new BookDeOfertas();
-    
+    private static boolean DEBUG = false;
     private ArrayList< OfertaDoMercado > ofertasDoMercado;
     
     /**
@@ -58,17 +58,23 @@ public class BookDeOfertas
     {
         int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
-        // System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
-        // + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas
-        // + "<" + ultimaOferta + ")" );
+        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        {
+            System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
+                    + ( númeroDeOfertas < ultimaOferta ) + "("
+                    + númeroDeOfertas + "<" + ultimaOferta + ")" );
+        }
         
         if( númeroDeOfertas < ultimaOferta )
         {
             return false;
         }
         
-        // System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
-        // + ( númeroDeOfertas > ultimaOferta ) );
+        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        {
+            System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
+                    + ( númeroDeOfertas > ultimaOferta ) );
+        }
         
         return númeroDeOfertas > ultimaOferta;
     }
@@ -89,7 +95,12 @@ public class BookDeOfertas
                         + ofertaDoMercado.getAçãoEmOferta().getPreço()
                         + " - Quantidade: "
                         + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
-        System.out.println( açãoEmOferta );
+        
+        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        {
+            System.out.println( açãoEmOferta );
+        }
+        
         return açãoEmOferta;
     }
 }
