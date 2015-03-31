@@ -55,6 +55,15 @@ public class JanelaDoBook extends JFrame implements Runnable
     {
         while( true )
         {
+            // JOptionPane
+            // .showMessageDialog(
+            // null,
+            // "Estou em JanelaDoBook chamando o teste \n\n"
+            // + "this.bookDeOfertas.existemNovasOfertas( "
+            // + "this.modeloPadrãoDeLista.getSize() ) = "
+            // + this.bookDeOfertas
+            // .existemNovasOfertas( this.modeloPadrãoDeLista
+            // .getSize() ) );
             if( this.bookDeOfertas
                     .existemNovasOfertas( this.modeloPadrãoDeLista.getSize() ) )
             {
@@ -96,6 +105,7 @@ public class JanelaDoBook extends JFrame implements Runnable
         int indice = this.modeloPadrãoDeLista.getSize();
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
+        System.out.println( ofertaDoMercado );
     }
     
     /**

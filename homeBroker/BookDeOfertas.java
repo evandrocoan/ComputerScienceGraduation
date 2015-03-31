@@ -56,12 +56,20 @@ public class BookDeOfertas
      */
     public boolean existemNovasOfertas( int ultimaOferta )
     {
-        int númeroDeOfertas = this.ofertasDoMercado.size();
+        int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
+        
+        // System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
+        // + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas
+        // + "<" + ultimaOferta + ")" );
         
         if( númeroDeOfertas < ultimaOferta )
         {
             return false;
         }
+        
+        // System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
+        // + ( númeroDeOfertas > ultimaOferta ) );
+        
         return númeroDeOfertas > ultimaOferta;
     }
     
@@ -81,6 +89,7 @@ public class BookDeOfertas
                         + ofertaDoMercado.getAçãoEmOferta().getPreço()
                         + " - Quantidade: "
                         + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
+        System.out.println( açãoEmOferta );
         return açãoEmOferta;
     }
 }
