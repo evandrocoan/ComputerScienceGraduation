@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Inicia a interface gráfica que exibe o book de efertas com as ordens de
  * compra e venda sendo feitas em tempo real.
  * 
- * @author Professional
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class BookDeOfertas
 {

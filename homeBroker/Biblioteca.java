@@ -10,7 +10,7 @@ import java.awt.Font;
 /**
  * Biblioteca de funções para o funcionamento do Homebroker.
  * 
- * @author Professional
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class Biblioteca
 {

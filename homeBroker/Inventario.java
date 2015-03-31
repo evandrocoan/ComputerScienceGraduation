@@ -1,3 +1,6 @@
+/**
+ * Pacote principal que contém o Homebroker.
+ */
 package homeBroker;
 
 import java.util.ArrayList;

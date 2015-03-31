@@ -1,5 +1,5 @@
 /**
- * Pacote que contém a classe principal de testes.
+ * Pacote principal que contém o Homebroker.
  */
 package homeBroker;
 
@@ -11,8 +11,7 @@ import javax.swing.SwingUtilities;
 import testes.DriverClass;
 
 /**
- * @author Professional
- *
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class ProgramaPrincipal
 {
@@ -49,12 +48,20 @@ public class ProgramaPrincipal
     public ArrayList< Conta > contasTeste;
     
     /**
+     * Define se os programa executará em mode de DEBUG.
+     */
+    public static final boolean DEBUG = false;
+    
+    /**
      * Construtor que inicializa a janela principal.
      */
     private ProgramaPrincipal()
     {
-        JOptionPane.showMessageDialog( null,
-                "Estou no construtor de ProgramaPrincipal()" );
+        if( ProgramaPrincipal.DEBUG )
+        {
+            JOptionPane.showMessageDialog( null,
+                    "Estou no construtor de ProgramaPrincipal()" );
+        }
         
         // Liga o book de ofertas
         ProgramaPrincipal.janelaDoBook = JanelaDoBook.getInstance();
@@ -62,7 +69,7 @@ public class ProgramaPrincipal
         this.processoDoBook.start();
         
         // Cria contas fictícias
-        this.contasTeste = DriverClass.criarContasFicticia( 5, "123" );
+        this.contasTeste = DriverClass.criarContasFicticia( 30, "123" );
         
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
@@ -170,13 +177,18 @@ public class ProgramaPrincipal
         // contasTeste.add( novaConta );
         // break;
         case "m":
-            if( ProgramaPrincipal.janelaPrincipal == null )
+            if( ProgramaPrincipal.DEBUG )
             {
-                JOptionPane.showMessageDialog( null, "janelaPrincipal é null!" );
-            }
-            if( ProgramaPrincipal.janelaPrincipal.janelaDoBook == null )
-            {
-                JOptionPane.showMessageDialog( null, "janelaDoBook é null!" );
+                if( ProgramaPrincipal.janelaPrincipal == null )
+                {
+                    JOptionPane.showMessageDialog( null,
+                            "janelaPrincipal é null!" );
+                }
+                if( ProgramaPrincipal.janelaPrincipal.janelaDoBook == null )
+                {
+                    JOptionPane
+                            .showMessageDialog( null, "janelaDoBook é null!" );
+                }
             }
             ProgramaPrincipal.janelaPrincipal.janelaDoBook
                     .exibirBookDeOfertas();

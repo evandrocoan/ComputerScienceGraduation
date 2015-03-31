@@ -74,7 +74,11 @@ public class DriverClass
                 BookDeOfertas.getInstance().adicionarOfertaDeVenda( ação );
             }
         }
-        JOptionPane.showMessageDialog( null, "Estou em testarBookDeOfertas" );
+        if( ProgramaPrincipal.DEBUG )
+        {
+            JOptionPane
+                    .showMessageDialog( null, "Estou em testarBookDeOfertas" );
+        }
         ProgramaPrincipal.janelaPrincipal =
                 new JanelaPrincipal( "HomeBroker Tabajara", programaPrincipal,
                         janelaDoBook );
@@ -139,8 +143,12 @@ public class DriverClass
             
             contasTeste.add( contaTeste );
         }
-        JOptionPane.showMessageDialog( null, "Estou em criarContasFictícias "
-                + contasTeste.get( 0 ).getNome() );
+        if( ProgramaPrincipal.DEBUG )
+        {
+            JOptionPane.showMessageDialog( null,
+                    "Estou em criarContasFictícias "
+                            + contasTeste.get( 0 ).getNome() );
+        }
         return contasTeste;
     }
     

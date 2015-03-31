@@ -1,3 +1,6 @@
+/**
+ * Pacote principal que contém o Homebroker.
+ */
 package homeBroker;
 
 import java.awt.BorderLayout;
@@ -18,12 +21,12 @@ import javax.swing.WindowConstants;
 /**
  * Classe que constrói a interface gráfica do book de ofertas.
  * 
- * @author Professional
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class JanelaDoBook extends JFrame implements Runnable
 {
     private static final JanelaDoBook INSTANCE = new JanelaDoBook();
-    
+    private static boolean DEBUG = false;
     private JPanel contentPane;
     
     private BookDeOfertas bookDeOfertas;
@@ -34,12 +37,13 @@ public class JanelaDoBook extends JFrame implements Runnable
     private JList< String > listaDeOfertas = new JList<>(
             this.modeloPadrãoDeLista );
     
-    /**
-     * 
-     */
     private JanelaDoBook()
     {
-        JOptionPane.showMessageDialog( null, "Sou construtor da JanelaDoBook!" );
+        if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+        {
+            JOptionPane.showMessageDialog( null,
+                    "Estou no construtor da JanelaDoBook!" );
+        }
         this.bookDeOfertas = BookDeOfertas.getInstance();
         
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
@@ -69,15 +73,18 @@ public class JanelaDoBook extends JFrame implements Runnable
     {
         while( true )
         {
-            // JOptionPane
-            // .showMessageDialog(
-            // null,
-            // "Estou em JanelaDoBook chamando o teste \n\n"
-            // + "this.bookDeOfertas.existemNovasOfertas( "
-            // + "this.modeloPadrãoDeLista.getSize() ) = "
-            // + this.bookDeOfertas
-            // .existemNovasOfertas( this.modeloPadrãoDeLista
-            // .getSize() ) );
+            if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+            {
+                JOptionPane
+                        .showMessageDialog(
+                                null,
+                                "Estou em JanelaDoBook chamando o teste \n\n"
+                                        + "this.bookDeOfertas.existemNovasOfertas( "
+                                        + "this.modeloPadrãoDeLista.getSize() ) = "
+                                        + this.bookDeOfertas
+                                                .existemNovasOfertas( this.modeloPadrãoDeLista
+                                                        .getSize() ) );
+            }
             if( this.bookDeOfertas
                     .existemNovasOfertas( this.modeloPadrãoDeLista.getSize() ) )
             {

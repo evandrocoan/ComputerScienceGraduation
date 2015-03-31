@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homeBroker;
 
@@ -23,13 +23,13 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 /**
- * 
- * @author Professional
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class JanelaPrincipal extends JFrame
 {
     private PainelJanelaPrincipal painelJanelaPrincipal;
     protected JanelaDoBook janelaDoBook;
+    private static boolean DEBUG = false;
     
     /**
      * Construtor que cria a janela principal do programa.
@@ -70,7 +70,7 @@ public class JanelaPrincipal extends JFrame
     /**
      * Representa o painel principal da janela principal
      * 
-     * @author Professional
+     * @authors Evandro  Coan, Renan Pinho Assi
      */
     private class PainelJanelaPrincipal extends JPanel
     {
@@ -163,10 +163,13 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( PainelJanelaPrincipal.this.programaPrincipal == null )
+                    if( ProgramaPrincipal.DEBUG || JanelaPrincipal.DEBUG )
                     {
-                        JOptionPane.showMessageDialog( null,
-                                "programaPrincipal é null!" );
+                        if( PainelJanelaPrincipal.this.programaPrincipal == null )
+                        {
+                            JOptionPane.showMessageDialog( null,
+                                    "programaPrincipal é null!" );
+                        }
                     }
                     PainelJanelaPrincipal.this.programaPrincipal
                             .menuPrincipal( caixaDeTextoPrincipal.getText() );

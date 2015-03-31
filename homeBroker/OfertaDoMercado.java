@@ -6,7 +6,7 @@ package homeBroker;
 /**
  * Representa uma oferta de venta ou compra.
  * 
- * @author Professional
+ * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class OfertaDoMercado
 {
