@@ -45,7 +45,7 @@ public class ProgramaPrincipal
      * As contasTeste que serão utilizadas para simular a adição de contas no
      * sistema, isto é, as contas criadas somente existirão temporariamente.
      */
-    public ArrayList< Conta > contasTeste;
+    private ArrayList< Conta > contasTeste;
     
     /**
      * Define se o programa executará em mode de DEBUG.
@@ -77,7 +77,8 @@ public class ProgramaPrincipal
         this.contaAutenticada = this.contasTeste.get( 0 );
         
         // Cria ofertas de compra e venda para fíctícias
-        
+        DriverClass.testarBookDeOfertas( this.contasTeste,
+                BookDeOfertas.getInstance() );
     }
     
     /**
@@ -100,7 +101,7 @@ public class ProgramaPrincipal
      * 
      * @return INSTANCE a única instancia existe da JanelaPrincipal.
      */
-    public static ProgramaPrincipal getInstance()
+    private static ProgramaPrincipal getInstance()
     {
         if( ProgramaPrincipal.INSTANCE == null )
         {
@@ -114,8 +115,8 @@ public class ProgramaPrincipal
      * Método principal que inicia a execução do programa. Este programa não
      * reconhece nenhum tipo de argumento.
      * 
-     * @param args um array de argumentos do tipo String passados por linha de
-     *            comando.
+     * @param args caso receba o argumento 'teste' abre o programa em uma conta
+     *            teste.
      */
     public static void main( String... args )
     {
@@ -136,7 +137,10 @@ public class ProgramaPrincipal
                         ProgramaPrincipal.getInstance();
                 
                 // Faz login
-                programaPrincipal.loginNoSistema( null );
+                if( args.length == 0 )
+                {
+                    programaPrincipal.loginNoSistema( null );
+                }
                 
                 // Cria uma janela para a aplicação principal.
                 ProgramaPrincipal.janelaPrincipal =
