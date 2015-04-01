@@ -137,9 +137,22 @@ public class ProgramaPrincipal
                         ProgramaPrincipal.getInstance();
                 
                 // Faz login
-                if( args.length == 0 )
+                if( args == null || args.length == 0 )
                 {
                     programaPrincipal.loginNoSistema( null );
+                } else
+                {
+                    for( int i = 0; i < args.length; i++ )
+                    {
+                        switch( args[i] )
+                        {
+                        case "teste":
+                            System.out.println( "Sessão de teste!" );
+                            break;
+                        default:
+                            break;
+                        }
+                    }
                 }
                 
                 // Cria uma janela para a aplicação principal.
