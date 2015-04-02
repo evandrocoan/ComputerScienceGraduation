@@ -124,9 +124,6 @@ public class ProgramaPrincipal
          * Here we are Secheduling a JOB for Event Dispatcher Thread, since
          * Swing is not Thread Safe. This is used to place the code which is
          * responsible for creating and diaplaying your GUI.
-         * 
-         * Também serve para se livrar o modificador static, assim entrar em um
-         * contexto do objeto this.
          */
         SwingUtilities.invokeLater( new Runnable()
         {
