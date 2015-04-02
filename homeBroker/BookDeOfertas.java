@@ -58,7 +58,7 @@ public class BookDeOfertas
     {
         int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
-        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
                     + ( númeroDeOfertas < ultimaOferta ) + "("
@@ -70,7 +70,7 @@ public class BookDeOfertas
             return false;
         }
         
-        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
                     + ( númeroDeOfertas > ultimaOferta ) );
@@ -96,7 +96,7 @@ public class BookDeOfertas
                         + " - Quantidade: "
                         + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
         
-        if( ProgramaPrincipal.DEBUG || BookDeOfertas.DEBUG )
+        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( açãoEmOferta );
         }

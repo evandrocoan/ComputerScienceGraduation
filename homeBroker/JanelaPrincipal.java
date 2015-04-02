@@ -163,7 +163,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( ProgramaPrincipal.DEBUG || JanelaPrincipal.DEBUG )
+                    if( ProgramaPrincipal.isDebug() || JanelaPrincipal.DEBUG )
                     {
                         if( PainelJanelaPrincipal.this.programaPrincipal == null )
                         {

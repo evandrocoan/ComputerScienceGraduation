@@ -39,7 +39,7 @@ public class JanelaDoBook extends JFrame implements Runnable
     
     private JanelaDoBook()
     {
-        if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+        if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
@@ -73,7 +73,7 @@ public class JanelaDoBook extends JFrame implements Runnable
     {
         while( true )
         {
-            if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+            if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
             {
                 String texto =
                         "Estou em JanelaDoBook chamando o teste \n\n"
@@ -128,7 +128,7 @@ public class JanelaDoBook extends JFrame implements Runnable
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
         
-        if( ProgramaPrincipal.DEBUG || JanelaDoBook.DEBUG )
+        if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
         {
             System.out.println( ofertaDoMercado );
         }

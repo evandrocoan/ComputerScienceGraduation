@@ -64,7 +64,7 @@ public class DriverClass
                 bookDeOfertas.adicionarOfertaDeVenda( ação );
             }
         }
-        if( ProgramaPrincipal.DEBUG || DriverClass.DEBUG )
+        if( ProgramaPrincipal.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
@@ -125,7 +125,7 @@ public class DriverClass
             
             contasTeste.add( contaTeste );
         }
-        if( ProgramaPrincipal.DEBUG || DriverClass.DEBUG )
+        if( ProgramaPrincipal.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou em criarContasFictícias "

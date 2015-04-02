@@ -50,7 +50,7 @@ public class ProgramaPrincipal
     /**
      * Define se o programa executará em mode de DEBUG.
      */
-    public static final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
     
     /**
      * Construtor que inicializa a o programa principal e implementa o padrão
@@ -59,7 +59,7 @@ public class ProgramaPrincipal
      */
     private ProgramaPrincipal()
     {
-        if( ProgramaPrincipal.DEBUG )
+        if( ProgramaPrincipal.isDebug() )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
@@ -109,6 +109,17 @@ public class ProgramaPrincipal
         }
         janelaPrincipal = getJanelaPrincipal();
         return ProgramaPrincipal.INSTANCE;
+    }
+    
+    /**
+     * Informa se o programa executará em modo de debug
+     * 
+     * @return true se o programa será executado em mode debug, false caso
+     *         contrário.
+     */
+    public static boolean isDebug()
+    {
+        return DEBUG;
     }
     
     /**
@@ -165,7 +176,7 @@ public class ProgramaPrincipal
      * 
      * @return conta a conta criada
      */
-    public Conta criarUsuario()
+    Conta criarUsuario()
     {
         // TODO
         String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
@@ -182,7 +193,7 @@ public class ProgramaPrincipal
      * 
      * @param commando o comando inserido pelo usuário
      */
-    public void menuPrincipal( String commando )
+    void menuPrincipal( String commando )
     {
         if( commando == null )
         {
@@ -211,7 +222,7 @@ public class ProgramaPrincipal
         // contasTeste.add( novaConta );
         // break;
         case "m":
-            if( ProgramaPrincipal.DEBUG )
+            if( ProgramaPrincipal.isDebug() )
             {
                 if( ProgramaPrincipal.janelaPrincipal == null )
                 {
@@ -246,7 +257,7 @@ public class ProgramaPrincipal
      *            ela serve para exibir quais contas estão disponiveis para
      *            login e sua senha
      */
-    public void loginNoSistema( String dica )
+    private void loginNoSistema( String dica )
     {
         Conta login = null;
         String command = " ", usuario = " ", senha = " ";
