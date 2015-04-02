@@ -76,7 +76,7 @@ public class ProgramaPrincipal
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
         
-        // Cria ofertas de compra e venda para fíctícias
+        // Cria ofertas de compra e venda fictícias
         DriverClass.testarBookDeOfertas( this.contasTeste,
                 BookDeOfertas.getInstance() );
     }
