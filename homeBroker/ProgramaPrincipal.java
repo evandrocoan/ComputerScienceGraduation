@@ -15,19 +15,8 @@ import testes.DriverClass;
  */
 public class ProgramaPrincipal
 {
-    /**
-     * Está é a única instância da classe principal.
-     */
     private static ProgramaPrincipal INSTANCE;
-    
-    /**
-     * Janela principal que contém a interface gráfica inicial do programa.
-     */
     private static JanelaPrincipal janelaPrincipal;
-    
-    /**
-     * 
-     */
     private static MotorDoBook motorDoBook;
     
     /**
@@ -51,6 +40,17 @@ public class ProgramaPrincipal
      * Define se o programa executará em mode de DEBUG.
      */
     private static final boolean DEBUG = false;
+    
+    /**
+     * Informa se o programa executará em modo de debug
+     * 
+     * @return true se o programa será executado em mode debug, false caso
+     *         contrário.
+     */
+    public static boolean isDebug()
+    {
+        return DEBUG;
+    }
     
     /**
      * Construtor que inicializa a o programa principal e implementa o padrão
@@ -82,20 +82,6 @@ public class ProgramaPrincipal
     }
     
     /**
-     * @return janelaPrincipal a janelaPrincipal deste programa.
-     */
-    private static JanelaPrincipal getJanelaPrincipal()
-    {
-        if( janelaPrincipal == null )
-        {
-            janelaPrincipal =
-                    new JanelaPrincipal( "HomeBroker Tabajara",
-                            ProgramaPrincipal.getInstance(), motorDoBook );
-        }
-        return janelaPrincipal;
-    }
-    
-    /**
      * Serve para implementação do padrão de projeto singleton. Retorna a única
      * instancia existe da JanelaPrincipal.
      * 
@@ -105,21 +91,9 @@ public class ProgramaPrincipal
     {
         if( ProgramaPrincipal.INSTANCE == null )
         {
-            return new ProgramaPrincipal();
+            ProgramaPrincipal.INSTANCE = new ProgramaPrincipal();
         }
-        janelaPrincipal = getJanelaPrincipal();
         return ProgramaPrincipal.INSTANCE;
-    }
-    
-    /**
-     * Informa se o programa executará em modo de debug
-     * 
-     * @return true se o programa será executado em mode debug, false caso
-     *         contrário.
-     */
-    public static boolean isDebug()
-    {
-        return DEBUG;
     }
     
     /**
@@ -130,6 +104,27 @@ public class ProgramaPrincipal
      */
     public static void main( String... args )
     {
+        ProgramaPrincipal programaPrincipal = ProgramaPrincipal.getInstance();
+        
+        // Faz login
+        if( args == null || args.length == 0 )
+        {
+            programaPrincipal.loginNoSistema( null );
+        } else
+        {
+            for( int i = 0; i < args.length; i++ )
+            {
+                switch( args[i] )
+                {
+                case "teste":
+                    System.out.println( "Sessão de teste!" );
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        
         /*
          * Here we are Secheduling a JOB for Event Dispatcher Thread, since
          * Swing is not Thread Safe. This is used to place the code which is
@@ -140,32 +135,9 @@ public class ProgramaPrincipal
             @Override
             public void run()
             {
-                ProgramaPrincipal programaPrincipal =
-                        ProgramaPrincipal.getInstance();
-                
-                // Faz login
-                if( args == null || args.length == 0 )
-                {
-                    programaPrincipal.loginNoSistema( null );
-                } else
-                {
-                    for( int i = 0; i < args.length; i++ )
-                    {
-                        switch( args[i] )
-                        {
-                        case "teste":
-                            System.out.println( "Sessão de teste!" );
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                }
-                
-                // Cria uma janela para a aplicação principal.
-                ProgramaPrincipal.janelaPrincipal =
-                        new JanelaPrincipal( "HomeBroker Tabajara",
-                                programaPrincipal, motorDoBook );
+                janelaPrincipal =
+                        JanelaPrincipal.getJanelaPrincipal( programaPrincipal,
+                                motorDoBook );
             }
         } );
     }

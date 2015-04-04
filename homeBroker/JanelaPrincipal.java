@@ -27,6 +27,8 @@ import javax.swing.WindowConstants;
  */
 public class JanelaPrincipal extends JFrame
 {
+    private static JanelaPrincipal INSTÂNCIA_DA_JANELA_PRINCIPAL;
+    
     private PainelJanelaPrincipal painelJanelaPrincipal;
     
     protected MotorDoBook janelaDoBook;
@@ -34,19 +36,36 @@ public class JanelaPrincipal extends JFrame
     private static boolean DEBUG = false;
     
     /**
+     * Implementa a criação de uma única janela principal.
+     * 
+     * @param programaPrincipal uma instância do programa principal.
+     * @param motorDoBook uma instância do motor do book.
+     * @return INSTÂNCIA_DA_JANELA_PRINCIPAL uma instância da janela principal.
+     */
+    public static JanelaPrincipal getJanelaPrincipal(
+            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
+    {
+        if( INSTÂNCIA_DA_JANELA_PRINCIPAL == null )
+        {
+            return new JanelaPrincipal( programaPrincipal, motorDoBook );
+        }
+        
+        return INSTÂNCIA_DA_JANELA_PRINCIPAL;
+    }
+    
+    /**
      * Construtor que cria a janela principal do programa.
      * 
-     * @param títuloDaJanela o títuloDaJanela que será criada.
      * @param programaPrincipal uma instância do programaPrincipal para realizar
      *            suas funções
      * @param motorDoBook uma instância da janelaDoBook para ele poder ser
      *            acessada através do menu principal.
      * 
      */
-    public JanelaPrincipal( String títuloDaJanela,
-            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
+    private JanelaPrincipal( ProgramaPrincipal programaPrincipal,
+            MotorDoBook motorDoBook )
     {
-        super( títuloDaJanela );
+        super( "HomeBroker Tabajara" );
         this.janelaDoBook = motorDoBook;
         
         // Cria o painelJanelaPrincipal
