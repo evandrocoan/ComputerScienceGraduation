@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebrokerr;
+package homebroker;
 
 /**
  * Representa uma conta de um usário/administrador em um homebroker.

@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebrokerr;
+package homebroker;
 
 import javax.swing.JOptionPane;
 
