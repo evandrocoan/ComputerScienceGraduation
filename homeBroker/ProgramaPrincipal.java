@@ -28,7 +28,7 @@ public class ProgramaPrincipal
     /**
      * 
      */
-    private static JanelaDoBook janelaDoBook;
+    private static MotorDoBook motorDoBook;
     
     /**
      * Processo que mantém o book de ofertas funcionando enquanto a interface
@@ -66,8 +66,8 @@ public class ProgramaPrincipal
         }
         
         // Liga o book de ofertas
-        ProgramaPrincipal.janelaDoBook = JanelaDoBook.getInstance();
-        this.processoDoBook = new Thread( ProgramaPrincipal.janelaDoBook );
+        ProgramaPrincipal.motorDoBook = MotorDoBook.getInstance();
+        this.processoDoBook = new Thread( ProgramaPrincipal.motorDoBook );
         this.processoDoBook.start();
         
         // Cria contas fictícias
@@ -90,7 +90,7 @@ public class ProgramaPrincipal
         {
             janelaPrincipal =
                     new JanelaPrincipal( "HomeBroker Tabajara",
-                            ProgramaPrincipal.getInstance(), janelaDoBook );
+                            ProgramaPrincipal.getInstance(), motorDoBook );
         }
         return janelaPrincipal;
     }
@@ -123,8 +123,7 @@ public class ProgramaPrincipal
     }
     
     /**
-     * Método principal que inicia a execução do programa. Este programa não
-     * reconhece nenhum tipo de argumento.
+     * Método principal que inicia a execução do programa.
      * 
      * @param args caso receba o argumento 'teste' abre o programa em uma conta
      *            teste.
@@ -166,7 +165,7 @@ public class ProgramaPrincipal
                 // Cria uma janela para a aplicação principal.
                 ProgramaPrincipal.janelaPrincipal =
                         new JanelaPrincipal( "HomeBroker Tabajara",
-                                programaPrincipal, janelaDoBook );
+                                programaPrincipal, motorDoBook );
             }
         } );
     }

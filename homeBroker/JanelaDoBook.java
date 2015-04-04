@@ -23,19 +23,14 @@ import javax.swing.WindowConstants;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class JanelaDoBook extends JFrame implements Runnable
+public class JanelaDoBook extends JFrame
 {
-    private static final JanelaDoBook INSTANCE = new JanelaDoBook();
+    private static final JanelaDoBook INSTÂNCIA_JANELA_DO_BOOK =
+            new JanelaDoBook();
+    
     private static boolean DEBUG = false;
-    private JPanel contentPane;
     
-    private BookDeOfertas bookDeOfertas;
-    
-    private DefaultListModel< String > modeloPadrãoDeLista =
-            new DefaultListModel<>();
-    
-    private JList< String > listaDeOfertas = new JList<>(
-            this.modeloPadrãoDeLista );
+    private PainelPrincipal painelPrincipal;
     
     private JanelaDoBook()
     {
@@ -44,63 +39,9 @@ public class JanelaDoBook extends JFrame implements Runnable
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
         }
-        this.bookDeOfertas = BookDeOfertas.getInstance();
         
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-        this.setBounds( 500, 500, 500, 500 );
-        this.contentPane = new JPanel();
-        this.contentPane.setLayout( new GridLayout( 0, 1 ) );
-        this.setContentPane( this.contentPane );
-        this.configurarJanela();
-    }
-    
-    /**
-     * @return the instance
-     */
-    public static JanelaDoBook getInstance()
-    {
-        return INSTANCE;
-    }
-    
-    /**
-     * Implementa uma thread que atualiza o book de ofertas em intervalos de
-     * 1000 milisegundos caso haja mudanças.
-     * 
-     * @see java.lang.Runnable#run()
-     */
-    @Override
-    public void run()
-    {
-        while( true )
-        {
-            if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
-            {
-                String texto =
-                        "Estou em JanelaDoBook chamando o teste \n\n"
-                                + "this.bookDeOfertas.existemNovasOfertas( "
-                                + "this.modeloPadrãoDeLista.getSize() ) = "
-                                + this.bookDeOfertas
-                                        .existemNovasOfertas( this.modeloPadrãoDeLista
-                                                .getSize() );
-                JOptionPane.showMessageDialog( null, texto );
-            }
-            if( this.bookDeOfertas
-                    .existemNovasOfertas( this.modeloPadrãoDeLista.getSize() ) )
-            {
-                this.atualizarListaDeOfertas();
-            }
-            try
-            {
-                Thread.sleep( 200 );
-            } catch( InterruptedException e )
-            {
-                // TODO
-            }
-        }
-    }
-    
-    private void configurarJanela()
-    {
+        
         Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int) tamanhoDaJanela.getWidth();
         int height = (int) tamanhoDaJanela.getHeight();
@@ -113,32 +54,70 @@ public class JanelaDoBook extends JFrame implements Runnable
         this.setBounds( 50, 50, width - 100, height - 100 );
         this.setVisible( false );
         
-        JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
-        this.add( painelRolável, BorderLayout.CENTER );
+        this.painelPrincipal = new PainelPrincipal();
+        this.setContentPane( this.painelPrincipal );
         
-        Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL, 30 ) );
+        Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL, 24 ) );
     }
     
     /**
-     * Atualiza a lista de ofertas do book de ofertas.
+     * @return the instance
      */
-    private void atualizarListaDeOfertas()
+    public static JanelaDoBook getInstance()
     {
-        int indice = this.modeloPadrãoDeLista.getSize();
-        String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
-        this.modeloPadrãoDeLista.addElement( ofertaDoMercado );
-        
-        if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
-        {
-            System.out.println( ofertaDoMercado );
-        }
+        return INSTÂNCIA_JANELA_DO_BOOK;
     }
     
     /**
+     * @return númeroDeOfertas o número de ofertas já inseridas no book de
+     *         ofertas.
+     */
+    public int getNúmeroDeOfertas()
+    {
+        return this.painelPrincipal.modeloPadrãoDeLista.getSize();
+    }
+    
+    /**
+     * Adiciona uma oferta de mercado ao book de ofertas.
      * 
+     * @param ofertaDeMercado uma String representando a oferta de mercado para
+     *            se adicionar ao book de ofertas. Os caracteres de quebra de
+     *            linhas desta String serão ignorados.
      */
-    public void exibirBookDeOfertas()
+    public void adicionarOfertaDeMercado( String ofertaDeMercado )
     {
-        this.setVisible( true );
+        this.painelPrincipal.modeloPadrãoDeLista.addElement( ofertaDeMercado );
+    }
+    
+    /**
+     * Classe que constrói a interface gráfica do book de ofertas.
+     * 
+     * @authors Evandro  Coan, Renan Pinho Assi
+     */
+    private class PainelPrincipal extends JPanel
+    {
+        private DefaultListModel< String > modeloPadrãoDeLista =
+                new DefaultListModel<>();
+        
+        private JList< String > listaDeOfertas = new JList<>(
+                this.modeloPadrãoDeLista );
+        
+        private PainelPrincipal()
+        {
+            if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
+            {
+                JOptionPane
+                        .showMessageDialog( null,
+                                "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+            }
+            
+            this.setLayout( new GridLayout( 0, 1 ) );
+            this.setSize( super.getSize() );
+            this.setPreferredSize( super.getSize() );
+            this.setVisible( true );
+            
+            JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
+            this.add( painelRolável, BorderLayout.CENTER );
+        }
     }
 }

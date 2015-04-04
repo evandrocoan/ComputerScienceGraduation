@@ -28,7 +28,9 @@ import javax.swing.WindowConstants;
 public class JanelaPrincipal extends JFrame
 {
     private PainelJanelaPrincipal painelJanelaPrincipal;
-    protected JanelaDoBook janelaDoBook;
+    
+    protected MotorDoBook janelaDoBook;
+    
     private static boolean DEBUG = false;
     
     /**
@@ -37,15 +39,15 @@ public class JanelaPrincipal extends JFrame
      * @param títuloDaJanela o títuloDaJanela que será criada.
      * @param programaPrincipal uma instância do programaPrincipal para realizar
      *            suas funções
-     * @param janelaDoBook uma instância da janelaDoBook para ele poder ser
+     * @param motorDoBook uma instância da janelaDoBook para ele poder ser
      *            acessada através do menu principal.
      * 
      */
     public JanelaPrincipal( String títuloDaJanela,
-            ProgramaPrincipal programaPrincipal, JanelaDoBook janelaDoBook )
+            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
     {
         super( títuloDaJanela );
-        this.janelaDoBook = janelaDoBook;
+        this.janelaDoBook = motorDoBook;
         
         // Cria o painelJanelaPrincipal
         this.painelJanelaPrincipal =
