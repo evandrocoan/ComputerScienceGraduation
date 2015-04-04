@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebrokerr;
 
 import java.util.ArrayList;
 
@@ -61,7 +61,7 @@ public class BookDeOfertas
     {
         int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
-        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
+        if( Homebroker.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
                     + ( númeroDeOfertas < ultimaOferta ) + "("
@@ -73,7 +73,7 @@ public class BookDeOfertas
             return false;
         }
         
-        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
+        if( Homebroker.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
                     + ( númeroDeOfertas > ultimaOferta ) );
@@ -99,7 +99,7 @@ public class BookDeOfertas
                         + " - Quantidade: "
                         + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
         
-        if( ProgramaPrincipal.isDebug() || BookDeOfertas.DEBUG )
+        if( Homebroker.isDebug() || BookDeOfertas.DEBUG )
         {
             System.out.println( açãoEmOferta );
         }

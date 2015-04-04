@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebrokerr;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -36,7 +36,7 @@ public class JanelaDoBook extends JFrame
     
     private JanelaDoBook()
     {
-        if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
+        if( Homebroker.isDebug() || JanelaDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
@@ -109,7 +109,7 @@ public class JanelaDoBook extends JFrame
         
         private PainelPrincipal()
         {
-            if( ProgramaPrincipal.isDebug() || JanelaDoBook.DEBUG )
+            if( Homebroker.isDebug() || JanelaDoBook.DEBUG )
             {
                 JOptionPane
                         .showMessageDialog( null,

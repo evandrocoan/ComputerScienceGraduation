@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebrokerr;
 
 import java.util.ArrayList;
 
@@ -15,9 +15,9 @@ import testes.DriverClass;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class ProgramaPrincipal
+public class Homebroker
 {
-    private static ProgramaPrincipal INSTÂNCIA_DO_PROGRAMA;
+    private static Homebroker INSTÂNCIA_DO_PROGRAMA;
     private static JanelaPrincipal janelaPrincipal;
     private static MotorDoBook motorDoBook;
     
@@ -59,9 +59,9 @@ public class ProgramaPrincipal
      * sigleton. O atributo JanelaPrincipal.janelaPricipal não é inicializado
      * devio a sua construção necessitar de um objeto deste construtor.
      */
-    private ProgramaPrincipal()
+    private Homebroker()
     {
-        if( ProgramaPrincipal.isDebug() )
+        if( Homebroker.isDebug() )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
@@ -71,8 +71,8 @@ public class ProgramaPrincipal
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         // Liga o book de ofertas
-        ProgramaPrincipal.motorDoBook = MotorDoBook.getInstance();
-        this.processoDoBook = new Thread( ProgramaPrincipal.motorDoBook );
+        Homebroker.motorDoBook = MotorDoBook.getInstance();
+        this.processoDoBook = new Thread( Homebroker.motorDoBook );
         this.processoDoBook.start();
         
         // Cria contas fictícias
@@ -92,20 +92,20 @@ public class ProgramaPrincipal
      * 
      * @return INSTANCE a única instancia existe da JanelaPrincipal.
      */
-    private static ProgramaPrincipal getInstance()
+    private static Homebroker getInstance()
     {
-        if( ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA == null )
+        if( Homebroker.INSTÂNCIA_DO_PROGRAMA == null )
         {
-            synchronized( ProgramaPrincipal.class )
+            synchronized( Homebroker.class )
             {
-                if( ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA == null )
+                if( Homebroker.INSTÂNCIA_DO_PROGRAMA == null )
                 {
-                    ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA =
-                            new ProgramaPrincipal();
+                    Homebroker.INSTÂNCIA_DO_PROGRAMA =
+                            new Homebroker();
                 }
             }
         }
-        return ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA;
+        return Homebroker.INSTÂNCIA_DO_PROGRAMA;
     }
     
     /**
@@ -116,7 +116,7 @@ public class ProgramaPrincipal
      */
     public static void main( String... args )
     {
-        ProgramaPrincipal programaPrincipal = ProgramaPrincipal.getInstance();
+        Homebroker programaPrincipal = Homebroker.getInstance();
         
         // Faz login
         if( args == null || args.length == 0 )
@@ -192,11 +192,11 @@ public class ProgramaPrincipal
             if( this.contaAutenticada == null )
             {
                 JOptionPane.showMessageDialog(
-                        ProgramaPrincipal.janelaPrincipal, "Não há "
+                        Homebroker.janelaPrincipal, "Não há "
                                 + "nenhuma conta carregada no sistema!" );
                 break;
             }
-            JOptionPane.showMessageDialog( ProgramaPrincipal.janelaPrincipal,
+            JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
                     this.contaAutenticada.getInventario().inventarioToString() );
             break;
         // TODO
@@ -205,24 +205,24 @@ public class ProgramaPrincipal
         // contasTeste.add( novaConta );
         // break;
         case "m":
-            if( ProgramaPrincipal.isDebug() )
+            if( Homebroker.isDebug() )
             {
-                if( ProgramaPrincipal.janelaPrincipal == null )
+                if( Homebroker.janelaPrincipal == null )
                 {
                     JOptionPane.showMessageDialog( null,
                             "janelaPrincipal é null!" );
                 }
-                if( ProgramaPrincipal.janelaPrincipal.janelaDoBook == null )
+                if( Homebroker.janelaPrincipal.janelaDoBook == null )
                 {
                     JOptionPane
                             .showMessageDialog( null, "janelaDoBook é null!" );
                 }
             }
-            ProgramaPrincipal.janelaPrincipal.janelaDoBook
+            Homebroker.janelaPrincipal.janelaDoBook
                     .exibirBookDeOfertas();
             break;
         default:
-            JOptionPane.showMessageDialog( ProgramaPrincipal.janelaPrincipal,
+            JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
                     "Você digitou uma " + "opção inválida!\n\n"
                             + "Digite 's' para fechar o programa.\n"
                             + "Digite 'v' para para ver o inventario\n"

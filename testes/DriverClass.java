@@ -30,12 +30,12 @@
  */
 package testes;
 
-import homebroker.Ação;
-import homebroker.Biblioteca;
-import homebroker.BookDeOfertas;
-import homebroker.Conta;
-import homebroker.Inventario;
-import homebroker.ProgramaPrincipal;
+import homebrokerr.Ação;
+import homebrokerr.Biblioteca;
+import homebrokerr.BookDeOfertas;
+import homebrokerr.Conta;
+import homebrokerr.Homebroker;
+import homebrokerr.Inventario;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -69,7 +69,7 @@ public class DriverClass
      */
     public static void main( String... args )
     {
-        ProgramaPrincipal.main( "teste" );
+        Homebroker.main( "teste" );
     }
     
     /**
@@ -91,7 +91,7 @@ public class DriverClass
                 bookDeOfertas.adicionarOfertaDeVenda( ação );
             }
         }
-        if( ProgramaPrincipal.isDebug() || DriverClass.DEBUG )
+        if( Homebroker.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
@@ -135,7 +135,7 @@ public class DriverClass
     {
         ArrayList< Conta > contasTeste = new ArrayList<>();
         contasTeste.add( new Conta( "admin", "admin",
-                2000.5 * homebroker.Biblioteca.gerarNumeroAleatorio(), true,
+                2000.5 * homebrokerr.Biblioteca.gerarNumeroAleatorio(), true,
                 new Inventario() ) );
         
         DriverClass.criarInventarioFicticio( contasTeste.get( 0 ), quantidade );
@@ -145,14 +145,14 @@ public class DriverClass
             Conta contaTeste =
                     new Conta( "User" + Biblioteca.gerarNumeroAleatorio(),
                             senha,
-                            2000.5 * homebroker.Biblioteca
+                            2000.5 * homebrokerr.Biblioteca
                                     .gerarNumeroAleatorio(), false,
                             new Inventario() );
             DriverClass.criarInventarioFicticio( contaTeste, quantidade );
             
             contasTeste.add( contaTeste );
         }
-        if( ProgramaPrincipal.isDebug() || DriverClass.DEBUG )
+        if( Homebroker.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou em criarContasFictícias "
@@ -172,43 +172,43 @@ public class DriverClass
         for( int i = 0; i < quantidade / 5; i++ )
         {
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 2.2 + homebroker.Biblioteca
-                            .gerarNumeroAleatorio(), 10 + homebroker.Biblioteca
+                    new Ação( 2.2 + homebrokerr.Biblioteca
+                            .gerarNumeroAleatorio(), 10 + homebrokerr.Biblioteca
                             .gerarNumeroAleatorio(), "Tabajara SA"
-                            + homebroker.Biblioteca.gerarNumeroAleatorio() ) );
+                            + homebrokerr.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 22.2 + homebroker.Biblioteca
+                    new Ação( 22.2 + homebrokerr.Biblioteca
                             .gerarNumeroAleatorio(),
-                            100 + homebroker.Biblioteca.gerarNumeroAleatorio(),
+                            100 + homebrokerr.Biblioteca.gerarNumeroAleatorio(),
                             "Tabajara SO"
-                                    + homebroker.Biblioteca
+                                    + homebrokerr.Biblioteca
                                             .gerarNumeroAleatorio() ) );
             
             conta.getInventario()
                     .adicionarAoInventario(
-                            new Ação( 200.2 + homebroker.Biblioteca
+                            new Ação( 200.2 + homebrokerr.Biblioteca
                                     .gerarNumeroAleatorio(),
-                                    1000 + homebroker.Biblioteca
+                                    1000 + homebrokerr.Biblioteca
                                             .gerarNumeroAleatorio(),
                                     "Tabajara SP"
-                                            + homebroker.Biblioteca
+                                            + homebrokerr.Biblioteca
                                                     .gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 2000.2 + homebroker.Biblioteca
+                    new Ação( 2000.2 + homebrokerr.Biblioteca
                             .gerarNumeroAleatorio(),
-                            10000 + homebroker.Biblioteca
+                            10000 + homebrokerr.Biblioteca
                                     .gerarNumeroAleatorio(), "Tabajara ST"
-                                    + homebroker.Biblioteca
+                                    + homebrokerr.Biblioteca
                                             .gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 200006.2 + homebroker.Biblioteca
+                    new Ação( 200006.2 + homebrokerr.Biblioteca
                             .gerarNumeroAleatorio(),
-                            10000 + homebroker.Biblioteca
+                            10000 + homebrokerr.Biblioteca
                                     .gerarNumeroAleatorio(), "Tabajara SS"
-                                    + homebroker.Biblioteca
+                                    + homebrokerr.Biblioteca
                                             .gerarNumeroAleatorio() ) );
         }
     }

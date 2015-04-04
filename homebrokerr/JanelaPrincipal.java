@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebrokerr;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -46,7 +46,7 @@ public class JanelaPrincipal extends JFrame
      *            acessada através do menu principal.
      * 
      */
-    private JanelaPrincipal( ProgramaPrincipal programaPrincipal,
+    private JanelaPrincipal( Homebroker programaPrincipal,
             MotorDoBook motorDoBook )
     {
         super( "HomeBroker Tabajara" );
@@ -85,7 +85,7 @@ public class JanelaPrincipal extends JFrame
      * @return INSTÂNCIA_DA_JANELA_PRINCIPAL uma instância da janela principal.
      */
     public static JanelaPrincipal getJanelaPrincipal(
-            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
+            Homebroker programaPrincipal, MotorDoBook motorDoBook )
     {
         if( INSTÂNCIA_DA_JANELA == null )
         {
@@ -110,7 +110,7 @@ public class JanelaPrincipal extends JFrame
      */
     private class PainelJanelaPrincipal extends JPanel
     {
-        private ProgramaPrincipal programaPrincipal;
+        private Homebroker programaPrincipal;
         
         private JTextField caixaDeTextoPrincipal;
         private JButton botãoPrincipal;
@@ -121,7 +121,7 @@ public class JanelaPrincipal extends JFrame
          * 
          * @param programaPrincipal
          */
-        public PainelJanelaPrincipal( ProgramaPrincipal programaPrincipal )
+        public PainelJanelaPrincipal( Homebroker programaPrincipal )
         {
             this.programaPrincipal = programaPrincipal;
             
@@ -199,7 +199,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( ProgramaPrincipal.isDebug() || JanelaPrincipal.DEBUG )
+                    if( Homebroker.isDebug() || JanelaPrincipal.DEBUG )
                     {
                         if( PainelJanelaPrincipal.this.programaPrincipal == null )
                         {

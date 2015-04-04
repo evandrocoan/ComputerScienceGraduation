@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebrokerr;
 
 import javax.swing.JOptionPane;
 
@@ -25,7 +25,7 @@ public class MotorDoBook implements Runnable
     
     private MotorDoBook()
     {
-        if( ProgramaPrincipal.isDebug() || MotorDoBook.DEBUG )
+        if( Homebroker.isDebug() || MotorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor do MotorDoBook!" );
@@ -57,7 +57,7 @@ public class MotorDoBook implements Runnable
     {
         while( true )
         {
-            if( ProgramaPrincipal.isDebug() || MotorDoBook.DEBUG )
+            if( Homebroker.isDebug() || MotorDoBook.DEBUG )
             {
                 String texto =
                         "Estou em JanelaDoBook chamando o teste \n\n this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook.getNúmeroDeOfertas()"
@@ -90,7 +90,7 @@ public class MotorDoBook implements Runnable
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.janelaDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
         
-        if( ProgramaPrincipal.isDebug() || MotorDoBook.DEBUG )
+        if( Homebroker.isDebug() || MotorDoBook.DEBUG )
         {
             System.out.println( ofertaDoMercado );
         }
