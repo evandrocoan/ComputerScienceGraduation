@@ -11,11 +11,13 @@ import javax.swing.SwingUtilities;
 import testes.DriverClass;
 
 /**
+ * Programa principal que inicia a execução do Homebroker.
+ * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class ProgramaPrincipal
 {
-    private static ProgramaPrincipal INSTANCE;
+    private static ProgramaPrincipal INSTÂNCIA_DO_PROGRAMA;
     private static JanelaPrincipal janelaPrincipal;
     private static MotorDoBook motorDoBook;
     
@@ -64,7 +66,10 @@ public class ProgramaPrincipal
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
         }
-        
+        if( INSTÂNCIA_DO_PROGRAMA != null )
+        {
+            throw new IllegalStateException( "Objeto já instânciado!" );
+        }
         // Liga o book de ofertas
         ProgramaPrincipal.motorDoBook = MotorDoBook.getInstance();
         this.processoDoBook = new Thread( ProgramaPrincipal.motorDoBook );
@@ -89,11 +94,11 @@ public class ProgramaPrincipal
      */
     private static ProgramaPrincipal getInstance()
     {
-        if( ProgramaPrincipal.INSTANCE == null )
+        if( ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA == null )
         {
-            ProgramaPrincipal.INSTANCE = new ProgramaPrincipal();
+            ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA = new ProgramaPrincipal();
         }
-        return ProgramaPrincipal.INSTANCE;
+        return ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA;
     }
     
     /**

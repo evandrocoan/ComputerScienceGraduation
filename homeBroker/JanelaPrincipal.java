@@ -23,35 +23,19 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 /**
+ * Janela principal que contém o programa.
+ * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class JanelaPrincipal extends JFrame
 {
-    private static JanelaPrincipal INSTÂNCIA_DA_JANELA_PRINCIPAL;
+    private static JanelaPrincipal INSTÂNCIA_DA_JANELA;
     
     private PainelJanelaPrincipal painelJanelaPrincipal;
     
     protected MotorDoBook janelaDoBook;
     
     private static boolean DEBUG = false;
-    
-    /**
-     * Implementa a criação de uma única janela principal.
-     * 
-     * @param programaPrincipal uma instância do programa principal.
-     * @param motorDoBook uma instância do motor do book.
-     * @return INSTÂNCIA_DA_JANELA_PRINCIPAL uma instância da janela principal.
-     */
-    public static JanelaPrincipal getJanelaPrincipal(
-            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
-    {
-        if( INSTÂNCIA_DA_JANELA_PRINCIPAL == null )
-        {
-            return new JanelaPrincipal( programaPrincipal, motorDoBook );
-        }
-        
-        return INSTÂNCIA_DA_JANELA_PRINCIPAL;
-    }
     
     /**
      * Construtor que cria a janela principal do programa.
@@ -66,6 +50,11 @@ public class JanelaPrincipal extends JFrame
             MotorDoBook motorDoBook )
     {
         super( "HomeBroker Tabajara" );
+        
+        if( INSTÂNCIA_DA_JANELA != null )
+        {
+            throw new IllegalStateException( "Objeto já instânciado!" );
+        }
         this.janelaDoBook = motorDoBook;
         
         // Cria o painelJanelaPrincipal
@@ -86,6 +75,24 @@ public class JanelaPrincipal extends JFrame
         // Ajusta a janela ao tamanho dos elementos.
         this.pack();
         this.setVisible( true );
+    }
+    
+    /**
+     * Implementa a criação de uma única janela principal.
+     * 
+     * @param programaPrincipal uma instância do programa principal.
+     * @param motorDoBook uma instância do motor do book.
+     * @return INSTÂNCIA_DA_JANELA_PRINCIPAL uma instância da janela principal.
+     */
+    public static JanelaPrincipal getJanelaPrincipal(
+            ProgramaPrincipal programaPrincipal, MotorDoBook motorDoBook )
+    {
+        if( INSTÂNCIA_DA_JANELA == null )
+        {
+            return new JanelaPrincipal( programaPrincipal, motorDoBook );
+        }
+        
+        return INSTÂNCIA_DA_JANELA;
     }
     
     /**

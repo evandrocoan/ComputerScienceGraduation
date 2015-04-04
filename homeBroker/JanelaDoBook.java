@@ -25,8 +25,7 @@ import javax.swing.WindowConstants;
  */
 public class JanelaDoBook extends JFrame
 {
-    private static final JanelaDoBook INSTÂNCIA_JANELA_DO_BOOK =
-            new JanelaDoBook();
+    private static final JanelaDoBook INSTÂNCIA_DA_JANELA = new JanelaDoBook();
     
     private static boolean DEBUG = false;
     
@@ -39,7 +38,10 @@ public class JanelaDoBook extends JFrame
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
         }
-        
+        if( INSTÂNCIA_DA_JANELA != null )
+        {
+            throw new IllegalStateException( "Objeto já instânciado!" );
+        }
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
         
         Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
@@ -65,7 +67,7 @@ public class JanelaDoBook extends JFrame
      */
     public static JanelaDoBook getInstance()
     {
-        return INSTÂNCIA_JANELA_DO_BOOK;
+        return INSTÂNCIA_DA_JANELA;
     }
     
     /**

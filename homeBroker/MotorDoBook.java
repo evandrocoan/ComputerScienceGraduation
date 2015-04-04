@@ -6,13 +6,13 @@ package homebroker;
 import javax.swing.JOptionPane;
 
 /**
- * Classe que constrói a interface gráfica do book de ofertas.
+ * Cuida da execução do BookDeOfertas.
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class MotorDoBook implements Runnable
 {
-    private static final MotorDoBook INSTÂNCIA = new MotorDoBook();
+    private static final MotorDoBook INSTÂNCIA_DO_MOTOR = new MotorDoBook();
     
     private static boolean DEBUG = false;
     
@@ -27,6 +27,10 @@ public class MotorDoBook implements Runnable
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor do MotorDoBook!" );
         }
+        if( INSTÂNCIA_DO_MOTOR != null )
+        {
+            throw new IllegalStateException( "Objeto já instânciado!" );
+        }
         this.bookDeOfertas = BookDeOfertas.getInstance();
         this.janelaDoBook = JanelaDoBook.getInstance();
     }
@@ -36,7 +40,7 @@ public class MotorDoBook implements Runnable
      */
     public static MotorDoBook getInstance()
     {
-        return INSTÂNCIA;
+        return INSTÂNCIA_DO_MOTOR;
     }
     
     /**
