@@ -89,6 +89,14 @@ public class JanelaPrincipal extends JFrame
     {
         if( INSTÂNCIA_DA_JANELA == null )
         {
+            synchronized( JanelaPrincipal.class )
+            {
+                if( INSTÂNCIA_DA_JANELA == null )
+                {
+                    
+                    return new JanelaPrincipal( programaPrincipal, motorDoBook );
+                }
+            }
             return new JanelaPrincipal( programaPrincipal, motorDoBook );
         }
         

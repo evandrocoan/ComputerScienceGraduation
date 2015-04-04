@@ -12,6 +12,9 @@ import javax.swing.JOptionPane;
  */
 public class MotorDoBook implements Runnable
 {
+    /**
+     * Por padrão, este tipo de instânciação é thread safe.
+     */
     private static final MotorDoBook INSTÂNCIA_DO_MOTOR = new MotorDoBook();
     
     private static boolean DEBUG = false;

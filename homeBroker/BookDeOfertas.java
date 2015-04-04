@@ -14,6 +14,9 @@ import java.util.ArrayList;
  */
 public class BookDeOfertas
 {
+    /**
+     * Por padrão, este tipo de instânciação é thread safe.
+     */
     private static final BookDeOfertas INSTANCE = new BookDeOfertas();
     private static boolean DEBUG = false;
     private ArrayList< OfertaDoMercado > ofertasDoMercado;

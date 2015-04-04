@@ -25,6 +25,9 @@ import javax.swing.WindowConstants;
  */
 public class JanelaDoBook extends JFrame
 {
+    /**
+     * Por padrão, este tipo de instânciação é thread safe.
+     */
     private static final JanelaDoBook INSTÂNCIA_DA_JANELA = new JanelaDoBook();
     
     private static boolean DEBUG = false;

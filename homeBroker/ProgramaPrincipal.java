@@ -96,7 +96,14 @@ public class ProgramaPrincipal
     {
         if( ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA == null )
         {
-            ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA = new ProgramaPrincipal();
+            synchronized( ProgramaPrincipal.class )
+            {
+                if( ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA == null )
+                {
+                    ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA =
+                            new ProgramaPrincipal();
+                }
+            }
         }
         return ProgramaPrincipal.INSTÂNCIA_DO_PROGRAMA;
     }
