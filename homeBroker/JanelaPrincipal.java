@@ -136,7 +136,7 @@ public class JanelaPrincipal extends JFrame
             // Adiciona os componentes ao painel principal
             this.add( this.botãoPrincipal, BorderLayout.WEST );
             
-            this.add( this.caixaDeTextoPrincipal, BorderLayout.SOUTH );
+            this.add( this.caixaDeTextoPrincipal, BorderLayout.NORTH );
             
             this.add( this.comandosDisponíveis, BorderLayout.EAST );
             
