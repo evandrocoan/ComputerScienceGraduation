@@ -22,6 +22,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import testes.DriverClass;
+
 /**
  * Janela principal que contém o programa.
  * 
@@ -199,7 +201,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( Homebroker.isDebug() || JanelaPrincipal.DEBUG )
+                    if( DriverClass.isDebug() || JanelaPrincipal.DEBUG )
                     {
                         if( PainelJanelaPrincipal.this.programaPrincipal == null )
                         {

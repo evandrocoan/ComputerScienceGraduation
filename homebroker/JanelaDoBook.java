@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import testes.DriverClass;
+
 /**
  * Classe que constrói a interface gráfica do book de ofertas.
  * 
@@ -36,7 +38,7 @@ public class JanelaDoBook extends JFrame
     
     private JanelaDoBook()
     {
-        if( Homebroker.isDebug() || JanelaDoBook.DEBUG )
+        if( DriverClass.isDebug() || JanelaDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
@@ -109,7 +111,7 @@ public class JanelaDoBook extends JFrame
         
         private PainelPrincipal()
         {
-            if( Homebroker.isDebug() || JanelaDoBook.DEBUG )
+            if( DriverClass.isDebug() || JanelaDoBook.DEBUG )
             {
                 JOptionPane
                         .showMessageDialog( null,

@@ -91,7 +91,7 @@ public class DriverClass
                 bookDeOfertas.adicionarOfertaDeVenda( ação );
             }
         }
-        if( Homebroker.isDebug() || DriverClass.DEBUG )
+        if( DriverClass.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
@@ -105,6 +105,17 @@ public class DriverClass
     public void testarContas()
     {
         // TODO
+    }
+    
+    /**
+     * Informa se o programa executará em modo de debug
+     * 
+     * @return true se o programa será executado em mode debug, false caso
+     *         contrário.
+     */
+    public static boolean isDebug()
+    {
+        return DriverClass.DEBUG;
     }
     
     /**
@@ -152,7 +163,7 @@ public class DriverClass
             
             contasTeste.add( contaTeste );
         }
-        if( Homebroker.isDebug() || DriverClass.DEBUG )
+        if( DriverClass.isDebug() || DriverClass.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou em criarContasFictícias "

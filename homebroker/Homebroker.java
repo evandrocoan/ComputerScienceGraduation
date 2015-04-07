@@ -39,29 +39,13 @@ public class Homebroker
     private ArrayList< Conta > contasTeste;
     
     /**
-     * Define se o programa executará em mode de DEBUG.
-     */
-    private static final boolean DEBUG = false;
-    
-    /**
-     * Informa se o programa executará em modo de debug
-     * 
-     * @return true se o programa será executado em mode debug, false caso
-     *         contrário.
-     */
-    public static boolean isDebug()
-    {
-        return DEBUG;
-    }
-    
-    /**
      * Construtor que inicializa a o programa principal e implementa o padrão
      * sigleton. O atributo JanelaPrincipal.janelaPricipal não é inicializado
      * devio a sua construção necessitar de um objeto deste construtor.
      */
     private Homebroker()
     {
-        if( Homebroker.isDebug() )
+        if( DriverClass.isDebug() )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
@@ -100,8 +84,7 @@ public class Homebroker
             {
                 if( Homebroker.INSTÂNCIA_DO_PROGRAMA == null )
                 {
-                    Homebroker.INSTÂNCIA_DO_PROGRAMA =
-                            new Homebroker();
+                    Homebroker.INSTÂNCIA_DO_PROGRAMA = new Homebroker();
                 }
             }
         }
@@ -191,9 +174,8 @@ public class Homebroker
         case "v":
             if( this.contaAutenticada == null )
             {
-                JOptionPane.showMessageDialog(
-                        Homebroker.janelaPrincipal, "Não há "
-                                + "nenhuma conta carregada no sistema!" );
+                JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
+                        "Não há " + "nenhuma conta carregada no sistema!" );
                 break;
             }
             JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
@@ -205,7 +187,7 @@ public class Homebroker
         // contasTeste.add( novaConta );
         // break;
         case "m":
-            if( Homebroker.isDebug() )
+            if( DriverClass.isDebug() )
             {
                 if( Homebroker.janelaPrincipal == null )
                 {
@@ -218,8 +200,7 @@ public class Homebroker
                             .showMessageDialog( null, "janelaDoBook é null!" );
                 }
             }
-            Homebroker.janelaPrincipal.janelaDoBook
-                    .exibirBookDeOfertas();
+            Homebroker.janelaPrincipal.janelaDoBook.exibirBookDeOfertas();
             break;
         default:
             JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
