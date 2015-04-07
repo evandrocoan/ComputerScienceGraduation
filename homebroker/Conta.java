@@ -158,4 +158,17 @@ public class Conta
     {
         return this.saldo;
     }
+    
+    /**
+     * Retorna o inventário representado como uma String. Essa String é composta
+     * pelos nomes das ações no inventário.
+     * 
+     * 
+     * @return inventario o inventário reprensentado como um String
+     * @see #Inventario.inventarioToString()
+     */
+    public String inventarioToString()
+    {
+        return this.getInventario().inventarioToString();
+    }
 }

@@ -24,6 +24,12 @@ public class BookDeOfertas
     private ArrayList< OfertaDoMercado > ofertasDoMercado;
     
     /**
+     * Serve para corrigir um bug no gerador automático de diagramas que não
+     * reconhece a composição feita acima do ArrayList de OfertaDoMercado.
+     */
+    public OfertaDoMercado inútil = new OfertaDoMercado( null, null );
+    
+    /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
      */
     private BookDeOfertas()
@@ -44,11 +50,10 @@ public class BookDeOfertas
     /**
      * Cria uma ordem de venda de uma ação no book de ofertas.
      * 
-     * @param ação a ação a ser vendida.
+     * @param ofertaDoMercado a ofertar do mercado a ser adicionada.
      */
-    public void adicionarOfertaDeVenda( Ação ação )
+    public void adicionarOfertaDeVenda( OfertaDoMercado ofertaDoMercado )
     {
-        OfertaDoMercado ofertaDoMercado = new OfertaDoMercado( ação, "Venda" );
         this.ofertasDoMercado.add( ofertaDoMercado );
     }
     
@@ -90,22 +95,6 @@ public class BookDeOfertas
      */
     public String ofertaToString( int indice )
     {
-        OfertaDoMercado ofertaDoMercado = this.ofertasDoMercado.get( indice );
-        
-        String açãoEmOferta =
-                "Ordem de " + ofertaDoMercado.getTipoDeOferta()
-                        + " - Nome da ação: "
-                        + ofertaDoMercado.getAçãoEmOferta().getNome()
-                        + " - Preço: "
-                        + ofertaDoMercado.getAçãoEmOferta().getPreço()
-                        + " - Quantidade: "
-                        + ofertaDoMercado.getAçãoEmOferta().getQuantidade();
-        
-        if( DriverClass.isDebug() || BookDeOfertas.DEBUG )
-        {
-            System.out.println( açãoEmOferta );
-        }
-        
-        return açãoEmOferta;
+        return this.ofertasDoMercado.get( indice ).ofertaToString();
     }
 }

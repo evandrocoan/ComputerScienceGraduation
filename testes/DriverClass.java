@@ -36,6 +36,7 @@ import homebroker.BookDeOfertas;
 import homebroker.Conta;
 import homebroker.Homebroker;
 import homebroker.Inventario;
+import homebroker.OfertaDoMercado;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -76,11 +77,10 @@ public class DriverClass
      * Realiza teste na interface do book de ofertas.
      * 
      * @param contasTeste um ArrayList< Conta > com as contas para testar
-     * @param bookDeOfertas
      */
-    public static void testarBookDeOfertas( ArrayList< Conta > contasTeste,
-            BookDeOfertas bookDeOfertas )
+    public static void testarBookDeOfertas( ArrayList< Conta > contasTeste )
     {
+        BookDeOfertas bookDeOfertas = BookDeOfertas.getInstance();
         for( Conta conta: contasTeste )
         {
             ArrayList< Ação > listaDeAções =
@@ -88,7 +88,8 @@ public class DriverClass
             
             for( Ação ação: listaDeAções )
             {
-                bookDeOfertas.adicionarOfertaDeVenda( ação );
+                bookDeOfertas.adicionarOfertaDeVenda( new OfertaDoMercado(
+                        ação, "Venda" ) );
             }
         }
         if( DriverClass.isDebug() || DriverClass.DEBUG )

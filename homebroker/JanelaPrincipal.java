@@ -112,7 +112,7 @@ public class JanelaPrincipal extends JFrame
      */
     private class PainelJanelaPrincipal extends JPanel
     {
-        private Homebroker programaPrincipal;
+        private Homebroker homebroker;
         
         private JTextField caixaDeTextoPrincipal;
         private JButton botãoPrincipal;
@@ -125,7 +125,7 @@ public class JanelaPrincipal extends JFrame
          */
         public PainelJanelaPrincipal( Homebroker programaPrincipal )
         {
-            this.programaPrincipal = programaPrincipal;
+            this.homebroker = programaPrincipal;
             
             // Cria os compomentos
             this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
@@ -171,7 +171,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    PainelJanelaPrincipal.this.programaPrincipal
+                    PainelJanelaPrincipal.this.homebroker
                             .menuPrincipal( PainelJanelaPrincipal.this.caixaDeTextoPrincipal
                                     .getText() );
                 }
@@ -203,13 +203,13 @@ public class JanelaPrincipal extends JFrame
                 {
                     if( DriverClass.isDebug() || JanelaPrincipal.DEBUG )
                     {
-                        if( PainelJanelaPrincipal.this.programaPrincipal == null )
+                        if( PainelJanelaPrincipal.this.homebroker == null )
                         {
                             JOptionPane.showMessageDialog( null,
                                     "programaPrincipal é null!" );
                         }
                     }
-                    PainelJanelaPrincipal.this.programaPrincipal
+                    PainelJanelaPrincipal.this.homebroker
                             .menuPrincipal( caixaDeTextoPrincipal.getText() );
                 }
             } );

@@ -66,8 +66,7 @@ public class Homebroker
         this.contaAutenticada = this.contasTeste.get( 0 );
         
         // Cria ofertas de compra e venda fictícias
-        DriverClass.testarBookDeOfertas( this.contasTeste,
-                BookDeOfertas.getInstance() );
+        DriverClass.testarBookDeOfertas( this.contasTeste );
     }
     
     /**
@@ -140,17 +139,17 @@ public class Homebroker
     /**
      * Inicia o processo de criação da conta de um usuário do sistema
      * 
-     * @return conta a conta criada
+     * //@return conta a conta criada
      */
-    Conta criarUsuario()
+    void criarUsuario()
     {
         // TODO
-        String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
-        String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
-        Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
+        // String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
+        // String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
+        // Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
         // ( String nome, String senha, double saldo,boolean
         // administrador, Inventario inventario )
-        return conta;
+        // return conta;
     }
     
     /**
@@ -179,7 +178,7 @@ public class Homebroker
                 break;
             }
             JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
-                    this.contaAutenticada.getInventario().inventarioToString() );
+                    this.contaAutenticada.inventarioToString() );
             break;
         // TODO
         // case "c":
