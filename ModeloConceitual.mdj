@@ -17,7 +17,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Main",
+					"name": "ModeloConceitual",
 					"visible": true,
 					"defaultDiagram": true,
 					"ownedViews": [
@@ -6497,6 +6497,76 @@
 							},
 							"lineStyle": 1,
 							"points": "599:1390;484:1390"
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFMlslsU1Fgjmw=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 48,
+							"top": 1700,
+							"width": 625,
+							"height": 64,
+							"autoResize": false,
+							"text": "Tanto as Ações possuem quantidade e preço por que, no mercado de valores existe um preço que diz quanto vale as ações de uma dada empresa e toda empresa possuem um quantidade fixa de ações em circulação no mercado. E as ofertas possuem uma quantidade e preço por que um usuário pode enviar ordens de compra e venda no preço que ele quiser.",
+							"wordWrap": true
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFMls3VYVllKc4=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 200,
+							"top": 1397,
+							"width": 161,
+							"height": 51,
+							"autoResize": false,
+							"text": "Uma oferta pode ser feita somente por um tipo de ação (Ações).",
+							"wordWrap": true
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAFMls8hsl60hhM=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"head": {
+								"$ref": "AAAAAAFMls3VYVllKc4="
+							},
+							"tail": {
+								"$ref": "AAAAAAFMlpK6ff54CkU="
+							},
+							"lineStyle": 1,
+							"points": "202:1467;235:1448"
 						}
 					]
 				},
