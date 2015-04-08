@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 import testes.DriverClass;
+import util.Biblioteca;
 
 /**
  * Classe que constrói a interface gráfica do book de ofertas.

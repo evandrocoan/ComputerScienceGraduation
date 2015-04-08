@@ -20,48 +20,78 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import testes.DriverClass;
+import util.Biblioteca;
 
 /**
- * Janela principal que contém o programa.
+ * Janela principal que contém o programa e inicia a execução do Homebroker.
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
 public class JanelaPrincipal extends JFrame
 {
-    private static JanelaPrincipal INSTÂNCIA_DA_JANELA;
-    
-    private PainelJanelaPrincipal painelJanelaPrincipal;
-    
-    protected MotorDoBook janelaDoBook;
+    private static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
+            .getInstance();
     
     private static boolean DEBUG = false;
     
+    private PainelJanelaPrincipal painelJanelaPrincipal;
+    
+    /**
+     * Método principal que inicia a execução do programa.
+     * 
+     * @param args caso receba o argumento 'teste' abre o programa em uma conta
+     *            teste.
+     */
+    public static void main( String... args )
+    {
+        // Faz login
+        if( args == null || args.length == 0 )
+        {
+            motorDoHomebroker.loginNoSistema( null );
+        } else
+        {
+            for( int i = 0; i < args.length; i++ )
+            {
+                switch( args[i] )
+                {
+                case "teste":
+                    System.out.println( "Sessão de teste!" );
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        
+        /*
+         * Here we are Secheduling a JOB for Event Dispatcher Thread, since
+         * Swing is not Thread Safe. This is used to place the code which is
+         * responsible for creating and diaplaying your GUI.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            @SuppressWarnings( "unused" )
+            @Override
+            public void run()
+            {
+                new JanelaPrincipal();
+            }
+        } );
+    }
+    
     /**
      * Construtor que cria a janela principal do programa.
-     * 
-     * @param programaPrincipal uma instância do programaPrincipal para realizar
-     *            suas funções
-     * @param motorDoBook uma instância da janelaDoBook para ele poder ser
-     *            acessada através do menu principal.
-     * 
      */
-    private JanelaPrincipal( Homebroker programaPrincipal,
-            MotorDoBook motorDoBook )
+    private JanelaPrincipal()
     {
         super( "HomeBroker Tabajara" );
         
-        if( INSTÂNCIA_DA_JANELA != null )
-        {
-            throw new IllegalStateException( "Objeto já instânciado!" );
-        }
-        this.janelaDoBook = motorDoBook;
-        
         // Cria o painelJanelaPrincipal
-        this.painelJanelaPrincipal =
-                new PainelJanelaPrincipal( programaPrincipal );
+        this.painelJanelaPrincipal = new PainelJanelaPrincipal();
         this.painelJanelaPrincipal.setDoubleBuffered( true );
         
         // Adiciona o painelJanelaPrincipal na janelaPrincipal
@@ -80,53 +110,21 @@ public class JanelaPrincipal extends JFrame
     }
     
     /**
-     * Implementa a criação de uma única janela principal.
-     * 
-     * @param programaPrincipal uma instância do programa principal.
-     * @param motorDoBook uma instância do motor do book.
-     * @return INSTÂNCIA_DA_JANELA_PRINCIPAL uma instância da janela principal.
-     */
-    public static JanelaPrincipal getJanelaPrincipal(
-            Homebroker programaPrincipal, MotorDoBook motorDoBook )
-    {
-        if( INSTÂNCIA_DA_JANELA == null )
-        {
-            synchronized( JanelaPrincipal.class )
-            {
-                if( INSTÂNCIA_DA_JANELA == null )
-                {
-                    
-                    return new JanelaPrincipal( programaPrincipal, motorDoBook );
-                }
-            }
-            return new JanelaPrincipal( programaPrincipal, motorDoBook );
-        }
-        
-        return INSTÂNCIA_DA_JANELA;
-    }
-    
-    /**
-     * Representa o painel principal da janela principal
+     * Representa o painel principal da janela principal.
      * 
      * @authors Evandro  Coan, Renan Pinho Assi
      */
     private class PainelJanelaPrincipal extends JPanel
     {
-        private Homebroker homebroker;
-        
         private JTextField caixaDeTextoPrincipal;
         private JButton botãoPrincipal;
         private JTextArea comandosDisponíveis;
         
         /**
          * Cria um painel para colocar os botões, caixas de texto, ...
-         * 
-         * @param programaPrincipal
          */
-        public PainelJanelaPrincipal( Homebroker programaPrincipal )
+        public PainelJanelaPrincipal()
         {
-            this.homebroker = programaPrincipal;
-            
             // Cria os compomentos
             this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
             this.botãoPrincipal = this.botãoPrincipal();
@@ -171,7 +169,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    PainelJanelaPrincipal.this.homebroker
+                    motorDoHomebroker
                             .menuPrincipal( PainelJanelaPrincipal.this.caixaDeTextoPrincipal
                                     .getText() );
                 }
@@ -203,14 +201,14 @@ public class JanelaPrincipal extends JFrame
                 {
                     if( DriverClass.isDebug() || JanelaPrincipal.DEBUG )
                     {
-                        if( PainelJanelaPrincipal.this.homebroker == null )
+                        if( motorDoHomebroker == null )
                         {
                             JOptionPane.showMessageDialog( null,
-                                    "programaPrincipal é null!" );
+                                    "motorDoHomebroker é null!" );
                         }
                     }
-                    PainelJanelaPrincipal.this.homebroker
-                            .menuPrincipal( caixaDeTextoPrincipal.getText() );
+                    motorDoHomebroker.menuPrincipal( caixaDeTextoPrincipal
+                            .getText() );
                 }
             } );
             

@@ -1,25 +1,23 @@
 /**
- * Pacote principal que contém o Homebroker.
+ * 
  */
 package homebroker;
 
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import testes.DriverClass;
 
 /**
- * Programa principal que inicia a execução do Homebroker.
  * 
- * @authors Evandro  Coan, Renan Pinho Assi
+ * @author Professional
  */
-public class Homebroker
+public class MotorDoHomebroker
 {
-    private static Homebroker INSTÂNCIA_DO_PROGRAMA;
-    private static JanelaPrincipal janelaPrincipal;
-    private static MotorDoBook motorDoBook;
+    private static MotorDoHomebroker INSTÂNCIA_DO_MOTOR;
+    
+    private MotorDoBook motorDoBook = MotorDoBook.getInstance();
     
     /**
      * Processo que mantém o book de ofertas funcionando enquanto a interface
@@ -28,35 +26,56 @@ public class Homebroker
     private Thread processoDoBook;
     
     /**
-     * A conta para qual se estará operando o inventário e no merdado de ações.
-     */
-    private Conta contaAutenticada;
-    
-    /**
      * As contasTeste que serão utilizadas para simular a adição de contas no
      * sistema, isto é, as contas criadas somente existirão temporariamente.
      */
     private ArrayList< Conta > contasTeste;
     
     /**
-     * Construtor que inicializa a o programa principal e implementa o padrão
+     * A conta para qual se estará operando o inventário e no merdado de ações.
+     */
+    private Conta contaAutenticada;
+    
+    /**
+     * Retorna a única instancia existe do MotorDoHomebroker.
+     * 
+     * @return INSTANCE a única instancia existe da JanelaPrincipal.
+     */
+    public static MotorDoHomebroker getInstance()
+    {
+        if( MotorDoHomebroker.INSTÂNCIA_DO_MOTOR == null )
+        {
+            synchronized( MotorDoHomebroker.class )
+            {
+                if( MotorDoHomebroker.INSTÂNCIA_DO_MOTOR == null )
+                {
+                    MotorDoHomebroker.INSTÂNCIA_DO_MOTOR =
+                            new MotorDoHomebroker();
+                }
+            }
+        }
+        return MotorDoHomebroker.INSTÂNCIA_DO_MOTOR;
+    }
+    
+    /**
+     * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
      * sigleton. O atributo JanelaPrincipal.janelaPricipal não é inicializado
      * devio a sua construção necessitar de um objeto deste construtor.
      */
-    private Homebroker()
+    private MotorDoHomebroker()
     {
         if( DriverClass.isDebug() )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
         }
-        if( INSTÂNCIA_DO_PROGRAMA != null )
+        if( INSTÂNCIA_DO_MOTOR != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         // Liga o book de ofertas
-        Homebroker.motorDoBook = MotorDoBook.getInstance();
-        this.processoDoBook = new Thread( Homebroker.motorDoBook );
+        this.motorDoBook = MotorDoBook.getInstance();
+        this.processoDoBook = new Thread( this.motorDoBook );
         this.processoDoBook.start();
         
         // Cria contas fictícias
@@ -67,73 +86,6 @@ public class Homebroker
         
         // Cria ofertas de compra e venda fictícias
         DriverClass.testarBookDeOfertas( this.contasTeste );
-    }
-    
-    /**
-     * Serve para implementação do padrão de projeto singleton. Retorna a única
-     * instancia existe da JanelaPrincipal.
-     * 
-     * @return INSTANCE a única instancia existe da JanelaPrincipal.
-     */
-    private static Homebroker getInstance()
-    {
-        if( Homebroker.INSTÂNCIA_DO_PROGRAMA == null )
-        {
-            synchronized( Homebroker.class )
-            {
-                if( Homebroker.INSTÂNCIA_DO_PROGRAMA == null )
-                {
-                    Homebroker.INSTÂNCIA_DO_PROGRAMA = new Homebroker();
-                }
-            }
-        }
-        return Homebroker.INSTÂNCIA_DO_PROGRAMA;
-    }
-    
-    /**
-     * Método principal que inicia a execução do programa.
-     * 
-     * @param args caso receba o argumento 'teste' abre o programa em uma conta
-     *            teste.
-     */
-    public static void main( String... args )
-    {
-        Homebroker programaPrincipal = Homebroker.getInstance();
-        
-        // Faz login
-        if( args == null || args.length == 0 )
-        {
-            programaPrincipal.loginNoSistema( null );
-        } else
-        {
-            for( int i = 0; i < args.length; i++ )
-            {
-                switch( args[i] )
-                {
-                case "teste":
-                    System.out.println( "Sessão de teste!" );
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-        
-        /*
-         * Here we are Secheduling a JOB for Event Dispatcher Thread, since
-         * Swing is not Thread Safe. This is used to place the code which is
-         * responsible for creating and diaplaying your GUI.
-         */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                janelaPrincipal =
-                        JanelaPrincipal.getJanelaPrincipal( programaPrincipal,
-                                motorDoBook );
-            }
-        } );
     }
     
     /**
@@ -158,7 +110,7 @@ public class Homebroker
      * 
      * @param commando o comando inserido pelo usuário
      */
-    void menuPrincipal( String commando )
+    String menuPrincipal( String commando )
     {
         if( commando == null )
         {
@@ -173,11 +125,11 @@ public class Homebroker
         case "v":
             if( this.contaAutenticada == null )
             {
-                JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
-                        "Não há " + "nenhuma conta carregada no sistema!" );
+                JOptionPane.showMessageDialog( null, "Não há "
+                        + "nenhuma conta carregada no sistema!" );
                 break;
             }
-            JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
+            JOptionPane.showMessageDialog( null,
                     this.contaAutenticada.inventarioToString() );
             break;
         // TODO
@@ -188,28 +140,25 @@ public class Homebroker
         case "m":
             if( DriverClass.isDebug() )
             {
-                if( Homebroker.janelaPrincipal == null )
+                if( this.motorDoBook == null )
                 {
-                    JOptionPane.showMessageDialog( null,
-                            "janelaPrincipal é null!" );
-                }
-                if( Homebroker.janelaPrincipal.janelaDoBook == null )
-                {
-                    JOptionPane
-                            .showMessageDialog( null, "janelaDoBook é null!" );
+                    JOptionPane.showMessageDialog( null, "motorDoBook é null!" );
                 }
             }
-            Homebroker.janelaPrincipal.janelaDoBook.exibirBookDeOfertas();
+            this.motorDoBook.exibirBookDeOfertas();
             break;
         default:
-            JOptionPane.showMessageDialog( Homebroker.janelaPrincipal,
-                    "Você digitou uma " + "opção inválida!\n\n"
-                            + "Digite 's' para fechar o programa.\n"
-                            + "Digite 'v' para para ver o inventario\n"
-                            // + "Digite 'c' para para criar uma conta!\n"
-                            + "Digite 'm' para ver o mercado!\n" );
+            JOptionPane.showMessageDialog( null, "Você digitou uma "
+                    + "opção inválida!\n\n"
+                    + "Digite 's' para fechar o programa.\n"
+                    + "Digite 'v' para para ver o inventario\n"
+                    // + "Digite 'c' para para criar uma conta!\n"
+                    + "Digite 'm' para ver o mercado!\n" );
             break;
         }
+        return "Será implementadado o modelo MVC, onde esta classe é o modelo, "
+                + "a classe Homebroker é o controler e a classe "
+                + "JanelaPrincipal é o viwer.";
         
     }
     
@@ -220,7 +169,7 @@ public class Homebroker
      *            ela serve para exibir quais contas estão disponiveis para
      *            login e sua senha
      */
-    private void loginNoSistema( String dica )
+    void loginNoSistema( String dica )
     {
         Conta login = null;
         String command = " ", usuario = " ", senha = " ";

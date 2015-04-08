@@ -19,7 +19,7 @@ public class BookDeOfertas
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final BookDeOfertas INSTANCE = new BookDeOfertas();
+    private static final BookDeOfertas INSTÂNCIA_DO_BOOK = new BookDeOfertas();
     private static boolean DEBUG = false;
     private ArrayList< OfertaDoMercado > ofertasDoMercado;
     
@@ -34,6 +34,10 @@ public class BookDeOfertas
      */
     private BookDeOfertas()
     {
+        if( INSTÂNCIA_DO_BOOK != null )
+        {
+            throw new IllegalStateException( "Objeto já instânciado!" );
+        }
         this.ofertasDoMercado = new ArrayList<>();
     }
     
@@ -44,7 +48,7 @@ public class BookDeOfertas
      */
     public static BookDeOfertas getInstance()
     {
-        return BookDeOfertas.INSTANCE;
+        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
     }
     
     /**
