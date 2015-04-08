@@ -31,7 +31,7 @@ import util.Biblioteca;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class JanelaPrincipal extends JFrame
+public class Homebroker extends JFrame
 {
     private static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
             .getInstance();
@@ -78,7 +78,7 @@ public class JanelaPrincipal extends JFrame
             @Override
             public void run()
             {
-                new JanelaPrincipal();
+                new Homebroker();
             }
         } );
     }
@@ -86,7 +86,7 @@ public class JanelaPrincipal extends JFrame
     /**
      * Construtor que cria a janela principal do programa.
      */
-    private JanelaPrincipal()
+    private Homebroker()
     {
         super( "HomeBroker Tabajara" );
         
@@ -199,7 +199,7 @@ public class JanelaPrincipal extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( DriverClass.isDebug() || JanelaPrincipal.DEBUG )
+                    if( DriverClass.isDebug() || Homebroker.DEBUG )
                     {
                         if( motorDoHomebroker == null )
                         {

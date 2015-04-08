@@ -34,7 +34,7 @@ import homebroker.Ação;
 import homebroker.BookDeOfertas;
 import homebroker.Conta;
 import homebroker.Inventario;
-import homebroker.JanelaPrincipal;
+import homebroker.Homebroker;
 import homebroker.OfertaDoMercado;
 
 import java.awt.Color;
@@ -71,7 +71,7 @@ public class DriverClass
      */
     public static void main( String... args )
     {
-        JanelaPrincipal.main( "teste" );
+        Homebroker.main( "teste" );
     }
     
     /**
