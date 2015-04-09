@@ -43,6 +43,12 @@ formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Ciencias da Computacao', 'ITA',
 formacaoNoCursoDe( ['Pessoa9 da Silva1', 'Ciencias da Computacao', 'ITA', 
 'Silva1 da Pessoa9', 2010, 2015 ] ).
 
-/**dataNascimento(X, Y) :- 
-	informacoesPessoais( dataNascimento(X|_), informacoesPessoais(.
-*/
+/** Questão 1 - Primeiro testo se a pessoa é a cabeça da lista.
+Segundo pego o telefone dela nesta lista na quarta posição.*/
+qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
+
+/** Questão 2*/
+quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
+
+
+/** Questão 3*/
