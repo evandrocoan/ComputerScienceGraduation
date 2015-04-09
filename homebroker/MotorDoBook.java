@@ -68,14 +68,18 @@ public class MotorDoBook implements Runnable
                                                 .getNúmeroDeOfertas() );
                 JOptionPane.showMessageDialog( null, texto );
             }
+            this.bookDeOfertas.adicionarOfertaDeVenda( new OfertaDoMercado(
+                    new Ação( 10, 10, "Tabajara" ), "Venda" ) );
+            
             if( this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook
                     .getNúmeroDeOfertas() ) )
             {
                 this.atualizarListaDeOfertas();
             }
+            
             try
             {
-                Thread.sleep( 200 );
+                Thread.sleep( 10000 );
             } catch( InterruptedException e )
             {
                 // TODO
@@ -104,5 +108,14 @@ public class MotorDoBook implements Runnable
     public void exibirBookDeOfertas()
     {
         this.janelaDoBook.setVisible( true );
+    }
+    
+    /**
+     * @param oferta
+     * @return se a operação foi bem sucedida
+     */
+    public boolean adicionarOfertaDeVenda( OfertaDoMercado oferta )
+    {
+        return this.bookDeOfertas.adicionarOfertaDeVenda( oferta );
     }
 }

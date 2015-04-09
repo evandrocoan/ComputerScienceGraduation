@@ -85,7 +85,7 @@ public class MotorDoHomebroker
         this.contaAutenticada = this.contasTeste.get( 0 );
         
         // Cria ofertas de compra e venda fictícias
-        DriverClass.testarBookDeOfertas( this.contasTeste );
+        // DriverClass.testarBookDeOfertas( this.contasTeste );
     }
     
     /**
@@ -137,6 +137,9 @@ public class MotorDoHomebroker
         // Conta novaConta = Principal.criarUsuario();
         // contasTeste.add( novaConta );
         // break;
+        case "ov":
+            this.efetuarVendaDeAção();
+            break;
         case "m":
             if( DriverClass.isDebug() )
             {
@@ -159,6 +162,32 @@ public class MotorDoHomebroker
         return "Será implementadado o modelo MVC, onde esta classe é o modelo, "
                 + "a classe Homebroker é o controler e a classe "
                 + "JanelaPrincipal é o viwer.";
+        
+    }
+    
+    private void efetuarVendaDeAção()
+    {
+        boolean sucesso = false;
+        
+        while( !sucesso )
+        {
+            String açãoAComprar =
+                    JOptionPane.showInputDialog( this.contaAutenticada
+                            .inventarioToString() );
+            double preço =
+                    Double.parseDouble( JOptionPane
+                            .showInputDialog( "Insira o preço da ação:" ) );
+            
+            int quantidade =
+                    (int) Double.parseDouble( JOptionPane
+                            .showInputDialog( "Insira a quantidade da ação:" ) );
+            
+            sucesso =
+                    this.motorDoBook
+                            .adicionarOfertaDeVenda( new OfertaDoMercado(
+                                    new Ação( preço, quantidade, açãoAComprar ),
+                                    "Venda" ) );
+        }
         
     }
     

@@ -133,6 +133,7 @@ public class Homebroker extends JFrame
                             + "tabajara de cadastro de ações!\n"
                             + "Digite 's' para fechar o programa.\n"
                             + "Digite 'v' para para ver o inventario\n"
+                            + "Digite 'ov' para enviar uma ordem de venda\n"
                             // + "Digite 'c' para para criar uma conta!\n"
                             + "Digite 'm' para ver o mercado!\n" );
             
@@ -231,7 +232,7 @@ public class Homebroker extends JFrame
                 {
                     if( evt.getKeyCode() != KeyEvent.VK_ENTER )
                     {
-                        caixaDeTextoPrincipal.setText( "" );
+                        // caixaDeTextoPrincipal.setText( "" );
                     }
                 }
             } );

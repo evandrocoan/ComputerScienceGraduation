@@ -55,10 +55,11 @@ public class BookDeOfertas
      * Cria uma ordem de venda de uma ação no book de ofertas.
      * 
      * @param ofertaDoMercado a ofertar do mercado a ser adicionada.
+     * @return true
      */
-    public void adicionarOfertaDeVenda( OfertaDoMercado ofertaDoMercado )
+    public boolean adicionarOfertaDeVenda( OfertaDoMercado ofertaDoMercado )
     {
-        this.ofertasDoMercado.add( ofertaDoMercado );
+        return this.ofertasDoMercado.add( ofertaDoMercado );
     }
     
     /**
