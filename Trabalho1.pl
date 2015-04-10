@@ -51,14 +51,48 @@ qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 /* Questão 2*/
 quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
-/* Questão 3 -*/
+/* Questão 7)
+ * Quais os colegas de curso ou de trabalho de uma dada pessoa? */
+/* Primeiro eu tiro a parte inicial da lista.
+ * Segundo imprimo o restante da lista, isto é, o nome das referências*/
+dividirLista(L,0,[],L).
+dividirLista([X|Xs],N,[X|Ys],Zs) :- N > 0, N1 is N - 1, dividirLista(Xs,N1,Ys,Zs).
+/* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
+ * que não seja retornado verdadeiro caso uma das pessoas no final da lista
+ * seja encontrada. */
+is_head_member(P, L) :- L = [P|_].
+/* Informa quem tão os colegas de uma dade pessoa. Primeiro carrega a lista
+ * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
+ * e caso sim, retira retorna os colegas na variável Colegas. */
+colegasDe(Pessoa, Colegas) :- 
+	formacaoNoCursoDe(Lista), 
+	is_head_member(Pessoa, Lista), 
+	dividirLista(Lista, 6, _, Colegas).
 
 
-/*Primeiro carrega-se a lista armazenada no predicado 
-informacoesPessoais na variável L com informacoesPessoais(L). 
-Depois chama-se a função que pega o elemento que queremos na lista.*/
-element_at(X,[X|_],1).
-element_at(X,[_|L],K) :- K > 1, K1 is K - 1, element_at(X,L,K1).
-elementoNa(X, K) :- informacoesPessoais(L), element_at(X,[_|L],K).
+
+
+
+
+
+
+
+
+
+
+
+/* ######################### Biblioteca de funções ##########################*/
+/* Verifica o comprimento de uma lista e imprime os passos intermediários
+ * da contagem na tela em uma nova linha cada. */
+my_length([],0).
+my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
+
+/* Dada uma posição K, dadoDeinforNaPosicao(Posicao, dadoDeRetorno), 
+ * retorna um elemento em uma dada posição na lista definida no predicado 
+ * informacoesPessoais([...]) */
+dadoNaPosicao(X,[X|_],0).
+dadoNaPosicao(X,[_|L],K) :- K > 0, K1 is K - 1, dadoNaPosicao(X,L,K1).
+dadoDeinforNaPosicao(Posicao, DadoDeRetorno) :- 
+	informacoesPessoais(L), dadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
 
 
