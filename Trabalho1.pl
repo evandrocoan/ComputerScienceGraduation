@@ -51,11 +51,14 @@ qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 /* Questão 2*/
 quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
-
-/* Questão 3*/
-my_last(X,[X|[]]).
-my_last(X,[_|L]) :- my_last(X,L).
+/* Questão 3 -*/
 
 
+/*Primeiro carrega-se a lista armazenada no predicado 
+informacoesPessoais na variável L com informacoesPessoais(L). 
+Depois chama-se a função que pega o elemento que queremos na lista.*/
+element_at(X,[X|_],1).
+element_at(X,[_|L],K) :- K > 1, K1 is K - 1, element_at(X,L,K1).
+elementoNa(X, K) :- informacoesPessoais(L), element_at(X,[_|L],K).
 
 
