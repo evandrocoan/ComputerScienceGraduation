@@ -1,5 +1,6 @@
 /* Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
-Orientador, Ano de Ingresso, Ano de Término, Referencias ... */
+ * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
+ * */
 formacaoNoCursoDe( ['Pessoa9 da Silva1', 'Ciencias da Computacao', 
 'ITA', 'Silva1 da Pessoa9', 2010, 2015 ] ).
 formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Ciencias da Computacao', 
@@ -21,7 +22,8 @@ formacaoNoCursoDe( ['Pessoa6 da Silva5', 'Ciencias Juridicas',
 formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva4 da Pessoa6', 2007, 2013 ], 'Demi Lovato' ). 
 
-/* Nome, data de nascimento, cidade, telefone */
+/* Nome, data de nascimento, cidade, telefone 
+ * */
 informacoesPessoais( ['Pessoa1 da Silva1', date( 1990, 1, 10 ),  
 'Sao Paulo', 4837326424 ] ).
 informacoesPessoais( ['Pessoa2 da Silva9', date( 1977, 2, 15 ),  
@@ -44,26 +46,36 @@ informacoesPessoais( ['Pessoa9 da Silva1', date( 1955, 11, 20 ),
 'Florianopolis', 4887347425 ] ).
 
 
-/* Questão 1 - Primeiro testo se a pessoa é a cabeça da lista.
-Segundo pego o telefone dela nesta lista na quarta posição.*/
+/* Questão 1
+ * Qual o telefone de uma dada pessoa?
+ * Primeiro testo se a pessoa é a cabeça da lista.
+ * Segundo pego o telefone dela nesta lista na quarta posição.
+ * */
 qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 
-/* Questão 2*/
+/* Questão 2
+ * Quais as pessoas de uma dada cidade?
+ * */
 quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
-/* Questão 7)
- * Quais os colegas de curso ou de trabalho de uma dada pessoa? */
-/* Primeiro eu tiro a parte inicial da lista.
- * Segundo imprimo o restante da lista, isto é, o nome das referências*/
+/* Questão 7
+ * Quais os colegas de curso ou de trabalho de uma dada pessoa?
+ * Primeiro eu tiro a parte inicial da lista.
+ * Segundo imprimo o restante da lista, isto é, o nome das referências.
+ * */
 dividirLista(L,0,[],L).
 dividirLista([X|Xs],N,[X|Ys],Zs) :- N > 0, N1 is N - 1, dividirLista(Xs,N1,Ys,Zs).
+
 /* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
  * que não seja retornado verdadeiro caso uma das pessoas no final da lista
- * seja encontrada. */
+ * seja encontrada. 
+ * */
 is_head_member(P, L) :- L = [P|_].
-/* Informa quem tão os colegas de uma dade pessoa. Primeiro carrega a lista
+
+/* Informa quem tão os colegas de uma dada pessoa. Primeiro carrega a lista
  * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
- * e caso sim, retira retorna os colegas na variável Colegas. */
+ * e caso sim, retira retorna os colegas na variável Colegas. 
+ * */
 colegasDe(Pessoa, Colegas) :- 
 	formacaoNoCursoDe(Lista), 
 	is_head_member(Pessoa, Lista), 
