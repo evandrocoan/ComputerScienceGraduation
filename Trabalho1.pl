@@ -1,3 +1,23 @@
+/* ######################### Biblioteca de funções ##########################*/
+/* Verifica o comprimento de uma lista e imprime os passos intermediários
+ * da contagem na tela em uma nova linha cada. */
+my_length([],0).
+my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
+
+/* Dada uma posição K, dadoDeInforNaPosicao(Posicao, dadoDeRetorno), 
+ * retorna um elemento em uma dada posição na lista definida no predicado 
+ * informacoesPessoais([...]) */
+privado_DadoNaPosicao(X, [X|_], 0).
+privado_DadoNaPosicao(X,[_|L],K) :- 
+	K > 0, 
+	K1 is K - 1, 
+	privado_DadoNaPosicao(X,L,K1).
+	
+dadoDeInforNaPosicao(Posicao, DadoDeRetorno) :- 
+	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
+
+
+/* ############################ Programa ###################################*/
 /* Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
@@ -28,11 +48,11 @@ informacoesPessoais( ['Pessoa1 da Silva1', date( 1990, 1, 10 ),
 'Sao Paulo', 4837326424 ] ).
 informacoesPessoais( ['Pessoa2 da Silva9', date( 1977, 2, 15 ),  
 'Florianopolis', 4737326422 ] ).
-informacoesPessoais( ['Pessoa3 da Silva7', date( 1960, 5, 13 ), 
+informacoesPessoais( ['Pessoa3 da Silva7', date( 1971, 5, 13 ), 
 'Sao Paulo', 4737326427 ] ).
-informacoesPessoais( ['Pessoa4 da Silva7', date( 1930, 12, 09 ), 
+informacoesPessoais( ['Pessoa4 da Silva7', date( 1978, 12, 09 ), 
 'Rio de Janeiro', 4887326455 ] ).
-informacoesPessoais( ['Pessoa5 da Silva7', date( 1950, 10, 30 ), 
+informacoesPessoais( ['Pessoa5 da Silva7', date( 1982, 10, 30 ), 
 'Rio Branco', 4887326465 ] ).
 informacoesPessoais( ['Pessoa6 da Silva5', date( 1990, 1, 10 ), 
 'Florianopolis', 1177326475 ] ).
@@ -42,7 +62,7 @@ informacoesPessoais( ['Pessoa8 da Silva2', date( 1982, 7, 04 ),
 'Joao Pessoa', 8197326625 ] ).
 informacoesPessoais( ['Pessoa9 da Silva2', date( 1986, 6, 12 ), 
 'Brasilia', 8177326825 ] ).
-informacoesPessoais( ['Pessoa9 da Silva1', date( 1955, 11, 20 ), 
+informacoesPessoais( ['Pessoa9 da Silva1', date( 1976, 11, 20 ), 
 'Florianopolis', 4887347425 ] ).
 
 
@@ -78,11 +98,25 @@ privado_CalcularIdade(Data, Idade) :-
  * Terceiro, calcula sua idade.
  * */
 qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
-	DadoDeRetorno = Nome,
+	informacoesPessoais(L), privado_DadoNaPosicao(NomeDaPessoa,[_|L],1),
+	NomeDaPessoa = Nome,
 	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
- 
+	
+/* Questão 4
+ * Quais as pessoas com mais de 30 anos?
+ * Primeiro, carrego a Lista com os dados da pessoa.
+ * Segundo, calculo a idade da pessoa.
+ * Terceiro, calculo se a pessoa é maior que 30 anos.
+ * Quarto, pego o nome da pessoa e retorno na variável Nome.
+ * */
+quaisComMaisDe30Anos(Nome) :-
+	informacoesPessoais(L),
+	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
+	privado_CalcularIdade(DataDeNascimento, Idade),
+	Idade > 30,
+	privado_DadoNaPosicao(Nome,[_|L],1).
+
 /* Questão 5
  * Quais os cursos de uma dada pessoa?
  * Primeiro encontro a pessoa na lista.
@@ -122,27 +156,5 @@ quaisColegasDe(Nome, Colegas) :-
 
 
 
-
-
-
-
-
-
-
-
-
-/* ######################### Biblioteca de funções ##########################*/
-/* Verifica o comprimento de uma lista e imprime os passos intermediários
- * da contagem na tela em uma nova linha cada. */
-my_length([],0).
-my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
-
-/* Dada uma posição K, dadoDeInforNaPosicao(Posicao, dadoDeRetorno), 
- * retorna um elemento em uma dada posição na lista definida no predicado 
- * informacoesPessoais([...]) */
-privado_DadoNaPosicao(X,[X|_],0).
-privado_DadoNaPosicao(X,[_|L],K) :- K > 0, K1 is K - 1, privado_DadoNaPosicao(X,L,K1).
-dadoDeInforNaPosicao(Posicao, DadoDeRetorno) :- 
-	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
 
 
