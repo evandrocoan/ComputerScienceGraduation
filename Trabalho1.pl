@@ -62,7 +62,28 @@ quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
 /* Questão 3
  * Qual a idade de uma dada pessoa?
+ * Primeiro, converto a data de aniversário para um TimeStamp. 
+ * Segundo, consigo a data atual e armazeno em outro TimeStamp2.
+ * Terceiro, calculo a diferença de TimeStamps.
+ * Quarto, converto o TimeStamp em idade.
  * */
+privado_CalcularIdade(Data, Idade) :-
+        date_time_stamp(Data, TimeStamp1),
+        get_time(TimeStamp2),
+        TempoDeVidaEmSegundos is TimeStamp2 - TimeStamp1,
+        convert_time(TempoDeVidaEmSegundos,TimeStamp3,_,_,_,_,_,_),
+        Idade is TimeStamp3 - 1970.
+
+/* Pega a data de nascimento de uma dada pessoa e calcula sua idade 
+ * Primeiro, encontra a pessoa na lista informacoesPessoais.
+ * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
+ * Terceiro, calcula sua idade.
+ * */
+calcularIdadeDe(Pessoa, Idade) :- 
+	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
+	DadoDeRetorno = Pessoa,
+	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
+	privado_CalcularIdade(DataDeNascimento, Idade).
  
 /* Questão 5
 * Usando dividirLista para "caminhar" na lista até a posição do curso.
@@ -81,17 +102,17 @@ dividirLista(List, 1, _, [Curso|_]).
  * Primeiro eu tiro a parte inicial da lista.
  * Segundo imprimo o restante da lista, isto é, o nome das referências.
  * */
-dividirLista(L,0,[],L).
-dividirLista([X|Xs],N,[X|Ys],Zs) :- 
+privado_DividirLista(L,0,[],L).
+privado_DividirLista([X|Xs],N,[X|Ys],Zs) :- 
 	N > 0, 
 	N1 is N - 1, 
-	dividirLista(Xs,N1,Ys,Zs).
+	privado_dividirLista(Xs,N1,Ys,Zs).
 
 /* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
  * que não seja retornado verdadeiro caso uma das pessoas no final da lista
  * seja encontrada. 
  * */
-is_head_member(P, L) :- L = [P|_].
+privado_is_head_member(P, L) :- L = [P|_].
 
 /* Informa quem tão os colegas de uma dada pessoa. Primeiro carrega a lista
  * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
@@ -99,8 +120,8 @@ is_head_member(P, L) :- L = [P|_].
  * */
 colegasDe(Pessoa, Colegas) :- 
 	formacaoNoCursoDe(Lista), 
-	is_head_member(Pessoa, Lista), 
-	dividirLista(Lista, 6, _, Colegas).
+	privado_is_head_member(Pessoa, Lista), 
+	privado_DividirLista(Lista, 6, _, Colegas).
 
 
 
@@ -123,9 +144,9 @@ my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
 /* Dada uma posição K, dadoDeinforNaPosicao(Posicao, dadoDeRetorno), 
  * retorna um elemento em uma dada posição na lista definida no predicado 
  * informacoesPessoais([...]) */
-dadoNaPosicao(X,[X|_],0).
-dadoNaPosicao(X,[_|L],K) :- K > 0, K1 is K - 1, dadoNaPosicao(X,L,K1).
+privado_DadoNaPosicao(X,[X|_],0).
+privado_DadoNaPosicao(X,[_|L],K) :- K > 0, K1 is K - 1, privado_DadoNaPosicao(X,L,K1).
 dadoDeinforNaPosicao(Posicao, DadoDeRetorno) :- 
-	informacoesPessoais(L), dadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
+	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
 
 
