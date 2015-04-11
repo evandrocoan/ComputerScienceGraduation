@@ -1,16 +1,18 @@
 /* ######################### Biblioteca de funções ##########################*/
 /* Verifica o comprimento de uma lista e imprime os passos intermediários
- * da contagem na tela em uma nova linha cada. */
-my_length([],0).
-my_length([_|L],N) :- 
-	my_length(L,N1), 
+ * da contagem na tela em uma nova linha cada. 
+ * */
+privado_ComprimentoDaLista([],0).
+privado_ComprimentoDaLista([_|L],N) :- 
+	privado_ComprimentoDaLista(L,N1), 
 	N is N1 + 1, 
 	write(N), 
 	writef('\n').
 
 /* Dada uma posição K, dadoDeInfoNaPosicao(Posicao, dadoDeRetorno), 
  * retorna um elemento em uma dada posição na lista definida no predicado 
- * informacoesPessoais([...]) */
+ * informacoesPessoais([...]) 
+ * */
 privado_DadoNaPosicao(X, [X|_], 0).
 privado_DadoNaPosicao(X,[_|L],K) :- 
 	K > 0, 
@@ -20,6 +22,15 @@ privado_DadoNaPosicao(X,[_|L],K) :-
 dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
 	informacoesPessoais(L), 
 	privado_DadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
+
+/* Dado uma lista numérica, retora a soma de seus elementos na variável Soma 
+ * */
+somaDosElementos(Lista, Soma) :- 
+	somaDosElementos(Lista, 0, Soma).
+somaDosElementos([], Soma, Soma).
+somaDosElementos([CabecaDaLista|Lista], Soma0, Soma) :-
+	Soma1 is Soma0 + CabecaDaLista,
+	somaDosElementos(Lista, Soma1, Soma).
 
 
 /* ############################ Programa ###################################*/
@@ -200,8 +211,21 @@ quaisNaoTemRerefencia(Nomes) :-
 /* Questão 9
  * Qual o numero de colegas de uma dada pessoa?
  * 
- * 
+ * Primeiro, carrega-se a informacoesAcademicas em Lista, 
+ * Segundo, verifica-se se essa é a lista dessa pessoa.
+ * Terceiro, retira-se da lista as outras informações, deixando somente os 
+ * colegas.
+ * Quarto, coloca-se o comprimento da lista, isto é, o número de colegas de
+ * uma dada pessoa em um dado curso.
  * */
+qualNumeroDeColegas(Nome, Quantidade) :-
+	informacoesAcademicas(Lista), 
+	privado_is_head_member(Nome, Lista), 
+	privado_DividirLista(Lista, 6, _, Colegas),
+	length(Colegas, Quantidade).
+
+
+
 
 
 
