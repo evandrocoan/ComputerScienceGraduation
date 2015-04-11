@@ -53,12 +53,12 @@ informacoesPessoais( ['Pessoa9 da Silva1', date( 1955, 11, 20 ),
  * Primeiro testo se a pessoa é a cabeça da lista.
  * Segundo pego o telefone dela nesta lista na quarta posição.
  * */
-qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
+qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 
 /* Questão 2
  * Quais as pessoas de uma dada cidade?
  * */
-quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
+quemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
 /* Questão 3
  * Qual a idade de uma dada pessoa?
@@ -79,9 +79,9 @@ privado_CalcularIdade(Data, Idade) :-
  * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
  * Terceiro, calcula sua idade.
  * */
-calcularIdadeDe(Pessoa, Idade) :- 
+qualIdadeDe(Nome, Idade) :- 
 	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
-	DadoDeRetorno = Pessoa,
+	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
  
@@ -90,9 +90,9 @@ calcularIdadeDe(Pessoa, Idade) :-
  * Primeiro encontro a pessoa na lista.
  * Segundo pego o curso dela e retorna na variável Curso.
  * */
-qualCurso(Pessoa, Curso) :-
+qualCurso(Nome, Curso) :-
 	formacaoNoCursoDe(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
-	DadoDeRetorno = Pessoa,
+	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
 
 /* Questão 7
@@ -116,9 +116,9 @@ privado_is_head_member(P, L) :- L = [P|_].
  * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
  * e caso sim, retira retorna os colegas na variável Colegas. 
  * */
-colegasDe(Pessoa, Colegas) :- 
+colegasDe(Nome, Colegas) :- 
 	formacaoNoCursoDe(Lista), 
-	privado_is_head_member(Pessoa, Lista), 
+	privado_is_head_member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas).
 
 
@@ -139,12 +139,12 @@ colegasDe(Pessoa, Colegas) :-
 my_length([],0).
 my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
 
-/* Dada uma posição K, dadoDeinforNaPosicao(Posicao, dadoDeRetorno), 
+/* Dada uma posição K, dadoDeInforNaPosicao(Posicao, dadoDeRetorno), 
  * retorna um elemento em uma dada posição na lista definida no predicado 
  * informacoesPessoais([...]) */
 privado_DadoNaPosicao(X,[X|_],0).
 privado_DadoNaPosicao(X,[_|L],K) :- K > 0, K1 is K - 1, privado_DadoNaPosicao(X,L,K1).
-dadoDeinforNaPosicao(Posicao, DadoDeRetorno) :- 
+dadoDeInforNaPosicao(Posicao, DadoDeRetorno) :- 
 	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
 
 
