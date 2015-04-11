@@ -63,7 +63,18 @@ quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 /* Questão 3
  * Qual a idade de uma dada pessoa?
  * */
+ 
+/* Questão 5
+* Usando dividirLista para "caminhar" na lista até a posição do curso.
+* A sublista criada excluirá tudo que vem antes, fazendo com que a cabeça
+* da lista seja o curso, então imprimimos a cabeça.
+*/
+dividirLista(L,0,[],L).
+dividirLista([X|Xs],N,[X|Ys],Zs) :- N > 0, N1 is N-1, dividirLista(Xs,N1,Ys,Zs).
 
+qualCurso(Nome,Curso) :-
+formacaoNoCursoDe(List),
+dividirLista(List, 1, _, [Curso|_]).
 
 /* Questão 7
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
