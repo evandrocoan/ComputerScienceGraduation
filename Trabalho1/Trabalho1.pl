@@ -141,6 +141,9 @@ qualNumeroDeColegas(Nome, Quantidade) :-
 /* Questão 10
  * Quantas pessoas estudaram em uma dada instituicao?
  * 
+ * Primeiro, encontra todas as ocorencias da univerdade para cada uma delas
+ * cria uma lista de 1s.
+ * Segundo, retorna a soma dessa lista na variável QuatidadeDePessoas.
  * */
 quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
     /* Faz todas as requisições ';' para a variavel informacoesAcademicas e
@@ -154,10 +157,8 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
      * */
     somaDosElementos( Lista, QuatidadeDePessoas).
 
-/* Acrescenta um contador que já deve estar inicializado. Este predicado 
- * acrescenta o contador, chamado contador, em uma unidade (1).
- * Ele retorna sempre 1 na variavel Quantidade, para cada uma das ocorrências 
- * da universidade na variável informacoesAcademicas.
+/* Este predicado retorna sempre 1 na variavel Quantidade, para cada uma 
+ * das ocorrências da universidade na variável informacoesAcademicas.
  * */
 privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 	informacoesAcademicas(L), 
