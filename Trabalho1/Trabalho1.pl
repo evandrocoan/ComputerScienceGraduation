@@ -124,15 +124,28 @@ quaisNaoTemRerefencia(Nomes) :-
 
 /* Questão 9
  * Qual o numero de colegas de uma dada pessoa?
- * 
+ * */
+qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
+    /* Faz todas as requisições ';' para a variavel informacoesAcademicas e
+     * Recebe um lista Lista contendo o número de colegas, para cada 
+     * instituição em que o aluno estudou.
+     * */
+    findall(Quantidade, privado_QualNumeroDeColegas(Nome, Quantidade), Lista),
+
+    /* Faz a soma da lista Lista e armazena na variável 
+     * QuatidadeDeColegas, que é retornada como resposta do programa.
+     * */
+    somaDosElementos( Lista, QuantidadeDeColegas).
+
+/*
  * Primeiro, carrega-se a informacoesAcademicas em Lista, 
  * Segundo, verifica-se se essa é a lista dessa pessoa.
  * Terceiro, retira-se da lista as outras informações, deixando somente os 
  * colegas.
- * Quarto, coloca-se o comprimento da lista, isto é, o número de colegas de
- * uma dada pessoa em um dado curso.
+ * Quarto, retorna-se o comprimento da lista, isto é, o número de colegas de
+ * uma dada pessoa em um dado curso, na variável Quantidade.
  * */
-qualNumeroDeColegas(Nome, Quantidade) :-
+privado_QualNumeroDeColegas(Nome, Quantidade) :-
 	informacoesAcademicas(Lista), 
 	privado_is_head_member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas),
