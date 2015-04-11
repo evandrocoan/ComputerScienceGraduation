@@ -43,13 +43,16 @@ qualIdadeDe(Nome, Idade) :-
 	
 /* Questão 4 ###############################################################
  * Quais as pessoas com mais de 30 anos?
- * 
- * Primeiro, carrego a Lista com os dados da pessoa.
+ * */
+quaisComMaisDe30Anos(Nomes) :-
+	findall(Nomes, privado_QuaisComMaisDe30Anos(Nomes), Nomes).
+
+/* Primeiro, carrego a Lista com os dados da pessoa.
  * Segundo, calculo a idade da pessoa.
  * Terceiro, calculo se a pessoa é maior que 30 anos.
  * Quarto, pego o nome da pessoa e retorno na variável Nome.
  * */
-quaisComMaisDe30Anos(Nome) :-
+privado_QuaisComMaisDe30Anos(Nome) :-
 	informacoesPessoais(L),
 	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade),
