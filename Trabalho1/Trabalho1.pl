@@ -58,11 +58,14 @@ quaisComMaisDe30Anos(Nome) :-
 
 /* Questão 5 ###############################################################
  * Quais os cursos de uma dada pessoa?
- * 
- * Primeiro encontro a pessoa na lista.
+ * */
+qualCursoDe(Nome, CursosDaPessoa) :-
+	findall(Curso, privado_QualCursoDe(Nome, Curso), CursosDaPessoa).
+
+/* Primeiro encontro a pessoa na lista.
  * Segundo pego o curso dela e retorna na variável Curso.
  * */
-qualCursoDe(Nome, Curso) :-
+privado_QualCursoDe(Nome, Curso) :-
 	informacoesAcademicas(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
