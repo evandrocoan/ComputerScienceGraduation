@@ -69,12 +69,16 @@ qualCursoDe(Nome, Curso) :-
 
 /* Questão 6 ###############################################################
  * Quais os(as) orientadores(as) de uma dada pessoa?
- * 
- * Primeiro, pega a lista.
+ * */
+quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
+	findall(Orientadores, 
+		privado_QuaisOrientadoresDe(Nome, Orientadores), OrientadoresDaPessoa).
+
+/* Primeiro, pega a lista.
  * Segundo, pega o nome da pessoa e verifica se é a pessoa que queremos.
  * Terceiro, pega o nome do orientador.
  * */
-quaisOrientadoresDe(Nome, Orientadores) :-
+privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa = Nome,
