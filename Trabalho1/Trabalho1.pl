@@ -13,12 +13,24 @@ qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 /* Questão 2 ###############################################################
  * Quais as pessoas de uma dada cidade?
  * */
-quemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
+quemMoraEm(Cidade, Nomes) :-
+	findall(Nome, privado_QuemMoraEm(Cidade, Nome), Nomes).
+privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
- * 
- * Primeiro, converto a data de aniversário para um TimeStamp. 
+ * Pega a data de nascimento de uma dada pessoa e calcula sua idade 
+ * Primeiro, encontra a pessoa na lista informacoesPessoais.
+ * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
+ * Terceiro, calcula sua idade.
+ * */
+qualIdadeDe(Nome, Idade) :- 
+	informacoesPessoais(L), privado_DadoNaPosicao(NomeDaPessoa,[_|L],1),
+	NomeDaPessoa = Nome,
+	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
+	privado_CalcularIdade(DataDeNascimento, Idade).
+
+/* Primeiro, converto a data de aniversário para um TimeStamp. 
  * Segundo, consigo a data atual e armazeno em outro TimeStamp2.
  * Terceiro, calculo a diferença de TimeStamps.
  * Quarto, converto o TimeStamp em idade.
@@ -30,17 +42,6 @@ privado_CalcularIdade(Data, Idade) :-
         convert_time(TempoDeVidaEmSegundos,TimeStamp3,_,_,_,_,_,_),
         Idade is TimeStamp3 - 1970.
 
-/* Pega a data de nascimento de uma dada pessoa e calcula sua idade 
- * Primeiro, encontra a pessoa na lista informacoesPessoais.
- * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
- * Terceiro, calcula sua idade.
- * */
-qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), privado_DadoNaPosicao(NomeDaPessoa,[_|L],1),
-	NomeDaPessoa = Nome,
-	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
-	privado_CalcularIdade(DataDeNascimento, Idade).
-	
 /* Questão 4 ###############################################################
  * Quais as pessoas com mais de 30 anos?
  * */
