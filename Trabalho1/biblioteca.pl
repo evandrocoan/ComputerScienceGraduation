@@ -58,4 +58,27 @@ testarRecursao :-
     write('Recurcoes: '), 
     writeln(ContadorValor).
 
-	
+
+/* Recebe os parametros, privado_DividirLista(L,N,L1,L2). 
+ * Uma lista L e cria duas listas, L1 e L2, onde a primeira contém N elementos 
+ * e a segunda o restante.
+ * */
+privado_DividirLista(L,0,[],L).
+privado_DividirLista([X|Xs],N,[X|Ys],Zs) :- 
+	N > 0, 
+	N1 is N - 1, 
+	privado_DividirLista(Xs,N1,Ys,Zs).
+
+/* Verifica se uma element P é membro da cabeça da lista. Faz isso para garantir 
+ * que não seja retornado verdadeiro caso P seja encontrado no final da lista.
+ * */
+privado_Is_Head_Member(P, L) :- 
+	L = [P|_].
+
+
+
+
+
+
+
+

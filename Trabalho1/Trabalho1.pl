@@ -82,29 +82,20 @@ quaisOrientadoresDe(Nome, Orientadores) :-
 
 /* Questão 7 ###############################################################
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
- * 
- * Primeiro, tiro a parte inicial da lista.
- * Segundo, imprimo o restante da lista, isto é, o nome das referências.
  * */
-privado_DividirLista(L,0,[],L).
-privado_DividirLista([X|Xs],N,[X|Ys],Zs) :- 
-	N > 0, 
-	N1 is N - 1, 
-	privado_DividirLista(Xs,N1,Ys,Zs).
+quaisColegasDe(Nome, ColegasDaPessoa) :-
+	findall(Colegas, privado_QuaisColegasDe(Nome, Colegas), ColegasDaPessoa).
 
-/* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
- * que não seja retornado verdadeiro caso uma das pessoas no final da lista
- * seja encontrada. 
+/* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
+ * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
+ * variável Colegas. 
  * */
-privado_is_head_member(P, L) :- L = [P|_].
-
-/* Informa quem são os colegas de uma dada pessoa. Primeiro carrega a lista
- * de informacoesAcademicas em Lista, depois verifica se ela pertence à lista. 
- * Caso sim, retorna os colegas na variável Colegas. 
- * */
-quaisColegasDe(Nome, Colegas) :-
+privado_QuaisColegasDe(Nome, Colegas) :-
+	/* Primeiro, tiro a parte inicial da lista.
+ 	 * Segundo, retorno o restante da lista, isto é, o nome das referências.
+	 * */
 	informacoesAcademicas(Lista), 
-	privado_is_head_member(Nome, Lista), 
+	privado_Is_Head_Member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas).
 
 /* Questão 8 ###############################################################
