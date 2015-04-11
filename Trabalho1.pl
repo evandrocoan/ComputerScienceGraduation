@@ -1,3 +1,5 @@
+:- use_module(library(date)).
+
 /* Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
@@ -58,13 +60,21 @@ qualTelefone(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
  * */
 quemMora(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
+/* Questão 3
+ * Qual a idade de uma dada pessoa?
+ * */
+
+
 /* Questão 7
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
  * Primeiro eu tiro a parte inicial da lista.
  * Segundo imprimo o restante da lista, isto é, o nome das referências.
  * */
 dividirLista(L,0,[],L).
-dividirLista([X|Xs],N,[X|Ys],Zs) :- N > 0, N1 is N - 1, dividirLista(Xs,N1,Ys,Zs).
+dividirLista([X|Xs],N,[X|Ys],Zs) :- 
+	N > 0, 
+	N1 is N - 1, 
+	dividirLista(Xs,N1,Ys,Zs).
 
 /* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
  * que não seja retornado verdadeiro caso uma das pessoas no final da lista
