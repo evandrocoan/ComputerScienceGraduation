@@ -2,7 +2,11 @@
 /* Verifica o comprimento de uma lista e imprime os passos intermediários
  * da contagem na tela em uma nova linha cada. */
 my_length([],0).
-my_length([_|L],N) :- my_length(L,N1), N is N1 + 1, write(N) ,writef('\n').
+my_length([_|L],N) :- 
+	my_length(L,N1), 
+	N is N1 + 1, 
+	write(N), 
+	writef('\n').
 
 /* Dada uma posição K, dadoDeInforNaPosicao(Posicao, dadoDeRetorno), 
  * retorna um elemento em uma dada posição na lista definida no predicado 
@@ -14,7 +18,8 @@ privado_DadoNaPosicao(X,[_|L],K) :-
 	privado_DadoNaPosicao(X,L,K1).
 	
 dadoDeInforNaPosicao(Posicao, DadoDeRetorno) :- 
-	informacoesPessoais(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],Posicao).
+	informacoesPessoais(L), 
+	privado_DadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
 
 
 /* ############################ Programa ###################################*/
@@ -25,6 +30,8 @@ formacaoNoCursoDe( ['Pessoa9 da Silva1', 'Ciencias da Computacao',
 'ITA', 'Silva1 da Pessoa9', 2010, 2015 ] ).
 formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Ciencias da Computacao', 
 'ITA', 'Silva2 da Pessoa8', 2003, 2007, 'Avril Lavigne', 'Demi Lovato' ] ).
+formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Sexologia', 
+'ITA', 'Silva11 da Pessoa13', 2007, 2012, 'Madonna' ] ).
 formacaoNoCursoDe( ['Pessoa8 da Silva2', 'Engenharia Mecanica', 
 'UFSC', 'Silva3 da Pessoa7', 2008, 2011, 'Marshall Mathers' ] ).
 formacaoNoCursoDe( ['Pessoa1 da Silva1', 'Ciencias da Computacao', 
@@ -40,7 +47,11 @@ formacaoNoCursoDe( ['Pessoa5 da Silva7', 'Engenharia da Computacao',
 formacaoNoCursoDe( ['Pessoa6 da Silva5', 'Ciencias Juridicas', 
 'UFSC', 'Silva4 da Pessoa5', 2002, 2012 ] ).
 formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
-'ITA', 'Silva4 da Pessoa6', 2007, 2013 ], 'Demi Lovato' ). 
+'ITA', 'Silva11 da Pessoa6', 2007, 2013 , 'Demi Lovato' ] ). 
+formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+'ITA', 'Silva19 da Pessoa24', 2007, 2013 , 'Maroon 5', 'Clean Bandit' ] ). 
+formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+'ITA', 'Silva15 da Pessoa16', 2007, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
 
 /* Nome, data de nascimento, cidade, telefone 
  * */
@@ -126,6 +137,18 @@ qualCursoDe(Nome, Curso) :-
 	formacaoNoCursoDe(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
+
+/* Questão 6 
+ * Quais os(as) orientadores(as) de uma dada pessoa?
+ * Primeiro, pega a lista.
+ * Segundo, pega o nome da pessoa e verifica se é a pessoa que queremos.
+ * Terceiro, pega o nome do orientador.
+ * */
+quaisOrientadoresDe(Nome, Orientadores) :-
+	formacaoNoCursoDe(L), 
+	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	NomeDaPessoa = Nome,
+	privado_DadoNaPosicao(Orientadores, [_|L], 4).
 
 /* Questão 7
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
