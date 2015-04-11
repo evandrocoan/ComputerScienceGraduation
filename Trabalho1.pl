@@ -90,7 +90,7 @@ qualIdadeDe(Nome, Idade) :-
  * Primeiro encontro a pessoa na lista.
  * Segundo pego o curso dela e retorna na variável Curso.
  * */
-qualCurso(Nome, Curso) :-
+qualCursoDe(Nome, Curso) :-
 	formacaoNoCursoDe(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
@@ -116,7 +116,7 @@ privado_is_head_member(P, L) :- L = [P|_].
  * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
  * e caso sim, retira retorna os colegas na variável Colegas. 
  * */
-colegasDe(Nome, Colegas) :- 
+quaisColegasDe(Nome, Colegas) :-
 	formacaoNoCursoDe(Lista), 
 	privado_is_head_member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas).
