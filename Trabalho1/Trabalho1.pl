@@ -19,6 +19,7 @@ privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
+ *
  * Pega a data de nascimento de uma dada pessoa e calcula sua idade 
  * Primeiro, encontra a pessoa na lista informacoesPessoais.
  * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
