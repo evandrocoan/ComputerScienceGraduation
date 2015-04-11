@@ -1,5 +1,3 @@
-:- use_module(library(date)).
-
 /* Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
