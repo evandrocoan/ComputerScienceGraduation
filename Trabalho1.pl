@@ -185,10 +185,10 @@ quaisColegasDe(Nome, Colegas) :-
 /* Questão 8 ###############################################################
  * Quais as pessoas sem nenhum colega citado como referencia?
  * 
- * Primeiro, carrego a lista em L, pego carrego uma pessoa e tiro a parte 
+ * Primeiro, carrega-se a lista em L, pega-se uma pessoa e tira-se a parte 
  * inicial da lista.
- * Segundo, verificos se o restante da lista, isto é, o nome das referências, 
- * é uma lista vazia, ou seja, tem comprimento 0.
+ * Segundo, verifica-se o restante da lista, isto é, o nome das referências, 
+ * é uma lista vazia, ou seja, caso tenha comprimento 0.
  * */
 quaisNaoTemRerefencia(Nomes) :-
 	informacoesAcademicas(L), 
@@ -197,7 +197,11 @@ quaisNaoTemRerefencia(Nomes) :-
 	length(Colegas, Tamanho),
 	Tamanho = 0.
 
-
+/* Questão 9
+ * Qual o numero de colegas de uma dada pessoa?
+ * 
+ * 
+ * */
 
 
 
