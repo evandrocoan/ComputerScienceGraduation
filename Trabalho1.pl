@@ -8,7 +8,7 @@ my_length([_|L],N) :-
 	write(N), 
 	writef('\n').
 
-/* Dada uma posição K, dadoDeInforNaPosicao(Posicao, dadoDeRetorno), 
+/* Dada uma posição K, dadoDeInfoNaPosicao(Posicao, dadoDeRetorno), 
  * retorna um elemento em uma dada posição na lista definida no predicado 
  * informacoesPessoais([...]) */
 privado_DadoNaPosicao(X, [X|_], 0).
@@ -17,7 +17,7 @@ privado_DadoNaPosicao(X,[_|L],K) :-
 	K1 is K - 1, 
 	privado_DadoNaPosicao(X,L,K1).
 	
-dadoDeInforNaPosicao(Posicao, DadoDeRetorno) :- 
+dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
 	informacoesPessoais(L), 
 	privado_DadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
 
@@ -152,14 +152,14 @@ quaisOrientadoresDe(Nome, Orientadores) :-
 
 /* Questão 7
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
- * Primeiro eu tiro a parte inicial da lista.
- * Segundo imprimo o restante da lista, isto é, o nome das referências.
+ * Primeiro, tiro a parte inicial da lista.
+ * Segundo, imprimo o restante da lista, isto é, o nome das referências.
  * */
 privado_DividirLista(L,0,[],L).
 privado_DividirLista([X|Xs],N,[X|Ys],Zs) :- 
 	N > 0, 
 	N1 is N - 1, 
-	privado_dividirLista(Xs,N1,Ys,Zs).
+	privado_DividirLista(Xs,N1,Ys,Zs).
 
 /* Verifica se uma pessoa é membro da cabeça da lista. Faz isso para garantir 
  * que não seja retornado verdadeiro caso uma das pessoas no final da lista
@@ -167,9 +167,9 @@ privado_DividirLista([X|Xs],N,[X|Ys],Zs) :-
  * */
 privado_is_head_member(P, L) :- L = [P|_].
 
-/* Informa quem tão os colegas de uma dada pessoa. Primeiro carrega a lista
- * de formacaoNoCursoDe em Lista, depois devifica se ela pertence a lista, 
- * e caso sim, retira retorna os colegas na variável Colegas. 
+/* Informa quem são os colegas de uma dada pessoa. Primeiro carrega a lista
+ * de formacaoNoCursoDe em Lista, depois verifica se ela pertence à lista. 
+ * Caso sim, retorna os colegas na variável Colegas. 
  * */
 quaisColegasDe(Nome, Colegas) :-
 	formacaoNoCursoDe(Lista), 
