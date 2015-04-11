@@ -86,16 +86,14 @@ calcularIdadeDe(Pessoa, Idade) :-
 	privado_CalcularIdade(DataDeNascimento, Idade).
  
 /* Questão 5
-* Usando dividirLista para "caminhar" na lista até a posição do curso.
-* A sublista criada excluirá tudo que vem antes, fazendo com que a cabeça
-* da lista seja o curso, então imprimimos a cabeça.
-*/
-dividirLista(L,0,[],L).
-dividirLista([X|Xs],N,[X|Ys],Zs) :- N > 0, N1 is N-1, dividirLista(Xs,N1,Ys,Zs).
-
-qualCurso(Nome,Curso) :-
-formacaoNoCursoDe(List),
-dividirLista(List, 1, _, [Curso|_]).
+ * Quais os cursos de uma dada pessoa?
+ * Primeiro encontro a pessoa na lista.
+ * Segundo pego o curso dela e retorna na variável Curso.
+ * */
+qualCurso(Pessoa, Curso) :-
+	formacaoNoCursoDe(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
+	DadoDeRetorno = Pessoa,
+	privado_DadoNaPosicao(Curso,[_|L],2).
 
 /* Questão 7
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
