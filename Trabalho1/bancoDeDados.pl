@@ -23,9 +23,9 @@ informacoesAcademicas( ['Pessoa6 da Silva5', 'Ciencias Juridicas',
 'UFSC', 'Silva4 da Pessoa5', 2002, 2012 ] ).
 informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva11 da Pessoa6', 2007, 2013 , 'Demi Lovato' ] ). 
-informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+informacoesAcademicas( ['Pessoa6 da Silva4', 'Sexologia', 
 'ITA', 'Silva19 da Pessoa24', 2007, 2013 , 'Maroon 5', 'Clean Bandit' ] ). 
-informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+informacoesAcademicas( ['Pessoa6 da Silva4', 'Medicina', 
 'ITA', 'Silva15 da Pessoa16', 2007, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
 
 /* Nome, data de nascimento, cidade, telefone 
