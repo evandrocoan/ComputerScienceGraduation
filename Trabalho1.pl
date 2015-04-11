@@ -26,31 +26,31 @@ dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :-
 /* Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
-formacaoNoCursoDe( ['Pessoa9 da Silva1', 'Ciencias da Computacao', 
+informacoesAcademicas( ['Pessoa9 da Silva1', 'Ciencias da Computacao', 
 'ITA', 'Silva1 da Pessoa9', 2010, 2015 ] ).
-formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Ciencias da Computacao', 
+informacoesAcademicas( ['Pessoa9 da Silva2', 'Ciencias da Computacao', 
 'ITA', 'Silva2 da Pessoa8', 2003, 2007, 'Avril Lavigne', 'Demi Lovato' ] ).
-formacaoNoCursoDe( ['Pessoa9 da Silva2', 'Sexologia', 
+informacoesAcademicas( ['Pessoa9 da Silva2', 'Sexologia', 
 'ITA', 'Silva11 da Pessoa13', 2007, 2012, 'Madonna' ] ).
-formacaoNoCursoDe( ['Pessoa8 da Silva2', 'Engenharia Mecanica', 
+informacoesAcademicas( ['Pessoa8 da Silva2', 'Engenharia Mecanica', 
 'UFSC', 'Silva3 da Pessoa7', 2008, 2011, 'Marshall Mathers' ] ).
-formacaoNoCursoDe( ['Pessoa1 da Silva1', 'Ciencias da Computacao', 
+informacoesAcademicas( ['Pessoa1 da Silva1', 'Ciencias da Computacao', 
 'UFSC', 'Silva9 da Pessoa1', 2007, 2012, 'Bruno Mars', 'Rock Star' ] ).
-formacaoNoCursoDe( ['Pessoa2 da Silva9', 'Ciencias da Automacao', 
+informacoesAcademicas( ['Pessoa2 da Silva9', 'Ciencias da Automacao', 
 'UFMG', 'Silva8 da Pessoa2', 2005, 2010 ] ).
-formacaoNoCursoDe( ['Pessoa3 da Silva7', 'Engenharia da Computacao', 
+informacoesAcademicas( ['Pessoa3 da Silva7', 'Engenharia da Computacao', 
 'USP', 'Silva7 da Pessoa3', 2009, 2015, 'Silvio Santos' ] ).
-formacaoNoCursoDe( ['Pessoa4 da Silva7', 'Ciencias Biologicas', 
+informacoesAcademicas( ['Pessoa4 da Silva7', 'Ciencias Biologicas', 
 'UNICAMP', 'Silva6 da Pessoa4', 2002, 2012, 'Silvio Santos', 'Bruno Mars' ] ).
-formacaoNoCursoDe( ['Pessoa5 da Silva7', 'Engenharia da Computacao', 
+informacoesAcademicas( ['Pessoa5 da Silva7', 'Engenharia da Computacao', 
 'UFSC', 'Silva5 da Pessoa5', 2000, 2005, 'Roberto Carlos' ] ).
-formacaoNoCursoDe( ['Pessoa6 da Silva5', 'Ciencias Juridicas', 
+informacoesAcademicas( ['Pessoa6 da Silva5', 'Ciencias Juridicas', 
 'UFSC', 'Silva4 da Pessoa5', 2002, 2012 ] ).
-formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva11 da Pessoa6', 2007, 2013 , 'Demi Lovato' ] ). 
-formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva19 da Pessoa24', 2007, 2013 , 'Maroon 5', 'Clean Bandit' ] ). 
-formacaoNoCursoDe( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
+informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva15 da Pessoa16', 2007, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
 
 /* Nome, data de nascimento, cidade, telefone 
@@ -79,6 +79,7 @@ informacoesPessoais( ['Pessoa9 da Silva1', date( 1976, 11, 20 ),
 
 /* Questão 1 ###############################################################
  * Qual o telefone de uma dada pessoa?
+ * 
  * Primeiro testo se a pessoa é a cabeça da lista.
  * Segundo pego o telefone dela nesta lista na quarta posição.
  * */
@@ -91,6 +92,7 @@ quemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
+ * 
  * Primeiro, converto a data de aniversário para um TimeStamp. 
  * Segundo, consigo a data atual e armazeno em outro TimeStamp2.
  * Terceiro, calculo a diferença de TimeStamps.
@@ -116,6 +118,7 @@ qualIdadeDe(Nome, Idade) :-
 	
 /* Questão 4 ###############################################################
  * Quais as pessoas com mais de 30 anos?
+ * 
  * Primeiro, carrego a Lista com os dados da pessoa.
  * Segundo, calculo a idade da pessoa.
  * Terceiro, calculo se a pessoa é maior que 30 anos.
@@ -130,28 +133,31 @@ quaisComMaisDe30Anos(Nome) :-
 
 /* Questão 5 ###############################################################
  * Quais os cursos de uma dada pessoa?
+ * 
  * Primeiro encontro a pessoa na lista.
  * Segundo pego o curso dela e retorna na variável Curso.
  * */
 qualCursoDe(Nome, Curso) :-
-	formacaoNoCursoDe(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
+	informacoesAcademicas(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno = Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
 
 /* Questão 6 ###############################################################
  * Quais os(as) orientadores(as) de uma dada pessoa?
+ * 
  * Primeiro, pega a lista.
  * Segundo, pega o nome da pessoa e verifica se é a pessoa que queremos.
  * Terceiro, pega o nome do orientador.
  * */
 quaisOrientadoresDe(Nome, Orientadores) :-
-	formacaoNoCursoDe(L), 
+	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa = Nome,
 	privado_DadoNaPosicao(Orientadores, [_|L], 4).
 
 /* Questão 7 ###############################################################
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
+ * 
  * Primeiro, tiro a parte inicial da lista.
  * Segundo, imprimo o restante da lista, isto é, o nome das referências.
  * */
@@ -168,17 +174,31 @@ privado_DividirLista([X|Xs],N,[X|Ys],Zs) :-
 privado_is_head_member(P, L) :- L = [P|_].
 
 /* Informa quem são os colegas de uma dada pessoa. Primeiro carrega a lista
- * de formacaoNoCursoDe em Lista, depois verifica se ela pertence à lista. 
+ * de informacoesAcademicas em Lista, depois verifica se ela pertence à lista. 
  * Caso sim, retorna os colegas na variável Colegas. 
  * */
 quaisColegasDe(Nome, Colegas) :-
-	formacaoNoCursoDe(Lista), 
+	informacoesAcademicas(Lista), 
 	privado_is_head_member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas).
 
 /* Questão 8 ###############################################################
  * Quais as pessoas sem nenhum colega citado como referencia?
+ * 
+ * Primeiro, carrego a lista em L, pego carrego uma pessoa e tiro a parte 
+ * inicial da lista.
+ * Segundo, verificos se o restante da lista, isto é, o nome das referências, 
+ * é uma lista vazia, ou seja, tem comprimento 0.
  * */
+quaisNaoTemRerefencia(Nomes) :-
+	informacoesAcademicas(L), 
+	privado_DadoNaPosicao(Nomes, [_|L], 1),
+	quaisColegasDe(Nomes, Colegas),
+	length(Colegas, Tamanho),
+	Tamanho = 0.
+
+
+
 
 
 
