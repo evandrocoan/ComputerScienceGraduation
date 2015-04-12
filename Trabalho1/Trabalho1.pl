@@ -198,6 +198,30 @@ privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 	InstituicaoDaPessoa = Instituicao,
 	Quantidade is 1.
 
+/* Questão 11
+ * Quais as pessoas com mais de 5 anos de experiencia em um cargo qualquer?
+ * */
+quemComMaisDe5Anos(NomesDasPessoas) :-
+	/* Faz todas as requisições ';' para a variavel informacoesAcademicas e
+     * Recebe um lista Nomes contendo os nomes.
+     * */
+    findall(Nome, privado_QuemComMaisDe5Anos(Nome), Nomes),
+    
+    /* Remove os elementos duplicados da lista.
+     * */
+    list_to_set(Nomes, NomesDasPessoas).
+
+/* Primeiro carrega-se a InformacoesAcademicas em Lista,
+ * Segundo, calcula-se o tempo de experiencia da pessoa.
+ * Terceiro, retorna o nome da pessoa caso o tempo seja maior que 5.
+ * */
+privado_QuemComMaisDe5Anos(Nome) :- 
+	informacoesProfissionais(L),
+	privado_DadoNaPosicao(DataInicial,[_|L],4),
+	privado_DadoNaPosicao(DataFinal,[_|L],5),
+	TempoDeExperiencia is DataFinal - DataInicial,
+	TempoDeExperiencia > 5,
+	privado_DadoNaPosicao(Nome,[_|L],1).
 
 
 
