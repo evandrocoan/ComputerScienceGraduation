@@ -96,9 +96,9 @@ privado_QuaisOrientadoresDe(Nome, Orientadores) :-
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
  * */
 quaisColegasDe(Nome, ColegasDaPessoa) :-
-	findall(Colegas, privado_QuaisColegasDe1(Nome, Colegas), ColegasDaPessoa1),
-	findall(Colegas, privado_QuaisColegasDe2(Nome, Colegas), ColegasDaPessoa2),
-	append(ColegasDaPessoa1, ColegasDaPessoa2, ColegasDaPessoa).
+	findall(Colegas, privado_QuaisColegasDe1(Nome, Colegas), ColegasDaPessoa1 ),
+	findall(Colegas, privado_QuaisColegasDe2(Nome, Colegas), ColegasDaPessoa2 ),
+	merge(ColegasDaPessoa1, ColegasDaPessoa2, ColegasDaPessoa).
 
 /* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
  * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
@@ -138,7 +138,7 @@ quaisNaoTemRerefencia(Nomes) :-
 privado_QuaisNaoTemRerefencia(Nomes) :-
 	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(Nomes, [_|L], 1),
-	quaisColegasDe(Nomes, Colegas),
+	privado_QuaisColegasDe1(Nomes, Colegas),
 	length(Colegas, Tamanho),
 	Tamanho = 0.
 
