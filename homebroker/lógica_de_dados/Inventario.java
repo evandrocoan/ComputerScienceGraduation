@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
 

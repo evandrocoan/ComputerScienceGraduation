@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.lógica_de_dados;
 
 /**
  * Representa uma conta de um usário/administrador em um homebroker.

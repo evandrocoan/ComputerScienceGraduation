@@ -30,12 +30,11 @@
  */
 package testes;
 
-import homebroker.Ação;
-import homebroker.BookDeOfertas;
-import homebroker.Conta;
-import homebroker.Homebroker;
-import homebroker.Inventario;
-import homebroker.OfertaDoMercado;
+import homebroker.interface_gráfica.Homebroker;
+import homebroker.lógica_de_dados.Ação;
+import homebroker.lógica_de_dados.BookDeOfertas;
+import homebroker.lógica_de_dados.Conta;
+import homebroker.lógica_de_dados.Inventario;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -89,8 +88,8 @@ public class DriverClass
             
             for( Ação ação: listaDeAções )
             {
-                bookDeOfertas.adicionarOfertaDeVenda( new OfertaDoMercado(
-                        ação, "Venda" ) );
+                bookDeOfertas.adicionarOfertaDeVenda( ação.getPreço(),
+                        ação.getQuantidade(), ação.getNome() );
             }
         }
         if( DriverClass.isDebug() || DriverClass.DEBUG )

@@ -1,7 +1,9 @@
 /**
  * 
  */
-package homebroker;
+package homebroker.lógica_de_execução;
+
+import homebroker.lógica_de_dados.Conta;
 
 import java.util.ArrayList;
 
@@ -110,7 +112,7 @@ public class MotorDoHomebroker
      * 
      * @param commando o comando inserido pelo usuário
      */
-    String menuPrincipal( String commando )
+    public void menuPrincipal( String commando )
     {
         if( commando == null )
         {
@@ -159,10 +161,6 @@ public class MotorDoHomebroker
                     + "Digite 'm' para ver o mercado!\n" );
             break;
         }
-        return "Será implementadado o modelo MVC, onde esta classe é o modelo, "
-                + "a classe Homebroker é o controler e a classe "
-                + "JanelaPrincipal é o viwer.";
-        
     }
     
     private void efetuarVendaDeAção()
@@ -183,10 +181,8 @@ public class MotorDoHomebroker
                             .showInputDialog( "Insira a quantidade da ação:" ) );
             
             sucesso =
-                    this.motorDoBook
-                            .adicionarOfertaDeVenda( new OfertaDoMercado(
-                                    new Ação( preço, quantidade, açãoAComprar ),
-                                    "Venda" ) );
+                    this.motorDoBook.adicionarOfertaDeVenda( preço, quantidade,
+                            açãoAComprar );
         }
         
     }
@@ -198,7 +194,7 @@ public class MotorDoHomebroker
      *            ela serve para exibir quais contas estão disponiveis para
      *            login e sua senha
      */
-    void loginNoSistema( String dica )
+    public void loginNoSistema( String dica )
     {
         Conta login = null;
         String command = " ", usuario = " ", senha = " ";

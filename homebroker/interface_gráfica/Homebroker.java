@@ -1,7 +1,9 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.interface_gráfica;
+
+import homebroker.lógica_de_execução.MotorDoHomebroker;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

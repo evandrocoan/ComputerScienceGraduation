@@ -1,7 +1,10 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.lógica_de_execução;
+
+import homebroker.interface_gráfica.JanelaDoBook;
+import homebroker.lógica_de_dados.BookDeOfertas;
 
 import javax.swing.JOptionPane;
 
@@ -68,8 +71,7 @@ public class MotorDoBook implements Runnable
                                                 .getNúmeroDeOfertas() );
                 JOptionPane.showMessageDialog( null, texto );
             }
-            this.bookDeOfertas.adicionarOfertaDeVenda( new OfertaDoMercado(
-                    new Ação( 10, 10, "Tabajara" ), "Venda" ) );
+            this.bookDeOfertas.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
             
             if( this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook
                     .getNúmeroDeOfertas() ) )
@@ -111,11 +113,17 @@ public class MotorDoBook implements Runnable
     }
     
     /**
-     * @param oferta
-     * @return se a operação foi bem sucedida
+     * Aciciona um oferta de venda.
+     * 
+     * @param preço
+     * @param quantidade
+     * @param açãoAComprar
+     * @return true se a oferta foi adicionada com sucesso.
      */
-    public boolean adicionarOfertaDeVenda( OfertaDoMercado oferta )
+    public boolean adicionarOfertaDeVenda( double preço, int quantidade,
+            String açãoAComprar )
     {
-        return this.bookDeOfertas.adicionarOfertaDeVenda( oferta );
+        return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade,
+                açãoAComprar );
     }
 }

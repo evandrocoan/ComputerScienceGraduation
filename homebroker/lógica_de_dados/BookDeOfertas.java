@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class BookDeOfertas
      * Serve para corrigir um bug no gerador automático de diagramas que não
      * reconhece a composição feita acima do ArrayList de OfertaDoMercado.
      */
-    public OfertaDoMercado inútil = new OfertaDoMercado( null, null );
+    public OfertaDoMercado inútil = new OfertaDoMercado( 0, 0, null, null );
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -54,12 +54,16 @@ public class BookDeOfertas
     /**
      * Cria uma ordem de venda de uma ação no book de ofertas.
      * 
-     * @param ofertaDoMercado a ofertar do mercado a ser adicionada.
-     * @return true
+     * @param preço
+     * @param quantidade
+     * @param açãoAComprar
+     * @return true se a oferta foi adicionada com sucesso.
      */
-    public boolean adicionarOfertaDeVenda( OfertaDoMercado ofertaDoMercado )
+    public boolean adicionarOfertaDeVenda( double preço, int quantidade,
+            String açãoAComprar )
     {
-        return this.ofertasDoMercado.add( ofertaDoMercado );
+        return this.ofertasDoMercado.add( new OfertaDoMercado( preço,
+                quantidade, açãoAComprar, "Venda" ) );
     }
     
     /**

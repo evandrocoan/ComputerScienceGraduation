@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker;
+package homebroker.lógica_de_dados;
 
 import testes.DriverClass;
 
@@ -17,12 +17,15 @@ public class OfertaDoMercado
     private static boolean DEBUG = false;
     
     /**
-     * @param açãoEmOferta a ação a ser vendida.
+     * @param preço
+     * @param quantidade
+     * @param açãoAComprar
      * @param tipoDeOferta o tipo da oferta
      */
-    public OfertaDoMercado( Ação açãoEmOferta, String tipoDeOferta )
+    public OfertaDoMercado( double preço, int quantidade, String açãoAComprar,
+            String tipoDeOferta )
     {
-        this.açãoEmOferta = açãoEmOferta;
+        this.açãoEmOferta = new Ação( preço, quantidade, açãoAComprar );
         this.tipoDeOferta = tipoDeOferta;
     }
     
