@@ -114,51 +114,63 @@ informacoesPessoais( ['Pessoa9 da Silva1', date( 1976, 11, 20 ),
 'Florianopolis', 4887347425 ] ).
 
 /* Organização das informações profissionais. ################################
- * Nome, Nome da Empresa, Nome do Cargo, Nome Completo de Colegas como 
- * Referências, Ano de Ingresso, Ano de Término.
+ * Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
+ * Nome Completo de Colegas como Referências...
  * */
 
 /* Pessoa1 da Silva1
  * */
-informacoesProfissionais( ['Pessoa1 da Silva1', 'Brasil Telecom' ] ).
+informacoesProfissionais( ['Pessoa1 da Silva1', 'Brasil Telecom', 
+'Programador Junior', 2002, 2006, 'Pessoa2 da Silva9', 'Pessoa3 da Silva7' ] ).
 
 /* Pessoa2 da Silva9
  * */
-informacoesProfissionais( ['Pessoa2 da Silva9', 'Microsoft' ] ).
-informacoesProfissionais( ['Pessoa2 da Silva9', 'Google' ] ).
-informacoesProfissionais( ['Pessoa2 da Silva9', 'Apple' ] ).
+informacoesProfissionais( ['Pessoa2 da Silva9', 'Microsoft', 
+'Assistente Sexual', 2009, 2015 ] ).
+informacoesProfissionais( ['Pessoa2 da Silva9', 'Google', 
+'Programador Senior', 1998, 2000, 'Pessoa3 da Silva7' ] ).
+informacoesProfissionais( ['Pessoa2 da Silva9', 'Apple',
+'Puxa Saco', 2001, 2008, 'Michael Jackson', 'Britney Spears' ] ).
 
 /* Pessoa3 da Silva7
  * */
-informacoesProfissionais( ['Pessoa3 da Silva7', 'GTV' ] ).
+informacoesProfissionais( ['Pessoa3 da Silva7', 'GTV',
+'Enxedor De Linguica', 1995, 2015 ] ).
 
 /* Pessoa4 da Silva7
  * */
-informacoesProfissionais( ['Pessoa4 da Silva7', 'Google' ] ).
+informacoesProfissionais( ['Pessoa4 da Silva7', 'Google',
+'Programador', 1989, 2013, 'Alexandre Gonçalves Silva', 'Ruan Ramon' ] ).
 
 /* Pessoa5 da Silva7
  * */
-informacoesProfissionais( ['Pessoa5 da Silva7', 'Apple' ] ).
+informacoesProfissionais( ['Pessoa5 da Silva7', 'Apple',
+'Desprogramador', 1990, 2015, 'Osvaldo Paulo Heiderscheidt Roberge Martins' ] ).
 
 /* Pessoa6 da Silva5
  * */
-informacoesProfissionais( ['Pessoa6 da Silva5', 'Microsoft' ] ).
+informacoesProfissionais( ['Pessoa6 da Silva5', 'Microsoft'
+'Despuxador de Saco', 2005, 2011, 'Eminem', 'Demi Lovato', 'Lily Allen' ] ).
 
 /* Pessoa6 da Silva4
  * */
-informacoesProfissionais( ['Pessoa6 da Silva4', 'Google' ] ).
+informacoesProfissionais( ['Pessoa6 da Silva4', 'Google',
+'Repuxador de Saco', 2003, 2013 ] ).
 
 /* Pessoa8 da Silva2
  * */
-informacoesProfissionais( ['Pessoa8 da Silva2', 'Google' ] ).
+informacoesProfissionais( ['Pessoa8 da Silva2', 'Google',
+'Exorcista', 2000, 2015, 'Homer Simpson', 'Marge Simpson' ] ).
 
 /* Pessoa9 da Silva2
  * */
-informacoesProfissionais( ['Pessoa9 da Silva2', 'TIM' ] ).
+informacoesProfissionais( ['Pessoa9 da Silva2', 'TIM'
+'Re-exorcista', 1999, 2011, 'Simpser Simpson', 'Bart Simpser' ] ).
 
 /* Pessoa9 da Silva1
  * */
-informacoesProfissionais( ['Pessoa9 da Silva1', 'Apple' ] ).
+informacoesProfissionais( ['Pessoa9 da Silva1', 'Apple',
+'Assitente Sexual', 1980, 2015, 'Madonna', 'Justin Bieber', 'Freddy Krueger' ] ).
 
 
 
