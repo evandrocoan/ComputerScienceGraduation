@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker.interface_gráfica;
+package homebroker.lógica_de_execução;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,20 +26,20 @@ import util.Biblioteca;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class JanelaDoBook extends JFrame
+public class MonitorDoBook extends JFrame
 {
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final JanelaDoBook INSTÂNCIA_DA_JANELA = new JanelaDoBook();
+    private static final MonitorDoBook INSTÂNCIA_DA_JANELA = new MonitorDoBook();
     
     private static boolean DEBUG = false;
     
     private PainelPrincipal painelPrincipal;
     
-    private JanelaDoBook()
+    private MonitorDoBook()
     {
-        if( DriverClass.isDebug() || JanelaDoBook.DEBUG )
+        if( DriverClass.isDebug() || MonitorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
@@ -71,7 +71,7 @@ public class JanelaDoBook extends JFrame
     /**
      * @return the instance
      */
-    public static JanelaDoBook getInstance()
+    public static MonitorDoBook getInstance()
     {
         return INSTÂNCIA_DA_JANELA;
     }
@@ -112,7 +112,7 @@ public class JanelaDoBook extends JFrame
         
         private PainelPrincipal()
         {
-            if( DriverClass.isDebug() || JanelaDoBook.DEBUG )
+            if( DriverClass.isDebug() || MonitorDoBook.DEBUG )
             {
                 JOptionPane
                         .showMessageDialog( null,

@@ -3,7 +3,6 @@
  */
 package homebroker.lógica_de_execução;
 
-import homebroker.interface_gráfica.JanelaDoBook;
 import homebroker.lógica_de_dados.BookDeOfertas;
 
 import javax.swing.JOptionPane;
@@ -26,7 +25,7 @@ public class MotorDoBook implements Runnable
     
     private BookDeOfertas bookDeOfertas;
     
-    private JanelaDoBook janelaDoBook;
+    private MonitorDoBook janelaDoBook;
     
     private MotorDoBook()
     {
@@ -40,7 +39,7 @@ public class MotorDoBook implements Runnable
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         this.bookDeOfertas = BookDeOfertas.getInstance();
-        this.janelaDoBook = JanelaDoBook.getInstance();
+        this.janelaDoBook = MonitorDoBook.getInstance();
     }
     
     /**
