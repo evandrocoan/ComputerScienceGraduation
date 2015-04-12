@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import testes.DriverClass;
 import util.Biblioteca;
 
 /**
@@ -202,7 +201,7 @@ public class Homebroker extends JFrame
                 @Override
                 public void actionPerformed( ActionEvent ae )
                 {
-                    if( DriverClass.isDebug() || Homebroker.DEBUG )
+                    if( Homebroker.DEBUG )
                     {
                         if( motorDoHomebroker == null )
                         {

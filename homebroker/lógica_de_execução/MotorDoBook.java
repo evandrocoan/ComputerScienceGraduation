@@ -7,8 +7,6 @@ import homebroker.lógica_de_dados.BookDeOfertas;
 
 import javax.swing.JOptionPane;
 
-import testes.DriverClass;
-
 /**
  * Cuida da execução do BookDeOfertas.
  * 
@@ -29,7 +27,7 @@ public class MotorDoBook implements Runnable
     
     private MotorDoBook()
     {
-        if( DriverClass.isDebug() || MotorDoBook.DEBUG )
+        if( MotorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor do MotorDoBook!" );
@@ -61,7 +59,7 @@ public class MotorDoBook implements Runnable
     {
         while( true )
         {
-            if( DriverClass.isDebug() || MotorDoBook.DEBUG )
+            if( MotorDoBook.DEBUG )
             {
                 String texto =
                         "Estou em JanelaDoBook chamando o teste \n\n this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook.getNúmeroDeOfertas()"
@@ -97,7 +95,7 @@ public class MotorDoBook implements Runnable
         String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
         this.janelaDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
         
-        if( DriverClass.isDebug() || MotorDoBook.DEBUG )
+        if( MotorDoBook.DEBUG )
         {
             System.out.println( ofertaDoMercado );
         }

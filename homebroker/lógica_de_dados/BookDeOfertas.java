@@ -5,8 +5,6 @@ package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
 
-import testes.DriverClass;
-
 /**
  * 
  * Inicia a interface gráfica que exibe o book de efertas com as ordens de
@@ -77,7 +75,7 @@ public class BookDeOfertas
     {
         int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
-        if( DriverClass.isDebug() || BookDeOfertas.DEBUG )
+        if( BookDeOfertas.DEBUG )
         {
             System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
                     + ( númeroDeOfertas < ultimaOferta ) + "("
@@ -89,7 +87,7 @@ public class BookDeOfertas
             return false;
         }
         
-        if( DriverClass.isDebug() || BookDeOfertas.DEBUG )
+        if( BookDeOfertas.DEBUG )
         {
             System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
                     + ( númeroDeOfertas > ultimaOferta ) );

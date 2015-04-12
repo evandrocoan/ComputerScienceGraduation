@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-import testes.DriverClass;
 import util.Biblioteca;
 
 /**
@@ -31,7 +30,8 @@ public class MonitorDoBook extends JFrame
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final MonitorDoBook INSTÂNCIA_DA_JANELA = new MonitorDoBook();
+    private static final MonitorDoBook INSTÂNCIA_DA_JANELA =
+            new MonitorDoBook();
     
     private static boolean DEBUG = false;
     
@@ -39,7 +39,7 @@ public class MonitorDoBook extends JFrame
     
     private MonitorDoBook()
     {
-        if( DriverClass.isDebug() || MonitorDoBook.DEBUG )
+        if( MonitorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor da JanelaDoBook!" );
@@ -112,7 +112,7 @@ public class MonitorDoBook extends JFrame
         
         private PainelPrincipal()
         {
-            if( DriverClass.isDebug() || MonitorDoBook.DEBUG )
+            if( MonitorDoBook.DEBUG )
             {
                 JOptionPane
                         .showMessageDialog( null,

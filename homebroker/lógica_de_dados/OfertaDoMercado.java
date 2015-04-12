@@ -3,7 +3,6 @@
  */
 package homebroker.lógica_de_dados;
 
-import testes.DriverClass;
 
 /**
  * Representa uma oferta de venta ou compra.
@@ -56,7 +55,7 @@ public class OfertaDoMercado
                         + this.getAçãoEmOferta().getPreço() + " - Quantidade: "
                         + this.getAçãoEmOferta().getQuantidade();
         
-        if( DriverClass.isDebug() || OfertaDoMercado.DEBUG )
+        if( OfertaDoMercado.DEBUG )
         {
             System.out.println( açãoEmOferta );
         }

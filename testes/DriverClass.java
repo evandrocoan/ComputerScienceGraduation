@@ -34,7 +34,6 @@ import homebroker.interface_gráfica.Homebroker;
 import homebroker.lógica_de_dados.Ação;
 import homebroker.lógica_de_dados.BookDeOfertas;
 import homebroker.lógica_de_dados.Conta;
-import homebroker.lógica_de_dados.Inventario;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -50,8 +49,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
-
-import util.Biblioteca;
 
 /**
  * Esta classe serve como utiliário que realiza uma serie de test para com a
@@ -92,7 +89,7 @@ public class DriverClass
                         ação.getQuantidade(), ação.getNome() );
             }
         }
-        if( DriverClass.isDebug() || DriverClass.DEBUG )
+        if( DriverClass.DEBUG )
         {
             JOptionPane
                     .showMessageDialog( null, "Estou em testarBookDeOfertas" );
@@ -109,17 +106,6 @@ public class DriverClass
     }
     
     /**
-     * Informa se o programa executará em modo de debug
-     * 
-     * @return true se o programa será executado em mode debug, false caso
-     *         contrário.
-     */
-    public static boolean isDebug()
-    {
-        return DriverClass.DEBUG;
-    }
-    
-    /**
      * Transforma um ArrayList de contas e uma String
      * 
      * @param contas um ArrayList contendo as contas
@@ -133,85 +119,6 @@ public class DriverClass
             texto = texto + conta.getNome() + ", ";
         }
         return texto;
-    }
-    
-    /**
-     * Cria contas teste para o sistema.
-     * 
-     * @param quantidade a quantidade de contas teste para se criar
-     * @param senha senha que as contas de teste terão
-     * @return conta uma nova conta teste com dados fictícios
-     */
-    public static ArrayList< Conta > criarContasFicticia( int quantidade,
-            String senha )
-    {
-        ArrayList< Conta > contasTeste = new ArrayList<>();
-        contasTeste.add( new Conta( "admin", "admin", 2000.5 * util.Biblioteca
-                .gerarNumeroAleatorio(), true, new Inventario() ) );
-        
-        DriverClass.criarInventarioFicticio( contasTeste.get( 0 ), quantidade );
-        
-        for( int i = 0; i < quantidade; i++ )
-        {
-            Conta contaTeste =
-                    new Conta( "User" + Biblioteca.gerarNumeroAleatorio(),
-                            senha,
-                            2000.5 * util.Biblioteca.gerarNumeroAleatorio(),
-                            false, new Inventario() );
-            DriverClass.criarInventarioFicticio( contaTeste, quantidade );
-            
-            contasTeste.add( contaTeste );
-        }
-        if( DriverClass.isDebug() || DriverClass.DEBUG )
-        {
-            JOptionPane.showMessageDialog( null,
-                    "Estou em criarContasFictícias "
-                            + contasTeste.get( 0 ).getNome() );
-        }
-        return contasTeste;
-    }
-    
-    /**
-     * Cria um inventário fictício de ações contendo 5 ações fictícias
-     * 
-     * @param conta a conta que irá receber as ações fictícioas
-     * @param quantidade a quantidade de ações fictícias para se criar
-     */
-    public static void criarInventarioFicticio( Conta conta, int quantidade )
-    {
-        for( int i = 0; i < quantidade / 5; i++ )
-        {
-            conta.getInventario().adicionarAoInventario(
-                    new Ação( 2.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SA"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
-            
-            conta.getInventario().adicionarAoInventario(
-                    new Ação( 22.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            100 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SO"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
-            
-            conta.getInventario().adicionarAoInventario(
-                    new Ação( 200.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            1000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SP"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
-            
-            conta.getInventario().adicionarAoInventario(
-                    new Ação( 2000.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara ST"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
-            
-            conta.getInventario().adicionarAoInventario(
-                    new Ação(
-                            200006.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SS"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
-        }
     }
     
     /**

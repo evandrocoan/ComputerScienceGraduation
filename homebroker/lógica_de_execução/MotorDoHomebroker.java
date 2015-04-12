@@ -3,13 +3,15 @@
  */
 package homebroker.lógica_de_execução;
 
+import homebroker.lógica_de_dados.Ação;
 import homebroker.lógica_de_dados.Conta;
+import homebroker.lógica_de_dados.Inventario;
 
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import testes.DriverClass;
+import util.Biblioteca;
 
 /**
  * 
@@ -18,6 +20,7 @@ import testes.DriverClass;
 public class MotorDoHomebroker
 {
     private static MotorDoHomebroker INSTÂNCIA_DO_MOTOR;
+    private static final boolean DEBUG = false;
     
     private MotorDoBook motorDoBook = MotorDoBook.getInstance();
     
@@ -66,7 +69,7 @@ public class MotorDoHomebroker
      */
     private MotorDoHomebroker()
     {
-        if( DriverClass.isDebug() )
+        if( MotorDoHomebroker.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
                     "Estou no construtor de ProgramaPrincipal()" );
@@ -81,7 +84,7 @@ public class MotorDoHomebroker
         this.processoDoBook.start();
         
         // Cria contas fictícias
-        this.contasTeste = DriverClass.criarContasFicticia( 30, "123" );
+        this.contasTeste = MotorDoHomebroker.criarContasFicticia( 30, "123" );
         
         // Login temporário para testes.
         this.contaAutenticada = this.contasTeste.get( 0 );
@@ -143,7 +146,7 @@ public class MotorDoHomebroker
             this.efetuarVendaDeAção();
             break;
         case "m":
-            if( DriverClass.isDebug() )
+            if( MotorDoHomebroker.DEBUG )
             {
                 if( this.motorDoBook == null )
                 {
@@ -256,5 +259,85 @@ public class MotorDoHomebroker
             System.exit( 0 );
         }
         this.contaAutenticada = login;
+    }
+    
+    /**
+     * Cria um inventário fictício de ações contendo 5 ações fictícias
+     * 
+     * @param conta a conta que irá receber as ações fictícioas
+     * @param quantidade a quantidade de ações fictícias para se criar
+     */
+    public static void criarInventarioFicticio( Conta conta, int quantidade )
+    {
+        for( int i = 0; i < quantidade / 5; i++ )
+        {
+            conta.getInventario().adicionarAoInventario(
+                    new Ação( 2.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                            10 + util.Biblioteca.gerarNumeroAleatorio(),
+                            "Tabajara SA"
+                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+            
+            conta.getInventario().adicionarAoInventario(
+                    new Ação( 22.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                            100 + util.Biblioteca.gerarNumeroAleatorio(),
+                            "Tabajara SO"
+                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+            
+            conta.getInventario().adicionarAoInventario(
+                    new Ação( 200.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                            1000 + util.Biblioteca.gerarNumeroAleatorio(),
+                            "Tabajara SP"
+                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+            
+            conta.getInventario().adicionarAoInventario(
+                    new Ação( 2000.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
+                            "Tabajara ST"
+                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+            
+            conta.getInventario().adicionarAoInventario(
+                    new Ação(
+                            200006.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
+                            "Tabajara SS"
+                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+        }
+    }
+    
+    /**
+     * Cria contas teste para o sistema.
+     * 
+     * @param quantidade a quantidade de contas teste para se criar
+     * @param senha senha que as contas de teste terão
+     * @return conta uma nova conta teste com dados fictícios
+     */
+    public static ArrayList< Conta > criarContasFicticia( int quantidade,
+            String senha )
+    {
+        ArrayList< Conta > contasTeste = new ArrayList<>();
+        contasTeste.add( new Conta( "admin", "admin", 2000.5 * util.Biblioteca
+                .gerarNumeroAleatorio(), true, new Inventario() ) );
+        
+        MotorDoHomebroker.criarInventarioFicticio( contasTeste.get( 0 ),
+                quantidade );
+        
+        for( int i = 0; i < quantidade; i++ )
+        {
+            Conta contaTeste =
+                    new Conta( "User" + Biblioteca.gerarNumeroAleatorio(),
+                            senha,
+                            2000.5 * util.Biblioteca.gerarNumeroAleatorio(),
+                            false, new Inventario() );
+            MotorDoHomebroker.criarInventarioFicticio( contaTeste, quantidade );
+            
+            contasTeste.add( contaTeste );
+        }
+        if( MotorDoHomebroker.DEBUG )
+        {
+            JOptionPane.showMessageDialog( null,
+                    "Estou em criarContasFictícias "
+                            + contasTeste.get( 0 ).getNome() );
+        }
+        return contasTeste;
     }
 }
