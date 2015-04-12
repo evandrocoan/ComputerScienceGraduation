@@ -96,19 +96,29 @@ privado_QuaisOrientadoresDe(Nome, Orientadores) :-
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
  * */
 quaisColegasDe(Nome, ColegasDaPessoa) :-
-	findall(Colegas, privado_QuaisColegasDe(Nome, Colegas), ColegasDaPessoa).
+	findall(Colegas, privado_QuaisColegasDe1(Nome, Colegas), ColegasDaPessoa1),
+	findall(Colegas, privado_QuaisColegasDe2(Nome, Colegas), ColegasDaPessoa2),
+	append(ColegasDaPessoa1, ColegasDaPessoa2, ColegasDaPessoa).
 
 /* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
  * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
  * variável Colegas. 
  * */
-privado_QuaisColegasDe(Nome, Colegas) :-
+privado_QuaisColegasDe1(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
  	 * Segundo, retorno o restante da lista, isto é, o nome das referências.
 	 * */
 	informacoesAcademicas(Lista), 
 	privado_Is_Head_Member(Nome, Lista), 
 	privado_DividirLista(Lista, 6, _, Colegas).
+
+privado_QuaisColegasDe2(Nome, Colegas) :-
+	/* Primeiro, tiro a parte inicial da lista.
+ 	 * Segundo, retorno o restante da lista, isto é, o nome das referências.
+	 * */
+	informacoesProfissionais(Lista), 
+	privado_Is_Head_Member(Nome, Lista), 
+	privado_DividirLista(Lista, 5, _, Colegas).
 
 /* Questão 8 ###############################################################
  * Quais as pessoas sem nenhum colega citado como referencia?
@@ -132,7 +142,7 @@ privado_QuaisNaoTemRerefencia(Nomes) :-
 	length(Colegas, Tamanho),
 	Tamanho = 0.
 
-/* Questão 9
+/* Questão 9 #################################################################
  * Qual o numero de colegas de uma dada pessoa?
  * */
 qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
@@ -147,8 +157,7 @@ qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
      * */
     somaDosElementos( Lista, QuantidadeDeColegas).
 
-/*
- * Primeiro, carrega-se a informacoesAcademicas em Lista, 
+/* Primeiro, carrega-se a informacoesAcademicas em Lista, 
  * Segundo, verifica-se se essa é a lista dessa pessoa.
  * Terceiro, retira-se da lista as outras informações, deixando somente os 
  * colegas.
@@ -161,7 +170,7 @@ privado_QualNumeroDeColegas(Nome, Quantidade) :-
 	privado_DividirLista(Lista, 6, _, Colegas),
 	length(Colegas, Quantidade).
 
-/* Questão 10
+/* Questão 10 ################################################################
  * Quantas pessoas estudaram em uma dada instituicao?
  * 
  * Primeiro, encontra todas as ocorencias da univerdade para cada uma delas
