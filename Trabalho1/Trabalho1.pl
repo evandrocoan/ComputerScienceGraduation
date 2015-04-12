@@ -27,7 +27,7 @@ privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
  * */
 qualIdadeDe(Nome, Idade) :- 
 	informacoesPessoais(L), privado_DadoNaPosicao(NomeDaPessoa,[_|L],1),
-	NomeDaPessoa = Nome,
+	NomeDaPessoa == Nome,
 	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
@@ -72,7 +72,7 @@ qualCursoDe(Nome, CursosDaPessoa) :-
  * */
 privado_QualCursoDe(Nome, Curso) :-
 	informacoesAcademicas(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
-	DadoDeRetorno = Nome,
+	DadoDeRetorno == Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
 
 /* Questão 6 ###############################################################
@@ -89,7 +89,7 @@ quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
 privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
-	NomeDaPessoa = Nome,
+	NomeDaPessoa == Nome,
 	privado_DadoNaPosicao(Orientadores, [_|L], 4).
 
 /* Questão 7 ###############################################################
@@ -140,7 +140,7 @@ privado_QuaisNaoTemRerefencia(Nomes) :-
 	privado_DadoNaPosicao(Nomes, [_|L], 1),
 	privado_QuaisColegasDe1(Nomes, Colegas),
 	length(Colegas, Tamanho),
-	Tamanho = 0.
+	Tamanho == 0.
 
 /* Questão 9 #################################################################
  * Qual o numero de colegas de uma dada pessoa?
@@ -195,14 +195,14 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
 privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
-	InstituicaoDaPessoa = Instituicao,
+	InstituicaoDaPessoa == Instituicao,
 	Quantidade is 1.
 
 /* Questão 11
  * Quais as pessoas com mais de 5 anos de experiencia em um cargo qualquer?
  * */
 quemComMaisDe5Anos(NomesDasPessoas) :-
-	/* Faz todas as requisições ';' para a variavel informacoesAcademicas e
+	/* Faz todas as requisições ';' para a variavel informacoesProfissionais e
      * Recebe um lista Nomes contendo os nomes.
      * */
     findall(Nome, privado_QuemComMaisDe5Anos(Nome), Nomes),
@@ -211,7 +211,7 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
      * */
     list_to_set(Nomes, NomesDasPessoas).
 
-/* Primeiro carrega-se a InformacoesAcademicas em Lista,
+/* Primeiro carrega-se a informacoesProfissionais em Lista,
  * Segundo, calcula-se o tempo de experiencia da pessoa.
  * Terceiro, retorna o nome da pessoa caso o tempo seja maior que 5.
  * */
