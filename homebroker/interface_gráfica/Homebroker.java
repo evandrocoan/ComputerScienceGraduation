@@ -231,9 +231,10 @@ public class Homebroker extends JFrame
                 @Override
                 public void keyPressed( KeyEvent evt )
                 {
-                    if( evt.getKeyCode() != KeyEvent.VK_ENTER )
+                    if( evt.getKeyCode() != KeyEvent.VK_ENTER
+                            && caixaDeTextoPrincipal.getText().length() > 1 )
                     {
-                        // caixaDeTextoPrincipal.setText( "" );
+                        caixaDeTextoPrincipal.setText( "" );
                     }
                 }
             } );

@@ -117,6 +117,24 @@ public class Conta
     // #################################### Client Access ##########
     
     /**
+     * @param nome o nome da ação a procurar o preço.
+     * @return preço o preço da ação encontrada.
+     */
+    public double getAçãoPreço( String nome )
+    {
+        return this.inventario.getAçãoPreço( nome );
+    }
+    
+    /**
+     * @param nome o nome da ação para encontrar a quantidade.
+     * @return quantidade a quantidade de ação disponíveis.
+     */
+    public int getAçãoQuantidade( String nome )
+    {
+        return this.inventario.getAçãoQuantidade( nome );
+    }
+    
+    /**
      * Retorna o inventário do cliente. Este contém todas as ações compradas por
      * ele.
      * 
@@ -170,5 +188,23 @@ public class Conta
     public String inventarioToString()
     {
         return this.getInventario().inventarioToString();
+    }
+    
+    /**
+     * @param nomeAção nome da ação.
+     * @return true se ela existe false caso contrário.
+     */
+    public boolean existeAçãoNoInvetário( String nomeAção )
+    {
+        return this.inventario.existeAçãoNoInvetário( nomeAção );
+    }
+    
+    /**
+     * @param quantidade a quantidade de ações
+     * @return true se existe a quantidade especificada, false caso contrário.
+     */
+    public boolean existeQuantidadeNoInvetário( int quantidade )
+    {
+        return this.inventario.existeQuantidadeNoInvetário( quantidade );
     }
 }

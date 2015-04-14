@@ -96,4 +96,78 @@ public class Inventario
     {
         return this.listaDeAções.remove( acao );
     }
+    
+    /**
+     * @param nome o nome da ação a procurar o preço.
+     * @return o preço da ação.
+     */
+    public double getAçãoPreço( String nome )
+    {
+        double preço = 0;
+        
+        for( Ação ação: this.listaDeAções )
+        {
+            if( ação.getNome() == nome )
+            {
+                preço = ação.getPreço();
+            }
+        }
+        return preço;
+    }
+    
+    /**
+     * @param nome o nome da ação.
+     * @return quantidade a quantidade de ações existentes no invetário.
+     */
+    public int getAçãoQuantidade( String nome )
+    {
+        int quantidade = 0;
+        
+        for( Ação ação: this.listaDeAções )
+        {
+            if( ação.getNome().equals( nome ) )
+            {
+                quantidade = ação.getQuantidade();
+            }
+        }
+        return quantidade;
+    }
+    
+    /**
+     * @param nomeAção o nome da ação.
+     * @return true se ela existe false caso contrário.
+     */
+    public boolean existeAçãoNoInvetário( String nomeAção )
+    {
+        boolean existe = false;
+        
+        for( Ação ação: this.listaDeAções )
+        {
+            if( ação.getNome().equals( nomeAção ) )
+            {
+                existe = true;
+                break;
+            }
+        }
+        return existe;
+    }
+    
+    /**
+     * @param quantidade a quantidade de ações.
+     * @return true se existe a quantidade de ações especificada.
+     */
+    public boolean existeQuantidadeNoInvetário( int quantidade )
+    {
+        boolean existe = false;
+        
+        for( Ação ação: this.listaDeAções )
+        {
+            if( ação.getQuantidade() >= quantidade )
+            {
+                existe = true;
+                break;
+            }
+        }
+        return existe;
+    }
 }

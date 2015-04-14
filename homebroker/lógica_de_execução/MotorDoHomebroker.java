@@ -55,7 +55,7 @@ public class MotorDoHomebroker
                 if( MotorDoHomebroker.INSTÂNCIA_DO_MOTOR == null )
                 {
                     MotorDoHomebroker.INSTÂNCIA_DO_MOTOR =
-                            new MotorDoHomebroker();
+                        new MotorDoHomebroker();
                 }
             }
         }
@@ -71,8 +71,8 @@ public class MotorDoHomebroker
     {
         if( MotorDoHomebroker.DEBUG )
         {
-            JOptionPane.showMessageDialog( null,
-                    "Estou no construtor de ProgramaPrincipal()" );
+            JOptionPane.showMessageDialog(
+                null, "Estou no construtor de ProgramaPrincipal()" );
         }
         if( INSTÂNCIA_DO_MOTOR != null )
         {
@@ -125,45 +125,64 @@ public class MotorDoHomebroker
         switch( commando )
         {
         case "s":
-            System.exit( 0 );
+            MotorDoHomebroker.sairDoSistema();
             break;
         case "v":
-            if( this.contaAutenticada == null )
-            {
-                JOptionPane.showMessageDialog( null, "Não há "
-                        + "nenhuma conta carregada no sistema!" );
-                break;
-            }
-            JOptionPane.showMessageDialog( null,
-                    this.contaAutenticada.inventarioToString() );
+            this.mostrarInventário();
             break;
-        // TODO
         // case "c":
-        // Conta novaConta = Principal.criarUsuario();
-        // contasTeste.add( novaConta );
+        // TODO
+        // this.criarUsuario();
         // break;
         case "ov":
             this.efetuarVendaDeAção();
             break;
         case "m":
-            if( MotorDoHomebroker.DEBUG )
-            {
-                if( this.motorDoBook == null )
-                {
-                    JOptionPane.showMessageDialog( null, "motorDoBook é null!" );
-                }
-            }
-            this.motorDoBook.exibirBookDeOfertas();
+            this.exibirBookDeOfertas();
             break;
         default:
-            JOptionPane.showMessageDialog( null, "Você digitou uma "
-                    + "opção inválida!\n\n"
-                    + "Digite 's' para fechar o programa.\n"
-                    + "Digite 'v' para para ver o inventario\n"
-                    // + "Digite 'c' para para criar uma conta!\n"
-                    + "Digite 'm' para ver o mercado!\n" );
+            MotorDoHomebroker.imputError();
             break;
         }
+    }
+    
+    private static void sairDoSistema()
+    {
+        System.exit( 0 );
+    }
+    
+    private static void imputError()
+    {
+        JOptionPane.showMessageDialog( null, "Você digitou uma "
+            + "opção inválida!\n\n" + "Digite 's' para fechar o programa.\n"
+            + "Digite 'v' para para ver o inventario\n"
+            // +
+            // "Digite 'c' para para criar uma conta!\n"
+            + "Digite 'm' para ver o mercado!\n" );
+    }
+    
+    private void exibirBookDeOfertas()
+    {
+        if( MotorDoHomebroker.DEBUG )
+        {
+            if( this.motorDoBook == null )
+            {
+                JOptionPane.showMessageDialog( null, "motorDoBook é null!" );
+            }
+        }
+        this.motorDoBook.exibirBookDeOfertas();
+    }
+    
+    private void mostrarInventário()
+    {
+        if( this.contaAutenticada == null )
+        {
+            JOptionPane.showMessageDialog( null, "Não há "
+                + "nenhuma conta carregada no sistema!" );
+            return;
+        }
+        JOptionPane.showMessageDialog( null, this.contaAutenticada
+            .inventarioToString() );
     }
     
     private void efetuarVendaDeAção()
@@ -172,22 +191,93 @@ public class MotorDoHomebroker
         
         while( !sucesso )
         {
-            String açãoAComprar =
-                    JOptionPane.showInputDialog( this.contaAutenticada
-                            .inventarioToString() );
-            double preço =
-                    Double.parseDouble( JOptionPane
-                            .showInputDialog( "Insira o preço da ação:" ) );
-            
-            int quantidade =
-                    (int) Double.parseDouble( JOptionPane
-                            .showInputDialog( "Insira a quantidade da ação:" ) );
-            
+            String nome = this.getNomeAçãoParaVenda();
+            if( nome == null )
+            {
+                return;
+            }
+            double preço = this.getPreçoAçãoParaVenda( nome );
+            if( preço == 0 )
+            {
+                return;
+            }
+            int quantidade = this.getQuantidadeAçãoParaVenda( nome );
+            if( quantidade == 0 )
+            {
+                return;
+            }
             sucesso =
-                    this.motorDoBook.adicionarOfertaDeVenda( preço, quantidade,
-                            açãoAComprar );
+                this.motorDoBook.adicionarOfertaDeVenda(
+                    preço, quantidade, nome );
         }
         
+    }
+    
+    private int getQuantidadeAçãoParaVenda( String açãoParaVender )
+    {
+        boolean sucesso = false;
+        boolean nÉsimaVez = false;
+        int quantidade = 0;
+        
+        while( !sucesso )
+        {
+            String imput =
+                JOptionPane.showInputDialog( ( nÉsimaVez
+                    ? "Quantidade não existênte!\n\n" : "" )
+                    + "Insira a quantidade da ação:", Integer
+                    .toString( this.contaAutenticada
+                        .getAçãoQuantidade( açãoParaVender ) ) );
+            if( imput == null )
+            {
+                return 0;
+            }
+            quantidade = (int) Double.parseDouble( imput );
+            sucesso =
+                this.contaAutenticada.existeQuantidadeNoInvetário( quantidade );
+            nÉsimaVez = true;
+        }
+        return quantidade;
+    }
+    
+    private double getPreçoAçãoParaVenda( String açãoParaVender )
+    {
+        double preço = 0;
+        String imput =
+            JOptionPane.showInputDialog(
+                "Insira o preço da ação:", Double
+                    .toString( this.contaAutenticada
+                        .getAçãoPreço( açãoParaVender ) ) );
+        if( imput == null )
+        {
+            return 0;
+        }
+        preço = Double.parseDouble( imput );
+        return preço;
+    }
+    
+    private String getNomeAçãoParaVenda()
+    {
+        boolean sucesso = false;
+        boolean nÉsimaVez = false;
+        String açãoParaVender = null;
+        
+        while( !sucesso )
+        {
+            açãoParaVender =
+                JOptionPane.showInputDialog( ( nÉsimaVez
+                    ? "Ação não existênte!\n\n" : "" )
+                    + "Lista de ações disponíveis "
+                    + "para venda: \n"
+                    + this.contaAutenticada.inventarioToString() );
+            if( açãoParaVender == null )
+            {
+                return null;
+            }
+            sucesso =
+                this.contaAutenticada.existeAçãoNoInvetário( açãoParaVender );
+            nÉsimaVez = true;
+        }
+        return açãoParaVender;
     }
     
     /**
@@ -214,21 +304,21 @@ public class MotorDoHomebroker
             dica = "";
         }
         
-        while( !command.equals( "sair" ) && !usuario.equals( "sair" )
-                && !senha.equals( "sair" ) )
+        while( !command.equals( "sair" )
+            && !usuario.equals( "sair" ) && !senha.equals( "sair" ) )
         {
             usuario =
-                    JOptionPane.showInputDialog( ( inputError
-                            ? "Usuário ou senha inválidos\n\n" : "" )
-                            + "Insira qual conta será feito login: " + dica );
+                JOptionPane.showInputDialog( ( inputError
+                    ? "Usuário ou senha inválidos\n\n" : "" )
+                    + "Insira qual conta será feito login: " + dica );
             if( usuario == null )
             {
                 break;
             }
             inputError = false;
             senha =
-                    JOptionPane.showInputDialog( "Insira qual senha "
-                            + "para a conta: " + usuario );
+                JOptionPane.showInputDialog( "Insira qual senha "
+                    + "para a conta: " + usuario );
             
             if( senha == null )
             {
@@ -262,45 +352,44 @@ public class MotorDoHomebroker
     }
     
     /**
-     * Cria um inventário fictício de ações contendo 5 ações fictícias
+     * Cria um inventário fictício de ações contendo 5 ações fictícias.
      * 
-     * @param conta a conta que irá receber as ações fictícioas
-     * @param quantidade a quantidade de ações fictícias para se criar
+     * @param conta a conta que irá receber as ações fictícioas.
+     * @param quantidade a quantidade de ações fictícias para se criar.
      */
     public static void criarInventarioFicticio( Conta conta, int quantidade )
     {
         for( int i = 0; i < quantidade / 5; i++ )
         {
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 2.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SA"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação(
+                    2.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                    10 + util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
+                        + util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 22.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            100 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SO"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação(
+                    22.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                    100 + util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
+                        + util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 200.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            1000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SP"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação(
+                    200.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                    1000 + util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara SP" + util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação( 2000.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara ST"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação(
+                    2000.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                    10000 + util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara ST" + util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                    new Ação(
-                            200006.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                            10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                            "Tabajara SS"
-                                    + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação(
+                    200006.2 + util.Biblioteca.gerarNumeroAleatorio(),
+                    10000 + util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara SS" + util.Biblioteca.gerarNumeroAleatorio() ) );
         }
     }
     
@@ -311,32 +400,32 @@ public class MotorDoHomebroker
      * @param senha senha que as contas de teste terão
      * @return conta uma nova conta teste com dados fictícios
      */
-    public static ArrayList< Conta > criarContasFicticia( int quantidade,
-            String senha )
+    public static ArrayList< Conta > criarContasFicticia(
+        int quantidade, String senha )
     {
         ArrayList< Conta > contasTeste = new ArrayList<>();
         contasTeste.add( new Conta( "admin", "admin", 2000.5 * util.Biblioteca
-                .gerarNumeroAleatorio(), true, new Inventario() ) );
+            .gerarNumeroAleatorio(), true, new Inventario() ) );
         
-        MotorDoHomebroker.criarInventarioFicticio( contasTeste.get( 0 ),
-                quantidade );
+        MotorDoHomebroker.criarInventarioFicticio(
+            contasTeste.get( 0 ), quantidade );
         
         for( int i = 0; i < quantidade; i++ )
         {
             Conta contaTeste =
-                    new Conta( "User" + Biblioteca.gerarNumeroAleatorio(),
-                            senha,
-                            2000.5 * util.Biblioteca.gerarNumeroAleatorio(),
-                            false, new Inventario() );
+                new Conta(
+                    "User" + Biblioteca.gerarNumeroAleatorio(), senha,
+                    2000.5 * util.Biblioteca.gerarNumeroAleatorio(), false,
+                    new Inventario() );
             MotorDoHomebroker.criarInventarioFicticio( contaTeste, quantidade );
             
             contasTeste.add( contaTeste );
         }
         if( MotorDoHomebroker.DEBUG )
         {
-            JOptionPane.showMessageDialog( null,
-                    "Estou em criarContasFictícias "
-                            + contasTeste.get( 0 ).getNome() );
+            JOptionPane.showMessageDialog(
+                null, "Estou em criarContasFictícias "
+                    + contasTeste.get( 0 ).getNome() );
         }
         return contasTeste;
     }
