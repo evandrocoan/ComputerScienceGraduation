@@ -34,12 +34,146 @@ import util.Biblioteca;
  */
 public class Homebroker extends JFrame
 {
+    /**
+     * Representa o painel principal da janela principal.
+     * 
+     * @authors Evandro  Coan, Renan Pinho Assi
+     */
+    private class PainelJanelaPrincipal extends JPanel
+    {
+        private JTextField caixaDeTextoPrincipal;
+        private JButton botãoPrincipal;
+        private JTextArea comandosDisponíveis;
+        
+        /**
+         * Cria um painel para colocar os botões, caixas de texto, ...
+         */
+        public PainelJanelaPrincipal()
+        {
+            // Cria os compomentos
+            this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
+            this.botãoPrincipal = this.botãoPrincipal();
+            this.comandosDisponíveis =
+                new JTextArea( "Bem-vindo ao sistema "
+                    + "tabajara de cadastro de ações!\n"
+                    + "Digite 's' para fechar o programa.\n"
+                    + "Digite 'v' para para ver o inventario\n"
+                    + "Digite 'ov' para enviar uma ordem de venda\n"
+                    // + "Digite 'c' para para criar uma conta!\n"
+                    + "Digite 'm' para ver o mercado!\n" );
+            
+            // Configura os componentes
+            super.setLayout( new BorderLayout() );
+            this.comandosDisponíveis.setEditable( false );
+            this.comandosDisponíveis.setFocusable( false );
+            
+            // Adiciona os componentes ao painel principal
+            this.add( this.botãoPrincipal, BorderLayout.WEST );
+            
+            this.add( this.caixaDeTextoPrincipal, BorderLayout.NORTH );
+            
+            this.add( this.comandosDisponíveis, BorderLayout.EAST );
+            
+            Biblioteca.trocarFontes( this, new Font( this.getName(),
+                Frame.NORMAL, 20 ) );
+        }
+        
+        /**
+         * Cria o botão principal para enviar os comandos da caixa de texto
+         * principal
+         * 
+         * @return botãoPrincipal o botãoPrincipal que envia os comandas da
+         *         caixa de texto principal.
+         */
+        private JButton botãoPrincipal()
+        {
+            // Button to show the second JFrame.
+            JButton botãoPrincipal = new JButton( "Enviar comando" );
+            botãoPrincipal.addActionListener( new ActionListener()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent ae )
+                {
+                    Homebroker.motorDoHomebroker
+                        .menuPrincipal( PainelJanelaPrincipal.this.caixaDeTextoPrincipal
+                            .getText() );
+                }
+            } );
+            
+            // Configura o botão principal
+            botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            botãoPrincipal.setFocusable( false );
+            
+            return botãoPrincipal;
+        }
+        
+        /**
+         * Cria um campo de texto para entrada de comandos para o programa.
+         * 
+         * @return caixaDeTextoPrincipal a caixaDeTextoPrincial para a entrada
+         *         de comandos.
+         */
+        private JTextField caixaDeTextoPrincipal()
+        {
+            // Cria um campo de texto para entrada de comandos para o programa
+            JTextField caixaDeTextoPrincipal =
+                new JTextField( "  Insira qual seu comando  " );
+            caixaDeTextoPrincipal.addActionListener( new ActionListener()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent ae )
+                {
+                    if( Homebroker.DEBUG )
+                    {
+                        if( Homebroker.motorDoHomebroker == null )
+                        {
+                            JOptionPane.showMessageDialog( null,
+                                "motorDoHomebroker é null!" );
+                        }
+                    }
+                    Homebroker.motorDoHomebroker
+                        .menuPrincipal( caixaDeTextoPrincipal.getText() );
+                }
+            } );
+            
+            // Limpa a caixa de texto ao clicar com o mouse.
+            caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void mouseClicked( MouseEvent e )
+                {
+                    caixaDeTextoPrincipal.setText( "" );
+                }
+            } );
+            
+            // Limpa a caixa de texto ao digital algo
+            caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
+            {
+                @Override
+                public void keyPressed( KeyEvent evt )
+                {
+                    if( ( evt.getKeyCode() != KeyEvent.VK_ENTER )
+                        && ( caixaDeTextoPrincipal.getText().length() > 1 ) )
+                    {
+                        caixaDeTextoPrincipal.setText( "" );
+                    }
+                }
+            } );
+            
+            // Configura a caixaDeTextoPrincipal
+            caixaDeTextoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            
+            return caixaDeTextoPrincipal;
+        }
+    }
+    
     private static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
-            .getInstance();
+        .getInstance();
     
     private static boolean DEBUG = false;
-    
-    private PainelJanelaPrincipal painelJanelaPrincipal;
     
     /**
      * Método principal que inicia a execução do programa.
@@ -50,9 +184,9 @@ public class Homebroker extends JFrame
     public static void main( String... args )
     {
         // Faz login
-        if( args == null || args.length == 0 )
+        if( ( args == null ) || ( args.length == 0 ) )
         {
-            motorDoHomebroker.loginNoSistema( null );
+            Homebroker.motorDoHomebroker.loginNoSistema( null );
         } else
         {
             for( int i = 0; i < args.length; i++ )
@@ -84,6 +218,8 @@ public class Homebroker extends JFrame
         } );
     }
     
+    private PainelJanelaPrincipal painelJanelaPrincipal;
+    
     /**
      * Construtor que cria a janela principal do programa.
      */
@@ -108,141 +244,5 @@ public class Homebroker extends JFrame
         // Ajusta a janela ao tamanho dos elementos.
         this.pack();
         this.setVisible( true );
-    }
-    
-    /**
-     * Representa o painel principal da janela principal.
-     * 
-     * @authors Evandro  Coan, Renan Pinho Assi
-     */
-    private class PainelJanelaPrincipal extends JPanel
-    {
-        private JTextField caixaDeTextoPrincipal;
-        private JButton botãoPrincipal;
-        private JTextArea comandosDisponíveis;
-        
-        /**
-         * Cria um painel para colocar os botões, caixas de texto, ...
-         */
-        public PainelJanelaPrincipal()
-        {
-            // Cria os compomentos
-            this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
-            this.botãoPrincipal = this.botãoPrincipal();
-            this.comandosDisponíveis =
-                    new JTextArea( "Bem-vindo ao sistema "
-                            + "tabajara de cadastro de ações!\n"
-                            + "Digite 's' para fechar o programa.\n"
-                            + "Digite 'v' para para ver o inventario\n"
-                            + "Digite 'ov' para enviar uma ordem de venda\n"
-                            // + "Digite 'c' para para criar uma conta!\n"
-                            + "Digite 'm' para ver o mercado!\n" );
-            
-            // Configura os componentes
-            super.setLayout( new BorderLayout() );
-            this.comandosDisponíveis.setEditable( false );
-            this.comandosDisponíveis.setFocusable( false );
-            
-            // Adiciona os componentes ao painel principal
-            this.add( this.botãoPrincipal, BorderLayout.WEST );
-            
-            this.add( this.caixaDeTextoPrincipal, BorderLayout.NORTH );
-            
-            this.add( this.comandosDisponíveis, BorderLayout.EAST );
-            
-            Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL,
-                    20 ) );
-        }
-        
-        /**
-         * Cria o botão principal para enviar os comandos da caixa de texto
-         * principal
-         * 
-         * @return botãoPrincipal o botãoPrincipal que envia os comandas da
-         *         caixa de texto principal.
-         */
-        private JButton botãoPrincipal()
-        {
-            // Button to show the second JFrame.
-            JButton botãoPrincipal = new JButton( "Enviar comando" );
-            botãoPrincipal.addActionListener( new ActionListener()
-            {
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( ActionEvent ae )
-                {
-                    motorDoHomebroker
-                            .menuPrincipal( PainelJanelaPrincipal.this.caixaDeTextoPrincipal
-                                    .getText() );
-                }
-            } );
-            
-            // Configura o botão principal
-            botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
-            botãoPrincipal.setFocusable( false );
-            
-            return botãoPrincipal;
-        }
-        
-        /**
-         * Cria um campo de texto para entrada de comandos para o programa.
-         * 
-         * @return caixaDeTextoPrincipal a caixaDeTextoPrincial para a entrada
-         *         de comandos.
-         */
-        private JTextField caixaDeTextoPrincipal()
-        {
-            // Cria um campo de texto para entrada de comandos para o programa
-            JTextField caixaDeTextoPrincipal =
-                    new JTextField( "  Insira qual seu comando  " );
-            caixaDeTextoPrincipal.addActionListener( new ActionListener()
-            {
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( ActionEvent ae )
-                {
-                    if( Homebroker.DEBUG )
-                    {
-                        if( motorDoHomebroker == null )
-                        {
-                            JOptionPane.showMessageDialog( null,
-                                    "motorDoHomebroker é null!" );
-                        }
-                    }
-                    motorDoHomebroker.menuPrincipal( caixaDeTextoPrincipal
-                            .getText() );
-                }
-            } );
-            
-            // Limpa a caixa de texto ao clicar com o mouse.
-            caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
-            {
-                @SuppressWarnings( "unused" )
-                @Override
-                public void mouseClicked( MouseEvent e )
-                {
-                    caixaDeTextoPrincipal.setText( "" );
-                }
-            } );
-            
-            // Limpa a caixa de texto ao digital algo
-            caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
-            {
-                @Override
-                public void keyPressed( KeyEvent evt )
-                {
-                    if( evt.getKeyCode() != KeyEvent.VK_ENTER
-                            && caixaDeTextoPrincipal.getText().length() > 1 )
-                    {
-                        caixaDeTextoPrincipal.setText( "" );
-                    }
-                }
-            } );
-            
-            // Configura a caixaDeTextoPrincipal
-            caixaDeTextoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
-            
-            return caixaDeTextoPrincipal;
-        }
     }
 }
