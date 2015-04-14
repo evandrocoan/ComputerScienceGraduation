@@ -28,23 +28,63 @@ import util.Biblioteca;
 public class MonitorDoBook extends JFrame
 {
     /**
+     * Classe que constrói a interface gráfica do book de ofertas.
+     * 
+     * @authors Evandro  Coan, Renan Pinho Assi
+     */
+    private class PainelPrincipal extends JPanel
+    {
+        private DefaultListModel< String > modeloPadrãoDeLista =
+            new DefaultListModel<>();
+        
+        private JList< String > listaDeOfertas = new JList<>(
+            this.modeloPadrãoDeLista );
+        
+        private PainelPrincipal()
+        {
+            if( MonitorDoBook.DEBUG )
+            {
+                JOptionPane.showMessageDialog( null,
+                    "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+            }
+            
+            this.setLayout( new GridLayout( 0, 1 ) );
+            this.setSize( super.getSize() );
+            this.setPreferredSize( super.getSize() );
+            this.setVisible( true );
+            
+            JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
+            this.add( painelRolável, BorderLayout.CENTER );
+        }
+    }
+    
+    /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final MonitorDoBook INSTÂNCIA_DA_JANELA =
-            new MonitorDoBook();
+        new MonitorDoBook();
     
     private static boolean DEBUG = false;
+    
+    /**
+     * @return the instance
+     */
+    public static MonitorDoBook getInstance()
+    {
+        return MonitorDoBook.INSTÂNCIA_DA_JANELA;
+    }
     
     private PainelPrincipal painelPrincipal;
     
     private MonitorDoBook()
     {
+        super( "Monitor do Book De Ofertas" );
         if( MonitorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
-                    "Estou no construtor da JanelaDoBook!" );
+                "Estou no construtor da JanelaDoBook!" );
         }
-        if( INSTÂNCIA_DA_JANELA != null )
+        if( MonitorDoBook.INSTÂNCIA_DA_JANELA != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
@@ -55,7 +95,7 @@ public class MonitorDoBook extends JFrame
         int height = (int) tamanhoDaJanela.getHeight();
         
         Dimension tamanhoDaJanelaReduzido =
-                new Dimension( width - 100, height - 100 );
+            new Dimension( width - 100, height - 100 );
         
         this.setSize( tamanhoDaJanelaReduzido );
         this.setPreferredSize( tamanhoDaJanelaReduzido );
@@ -65,24 +105,8 @@ public class MonitorDoBook extends JFrame
         this.painelPrincipal = new PainelPrincipal();
         this.setContentPane( this.painelPrincipal );
         
-        Biblioteca.trocarFontes( this, new Font( getName(), Frame.NORMAL, 24 ) );
-    }
-    
-    /**
-     * @return the instance
-     */
-    public static MonitorDoBook getInstance()
-    {
-        return INSTÂNCIA_DA_JANELA;
-    }
-    
-    /**
-     * @return númeroDeOfertas o número de ofertas já inseridas no book de
-     *         ofertas.
-     */
-    public int getNúmeroDeOfertas()
-    {
-        return this.painelPrincipal.modeloPadrãoDeLista.getSize();
+        Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
+            24 ) );
     }
     
     /**
@@ -98,34 +122,11 @@ public class MonitorDoBook extends JFrame
     }
     
     /**
-     * Classe que constrói a interface gráfica do book de ofertas.
-     * 
-     * @authors Evandro  Coan, Renan Pinho Assi
+     * @return númeroDeOfertas o número de ofertas já inseridas no book de
+     *         ofertas.
      */
-    private class PainelPrincipal extends JPanel
+    public int getNúmeroDeOfertas()
     {
-        private DefaultListModel< String > modeloPadrãoDeLista =
-                new DefaultListModel<>();
-        
-        private JList< String > listaDeOfertas = new JList<>(
-                this.modeloPadrãoDeLista );
-        
-        private PainelPrincipal()
-        {
-            if( MonitorDoBook.DEBUG )
-            {
-                JOptionPane
-                        .showMessageDialog( null,
-                                "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
-            }
-            
-            this.setLayout( new GridLayout( 0, 1 ) );
-            this.setSize( super.getSize() );
-            this.setPreferredSize( super.getSize() );
-            this.setVisible( true );
-            
-            JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
-            this.add( painelRolável, BorderLayout.CENTER );
-        }
+        return this.painelPrincipal.modeloPadrãoDeLista.getSize();
     }
 }
