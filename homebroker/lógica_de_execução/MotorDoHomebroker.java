@@ -23,6 +23,22 @@ public class MotorDoHomebroker
     private static final boolean DEBUG = false;
     
     /**
+     * Transforma um ArrayList de contas e uma String
+     * 
+     * @param contas um ArrayList contendo as contas
+     * @return texto um texto contendo os nomes das contas de teste criadas
+     */
+    public static String contasTesteToString( ArrayList< Conta > contas )
+    {
+        String texto = "";
+        for( Conta conta: contas )
+        {
+            texto = texto + conta.getNome() + ", ";
+        }
+        return texto;
+    }
+    
+    /**
      * Retorna a única instancia existe do MotorDoHomebroker.
      * 
      * @return INSTANCE a única instancia existe da JanelaPrincipal.
