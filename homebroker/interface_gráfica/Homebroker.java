@@ -194,7 +194,7 @@ public class Homebroker extends JFrame
                 switch( args[i] )
                 {
                 case "teste":
-                    System.out.println( "Sessão de teste!" );
+                    JOptionPane.showMessageDialog( null, "Sessão de teste!" );
                     break;
                 default:
                     break;
