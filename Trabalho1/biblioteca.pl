@@ -13,15 +13,15 @@ privado_ComprimentoDaLista([_|L],N) :-
  * retorna um elemento em uma dada posição na lista definida no predicado 
  * informacoesPessoais([...]) 
  * */
+dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
+    informacoesPessoais(L), 
+    privado_DadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
+
 privado_DadoNaPosicao(X, [X|_], 0).
 privado_DadoNaPosicao(X,[_|L],K) :- 
 	K > 0, 
 	K1 is K - 1, 
 	privado_DadoNaPosicao(X,L,K1).
-	
-dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
-	informacoesPessoais(L), 
-	privado_DadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
 
 /* Dado uma lista numérica, retora a soma de seus elementos na variável Soma 
  * */
@@ -74,7 +74,6 @@ privado_DividirLista([X|Xs],N,[X|Ys],Zs) :-
  * */
 privado_Is_Head_Member(P, L) :- 
 	L = [P|_].
-
 
 
 
