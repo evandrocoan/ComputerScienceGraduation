@@ -20,7 +20,7 @@ privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
  *
- * Pega a data de nascimento de uma dada pessoa e calcula sua idade 
+ * Pega a data de nascimento de uma dada pessoa e calcula sua idade.
  * Primeiro, encontra a pessoa na lista informacoesPessoais.
  * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
  * Terceiro, calcula sua idade.
@@ -106,7 +106,7 @@ quaisColegasDe(Nome, ColegasDaPessoa) :-
  * */
 privado_QuaisColegasDe1(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
- 	 * Segundo, retorno o restante da lista, isto é, o nome das referências.
+ 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
 	informacoesAcademicas(Lista), 
 	privado_Is_Head_Member(Nome, Lista), 
@@ -114,7 +114,7 @@ privado_QuaisColegasDe1(Nome, Colegas) :-
 
 privado_QuaisColegasDe2(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
- 	 * Segundo, retorno o restante da lista, isto é, o nome das referências.
+ 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
 	informacoesProfissionais(Lista), 
 	privado_Is_Head_Member(Nome, Lista), 
