@@ -1,4 +1,4 @@
-importarArquivosExternos:-[biblioteca,bancoDeDados].
+﻿importarArquivosExternos:-[biblioteca,bancoDeDados].
 :-importarArquivosExternos.
 
 /* ############################ Programa ###################################*/
@@ -223,9 +223,88 @@ privado_QuemComMaisDe5Anos(Nome) :-
 	TempoDeExperiencia > 5,
 	privado_DadoNaPosicao(Nome,[_|L],1).
 
+/* Questão 12
+ * Qual o tempo de estudo de uma dada pessoa em cada curso ?
+ * Primeiro carrega-se as listas de Informações academicas.
+ * Segundo verifica-se se o nome informado é cabeça da lista.
+ * Terceiro carrega-se a data inicio do curso.
+ * Quarto carrega-se a data de término do curso.
+ * Quinto retorna-se a diferença entre as datas.
+ * */
+
+tempoDeEstudoEmCadaCurso(Nome, Curso) :-
+	informacoesAcademicas(L),
+	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	NomeDaPessoa == Nome,
+	privado_DadoNaPosicao(DataInicial,[_|L],5),
+	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	Curso is DataFinal - DataInicial.
+	
 
 
 
+/* Questão 13
+ * Qual o tempo total de estudo de uma dada pessoa?.
+ * Primeiro cria-se uma lista com todos os nomes.
+ * Segundo carrega-se as Informações Acadêmicas.
+ * Terceiro e Quarto comparam o nome da lista com a nome na cabeça.
+ * Quinto e Sexto carregam os valores de início e término dos cursos.
+ * Sexto calcula o tempo de 1 curso.
+ * Sétimo faz a soma dos tempos dos cursos.
+ * */
+
+tempoTotalDeEstudo(Nome, TempoTotal) :-
+	findall(Tempo, privado_TempoDeCada(Nome, Tempo), Lista),
+	somaDosTempos(Lista, TempoTotal).
+
+privado_TempoDeCada(Nome2, Tempo) :-
+	informacoesAcademicas(L),
+	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	NomeDaPessoa = Nome2,
+	privado_DadoNaPosicao(DataInicial,[_|L],5),
+	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	Tempo is DataFinal - DataInicial.
+
+/* Questão 14
+ * Qual o tempo medio de estudo entre todas as pessoas?
+ * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos os  * cursos.
+ * Segundo conta-se a quantidade de pessoas no banco de dados.
+ * Terceiro carregam-se as listas de Informações Acadêmicas.
+ * Quarto acessa todas as listas.
+ * Quinto e Sexto carregam os valores de início e término dos cursos.
+ * Sétimo calcula o tempo de 1 curso.
+ * Oitavo incrementa a lista de pessoas em mais um.
+ * Nono faz a soma dos tempos dos cursos. 
+ * Décimo faz a soma da lista de pessoas.
+ * Décimo Primeiro calculo o tempo médio.
+ * */
+
+tempoMedioDeEstudo(TempoMedio) :-
+	findall(Tempo, privado_TempoDeCada2(_,Tempo), ListaTempos),
+	findall(Retorno, privado_TempoDeCada2(Retorno,_), Listade1),
+	somaDosTempos( ListaTempos, TempoTotal),
+	somaDosTempos( Listade1, Retorno),
+	TempoMedio is TempoTotal / Retorno.
+
+privado_TempoDeCada2(Retorno, Tempo) :-
+	informacoesAcademicas(L),
+	privado_DadoNaPosicao(_,[_|L], 1),
+	privado_DadoNaPosicao(DataInicial,[_|L],5),
+	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	Tempo is DataFinal - DataInicial,
+	Retorno is 1.
+
+
+/* Questão 15
+ * Qual o nome de todas as pessoas da lista ?
+ * 
+**/
+
+nomeDeTodasAsPessoas(ListaDeNomes) :-
+	findall(Nome, privado_Nomes(Nome), ListaDeNomes).
+
+privado_Nomes(Nome) :-
+	dadoDeInfoNaPosicao(1,Nome).
 
 
 
