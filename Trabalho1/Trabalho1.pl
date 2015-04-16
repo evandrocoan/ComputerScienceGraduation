@@ -10,12 +10,14 @@
  * */
 qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
 
+
 /* Questão 2 ###############################################################
  * Quais as pessoas de uma dada cidade?
  * */
 quemMoraEm(Cidade, Nomes) :-
 	findall(Nome, privado_QuemMoraEm(Cidade, Nome), Nomes).
 privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
+
 
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
@@ -43,6 +45,7 @@ privado_CalcularIdade(Data, Idade) :-
         convert_time(TempoDeVidaEmSegundos,TimeStamp3,_,_,_,_,_,_),
         Idade is TimeStamp3 - 1970.
 
+
 /* Questão 4 ###############################################################
  * Quais as pessoas com mais de 30 anos?
  * */
@@ -61,6 +64,7 @@ privado_QuaisComMaisDe30Anos(Nome) :-
 	Idade > 30,
 	privado_DadoNaPosicao(Nome,[_|L],1).
 
+
 /* Questão 5 ###############################################################
  * Quais os cursos de uma dada pessoa?
  * */
@@ -74,6 +78,7 @@ privado_QualCursoDe(Nome, Curso) :-
 	informacoesAcademicas(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno == Nome,
 	privado_DadoNaPosicao(Curso,[_|L],2).
+
 
 /* Questão 6 ###############################################################
  * Quais os(as) orientadores(as) de uma dada pessoa?
@@ -91,6 +96,7 @@ privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa == Nome,
 	privado_DadoNaPosicao(Orientadores, [_|L], 4).
+
 
 /* Questão 7 ###############################################################
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
@@ -120,6 +126,7 @@ privado_QuaisColegasDe2(Nome, Colegas) :-
 	privado_Is_Head_Member(Nome, Lista), 
 	privado_DividirLista(Lista, 5, _, Colegas).
 
+
 /* Questão 8 ###############################################################
  * Quais as pessoas sem nenhum colega citado como referencia?
  * */
@@ -141,6 +148,7 @@ privado_QuaisNaoTemRerefencia(Nomes) :-
 	privado_QuaisColegasDe1(Nomes, Colegas),
 	length(Colegas, Tamanho),
 	Tamanho == 0.
+
 
 /* Questão 9 #################################################################
  * Qual o numero de colegas de uma dada pessoa?
@@ -170,6 +178,7 @@ privado_QualNumeroDeColegas(Nome, Quantidade) :-
 	privado_DividirLista(Lista, 6, _, Colegas),
 	length(Colegas, Quantidade).
 
+
 /* Questão 10 ################################################################
  * Quantas pessoas estudaram em uma dada instituicao?
  * 
@@ -198,6 +207,7 @@ privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 	InstituicaoDaPessoa == Instituicao,
 	Quantidade is 1.
 
+
 /* Questão 11
  * Quais as pessoas com mais de 5 anos de experiencia em um cargo qualquer?
  * */
@@ -223,6 +233,7 @@ privado_QuemComMaisDe5Anos(Nome) :-
 	TempoDeExperiencia > 5,
 	privado_DadoNaPosicao(Nome,[_|L],1).
 
+
 /* Questão 12
  * Qual o tempo de estudo de uma dada pessoa em cada curso ?
  * Primeiro carrega-se as listas de Informações academicas.
@@ -239,8 +250,6 @@ tempoDeEstudoEmCadaCurso(Nome, Curso) :-
 	privado_DadoNaPosicao(DataInicial,[_|L],5),
 	privado_DadoNaPosicao(DataFinal,[_|L],6),
 	Curso is DataFinal - DataInicial.
-	
-
 
 
 /* Questão 13
@@ -264,6 +273,7 @@ privado_TempoDeCada(Nome2, Tempo) :-
 	privado_DadoNaPosicao(DataInicial,[_|L],5),
 	privado_DadoNaPosicao(DataFinal,[_|L],6),
 	Tempo is DataFinal - DataInicial.
+
 
 /* Questão 14
  * Qual o tempo medio de estudo entre todas as pessoas?
@@ -299,7 +309,6 @@ privado_TempoDeCada2(Retorno, Tempo) :-
  * Qual o nome de todas as pessoas da lista ?
  * 
 **/
-
 nomeDeTodasAsPessoas(ListaDeNomes) :-
 	findall(Nome, privado_Nomes(Nome), ListaDeNomes).
 
