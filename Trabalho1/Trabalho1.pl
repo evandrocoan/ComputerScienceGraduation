@@ -1,4 +1,4 @@
-﻿importarArquivosExternos:-[biblioteca,bancoDeDados].
+﻿importarArquivosExternos:-[bibliotecaDeListas,bancoDeDados].
 :-importarArquivosExternos.
 
 /* ############################ Programa ###################################*/
@@ -28,9 +28,9 @@ privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
  * Terceiro, calcula sua idade.
  * */
 qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), privado_DadoNaPosicao(NomeDaPessoa,[_|L],1),
+	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa,[_|L],1),
 	NomeDaPessoa == Nome,
-	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
+	dadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
 /* Primeiro, converto a data de aniversário para um TimeStamp. 
@@ -59,10 +59,10 @@ quaisComMaisDe30Anos(Nomes) :-
  * */
 privado_QuaisComMaisDe30Anos(Nome) :-
 	informacoesPessoais(L),
-	privado_DadoNaPosicao(DataDeNascimento,[_|L],2),
+	dadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade),
 	Idade > 30,
-	privado_DadoNaPosicao(Nome,[_|L],1).
+	dadoNaPosicao(Nome,[_|L],1).
 
 
 /* Questão 5 ###############################################################
@@ -75,9 +75,9 @@ qualCursoDe(Nome, CursosDaPessoa) :-
  * Segundo pego o curso dela e retorna na variável Curso.
  * */
 privado_QualCursoDe(Nome, Curso) :-
-	informacoesAcademicas(L), privado_DadoNaPosicao(DadoDeRetorno,[_|L],1),
+	informacoesAcademicas(L), dadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno == Nome,
-	privado_DadoNaPosicao(Curso,[_|L],2).
+	dadoNaPosicao(Curso,[_|L],2).
 
 
 /* Questão 6 ###############################################################
@@ -93,9 +93,9 @@ quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
  * */
 privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 	informacoesAcademicas(L), 
-	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa == Nome,
-	privado_DadoNaPosicao(Orientadores, [_|L], 4).
+	dadoNaPosicao(Orientadores, [_|L], 4).
 
 
 /* Questão 7 ###############################################################
@@ -115,16 +115,16 @@ privado_QuaisColegasDe1(Nome, Colegas) :-
  	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
 	informacoesAcademicas(Lista), 
-	privado_Is_Head_Member(Nome, Lista), 
-	privado_DividirLista(Lista, 6, _, Colegas).
+	isHeadMember(Nome, Lista), 
+	dividirLista(Lista, 6, _, Colegas).
 
 privado_QuaisColegasDe2(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
  	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
 	informacoesProfissionais(Lista), 
-	privado_Is_Head_Member(Nome, Lista), 
-	privado_DividirLista(Lista, 5, _, Colegas).
+	isHeadMember(Nome, Lista), 
+	dividirLista(Lista, 5, _, Colegas).
 
 
 /* Questão 8 ###############################################################
@@ -144,7 +144,7 @@ quaisNaoTemReferencia(Nomes) :-
  * */
 privado_QuaisNaoTemReferencia(Nomes) :-
 	informacoesAcademicas(L), 
-	privado_DadoNaPosicao(Nomes, [_|L], 1),
+	dadoNaPosicao(Nomes, [_|L], 1),
 	privado_QuaisColegasDe1(Nomes, Colegas),
 	length(Colegas, Tamanho),
 	Tamanho == 0.
@@ -175,7 +175,7 @@ qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
 privado_QualNumeroDeColegas(Nome, Quantidade) :-
 	informacoesAcademicas(Lista), 
 	privado_is_head_member(Nome, Lista), 
-	privado_DividirLista(Lista, 6, _, Colegas),
+	dividirLista(Lista, 6, _, Colegas),
 	length(Colegas, Quantidade).
 
 
@@ -203,7 +203,7 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
  * */
 privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 	informacoesAcademicas(L), 
-	privado_DadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
+	dadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
 	InstituicaoDaPessoa == Instituicao,
 	Quantidade is 1.
 
@@ -227,11 +227,11 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
  * */
 privado_QuemComMaisDe5Anos(Nome) :- 
 	informacoesProfissionais(L),
-	privado_DadoNaPosicao(DataInicial,[_|L],4),
-	privado_DadoNaPosicao(DataFinal,[_|L],5),
+	dadoNaPosicao(DataInicial,[_|L],4),
+	dadoNaPosicao(DataFinal,[_|L],5),
 	TempoDeExperiencia is DataFinal - DataInicial,
 	TempoDeExperiencia > 5,
-	privado_DadoNaPosicao(Nome,[_|L],1).
+	dadoNaPosicao(Nome,[_|L],1).
 
 
 /* Questão 12
@@ -242,13 +242,12 @@ privado_QuemComMaisDe5Anos(Nome) :-
  * Quarto carrega-se a data de término do curso.
  * Quinto retorna-se a diferença entre as datas.
  * */
-
 tempoDeEstudoEmCadaCurso(Nome, Curso) :-
 	informacoesAcademicas(L),
-	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa == Nome,
-	privado_DadoNaPosicao(DataInicial,[_|L],5),
-	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	dadoNaPosicao(DataInicial,[_|L],5),
+	dadoNaPosicao(DataFinal,[_|L],6),
 	Curso is DataFinal - DataInicial.
 
 
@@ -268,16 +267,17 @@ tempoTotalDeEstudo(Nome, TempoTotal) :-
 
 privado_TempoDeCada(Nome2, Tempo) :-
 	informacoesAcademicas(L),
-	privado_DadoNaPosicao(NomeDaPessoa, [_|L], 1),
+	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
 	NomeDaPessoa = Nome2,
-	privado_DadoNaPosicao(DataInicial,[_|L],5),
-	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	dadoNaPosicao(DataInicial,[_|L],5),
+	dadoNaPosicao(DataFinal,[_|L],6),
 	Tempo is DataFinal - DataInicial.
 
 
 /* Questão 14
  * Qual o tempo medio de estudo entre todas as pessoas?
- * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos os  * cursos.
+ * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos os  
+ * cursos.
  * Segundo conta-se a quantidade de pessoas no banco de dados.
  * Terceiro carregam-se as listas de Informações Acadêmicas.
  * Quarto acessa todas as listas.
@@ -298,9 +298,9 @@ tempoMedioDeEstudo(TempoMedio) :-
 
 privado_TempoDeCada2(Retorno, Tempo) :-
 	informacoesAcademicas(L),
-	privado_DadoNaPosicao(_,[_|L], 1),
-	privado_DadoNaPosicao(DataInicial,[_|L],5),
-	privado_DadoNaPosicao(DataFinal,[_|L],6),
+	dadoNaPosicao(_,[_|L], 1),
+	dadoNaPosicao(DataInicial,[_|L],5),
+	dadoNaPosicao(DataFinal,[_|L],6),
 	Tempo is DataFinal - DataInicial,
 	Retorno is 1.
 
