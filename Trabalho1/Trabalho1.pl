@@ -130,19 +130,19 @@ privado_QuaisColegasDe2(Nome, Colegas) :-
 /* Questão 8 ###############################################################
  * Quais as pessoas sem nenhum colega citado como referencia?
  * */
-quaisNaoTemRerefencia(Nomes) :-
+quaisNaoTemReferencia(Nomes) :-
     /* Faz todas as requisições ';' para a variavel informacoesAcademicas e
      * Recebe um lista Nomes contendo os nomes, das pessoas que não tem 
      * referências.
      * */
-    findall(Nome, privado_QuaisNaoTemRerefencia(Nome), Nomes).
+    findall(Nome, privado_QuaisNaoTemReferencia(Nome), Nomes).
 
 /* Primeiro, carrega-se a lista em L, pega-se uma pessoa e tira-se a parte 
  * inicial da lista.
  * Segundo, verifica-se o restante da lista, isto é, o nome das referências, 
  * é uma lista vazia, ou seja, caso tenha comprimento 0.
  * */
-privado_QuaisNaoTemRerefencia(Nomes) :-
+privado_QuaisNaoTemReferencia(Nomes) :-
 	informacoesAcademicas(L), 
 	privado_DadoNaPosicao(Nomes, [_|L], 1),
 	privado_QuaisColegasDe1(Nomes, Colegas),
