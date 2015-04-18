@@ -101,16 +101,17 @@ privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 /* Questão 7 ###############################################################
  * Quais os colegas de curso ou de trabalho de uma dada pessoa?
  * */
-quaisColegasDe(Nome, ColegasDaPessoa) :-
-	findall(Colegas, privado_QuaisColegasDe1(Nome, Colegas), ColegasDaPessoa1 ),
-	findall(Colegas, privado_QuaisColegasDe2(Nome, Colegas), ColegasDaPessoa2 ),
-	merge(ColegasDaPessoa1, ColegasDaPessoa2, ColegasDaPessoa).
+quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
+	findall(Colegas, privado_QuaisDeFaculdade(Nome, Colegas), ColegasDeFacul ),
+	findall(Colegas, privado_QuaisDeTrabalho(Nome, Colegas), ColegasDeTraba ),
+	merge(ColegasDeFacul, ColegasDeTraba, ColegasDaPessoa),
+	nivelada( ColegasDaPessoa, ColegasDaPessoaNivelada).
 
 /* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
  * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
  * variável Colegas. 
  * */
-privado_QuaisColegasDe1(Nome, Colegas) :-
+privado_QuaisDeFaculdade(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
  	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
@@ -118,7 +119,7 @@ privado_QuaisColegasDe1(Nome, Colegas) :-
 	isHeadMember(Nome, Lista), 
 	dividirLista(Lista, 6, _, Colegas).
 
-privado_QuaisColegasDe2(Nome, Colegas) :-
+privado_QuaisDeTrabalho(Nome, Colegas) :-
 	/* Primeiro, tiro a parte inicial da lista.
  	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 	 * */
