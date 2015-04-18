@@ -309,7 +309,7 @@ privado_TempoDeCada2(Retorno, Tempo) :-
 /* Questão 15
  * Qual o nome de todas as pessoas da lista ?
  * 
-**/
+ * */
 nomeDeTodasAsPessoas(ListaDeNomes) :-
 	findall(Nome, privado_Nomes(Nome), ListaDeNomes).
 
