@@ -219,9 +219,9 @@ dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :-
     dadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
 
 
-/* Dada uma posição K, dadoDeInfoNaPosicao(Posicao, dadoDeRetorno), 
- * retorna um elemento em uma dada posição na lista definida no predicado 
- * informacoesPessoais([...]) 
+/* dadoNaPosicao(Dado, Lista, Posicao).
+ * Dada uma posição Posicao retorna um elemento Dado em uma dada posição na 
+ * lista Lista.
  * */
 dadoNaPosicao(X, [X|_], 0).
 dadoNaPosicao(X,[_|L],K) :- 
