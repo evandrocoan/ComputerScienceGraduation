@@ -107,7 +107,7 @@ public class Inventario
         
         for( Ação ação: this.listaDeAções )
         {
-            if( ação.getNome() == nome )
+            if( ( ação.getNome() ).equals( nome ) )
             {
                 preço = ação.getPreço();
             }

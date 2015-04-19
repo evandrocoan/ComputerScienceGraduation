@@ -52,7 +52,7 @@ import javax.swing.JPanel;
 public class DialogTest
 {
     static final SimpleDateFormat SDF = new SimpleDateFormat(
-            "MM/dd/yyyy hh:mm:ss" );
+        "MM/dd/yyyy hh:mm:ss" );
     
     /**
      * @param args
@@ -62,7 +62,7 @@ public class DialogTest
         
         final JFrame frame = new JFrame( "Dialog test" );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        frame.add( createPanelToPopDialog( frame ) );
+        frame.add( DialogTest.createPanelToPopDialog( frame ) );
         frame.setSize( 500, 200 );
         frame.setVisible( true );
     }
@@ -76,16 +76,17 @@ public class DialogTest
         {
             @Override
             public void actionPerformed(
-                    @SuppressWarnings( "unused" ) ActionEvent e )
+                @SuppressWarnings( "unused" ) ActionEvent e )
             {
                 JDialog dialog = new JDialog( parent, true );
-                dialog.add( createPanelToPopDialog( parent ) );
+                dialog.add( DialogTest.createPanelToPopDialog( parent ) );
                 dialog.setSize( 500, 200 );
                 dialog.setVisible( true );
             }
         } );
         panel.add( button, BorderLayout.SOUTH );
-        panel.add( new JLabel( "Created at " + SDF.format( new Date() ) ) );
+        panel.add( new JLabel( "Created at "
+            + DialogTest.SDF.format( new Date() ) ) );
         
         panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
         return panel;

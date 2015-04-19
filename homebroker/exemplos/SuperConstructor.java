@@ -53,17 +53,108 @@ import javax.swing.WindowConstants;
 public class SuperConstructor extends JFrame
 {
     
+    private class FirstDialog extends JDialog
+    {
+        
+        private static final long serialVersionUID = 1L;
+        
+        FirstDialog( final Frame parent )
+        {
+            super( parent, "FirstDialog" );
+            this.setPreferredSize( new Dimension( 200, 200 ) );
+            this.setLocationRelativeTo( parent );
+            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+            this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
+            JButton bNext = new JButton( "Show next dialog" );
+            bNext.addActionListener( new ActionListener()
+            {
+                
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent evt )
+                {
+                    new SecondDialog( parent, false );
+                }
+            } );
+            this.add( bNext, BorderLayout.NORTH );
+            JButton bClose = new JButton( "Close" );
+            bClose.addActionListener( new ActionListener()
+            {
+                
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( ActionEvent evt )
+                {
+                    FirstDialog.this.setVisible( false );
+                }
+            } );
+            this.add( bClose, BorderLayout.SOUTH );
+            this.pack();
+            this.setVisible( true );
+        }
+    }
+    
+    private class SecondDialog extends JDialog
+    {
+        
+        private static final long serialVersionUID = 1L;
+        
+        @SuppressWarnings( { "unused" } )
+        SecondDialog( final Frame parent, boolean modal )
+        {
+            // super(parent); // < --- Makes this dialog
+            // unfocusable as long as FirstDialog is visible
+            this.setPreferredSize( new Dimension( 200, 200 ) );
+            this.setLocation( 300, 50 );
+            this.setModal( modal );
+            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+            this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
+            JButton bClose = new JButton( "Close" );
+            bClose.addActionListener( new ActionListener()
+            {
+                
+                @Override
+                public void actionPerformed( ActionEvent evt )
+                {
+                    SecondDialog.this.setVisible( false );
+                }
+            } );
+            this.add( bClose, BorderLayout.SOUTH );
+            this.pack();
+            this.setVisible( true );
+        }
+    }
+    
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * @param args
+     */
+    public static void main( String args[] )
+    {
+        EventQueue.invokeLater( new Runnable()
+        {
+            
+            @SuppressWarnings( "unused" )
+            @Override
+            public void run()
+            {
+                new SuperConstructor();
+            }
+        } );
+    }
+    
+    private int i;
     
     /**
      * 
      */
     public SuperConstructor()
     {
-        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        setPreferredSize( new Dimension( 300, 300 ) );
-        setTitle( "Super constructor" );
-        Container cp = getContentPane();
+        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        this.setPreferredSize( new Dimension( 300, 300 ) );
+        this.setTitle( "Super constructor" );
+        Container cp = this.getContentPane();
         JButton b = new JButton( "Show dialog" );
         b.addActionListener( new ActionListener()
         {
@@ -72,8 +163,7 @@ public class SuperConstructor extends JFrame
             @Override
             public void actionPerformed( ActionEvent evt )
             {
-                FirstDialog firstDialog =
-                        new FirstDialog( SuperConstructor.this );
+                new FirstDialog( SuperConstructor.this );
             }
         } );
         cp.add( b, BorderLayout.SOUTH );
@@ -88,100 +178,8 @@ public class SuperConstructor extends JFrame
                 System.exit( 0 );
             }
         } );
-        add( bClose, BorderLayout.NORTH );
-        pack();
-        setVisible( true );
-    }
-    
-    /**
-     * @param args
-     */
-    public static void main( String args[] )
-    {
-        EventQueue.invokeLater( new Runnable()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void run()
-            {
-                SuperConstructor superConstructor = new SuperConstructor();
-            }
-        } );
-    }
-    
-    private class FirstDialog extends JDialog
-    {
-        
-        private static final long serialVersionUID = 1L;
-        
-        FirstDialog( final Frame parent )
-        {
-            super( parent, "FirstDialog" );
-            setPreferredSize( new Dimension( 200, 200 ) );
-            setLocationRelativeTo( parent );
-            setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-            setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
-            JButton bNext = new JButton( "Show next dialog" );
-            bNext.addActionListener( new ActionListener()
-            {
-                
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( ActionEvent evt )
-                {
-                    SecondDialog secondDialog =
-                            new SecondDialog( parent, false );
-                }
-            } );
-            add( bNext, BorderLayout.NORTH );
-            JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( ActionEvent evt )
-                {
-                    setVisible( false );
-                }
-            } );
-            add( bClose, BorderLayout.SOUTH );
-            pack();
-            setVisible( true );
-        }
-    }
-    
-    private int i;
-    
-    private class SecondDialog extends JDialog
-    {
-        
-        private static final long serialVersionUID = 1L;
-        
-        @SuppressWarnings( { "unused", "static-access" } )
-        SecondDialog( final Frame parent, boolean modal )
-        {
-            // super(parent); // < --- Makes this dialog
-            // unfocusable as long as FirstDialog is visible
-            setPreferredSize( new Dimension( 200, 200 ) );
-            setLocation( 300, 50 );
-            setModal( modal );
-            setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-            setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
-            JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                
-                @Override
-                public void actionPerformed( ActionEvent evt )
-                {
-                    setVisible( false );
-                }
-            } );
-            add( bClose, BorderLayout.SOUTH );
-            pack();
-            setVisible( true );
-        }
+        this.add( bClose, BorderLayout.NORTH );
+        this.pack();
+        this.setVisible( true );
     }
 }
