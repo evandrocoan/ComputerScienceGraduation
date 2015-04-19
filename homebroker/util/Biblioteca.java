@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package util;
+package homebroker.util;
 
 import java.awt.Component;
 import java.awt.Container;

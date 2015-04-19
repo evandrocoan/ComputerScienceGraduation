@@ -1,7 +1,7 @@
 /**
  * Pacote que contém a classe principal de testes.
  */
-package testes;
+package homebroker.testes;
 
 import homebroker.interface_gráfica.Homebroker;
 

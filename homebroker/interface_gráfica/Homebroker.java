@@ -4,6 +4,7 @@
 package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.util.Biblioteca;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,8 +25,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-
-import util.Biblioteca;
 
 /**
  * Janela principal que contém o programa e inicia a execução do Homebroker.

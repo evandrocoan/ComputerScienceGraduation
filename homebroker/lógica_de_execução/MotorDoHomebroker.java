@@ -6,12 +6,11 @@ package homebroker.lógica_de_execução;
 import homebroker.lógica_de_dados.Ação;
 import homebroker.lógica_de_dados.Conta;
 import homebroker.lógica_de_dados.Inventario;
+import homebroker.util.Biblioteca;
 
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-
-import util.Biblioteca;
 
 /**
  * 
@@ -71,29 +70,29 @@ public class MotorDoHomebroker
         for( int i = 0; i < ( quantidade / 5 ); i++ )
         {
             conta.getInventario().adicionarAoInventario(
-                new Ação( 2.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                    10 + util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
-                        + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação( 2.2 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    10 + homebroker.util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
+                        + homebroker.util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                new Ação( 22.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                    100 + util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
-                        + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação( 22.2 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    100 + homebroker.util.Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
+                        + homebroker.util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                new Ação( 200.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                    1000 + util.Biblioteca.gerarNumeroAleatorio(),
-                    "Tabajara SP" + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação( 200.2 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    1000 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara SP" + homebroker.util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                new Ação( 2000.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                    10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                    "Tabajara ST" + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação( 2000.2 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    10000 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara ST" + homebroker.util.Biblioteca.gerarNumeroAleatorio() ) );
             
             conta.getInventario().adicionarAoInventario(
-                new Ação( 200006.2 + util.Biblioteca.gerarNumeroAleatorio(),
-                    10000 + util.Biblioteca.gerarNumeroAleatorio(),
-                    "Tabajara SS" + util.Biblioteca.gerarNumeroAleatorio() ) );
+                new Ação( 200006.2 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    10000 + homebroker.util.Biblioteca.gerarNumeroAleatorio(),
+                    "Tabajara SS" + homebroker.util.Biblioteca.gerarNumeroAleatorio() ) );
         }
     }
     
@@ -295,7 +294,7 @@ public class MotorDoHomebroker
     private void criarContasFicticia( int quantidade, String senha )
     {
         ArrayList< Conta > contasTeste = new ArrayList<>();
-        contasTeste.add( new Conta( "admin", "admin", 2000.5 * util.Biblioteca
+        contasTeste.add( new Conta( "admin", "admin", 2000.5 * homebroker.util.Biblioteca
             .gerarNumeroAleatorio(), true, new Inventario() ) );
         
         MotorDoHomebroker.criarInventarioFicticio( contasTeste.get( 0 ),
@@ -305,7 +304,7 @@ public class MotorDoHomebroker
         {
             Conta contaTeste =
                 new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
-                    2000.5 * util.Biblioteca.gerarNumeroAleatorio(), false,
+                    2000.5 * homebroker.util.Biblioteca.gerarNumeroAleatorio(), false,
                     new Inventario() );
             MotorDoHomebroker.criarInventarioFicticio( contaTeste, quantidade );
             

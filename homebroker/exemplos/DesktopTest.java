@@ -28,7 +28,7 @@
  *      href="http://programmers.stackexchange.com/questions/75919/should-package-names-be-singular-or-plural">
  *      Should package names be singular or plural?</a>
  */
-package exemplos;
+package homebroker.exemplos;
 
 import javax.swing.JFrame;
 
