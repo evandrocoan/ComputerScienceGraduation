@@ -5,6 +5,8 @@ package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -19,15 +21,19 @@ public final class BookDeOfertas
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final BookDeOfertas INSTÂNCIA_DO_BOOK = new BookDeOfertas();
-    private static final boolean DEBUG = false;
+    
+    private static final Logger LOG = Logger.getLogger( BookDeOfertas.class
+            .getName() );
     
     /**
      * Serve para implementação do padrão de projeto singleton.
      * 
      * @return INSTANCE a única instancia existe do BookDeOfertas.
      */
-    public static BookDeOfertas getInstance()
+    public static BookDeOfertas getInstância()
     {
+        BookDeOfertas.LOG.setLevel( Level.OFF );
+        
         return BookDeOfertas.INSTÂNCIA_DO_BOOK;
     }
     
@@ -77,9 +83,9 @@ public final class BookDeOfertas
     {
         final int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
-        if( BookDeOfertas.DEBUG )
+        if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
         {
-            System.out.println( "1 - númeroDeOfertas < ultimaOferta = "
+            BookDeOfertas.LOG.severe( "1 - númeroDeOfertas < ultimaOferta = "
                     + ( númeroDeOfertas < ultimaOferta ) + "("
                     + númeroDeOfertas + "<" + ultimaOferta + ")" );
         }
@@ -89,9 +95,9 @@ public final class BookDeOfertas
             return false;
         }
         
-        if( BookDeOfertas.DEBUG )
+        if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
         {
-            System.out.println( "2 - númeroDeOfertas > ultimaOferta = "
+            BookDeOfertas.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
                     + ( númeroDeOfertas > ultimaOferta ) );
         }
         

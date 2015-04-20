@@ -3,6 +3,8 @@
  */
 package homebroker.lógica_de_dados;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Representa uma oferta de venta ou compra.
@@ -11,9 +13,11 @@ package homebroker.lógica_de_dados;
  */
 public class OfertaDoMercado
 {
-    private Ação açãoEmOferta;
-    private String tipoDeOferta;
-    private static boolean DEBUG = false;
+    private static final Logger LOG = Logger.getLogger( BookDeOfertas.class
+            .getName() );
+    
+    private final Ação açãoEmOferta;
+    private final String tipoDeOferta;
     
     /**
      * @param preço
@@ -21,11 +25,12 @@ public class OfertaDoMercado
      * @param açãoAComprar
      * @param tipoDeOferta o tipo da oferta
      */
-    public OfertaDoMercado( double preço, int quantidade, String açãoAComprar,
-            String tipoDeOferta )
+    public OfertaDoMercado( final double preço, final int quantidade,
+            final String açãoAComprar, final String tipoDeOferta )
     {
         this.açãoEmOferta = new Ação( preço, quantidade, açãoAComprar );
         this.tipoDeOferta = tipoDeOferta;
+        OfertaDoMercado.LOG.setLevel( Level.OFF );
     }
     
     /**
@@ -49,15 +54,15 @@ public class OfertaDoMercado
      */
     public String ofertaToString()
     {
-        String açãoEmOferta =
+        final String açãoEmOferta =
                 "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
                         + this.getAçãoEmOferta().getNome() + " - Preço: "
                         + this.getAçãoEmOferta().getPreço() + " - Quantidade: "
                         + this.getAçãoEmOferta().getQuantidade();
         
-        if( OfertaDoMercado.DEBUG )
+        if( OfertaDoMercado.LOG.isLoggable( Level.SEVERE ) )
         {
-            System.out.println( açãoEmOferta );
+            OfertaDoMercado.LOG.severe( açãoEmOferta );
         }
         
         return açãoEmOferta;
