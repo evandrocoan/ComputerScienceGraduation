@@ -23,7 +23,7 @@ public class Ação
      * @param quantidade a quantidade de ações que este objeto representa
      * @param nome o nome da ação que este objeto representa
      */
-    public Ação( double preco, int quantidade, String nome )
+    public Ação( final double preco, final int quantidade, final String nome )
     {
         this.preço = preco;
         this.quantidade = quantidade;
@@ -61,7 +61,7 @@ public class Ação
     /**
      * @param nome the nome to set
      */
-    public void setNome( String nome )
+    public void setNome( final String nome )
     {
         this.nome = nome;
     }
@@ -71,7 +71,7 @@ public class Ação
      * 
      * @param preco o novo preço da ação
      */
-    public void setPrice( double preco )
+    public void setPrice( final double preco )
     {
         this.preço = preco;
     }
@@ -82,7 +82,7 @@ public class Ação
      * @param quantidade a quantidade de ações que este objeto representa
      * @return true caso tenha sucesso, false caso contrário
      */
-    public boolean setQuantidade( int quantidade )
+    public boolean setQuantidade( final int quantidade )
     {
         if( this.quantidade >= Math.abs( quantidade ) )
         {

@@ -38,28 +38,30 @@ public class Homebroker extends JFrame
      * 
      * @authors Evandro  Coan, Renan Pinho Assi
      */
-    private class PainelJanelaPrincipal extends JPanel
+    private class PainelPrincipal extends JPanel
     {
-        private JTextField caixaDeTextoPrincipal;
-        private JButton botãoPrincipal;
-        private JTextArea comandosDisponíveis;
+        private final JTextField caixaDeTextoPrincipal;
+        private final JButton botãoPrincipal;
+        private final JTextArea comandosDisponíveis;
         
         /**
          * Cria um painel para colocar os botões, caixas de texto, ...
          */
-        public PainelJanelaPrincipal()
+        public PainelPrincipal()
         {
+            super();
+            
             // Cria os compomentos
             this.caixaDeTextoPrincipal = this.caixaDeTextoPrincipal();
             this.botãoPrincipal = this.botãoPrincipal();
             this.comandosDisponíveis =
-                new JTextArea( "Bem-vindo ao sistema "
-                    + "tabajara de cadastro de ações!\n"
-                    + "Digite 's' para fechar o programa.\n"
-                    + "Digite 'v' para para ver o inventario\n"
-                    + "Digite 'ov' para enviar uma ordem de venda\n"
-                    // + "Digite 'c' para para criar uma conta!\n"
-                    + "Digite 'm' para ver o mercado!\n" );
+                    new JTextArea( "Bem-vindo ao sistema "
+                            + "tabajara de cadastro de ações!\n"
+                            + "Digite 's' para fechar o programa.\n"
+                            + "Digite 'v' para para ver o inventario\n"
+                            + "Digite 'ov' para enviar uma ordem de venda\n"
+                            // + "Digite 'c' para para criar uma conta!\n"
+                            + "Digite 'm' para ver o mercado!\n" );
             
             // Configura os componentes
             super.setLayout( new BorderLayout() );
@@ -74,7 +76,7 @@ public class Homebroker extends JFrame
             this.add( this.comandosDisponíveis, BorderLayout.EAST );
             
             Biblioteca.trocarFontes( this, new Font( this.getName(),
-                Frame.NORMAL, 20 ) );
+                    Frame.NORMAL, 20 ) );
         }
         
         /**
@@ -87,16 +89,19 @@ public class Homebroker extends JFrame
         private JButton botãoPrincipal()
         {
             // Button to show the second JFrame.
-            JButton botãoPrincipal = new JButton( "Enviar comando" );
+            final JButton botãoPrincipal = new JButton( "Enviar comando" );
             botãoPrincipal.addActionListener( new ActionListener()
             {
+                /**
+                 * Processa o comando na caixa de texto principal.
+                 */
                 @SuppressWarnings( "unused" )
                 @Override
-                public void actionPerformed( ActionEvent ae )
+                public void actionPerformed( final ActionEvent ae )
                 {
                     Homebroker.motorDoHomebroker
-                        .menuPrincipal( PainelJanelaPrincipal.this.caixaDeTextoPrincipal
-                            .getText() );
+                            .menuPrincipal( PainelPrincipal.this.caixaDeTextoPrincipal
+                                    .getText() );
                 }
             } );
             
@@ -116,46 +121,57 @@ public class Homebroker extends JFrame
         private JTextField caixaDeTextoPrincipal()
         {
             // Cria um campo de texto para entrada de comandos para o programa
-            JTextField caixaDeTextoPrincipal =
-                new JTextField( "  Insira qual seu comando  " );
+            final JTextField caixaDeTextoPrincipal =
+                    new JTextField( "  Insira qual seu comando  " );
             caixaDeTextoPrincipal.addActionListener( new ActionListener()
             {
+                /**
+                 * Obtém o texto digito.
+                 */
                 @SuppressWarnings( "unused" )
                 @Override
-                public void actionPerformed( ActionEvent ae )
+                public void actionPerformed( final ActionEvent ae )
                 {
                     if( Homebroker.DEBUG )
                     {
                         if( Homebroker.motorDoHomebroker == null )
                         {
                             JOptionPane.showMessageDialog( null,
-                                "motorDoHomebroker é null!" );
+                                    "motorDoHomebroker é null!" );
                         }
                     }
                     Homebroker.motorDoHomebroker
-                        .menuPrincipal( caixaDeTextoPrincipal.getText() );
+                            .menuPrincipal( caixaDeTextoPrincipal.getText() );
                 }
             } );
             
             // Limpa a caixa de texto ao clicar com o mouse.
             caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
             {
+                /**
+                 * Limpa a caixa de texto ao clicar com o mouse.
+                 */
                 @SuppressWarnings( "unused" )
                 @Override
-                public void mouseClicked( MouseEvent e )
+                // @formatter:off
+                        public
+                        void mouseClicked( final MouseEvent e )
                 {
                     caixaDeTextoPrincipal.setText( "" );
-                }
+                } // @formatter:on
             } );
             
             // Limpa a caixa de texto ao digital algo
             caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
             {
+                /**
+                 * Limpa a caixa de texto ao entrar mais que 2 caracteres.
+                 */
                 @Override
-                public void keyPressed( KeyEvent evt )
+                public void keyPressed( final KeyEvent evt )
                 {
                     if( ( evt.getKeyCode() != KeyEvent.VK_ENTER )
-                        && ( caixaDeTextoPrincipal.getText().length() > 1 ) )
+                            && ( caixaDeTextoPrincipal.getText().length() > 1 ) )
                     {
                         caixaDeTextoPrincipal.setText( "" );
                     }
@@ -169,10 +185,13 @@ public class Homebroker extends JFrame
         }
     }
     
+    /**
+     * Contém a única instância deste motor.
+     */
     private static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
-        .getInstance();
+            .getInstance();
     
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
     
     /**
      * Método principal que inicia a execução do programa.
@@ -180,7 +199,7 @@ public class Homebroker extends JFrame
      * @param args caso receba o argumento 'teste' abre o programa em uma conta
      *            teste.
      */
-    public static void main( String... args )
+    public static void main( final String... args )
     {
         // Faz login
         if( ( args == null ) || ( args.length == 0 ) )
@@ -201,13 +220,15 @@ public class Homebroker extends JFrame
             }
         }
         
-        /*
-         * Here we are Secheduling a JOB for Event Dispatcher Thread, since
-         * Swing is not Thread Safe. This is used to place the code which is
-         * responsible for creating and diaplaying your GUI.
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
          */
         SwingUtilities.invokeLater( new Runnable()
         {
+            /**
+             * Executa o homebroker.
+             */
             @SuppressWarnings( "unused" )
             @Override
             public void run()
@@ -217,7 +238,7 @@ public class Homebroker extends JFrame
         } );
     }
     
-    private PainelJanelaPrincipal painelJanelaPrincipal;
+    private final PainelPrincipal painelPrincipal;
     
     /**
      * Construtor que cria a janela principal do programa.
@@ -227,18 +248,18 @@ public class Homebroker extends JFrame
         super( "HomeBroker Tabajara" );
         
         // Cria o painelJanelaPrincipal
-        this.painelJanelaPrincipal = new PainelJanelaPrincipal();
-        this.painelJanelaPrincipal.setDoubleBuffered( true );
+        this.painelPrincipal = new PainelPrincipal();
+        this.painelPrincipal.setDoubleBuffered( true );
         
         // Adiciona o painelJanelaPrincipal na janelaPrincipal
-        this.add( this.painelJanelaPrincipal );
+        this.add( this.painelPrincipal );
         
         // Used to close the JFrame graciously.
         this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         
         // Abre a janela maximizado
         this.setLocation( 50, 50 );
-        this.setExtendedState( java.awt.Frame.MAXIMIZED_BOTH );
+        this.setExtendedState( Frame.MAXIMIZED_BOTH );
         
         // Ajusta a janela ao tamanho dos elementos.
         this.pack();

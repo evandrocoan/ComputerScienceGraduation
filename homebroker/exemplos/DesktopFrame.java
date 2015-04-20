@@ -72,36 +72,37 @@ public class DesktopFrame extends JFrame
         
         addMenu.add( newFrame ); // add new frame item to Add menu
         bar.add( addMenu ); // add Add menu to menu bar
-        setJMenuBar( bar ); // set menu bar for this application
+        this.setJMenuBar( bar ); // set menu bar for this application
         
         this.theDesktop = new JDesktopPane(); // create desktop pane
-        add( this.theDesktop ); // add desktop pane to frame
+        this.add( this.theDesktop ); // add desktop pane to frame
         
         // set up listener for newFrame menu item
         newFrame.addActionListener(
         
         new ActionListener() // anonymous inner class
-        {
-            // display new internal window
-            @Override
-            public void actionPerformed(
-                    @SuppressWarnings( "unused" ) ActionEvent event )
             {
-                // create internal frame
-                JInternalFrame frame =
+                // display new internal window
+                @Override
+                public void actionPerformed(
+                    @SuppressWarnings( "unused" ) ActionEvent event )
+                {
+                    // create internal frame
+                    JInternalFrame frame =
                         new JInternalFrame( "Internal Frame", true, true, true,
-                                true );
-                
-                MyJPanel panel = new MyJPanel(); // create new panel
-                frame.add( panel, BorderLayout.CENTER ); // add panel
-                frame.pack(); // set internal frame to size of contents
-                
-                DesktopFrame.this.theDesktop.add( frame ); // attach internal
-                                                           // frame
-                frame.setVisible( true ); // show internal frame
-            } // end method actionPerformed
-        } // end anonymous inner class
-        ); // end call to addActionListener
+                            true );
+                    
+                    MyJPanel panel = new MyJPanel(); // create new panel
+                    frame.add( panel, BorderLayout.CENTER ); // add panel
+                    frame.pack(); // set internal frame to size of contents
+                    
+                    DesktopFrame.this.theDesktop.add( frame ); // attach
+                                                               // internal
+                                                               // frame
+                    frame.setVisible( true ); // show internal frame
+                } // end method actionPerformed
+            } // end anonymous inner class
+            ); // end call to addActionListener
     } // end constructor DesktopFrame
 } // end class DesktopFrame
 
@@ -115,30 +116,31 @@ class MyJPanel extends JPanel
     private static Random generator = new Random();
     private ImageIcon picture; // image to be displayed
     private String[] images = { "yellowflowers.png", "purpleflowers.png",
-            "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
+        "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
     
     // load image
     public MyJPanel()
     {
-        int randomNumber = generator.nextInt( 5 );
+        int randomNumber = MyJPanel.generator.nextInt( 5 );
         this.picture = new ImageIcon( this.images[randomNumber] ); // set icon
     } // end MyJPanel constructor
-    
-    // display imageIcon on panel
-    @Override
-    public void paintComponent( Graphics g )
-    {
-        super.paintComponent( g );
-        this.picture.paintIcon( this, g, 0, 0 ); // display icon
-    } // end method paintComponent
     
     // return image dimensions
     @Override
     public Dimension getPreferredSize()
     {
-        return new Dimension( this.picture.getIconWidth(),
-                this.picture.getIconHeight() );
+        return new Dimension( this.picture.getIconWidth(), this.picture
+            .getIconHeight() );
     } // end method getPreferredSize
+    
+    // display imageIcon on panel
+    @Override
+    public void paintComponent( Graphics g ) 
+                                             // 20/04/15 02:27
+    {
+        super.paintComponent( g );
+        this.picture.paintIcon( this, g, 0, 0 ); // display icon
+    } // end method paintComponent
 } // end class MyJPanel
 
 /**************************************************************************

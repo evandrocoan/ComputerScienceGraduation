@@ -4,6 +4,7 @@
 package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -12,14 +13,25 @@ import java.util.ArrayList;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class BookDeOfertas
+public final class BookDeOfertas
 {
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final BookDeOfertas INSTÂNCIA_DO_BOOK = new BookDeOfertas();
-    private static boolean DEBUG = false;
-    private ArrayList< OfertaDoMercado > ofertasDoMercado;
+    private static final boolean DEBUG = false;
+    
+    /**
+     * Serve para implementação do padrão de projeto singleton.
+     * 
+     * @return INSTANCE a única instancia existe do BookDeOfertas.
+     */
+    public static BookDeOfertas getInstance()
+    {
+        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
+    }
+    
+    private final List< OfertaDoMercado > ofertasDoMercado;
     
     /**
      * Serve para corrigir um bug no gerador automático de diagramas que não
@@ -32,21 +44,11 @@ public class BookDeOfertas
      */
     private BookDeOfertas()
     {
-        if( INSTÂNCIA_DO_BOOK != null )
+        if( BookDeOfertas.INSTÂNCIA_DO_BOOK != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         this.ofertasDoMercado = new ArrayList<>();
-    }
-    
-    /**
-     * Serve para implementação do padrão de projeto singleton.
-     * 
-     * @return INSTANCE a única instancia existe do BookDeOfertas.
-     */
-    public static BookDeOfertas getInstance()
-    {
-        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
     }
     
     /**
@@ -57,8 +59,8 @@ public class BookDeOfertas
      * @param açãoAComprar
      * @return true se a oferta foi adicionada com sucesso.
      */
-    public boolean adicionarOfertaDeVenda( double preço, int quantidade,
-            String açãoAComprar )
+    public boolean adicionarOfertaDeVenda( final double preço,
+            final int quantidade, final String açãoAComprar )
     {
         return this.ofertasDoMercado.add( new OfertaDoMercado( preço,
                 quantidade, açãoAComprar, "Venda" ) );
@@ -71,9 +73,9 @@ public class BookDeOfertas
      * @param ultimaOferta a última oferta visualizada
      * @return true se existem novas ofertas, false caso contrário.
      */
-    public boolean existemNovasOfertas( int ultimaOferta )
+    public boolean existemNovasOfertas( final int ultimaOferta )
     {
-        int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
+        final int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
         
         if( BookDeOfertas.DEBUG )
         {
@@ -100,7 +102,7 @@ public class BookDeOfertas
      * @param indice
      * @return açãoEmOferta uma String representando uma ação em oferta.
      */
-    public String ofertaToString( int indice )
+    public String ofertaToString( final int indice )
     {
         return this.ofertasDoMercado.get( indice ).ofertaToString();
     }
