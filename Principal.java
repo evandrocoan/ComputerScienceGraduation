@@ -40,11 +40,9 @@ public class Principal
             throws ExeçãoElementoNãoEncontrado
     {
         Principal.testeGenéricoHashtable();
-        
         Principal.testeDeGrau();
         
         Principal.finalizarTestes();
-        
         Principal.testeDaBase();
         
         org.junit.runner.JUnitCore.main( "GrafoTest" );
@@ -117,7 +115,7 @@ public class Principal
         try
         {
             if( ( grafo.grauDoVértice( "Franca" ) == 4 )
-                    & ( grafo.grauDoVértice( "Brazil" ) == 5 ) )
+                    & ( grafo.grauDoVértice( "Brazil" ) == 6 ) )
             {
                 sucesso = true;
                 Principal.falharam--;
@@ -130,7 +128,7 @@ public class Principal
                 
                 System.out.println( "Grau do vértice Brasil é: "
                         + grafo.grauDoVértice( "Brazil" ) );
-                System.out.println( "Mas deveria ser: 5" );
+                System.out.println( "Mas deveria ser: 6" );
                 System.out.println();
                 
                 System.out.println( grafo.toString() );

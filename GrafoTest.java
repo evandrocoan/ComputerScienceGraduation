@@ -1,40 +1,15 @@
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 @SuppressWarnings( "javadoc" )
 public class GrafoTest
 {
-    @BeforeClass
-    public static void oneTimeSetUp()
-    {
-        System.out.println( "Inicio dos testes!" );
-    }
-    
-    @AfterClass
-    public static void oneTimeTearDown()
-    {
-        System.out.println( "Fim dos testes!" );
-    }
-    
     Grafo grafo;
     String[] nomes;
-    
-    /**
-     * É executado depois que um teste conclui. Os testes execuram na seguinte
-     * ordem: setUp(), test1(), printBye(), setUp(), test2(), printBye()...
-     */
-    @After
-    public void printBye()
-    {
-        System.out.println( "Fim do Teste." );
-    }
     
     /**
      * É executado antes que um teste inicia. Os testes execuram na seguinte
@@ -56,12 +31,14 @@ public class GrafoTest
         this.grafo.adicionarVértice( this.nomes );
         this.grafo.conectarVértice( "Brasil", this.nomes );
         
-        Assert.assertEquals( 5, this.grafo.grauDoVértice( "Brasil" ) );
+        Assert.assertEquals( 6, this.grafo.grauDoVértice( "Brasil" ) );
         
         this.grafo.adicionarVértice( "Tcheca" );
         this.grafo.conectarVértices( "Tcheca", "Brasil" );
-        Assert.assertEquals( 6, this.grafo.grauDoVértice( "Brasil" ) );
+        Assert.assertEquals( 7, this.grafo.grauDoVértice( "Brasil" ) );
         
+        this.grafo.conectarVértices( "Tcheca", "Tcheca" );
+        Assert.assertEquals( 3, this.grafo.grauDoVértice( "Tcheca" ) );
     }
     
     @Test
