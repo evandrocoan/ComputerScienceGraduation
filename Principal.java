@@ -46,6 +46,8 @@ public class Principal
         Principal.finalizarTestes();
         
         Principal.testeDaBase();
+        
+        org.junit.runner.JUnitCore.main( "GrafoTest" );
     }
     
     private static void finalizarTestes()
