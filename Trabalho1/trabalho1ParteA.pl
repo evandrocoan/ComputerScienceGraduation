@@ -33,17 +33,18 @@ qualIdadeDe(Nome, Idade) :-
 	dadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
-/* Primeiro, converto a data de aniversário para um TimeStamp. 
- * Segundo, consigo a data atual e armazeno em outro TimeStamp2.
- * Terceiro, calculo a diferença de TimeStamps.
- * Quarto, converto o TimeStamp em idade.
+/* Primeiro, converto a data de aniversário Data para um TimeStamp DataDeAniver. 
+ * Segundo, consigo a data atual e armazeno em outro TimeStamp DataAtual.
+ * Terceiro, obtenho Ano do aniversário de DataDeAniver.
+ * Quarto, obtenho Ano atual de DataDeAniver.
+ * Quinto, calculo a idade da pessoa.
  * */
 privado_CalcularIdade(Data, Idade) :-
-        date_time_stamp(Data, TimeStamp1),
-        get_time(TimeStamp2),
-        TempoDeVidaEmSegundos is TimeStamp2 - TimeStamp1,
-        convert_time(TempoDeVidaEmSegundos,TimeStamp3,_,_,_,_,_,_),
-        Idade is TimeStamp3 - 1970.
+    date_time_stamp(Data, DataDeAniver),
+    get_time(DataAtual),
+    convert_time(DataDeAniver, AnoAniver, _, _,_,_,_,_),
+    convert_time(DataAtual, AnoAtual, _, _, _,_,_,_),
+    Idade is AnoAtual - AnoAniver.
 
 
 /* Questão 4 ###############################################################
