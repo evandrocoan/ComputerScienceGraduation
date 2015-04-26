@@ -17,14 +17,14 @@ public class Conta
     private final Inventario inventario;
     
     /**
-     * Cosntrutor padrão que cria um objeto da classe, sem reslizar nenhum tipo
+     * Cosntrutor padrão que cria um objeto da classe, sem realizar nenhum tipo
      * de restrição com os parâmetros que ele recebe.
      * 
-     * @param nome
-     * @param senha
-     * @param saldo
-     * @param administrador
-     * @param inventario
+     * @param nome o nome do usuário.
+     * @param senha a senha do usuário.
+     * @param saldo o saldo do usuário.
+     * @param administrador se é um administrador ou não.
+     * @param inventario o inventário do usuário.
      */
     public Conta( final String nome, final String senha, final double saldo,
             final boolean administrador, final Inventario inventario )
