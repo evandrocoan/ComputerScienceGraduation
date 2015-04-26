@@ -143,7 +143,6 @@ class RequestFocusListener implements AncestorListener
      * @param removeListener when true this listener is only invoked once
      * otherwise it can be invoked multiple times.
      */
-    @SuppressWarnings( "hiding" )
     public RequestFocusListener( final boolean removeListener )
     {
         this.removeListener = removeListener;
