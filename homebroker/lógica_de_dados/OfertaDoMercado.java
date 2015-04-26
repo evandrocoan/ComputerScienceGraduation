@@ -20,15 +20,15 @@ public class OfertaDoMercado
     private final String tipoDeOferta;
     
     /**
-     * @param preço
-     * @param quantidade
-     * @param açãoAComprar
+     * @param preço o preço da ação.
+     * @param quantidade a quantidade de ações.
+     * @param ação o nome da ação.
      * @param tipoDeOferta o tipo da oferta
      */
     public OfertaDoMercado( final double preço, final int quantidade,
-            final String açãoAComprar, final String tipoDeOferta )
+            final String ação, final String tipoDeOferta )
     {
-        this.açãoEmOferta = new Ação( preço, quantidade, açãoAComprar );
+        this.açãoEmOferta = new Ação( preço, quantidade, ação );
         this.tipoDeOferta = tipoDeOferta;
         OfertaDoMercado.LOG.setLevel( Level.OFF );
     }
