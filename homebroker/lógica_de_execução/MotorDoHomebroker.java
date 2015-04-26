@@ -189,12 +189,9 @@ public final class MotorDoHomebroker
         String command = " ", usuario = " ", senha = " ";
         boolean inputError = false;
         
-        if( dica != null )
+        if( "".equals( dica ) )
         {
-            if( dica.equals( "" ) )
-            {
-                dica = "(" + dica + ")";
-            }
+            dica = "(" + dica + ")";
         } else
         {
             dica = "";
