@@ -18,25 +18,21 @@ import java.util.logging.Logger;
 public final class BookDeOfertas
 {
     /**
+     * Resposável por realizar o debug do programa, quando ativado. Deve ser
+     * instânciado antes que o construtor desta classe, pois este construtor
+     * precisa de deste objeto já instânciado para ser monitorado pelo log.
+     */
+    private static final Logger LOG = Logger.getLogger( BookDeOfertas.class
+        .getName() );
+    
+    /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final BookDeOfertas INSTÂNCIA_DO_BOOK = new BookDeOfertas();
     
-    private static final Logger LOG = Logger.getLogger( BookDeOfertas.class
-            .getName() );
-    
     /**
-     * Serve para implementação do padrão de projeto singleton.
-     * 
-     * @return INSTANCE a única instancia existe do BookDeOfertas.
+     * As ofertas do mercado realizadas.
      */
-    public static BookDeOfertas getInstância()
-    {
-        BookDeOfertas.LOG.setLevel( Level.OFF );
-        
-        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
-    }
-    
     private final List< OfertaDoMercado > ofertasDoMercado;
     
     /**
@@ -50,6 +46,8 @@ public final class BookDeOfertas
      */
     private BookDeOfertas()
     {
+        BookDeOfertas.LOG.setLevel( Level.OFF );
+        
         if( BookDeOfertas.INSTÂNCIA_DO_BOOK != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
@@ -60,16 +58,16 @@ public final class BookDeOfertas
     /**
      * Cria uma ordem de venda de uma ação no book de ofertas.
      * 
-     * @param preço
-     * @param quantidade
-     * @param açãoAComprar
+     * @param preço o preço da oferta
+     * @param quantidade a quatidada
+     * @param açãoAComprar o nome da ação
      * @return true se a oferta foi adicionada com sucesso.
      */
     public boolean adicionarOfertaDeVenda( final double preço,
-            final int quantidade, final String açãoAComprar )
+        final int quantidade, final String açãoAComprar )
     {
         return this.ofertasDoMercado.add( new OfertaDoMercado( preço,
-                quantidade, açãoAComprar, "Venda" ) );
+            quantidade, açãoAComprar, "Venda" ) );
     }
     
     /**
@@ -86,8 +84,8 @@ public final class BookDeOfertas
         if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
         {
             BookDeOfertas.LOG.severe( "1 - númeroDeOfertas < ultimaOferta = "
-                    + ( númeroDeOfertas < ultimaOferta ) + "("
-                    + númeroDeOfertas + "<" + ultimaOferta + ")" );
+                + ( númeroDeOfertas < ultimaOferta ) + "("
+                + númeroDeOfertas + "<" + ultimaOferta + ")" );
         }
         
         if( númeroDeOfertas < ultimaOferta )
@@ -98,18 +96,28 @@ public final class BookDeOfertas
         if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
         {
             BookDeOfertas.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
-                    + ( númeroDeOfertas > ultimaOferta ) );
+                + ( númeroDeOfertas > ultimaOferta ) );
         }
         
         return númeroDeOfertas > ultimaOferta;
     }
     
     /**
-     * @param indice
+     * @param indice qual oferta buscar
      * @return açãoEmOferta uma String representando uma ação em oferta.
      */
     public String ofertaToString( final int indice )
     {
         return this.ofertasDoMercado.get( indice ).ofertaToString();
+    }
+    
+    /**
+     * Serve para implementação do padrão de projeto singleton.
+     * 
+     * @return INSTANCE a única instancia existe do BookDeOfertas.
+     */
+    public static BookDeOfertas getInstância()
+    {
+        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
     }
 }
