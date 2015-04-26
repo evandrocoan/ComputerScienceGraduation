@@ -18,20 +18,16 @@ import javax.swing.JOptionPane;
 public final class MotorDoBook implements Runnable
 {
     /**
+     * Resposável por realizar o debug do programa, quando ativado. Deve ser
+     * instânciado antes que o construtor desta classe, pois este construtor
+     * precisa de deste objeto já instânciado para ser monitorado pelo log.
+     */
+    private static final Logger LOG = Logger.getLogger( MotorDoBook.class.getName() );
+    
+    /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final MotorDoBook INSTÂNCIA_DO_MOTOR = new MotorDoBook();
-    
-    private static final Logger LOG = Logger.getLogger( MotorDoBook.class
-            .getName() );
-    
-    /**
-     * @return the instance
-     */
-    public static MotorDoBook getInstance()
-    {
-        return MotorDoBook.INSTÂNCIA_DO_MOTOR;
-    }
     
     private final BookDeOfertas bookDeOfertas;
     
@@ -39,10 +35,13 @@ public final class MotorDoBook implements Runnable
     
     private MotorDoBook()
     {
+        super();
+        MotorDoBook.LOG.setLevel( Level.OFF );
+        
         if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
         {
             JOptionPane.showMessageDialog( null,
-                    "Estou no construtor do MotorDoBook!" );
+                "Estou no construtor do MotorDoBook!" );
         }
         if( MotorDoBook.INSTÂNCIA_DO_MOTOR != null )
         {
@@ -55,16 +54,31 @@ public final class MotorDoBook implements Runnable
     /**
      * Aciciona um oferta de venda.
      * 
-     * @param preço
-     * @param quantidade
-     * @param açãoAComprar
+     * @param preço o preço da ação.
+     * @param quantidade a quantidade de ações.
+     * @param ação o nome da ação.
      * @return true se a oferta foi adicionada com sucesso.
      */
     public boolean adicionarOfertaDeVenda( final double preço,
-            final int quantidade, final String açãoAComprar )
+        final int quantidade, final String ação )
     {
         return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade,
-                açãoAComprar );
+            ação );
+    }
+    
+    /**
+     * Atualiza a lista de ofertas do book de ofertas.
+     */
+    private void atualizarListaDeOfertas()
+    {
+        final int indice = this.janelaDoBook.getNúmeroDeOfertas();
+        final String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
+        this.janelaDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
+        
+        if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
+        {
+            MotorDoBook.LOG.severe( ofertaDoMercado );
+        }
     }
     
     /**
@@ -88,23 +102,19 @@ public final class MotorDoBook implements Runnable
         {
             if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
             {
-                final String texto =
-                        "Estou em JanelaDoBook chamando o teste \n\n "
-                                + "this.bookDeOfertas.existemNovasOfertas( "
-                                + "this.janelaDoBook.getNúmeroDeOfertas()"
-                                + this.bookDeOfertas
-                                        .existemNovasOfertas( this.janelaDoBook
-                                                .getNúmeroDeOfertas() );
-                JOptionPane.showMessageDialog( null, texto );
+                final String texto = "Estou em JanelaDoBook chamando o teste "
+                    + "\n\n this.bookDeOfertas.existemNovasOfertas( "
+                    + "this.janelaDoBook.getNúmeroDeOfertas()"
+                    + this.bookDeOfertas.existemNovasOfertas(
+                        this.janelaDoBook.getNúmeroDeOfertas() );
+                MotorDoBook.LOG.severe( texto );
             }
             this.bookDeOfertas.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
             
-            if( this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook
-                    .getNúmeroDeOfertas() ) )
+            if( this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook.getNúmeroDeOfertas() ) )
             {
                 this.atualizarListaDeOfertas();
             }
-            
             try
             {
                 Thread.sleep( 10000 );
@@ -116,18 +126,10 @@ public final class MotorDoBook implements Runnable
     }
     
     /**
-     * Atualiza a lista de ofertas do book de ofertas.
+     * @return the instance
      */
-    private void atualizarListaDeOfertas()
+    public static MotorDoBook getInstance()
     {
-        final int indice = this.janelaDoBook.getNúmeroDeOfertas();
-        final String ofertaDoMercado =
-                this.bookDeOfertas.ofertaToString( indice );
-        this.janelaDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
-        
-        if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
-        {
-            MotorDoBook.LOG.severe( ofertaDoMercado );
-        }
+        return MotorDoBook.INSTÂNCIA_DO_MOTOR;
     }
 }
