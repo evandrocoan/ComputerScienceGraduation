@@ -21,10 +21,21 @@ public class Biblioteca
      */
     public static int gerarNumeroAleatorio()
     {
-        double random = Math.random();
-        double x = random * 100 + 1;
-        int y = (int) x;
+        final double random = Math.random();
+        final double x = ( random * 100 ) + 1;
+        final int y = (int) x;
         return y;
+    }
+    
+    /**
+     * Quera a lina a cada 10 contagens do contador.
+     * 
+     * @param contador número de símbolos ocorrentes.
+     * @return true caso seja preciso quebrar a linha.
+     */
+    public static boolean quebrarLinha( final int contador )
+    {
+        return ( contador % 10 ) == 9;
     }
     
     /**
@@ -34,14 +45,15 @@ public class Biblioteca
      * @param componente o componente a ter a fonte trocada
      * @param novaFonte a novaFonte a ser utilizada pelos componentes
      */
-    public static void trocarFontes( Component componente, Font novaFonte )
+    public static void trocarFontes( final Component componente,
+        final Font novaFonte )
     {
         componente.setFont( novaFonte );
         if( componente instanceof Container )
         {
-            for( Component child: ( (Container) componente ).getComponents() )
+            for( final Component child: ( (Container) componente ).getComponents() )
             {
-                trocarFontes( child, novaFonte );
+                Biblioteca.trocarFontes( child, novaFonte );
             }
         }
     }

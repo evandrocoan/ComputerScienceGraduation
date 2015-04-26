@@ -3,6 +3,8 @@
  */
 package homebroker.lógica_de_dados;
 
+import homebroker.util.Biblioteca;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +16,6 @@ import java.util.List;
 public class Inventario
 {
     private final static char SEPARADOR = ';';
-    
-    private static boolean quebrarLinha( final int contadorDeChar )
-    {
-        return ( contadorDeChar % 10 ) == 9;
-    }
     
     private List< Ação > listaDeAções = new ArrayList<>();
     
@@ -148,7 +145,7 @@ public class Inventario
                     contadorDeChar++;
                 }
             }
-            if( Inventario.quebrarLinha( contadorDeChar ) )
+            if( Biblioteca.quebrarLinha( contadorDeChar ) )
             {
                 enviar.append( '\n' );
             }
@@ -173,6 +170,7 @@ public class Inventario
      * 
      * @param listaDeAções a listaDeAções em forma de um ArrayList< Ação >
      */
+    @SuppressWarnings( "cast" )
     public void setInventario( final List< Ação > listaDeAções )
     {
         this.listaDeAções = (ArrayList< Ação >) listaDeAções;
