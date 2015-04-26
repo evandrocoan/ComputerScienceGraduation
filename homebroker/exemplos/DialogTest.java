@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -52,33 +50,19 @@ import javax.swing.JPanel;
 public class DialogTest
 {
     static final SimpleDateFormat SDF = new SimpleDateFormat(
-        "MM/dd/yyyy hh:mm:ss" );
-    
-    /**
-     * @param args
-     */
-    public static void main( String[] args )
-    {
-        
-        final JFrame frame = new JFrame( "Dialog test" );
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        frame.add( DialogTest.createPanelToPopDialog( frame ) );
-        frame.setSize( 500, 200 );
-        frame.setVisible( true );
-    }
+            "MM/dd/yyyy hh:mm:ss" );
     
     static JPanel createPanelToPopDialog( final JFrame parent )
     {
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setLayout( new BorderLayout() );
-        JButton button = new JButton( "Pop a Dialog" );
+        final JButton button = new JButton( "Pop a Dialog" );
         button.addActionListener( new ActionListener()
         {
             @Override
-            public void actionPerformed(
-                @SuppressWarnings( "unused" ) ActionEvent e )
+            public void actionPerformed( final ActionEvent e )
             {
-                JDialog dialog = new JDialog( parent, true );
+                final JDialog dialog = new JDialog( parent, true );
                 dialog.add( DialogTest.createPanelToPopDialog( parent ) );
                 dialog.setSize( 500, 200 );
                 dialog.setVisible( true );
@@ -86,9 +70,23 @@ public class DialogTest
         } );
         panel.add( button, BorderLayout.SOUTH );
         panel.add( new JLabel( "Created at "
-            + DialogTest.SDF.format( new Date() ) ) );
+                + DialogTest.SDF.format( new Date() ) ) );
         
         panel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
         return panel;
+    }
+    
+    /**
+     * @param args
+     */
+    @SuppressWarnings( "javadoc" )
+    public static void main( final String[] args )
+    {
+        
+        final JFrame frame = new JFrame( "Dialog test" );
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        frame.add( DialogTest.createPanelToPopDialog( frame ) );
+        frame.setSize( 500, 200 );
+        frame.setVisible( true );
     }
 }

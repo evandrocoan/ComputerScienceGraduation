@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -55,58 +53,32 @@ import javax.swing.SwingUtilities;
 public class ListPanel extends JFrame
 {
     
+    class PanelRenderer implements ListCellRenderer< Object >
+    {
+        
+        @Override
+        public Component getListCellRendererComponent( final JList< ? > list,
+                final Object value, final int index, final boolean isSelected,
+                final boolean cellHasFocus )
+        {
+            final JButton renderer = (JButton) value;
+            renderer.setBackground( isSelected? Color.red : list
+                    .getBackground() );
+            return renderer;
+        }
+    }
+    
     private static final long serialVersionUID = 1L;
     
     /**
-     * 
+     * @param text
+     * @return
      */
-    public ListPanel()
+    @SuppressWarnings( "javadoc" )
+    public static JButton createButtons( final String text )
     {
-        setLayout( new GridLayout( 0, 2, 10, 10 ) );
-        DefaultListModel< JButton > model = new DefaultListModel<>();
-        model.addElement( createButtons( "one" ) );
-        model.addElement( createButtons( "two" ) );
-        model.addElement( createButtons( "three" ) );
-        model.addElement( createButtons( "four" ) );
-        model.addElement( createButtons( "five" ) );
-        model.addElement( createButtons( "six" ) );
-        model.addElement( createButtons( "seven" ) );
-        model.addElement( createButtons( "eight" ) );
-        model.addElement( createButtons( "nine" ) );
-        model.addElement( createButtons( "ten" ) );
-        model.addElement( createButtons( "eleven" ) );
-        model.addElement( createButtons( "twelwe" ) );
-        JList< JButton > list = new JList<>( model );
-        list.setCellRenderer( new PanelRenderer() );
-        JScrollPane scroll1 = new JScrollPane( list );
-        final JScrollBar scrollBar = scroll1.getVerticalScrollBar();
-        scrollBar.addAdjustmentListener( new AdjustmentListener()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void adjustmentValueChanged( AdjustmentEvent e )
-            {
-                System.out.println( "JScrollBar's current value = "
-                        + scrollBar.getValue() );
-            }
-        } );
-        add( scroll1 );
-        JScrollPane scroll2 = new JScrollPane( createPanel() );
-        add( scroll2 );
-        final JScrollBar scrollBar1 = scroll2.getVerticalScrollBar();
-        scrollBar1.addAdjustmentListener( new AdjustmentListener()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void adjustmentValueChanged( AdjustmentEvent e )
-            {
-                System.out.println( "JScrollBar's current value = "
-                        + scrollBar1.getValue() );
-            }
-        } );
-        
+        final JButton button = new JButton( text );
+        return button;
     }
     
     /**
@@ -115,38 +87,28 @@ public class ListPanel extends JFrame
     @SuppressWarnings( "javadoc" )
     public static JPanel createPanel()
     {
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setLayout( new GridLayout( 0, 1, 1, 1 ) );
-        panel.add( createButtons( "one" ) );
-        panel.add( createButtons( "two" ) );
-        panel.add( createButtons( "three" ) );
-        panel.add( createButtons( "four" ) );
-        panel.add( createButtons( "five" ) );
-        panel.add( createButtons( "six" ) );
-        panel.add( createButtons( "seven" ) );
-        panel.add( createButtons( "eight" ) );
-        panel.add( createButtons( "nine" ) );
-        panel.add( createButtons( "ten" ) );
-        panel.add( createButtons( "eleven" ) );
-        panel.add( createButtons( "twelwe" ) );
+        panel.add( ListPanel.createButtons( "one" ) );
+        panel.add( ListPanel.createButtons( "two" ) );
+        panel.add( ListPanel.createButtons( "three" ) );
+        panel.add( ListPanel.createButtons( "four" ) );
+        panel.add( ListPanel.createButtons( "five" ) );
+        panel.add( ListPanel.createButtons( "six" ) );
+        panel.add( ListPanel.createButtons( "seven" ) );
+        panel.add( ListPanel.createButtons( "eight" ) );
+        panel.add( ListPanel.createButtons( "nine" ) );
+        panel.add( ListPanel.createButtons( "ten" ) );
+        panel.add( ListPanel.createButtons( "eleven" ) );
+        panel.add( ListPanel.createButtons( "twelwe" ) );
         return panel;
-    }
-    
-    /**
-     * @param text
-     * @return
-     */
-    @SuppressWarnings( "javadoc" )
-    public static JButton createButtons( String text )
-    {
-        JButton button = new JButton( text );
-        return button;
     }
     
     /**
      * @param args
      */
-    public static void main( String[] args )
+    @SuppressWarnings( "javadoc" )
+    public static void main( final String[] args )
     {
         SwingUtilities.invokeLater( new Runnable()
         {
@@ -154,8 +116,8 @@ public class ListPanel extends JFrame
             @Override
             public void run()
             {
-                ListPanel frame = new ListPanel();
-                frame.setDefaultCloseOperation( EXIT_ON_CLOSE );
+                final ListPanel frame = new ListPanel();
+                frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
                 // frame.pack();
                 frame.setSize( 270, 200 );
                 frame.setVisible( true );
@@ -163,19 +125,53 @@ public class ListPanel extends JFrame
         } );
     }
     
-    class PanelRenderer implements ListCellRenderer< Object >
+    /**
+     * 
+     */
+    public ListPanel()
     {
-        
-        @SuppressWarnings( "unused" )
-        @Override
-        public Component getListCellRendererComponent( JList< ? > list,
-                Object value, int index, boolean isSelected,
-                boolean cellHasFocus )
+        this.setLayout( new GridLayout( 0, 2, 10, 10 ) );
+        final DefaultListModel< JButton > model = new DefaultListModel<>();
+        model.addElement( ListPanel.createButtons( "one" ) );
+        model.addElement( ListPanel.createButtons( "two" ) );
+        model.addElement( ListPanel.createButtons( "three" ) );
+        model.addElement( ListPanel.createButtons( "four" ) );
+        model.addElement( ListPanel.createButtons( "five" ) );
+        model.addElement( ListPanel.createButtons( "six" ) );
+        model.addElement( ListPanel.createButtons( "seven" ) );
+        model.addElement( ListPanel.createButtons( "eight" ) );
+        model.addElement( ListPanel.createButtons( "nine" ) );
+        model.addElement( ListPanel.createButtons( "ten" ) );
+        model.addElement( ListPanel.createButtons( "eleven" ) );
+        model.addElement( ListPanel.createButtons( "twelwe" ) );
+        final JList< JButton > list = new JList<>( model );
+        list.setCellRenderer( new PanelRenderer() );
+        final JScrollPane scroll1 = new JScrollPane( list );
+        final JScrollBar scrollBar = scroll1.getVerticalScrollBar();
+        scrollBar.addAdjustmentListener( new AdjustmentListener()
         {
-            JButton renderer = (JButton) value;
-            renderer.setBackground( isSelected? Color.red : list
-                    .getBackground() );
-            return renderer;
-        }
+            
+            @Override
+            public void adjustmentValueChanged( final AdjustmentEvent e )
+            {
+                System.out.println( "JScrollBar's current value = "
+                        + scrollBar.getValue() );
+            }
+        } );
+        this.add( scroll1 );
+        final JScrollPane scroll2 = new JScrollPane( ListPanel.createPanel() );
+        this.add( scroll2 );
+        final JScrollBar scrollBar1 = scroll2.getVerticalScrollBar();
+        scrollBar1.addAdjustmentListener( new AdjustmentListener()
+        {
+            
+            @Override
+            public void adjustmentValueChanged( final AdjustmentEvent e )
+            {
+                System.out.println( "JScrollBar's current value = "
+                        + scrollBar1.getValue() );
+            }
+        } );
+        
     }
 }

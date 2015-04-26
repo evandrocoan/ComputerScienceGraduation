@@ -6,7 +6,8 @@
       <Class name="~homebroker.exemplos.*\.*" />
      </Match>
 	 
-	 <!-- Ignora o bug double check no método getInstance do motor do homebroker. -->
+	 <!-- Ignora o bug double check no método getInstance do motor do  -->
+	 <!-- homebroker. -->
      <Match>
       <Class name="~homebroker.lógica_de_execução.MotorDoHomebroker" />
 	  <Method name="getInstance" />

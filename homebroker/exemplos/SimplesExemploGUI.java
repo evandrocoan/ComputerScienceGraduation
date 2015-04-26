@@ -1,5 +1,5 @@
 /**
- * * Use the plural for packages with homogeneous contents and the singular for
+ * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
  * A class is similar to a database relation. A database relation should be
@@ -46,13 +46,14 @@ import javax.swing.SpringLayout;
  * 
  * @author Professional
  */
+@SuppressWarnings( "javadoc" )
 public class SimplesExemploGUI
 {
     
     /**
      * @param args
      */
-    public static void main( String[] args )
+    public static void main( final String[] args )
     {
         SimplesExemploGUI.testarInterfaceExemplo();
     }
@@ -62,51 +63,53 @@ public class SimplesExemploGUI
      */
     public static void testarInterfaceExemplo()
     {
-        JFrame frame = new JFrame( "Option Pane Text Area Example" );
+        final JFrame frame = new JFrame( "Option Pane Text Area Example" );
         
         final SpringLayout layout = new SpringLayout();
         
         final JPanel panel = new JPanel( layout );
         panel.setPreferredSize( new Dimension( 250, 160 ) );
         
-        JLabel lblName = new JLabel( "Name" );
+        final JLabel lblName = new JLabel( "Name" );
         panel.add( lblName );
-        JTextField txtName = new JTextField( 10 );
+        final JTextField txtName = new JTextField( 10 );
         txtName.setBorder( BorderFactory.createLineBorder( Color.black ) );
         panel.add( txtName );
         
-        JLabel lblAddress = new JLabel( "Address" );
+        final JLabel lblAddress = new JLabel( "Address" );
         panel.add( lblAddress );
-        JTextArea txtAddress = new JTextArea();
+        final JTextArea txtAddress = new JTextArea();
         txtAddress.setBorder( BorderFactory.createLineBorder( Color.black ) );
         txtAddress.setLineWrap( true );
         txtAddress.setWrapStyleWord( true );
-        JScrollPane scrollPane =
-            new JScrollPane( txtAddress,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS );
+        final JScrollPane scrollPane =
+                new JScrollPane( txtAddress,
+                        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS );
         scrollPane.setPreferredSize( new Dimension( 250, 100 ) );
         panel.add( scrollPane );
         
         layout.putConstraint( SpringLayout.WEST, lblName, 0, SpringLayout.WEST,
-            panel );
+                panel );
         layout.putConstraint( SpringLayout.NORTH, lblAddress, 10,
-            SpringLayout.SOUTH, lblName );
+                SpringLayout.SOUTH, lblName );
         
         layout.putConstraint( SpringLayout.WEST, txtName, 25,
-            SpringLayout.EAST, lblName );
+                SpringLayout.EAST, lblName );
         layout.putConstraint( SpringLayout.NORTH, scrollPane, 10,
-            SpringLayout.SOUTH, lblAddress );
+                SpringLayout.SOUTH, lblAddress );
         
-        int result =
-            JOptionPane.showConfirmDialog( frame, panel,
-                "Text Box and Text Area Example", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE );
+        final int result =
+                JOptionPane
+                .showConfirmDialog( frame, panel,
+                        "Text Box and Text Area Example",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE );
         
         if( result == JOptionPane.YES_OPTION )
         {
             System.out.println( txtName.getText() + ",\n"
-                + txtAddress.getText() );
+                    + txtAddress.getText() );
         } else
         {
             System.out.println( "Canceled" );

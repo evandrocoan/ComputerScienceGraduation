@@ -4,6 +4,7 @@ package homebroker.testes;
  * 
  * @author Professional
  */
+@SuppressWarnings( { "all" } )
 public class BadClass
 {
     /**
@@ -13,11 +14,9 @@ public class BadClass
     {
         try
         {
-            @SuppressWarnings( "unused" )
-            String bad = "";
-        } catch( Exception e )
+            final String bad = "";
+        } catch( final Exception e )
         {
-            // TODO
         }
     }
 }

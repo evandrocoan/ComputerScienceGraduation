@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -45,10 +43,33 @@ import javax.swing.WindowConstants;
  *      href="http://stackoverflow.com/questions/9443161/swing-multiple-screens-transfer-of-control">
  *      Swing , Multiple Screens , Transfer of control</a>
  */
+@SuppressWarnings( "javadoc" )
 public class TwoFrames
 {
+    /**
+     * @param args
+     */
+    public static void main( final String... args )
+    {
+        /*
+         * Here we are Secheduling a JOB for Event Dispatcher Thread, since
+         * Swing is not Thread Safe. This is used to place the code which is
+         * responsible for creating and diaplaying your GUI.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final TwoFrames tf = new TwoFrames();
+                tf.createAndDisplayGUI();
+            }
+        } );
+    }
+    
     // Making our first JFrame.
     JFrame frame1 = new JFrame( "FRAME 1" );
+    
     // Declaring our second JFrame.
     JFrame frame2;
     
@@ -70,12 +91,12 @@ public class TwoFrames
         this.makeNewFrame();
         
         // Button to show the second JFrame.
-        JButton showButton = new JButton( "SHOW NEW FRAME" );
+        final JButton showButton = new JButton( "SHOW NEW FRAME" );
         showButton.addActionListener( new ActionListener()
         {
+            @SuppressWarnings( "synthetic-access" )
             @Override
-            public void actionPerformed(
-                    @SuppressWarnings( "unused" ) ActionEvent ae )
+            public void actionPerformed( final ActionEvent ae )
             {
                 // Checking if the frame2 is already visible
                 // on the screen, if YES then we won't
@@ -88,7 +109,7 @@ public class TwoFrames
                     // by clicking the hide Button on the other frame
                     // then the click on this button will recreate
                     // a new frame to be displayed.
-                    makeNewFrame();
+                    TwoFrames.this.makeNewFrame();
                     TwoFrames.this.frame2.setVisible( true );
                 }
             }
@@ -107,12 +128,11 @@ public class TwoFrames
         this.frame2.setLocationByPlatform( true );
         
         // Creating a JButton to be shown on the JFrame.
-        JButton hideButton = new JButton( "HIDE FRAME" );
+        final JButton hideButton = new JButton( "HIDE FRAME" );
         hideButton.addActionListener( new ActionListener()
         {
-            @SuppressWarnings( "unused" )
             @Override
-            public void actionPerformed( ActionEvent ae )
+            public void actionPerformed( final ActionEvent ae )
             {
                 // On the click of this button, frame2 will
                 // disappear and HAI will be displayed on the console.
@@ -124,26 +144,5 @@ public class TwoFrames
         // Adding the button to the South side of the frame1.
         this.frame2.add( hideButton, BorderLayout.PAGE_END );
         this.frame2.pack();
-    }
-    
-    /**
-     * @param args
-     */
-    public static void main( String... args )
-    {
-        /*
-         * Here we are Secheduling a JOB for Event Dispatcher Thread, since
-         * Swing is not Thread Safe. This is used to place the code which is
-         * responsible for creating and diaplaying your GUI.
-         */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                TwoFrames tf = new TwoFrames();
-                tf.createAndDisplayGUI();
-            }
-        } );
     }
 }

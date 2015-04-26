@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -50,6 +48,7 @@ import javax.swing.WindowConstants;
  *      href="http://stackoverflow.com/questions/8976874/show-two-dialogs-on-top-of-each-other-using-java-swing">
  *      show two dialogs on top of each other using java swing</a>
  */
+@SuppressWarnings( "javadoc" )
 public class SuperConstructor extends JFrame
 {
     
@@ -65,25 +64,23 @@ public class SuperConstructor extends JFrame
             this.setLocationRelativeTo( parent );
             this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
             this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
-            JButton bNext = new JButton( "Show next dialog" );
+            final JButton bNext = new JButton( "Show next dialog" );
             bNext.addActionListener( new ActionListener()
             {
                 
                 @SuppressWarnings( "unused" )
                 @Override
-                public void actionPerformed( ActionEvent evt )
+                public void actionPerformed( final ActionEvent evt )
                 {
                     new SecondDialog( parent, false );
                 }
             } );
             this.add( bNext, BorderLayout.NORTH );
-            JButton bClose = new JButton( "Close" );
+            final JButton bClose = new JButton( "Close" );
             bClose.addActionListener( new ActionListener()
             {
-                
-                @SuppressWarnings( "unused" )
                 @Override
-                public void actionPerformed( ActionEvent evt )
+                public void actionPerformed( final ActionEvent evt )
                 {
                     FirstDialog.this.setVisible( false );
                 }
@@ -99,8 +96,8 @@ public class SuperConstructor extends JFrame
         
         private static final long serialVersionUID = 1L;
         
-        @SuppressWarnings( { "unused" } )
-        SecondDialog( final Frame parent, boolean modal )
+        @SuppressWarnings( { "unused", "synthetic-access" } )
+        SecondDialog( final Frame parent, final boolean modal )
         {
             // super(parent); // < --- Makes this dialog
             // unfocusable as long as FirstDialog is visible
@@ -109,12 +106,11 @@ public class SuperConstructor extends JFrame
             this.setModal( modal );
             this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
             this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
-            JButton bClose = new JButton( "Close" );
+            final JButton bClose = new JButton( "Close" );
             bClose.addActionListener( new ActionListener()
             {
-                
                 @Override
-                public void actionPerformed( ActionEvent evt )
+                public void actionPerformed( final ActionEvent evt )
                 {
                     SecondDialog.this.setVisible( false );
                 }
@@ -130,7 +126,7 @@ public class SuperConstructor extends JFrame
     /**
      * @param args
      */
-    public static void main( String args[] )
+    public static void main( final String args[] )
     {
         EventQueue.invokeLater( new Runnable()
         {
@@ -154,26 +150,24 @@ public class SuperConstructor extends JFrame
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.setPreferredSize( new Dimension( 300, 300 ) );
         this.setTitle( "Super constructor" );
-        Container cp = this.getContentPane();
-        JButton b = new JButton( "Show dialog" );
+        final Container cp = this.getContentPane();
+        final JButton b = new JButton( "Show dialog" );
         b.addActionListener( new ActionListener()
         {
             
             @SuppressWarnings( "unused" )
             @Override
-            public void actionPerformed( ActionEvent evt )
+            public void actionPerformed( final ActionEvent evt )
             {
                 new FirstDialog( SuperConstructor.this );
             }
         } );
         cp.add( b, BorderLayout.SOUTH );
-        JButton bClose = new JButton( "Close" );
+        final JButton bClose = new JButton( "Close" );
         bClose.addActionListener( new ActionListener()
         {
-            
-            @SuppressWarnings( "unused" )
             @Override
-            public void actionPerformed( ActionEvent evt )
+            public void actionPerformed( final ActionEvent evt )
             {
                 System.exit( 0 );
             }

@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -57,7 +55,7 @@ public class DesktopFrame extends JFrame
      * 
      */
     private static final long serialVersionUID = 1L;
-    private JDesktopPane theDesktop;
+    private final JDesktopPane theDesktop;
     
     /**
      * set up GUI
@@ -66,9 +64,9 @@ public class DesktopFrame extends JFrame
     {
         super( "Using a JDesktopPane" );
         
-        JMenuBar bar = new JMenuBar(); // create menu bar
-        JMenu addMenu = new JMenu( "Add" ); // create Add menu
-        JMenuItem newFrame = new JMenuItem( "Internal Frame" );
+        final JMenuBar bar = new JMenuBar(); // create menu bar
+        final JMenu addMenu = new JMenu( "Add" ); // create Add menu
+        final JMenuItem newFrame = new JMenuItem( "Internal Frame" );
         
         addMenu.add( newFrame ); // add new frame item to Add menu
         bar.add( addMenu ); // add Add menu to menu bar
@@ -79,30 +77,30 @@ public class DesktopFrame extends JFrame
         
         // set up listener for newFrame menu item
         newFrame.addActionListener(
-        
-        new ActionListener() // anonymous inner class
+                
+                new ActionListener() // anonymous inner class
+        {
+            // display new internal window
+            @SuppressWarnings( "synthetic-access" )
+            @Override
+            public void actionPerformed( final ActionEvent event )
             {
-                // display new internal window
-                @Override
-                public void actionPerformed(
-                    @SuppressWarnings( "unused" ) ActionEvent event )
-                {
-                    // create internal frame
-                    JInternalFrame frame =
-                        new JInternalFrame( "Internal Frame", true, true, true,
-                            true );
-                    
-                    MyJPanel panel = new MyJPanel(); // create new panel
-                    frame.add( panel, BorderLayout.CENTER ); // add panel
-                    frame.pack(); // set internal frame to size of contents
-                    
-                    DesktopFrame.this.theDesktop.add( frame ); // attach
-                                                               // internal
-                                                               // frame
-                    frame.setVisible( true ); // show internal frame
-                } // end method actionPerformed
-            } // end anonymous inner class
-            ); // end call to addActionListener
+                // create internal frame
+                final JInternalFrame frame =
+                                new JInternalFrame( "Internal Frame", true, true, true,
+                                true );
+                
+                final MyJPanel panel = new MyJPanel(); // create new panel
+                frame.add( panel, BorderLayout.CENTER ); // add panel
+                frame.pack(); // set internal frame to size of contents
+                
+                DesktopFrame.this.theDesktop.add( frame ); // attach
+                // internal
+                // frame
+                frame.setVisible( true ); // show internal frame
+            } // end method actionPerformed
+        } // end anonymous inner class
+        ); // end call to addActionListener
     } // end constructor DesktopFrame
 } // end class DesktopFrame
 
@@ -114,14 +112,14 @@ class MyJPanel extends JPanel
      */
     private static final long serialVersionUID = 1L;
     private static Random generator = new Random();
-    private ImageIcon picture; // image to be displayed
-    private String[] images = { "yellowflowers.png", "purpleflowers.png",
-        "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
+    private final ImageIcon picture; // image to be displayed
+    private final String[] images = { "yellowflowers.png", "purpleflowers.png",
+            "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
     
     // load image
     public MyJPanel()
     {
-        int randomNumber = MyJPanel.generator.nextInt( 5 );
+        final int randomNumber = MyJPanel.generator.nextInt( 5 );
         this.picture = new ImageIcon( this.images[randomNumber] ); // set icon
     } // end MyJPanel constructor
     
@@ -129,14 +127,14 @@ class MyJPanel extends JPanel
     @Override
     public Dimension getPreferredSize()
     {
-        return new Dimension( this.picture.getIconWidth(), this.picture
-            .getIconHeight() );
+        return new Dimension( this.picture.getIconWidth(),
+                this.picture.getIconHeight() );
     } // end method getPreferredSize
     
     // display imageIcon on panel
     @Override
-    public void paintComponent( Graphics g ) 
-                                             // 20/04/15 02:27
+    public void paintComponent( final Graphics g )
+    // 20/04/15 02:27
     {
         super.paintComponent( g );
         this.picture.paintIcon( this, g, 0, 0 ); // display icon

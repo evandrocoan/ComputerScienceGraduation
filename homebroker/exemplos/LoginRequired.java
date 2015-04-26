@@ -1,6 +1,4 @@
 /**
- * Pacote que contém a classe principal de testes.
- * 
  * Use the plural for packages with homogeneous contents and the singular for
  * packages with heterogeneous contents.
  * 
@@ -55,46 +53,10 @@ import javax.swing.event.AncestorListener;
 public class LoginRequired
 {
     
-    LoginRequired()
-    {
-        JFrame f = new JFrame( "Login Required" );
-        f.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-        
-        f.setSize( 400, 300 );
-        f.setResizable( false );
-        f.setLocationByPlatform( true );
-        f.setVisible( true );
-        
-        showLogin( f );
-    }
-    
-    private static void showLogin( JFrame frame )
-    {
-        JPanel p = new JPanel( new BorderLayout( 5, 5 ) );
-        
-        JPanel labels = new JPanel( new GridLayout( 0, 1, 2, 2 ) );
-        labels.add( new JLabel( "User Name", SwingConstants.RIGHT ) );
-        labels.add( new JLabel( "Password", SwingConstants.RIGHT ) );
-        p.add( labels, BorderLayout.WEST );
-        
-        JPanel controls = new JPanel( new GridLayout( 0, 1, 2, 2 ) );
-        JTextField username = new JTextField( "Joe Blogs" );
-        controls.add( username );
-        JPasswordField password = new JPasswordField();
-        password.addAncestorListener( new RequestFocusListener( false ) );
-        controls.add( password );
-        p.add( controls, BorderLayout.CENTER );
-        
-        // LayoutManager l = new GroupLayout(p);
-        // p.setLayout(l);
-        JOptionPane.showMessageDialog( frame, p, "Log In",
-                JOptionPane.QUESTION_MESSAGE );
-    }
-    
     /**
      * @param args none
      */
-    public static void main( String[] args )
+    public static void main( final String[] args )
     {
         SwingUtilities.invokeLater( new Runnable()
         {
@@ -105,6 +67,42 @@ public class LoginRequired
                 new LoginRequired();
             }
         } );
+    }
+    
+    private static void showLogin( final JFrame frame )
+    {
+        final JPanel p = new JPanel( new BorderLayout( 5, 5 ) );
+        
+        final JPanel labels = new JPanel( new GridLayout( 0, 1, 2, 2 ) );
+        labels.add( new JLabel( "User Name", SwingConstants.RIGHT ) );
+        labels.add( new JLabel( "Password", SwingConstants.RIGHT ) );
+        p.add( labels, BorderLayout.WEST );
+        
+        final JPanel controls = new JPanel( new GridLayout( 0, 1, 2, 2 ) );
+        final JTextField username = new JTextField( "Joe Blogs" );
+        controls.add( username );
+        final JPasswordField password = new JPasswordField();
+        password.addAncestorListener( new RequestFocusListener( false ) );
+        controls.add( password );
+        p.add( controls, BorderLayout.CENTER );
+        
+        // LayoutManager l = new GroupLayout(p);
+        // p.setLayout(l);
+        JOptionPane.showMessageDialog( frame, p, "Log In",
+                JOptionPane.QUESTION_MESSAGE );
+    }
+    
+    LoginRequired()
+    {
+        final JFrame f = new JFrame( "Login Required" );
+        f.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+        
+        f.setSize( 400, 300 );
+        f.setResizable( false );
+        f.setLocationByPlatform( true );
+        f.setVisible( true );
+        
+        LoginRequired.showLogin( f );
     }
     
 }
@@ -127,7 +125,7 @@ public class LoginRequired
  */
 class RequestFocusListener implements AncestorListener
 {
-    private boolean removeListener;
+    private final boolean removeListener;
     
     /*
      * Convenience constructor. The listener is only used once and then it is
@@ -145,31 +143,32 @@ class RequestFocusListener implements AncestorListener
      * @param removeListener when true this listener is only invoked once
      * otherwise it can be invoked multiple times.
      */
-    public RequestFocusListener( boolean removeListener )
+    @SuppressWarnings( "hiding" )
+    public RequestFocusListener( final boolean removeListener )
     {
         this.removeListener = removeListener;
     }
     
     @Override
-    public void ancestorAdded( AncestorEvent e )
+    public void ancestorAdded( final AncestorEvent e )
     {
-        JComponent component = e.getComponent();
+        final JComponent component = e.getComponent();
         component.requestFocusInWindow();
         
         if( this.removeListener )
+        {
             component.removeAncestorListener( this );
+        }
     }
     
-    @SuppressWarnings( "unused" )
     @Override
-    public void ancestorMoved( AncestorEvent e )
+    public void ancestorMoved( final AncestorEvent e )
     {
         // TODO
     }
     
-    @SuppressWarnings( "unused" )
     @Override
-    public void ancestorRemoved( AncestorEvent e )
+    public void ancestorRemoved( final AncestorEvent e )
     {
         // TODO
     }
