@@ -2,7 +2,7 @@ importarTrabalho1ParteA:-[trabalho1ParteA].
 :-importarTrabalho1ParteA.
 
 /* ############################ Programa ###################################*/
-/* Questão 1 ###############################################################
+/* Questão 16 ###############################################################
  * Quais as pessoas que estudaram em uma dada instituição?
  *
  * Eu passo em cada pessoa, e vejo se a instituição dela é a que queremos.

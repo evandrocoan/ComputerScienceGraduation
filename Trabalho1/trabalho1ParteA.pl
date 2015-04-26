@@ -78,7 +78,7 @@ qualCursoDe(Nome, CursosDaPessoa) :-
 privado_QualCursoDe(Nome, Curso) :-
 	informacoesAcademicas(L), dadoNaPosicao(DadoDeRetorno,[_|L],1),
 	DadoDeRetorno == Nome,
-	dadoNaPosicao(Curso,[_|L],2).
+	dadoNaPosicao(Curso, L, 1).
 
 
 /* Questão 6 ###############################################################

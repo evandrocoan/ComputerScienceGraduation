@@ -55,9 +55,9 @@ informacoesAcademicas( ['Pessoa6 da Silva5', 'Ciencias Juridicas',
 informacoesAcademicas( ['Pessoa6 da Silva4', 'Ciencias Sociais', 
 'ITA', 'Silva11 da Pessoa6', 2007, 2013 , 'Demi Lovato' ] ). 
 informacoesAcademicas( ['Pessoa6 da Silva4', 'Sexologia', 
-'ITA', 'Silva19 da Pessoa24', 2007, 2013 , 'Maroon 5', 'Clean Bandit' ] ). 
+'ITA', 'Silva19 da Pessoa24', 2004, 2013 , 'Maroon 5', 'Clean Bandit' ] ). 
 informacoesAcademicas( ['Pessoa6 da Silva4', 'Medicina', 
-'ITA', 'Silva15 da Pessoa16', 2007, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
+'ITA', 'Silva15 da Pessoa16', 2011, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
 
 /* Organização das informações pessoais. #####################################
  * Nome, data de nascimento, cidade, telefone 

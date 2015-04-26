@@ -257,7 +257,12 @@ dividirLista([X|Xs],N,[X|Ys],Zs) :-
 isHeadMember(P, L) :- 
 	L = [P|_].
 
-
+/* maiorElemento( Lista, Maior )
+ * Dado um Lista retorna o Maior elemento dela.
+ * */
+maiorElemento([X],X).
+maiorElemento([X|Xs],X) :- max(Xs,Y), X >= Y.
+maiorElemento([X|Xs],N) :- max(Xs,N), N > X.
 
 
 
