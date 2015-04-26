@@ -28,46 +28,6 @@ import javax.swing.WindowConstants;
 public class MonitorDoBook extends JFrame
 {
     /**
-     * Classe que constrói a interface gráfica do book de ofertas.
-     * 
-     * @authors Evandro  Coan, Renan Pinho Assi
-     */
-    private class PainelPrincipal extends JPanel
-    {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 9104840444093828978L;
-        
-        final DefaultListModel< String > modeloPadrãoDeLista =
-                new DefaultListModel<>();
-        
-        private final JList< String > listaDeOfertas = new JList<>(
-                this.modeloPadrãoDeLista );
-        
-        public PainelPrincipal()
-        {
-            super();
-            
-            if( MonitorDoBook.DEBUG )
-            {
-                JOptionPane
-                .showMessageDialog( null,
-                        "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
-            }
-            
-            this.setLayout( new GridLayout( 0, 1 ) );
-            this.setSize( super.getSize() );
-            this.setPreferredSize( super.getSize() );
-            this.setVisible( true );
-            
-            final JScrollPane painelRolável =
-                    new JScrollPane( this.listaDeOfertas );
-            this.add( painelRolável, BorderLayout.CENTER );
-        }
-    }
-    
-    /**
      * 
      */
     private static final long serialVersionUID = 2978670135770143966L;
@@ -79,14 +39,6 @@ public class MonitorDoBook extends JFrame
             new MonitorDoBook();
     
     private static final boolean DEBUG = false;
-    
-    /**
-     * @return the instance
-     */
-    public static MonitorDoBook getInstance()
-    {
-        return MonitorDoBook.INSTÂNCIA_DA_JANELA;
-    }
     
     private final PainelPrincipal painelPrincipal;
     
@@ -143,5 +95,52 @@ public class MonitorDoBook extends JFrame
     public int getNúmeroDeOfertas()
     {
         return this.painelPrincipal.modeloPadrãoDeLista.getSize();
+    }
+    
+    /**
+     * @return the instance
+     */
+    public static MonitorDoBook getInstance()
+    {
+        return MonitorDoBook.INSTÂNCIA_DA_JANELA;
+    }
+    
+    /**
+     * Classe que constrói a interface gráfica do book de ofertas.
+     * 
+     * @authors Evandro  Coan, Renan Pinho Assi
+     */
+    private class PainelPrincipal extends JPanel
+    {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 9104840444093828978L;
+        
+        final DefaultListModel< String > modeloPadrãoDeLista =
+                new DefaultListModel<>();
+        
+        private final JList< String > listaDeOfertas = new JList<>(
+                this.modeloPadrãoDeLista );
+        
+        public PainelPrincipal()
+        {
+            super();
+            
+            if( MonitorDoBook.DEBUG )
+            {
+                JOptionPane.showMessageDialog( null,
+                        "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+            }
+            
+            this.setLayout( new GridLayout( 0, 1 ) );
+            this.setSize( super.getSize() );
+            this.setPreferredSize( super.getSize() );
+            this.setVisible( true );
+            
+            final JScrollPane painelRolável =
+                    new JScrollPane( this.listaDeOfertas );
+            this.add( painelRolável, BorderLayout.CENTER );
+        }
     }
 }
