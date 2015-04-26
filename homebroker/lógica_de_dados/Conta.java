@@ -13,8 +13,8 @@ public class Conta
     private String nome;
     private String senha;
     private double saldo;
-    private boolean administrador;
-    private Inventario inventario;
+    private final boolean administrador;
+    private final Inventario inventario;
     
     /**
      * Cosntrutor padrão que cria um objeto da classe, sem reslizar nenhum tipo
@@ -26,8 +26,8 @@ public class Conta
      * @param administrador
      * @param inventario
      */
-    public Conta( String nome, String senha, double saldo,
-            boolean administrador, Inventario inventario )
+    public Conta( final String nome, final String senha, final double saldo,
+            final boolean administrador, final Inventario inventario )
     {
         this.nome = nome;
         this.senha = senha;
@@ -36,66 +36,15 @@ public class Conta
         this.inventario = inventario;
     }
     
-    // #################################### Administrador Access ##########
     /**
-     * Define no nome do cliente. Somente o administrador tem acesso a essa
-     * funcionanlidade.
+     * Retorna se a senha para esse usuário confere com a solicitada.
      * 
-     * @param nome o nome do cliente a ser definido
+     * @param senha a senha para ser verificada com a conta.
+     * @return true se a senha confere, false caso contrário.
      */
-    public void setNome( String nome )
+    public boolean checkSenha( final String senha )
     {
-        if( this.administrador )
-        {
-            this.nome = nome;
-        }
-    }
-    
-    /**
-     * Define a senha do cliente. Somente o administrador tem acesso a essa
-     * funcionanlidade.
-     * 
-     * @param senha a senha do cliente a ser definida
-     */
-    public void setSenha( String senha )
-    {
-        if( this.administrador )
-        {
-            this.senha = senha;
-        }
-    }
-    
-    /**
-     * Define um valor para o saldo. Tal comando é pertencente ao administrador.
-     * 
-     * @param saldo o saldo da conta do cliente
-     */
-    public void setSaldo( double saldo )
-    {
-        if( this.administrador )
-        {
-            this.saldo = saldo;
-        }
-    }
-    
-    /**
-     * Retira dinheiro da conta.
-     * 
-     * @param quantidade a quantidade de saldo a ser retirada da conta. Caso o
-     *            saldo seja insuficiente não realiza a operação
-     * @return true caso seja realizada a transação, false caso contrário.
-     */
-    public boolean retirarDinheiro( double quantidade )
-    {
-        if( this.administrador )
-        {
-            if( this.saldo >= quantidade )
-            {
-                this.saldo = this.saldo - quantidade;
-            }
-        }
-        
-        return false;
+        return this.senha.equals( senha );
     }
     
     /**
@@ -104,7 +53,7 @@ public class Conta
      * @param amount a quantidade de saldo a ser colocada na conta.
      * @return true caso seja realizada a transação, false caso contrário
      */
-    public boolean depositMoney( double amount )
+    public boolean depositMoney( final double amount )
     {
         if( this.administrador )
         {
@@ -114,22 +63,40 @@ public class Conta
         return false;
     }
     
-    // #################################### Client Access ##########
+    /**
+     * @param nomeAção nome da ação.
+     * @return true se ela existe false caso contrário.
+     */
+    public boolean existeAçãoNoInvetário( final String nomeAção )
+    {
+        return this.inventario.existeAçãoNoInvetário( nomeAção );
+    }
+    
+    /**
+     * @param quantidade a quantidade de ações
+     * @return true se existe a quantidade especificada, false caso contrário.
+     */
+    public boolean existeQuantidadeNoInvetário( final int quantidade )
+    {
+        return this.inventario.existeQuantidadeNoInvetário( quantidade );
+    }
     
     /**
      * @param nome o nome da ação a procurar o preço.
      * @return preço o preço da ação encontrada.
      */
-    public double getAçãoPreço( String nome )
+    public double getAçãoPreço( final String nome )
     {
         return this.inventario.getAçãoPreço( nome );
     }
+    
+    // #################################### Client Access ##########
     
     /**
      * @param nome o nome da ação para encontrar a quantidade.
      * @return quantidade a quantidade de ação disponíveis.
      */
-    public int getAçãoQuantidade( String nome )
+    public int getAçãoQuantidade( final String nome )
     {
         return this.inventario.getAçãoQuantidade( nome );
     }
@@ -144,17 +111,6 @@ public class Conta
     public Inventario getInventario()
     {
         return this.inventario;
-    }
-    
-    /**
-     * Retorna se a senha para esse usuário confere com a solicitada.
-     * 
-     * @param senha a senha para ser verificada com a conta.
-     * @return true se a senha confere, false caso contrário.
-     */
-    public boolean checkSenha( String senha )
-    {
-        return this.senha.equals( senha );
     }
     
     /**
@@ -191,20 +147,64 @@ public class Conta
     }
     
     /**
-     * @param nomeAção nome da ação.
-     * @return true se ela existe false caso contrário.
+     * Retira dinheiro da conta.
+     * 
+     * @param quantidade a quantidade de saldo a ser retirada da conta. Caso o
+     *            saldo seja insuficiente não realiza a operação
+     * @return true caso seja realizada a transação, false caso contrário.
      */
-    public boolean existeAçãoNoInvetário( String nomeAção )
+    public boolean retirarDinheiro( final double quantidade )
     {
-        return this.inventario.existeAçãoNoInvetário( nomeAção );
+        if( this.administrador )
+        {
+            if( this.saldo >= quantidade )
+            {
+                this.saldo = this.saldo - quantidade;
+            }
+        }
+        
+        return false;
+    }
+    
+    // #################################### Administrador Access ##########
+    /**
+     * Define no nome do cliente. Somente o administrador tem acesso a essa
+     * funcionanlidade.
+     * 
+     * @param nome o nome do cliente a ser definido
+     */
+    public void setNome( final String nome )
+    {
+        if( this.administrador )
+        {
+            this.nome = nome;
+        }
     }
     
     /**
-     * @param quantidade a quantidade de ações
-     * @return true se existe a quantidade especificada, false caso contrário.
+     * Define um valor para o saldo. Tal comando é pertencente ao administrador.
+     * 
+     * @param saldo o saldo da conta do cliente
      */
-    public boolean existeQuantidadeNoInvetário( int quantidade )
+    public void setSaldo( final double saldo )
     {
-        return this.inventario.existeQuantidadeNoInvetário( quantidade );
+        if( this.administrador )
+        {
+            this.saldo = saldo;
+        }
+    }
+    
+    /**
+     * Define a senha do cliente. Somente o administrador tem acesso a essa
+     * funcionanlidade.
+     * 
+     * @param senha a senha do cliente a ser definida
+     */
+    public void setSenha( final String senha )
+    {
+        if( this.administrador )
+        {
+            this.senha = senha;
+        }
     }
 }

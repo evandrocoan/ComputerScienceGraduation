@@ -4,6 +4,7 @@
 package homebroker.lógica_de_dados;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representa um inventário de um cliente.
@@ -12,7 +13,14 @@ import java.util.ArrayList;
  */
 public class Inventario
 {
-    private ArrayList< Ação > listaDeAções = new ArrayList<>();
+    private final static char SEPARADOR = ';';
+    
+    private static boolean quebrarLinha( final int contadorDeChar )
+    {
+        return ( contadorDeChar % 10 ) == 9;
+    }
+    
+    private List< Ação > listaDeAções = new ArrayList<>();
     
     /**
      * Serve para corrigir um bug no gerador automático de diagramas que não
@@ -21,127 +29,26 @@ public class Inventario
     public Ação inútil = new Ação( 0, 0, null );
     
     /**
-     * @return listaDeAções a listaDeAções em forma de um ArrayList< Ação >
-     */
-    public ArrayList< Ação > getListaDeAções()
-    {
-        return this.listaDeAções;
-    }
-    
-    /**
-     * Definife, e portanto sobre-escreve o
-     * 
-     * @param listaDeAções a listaDeAções em forma de um ArrayList< Ação >
-     */
-    public void setInventario( ArrayList< Ação > listaDeAções )
-    {
-        this.listaDeAções = listaDeAções;
-    }
-    
-    /**
-     * Retorna o inventário representado como uma String. Essa String é composta
-     * pelos nomes das ações no inventário.
-     * 
-     * @return inventario o inventário reprensentado como um String
-     */
-    public String inventarioToString()
-    {
-        if( this.listaDeAções.size() == 0 )
-        {
-            return "Não há ações nesta conta";
-        }
-        
-        String enviar = new String();
-        for( Ação i: this.listaDeAções )
-        {
-            enviar = enviar + i.getNome() + "; ";
-            
-            int contadorDeChar = 0;
-            for( char caractere: enviar.toCharArray() )
-            {
-                if( caractere == ';' )
-                {
-                    contadorDeChar++;
-                }
-            }
-            
-            if( contadorDeChar % 10 == 9 )
-            {
-                enviar = enviar + "\n";
-            }
-        }
-        return enviar;
-    }
-    
-    /**
      * Adiciona um ação do inventario de ações do cliente.
      * 
      * @param acao a ação para se adicionar
      * @return true caso possa adicionar a ação ao inventário, false caso
      *         contrário
      */
-    public boolean adicionarAoInventario( Ação acao )
+    public boolean adicionarAoInventario( final Ação acao )
     {
         return this.listaDeAções.add( acao );
-    }
-    
-    /**
-     * Remove uma ação do inventario de ações do cliente.
-     * 
-     * @param acao a ação para se remover
-     * @return true caso possa remover a ação do inventário, false caso
-     *         contrário
-     */
-    public boolean removerDoInventario( Ação acao )
-    {
-        return this.listaDeAções.remove( acao );
-    }
-    
-    /**
-     * @param nome o nome da ação a procurar o preço.
-     * @return o preço da ação.
-     */
-    public double getAçãoPreço( String nome )
-    {
-        double preço = 0;
-        
-        for( Ação ação: this.listaDeAções )
-        {
-            if( ( ação.getNome() ).equals( nome ) )
-            {
-                preço = ação.getPreço();
-            }
-        }
-        return preço;
-    }
-    
-    /**
-     * @param nome o nome da ação.
-     * @return quantidade a quantidade de ações existentes no invetário.
-     */
-    public int getAçãoQuantidade( String nome )
-    {
-        int quantidade = 0;
-        
-        for( Ação ação: this.listaDeAções )
-        {
-            if( ação.getNome().equals( nome ) )
-            {
-                quantidade = ação.getQuantidade();
-            }
-        }
-        return quantidade;
     }
     
     /**
      * @param nomeAção o nome da ação.
      * @return true se ela existe false caso contrário.
      */
-    public boolean existeAçãoNoInvetário( String nomeAção )
+    public boolean existeAçãoNoInvetário( final String nomeAção )
     {
         boolean existe = false;
         
-        for( Ação ação: this.listaDeAções )
+        for( final Ação ação: this.listaDeAções )
         {
             if( ação.getNome().equals( nomeAção ) )
             {
@@ -156,11 +63,11 @@ public class Inventario
      * @param quantidade a quantidade de ações.
      * @return true se existe a quantidade de ações especificada.
      */
-    public boolean existeQuantidadeNoInvetário( int quantidade )
+    public boolean existeQuantidadeNoInvetário( final int quantidade )
     {
         boolean existe = false;
         
-        for( Ação ação: this.listaDeAções )
+        for( final Ação ação: this.listaDeAções )
         {
             if( ação.getQuantidade() >= quantidade )
             {
@@ -169,5 +76,105 @@ public class Inventario
             }
         }
         return existe;
+    }
+    
+    /**
+     * @param nome o nome da ação a procurar o preço.
+     * @return o preço da ação.
+     */
+    public double getAçãoPreço( final String nome )
+    {
+        double preço = 0;
+        
+        for( final Ação ação: this.listaDeAções )
+        {
+            if( ( ação.getNome() ).equals( nome ) )
+            {
+                preço = ação.getPreço();
+            }
+        }
+        return preço;
+    }
+    
+    /**
+     * @param nome o nome da ação.
+     * @return quantidade a quantidade de ações existentes no invetário.
+     */
+    public int getAçãoQuantidade( final String nome )
+    {
+        int quantidade = 0;
+        
+        for( final Ação ação: this.listaDeAções )
+        {
+            if( ação.getNome().equals( nome ) )
+            {
+                quantidade = ação.getQuantidade();
+            }
+        }
+        return quantidade;
+    }
+    
+    /**
+     * @return listaDeAções a listaDeAções em forma de um ArrayList< Ação >
+     */
+    public List< Ação > getListaDeAções()
+    {
+        return this.listaDeAções;
+    }
+    
+    /**
+     * Retorna o inventário representado como uma String. Essa String é composta
+     * pelos nomes das ações no inventário.
+     * 
+     * @return inventario o inventário reprensentado como um String
+     */
+    public String inventarioToString()
+    {
+        if( this.listaDeAções.size() == 0 )
+        {
+            return "Não há ações nesta conta";
+        }
+        final StringBuilder enviar = new StringBuilder();
+        
+        for( final Ação i: this.listaDeAções )
+        {
+            enviar.append( i.getNome() + Inventario.SEPARADOR + " " );
+            int contadorDeChar = 0;
+            
+            for( final char caractere: enviar.toString().toCharArray() )
+            {
+                if( caractere == Inventario.SEPARADOR )
+                {
+                    contadorDeChar++;
+                }
+            }
+            if( Inventario.quebrarLinha( contadorDeChar ) )
+            {
+                enviar.append( '\n' );
+            }
+        }
+        return enviar.toString();
+    }
+    
+    /**
+     * Remove uma ação do inventario de ações do cliente.
+     * 
+     * @param acao a ação para se remover
+     * @return true caso possa remover a ação do inventário, false caso
+     *         contrário
+     */
+    public boolean removerDoInventario( final Ação acao )
+    {
+        return this.listaDeAções.remove( acao );
+    }
+    
+    /**
+     * Definife, e portanto sobre-escreve o
+     * 
+     * @param listaDeAções a listaDeAções em forma de um ArrayList< Ação >
+     */
+    public void setInventario( final List< Ação > listaDeAções )
+    {
+        this.listaDeAções = (ArrayList< Ação >) listaDeAções;
     }
 }
