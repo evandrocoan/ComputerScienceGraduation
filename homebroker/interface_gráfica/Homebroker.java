@@ -40,9 +40,15 @@ public class Homebroker extends JFrame
      */
     private class PainelPrincipal extends JPanel
     {
-        private final JTextField caixaDeTextoPrincipal;
-        private final JButton botãoPrincipal;
-        private final JTextArea comandosDisponíveis;
+        
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -4450248854153724051L;
+        
+        JTextField caixaDeTextoPrincipal;
+        JButton botãoPrincipal;
+        final JTextArea comandosDisponíveis;
         
         /**
          * Cria um painel para colocar os botões, caixas de texto, ...
@@ -89,27 +95,26 @@ public class Homebroker extends JFrame
         private JButton botãoPrincipal()
         {
             // Button to show the second JFrame.
-            final JButton botãoPrincipal = new JButton( "Enviar comando" );
-            botãoPrincipal.addActionListener( new ActionListener()
+            this.botãoPrincipal = new JButton( "Enviar comando" );
+            this.botãoPrincipal.addActionListener( new ActionListener()
             {
                 /**
                  * Processa o comando na caixa de texto principal.
                  */
-                @SuppressWarnings( "unused" )
                 @Override
                 public void actionPerformed( final ActionEvent ae )
                 {
                     Homebroker.motorDoHomebroker
-                            .menuPrincipal( PainelPrincipal.this.caixaDeTextoPrincipal
-                                    .getText() );
+                    .menuPrincipal( PainelPrincipal.this.caixaDeTextoPrincipal
+                            .getText() );
                 }
             } );
             
             // Configura o botão principal
-            botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
-            botãoPrincipal.setFocusable( false );
+            this.botãoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            this.botãoPrincipal.setFocusable( false );
             
-            return botãoPrincipal;
+            return this.botãoPrincipal;
         }
         
         /**
@@ -121,14 +126,13 @@ public class Homebroker extends JFrame
         private JTextField caixaDeTextoPrincipal()
         {
             // Cria um campo de texto para entrada de comandos para o programa
-            final JTextField caixaDeTextoPrincipal =
+            this.caixaDeTextoPrincipal =
                     new JTextField( "  Insira qual seu comando  " );
-            caixaDeTextoPrincipal.addActionListener( new ActionListener()
+            this.caixaDeTextoPrincipal.addActionListener( new ActionListener()
             {
                 /**
                  * Obtém o texto digito.
                  */
-                @SuppressWarnings( "unused" )
                 @Override
                 public void actionPerformed( final ActionEvent ae )
                 {
@@ -141,28 +145,28 @@ public class Homebroker extends JFrame
                         }
                     }
                     Homebroker.motorDoHomebroker
-                            .menuPrincipal( caixaDeTextoPrincipal.getText() );
+                    .menuPrincipal( PainelPrincipal.this.caixaDeTextoPrincipal
+                                    .getText() );
                 }
             } );
             
             // Limpa a caixa de texto ao clicar com o mouse.
-            caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
+            this.caixaDeTextoPrincipal.addMouseListener( new MouseAdapter()
             {
                 /**
                  * Limpa a caixa de texto ao clicar com o mouse.
                  */
-                @SuppressWarnings( "unused" )
                 @Override
                 // @formatter:off
-                        public
-                        void mouseClicked( final MouseEvent e )
+                public
+                void mouseClicked( final MouseEvent e )
                 {
-                    caixaDeTextoPrincipal.setText( "" );
+                    PainelPrincipal.this.caixaDeTextoPrincipal.setText( "" );
                 } // @formatter:on
             } );
             
             // Limpa a caixa de texto ao digital algo
-            caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
+            this.caixaDeTextoPrincipal.addKeyListener( new KeyAdapter()
             {
                 /**
                  * Limpa a caixa de texto ao entrar mais que 2 caracteres.
@@ -171,24 +175,31 @@ public class Homebroker extends JFrame
                 public void keyPressed( final KeyEvent evt )
                 {
                     if( ( evt.getKeyCode() != KeyEvent.VK_ENTER )
-                            && ( caixaDeTextoPrincipal.getText().length() > 1 ) )
+                            && ( PainelPrincipal.this.caixaDeTextoPrincipal
+                                    .getText().length() > 1 ) )
                     {
-                        caixaDeTextoPrincipal.setText( "" );
+                        PainelPrincipal.this.caixaDeTextoPrincipal.setText( "" );
                     }
                 }
             } );
             
             // Configura a caixaDeTextoPrincipal
-            caixaDeTextoPrincipal.setPreferredSize( new Dimension( 250, 35 ) );
+            this.caixaDeTextoPrincipal
+            .setPreferredSize( new Dimension( 250, 35 ) );
             
-            return caixaDeTextoPrincipal;
+            return this.caixaDeTextoPrincipal;
         }
     }
     
     /**
+     * 
+     */
+    private static final long serialVersionUID = -7263112844101186140L;
+    
+    /**
      * Contém a única instância deste motor.
      */
-    private static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
+    static MotorDoHomebroker motorDoHomebroker = MotorDoHomebroker
             .getInstance();
     
     private static final boolean DEBUG = false;
@@ -229,7 +240,7 @@ public class Homebroker extends JFrame
             /**
              * Executa o homebroker.
              */
-            @SuppressWarnings( "unused" )
+            @SuppressWarnings( { "unused", "synthetic-access" } )
             @Override
             public void run()
             {

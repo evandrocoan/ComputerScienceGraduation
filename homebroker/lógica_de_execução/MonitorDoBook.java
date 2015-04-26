@@ -34,18 +34,26 @@ public class MonitorDoBook extends JFrame
      */
     private class PainelPrincipal extends JPanel
     {
-        private DefaultListModel< String > modeloPadrãoDeLista =
-            new DefaultListModel<>();
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 9104840444093828978L;
         
-        private JList< String > listaDeOfertas = new JList<>(
-            this.modeloPadrãoDeLista );
+        final DefaultListModel< String > modeloPadrãoDeLista =
+                new DefaultListModel<>();
         
-        private PainelPrincipal()
+        private final JList< String > listaDeOfertas = new JList<>(
+                this.modeloPadrãoDeLista );
+        
+        public PainelPrincipal()
         {
+            super();
+            
             if( MonitorDoBook.DEBUG )
             {
-                JOptionPane.showMessageDialog( null,
-                    "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+                JOptionPane
+                .showMessageDialog( null,
+                        "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
             }
             
             this.setLayout( new GridLayout( 0, 1 ) );
@@ -53,18 +61,24 @@ public class MonitorDoBook extends JFrame
             this.setPreferredSize( super.getSize() );
             this.setVisible( true );
             
-            JScrollPane painelRolável = new JScrollPane( this.listaDeOfertas );
+            final JScrollPane painelRolável =
+                    new JScrollPane( this.listaDeOfertas );
             this.add( painelRolável, BorderLayout.CENTER );
         }
     }
     
     /**
+     * 
+     */
+    private static final long serialVersionUID = 2978670135770143966L;
+    
+    /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final MonitorDoBook INSTÂNCIA_DA_JANELA =
-        new MonitorDoBook();
+            new MonitorDoBook();
     
-    private static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
     
     /**
      * @return the instance
@@ -74,7 +88,7 @@ public class MonitorDoBook extends JFrame
         return MonitorDoBook.INSTÂNCIA_DA_JANELA;
     }
     
-    private PainelPrincipal painelPrincipal;
+    private final PainelPrincipal painelPrincipal;
     
     private MonitorDoBook()
     {
@@ -82,7 +96,7 @@ public class MonitorDoBook extends JFrame
         if( MonitorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
-                "Estou no construtor da JanelaDoBook!" );
+                    "Estou no construtor da JanelaDoBook!" );
         }
         if( MonitorDoBook.INSTÂNCIA_DA_JANELA != null )
         {
@@ -90,12 +104,13 @@ public class MonitorDoBook extends JFrame
         }
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
         
-        Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) tamanhoDaJanela.getWidth();
-        int height = (int) tamanhoDaJanela.getHeight();
+        final Dimension tamanhoDaJanela =
+                Toolkit.getDefaultToolkit().getScreenSize();
+        final int width = (int) tamanhoDaJanela.getWidth();
+        final int height = (int) tamanhoDaJanela.getHeight();
         
-        Dimension tamanhoDaJanelaReduzido =
-            new Dimension( width - 100, height - 100 );
+        final Dimension tamanhoDaJanelaReduzido =
+                new Dimension( width - 100, height - 100 );
         
         this.setSize( tamanhoDaJanelaReduzido );
         this.setPreferredSize( tamanhoDaJanelaReduzido );
@@ -106,7 +121,7 @@ public class MonitorDoBook extends JFrame
         this.setContentPane( this.painelPrincipal );
         
         Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
-            24 ) );
+                24 ) );
     }
     
     /**
@@ -116,7 +131,7 @@ public class MonitorDoBook extends JFrame
      *            se adicionar ao book de ofertas. Os caracteres de quebra de
      *            linhas desta String serão ignorados.
      */
-    public void adicionarOfertaDeMercado( String ofertaDeMercado )
+    public void adicionarOfertaDeMercado( final String ofertaDeMercado )
     {
         this.painelPrincipal.modeloPadrãoDeLista.addElement( ofertaDeMercado );
     }
