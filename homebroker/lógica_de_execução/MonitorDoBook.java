@@ -35,8 +35,8 @@ public class MonitorDoBook extends JFrame
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final MonitorDoBook INSTÂNCIA_DA_JANELA =
-            new MonitorDoBook();
+    private static final MonitorDoBook INSTÂNCIA =
+        new MonitorDoBook();
     
     private static final boolean DEBUG = false;
     
@@ -48,21 +48,21 @@ public class MonitorDoBook extends JFrame
         if( MonitorDoBook.DEBUG )
         {
             JOptionPane.showMessageDialog( null,
-                    "Estou no construtor da JanelaDoBook!" );
+                "Estou no construtor da JanelaDoBook!" );
         }
-        if( MonitorDoBook.INSTÂNCIA_DA_JANELA != null )
+        if( MonitorDoBook.INSTÂNCIA != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
         
         final Dimension tamanhoDaJanela =
-                Toolkit.getDefaultToolkit().getScreenSize();
+            Toolkit.getDefaultToolkit().getScreenSize();
         final int width = (int) tamanhoDaJanela.getWidth();
         final int height = (int) tamanhoDaJanela.getHeight();
         
         final Dimension tamanhoDaJanelaReduzido =
-                new Dimension( width - 100, height - 100 );
+            new Dimension( width - 100, height - 100 );
         
         this.setSize( tamanhoDaJanelaReduzido );
         this.setPreferredSize( tamanhoDaJanelaReduzido );
@@ -73,7 +73,7 @@ public class MonitorDoBook extends JFrame
         this.setContentPane( this.painelPrincipal );
         
         Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
-                24 ) );
+            24 ) );
     }
     
     /**
@@ -102,7 +102,7 @@ public class MonitorDoBook extends JFrame
      */
     public static MonitorDoBook getInstance()
     {
-        return MonitorDoBook.INSTÂNCIA_DA_JANELA;
+        return MonitorDoBook.INSTÂNCIA;
     }
     
     /**
@@ -118,10 +118,10 @@ public class MonitorDoBook extends JFrame
         private static final long serialVersionUID = 9104840444093828978L;
         
         final DefaultListModel< String > modeloPadrãoDeLista =
-                new DefaultListModel<>();
+            new DefaultListModel<>();
         
         private final JList< String > listaDeOfertas = new JList<>(
-                this.modeloPadrãoDeLista );
+            this.modeloPadrãoDeLista );
         
         public PainelPrincipal()
         {
@@ -130,7 +130,7 @@ public class MonitorDoBook extends JFrame
             if( MonitorDoBook.DEBUG )
             {
                 JOptionPane.showMessageDialog( null,
-                        "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+                    "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
             }
             
             this.setLayout( new GridLayout( 0, 1 ) );
@@ -139,7 +139,7 @@ public class MonitorDoBook extends JFrame
             this.setVisible( true );
             
             final JScrollPane painelRolável =
-                    new JScrollPane( this.listaDeOfertas );
+                new JScrollPane( this.listaDeOfertas );
             this.add( painelRolável, BorderLayout.CENTER );
         }
     }
