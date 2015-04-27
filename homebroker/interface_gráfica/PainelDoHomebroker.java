@@ -1,5 +1,6 @@
 package homebroker.interface_gráfica;
 
+import homebroker.lógica_de_execução.MotorDoHomebroker;
 import homebroker.util.Biblioteca;
 
 import java.awt.BorderLayout;
@@ -23,12 +24,22 @@ import javax.swing.JTextField;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public final class PainelPrincipal extends JPanel
+public final class PainelDoHomebroker extends JPanel
 {
     /**
      * Implementa a serialização do swing.
      */
     private static final long serialVersionUID = -4450248854153724051L;
+    
+    /**
+     * Contém a única instância do painel.
+     */
+    private static PainelDoHomebroker instância;
+    
+    /**
+     * Motor responsável pela lógica da interface gráfica principal do programa.
+     */
+    private transient final MotorDoHomebroker motor;
     
     /**
      * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -44,9 +55,11 @@ public final class PainelPrincipal extends JPanel
     /**
      * Cria um painel para colocar os botões, caixas de texto, ...
      */
-    PainelPrincipal()
+    private PainelDoHomebroker( final MotorDoHomebroker motor )
     {
         super();
+        
+        this.motor = motor;
         
         // Configura os compomentos
         this.configurarEntradaDeComandos();
@@ -93,7 +106,7 @@ public final class PainelPrincipal extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                Homebroker.enviarCommando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
             }
         } );
         
@@ -118,7 +131,7 @@ public final class PainelPrincipal extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                Homebroker.enviarCommando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
             }
         } );
         
@@ -130,7 +143,7 @@ public final class PainelPrincipal extends JPanel
             @Override
             public void mouseClicked( final MouseEvent e )
             {
-                PainelPrincipal.this.limpar();
+                PainelDoHomebroker.this.limpar();
             }
         } );
         
@@ -143,9 +156,9 @@ public final class PainelPrincipal extends JPanel
             public void keyPressed( final KeyEvent evt )
             {
                 if( ( evt.getKeyCode() != KeyEvent.VK_ENTER )
-                    && ( PainelPrincipal.this.conteúdo().length() > 1 ) )
+                    && ( PainelDoHomebroker.this.conteúdo().length() > 1 ) )
                 {
-                    PainelPrincipal.this.limpar();
+                    PainelDoHomebroker.this.limpar();
                 }
             }
         } );
@@ -163,10 +176,34 @@ public final class PainelPrincipal extends JPanel
     }
     
     /**
+     * Envia um comando entrado pelo usuário ao interpretador de comandos.
+     */
+    void enviarCommando( final String comando )
+    {
+        this.motor.menuPrincipal( comando );
+    }
+    
+    /**
      * Limpa o conteúdo da caixa de texto principal.
      */
     void limpar()
     {
         this.entradaDeComandos.setText( "" );
+    }
+    
+    /**
+     * @param motor o motor do Homebroker.
+     * @return instância uma intância da janela de login.
+     */
+    public static PainelDoHomebroker getInstância( final MotorDoHomebroker motor )
+    {
+        synchronized( PainelDoHomebroker.class )
+        {
+            if( PainelDoHomebroker.instância == null )
+            {
+                PainelDoHomebroker.instância = new PainelDoHomebroker( motor );
+            }
+        }
+        return PainelDoHomebroker.instância;
     }
 }
