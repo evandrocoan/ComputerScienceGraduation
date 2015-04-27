@@ -24,7 +24,7 @@
   <class id="3" language="java" name="homebroker.lógica_de_execução.UtiliárioDeContas" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_execução/UtiliárioDeContas.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="169" y="832"/>    
+    <position height="-1" width="-1" x="170" y="832"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -131,11 +131,11 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="homebroker.lógica_de_execução.MonitorDoBook.PainelPrincipal" 
+  <class id="14" language="java" name="homebroker.lógica_de_execução.MonitorDoBook.PainelDoMonitorDoBook" 
     project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_execução/MonitorDoBook.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="970" y="1517"/>    
+    <position height="-1" width="-1" x="968" y="1519"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -219,42 +219,42 @@
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="34">    
+  <dependency id="34">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <association id="35">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="35" name="motor">        
-        <position height="18" width="35" x="379" y="378"/>      
+      <attribute id="36" name="motor">        
+        <position height="18" width="35" x="380" y="391"/>      
       </attribute>      
-      <multiplicity id="36" minimum="0" maximum="1"/>    
+      <multiplicity id="37" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="37">    
+  <association id="38">    
     <bendpoint x="588" y="1870"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="38" name="açãoEmOferta">        
+      <attribute id="39" name="açãoEmOferta">        
         <position height="18" width="77" x="252" y="1849"/>      
       </attribute>      
-      <multiplicity id="39" minimum="0" maximum="1"/>    
+      <multiplicity id="40" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="40">    
+  <association id="41">    
     <bendpoint x="803" y="-36"/>    
     <bendpoint x="803" y="113"/>    
     <bendpoint x="804" y="553"/>    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="41" name="motor"/>      
-      <multiplicity id="42" minimum="0" maximum="1"/>    
+      <attribute id="42" name="motor"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="43">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
   <nesting id="44">    
     <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="14"/>  
@@ -262,10 +262,10 @@
   <association id="45">    
     <end type="SOURCE" refId="9" navigable="false">      
       <attribute id="46" name="painelPrincipal">        
-        <position height="18" width="76" x="965" y="1407"/>      
+        <position height="18" width="76" x="972" y="1414"/>      
       </attribute>      
       <multiplicity id="47" minimum="0" maximum="1">        
-        <position height="16" width="23" x="969" y="1424"/>      
+        <position height="16" width="23" x="975" y="1428"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    

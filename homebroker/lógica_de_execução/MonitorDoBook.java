@@ -40,7 +40,7 @@ public class MonitorDoBook extends JFrame
     
     private static final boolean DEBUG = false;
     
-    private final PainelPrincipal painelPrincipal;
+    private final PainelDoMonitorDoBook painelPrincipal;
     
     private MonitorDoBook()
     {
@@ -69,7 +69,7 @@ public class MonitorDoBook extends JFrame
         this.setBounds( 50, 50, width - 100, height - 100 );
         this.setVisible( false );
         
-        this.painelPrincipal = new PainelPrincipal();
+        this.painelPrincipal = new PainelDoMonitorDoBook();
         this.setContentPane( this.painelPrincipal );
         
         Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
@@ -110,7 +110,7 @@ public class MonitorDoBook extends JFrame
      * 
      * @authors Evandro  Coan, Renan Pinho Assi
      */
-    private class PainelPrincipal extends JPanel
+    private class PainelDoMonitorDoBook extends JPanel
     {
         /**
          * 
@@ -123,7 +123,7 @@ public class MonitorDoBook extends JFrame
         private final JList< String > listaDeOfertas = new JList<>(
             this.modeloPadrãoDeLista );
         
-        public PainelPrincipal()
+        public PainelDoMonitorDoBook()
         {
             super();
             
