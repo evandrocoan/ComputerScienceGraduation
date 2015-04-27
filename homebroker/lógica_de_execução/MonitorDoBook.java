@@ -5,19 +5,15 @@ package homebroker.lógica_de_execução;
 
 import homebroker.util.Biblioteca;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 /**
@@ -25,7 +21,7 @@ import javax.swing.WindowConstants;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class MonitorDoBook extends JFrame
+public final class MonitorDoBook extends JFrame
 {
     /**
      * 
@@ -33,19 +29,26 @@ public class MonitorDoBook extends JFrame
     private static final long serialVersionUID = 2978670135770143966L;
     
     /**
+     * Resposável por realizar o debug do programa, quando ativado. Deve ser
+     * instânciado antes que o construtor desta classe, pois este construtor
+     * precisa de deste objeto já instânciado para ser monitorado pelo log.
+     */
+    private static final Logger LOG = Logger.getLogger( MotorDoBook.class.getName() );
+    
+    /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final MonitorDoBook INSTÂNCIA =
         new MonitorDoBook();
     
-    private static final boolean DEBUG = false;
-    
-    private final PainelDoMonitorDoBook painelPrincipal;
+    private final PainelDoMonitor painelPrincipal;
     
     private MonitorDoBook()
     {
         super( "Monitor do Book De Ofertas" );
-        if( MonitorDoBook.DEBUG )
+        MonitorDoBook.LOG.setLevel( Level.OFF );
+        
+        if( MonitorDoBook.LOG.isLoggable( Level.SEVERE ) )
         {
             JOptionPane.showMessageDialog( null,
                 "Estou no construtor da JanelaDoBook!" );
@@ -69,7 +72,7 @@ public class MonitorDoBook extends JFrame
         this.setBounds( 50, 50, width - 100, height - 100 );
         this.setVisible( false );
         
-        this.painelPrincipal = new PainelDoMonitorDoBook();
+        this.painelPrincipal = PainelDoMonitor.getInstância();
         this.setContentPane( this.painelPrincipal );
         
         Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
@@ -103,44 +106,5 @@ public class MonitorDoBook extends JFrame
     public static MonitorDoBook getInstance()
     {
         return MonitorDoBook.INSTÂNCIA;
-    }
-    
-    /**
-     * Classe que constrói a interface gráfica do book de ofertas.
-     * 
-     * @authors Evandro  Coan, Renan Pinho Assi
-     */
-    private class PainelDoMonitorDoBook extends JPanel
-    {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 9104840444093828978L;
-        
-        final DefaultListModel< String > modeloPadrãoDeLista =
-            new DefaultListModel<>();
-        
-        private final JList< String > listaDeOfertas = new JList<>(
-            this.modeloPadrãoDeLista );
-        
-        public PainelDoMonitorDoBook()
-        {
-            super();
-            
-            if( MonitorDoBook.DEBUG )
-            {
-                JOptionPane.showMessageDialog( null,
-                    "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
-            }
-            
-            this.setLayout( new GridLayout( 0, 1 ) );
-            this.setSize( super.getSize() );
-            this.setPreferredSize( super.getSize() );
-            this.setVisible( true );
-            
-            final JScrollPane painelRolável =
-                new JScrollPane( this.listaDeOfertas );
-            this.add( painelRolável, BorderLayout.CENTER );
-        }
     }
 }

@@ -53,7 +53,6 @@ public final class MotorDoHomebroker
      */
     private MotorDoHomebroker()
     {
-        super();
         MotorDoHomebroker.LOG.setLevel( Level.OFF );
         
         if( MotorDoHomebroker.LOG.isLoggable( Level.SEVERE ) )
@@ -162,8 +161,8 @@ public final class MotorDoHomebroker
     {
         final String imput = JOptionPane.showInputDialog(
             "Insira o preço da ação:", Double
-                .toString( this.contaAutenticada
-                .getAçãoPreço( açãoParaVender ) ) );
+            .toString( this.contaAutenticada
+                    .getAçãoPreço( açãoParaVender ) ) );
         if( imput == null )
         {
             return 0;
@@ -241,10 +240,10 @@ public final class MotorDoHomebroker
         case "v":
             this.mostrarInventário();
             break;
-            // case "c":
-            // TODO
-            // this.criarUsuario();
-            // break;
+        // case "c":
+        // TODO
+        // this.criarUsuario();
+        // break;
         case "ov":
             this.efetuarVendaDeAção();
             break;

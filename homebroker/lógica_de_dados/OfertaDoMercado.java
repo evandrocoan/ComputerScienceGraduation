@@ -28,6 +28,8 @@ public class OfertaDoMercado
     public OfertaDoMercado( final double preço, final int quantidade,
         final String ação, final String tipoDeOferta )
     {
+        OfertaDoMercado.LOG.setLevel( Level.OFF );
+        
         this.açãoEmOferta = new Ação( preço, quantidade, ação );
         this.tipoDeOferta = tipoDeOferta;
         OfertaDoMercado.LOG.setLevel( Level.OFF );

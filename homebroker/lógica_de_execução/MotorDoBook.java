@@ -35,7 +35,6 @@ public final class MotorDoBook implements Runnable
     
     private MotorDoBook()
     {
-        super();
         MotorDoBook.LOG.setLevel( Level.OFF );
         
         if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )

@@ -31,6 +31,7 @@ public final class UtiliárioDeContas
      */
     private UtiliárioDeContas()
     {
+        UtiliárioDeContas.LOG.setLevel( Level.OFF );
     }
     
     /**

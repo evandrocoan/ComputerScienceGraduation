@@ -57,8 +57,6 @@ public final class PainelDoHomebroker extends JPanel
      */
     private PainelDoHomebroker( final MotorDoHomebroker motor )
     {
-        super();
-        
         this.motor = motor;
         
         // Configura os compomentos
@@ -195,7 +193,8 @@ public final class PainelDoHomebroker extends JPanel
      * @param motor o motor do Homebroker.
      * @return instância uma intância da janela de login.
      */
-    public static PainelDoHomebroker getInstância( final MotorDoHomebroker motor )
+    public static PainelDoHomebroker
+        getInstância( final MotorDoHomebroker motor )
     {
         synchronized( PainelDoHomebroker.class )
         {
