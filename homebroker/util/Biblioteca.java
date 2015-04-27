@@ -12,8 +12,15 @@ import java.awt.Font;
  * 
  * @authors Evandro  Coan, Renan Pinho Assi
  */
-public class Biblioteca
+public final class Biblioteca
 {
+    /**
+     * Serve para tornar a classe uma classe utilitária.
+     */
+    private Biblioteca()
+    {
+    }
+    
     /**
      * Gera número aleátorios entre 1 e 100
      * 
@@ -22,9 +29,7 @@ public class Biblioteca
     public static int gerarNumeroAleatorio()
     {
         final double random = Math.random();
-        final double x = ( random * 100 ) + 1;
-        final int y = (int) x;
-        return y;
+        return (int) ( random * 100 ) + 1;
     }
     
     /**
