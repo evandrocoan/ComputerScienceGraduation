@@ -4,7 +4,7 @@
   <class id="1" language="java" name="homebroker.lógica_de_dados.Inventario" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/Inventario.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="261" y="1576"/>    
+    <position height="-1" width="-1" x="168" y="1582"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -94,7 +94,7 @@
   <class id="10" language="java" name="homebroker.lógica_de_dados.Ação" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/Ação.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="261" y="1868"/>    
+    <position height="-1" width="-1" x="166" y="1869"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -157,10 +157,10 @@
   <association id="18">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="19" name="listaDeAções">        
-        <position height="18" width="72" x="268" y="1728"/>      
+        <position height="18" width="72" x="173" y="1729"/>      
       </attribute>      
       <multiplicity id="20" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="234" y="1729"/>      
+        <position height="16" width="21" x="139" y="1730"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
@@ -233,7 +233,7 @@
     <bendpoint x="588" y="1870"/>    
     <end type="SOURCE" refId="5" navigable="false">      
       <attribute id="38" name="açãoEmOferta">        
-        <position height="18" width="77" x="347" y="1848"/>      
+        <position height="18" width="77" x="252" y="1849"/>      
       </attribute>      
       <multiplicity id="39" minimum="0" maximum="1"/>    
     </end>    
@@ -280,7 +280,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="51">    
-    <bendpoint x="968" y="852"/>    
+    <bendpoint x="967" y="854"/>    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="52" name="janelaDoBook">        
         <position height="18" width="73" x="972" y="974"/>      
@@ -294,7 +294,7 @@
   </association>  
   <dependency id="54">    
     <bendpoint x="33" y="993"/>    
-    <bendpoint x="32" y="1571"/>    
+    <bendpoint x="33" y="1575"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
