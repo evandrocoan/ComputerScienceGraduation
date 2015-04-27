@@ -27,7 +27,7 @@ public final class MotorDoBook implements Runnable
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final MotorDoBook INSTÂNCIA_DO_MOTOR = new MotorDoBook();
+    private static final MotorDoBook INSTÂNCIA = new MotorDoBook();
     
     private final BookDeOfertas bookDeOfertas;
     
@@ -43,7 +43,7 @@ public final class MotorDoBook implements Runnable
             JOptionPane.showMessageDialog( null,
                 "Estou no construtor do MotorDoBook!" );
         }
-        if( MotorDoBook.INSTÂNCIA_DO_MOTOR != null )
+        if( MotorDoBook.INSTÂNCIA != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
@@ -130,6 +130,6 @@ public final class MotorDoBook implements Runnable
      */
     public static MotorDoBook getInstance()
     {
-        return MotorDoBook.INSTÂNCIA_DO_MOTOR;
+        return MotorDoBook.INSTÂNCIA;
     }
 }

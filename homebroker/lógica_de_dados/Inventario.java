@@ -20,12 +20,6 @@ public class Inventario
     private List< Ação > listaDeAções = new ArrayList<>();
     
     /**
-     * Serve para corrigir um bug no gerador automático de diagramas que não
-     * reconhece a composição feita acima do ArrayList de Ações.
-     */
-    public Ação inútil = new Ação( 0, 0, null );
-    
-    /**
      * Adiciona um ação do inventario de ações do cliente.
      * 
      * @param acao a ação para se adicionar

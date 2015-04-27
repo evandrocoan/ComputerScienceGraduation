@@ -28,18 +28,12 @@ public final class BookDeOfertas
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
-    private static final BookDeOfertas INSTÂNCIA_DO_BOOK = new BookDeOfertas();
+    private static final BookDeOfertas INSTÂNCIA = new BookDeOfertas();
     
     /**
      * As ofertas do mercado realizadas.
      */
     private final List< OfertaDoMercado > ofertasDoMercado;
-    
-    /**
-     * Serve para corrigir um bug no gerador automático de diagramas que não
-     * reconhece a composição feita acima do ArrayList de OfertaDoMercado.
-     */
-    public OfertaDoMercado inútil = new OfertaDoMercado( 0, 0, null, null );
     
     /**
      * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -48,7 +42,7 @@ public final class BookDeOfertas
     {
         BookDeOfertas.LOG.setLevel( Level.OFF );
         
-        if( BookDeOfertas.INSTÂNCIA_DO_BOOK != null )
+        if( BookDeOfertas.INSTÂNCIA != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
@@ -118,6 +112,6 @@ public final class BookDeOfertas
      */
     public static BookDeOfertas getInstância()
     {
-        return BookDeOfertas.INSTÂNCIA_DO_BOOK;
+        return BookDeOfertas.INSTÂNCIA;
     }
 }

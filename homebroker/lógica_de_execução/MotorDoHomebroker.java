@@ -27,7 +27,7 @@ public final class MotorDoHomebroker
     /**
      * Único objeto desta classe.
      */
-    private static final MotorDoHomebroker INSTÂNCIA_DO_MOTOR =
+    private static final MotorDoHomebroker INSTÂNCIA =
         new MotorDoHomebroker();
     
     /**
@@ -61,7 +61,7 @@ public final class MotorDoHomebroker
             MotorDoHomebroker.LOG.severe(
                 "Estou no construtor de ProgramaPrincipal()" );
         }
-        if( MotorDoHomebroker.INSTÂNCIA_DO_MOTOR != null )
+        if( MotorDoHomebroker.INSTÂNCIA != null )
         {
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
@@ -276,7 +276,7 @@ public final class MotorDoHomebroker
      */
     public static MotorDoHomebroker getInstância()
     {
-        return MotorDoHomebroker.INSTÂNCIA_DO_MOTOR;
+        return MotorDoHomebroker.INSTÂNCIA;
     }
     
     private static void imputError()
