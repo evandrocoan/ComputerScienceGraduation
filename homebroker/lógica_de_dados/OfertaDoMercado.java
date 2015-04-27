@@ -13,8 +13,8 @@ import java.util.logging.Logger;
  */
 public class OfertaDoMercado
 {
-    private static final Logger LOG = Logger.getLogger( BookDeOfertas.class
-            .getName() );
+    private static final Logger LOG = Logger.getLogger( OfertaDoMercado.class
+        .getName() );
     
     private final Ação açãoEmOferta;
     private final String tipoDeOferta;
@@ -26,7 +26,7 @@ public class OfertaDoMercado
      * @param tipoDeOferta o tipo da oferta
      */
     public OfertaDoMercado( final double preço, final int quantidade,
-            final String ação, final String tipoDeOferta )
+        final String ação, final String tipoDeOferta )
     {
         this.açãoEmOferta = new Ação( preço, quantidade, ação );
         this.tipoDeOferta = tipoDeOferta;
@@ -55,10 +55,10 @@ public class OfertaDoMercado
     public String ofertaToString()
     {
         final String açãoEmOferta =
-                "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
-                        + this.getAçãoEmOferta().getNome() + " - Preço: "
-                        + this.getAçãoEmOferta().getPreço() + " - Quantidade: "
-                        + this.getAçãoEmOferta().getQuantidade();
+            "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
+                + this.getAçãoEmOferta().getNome() + " - Preço: "
+                + this.getAçãoEmOferta().getPreço() + " - Quantidade: "
+                + this.getAçãoEmOferta().getQuantidade();
         
         if( OfertaDoMercado.LOG.isLoggable( Level.SEVERE ) )
         {
