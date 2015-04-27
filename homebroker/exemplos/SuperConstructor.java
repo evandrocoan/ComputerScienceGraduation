@@ -52,6 +52,62 @@ import javax.swing.WindowConstants;
 public class SuperConstructor extends JFrame
 {
     
+    private static final long serialVersionUID = 1L;
+    
+    private int i;
+    
+    /**
+     * 
+     */
+    public SuperConstructor()
+    {
+        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        this.setPreferredSize( new Dimension( 300, 300 ) );
+        this.setTitle( "Super constructor" );
+        final Container cp = this.getContentPane();
+        final JButton b = new JButton( "Show dialog" );
+        b.addActionListener( new ActionListener()
+        {
+            
+            @SuppressWarnings( "unused" )
+            @Override
+            public void actionPerformed( final ActionEvent evt )
+            {
+                new FirstDialog( SuperConstructor.this );
+            }
+        } );
+        cp.add( b, BorderLayout.SOUTH );
+        final JButton bClose = new JButton( "Close" );
+        bClose.addActionListener( new ActionListener()
+        {
+            @Override
+            public void actionPerformed( final ActionEvent evt )
+            {
+                System.exit( 0 );
+            }
+        } );
+        this.add( bClose, BorderLayout.NORTH );
+        this.pack();
+        this.setVisible( true );
+    }
+    
+    /**
+     * @param args
+     */
+    public static void main( final String args[] )
+    {
+        EventQueue.invokeLater( new Runnable()
+        {
+            
+            @SuppressWarnings( "unused" )
+            @Override
+            public void run()
+            {
+                new SuperConstructor();
+            }
+        } );
+    }
+    
     private class FirstDialog extends JDialog
     {
         
@@ -67,7 +123,6 @@ public class SuperConstructor extends JFrame
             final JButton bNext = new JButton( "Show next dialog" );
             bNext.addActionListener( new ActionListener()
             {
-                
                 @SuppressWarnings( "unused" )
                 @Override
                 public void actionPerformed( final ActionEvent evt )
@@ -119,61 +174,5 @@ public class SuperConstructor extends JFrame
             this.pack();
             this.setVisible( true );
         }
-    }
-    
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * @param args
-     */
-    public static void main( final String args[] )
-    {
-        EventQueue.invokeLater( new Runnable()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void run()
-            {
-                new SuperConstructor();
-            }
-        } );
-    }
-    
-    private int i;
-    
-    /**
-     * 
-     */
-    public SuperConstructor()
-    {
-        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        this.setPreferredSize( new Dimension( 300, 300 ) );
-        this.setTitle( "Super constructor" );
-        final Container cp = this.getContentPane();
-        final JButton b = new JButton( "Show dialog" );
-        b.addActionListener( new ActionListener()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void actionPerformed( final ActionEvent evt )
-            {
-                new FirstDialog( SuperConstructor.this );
-            }
-        } );
-        cp.add( b, BorderLayout.SOUTH );
-        final JButton bClose = new JButton( "Close" );
-        bClose.addActionListener( new ActionListener()
-        {
-            @Override
-            public void actionPerformed( final ActionEvent evt )
-            {
-                System.exit( 0 );
-            }
-        } );
-        this.add( bClose, BorderLayout.NORTH );
-        this.pack();
-        this.setVisible( true );
     }
 }
