@@ -1,0 +1,5 @@
+Escreva um programa que calcule a área e o perímetro de um retangulo. Obs: O retangulo deve ser tratado com um objeto.
+
+Entregar impresso.
+
+Entregar segunda feira, 02/09/2013.

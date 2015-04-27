@@ -1,0 +1,1 @@
+dir /s /B *.java > listaCriada.txt

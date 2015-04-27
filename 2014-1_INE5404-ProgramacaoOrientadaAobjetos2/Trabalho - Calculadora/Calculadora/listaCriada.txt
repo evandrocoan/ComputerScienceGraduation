@@ -1,0 +1,13 @@
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\bin\Calculadora.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\bin\ManipulaString.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\bin\NrComplexo.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\bin\OperacoesMat.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\Operacao.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\soma\NumerosBinarios.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\soma\NumerosComplexos.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\soma\NumerosHexadecimais.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\soma\NumerosReais.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\operacoes\soma\Soma.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\pilha\NumeroReal.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\pilha\Valor.java
+D:\Evandro\Archives\Dropbox\Aplicativos\SoftwareVersioning\2014-1_SemestresAnteriores\2014-1_INE5404-ProgramacaoOrientadaAobjetos2\Trabalho - Calculadora\Calculadora\testes\TesteClasseNumerosReais.java

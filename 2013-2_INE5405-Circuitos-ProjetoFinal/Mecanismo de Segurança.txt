@@ -1,0 +1,3 @@
+Dentro do bloco Esc:
+Ele detecta 5 toques do botão pela saida hasdata e depois desativa a máquina até se apertar Esc.
+
