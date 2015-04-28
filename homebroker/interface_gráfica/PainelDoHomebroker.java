@@ -1,7 +1,6 @@
 package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.MotorDoHomebroker;
-import homebroker.util.Biblioteca;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,6 +17,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import util.Biblioteca;
 
 /**
  * Representa o painel principal da janela principal.
