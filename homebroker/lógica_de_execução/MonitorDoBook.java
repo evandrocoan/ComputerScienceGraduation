@@ -3,8 +3,6 @@
  */
 package homebroker.lógica_de_execução;
 
-import homebroker.util.Biblioteca;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -15,6 +13,8 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+
+import util.Biblioteca;
 
 /**
  * Classe que constrói a interface gráfica do book de ofertas.

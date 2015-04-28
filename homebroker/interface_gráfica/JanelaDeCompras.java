@@ -12,18 +12,18 @@ import javax.swing.JOptionPane;
  * 
  * @author Professional
  */
-public final class JanelaDeVendas extends JFrame
+public final class JanelaDeCompras extends JFrame
 {
     /**
      * Implementa a serialização do swing.
      */
     private static final long serialVersionUID = -272784152689390567L;
     
-    private static JanelaDeVendas instância;
+    private static JanelaDeCompras instância;
     
     private final MotorDoHomebroker motor;
     
-    private JanelaDeVendas( final MotorDoHomebroker motor )
+    private JanelaDeCompras( final MotorDoHomebroker motor )
     {
         this.motor = motor;
     }
@@ -31,7 +31,7 @@ public final class JanelaDeVendas extends JFrame
     /**
      * Efetua a venda de ações.
      */
-    public void efetuarVenda()
+    public void efetuarCompra()
     {
         if( !this.motor.contaEstáAutenticada() )
         {
@@ -128,15 +128,15 @@ public final class JanelaDeVendas extends JFrame
      * @param motor o motor do Homebroker.
      * @return instância uma intância da janela de login.
      */
-    public static JanelaDeVendas getInstância( final MotorDoHomebroker motor )
+    public static JanelaDeCompras getInstância( final MotorDoHomebroker motor )
     {
-        synchronized( JanelaDeVendas.class )
+        synchronized( JanelaDeCompras.class )
         {
-            if( JanelaDeVendas.instância == null )
+            if( JanelaDeCompras.instância == null )
             {
-                JanelaDeVendas.instância = new JanelaDeVendas( motor );
+                JanelaDeCompras.instância = new JanelaDeCompras( motor );
             }
         }
-        return JanelaDeVendas.instância;
+        return JanelaDeCompras.instância;
     }
 }

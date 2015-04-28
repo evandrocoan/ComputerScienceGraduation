@@ -3,10 +3,10 @@
  */
 package homebroker.lógica_de_dados;
 
-import homebroker.util.Biblioteca;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import util.Biblioteca;
 
 /**
  * Representa um inventário de um cliente.
