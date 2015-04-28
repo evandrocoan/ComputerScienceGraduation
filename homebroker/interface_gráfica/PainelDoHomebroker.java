@@ -100,7 +100,7 @@ public final class PainelDoHomebroker extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarComando( ae.getActionCommand() );
             }
         } );
         
@@ -125,7 +125,7 @@ public final class PainelDoHomebroker extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarComando( ae.getActionCommand() );
             }
         } );
         
@@ -172,7 +172,7 @@ public final class PainelDoHomebroker extends JPanel
     /**
      * Envia um comando entrado pelo usuário ao interpretador de comandos.
      */
-    void enviarCommando( final String comando )
+    void enviarComando( final String comando )
     {
         PainelDoHomebroker.janela.enviarCommando( comando );
     }

@@ -33,7 +33,7 @@ public final class JanelaDeVendas extends JFrame
      */
     public void efetuarVendaDeAção()
     {
-        if( this.motor.contaAutenticada == null )
+        if( !this.motor.contaEstáAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
@@ -74,14 +74,13 @@ public final class JanelaDeVendas extends JFrame
         {
             açãoParaVender = JOptionPane.showInputDialog(
                 ( nÉsimaVez? "Ação não existênte!\n\n" : "" )
-                + "Lista de ações disponíveis para venda: \n"
-                + this.motor.contaAutenticada.inventarioToString() );
+                    + "Lista de ações disponíveis para venda: \n"
+                    + this.motor.inventarioToString() );
             if( açãoParaVender == null )
             {
                 return null;
             }
-            sucesso = this.motor.contaAutenticada
-                .existeAçãoNoInvetário( açãoParaVender );
+            sucesso = this.motor.existeAçãoNoInvetário( açãoParaVender );
             nÉsimaVez = true;
         }
         return açãoParaVender;
@@ -90,9 +89,8 @@ public final class JanelaDeVendas extends JFrame
     private double getPreçoAçãoParaVenda( final String açãoParaVender )
     {
         final String imput = JOptionPane.showInputDialog(
-            "Insira o preço da ação:", Double
-            .toString( this.motor.contaAutenticada
-                    .getAçãoPreço( açãoParaVender ) ) );
+            "Insira o preço da ação:",
+            Double.toString( this.motor.getAçãoPreço( açãoParaVender ) ) );
         if( imput == null )
         {
             return 0;
@@ -114,15 +112,13 @@ public final class JanelaDeVendas extends JFrame
             final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
                 ? "Quantidade não existênte!\n\n" : "" )
                 + "Insira a quantidade da ação:", Integer
-                .toString( this.motor.contaAutenticada
-                    .getAçãoQuantidade( açãoParaVender ) ) );
+                .toString( this.motor.getAçãoQuantidade( açãoParaVender ) ) );
             if( imput == null )
             {
                 return 0;
             }
             quantidade = (int) Double.parseDouble( imput );
-            sucesso = this.motor.contaAutenticada
-                .existeQuantidadeNoInvetário( quantidade );
+            sucesso = this.motor.existeQuantidadeNoInvetário( quantidade );
             nÉsimaVez = true;
         }
         return quantidade;

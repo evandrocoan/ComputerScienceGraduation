@@ -144,14 +144,13 @@ public final class JanelaDoHomebroker extends JFrame
      */
     public void mostrarInventário()
     {
-        if( this.motor.contaAutenticada == null )
+        if( !this.motor.contaEstáAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
             return;
         }
-        JOptionPane.showMessageDialog( null,
-            this.motor.contaAutenticada.inventarioToString() );
+        JOptionPane.showMessageDialog( null, this.motor.inventarioToString() );
     }
     
     /**

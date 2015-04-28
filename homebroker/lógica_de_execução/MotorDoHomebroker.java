@@ -42,7 +42,7 @@ public final class MotorDoHomebroker
     /**
      * A conta para qual se estará operando o inventário e no merdado de ações.
      */
-    public transient Conta contaAutenticada;
+    private transient Conta contaAutenticada;
     
     /**
      * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
@@ -83,6 +83,15 @@ public final class MotorDoHomebroker
     }
     
     /**
+     * @return true caso haja alguma conta está altenticada, false caso
+     *         contrário.
+     */
+    public boolean contaEstáAutenticada()
+    {
+        return this.contaAutenticada != null;
+    }
+    
+    /**
      * @return string uma string reprensentado as contas teste.
      */
     public String contasTesteToString()
@@ -103,6 +112,59 @@ public final class MotorDoHomebroker
             }
         }
         this.motorDoBook.exibirBookDeOfertas();
+    }
+    
+    /**
+     * {@link homebroker.lógica_de_dados.Conta#existeAçãoNoInvetário(String)}
+     * 
+     * @param açãoParaVender o nome da ação.
+     * @return true caso ele exista, false caso contrário.
+     */
+    public boolean existeAçãoNoInvetário( final String açãoParaVender )
+    {
+        return this.contaAutenticada.existeAçãoNoInvetário( açãoParaVender );
+    }
+    
+    /**
+     * {@link homebroker.lógica_de_dados.Conta#existeQuantidadeNoInvetário(int)}
+     * 
+     * @param quantidade a quantidade de ações.
+     * @return true caso exista, false caso contrário.
+     */
+    public boolean existeQuantidadeNoInvetário( final int quantidade )
+    {
+        return this.contaAutenticada.existeQuantidadeNoInvetário( quantidade );
+    }
+    
+    /**
+     * {@link homebroker.lógica_de_dados.Conta#getAçãoPreço(String)}
+     * 
+     * @param açãoParaVender o nome da ação.
+     * @return preço o preço da ação.
+     */
+    public double getAçãoPreço( final String açãoParaVender )
+    {
+        return this.contaAutenticada.getAçãoPreço( açãoParaVender );
+    }
+    
+    /**
+     * {@link homebroker.lógica_de_dados.Conta#getAçãoQuantidade(String)}
+     * 
+     * @param açãoParaVender o nome da ação para vender.
+     * @return a quantidade de ações.
+     */
+    public int getAçãoQuantidade( final String açãoParaVender )
+    {
+        return this.contaAutenticada.getAçãoQuantidade( açãoParaVender );
+    }
+    
+    /**
+     * @return @see
+     *         {@link homebroker.lógica_de_dados.Conta#inventarioToString()}
+     */
+    public String inventarioToString()
+    {
+        return this.contaAutenticada.inventarioToString();
     }
     
     /**

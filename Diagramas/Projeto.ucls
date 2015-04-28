@@ -4,7 +4,7 @@
   <class id="1" language="java" name="homebroker.lógica_de_dados.Inventario" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/Inventario.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="170" y="1574"/>    
+    <position height="-1" width="-1" x="171" y="1846"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -44,44 +44,34 @@
   <class id="5" language="java" name="homebroker.lógica_de_dados.OfertaDoMercado" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/OfertaDoMercado.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="587" y="1534"/>    
+    <position height="-1" width="-1" x="588" y="1806"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="homebroker.testes.DriverClass" project="HomeBrocker" 
-    file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/testes/DriverClass.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="464" y="0"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="homebroker.interface_gráfica.JanelaDeLogin" project="HomeBrocker" 
+  <class id="6" language="java" name="homebroker.interface_gráfica.JanelaDeLogin" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/JanelaDeLogin.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="169" y="183"/>    
+    <position height="-1" width="-1" x="274" y="141"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="homebroker.interface_gráfica.JanelaDoHomebroker" project="HomeBrocker" 
+  <class id="7" language="java" name="homebroker.interface_gráfica.JanelaDoHomebroker" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/JanelaDoHomebroker.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="736" y="171"/>    
+    <position height="-1" width="-1" x="753" y="-141"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="homebroker.lógica_de_execução.MonitorDoBook" project="HomeBrocker" 
+  <class id="8" language="java" name="homebroker.lógica_de_execução.MonitorDoBook" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_execução/MonitorDoBook.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1017" y="845"/>    
@@ -91,47 +81,47 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="homebroker.lógica_de_dados.Ação" project="HomeBrocker" 
+  <class id="9" language="java" name="homebroker.lógica_de_dados.Ação" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/Ação.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="166" y="1869"/>    
+    <position height="-1" width="-1" x="167" y="2141"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="homebroker.lógica_de_dados.BookDeOfertas" project="HomeBrocker" 
+  <class id="10" language="java" name="homebroker.lógica_de_dados.BookDeOfertas" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/BookDeOfertas.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="587" y="1092"/>    
+    <position height="-1" width="-1" x="588" y="1364"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="homebroker.interface_gráfica.PainelDoHomebroker" project="HomeBrocker" 
+  <class id="11" language="java" name="homebroker.interface_gráfica.PainelDoHomebroker" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/PainelDoHomebroker.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1067" y="214"/>    
+    <position height="-1" width="-1" x="758" y="-456"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="homebroker.lógica_de_dados.Conta" project="HomeBrocker" 
+  <class id="12" language="java" name="homebroker.lógica_de_dados.Conta" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_dados/Conta.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="172" y="1207"/>    
+    <position height="-1" width="-1" x="173" y="1479"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="homebroker.lógica_de_execução.PainelDoMonitor" project="HomeBrocker" 
+  <class id="13" language="java" name="homebroker.lógica_de_execução.PainelDoMonitor" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/lógica_de_execução/PainelDoMonitor.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1016" y="1098"/>    
@@ -141,10 +131,20 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="homebroker.interface_gráfica.Homebroker" project="HomeBrocker" 
+  <class id="14" language="java" name="homebroker.interface_gráfica.Homebroker" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/Homebroker.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="460" y="180"/>    
+    <position height="-1" width="-1" x="483" y="-166"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="homebroker.interface_gráfica.JanelaDeVendas" project="HomeBrocker" 
+    file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/JanelaDeVendas.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="752" y="145"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -154,286 +154,318 @@
   <association id="16">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="17" name="listaDeAções">        
-        <position height="18" width="72" x="173" y="1729"/>      
+        <position height="18" width="72" x="174" y="2001"/>      
       </attribute>      
       <multiplicity id="18" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="139" y="1730"/>      
+        <position height="16" width="21" x="140" y="2002"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="19">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="20" name="motor">        
-        <position height="18" width="35" x="380" y="391"/>      
-      </attribute>      
-      <multiplicity id="21" minimum="0" maximum="1">        
+  <dependency id="19">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="20">    
+    <bendpoint x="275" y="554"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="21" name="motor"/>      
+      <multiplicity id="22" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="22">    
+  <dependency id="23">    
     <bendpoint x="15" y="993"/>    
-    <bendpoint x="15" y="1867"/>    
+    <bendpoint x="16" y="2143"/>    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="10"/>  
+    <end type="TARGET" refId="9"/>  
   </dependency>  
-  <association id="23">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="24" name="instância">        
-        <position height="0" width="0" x="-2" y="12"/>      
+  <association id="24">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="25" name="instância">        
+        <position height="0" width="0" x="103" y="-30"/>      
       </attribute>      
-      <multiplicity id="25" minimum="0" maximum="1">        
-        <position height="0" width="0" x="-2" y="12"/>      
+      <multiplicity id="26" minimum="0" maximum="1">        
+        <position height="0" width="0" x="103" y="-30"/>      
       </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="27">    
+    <bendpoint x="483" y="382"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="28" name="motor"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="31" name="janela"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="26">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="27" name="motor"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="7"/>  
+  <dependency id="33">    
+    <bendpoint x="965" y="-455"/>    
+    <bendpoint x="966" y="558"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="2"/>  
   </dependency>  
-  <association id="30">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="31" name="motor">        
-        <position height="18" width="35" x="780" y="422"/>      
-      </attribute>      
-      <multiplicity id="32" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="33">    
+  <dependency id="34">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="35">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="34" name="janelaDoBook">        
-        <position height="18" width="73" x="1028" y="732"/>      
+      <attribute id="36" name="janelaDoBook">        
+        <position height="18" width="73" x="769" y="829"/>      
       </attribute>      
-      <multiplicity id="35" minimum="0" maximum="1">        
-        <position height="16" width="23" x="987" y="734"/>      
-      </multiplicity>    
+      <multiplicity id="37" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="36">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="37" name="INSTÂNCIA">        
+  <association id="38">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="39" name="INSTÂNCIA">        
         <position height="18" width="62" x="1154" y="948"/>      
       </attribute>      
-      <multiplicity id="38" minimum="0" maximum="1">        
+      <multiplicity id="40" minimum="0" maximum="1">        
         <position height="16" width="23" x="1205" y="925"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="39">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="40" name="INSTÂNCIA">        
-        <position height="18" width="62" x="702" y="1198"/>      
+  <association id="41">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="42" name="INSTÂNCIA">        
+        <position height="18" width="62" x="703" y="1470"/>      
       </attribute>      
-      <multiplicity id="41" minimum="0" maximum="1">        
-        <position height="16" width="23" x="750" y="1177"/>      
+      <multiplicity id="43" minimum="0" maximum="1">        
+        <position height="16" width="23" x="751" y="1449"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
+    <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="42">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="43" name="ofertasDoMercado">        
-        <position height="18" width="98" x="594" y="1421"/>      
+  <association id="44">    
+    <bendpoint x="752" y="385"/>    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="45" name="motor"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="48" name="ofertasDoMercado">        
+        <position height="18" width="98" x="595" y="1693"/>      
       </attribute>      
-      <multiplicity id="44" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="558" y="1422"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="559" y="1694"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="45">    
+  <association id="50">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="46" name="motorDoBook">        
+      <attribute id="51" name="motorDoBook">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="47" minimum="0" maximum="1">        
+      <multiplicity id="52" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="48">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="8"/>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="7"/>  
   </dependency>  
-  <association id="49">    
+  <dependency id="54">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <association id="55">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="50" name="INSTÂNCIA">        
+      <attribute id="56" name="INSTÂNCIA">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="51" minimum="0" maximum="1">        
+      <multiplicity id="57" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="52">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="53" name="painelPrincipal">        
+  <association id="58">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="59" name="painelPrincipal">        
         <position height="18" width="76" x="1024" y="977"/>      
       </attribute>      
-      <multiplicity id="54" minimum="0" maximum="1">        
+      <multiplicity id="60" minimum="0" maximum="1">        
         <position height="16" width="23" x="985" y="980"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="55">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <dependency id="56">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <association id="57">    
-    <bendpoint x="388" y="759"/>    
-    <bendpoint x="388" y="1207"/>    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="58" name="contaAutenticada">        
-        <position height="18" width="93" x="299" y="1213"/>      
-      </attribute>      
-      <multiplicity id="59" minimum="0" maximum="1">        
-        <position height="16" width="23" x="310" y="1188"/>      
-      </multiplicity>    
-    </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="60">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
   <association id="61">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="62" name="motor"/>      
+    <bendpoint x="388" y="759"/>    
+    <bendpoint x="386" y="1480"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="62" name="contaAutenticada">        
+        <position height="18" width="93" x="300" y="1485"/>      
+      </attribute>      
       <multiplicity id="63" minimum="0" maximum="1">        
-        <position height="16" width="23" x="667" y="362"/>      
+        <position height="16" width="23" x="311" y="1460"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="64">    
+    <bendpoint x="592" y="40"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="65" name="motor"/>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="67">    
     <bendpoint x="370" y="757"/>    
-    <bendpoint x="370" y="1025"/>    
+    <bendpoint x="370" y="1278"/>    
+    <bendpoint x="306" y="1278"/>    
+    <bendpoint x="306" y="1295"/>    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="65" name="contasTeste">        
-        <position height="18" width="69" x="297" y="1096"/>      
+      <attribute id="68" name="contasTeste"/>      
+      <multiplicity id="69" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="70">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="71">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="72" name="INSTÂNCIA">        
+        <position height="0" width="0" x="50" y="-442"/>      
       </attribute>      
-      <multiplicity id="66" minimum="0" maximum="2147483647">        
-        <position height="16" width="21" x="297" y="1058"/>      
+      <multiplicity id="73" minimum="0" maximum="1">        
+        <position height="0" width="0" x="50" y="-442"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="67">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="68" name="INSTÂNCIA">        
-        <position height="0" width="0" x="50" y="-442"/>      
+  <association id="74">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="75" name="instância">        
+        <position height="18" width="51" x="854" y="257"/>      
       </attribute>      
-      <multiplicity id="69" minimum="0" maximum="1">        
-        <position height="0" width="0" x="50" y="-442"/>      
-      </multiplicity>    
+      <multiplicity id="76" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
+    <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="70">    
+  <association id="77">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="71" name="INSTÂNCIA">        
+      <attribute id="78" name="INSTÂNCIA">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="72" minimum="0" maximum="1">        
+      <multiplicity id="79" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="73">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="13"/>  
+  <dependency id="80">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
   </dependency>  
-  <association id="74">    
-    <bendpoint x="588" y="1870"/>    
+  <dependency id="81">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <association id="82">    
+    <bendpoint x="589" y="2142"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="75" name="açãoEmOferta">        
-        <position height="18" width="77" x="252" y="1849"/>      
+      <attribute id="83" name="açãoEmOferta">        
+        <position height="18" width="77" x="253" y="2121"/>      
       </attribute>      
-      <multiplicity id="76" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="84" minimum="0" maximum="1">        
+        <position height="0" width="0" x="1" y="272"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="85">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="86" name="bookDeOfertas">        
+        <position height="18" width="81" x="503" y="1249"/>      
+      </attribute>      
+      <multiplicity id="87" minimum="0" maximum="1">        
+        <position height="16" width="23" x="596" y="1251"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="77">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="78" name="bookDeOfertas">        
-        <position height="18" width="81" x="502" y="977"/>      
+  <association id="88">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="89" name="inventario">        
+        <position height="18" width="55" x="179" y="1694"/>      
       </attribute>      
-      <multiplicity id="79" minimum="0" maximum="1">        
-        <position height="16" width="23" x="595" y="979"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="80">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="81" name="inventario">        
-        <position height="18" width="55" x="178" y="1422"/>      
-      </attribute>      
-      <multiplicity id="82" minimum="0" maximum="1">        
-        <position height="16" width="23" x="141" y="1423"/>      
+      <multiplicity id="90" minimum="0" maximum="1">        
+        <position height="16" width="23" x="142" y="1695"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="83">    
+  <dependency id="91">    
     <bendpoint x="33" y="993"/>    
-    <bendpoint x="33" y="1575"/>    
+    <bendpoint x="33" y="1853"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <association id="84">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="85" name="instância">        
-        <position height="0" width="0" x="474" y="-9"/>      
+  <dependency id="92">    
+    <bendpoint x="380" y="729"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="93">    
+    <bendpoint x="692" y="-289"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <association id="94">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="95" name="instância">        
+        <position height="0" width="0" x="165" y="-679"/>      
       </attribute>      
-      <multiplicity id="86" minimum="0" maximum="1">        
-        <position height="0" width="0" x="474" y="-9"/>      
+      <multiplicity id="96" minimum="0" maximum="1">        
+        <position height="0" width="0" x="165" y="-679"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
+    <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
