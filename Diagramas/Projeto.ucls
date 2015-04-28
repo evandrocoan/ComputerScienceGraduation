@@ -337,7 +337,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="64">    
-    <bendpoint x="592" y="40"/>    
+    <bendpoint x="592" y="48"/>    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="65" name="motor"/>      
       <multiplicity id="66" minimum="0" maximum="1"/>    
