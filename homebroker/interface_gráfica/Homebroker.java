@@ -50,11 +50,11 @@ public final class Homebroker
                 case "teste":
                     Homebroker.modoDeTeste();
                     break;
-                    
+                
                 case "dica":
                     Homebroker.modoDeDica();
                     break;
-                    
+                
                 case "ajuda":
                     System.out.println( "Comandos disponívels:\n"
                         + "teste: abre o programa em mode de teste sem dica"
@@ -63,7 +63,7 @@ public final class Homebroker
                         + "com dicas de contas para se logar." );
                     exitLoop = true;
                     break;
-                    
+                
                 default:
                     System.out.println( "Linha de Comando inválido! " + args[i] );
                     exitLoop = true;

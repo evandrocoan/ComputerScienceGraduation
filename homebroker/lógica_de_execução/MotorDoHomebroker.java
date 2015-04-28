@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 /**
  * 
  * @author Professional
@@ -44,7 +42,7 @@ public final class MotorDoHomebroker
     /**
      * A conta para qual se estará operando o inventário e no merdado de ações.
      */
-    private transient Conta contaAutenticada;
+    public transient Conta contaAutenticada;
     
     /**
      * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
@@ -73,6 +71,18 @@ public final class MotorDoHomebroker
     }
     
     /**
+     * @param preço o preço da ação.
+     * @param quantidade a quantidade de ações.
+     * @param nome o nome a ação.
+     * @return true caso a operação tenha sucesso.
+     */
+    public boolean adicionarOfertaDeVenda( final double preço,
+        final int quantidade, final String nome )
+    {
+        return this.motorDoBook.adicionarOfertaDeVenda( preço, quantidade, nome );
+    }
+    
+    /**
      * @return string uma string reprensentado as contas teste.
      */
     public String contasTesteToString()
@@ -81,55 +91,9 @@ public final class MotorDoHomebroker
     }
     
     /**
-     * Inicia o processo de criação da conta de um usuário do sistema
-     * 
-     * //@return conta a conta criada
+     * Exibe o book de ofertas.
      */
-    public void criarUsuario()
-    {
-        // TODO
-        // String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
-        // String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
-        // Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
-        // ( String nome, String senha, double saldo,boolean
-        // administrador, Inventario inventario )
-        // return conta;
-    }
-    
-    private void efetuarVendaDeAção()
-    {
-        if( this.contaAutenticada == null )
-        {
-            JOptionPane.showMessageDialog( null, "Não há "
-                + "nenhuma conta carregada no sistema!" );
-            return;
-        }
-        boolean sucesso = false;
-        
-        while( !sucesso )
-        {
-            final String nome = this.getNomeAçãoParaVenda();
-            if( nome == null )
-            {
-                return;
-            }
-            final double preço = this.getPreçoAçãoParaVenda( nome );
-            if( preço == 0 )
-            {
-                return;
-            }
-            final int quantidade = this.getQuantidadeAçãoParaVenda( nome );
-            if( quantidade == 0 )
-            {
-                return;
-            }
-            sucesso = this.motorDoBook.adicionarOfertaDeVenda( preço,
-                quantidade, nome );
-        }
-        
-    }
-    
-    private void exibirBookDeOfertas()
+    public void exibirBookDeOfertas()
     {
         if( MotorDoHomebroker.LOG.isLoggable( Level.SEVERE ) )
         {
@@ -139,71 +103,6 @@ public final class MotorDoHomebroker
             }
         }
         this.motorDoBook.exibirBookDeOfertas();
-    }
-    
-    private String getNomeAçãoParaVenda()
-    {
-        boolean sucesso = false;
-        boolean nÉsimaVez = false;
-        String açãoParaVender = null;
-        
-        while( !sucesso )
-        {
-            açãoParaVender = JOptionPane.showInputDialog( ( nÉsimaVez
-                ? "Ação não existênte!\n\n" : "" )
-                + "Lista de ações disponíveis "
-                + "para venda: \n"
-                + this.contaAutenticada.inventarioToString() );
-            if( açãoParaVender == null )
-            {
-                return null;
-            }
-            sucesso = this.contaAutenticada
-                .existeAçãoNoInvetário( açãoParaVender );
-            nÉsimaVez = true;
-        }
-        return açãoParaVender;
-    }
-    
-    private double getPreçoAçãoParaVenda( final String açãoParaVender )
-    {
-        final String imput = JOptionPane.showInputDialog(
-            "Insira o preço da ação:", Double
-            .toString( this.contaAutenticada
-                    .getAçãoPreço( açãoParaVender ) ) );
-        if( imput == null )
-        {
-            return 0;
-        }
-        double preço;
-        
-        preço = Double.parseDouble( imput );
-        return preço;
-    }
-    
-    private int getQuantidadeAçãoParaVenda( final String açãoParaVender )
-    {
-        boolean sucesso = false;
-        boolean nÉsimaVez = false;
-        int quantidade = 0;
-        
-        while( !sucesso )
-        {
-            final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
-                ? "Quantidade não existênte!\n\n" : "" )
-                + "Insira a quantidade da ação:", Integer
-                .toString( this.contaAutenticada
-                    .getAçãoQuantidade( açãoParaVender ) ) );
-            if( imput == null )
-            {
-                return 0;
-            }
-            quantidade = (int) Double.parseDouble( imput );
-            sucesso = this.contaAutenticada
-                .existeQuantidadeNoInvetário( quantidade );
-            nÉsimaVez = true;
-        }
-        return quantidade;
     }
     
     /**
@@ -228,55 +127,6 @@ public final class MotorDoHomebroker
     }
     
     /**
-     * Menu principal que exibe as opções de operação no mercado e na carteira
-     * de ações do cliente.
-     * 
-     * @param commando o comando inserido pelo usuário
-     */
-    public void menuPrincipal( String commando )
-    {
-        if( commando == null )
-        {
-            commando = "s";
-        }
-        
-        switch( commando )
-        {
-        case "s":
-            MotorDoHomebroker.sairDoSistema();
-            break;
-        case "v":
-            this.mostrarInventário();
-            break;
-        // case "c":
-        // TODO
-        // this.criarUsuario();
-        // break;
-        case "ov":
-            this.efetuarVendaDeAção();
-            break;
-        case "m":
-            this.exibirBookDeOfertas();
-            break;
-        default:
-            MotorDoHomebroker.imputError();
-            break;
-        }
-    }
-    
-    private void mostrarInventário()
-    {
-        if( this.contaAutenticada == null )
-        {
-            JOptionPane.showMessageDialog( null, "Não há "
-                + "nenhuma conta carregada no sistema!" );
-            return;
-        }
-        JOptionPane.showMessageDialog( null,
-            this.contaAutenticada.inventarioToString() );
-    }
-    
-    /**
      * Retorna a única instancia existe do MotorDoHomebroker.
      * 
      * @return INSTANCE a única instancia existe da JanelaPrincipal.
@@ -286,18 +136,10 @@ public final class MotorDoHomebroker
         return MotorDoHomebroker.INSTÂNCIA;
     }
     
-    private static void imputError()
-    {
-        JOptionPane.showMessageDialog( null, "Você digitou uma "
-            + "opção inválida!\n\n"
-            + "Digite 's' para fechar o programa.\n"
-            + "Digite 'v' para para ver o inventario\n"
-            // +
-            // "Digite 'c' para para criar uma conta!\n"
-            + "Digite 'm' para ver o mercado!\n" );
-    }
-    
-    private static void sairDoSistema()
+    /**
+     * Encerrra a execução do Homebroker.
+     */
+    public static void sairDoSistema()
     {
         System.exit( 0 );
     }

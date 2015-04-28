@@ -144,7 +144,7 @@
   <class id="15" language="java" name="homebroker.interface_gráfica.Homebroker" project="HomeBrocker" 
     file="/HomeBrocker/2015-1_EngenhariaDeSoftware1/homebroker/interface_gráfica/Homebroker.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="467" y="176"/>    
+    <position height="-1" width="-1" x="460" y="180"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -332,7 +332,9 @@
   <association id="61">    
     <end type="SOURCE" refId="8" navigable="false">      
       <attribute id="62" name="motor"/>      
-      <multiplicity id="63" minimum="0" maximum="1"/>    
+      <multiplicity id="63" minimum="0" maximum="1">        
+        <position height="16" width="23" x="667" y="362"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

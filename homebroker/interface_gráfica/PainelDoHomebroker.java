@@ -31,15 +31,13 @@ public final class PainelDoHomebroker extends JPanel
      */
     private static final long serialVersionUID = -4450248854153724051L;
     
+    private static JanelaDoHomebroker janela =
+        JanelaDoHomebroker.getInstância( MotorDoHomebroker.getInstância() );
+    
     /**
      * Contém a única instância do painel.
      */
     private static PainelDoHomebroker instância;
-    
-    /**
-     * Motor responsável pela lógica da interface gráfica principal do programa.
-     */
-    private transient final MotorDoHomebroker motor;
     
     /**
      * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -55,10 +53,8 @@ public final class PainelDoHomebroker extends JPanel
     /**
      * Cria um painel para colocar os botões, caixas de texto, ...
      */
-    private PainelDoHomebroker( final MotorDoHomebroker motor )
+    private PainelDoHomebroker()
     {
-        this.motor = motor;
-        
         // Configura os compomentos
         this.configurarEntradaDeComandos();
         this.configurarBotãoDeComandos();
@@ -178,7 +174,7 @@ public final class PainelDoHomebroker extends JPanel
      */
     void enviarCommando( final String comando )
     {
-        this.motor.menuPrincipal( comando );
+        PainelDoHomebroker.janela.enviarCommando( comando );
     }
     
     /**
@@ -190,17 +186,15 @@ public final class PainelDoHomebroker extends JPanel
     }
     
     /**
-     * @param motor o motor do Homebroker.
      * @return instância uma intância da janela de login.
      */
-    public static PainelDoHomebroker
-        getInstância( final MotorDoHomebroker motor )
+    public static PainelDoHomebroker getInstância()
     {
         synchronized( PainelDoHomebroker.class )
         {
             if( PainelDoHomebroker.instância == null )
             {
-                PainelDoHomebroker.instância = new PainelDoHomebroker( motor );
+                PainelDoHomebroker.instância = new PainelDoHomebroker();
             }
         }
         return PainelDoHomebroker.instância;
