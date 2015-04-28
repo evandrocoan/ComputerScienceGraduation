@@ -99,7 +99,7 @@ public final class JanelaDoHomebroker extends JFrame
             {
                 final JanelaDeVendas janelaDeVendas;
                 janelaDeVendas = JanelaDeVendas.getInstância( motor );
-                janelaDeVendas.efetuarVendaDeAção();
+                janelaDeVendas.efetuarVenda();
             }
         } );
     }

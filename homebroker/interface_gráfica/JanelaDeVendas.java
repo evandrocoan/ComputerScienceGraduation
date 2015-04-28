@@ -31,7 +31,7 @@ public final class JanelaDeVendas extends JFrame
     /**
      * Efetua a venda de ações.
      */
-    public void efetuarVendaDeAção()
+    public void efetuarVenda()
     {
         if( !this.motor.contaEstáAutenticada() )
         {
@@ -43,17 +43,17 @@ public final class JanelaDeVendas extends JFrame
         
         while( !sucesso )
         {
-            final String nome = this.getNomeAçãoParaVenda();
+            final String nome = this.getNomeAção();
             if( nome == null )
             {
                 return;
             }
-            final double preço = this.getPreçoAçãoParaVenda( nome );
+            final double preço = this.getPreçoAção( nome );
             if( preço == 0 )
             {
                 return;
             }
-            final int quantidade = this.getQuantidadeAçãoParaVenda( nome );
+            final int quantidade = this.getQuantidadeAção( nome );
             if( quantidade == 0 )
             {
                 return;
@@ -64,7 +64,7 @@ public final class JanelaDeVendas extends JFrame
         
     }
     
-    private String getNomeAçãoParaVenda()
+    private String getNomeAção()
     {
         boolean sucesso = false;
         boolean nÉsimaVez = false;
@@ -86,7 +86,7 @@ public final class JanelaDeVendas extends JFrame
         return açãoParaVender;
     }
     
-    private double getPreçoAçãoParaVenda( final String açãoParaVender )
+    private double getPreçoAção( final String açãoParaVender )
     {
         final String imput = JOptionPane.showInputDialog(
             "Insira o preço da ação:",
@@ -101,7 +101,7 @@ public final class JanelaDeVendas extends JFrame
         return preço;
     }
     
-    private int getQuantidadeAçãoParaVenda( final String açãoParaVender )
+    private int getQuantidadeAção( final String açãoParaVender )
     {
         boolean sucesso = false;
         boolean nÉsimaVez = false;
