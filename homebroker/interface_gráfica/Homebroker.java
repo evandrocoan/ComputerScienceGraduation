@@ -1,23 +1,17 @@
 /**
- * Pacote principal que contém o Homebroker.
+ * 
  */
 package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.MotorDoHomebroker;
 
-import java.awt.Frame;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 /**
- * Janela principal que contém o programa e inicia a execução do Homebroker.
  * 
- * @authors Evandro  Coan, Renan Pinho Assi
+ * @author Professional
  */
-public final class Homebroker extends JFrame
+public final class Homebroker
 {
     /**
      * Motor responsável pela lógica da interface gráfica principal do programa.
@@ -25,63 +19,8 @@ public final class Homebroker extends JFrame
     private static MotorDoHomebroker motor = MotorDoHomebroker
         .getInstância();
     
-    /**
-     * Motor responsável pela lógica da interface gráfica.
-     */
-    private static JanelaDeLogin janela = JanelaDeLogin.getInstância(
-        Homebroker.motor );
-    
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -7263112844101186140L;
-    
-    /**
-     * Contém a única instância do homebroker.
-     */
-    private static final Homebroker INSTÂNCIA = new Homebroker();
-    
-    /**
-     * Construtor que cria a janela principal do programa.
-     */
     private Homebroker()
     {
-        super( "HomeBroker Tabajara" );
-        
-        // Cria o painel principal
-        final PainelDoHomebroker painelPrincipal = PainelDoHomebroker.getInstância(
-            Homebroker.motor );
-        
-        painelPrincipal.setDoubleBuffered( true );
-        
-        // Adiciona o painel principal nesta janela
-        this.add( painelPrincipal );
-        
-        // Define que a janela deve fechar ao sair.
-        this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
-        
-        // Abre a janela maximizado
-        this.setLocation( 50, 50 );
-        this.setExtendedState( Frame.MAXIMIZED_BOTH );
-        
-        // Ajusta a janela ao tamanho dos elementos.
-        this.pack();
-    }
-    
-    /**
-     * Envia um comando entrado pelo usuário ao interpretador de comandos.
-     */
-    static void enviarCommando( final String comando )
-    {
-        Homebroker.motor.menuPrincipal( comando );
-    }
-    
-    /**
-     * @return instância a instância de programa principal.
-     */
-    static Homebroker getInstância()
-    {
-        return Homebroker.INSTÂNCIA;
     }
     
     /**
@@ -99,7 +38,7 @@ public final class Homebroker extends JFrame
     {
         if( ( args == null ) || ( args.length == 0 ) )
         {
-            Homebroker.janela.loginNoSistema( "login" );
+            Homebroker.modoDeLogin();
         } else
         {
             boolean exitLoop = false;
@@ -109,14 +48,11 @@ public final class Homebroker extends JFrame
                 switch( args[i] )
                 {
                 case "teste":
-                    JOptionPane.showMessageDialog( null, "Sessão de teste!" );
-                    Homebroker.janela.loginNoSistema( "teste" );
+                    Homebroker.modoDeTeste();
                     break;
                     
                 case "dica":
-                    JOptionPane.showMessageDialog( null, "Sessão de teste "
-                        + "COM dica de contas no login!" );
-                    Homebroker.janela.loginNoSistema( "dica" );
+                    Homebroker.modoDeDica();
                     break;
                     
                 case "ajuda":
@@ -139,7 +75,6 @@ public final class Homebroker extends JFrame
                 }
             }
         }
-        Homebroker.INSTÂNCIA.setVisible( true );
     }
     
     /**
@@ -151,7 +86,15 @@ public final class Homebroker extends JFrame
     public static void main( final String... args )
     {
         Homebroker.iniciarSistema( args );
-        
+    }
+    
+    /**
+     * Inicia o sistema em modo de teste exibindo dica de contas para logar.
+     */
+    private static void modoDeDica()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = Homebroker.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -164,7 +107,76 @@ public final class Homebroker extends JFrame
             @Override
             public void run()
             {
-                Homebroker.getInstância();
+                final JanelaDeLogin janelaDeLogin;
+                final JanelaDoHomebroker janelaDoHomebroker;
+                
+                janelaDeLogin = JanelaDeLogin.getInstância( motor );
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                
+                janelaDeLogin.loginNoSistema( "dica" );
+                janelaDoHomebroker.setVisible( true );
+            }
+        } );
+    }
+    
+    /**
+     * Inicia o sistema o login no sistema.
+     */
+    private static void modoDeLogin()
+    {
+        // encapsula a janela para evitar o synthetic-access
+        final MotorDoHomebroker motor = Homebroker.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeLogin janelaDeLogin;
+                final JanelaDoHomebroker janelaDoHomebroker;
+                
+                janelaDeLogin = JanelaDeLogin.getInstância( motor );
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                
+                janelaDeLogin.loginNoSistema( "login" );
+                janelaDoHomebroker.setVisible( true );
+            }
+        } );
+    }
+    
+    /**
+     * Inicia o sistema em modo de teste.
+     */
+    private static void modoDeTeste()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = Homebroker.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeLogin janelaDeLogin;
+                final JanelaDoHomebroker janelaDoHomebroker;
+                
+                janelaDeLogin = JanelaDeLogin.getInstância( motor );
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                
+                janelaDeLogin.loginNoSistema( "teste" );
+                janelaDoHomebroker.setVisible( true );
             }
         } );
     }

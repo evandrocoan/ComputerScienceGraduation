@@ -1,6 +1,5 @@
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.UtiliárioDeContas;
 import homebroker.lógica_de_execução.MotorDoHomebroker;
 
 import javax.swing.JFrame;
@@ -42,19 +41,21 @@ public final class JanelaDeLogin extends JFrame
         case "login":
             this.loginNoSistemaInterno( "" );
             break;
-            
+        
         case "teste":
+            JOptionPane.showMessageDialog( null, "Sessão de teste!" );
             this.motor.loginNoSistemaChecagem( "admin", "admin" );
             break;
-            
+        
         case "dica":
+            JOptionPane.showMessageDialog( null, "Sessão de teste "
+                + "COM dica de contas no login!" );
             final StringBuilder dica = new StringBuilder();
-            dica.append( '\n' ).append(
-                UtiliárioDeContas.contasTesteToString( this.motor.contasTeste ) );
+            dica.append( '\n' ).append( this.motor.contasTesteToString() );
             
             this.loginNoSistemaInterno( dica.toString() );
             break;
-            
+        
         default:
             System.out.println( "Comando de Login inválido! " + darDica );
             break;

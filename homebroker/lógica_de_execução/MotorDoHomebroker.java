@@ -73,6 +73,14 @@ public final class MotorDoHomebroker
     }
     
     /**
+     * @return string uma string reprensentado as contas teste.
+     */
+    public String contasTesteToString()
+    {
+        return UtiliárioDeContas.contasTesteToString( this.contasTeste );
+    }
+    
+    /**
      * Inicia o processo de criação da conta de um usuário do sistema
      * 
      * //@return conta a conta criada
