@@ -55,14 +55,16 @@ privado_QualCursoMaisLongoDe(Nome_Interno, Tempo) :-
  
 /* Questão 18 ###########################################################
  * Qual a instituição de ensino com maior número de pessoas?
+ * Primeiro pego a instituição de cada pessoa do banco de dados e crio
+ * uma nova lista.
+ * Segundo, aplico o predicado listmax que retorna o elemento da lista
+ * com o maior número de ocorrências.
  * */
 qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
-	findall(NumPesEmCada,private_ContaInstituicoes(NumPesEmCada),Lista),
-	max(Lista,Instituicao).
+	findall(Instit, privado_criarListaDeInstituicoes(Instit), Inst),
+	listmax(Inst,Instituicao).
 	
-
-private_ContaInstituicoes(NumPesEmCada) :-
+	privado_criarListaDeInstituicoes(Instituicao) :-
 	informacoesAcademicas(L),
-	dadoNaPosicao(Instituicao,[_|L],3),
-	(Instituicao = 'UFSC' -> NumPesEmCada is NumPesEmCada + 1).
-
+	dadoNaPosicao(Instituicao, [_|L], 3).
+	
