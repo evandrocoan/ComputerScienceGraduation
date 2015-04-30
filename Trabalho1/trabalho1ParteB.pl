@@ -23,6 +23,46 @@ privado_QuemEstudouNaInstituicao(Instituicao_Interno, Nome_Interno) :-
     InstituicaoDaPessoa == Instituicao_Interno, 
     dadoNaPosicao(Nome_Interno, L, 0).
 
+/* Questão 17 ###############################################################
+ * Qual o curso mais longo de uma dada pessoa?
+ * 
+ * Pega uma lista com os tempo do curso de uma dada pessoa.
+ * Descobre qual a posição do curso com maior duração.
+ * Cria uma lista com os cursos dessa dada pessoa.
+ * Pega a retorna o curso que se encontra na posição de maior.
+ * */
+qualCursoMaisLongoDe( Nome, Curso ) :-
+	/* Pega os tempos dos cursos e coloca na ListaTempos.
+	 * */
+    findall(Curso, privado_QualCursoMaisLongoDe(Nome, Curso), ListaTempos),
+    /* Pega 
+     * */
+    findall(Curso, privado_QualCursoMaisLongoDe2(Nome, Curso), ListaCursos),
+    maiorElemento(ListaTempos, Maior). 
+    
 
+/* Primeiro encontro a pessoa na lista.
+ * Segundo pego o tempo de curso dela e retorna na variável Curso.
+ * */ 
+privado_QualCursoMaisLongoDe(Nome_Interno, Tempo) :-
+    informacoesAcademicas(L), 
+    dadoNaPosicao(Nome,L,0),
+    Nome == Nome_Interno, 
+    dadoNaPosicao(TempoInicial, L, 4),
+    dadoNaPosicao(TempoFinal, L, 5),
+    Tempo is TempoFinal - TempoInicial.
 
+ 
+/* Questão 18 ###########################################################
+ * Qual a instituição de ensino com maior número de pessoas?
+ * */
+qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
+	findall(NumPesEmCada,private_ContaInstituicoes(NumPesEmCada),Lista),
+	max(Lista,Instituicao).
+	
+
+private_ContaInstituicoes(NumPesEmCada) :-
+	informacoesAcademicas(L),
+	dadoNaPosicao(Instituicao,[_|L],3),
+	(Instituicao = 'UFSC' -> NumPesEmCada is NumPesEmCada + 1).
 
