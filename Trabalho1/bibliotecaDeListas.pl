@@ -26,6 +26,12 @@ pertence( D, [_|L] ) :- pertence( D, L ).
 inseridoNoFinal( D, [], [D] ).
 inseridoNoFinal( D, [X | L], [X | LM] ) :- inseridoNoFinal( D, L, LM ).
 
+/* Predicado: add(Item, List, NewList).
+ * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o dado
+ * D no inicio.
+ * */
+ add(Item, List, [Item|List]).
+
 
 /* Predicado: substituidoDoInicio(D, L, LM)
  * Definição: D é um dado, L é uma lista e LM é a lista L com
