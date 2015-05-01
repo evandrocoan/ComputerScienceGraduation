@@ -267,21 +267,21 @@ maiorElemento([X|Xs],N) :- privado_ehMaior_Max(Xs,N), N > X.
 /* Esta funcao percorre uma lista removendo a primeira ocorrencia de um elemento
  * e criando uma nova lista com tal. Apos, a funcao eh aplicada recursivamente
  * nestas novas listas ateh que se obtenha uma lista vazia.
- * A primeira clausula de listmax é o caso base, que checa se a lista eh vazia.
- * A segunda clausula de listmax é a clausula iterativa que checa se esta eh a
+ * A primeira clausula de listMax é o caso base, que checa se a lista eh vazia.
+ * A segunda clausula de listMax é a clausula iterativa que checa se esta eh a
  * primeira vez que vemos tal elemento; a lista de argumentos ja vistos eh mantida
  * no segundo argumento deste predicado; o terceiro argumento coleta os remanescentes(
  * que nao foram vistos pela primeira vez).
  */	
-listmax(L, M):-
- listmax(L, [], [], M).
+listMax(L, M):-
+listMax(L, [], [], M).
 
-listmax([], Seen, MMax, Max):-
-  MMax=[] -> Max=Seen ; listmax(MMax, [], [], Max).
-listmax([H|T], Seen, MMax, Max):-
+listMax([], Seen, MMax, Max):-
+  MMax=[] -> Max=Seen ; listMax(MMax, [], [], Max).
+listMax([H|T], Seen, MMax, Max):-
   (member(H, Seen) ->
-    listmax(T, Seen, [H|MMax], Max) ;
-    listmax(T, [H|Seen], MMax, Max)).
+    listMax(T, Seen, [H|MMax], Max) ;
+    listMax(T, [H|Seen], MMax, Max)).
 
 
 

@@ -57,12 +57,12 @@ privado_QualCursoMaisLongoDe(Nome_Interno, Tempo) :-
  * Qual a instituição de ensino com maior número de pessoas?
  * Primeiro pego a instituição de cada pessoa do banco de dados e crio
  * uma nova lista.
- * Segundo, aplico o predicado listmax que retorna o elemento da lista
+ * Segundo, aplico o predicado listMax que retorna o elemento da lista
  * com o maior número de ocorrências.
  * */
 qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	findall(Instit, privado_criarListaDeInstituicoes(Instit), Inst),
-	listmax(Inst,Instituicao).
+	listMax(Inst,Instituicao).
 	
 	privado_criarListaDeInstituicoes(Instituicao) :-
 	informacoesAcademicas(L),
