@@ -74,16 +74,17 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
  * O algoritmo cria, inicialmente, duas listas de listas, uma com todas
  * as referências acadêmicas e outra com todas as referências
  * profissionais.
- * Após, as listas são concatenadas em uma única lista de listas, que é,
- * então, transformada em uma lista simples usando o predicado append.
- * listmax é utilizado no final para nos retornar o elemento com maior
- * número de ocorrência nesta lista.
+ * Após, cada lista é transformada em uma lista simples usando append,
+ * e então são concatenadas em apenas uma única lista.
+ * Por fim, esta lista é passada pelo predicado listmax que nos retorna
+ * o elemento de maior ocorrência.
  * */
  qualReferenciaMaisCitada(Referencia) :-
  findall(Ref, privado_PegarReferenciasAcademicas(Ref), Lista),
  findall(Ref2, privado_PegarReferenciasProfissionais(Ref2), Lista2),
- concatenadas(Lista, Lista2, ListaRef),
- append(ListaRef, ListaRefCompleta),
+ append(Lista, ListaRef),
+ append(Lista2, ListaRef2),
+ concatenadas(ListaRef, ListaRef2, ListaRefCompleta),
  listmax(ListaRefCompleta,Referencia).
  
 /* Este predicado divide a lista de 'informacoesAcademicas' em duas
