@@ -113,15 +113,15 @@ concatenadas( [D | L1], L2, [D | LC] ) :- concatenadas( L1, L2, LC ).
  * Definição: L é uma lista de números e M é o maior dos números.
  * */
 ehMaior( [M], M ).
-ehMaior( [X | L], M ) :- ehMaior( L, Y ), max( X, Y, M ).
+ehMaior( [X | L], M ) :- ehMaior( L, Y ), privado_ehMaior_Max( X, Y, M ).
 
 
-/* Predicado auxiliar: max( X, Y, M )
+/* Predicado auxiliar: privado_ehMaior_Max( X, Y, M )
  * Definição: M é o máximo entre X e Y. 
  * */
-max( X, Y, X ) :- X > Y.
-max( X, Y, Y ) :- Y > X.
-max( X, X, X ).
+privado_ehMaior_Max( X, Y, X ) :- X > Y.
+privado_ehMaior_Max( X, Y, Y ) :- Y > X.
+privado_ehMaior_Max( X, X, X ).
 
 
 /* Predicado: primeiroEUltimo(L, LPU)
@@ -261,8 +261,8 @@ isHeadMember(P, L) :-
  * Dado um Lista retorna o Maior elemento dela.
  * */
 maiorElemento([X],X).
-maiorElemento([X|Xs],X) :- max(Xs,Y), X >= Y.
-maiorElemento([X|Xs],N) :- max(Xs,N), N > X.
+maiorElemento([X|Xs],X) :- privado_ehMaior_Max(Xs,Y), X >= Y.
+maiorElemento([X|Xs],N) :- privado_ehMaior_Max(Xs,N), N > X.
 
 /* Esta funcao percorre uma lista removendo a primeira ocorrencia de um elemento
  * e criando uma nova lista com tal. Apos, a funcao eh aplicada recursivamente
