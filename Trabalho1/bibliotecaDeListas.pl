@@ -277,13 +277,38 @@ listMax(L, M):-
 listMax(L, [], [], M).
 
 listMax([], Seen, MMax, Max):-
-  MMax=[] -> Max=Seen ; listMax(MMax, [], [], Max).
+	MMax = [] -> 
+		Max = Seen 
+	; 
+		listMax(MMax, [], [], Max).
+
 listMax([H|T], Seen, MMax, Max):-
-  (member(H, Seen) ->
-    listMax(T, Seen, [H|MMax], Max) ;
-    listMax(T, [H|Seen], MMax, Max)).
+  	( member(H, Seen) ->
+	    listMax(T, Seen, [H|MMax], Max) 
+	;
+	    listMax(T, [H|Seen], MMax, Max)
+    ).
 
 
+/* predicado: posicaoDoMaior(Lista, Posicao)
+ * Onde Lista é uma lista de números
+ * e Posicao será a posição do maior elemento.
+ * */
+posicaoDoMaior(Lista_Interno, Posicao_Interno) :- 
+	/* Calcula o maior elemento */
+	max_list(Lista_Interno, Maximo),
+	/* Calcula a posicao do maior elemento */
+	indexOf( Lista_Interno, Maximo, Posicao_Interno ).
 
-
-
+/* predicado(Lista, Elemento, Indice).
+ * Encontra todas as ocorrências de um Elemento em uma Lista e retorna na 
+ * variável Indice.
+ * */
+indexOf([Element|_], Element, 0). % We found the element
+indexOf([_|Tail], Element, Index):-
+  	indexOf(Tail, Element, Index1), % Check in the tail of the list
+  	Index is Index1+1.  % and increment the resulting index
+	
+	
+	
+	

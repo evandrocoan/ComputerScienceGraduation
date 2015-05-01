@@ -13,14 +13,15 @@ quemEstudouNaInstituicao(Instituicao, Nomes) :-
      * */
     findall(Nome, privado_QuemEstudouNaInstituicao(Instituicao, Nome), Nomes).
 
-/* Este predicado retorna sempre o nome da pessoa, caso ela tenha estudado em 
- * uma dada instituição armazenado na variável informacoesAcademicas.
- * */
-privado_QuemEstudouNaInstituicao(Instituicao_Interno, Nome_Interno) :-
-    informacoesAcademicas(L), 
-    dadoNaPosicao(InstituicaoDaPessoa, L, 2),
-    InstituicaoDaPessoa == Instituicao_Interno, 
-    dadoNaPosicao(Nome_Interno, L, 0).
+	/* Este predicado retorna sempre o nome da pessoa, caso ela tenha estudado em 
+	 * uma dada instituição armazenado na variável informacoesAcademicas.
+	 * */
+	privado_QuemEstudouNaInstituicao(Instituicao_Interno, Nome_Interno) :-
+	    informacoesAcademicas(L), 
+	    dadoNaPosicao(InstituicaoDaPessoa, L, 2),
+	    InstituicaoDaPessoa == Instituicao_Interno, 
+	    dadoNaPosicao(Nome_Interno, L, 0).
+
 
 /* Questão 17 ###############################################################
  * Qual o curso mais longo de uma dada pessoa?
@@ -30,31 +31,30 @@ privado_QuemEstudouNaInstituicao(Instituicao_Interno, Nome_Interno) :-
  * Cria uma lista com os cursos dessa dada pessoa.
  * Pega a retorna o curso que se encontra na posição de maior.
  * */
-qualCursoMaisLongoDe( Nome, Curso ) :-
-	/* Pega os tempos dos cursos e coloca na ListaTempos.
+qualCursoMaisLongoDe( Nome, CursoLista ) :-
+	/* Faz todas as requisições, e cria uma lista com os cursos de maior 
+	 * duração, isto é, os cursos com o mesmo tempo de duração.
 	 * */
-    findall(Curso, privado_QualCursoMaisLongoDe(Nome, Curso), ListaTempos),
-    /* Pega 
-     * */
-    findall(Curso, privado_QualCursoMaisLongoDe2(Nome, Curso), ListaCursos),
-    maiorElemento(ListaTempos, Maior). 
-    
+	findall(Curso, privado_QualCursoMaisLongoDe( Nome, Curso ), CursoLista).
+	
+	privado_QualCursoMaisLongoDe( Nome, Curso ) :- 
+		/* Pega os tempos dos cursos e coloca na ListaTempos.
+		 * */
+	    findall(Curso, tempoDeEstudoEmCadaCurso(Nome, Curso), ListaTempos),
+	    /* Pega a posição do curso de maior duração da pessoa.
+	     * */
+	    posicaoDoMaior(ListaTempos, Posicao),
+	   	/* Pega uma lista com dos cursos e coloca na ListaCursos.
+		 * */
+	    quaisCursosDe(Nome, ListaCursos), 
+	    /* Pega qual o curso de maior duração da ListaDeCursos.
+	     * */
+	    dadoNaPosicao(Curso, ListaCursos, Posicao). 
 
-/* Primeiro encontro a pessoa na lista.
- * Segundo pego o tempo de curso dela e retorna na variável Curso.
- * */ 
-privado_QualCursoMaisLongoDe(Nome_Interno, Tempo) :-
-    informacoesAcademicas(L), 
-    dadoNaPosicao(Nome,L,0),
-    Nome == Nome_Interno, 
-    dadoNaPosicao(TempoInicial, L, 4),
-    dadoNaPosicao(TempoFinal, L, 5),
-    Tempo is TempoFinal - TempoInicial.
 
- 
 /* Questão 18 ###########################################################
  * Qual a instituição de ensino com maior número de pessoas?
- *
+ * 
  * Primeiro pego a instituição de cada pessoa do banco de dados e crio
  * uma nova lista.
  * Segundo, aplico o predicado listMax que retorna o elemento da lista
@@ -67,4 +67,4 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	privado_criarListaDeInstituicoes(Instituicao) :-
 	informacoesAcademicas(L),
 	dadoNaPosicao(Instituicao, [_|L], 3).
-	
+
