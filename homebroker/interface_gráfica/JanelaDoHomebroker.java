@@ -8,8 +8,6 @@ import homebroker.lógica_de_execução.MotorDoHomebroker;
 import java.awt.Frame;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /**
@@ -25,9 +23,14 @@ public final class JanelaDoHomebroker extends JFrame
     private static final long serialVersionUID = -7263112844101186140L;
     
     /**
-     * Contém a única instância do homebroker.
+     * Contém a única instância desta classe.
      */
     private static JanelaDoHomebroker instância;
+    
+    /**
+     * Armazean o painel do homebroker.
+     */
+    private final PainelDoHomebroker painelPrincipal;
     
     /**
      * Motor principal do programa.
@@ -42,14 +45,10 @@ public final class JanelaDoHomebroker extends JFrame
         super( "HomeBroker Tabajara" );
         this.motor = motor;
         
-        // Cria o painel principal
-        final PainelDoHomebroker painelPrincipal = PainelDoHomebroker.
-            getInstância();
-        
-        painelPrincipal.setDoubleBuffered( true );
-        
         // Adiciona o painel principal nesta janela
-        this.add( painelPrincipal );
+        this.painelPrincipal = PainelDoHomebroker.getInstância( this.motor );
+        this.painelPrincipal.setDoubleBuffered( true );
+        this.add( this.painelPrincipal );
         
         // Define que a janela deve fechar ao sair.
         this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
@@ -60,97 +59,6 @@ public final class JanelaDoHomebroker extends JFrame
         
         // Ajusta a janela ao tamanho dos elementos.
         this.pack();
-    }
-    
-    /**
-     * Inicia o processo de criação da conta de um usuário do sistema
-     * 
-     * //@return conta a conta criada
-     */
-    public void criarUsuario()
-    {
-        // TODO
-        // String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
-        // String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
-        // Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
-        // ( String nome, String senha, double saldo,boolean
-        // administrador, Inventario inventario )
-        // return conta;
-    }
-    
-    /**
-     * Chama a janela responsável por realizar venda da ação.
-     */
-    private void efetuarVendaDeAção()
-    {
-        // encapsula o motor para evitar o synthetic-access
-        final MotorDoHomebroker motor = this.motor;
-        /**
-         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
-         * Swing não é thread-safe.
-         */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            /**
-             * Executa o homebroker.
-             */
-            @Override
-            public void run()
-            {
-                final JanelaDeVendas janelaDeVendas;
-                janelaDeVendas = JanelaDeVendas.getInstância( motor );
-                janelaDeVendas.efetuarVenda();
-            }
-        } );
-    }
-    
-    /**
-     * Menu principal que exibe as opções de operação no mercado e na carteira
-     * de ações do cliente.
-     */
-    protected void enviarCommando( String comando )
-    {
-        if( comando == null )
-        {
-            comando = "s";
-        }
-        
-        switch( comando )
-        {
-        case "s":
-            MotorDoHomebroker.sairDoSistema();
-            break;
-        case "v":
-            this.mostrarInventário();
-            break;
-        // case "c":
-        // TODO
-        // this.criarUsuario();
-        // break;
-        case "ov":
-            this.efetuarVendaDeAção();
-            break;
-        case "m":
-            this.motor.exibirBookDeOfertas();
-            break;
-        default:
-            JanelaDoHomebroker.imputError();
-            break;
-        }
-    }
-    
-    /**
-     * Exibe o inventário da conta atualmente autenticada.
-     */
-    public void mostrarInventário()
-    {
-        if( !this.motor.contaEstáAutenticada() )
-        {
-            JOptionPane.showMessageDialog( null, "Não há "
-                + "nenhuma conta carregada no sistema!" );
-            return;
-        }
-        JOptionPane.showMessageDialog( null, this.motor.inventarioToString() );
     }
     
     /**
@@ -170,14 +78,4 @@ public final class JanelaDoHomebroker extends JFrame
         return JanelaDoHomebroker.instância;
     }
     
-    private static void imputError()
-    {
-        JOptionPane.showMessageDialog( null, "Você digitou uma "
-            + "opção inválida!\n\n"
-            + "Digite 's' para fechar o programa.\n"
-            + "Digite 'v' para para ver o inventario\n"
-            // +
-            // "Digite 'c' para para criar uma conta!\n"
-            + "Digite 'm' para ver o mercado!\n" );
-    }
 }
