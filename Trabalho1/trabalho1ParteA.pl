@@ -16,7 +16,9 @@ qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
  * */
 quemMoraEm(Cidade, Nomes) :-
 	findall(Nome, privado_QuemMoraEm(Cidade, Nome), Nomes).
-privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais([Nome, _, Cidade, _]).
+	
+	privado_QuemMoraEm(Cidade, Nome) :- informacoesPessoais(
+		[Nome, _, Cidade, _]).
 
 
 /* Questão 3 ###############################################################
@@ -33,18 +35,18 @@ qualIdadeDe(Nome, Idade) :-
 	dadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
-/* Primeiro, converto a data de aniversário Data para um TimeStamp DataDeAniver. 
- * Segundo, consigo a data atual e armazeno em outro TimeStamp DataAtual.
- * Terceiro, obtenho Ano do aniversário de DataDeAniver.
- * Quarto, obtenho Ano atual de DataDeAniver.
- * Quinto, calculo a idade da pessoa.
- * */
-privado_CalcularIdade(Data, Idade) :-
-    date_time_stamp(Data, DataDeAniver),
-    get_time(DataAtual),
-    convert_time(DataDeAniver, AnoAniver, _, _,_,_,_,_),
-    convert_time(DataAtual, AnoAtual, _, _, _,_,_,_),
-    Idade is AnoAtual - AnoAniver.
+	/* Primeiro, converto a data de aniversário Data para um TimeStamp DataDeAniver. 
+	 * Segundo, consigo a data atual e armazeno em outro TimeStamp DataAtual.
+	 * Terceiro, obtenho Ano do aniversário de DataDeAniver.
+	 * Quarto, obtenho Ano atual de DataDeAniver.
+	 * Quinto, calculo a idade da pessoa.
+	 * */
+	privado_CalcularIdade(Data, Idade) :-
+	    date_time_stamp(Data, DataDeAniver),
+	    get_time(DataAtual),
+	    convert_time(DataDeAniver, AnoAniver, _, _,_,_,_,_),
+	    convert_time(DataAtual, AnoAtual, _, _, _,_,_,_),
+	    Idade is AnoAtual - AnoAniver.
 
 
 /* Questão 4 ###############################################################
@@ -53,32 +55,32 @@ privado_CalcularIdade(Data, Idade) :-
 quaisComMaisDe30Anos(Nomes) :-
 	findall(Nomes, privado_QuaisComMaisDe30Anos(Nomes), Nomes).
 
-/* Primeiro, carrego a Lista com os dados da pessoa.
- * Segundo, calculo a idade da pessoa.
- * Terceiro, calculo se a pessoa é maior que 30 anos.
- * Quarto, pego o nome da pessoa e retorno na variável Nome.
- * */
-privado_QuaisComMaisDe30Anos(Nome) :-
-	informacoesPessoais(L),
-	dadoNaPosicao(DataDeNascimento,[_|L],2),
-	privado_CalcularIdade(DataDeNascimento, Idade),
-	Idade > 30,
-	dadoNaPosicao(Nome,[_|L],1).
+	/* Primeiro, carrego a Lista com os dados da pessoa.
+	 * Segundo, calculo a idade da pessoa.
+	 * Terceiro, calculo se a pessoa é maior que 30 anos.
+	 * Quarto, pego o nome da pessoa e retorno na variável Nome.
+	 * */
+	privado_QuaisComMaisDe30Anos(Nome) :-
+		informacoesPessoais(L),
+		dadoNaPosicao(DataDeNascimento,[_|L],2),
+		privado_CalcularIdade(DataDeNascimento, Idade),
+		Idade > 30,
+		dadoNaPosicao(Nome,[_|L],1).
 
 
 /* Questão 5 ###############################################################
  * Quais os cursos de uma dada pessoa?
  * */
-qualCursoDe(Nome, CursosDaPessoa) :-
-	findall(Curso, privado_QualCursoDe(Nome, Curso), CursosDaPessoa).
+quaisCursosDe(Nome, CursosDaPessoa) :-
+	findall(Curso, privado_quaisCursosDe(Nome, Curso), CursosDaPessoa).
 
-/* Primeiro encontro a pessoa na lista.
- * Segundo pego o curso dela e retorna na variável Curso.
- * */
-privado_QualCursoDe(Nome, Curso) :-
-	informacoesAcademicas(L), dadoNaPosicao(DadoDeRetorno,[_|L],1),
-	DadoDeRetorno == Nome,
-	dadoNaPosicao(Curso, L, 1).
+	/* Primeiro encontro a pessoa na lista.
+	 * Segundo pego o curso dela e retorna na variável Curso.
+	 * */
+	privado_quaisCursosDe(Nome, Curso) :-
+		informacoesAcademicas(L), dadoNaPosicao(DadoDeRetorno,[_|L],1),
+		DadoDeRetorno == Nome,
+		dadoNaPosicao(Curso, L, 1).
 
 
 /* Questão 6 ###############################################################
@@ -88,15 +90,15 @@ quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
 	findall(Orientadores, 
 		privado_QuaisOrientadoresDe(Nome, Orientadores), OrientadoresDaPessoa).
 
-/* Primeiro, pega a lista.
- * Segundo, pega o nome da pessoa e verifica se é a pessoa que queremos.
- * Terceiro, pega o nome do orientador.
- * */
-privado_QuaisOrientadoresDe(Nome, Orientadores) :-
-	informacoesAcademicas(L), 
-	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
-	NomeDaPessoa == Nome,
-	dadoNaPosicao(Orientadores, [_|L], 4).
+	/* Primeiro, pega a lista.
+	 * Segundo, pega o nome da pessoa e verifica se é a pessoa que queremos.
+	 * Terceiro, pega o nome do orientador.
+	 * */
+	privado_QuaisOrientadoresDe(Nome, Orientadores) :-
+		informacoesAcademicas(L), 
+		dadoNaPosicao(NomeDaPessoa, [_|L], 1),
+		NomeDaPessoa == Nome,
+		dadoNaPosicao(Orientadores, [_|L], 4).
 
 
 /* Questão 7 ###############################################################
@@ -108,25 +110,25 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 	merge(ColegasDeFacul, ColegasDeTraba, ColegasDaPessoa),
 	nivelada( ColegasDaPessoa, ColegasDaPessoaNivelada).
 
-/* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
- * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
- * variável Colegas. 
- * */
-privado_QuaisDeFaculdade(Nome, Colegas) :-
-	/* Primeiro, tiro a parte inicial da lista.
- 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
+	/* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
+	 * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
+	 * variável Colegas. 
 	 * */
-	informacoesAcademicas(Lista), 
-	isHeadMember(Nome, Lista), 
-	dividirLista(Lista, 6, _, Colegas).
-
-privado_QuaisDeTrabalho(Nome, Colegas) :-
-	/* Primeiro, tiro a parte inicial da lista.
- 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
-	 * */
-	informacoesProfissionais(Lista), 
-	isHeadMember(Nome, Lista), 
-	dividirLista(Lista, 5, _, Colegas).
+	privado_QuaisDeFaculdade(Nome, Colegas) :-
+		/* Primeiro, tiro a parte inicial da lista.
+	 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
+		 * */
+		informacoesAcademicas(Lista), 
+		isHeadMember(Nome, Lista), 
+		dividirLista(Lista, 6, _, Colegas).
+	
+		/* Primeiro, tiro a parte inicial da lista.
+	 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
+		 * */
+		privado_QuaisDeTrabalho(Nome, Colegas) :-
+			informacoesProfissionais(Lista), 
+			isHeadMember(Nome, Lista), 
+			dividirLista(Lista, 5, _, Colegas).
 
 
 /* Questão 8 ###############################################################
@@ -139,17 +141,17 @@ quaisNaoTemReferencia(Nomes) :-
      * */
     findall(Nome, privado_QuaisNaoTemReferencia(Nome), Nomes).
 
-/* Primeiro, carrega-se a lista em L, pega-se uma pessoa e tira-se a parte 
- * inicial da lista.
- * Segundo, verifica-se o restante da lista, isto é, o nome das referências, 
- * é uma lista vazia, ou seja, caso tenha comprimento 0.
- * */
-privado_QuaisNaoTemReferencia(Nomes) :-
-	informacoesAcademicas(L), 
-	dadoNaPosicao(Nomes, [_|L], 1),
-	privado_QuaisColegasDe1(Nomes, Colegas),
-	length(Colegas, Tamanho),
-	Tamanho == 0.
+	/* Primeiro, carrega-se a lista em L, pega-se uma pessoa e tira-se a parte 
+	 * inicial da lista.
+	 * Segundo, verifica-se o restante da lista, isto é, o nome das referências, 
+	 * é uma lista vazia, ou seja, caso tenha comprimento 0.
+	 * */
+	privado_QuaisNaoTemReferencia(Nomes) :-
+		informacoesAcademicas(L), 
+		dadoNaPosicao(Nomes, [_|L], 1),
+		privado_QuaisColegasDe1(Nomes, Colegas),
+		length(Colegas, Tamanho),
+		Tamanho == 0.
 
 
 /* Questão 9 #################################################################
@@ -167,18 +169,18 @@ qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
      * */
     somaDosElementos( Lista, QuantidadeDeColegas).
 
-/* Primeiro, carrega-se a informacoesAcademicas em Lista, 
- * Segundo, verifica-se se essa é a lista dessa pessoa.
- * Terceiro, retira-se da lista as outras informações, deixando somente os 
- * colegas.
- * Quarto, retorna-se o comprimento da lista, isto é, o número de colegas de
- * uma dada pessoa em um dado curso, na variável Quantidade.
- * */
-privado_QualNumeroDeColegas(Nome, Quantidade) :-
-	informacoesAcademicas(Lista), 
-	privado_is_head_member(Nome, Lista), 
-	dividirLista(Lista, 6, _, Colegas),
-	length(Colegas, Quantidade).
+	/* Primeiro, carrega-se a informacoesAcademicas em Lista, 
+	 * Segundo, verifica-se se essa é a lista dessa pessoa.
+	 * Terceiro, retira-se da lista as outras informações, deixando somente os 
+	 * colegas.
+	 * Quarto, retorna-se o comprimento da lista, isto é, o número de colegas de
+	 * uma dada pessoa em um dado curso, na variável Quantidade.
+	 * */
+	privado_QualNumeroDeColegas(Nome, Quantidade) :-
+		informacoesAcademicas(Lista), 
+		privado_is_head_member(Nome, Lista), 
+		dividirLista(Lista, 6, _, Colegas),
+		length(Colegas, Quantidade).
 
 
 /* Questão 10 ################################################################
@@ -200,17 +202,17 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
      * */
     somaDosElementos( Lista, QuatidadeDePessoas).
 
-/* Este predicado retorna sempre 1 na variavel Quantidade, para cada uma 
- * das ocorrências da universidade na variável informacoesAcademicas.
- * */
-privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
-	informacoesAcademicas(L), 
-	dadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
-	InstituicaoDaPessoa == Instituicao,
-	Quantidade is 1.
+	/* Este predicado retorna sempre 1 na variavel Quantidade, para cada uma 
+	 * das ocorrências da universidade na variável informacoesAcademicas.
+	 * */
+	privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
+		informacoesAcademicas(L), 
+		dadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
+		InstituicaoDaPessoa == Instituicao,
+		Quantidade is 1.
 
 
-/* Questão 11
+/* Questão 11 ################################################################
  * Quais as pessoas com mais de 5 anos de experiencia em um cargo qualquer?
  * */
 quemComMaisDe5Anos(NomesDasPessoas) :-
@@ -223,21 +225,22 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
      * */
     list_to_set(Nomes, NomesDasPessoas).
 
-/* Primeiro carrega-se a informacoesProfissionais em Lista,
- * Segundo, calcula-se o tempo de experiencia da pessoa.
- * Terceiro, retorna o nome da pessoa caso o tempo seja maior que 5.
- * */
-privado_QuemComMaisDe5Anos(Nome) :- 
-	informacoesProfissionais(L),
-	dadoNaPosicao(DataInicial,[_|L],4),
-	dadoNaPosicao(DataFinal,[_|L],5),
-	TempoDeExperiencia is DataFinal - DataInicial,
-	TempoDeExperiencia > 5,
-	dadoNaPosicao(Nome,[_|L],1).
+	/* Primeiro carrega-se a informacoesProfissionais em Lista,
+	 * Segundo, calcula-se o tempo de experiencia da pessoa.
+	 * Terceiro, retorna o nome da pessoa caso o tempo seja maior que 5.
+	 * */
+	privado_QuemComMaisDe5Anos(Nome) :- 
+		informacoesProfissionais(L),
+		dadoNaPosicao(DataInicial,[_|L],4),
+		dadoNaPosicao(DataFinal,[_|L],5),
+		TempoDeExperiencia is DataFinal - DataInicial,
+		TempoDeExperiencia > 5,
+		dadoNaPosicao(Nome,[_|L],1).
 
 
-/* Questão 12
+/* Questão 12 ################################################################
  * Qual o tempo de estudo de uma dada pessoa em cada curso ?
+ * 
  * Primeiro carrega-se as listas de Informações academicas.
  * Segundo verifica-se se o nome informado é cabeça da lista.
  * Terceiro carrega-se a data inicio do curso.
@@ -253,8 +256,9 @@ tempoDeEstudoEmCadaCurso(Nome, Curso) :-
 	Curso is DataFinal - DataInicial.
 
 
-/* Questão 13
- * Qual o tempo total de estudo de uma dada pessoa?.
+/* Questão 13 ###############################################################
+ * Qual o tempo total de estudo de uma dada pessoa?
+ *
  * Primeiro cria-se uma lista com todos os nomes.
  * Segundo carrega-se as Informações Acadêmicas.
  * Terceiro e Quarto comparam o nome da lista com a nome na cabeça.
@@ -267,17 +271,18 @@ tempoTotalDeEstudo(Nome, TempoTotal) :-
 	findall(Tempo, privado_TempoDeCada(Nome, Tempo), Lista),
 	somaDosTempos(Lista, TempoTotal).
 
-privado_TempoDeCada(Nome2, Tempo) :-
-	informacoesAcademicas(L),
-	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
-	NomeDaPessoa = Nome2,
-	dadoNaPosicao(DataInicial,[_|L],5),
-	dadoNaPosicao(DataFinal,[_|L],6),
-	Tempo is DataFinal - DataInicial.
+	privado_TempoDeCada(Nome2, Tempo) :-
+		informacoesAcademicas(L),
+		dadoNaPosicao(NomeDaPessoa, [_|L], 1),
+		NomeDaPessoa = Nome2,
+		dadoNaPosicao(DataInicial,[_|L],5),
+		dadoNaPosicao(DataFinal,[_|L],6),
+		Tempo is DataFinal - DataInicial.
 
 
-/* Questão 14
+/* Questão 14 #############################################################
  * Qual o tempo medio de estudo entre todas as pessoas?
+ * 
  * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos os  
  * cursos.
  * Segundo conta-se a quantidade de pessoas no banco de dados.
@@ -290,7 +295,6 @@ privado_TempoDeCada(Nome2, Tempo) :-
  * Décimo faz a soma da lista de pessoas.
  * Décimo Primeiro calculo o tempo médio.
  * */
-
 tempoMedioDeEstudo(TempoMedio) :-
 	findall(Tempo, privado_TempoDeCada2(_,Tempo), ListaTempos),
 	findall(Retorno, privado_TempoDeCada2(Retorno,_), Listade1),
@@ -298,24 +302,23 @@ tempoMedioDeEstudo(TempoMedio) :-
 	somaDosTempos( Listade1, Retorno),
 	TempoMedio is TempoTotal / Retorno.
 
-privado_TempoDeCada2(Retorno, Tempo) :-
-	informacoesAcademicas(L),
-	dadoNaPosicao(_,[_|L], 1),
-	dadoNaPosicao(DataInicial,[_|L],5),
-	dadoNaPosicao(DataFinal,[_|L],6),
-	Tempo is DataFinal - DataInicial,
-	Retorno is 1.
+	privado_TempoDeCada2(Retorno, Tempo) :-
+		informacoesAcademicas(L),
+		dadoNaPosicao(_,[_|L], 1),
+		dadoNaPosicao(DataInicial,[_|L],5),
+		dadoNaPosicao(DataFinal,[_|L],6),
+		Tempo is DataFinal - DataInicial,
+		Retorno is 1.
 
 
-/* Questão 15
+/* Questão 15 ################################################################
  * Qual o nome de todas as pessoas da lista ?
- * 
  * */
 nomeDeTodasAsPessoas(ListaDeNomes) :-
 	findall(Nome, privado_Nomes(Nome), ListaDeNomes).
 
-privado_Nomes(Nome) :-
-	dadoDeInfoNaPosicao(1,Nome).
+	privado_Nomes(Nome) :-
+		dadoDeInfoNaPosicao(1,Nome).
 
 
 
