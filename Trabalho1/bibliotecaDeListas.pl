@@ -310,5 +310,9 @@ indexOf([_|Tail], Element, Index):-
   	Index is Index1+1.  % and increment the resulting index
 	
 	
-	
+/* Predicado que mapeia length para uma lista de listas, retornando uma nova lista X
+ * composta pelo comprimento de cada uma de suas listas.
+ * */
+ lengthOfListsOnList(L,X):-
+    maplist(length,L,X).
 	
