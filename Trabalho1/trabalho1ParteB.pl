@@ -68,3 +68,35 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	informacoesAcademicas(L),
 	dadoNaPosicao(Instituicao, [_|L], 3).
 
+
+/* Questão 21 ###########################################################
+ * Qual a pessoa mais citada como referência? Exiba seu currículo.
+ * O algoritmo cria, inicialmente, duas listas de listas, uma com todas
+ * as referências acadêmicas e outra com todas as referências
+ * profissionais.
+ * Após, as listas são concatenadas em uma única lista de listas, que é,
+ * então, transformada em uma lista simples usando o predicado append.
+ * listmax é utilizado no final para nos retornar o elemento com maior
+ * número de ocorrência nesta lista.
+ * */
+ qualReferenciaMaisCitada(Referencia) :-
+ findall(Ref, privado_PegarReferenciasAcademicas(Ref), Lista),
+ findall(Ref2, privado_PegarReferenciasProfissionais(Ref2), Lista2),
+ concatenadas(Lista, Lista2, ListaRef),
+ append(ListaRef, ListaRefCompleta),
+ listmax(ListaRefCompleta,Referencia).
+ 
+/* Este predicado divide a lista de 'informacoesAcademicas' em duas
+ * listas, onde uma delas é uma lista de Referencias. 
+ * */
+ privado_PegarReferenciasAcademicas(Ref) :-
+ informacoesAcademicas(L),
+ dividirLista(L,6,L1,Ref).
+ 
+/* Este predicado divide a lista de 'informacoesProfissionais' em duas
+ * listas, onde uma delas é uma lista de Referencias. 
+ * */
+ privado_PegarReferenciasProfissionais(Ref) :-
+ informacoesProfissionais(L),
+ dividirLista(L,5,L1,Ref).
+ 
