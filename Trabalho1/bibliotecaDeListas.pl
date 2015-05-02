@@ -30,7 +30,7 @@ inseridoNoFinal( D, [X | L], [X | LM] ) :- inseridoNoFinal( D, L, LM ).
  * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o dado
  * D no inicio.
  * */
- add(Item, List, [Item|List]).
+adicionarNoInicio(Item, List, [Item|List]).
 
 
 /* Predicado: substituidoDoInicio(D, L, LM)

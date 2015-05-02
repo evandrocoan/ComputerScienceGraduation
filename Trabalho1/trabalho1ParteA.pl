@@ -35,7 +35,8 @@ qualIdadeDe(Nome, Idade) :-
 	dadoNaPosicao(DataDeNascimento,[_|L],2),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
-	/* Primeiro, converto a data de aniversário Data para um TimeStamp DataDeAniver. 
+	/* Primeiro, converto a data de aniversário Data para um TimeStamp 
+	 *  DataDeAniver. 
 	 * Segundo, consigo a data atual e armazeno em outro TimeStamp DataAtual.
 	 * Terceiro, obtenho Ano do aniversário de DataDeAniver.
 	 * Quarto, obtenho Ano atual de DataDeAniver.
@@ -110,9 +111,9 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 	merge(ColegasDeFacul, ColegasDeTraba, ColegasDaPessoa),
 	nivelada( ColegasDaPessoa, ColegasDaPessoaNivelada).
 
-	/* Primeiro carrega a lista de informacoesAcademicas em Lista, depois verifica 
-	 * se a lista pertence ao Nome. Caso sim, retorna uma lista dos colegas na 
-	 * variável Colegas. 
+	/* Primeiro carrega a lista de informacoesAcademicas em Lista, depois 
+	 * verifica se a lista pertence ao Nome. Caso sim, retorna uma lista dos 
+	 * colegas na variável Colegas. 
 	 * */
 	privado_QuaisDeFaculdade(Nome, Colegas) :-
 		/* Primeiro, tiro a parte inicial da lista.
@@ -143,8 +144,8 @@ quaisNaoTemReferencia(Nomes) :-
 
 	/* Primeiro, carrega-se a lista em L, pega-se uma pessoa e tira-se a parte 
 	 * inicial da lista.
-	 * Segundo, verifica-se o restante da lista, isto é, o nome das referências, 
-	 * é uma lista vazia, ou seja, caso tenha comprimento 0.
+	 * Segundo, verifica-se o restante da lista, isto é, o nome das 
+	 * referências, é uma lista vazia, ou seja, caso tenha comprimento 0.
 	 * */
 	privado_QuaisNaoTemReferencia(Nomes) :-
 		informacoesAcademicas(L), 
@@ -173,8 +174,8 @@ qualNumeroDeColegas(Nome, QuantidadeDeColegas) :-
 	 * Segundo, verifica-se se essa é a lista dessa pessoa.
 	 * Terceiro, retira-se da lista as outras informações, deixando somente os 
 	 * colegas.
-	 * Quarto, retorna-se o comprimento da lista, isto é, o número de colegas de
-	 * uma dada pessoa em um dado curso, na variável Quantidade.
+	 * Quarto, retorna-se o comprimento da lista, isto é, o número de colegas 
+	 * de uma dada pessoa em um dado curso, na variável Quantidade.
 	 * */
 	privado_QualNumeroDeColegas(Nome, Quantidade) :-
 		informacoesAcademicas(Lista), 
@@ -283,8 +284,8 @@ tempoTotalDeEstudo(Nome, TempoTotal) :-
 /* Questão 14 #############################################################
  * Qual o tempo medio de estudo entre todas as pessoas?
  * 
- * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos os  
- * cursos.
+ * Primeiro cria-se uma lista com o tempo de estudo de cada pessoa, em todos 
+ * os cursos.
  * Segundo conta-se a quantidade de pessoas no banco de dados.
  * Terceiro carregam-se as listas de Informações Acadêmicas.
  * Quarto acessa todas as listas.
