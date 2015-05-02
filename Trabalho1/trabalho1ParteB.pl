@@ -74,11 +74,13 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
  *   tempo de serviço de cada pessoa do banco de dados que trabalhou nesta 
  *   empresa. 
  *
- * Primeiro, para cada pessoa no lista você pega as empresas que ela trabalhou
+ * Primeiro, para cada pessoa na lista você pega as empresas que ela trabalhou
  *   e coloca em uma lista NomesDasEmpresas, que não aceita repetição.
  * Segundo, para cada empresa na lista NomesDasEmpresas, você coloca na lista
  *   TemposDasEmpresas e na mesma posição da empresa NomesDasEmpresas, o 
  *   tempo total de trabalho das pessoas naquela empresa.
+ * Terceiro, cria um lista com todas as empresas que empatam em ter o maior 
+ *   tempo de serviço.
  * Para isso você passa em todas as pessoas do banco de dados e caso essa 
  *   pessoa tenha trabalho na empresa, você coloca o tempo de trabalho dessa 
  *   pessoa na lista TemposDasEmpresas e na posição correspondente a empresa 
@@ -87,7 +89,10 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
  *   de trabalho da empresa 1 está na posição 1 da lista TemposDasEmpresas e o 
  *   nome da empresa 1 está na posição 1 da lista NomesDasEmpresas.
  * */
-maiorTempoDeServico(Empresa) :-
+maiorTempoDeServico(Empresas) :-
+	findall(Empresa, maiorTempoDeServicoAll(Empresa), Empresas ).
+
+maiorTempoDeServicoAll(Empresa) :-
 	/* Passo 1, colocar o nome de todas as empresas em uma lista ordenada
 	 *   NomesDasEmpresas e sem repetição. 
 	 * */
@@ -103,11 +108,8 @@ maiorTempoDeServico(Empresa) :-
 	posicaoDoMaior(TemposDasEmpresas, Posicao),
     /* Pega o nome da empresa com maior tempo de trabalho. 
      * */
-    dadoNaPosicao(Empresa, NomesDasEmpresas, Posicao),
-    /* Encerra a execução do algoritmo.
-     * */
-    !.
-	
+    dadoNaPosicao(Empresa, NomesDasEmpresas, Posicao).
+    
 	/* Pega a lista NomesDasEmpresas_Interno, e chama o predicado 
 	 *   privado_CarregarTempoDeTrabalho.
 	 * */
@@ -119,8 +121,7 @@ maiorTempoDeServico(Empresa) :-
 	privado_CarregarTempoDeTrabalho([], Cauda, ListaTempos) :-
 		/* Salva a lista TemposDasEmpresas.
 		 * */
-		copy_term(Cauda, ListaTempos),
-		!.
+		copy_term(Cauda, ListaTempos).
 	
 	privado_CarregarTempoDeTrabalho(Lista, ListaTempoEntrada, ListaTempos) :-
 		/* Divide a Lista entre Cabeca e Cauda.
@@ -207,6 +208,23 @@ maiorTempoDeServico(Empresa) :-
 			/* Segundo pego o nome da empresa. 
 			 * */
 			dadoNaPosicao(NomeDaEmpresa, L, 1).
+
+/* Questão 20 ##############################################################
+ * Qual a pessoa que mais tempo ficou em um cargo e qual e este cargo? 
+ * Exiba seu currículo.
+ *
+ * 1) Faço uma lista de pessoas.
+ * 2) Para cada pessoa na lista, crio uma lista de nomes de cargos que ela tenha 
+ *   e outra lista com os tempos dos cargos, correspondente a lista de nomes.
+ * 3) Pego a posição do maior cargo dela e retorno o nome do cargo que se 
+ *   encontra na posição do maior cargo.
+ * 4) Crio uma lista com os nomes dos maiores cargos de todas as pessoas e 
+ *   outra lista com os tempos dos maiores cargos.
+ * 5) Descubro qual a posição da pessoa que possui o maior cargo e retorno o 
+ *   nome do cargo na posição de maior na lista de nomes dos maiores cargos.
+ * */
+maisTempoEmUmCargo(Pessoa, Cargo) :-
+	.
 
 
 /* Questão 21 ###########################################################
@@ -346,7 +364,7 @@ privado_TotalReferenciasP(NomePessoa, TotalRef) :-
 /* Caso sim, divido a lista para pegar apenas suas referências e calculo
  * o seu tamanho.
  * */
-		dividirLista(L,5,L1,L2),
+		dividirLista(L,5,_,L2),
 		length(L2,N),
 		QtdRef is N
 	;
@@ -384,7 +402,7 @@ privado_TotalReferenciasA(NomePessoa, TotalRef) :-
 /* Caso sim, divido a lista para pegar apenas suas referências e calculo
  * o seu tamanho.
  * */
-		dividirLista(L,6,L1,L2),
+		dividirLista(L,6,_,L2),
 		length(L2,N),
 		QtdRef is N
 	;
