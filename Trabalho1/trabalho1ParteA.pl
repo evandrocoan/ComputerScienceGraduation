@@ -247,13 +247,13 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
  * Quarto carrega-se a data de término do curso.
  * Quinto retorna-se a diferença entre as datas.
  * */
-tempoDeEstudoEmCadaCurso(Nome, Curso) :-
+tempoDeEstudoEmCadaCurso(NomeDaPessoa, TempoDeEstudo) :-
 	informacoesAcademicas(L),
-	dadoNaPosicao(NomeDaPessoa, [_|L], 1),
-	NomeDaPessoa == Nome,
+	dadoNaPosicao(Nome, [_|L], 1),
+	Nome == NomeDaPessoa,
 	dadoNaPosicao(DataInicial,[_|L],5),
 	dadoNaPosicao(DataFinal,[_|L],6),
-	Curso is DataFinal - DataInicial.
+	TempoDeEstudo is DataFinal - DataInicial.
 
 
 /* Questão 13 ###############################################################
