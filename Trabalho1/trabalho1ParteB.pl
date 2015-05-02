@@ -95,12 +95,9 @@ maiorTempoDeServico(Empresa) :-
 	/* Passo 2, chamo um predicado que recursivamente, pega a cabeça da lista 
 	 *   NomesDasEmpresas e chama o predicado privado_TempoTotalDeTrabalho e 
 	 *   salva o TempoTotalDeTrabalho da empresa cabeça da lista.
-	 *   NomesDasEmpresas na lista variável global temposDasEmpresas.
+	 *   NomesDasEmpresas na lista variável TemposDasEmpresas.
 	 * */
-	privado_CarregarTempoDeTrabalho(NomesDasEmpresas),
-	/* Pega a lista temposDasEmpresas.
-	 * */
-	nb_getval(temposDasEmpresas, TemposDasEmpresas),
+	privado_CarregarTempoDeTrabalho(NomesDasEmpresas, TemposDasEmpresas),
 	/* Descobre qual a posição da empresa com maior tempo .
 	 * */
 	posicaoDoMaior(TemposDasEmpresas, Posicao),
@@ -114,18 +111,18 @@ maiorTempoDeServico(Empresa) :-
 	/* Pega a lista NomesDasEmpresas_Interno, e chama o predicado 
 	 *   privado_CarregarTempoDeTrabalho.
 	 * */
-	privado_CarregarTempoDeTrabalho(NomesDasEmpresas_Interno) :-
+	privado_CarregarTempoDeTrabalho(ListaNomes, ListaTempos) :-
 		/* Chama o predicado que realizada a recursão.
 		 * */
-		privado_CarregarTempoDeTrabalho(NomesDasEmpresas_Interno, []).
+		privado_CarregarTempoDeTrabalho(ListaNomes, [], ListaTempos).
 	
-	privado_CarregarTempoDeTrabalho([], Cauda) :-
-		/* Salva a lista temposDasEmpresas.
+	privado_CarregarTempoDeTrabalho([], Cauda, ListaTempos) :-
+		/* Salva a lista TemposDasEmpresas.
 		 * */
-		nb_setval( temposDasEmpresas, Cauda),
+		copy_term(Cauda, ListaTempos),
 		!.
 	
-	privado_CarregarTempoDeTrabalho(Lista, ListaTempoEntrada) :-
+	privado_CarregarTempoDeTrabalho(Lista, ListaTempoEntrada, ListaTempos) :-
 		/* Divide a Lista entre Cabeca e Cauda.
 		 * */
 		dividirLista(Lista, 1, CabecaLista, Cauda), 
@@ -142,7 +139,7 @@ maiorTempoDeServico(Empresa) :-
 		/* Chama recursivamente este predicado para processar o resto da 
 		 *   lista. 
 		 * */
-		privado_CarregarTempoDeTrabalho(Cauda, ListaTempoSaida).
+		privado_CarregarTempoDeTrabalho(Cauda, ListaTempoSaida, ListaTempos).
 	
 	/* Dado o NomeDaEmpresa, calculo o tempo total.
 	 * */
