@@ -9,12 +9,12 @@ importarTrabalho1ParteA:-[trabalho1ParteA].
  * */
 quemEstudouNaInstituicao(Instituicao, Nomes) :-
     /* Faz todas as requisições ';' para a variavel informacoesAcademicas e
-     * recebe um lista Lista contendo o nome das pessoas.
+     *   recebe um lista Lista contendo o nome das pessoas.
      * */
     findall(Nome, privado_QuemEstudouNaInstituicao(Instituicao, Nome), Nomes).
 
-	/* Este predicado retorna sempre o nome da pessoa, caso ela tenha estudado em 
-	 * uma dada instituição armazenado na variável informacoesAcademicas.
+	/* Este predicado retorna sempre o nome da pessoa, caso ela tenha estudado
+	 *   em uma dada instituição armazenado na variável informacoesAcademicas.
 	 * */
 	privado_QuemEstudouNaInstituicao(Instituicao_Interno, Nome_Interno) :-
 	    informacoesAcademicas(L), 
@@ -33,7 +33,7 @@ quemEstudouNaInstituicao(Instituicao, Nomes) :-
  * */
 qualCursoMaisLongoDe( Nome, CursoLista ) :-
 	/* Faz todas as requisições, e cria uma lista com os cursos de maior 
-	 * duração, isto é, os cursos com o mesmo tempo de duração.
+	 *   duração, isto é, os cursos com o mesmo tempo de duração.
 	 * */
 	findall(Curso, privado_QualCursoMaisLongoDe( Nome, Curso ), CursoLista).
 	
@@ -56,9 +56,9 @@ qualCursoMaisLongoDe( Nome, CursoLista ) :-
  * Qual a instituição de ensino com maior número de pessoas?
  * 
  * Primeiro pego a instituição de cada pessoa do banco de dados e crio
- * uma nova lista.
+ *   uma nova lista.
  * Segundo, aplico o predicado listMax que retorna o elemento da lista
- * com o maior número de ocorrências.
+ *   com o maior número de ocorrências.
  * */
 qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	findall(Instit, privado_criarListaDeInstituicoes(Instit), Inst),
@@ -69,38 +69,39 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	dadoNaPosicao(Instituicao, [_|L], 3).
 
 
-/* 19. Qual a empresa com maior tempo total de serviço? Considere a soma do 
- * tempo de serviço de cada pessoa do banco de dados que trabalhou nesta 
- * empresa. 
+/* Questão 19 ###########################################################
+ * Qual a empresa com maior tempo total de serviço? Considere a soma do 
+ *   tempo de serviço de cada pessoa do banco de dados que trabalhou nesta 
+ *   empresa. 
  *
  * Primeiro, para cada pessoa no lista você pega as empresas que ela trabalhou
- *  e coloca em uma lista NomesDasEmpresas, que não aceita repetição.
+ *   e coloca em uma lista NomesDasEmpresas, que não aceita repetição.
  * Segundo, para cada empresa na lista NomesDasEmpresas, você coloca na lista
- *  TemposDasEmpresas e na mesma posição da empresa NomesDasEmpresas, o 
- *  tempo total de trabalho das pessoas naquela empresa.
+ *   TemposDasEmpresas e na mesma posição da empresa NomesDasEmpresas, o 
+ *   tempo total de trabalho das pessoas naquela empresa.
  * Para isso você passa em todas as pessoas do banco de dados e caso essa 
- *  pessoa tenha trabalho na empresa, você coloca o tempo de trabalho dessa 
- *  pessoa na lista TemposDasEmpresas e na posição correspondente a empresa 
- *  em questão. 
+ *   pessoa tenha trabalho na empresa, você coloca o tempo de trabalho dessa 
+ *   pessoa na lista TemposDasEmpresas e na posição correspondente a empresa 
+ *   em questão. 
  * Isto é, estas listas contém os dados na mesmo posição, por exemplo, o tempo
- *  de trabalho da empresa 1 está na posição 1 da lista TemposDasEmpresas e o 
- *  nome da empresa 1 está na posição 1 da lista NomesDasEmpresas.
+ *   de trabalho da empresa 1 está na posição 1 da lista TemposDasEmpresas e o 
+ *   nome da empresa 1 está na posição 1 da lista NomesDasEmpresas.
  * */
 maiorTempoDeServico(Empresa) :-
 	/* Passo 1, colocar o nome de todas as empresas em uma lista ordenada
-	 *  NomesDasEmpresas e sem repetição. 
+	 *   NomesDasEmpresas e sem repetição. 
 	 * */
 	privado_CarregaLista(NomesDasEmpresas),
 	/* Passo 2, chamo um predicado que recursivamente, pega a cabeça da lista 
-	 *  NomesDasEmpresas e chama o predicado privado_TempoTotalDeTrabalho e 
-	 *  salva o TempoTotalDeTrabalho da empresa cabeça da lista na lista 
-	 *  variável global temposDasEmpresas.
+	 *   NomesDasEmpresas e chama o predicado privado_TempoTotalDeTrabalho e 
+	 *   salva o TempoTotalDeTrabalho da empresa cabeça da lista.
+	 *   NomesDasEmpresas na lista variável global temposDasEmpresas.
 	 * */
 	privado_CarregarTempoDeTrabalho(NomesDasEmpresas),
-	/* Pega a lista temposDasEmpresas 
+	/* Pega a lista temposDasEmpresas.
 	 * */
 	nb_getval(temposDasEmpresas, TemposDasEmpresas),
-	/* Descobre qual a posição da empresa com maior tempo 
+	/* Descobre qual a posição da empresa com maior tempo .
 	 * */
 	posicaoDoMaior(TemposDasEmpresas, Posicao),
     /* Pega o nome da empresa com maior tempo de trabalho. 
@@ -110,21 +111,26 @@ maiorTempoDeServico(Empresa) :-
      * */
     !.
 	
-	/* Pega a cabeça da lista NomesDasEmpresas_Interno, e chama o predicado 
-	 * privado_TempoTotalDeTrabalho, e salva o TempoTotalDeTrabalho em 
-	 * TemposDasEmpresas_Interno.
+	/* Pega a lista NomesDasEmpresas_Interno, e chama o predicado 
+	 *   privado_CarregarTempoDeTrabalho.
 	 * */
-	privado_CarregarTempoDeTrabalho(Lista) :-
-		privado_CarregarTempoDeTrabalho(Lista, []).
+	privado_CarregarTempoDeTrabalho(NomesDasEmpresas_Interno) :-
+		/* Chama o predicado que realizada a recursão.
+		 * */
+		privado_CarregarTempoDeTrabalho(NomesDasEmpresas_Interno, []).
+	
 	privado_CarregarTempoDeTrabalho([], Cauda) :-
+		/* Salva a lista temposDasEmpresas.
+		 * */
 		nb_setval( temposDasEmpresas, Cauda),
 		!.
+	
 	privado_CarregarTempoDeTrabalho(Lista, ListaTempoEntrada) :-
-		/* Divide a Lista entre Cabeca e Cauda 
+		/* Divide a Lista entre Cabeca e Cauda.
 		 * */
 		dividirLista(Lista, 1, CabecaLista, Cauda), 
 		/* Transforma a lista de um elemento CabecaLista em um elemento 
-		 *  Cabeca. 
+		 *   Cabeca. 
 		 * */
 		dadoNaPosicao(Cabeca, CabecaLista, 0), 
 		/* Chama o predicado privado_TempoTotalDeTrabalho. 
@@ -134,26 +140,29 @@ maiorTempoDeServico(Empresa) :-
 		 * */
 		inseridoNoFinal(Tempo, ListaTempoEntrada, ListaTempoSaida), 
 		/* Chama recursivamente este predicado para processar o resto da 
-		 *  lista. 
+		 *   lista. 
 		 * */
 		privado_CarregarTempoDeTrabalho(Cauda, ListaTempoSaida).
-
-	/* Dado o NomeDaEmpresa, faz todas as requisições ';' para o predicado 
-	 *  privado_QualTempoDeTrabalho e cria uma lista de TemposTrabalho.
-	 * Depois faz a soma dos TemposTrabalho e retorna na variável TempoTotal.
+	
+	/* Dado o NomeDaEmpresa, calculo o tempo total.
 	 * */
 	privado_TempoTotalDeTrabalho( NomeDaEmpresa, TempoTotal ) :-
+		/* Faz todas as requisições ';' para o predicado 
+		 *   privado_QualTempoDeTrabalho e cria uma lista de TemposTrabalho.
+		 * */
 		findall(Tempo, privado_QualTempoDeTrabalho(NomeDaEmpresa, Tempo), 
 		        TemposTrabalho),
+		/* Faz a soma dos TemposTrabalho e retorna na variável TempoTotal.
+		 * */
 		somaDosElementos(TemposTrabalho, TempoTotal).
 		
 		/* Retorna o tempo de trabalho em uma empresa NomeDaEmpresa
-		 *  armazenada no predicado informacoesProfissionais. 
+		 *   armazenada no predicado informacoesProfissionais. 
 		 * A cada vez que se faz um requisição ';' a este predicado, ele 
-		 *  retorna a o tempo da empresa NomeDaEmpresa, caso a empresa 
-		 *  pega no predicado informacoesProfissionais não seja NomeDaEmpresa, 
-		 *  retorna 0 em TempoDeTrabalho, caso contrário, retorna o 
-		 *  TempoDeTrabalho.
+		 *   retorna a o tempo da empresa NomeDaEmpresa, caso a empresa 
+		 *   pega no predicado informacoesProfissionais não seja NomeDaEmpresa, 
+		 *   retorna 0 em TempoDeTrabalho, caso contrário, retorna o 
+		 *   TempoDeTrabalho.
 		 * */
 		privado_QualTempoDeTrabalho(NomeDaEmpresa, TempoDeTrabalho) :-
 			/* Primeiro, carrego a lista de informacoesProfissionais. 
@@ -178,38 +187,41 @@ maiorTempoDeServico(Empresa) :-
 				TempoDeTrabalho is 0
 			).
 
-	/* Faz todas as requisições ';' para o predicado privado_QualEmpresa e 
-	 *  cria um lista contendo todas as empresas.
-	 * Depois retira desta lista todos os repetidos e retorna essa lista em 
-	 *  ListaDeEmpresas.
+	/* Cria um lista contendo todas as empresas.
 	 * */
 	privado_CarregaLista( ListaDeEmpresas ) :-
+		/* Faz todas as requisições ';' para o predicado privado_QualEmpresa.
+		 * */
 		findall( Empresa, privado_QualEmpresa( Empresa ), Lista ),
+		/* Retira desta lista todos os repetidos e retorna essa lista em 
+		 *   ListaDeEmpresas.
+		 * */
 		sort(Lista, ListaDeEmpresas).
 	
 		/* Retorna o Nome da Empresa armazenada no predicado 
-		 *  informacoesProfissionais. A cada vez que se faz um requisição ';' 
-		 *  a este predicado, ele retorna a próxima empresa, até não existirem 
-		 *  mais informacoesProfissionais.
+		 *   informacoesProfissionais. A cada vez que se faz um requisição ';' 
+		 *   a este predicado, ele retorna a próxima empresa, até não existirem 
+		 *   mais informacoesProfissionais.
 		 * */
 		privado_QualEmpresa(NomeDaEmpresa) :-
 			/* Primeiro carrego a lista de informacoesProfissionais. 
-			* */
+			 * */
 			informacoesProfissionais(L),
 			/* Segundo pego o nome da empresa. 
-			* */
+			 * */
 			dadoNaPosicao(NomeDaEmpresa, L, 1).
 
 
 /* Questão 21 ###########################################################
  * Qual a pessoa mais citada como referência? Exiba seu currículo.
+ * 
  * O algoritmo cria, inicialmente, duas listas de listas, uma com todas
- * as referências acadêmicas e outra com todas as referências
- * profissionais.
+ *   as referências acadêmicas e outra com todas as referências
+ *   profissionais.
  * Após, cada lista é transformada em uma lista simples usando append,
- * e então são concatenadas em apenas uma única lista.
+ *   e então são concatenadas em apenas uma única lista.
  * Por fim, esta lista é passada pelo predicado listmax que nos retorna
- * o elemento de maior ocorrência.
+ *   o elemento de maior ocorrência.
  * */
 qualReferenciaMaisCitada(Referencia) :-
 	findall(Ref, privado_PegarReferenciasAcademicas(Ref), Lista),
@@ -234,9 +246,9 @@ qualReferenciaMaisCitada(Referencia) :-
 		dividirLista(L,5,_,Ref).
 
 
-/* Questão 22 ##########################################################
+/* Questão 22 #############################################################
  * Qual a pessoa com maior quantidade de colegas referenciados (de curso
- * ou de trabalho)? Exiba seu currículo.
+ *   ou de trabalho)? Exiba seu currículo.
  *
  * ***O predicado principal gera duas listas de listas com todos os
  * ***resultados dos predicados abaixo, falta encontrar os nomes
@@ -248,7 +260,7 @@ findall(Ref, privado_PegarReferenciasAcademicas2(Ref), Lista),
 findall(Ref2, privado_PegarReferenciasProfissionais2(Ref2), Lista2).
  
 	/* Este predicado gera duplas com o nome da pessoa e a quantidade de
-	 * referências de um dado fato de informacoesAcademicas.
+	 *   referências de um dado fato de informacoesAcademicas.
 	 * */
 	privado_PegarReferenciasAcademicas2(Ref) :-
 	informacoesAcademicas(L),
