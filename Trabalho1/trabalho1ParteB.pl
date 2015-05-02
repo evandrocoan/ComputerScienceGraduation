@@ -69,6 +69,138 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	dadoNaPosicao(Instituicao, [_|L], 3).
 
 
+/* 19. Qual a empresa com maior tempo total de serviço? Considere a soma do 
+ * tempo de serviço de cada pessoa do banco de dados que trabalhou nesta 
+ * empresa. 
+ *
+ * Primeiro, para cada pessoa no lista você pega as empresas que ela trabalhou
+ *  e coloca em uma lista NomesDasEmpresas, que não aceita repetição.
+ * Segundo, para cada empresa na lista NomesDasEmpresas, você coloca na lista
+ *  TemposDasEmpresas e na mesma posição da empresa NomesDasEmpresas, o 
+ *  tempo total de trabalho das pessoas naquela empresa.
+ * Para isso você passa em todas as pessoas do banco de dados e caso essa 
+ *  pessoa tenha trabalho na empresa, você coloca o tempo de trabalho dessa 
+ *  pessoa na lista TemposDasEmpresas e na posição correspondente a empresa 
+ *  em questão. 
+ * Isto é, estas listas contém os dados na mesmo posição, por exemplo, o tempo
+ *  de trabalho da empresa 1 está na posição 1 da lista TemposDasEmpresas e o 
+ *  nome da empresa 1 está na posição 1 da lista NomesDasEmpresas.
+ * */
+maiorTempoDeServico(Empresa) :-
+	/* Passo 1, colocar o nome de todas as empresas em uma lista ordenada
+	 *  NomesDasEmpresas e sem repetição. 
+	 * */
+	privado_CarregaLista(NomesDasEmpresas),
+	/* Passo 2, chamo um predicado que recursivamente, pega a cabeça da lista 
+	 *  NomesDasEmpresas e chama o predicado privado_TempoTotalDeTrabalho e 
+	 *  salva o TempoTotalDeTrabalho da empresa cabeça da lista na lista 
+	 *  variável global temposDasEmpresas.
+	 * */
+	privado_CarregarTempoDeTrabalho(NomesDasEmpresas),
+	/* Pega a lista temposDasEmpresas 
+	 * */
+	nb_getval(temposDasEmpresas, TemposDasEmpresas),
+	/* Descobre qual a posição da empresa com maior tempo 
+	 * */
+	posicaoDoMaior(TemposDasEmpresas, Posicao),
+    /* Pega o nome da empresa com maior tempo de trabalho. 
+     * */
+    dadoNaPosicao(Empresa, NomesDasEmpresas, Posicao),
+    /* Encerra a execução do algoritmo.
+     * */
+    !.
+	
+	/* Pega a cabeça da lista NomesDasEmpresas_Interno, e chama o predicado 
+	 * privado_TempoTotalDeTrabalho, e salva o TempoTotalDeTrabalho em 
+	 * TemposDasEmpresas_Interno.
+	 * */
+	privado_CarregarTempoDeTrabalho(Lista) :-
+		privado_CarregarTempoDeTrabalho(Lista, []).
+	privado_CarregarTempoDeTrabalho([], Cauda) :-
+		nb_setval( temposDasEmpresas, Cauda),
+		!.
+	privado_CarregarTempoDeTrabalho(Lista, ListaTempoEntrada) :-
+		/* Divide a Lista entre Cabeca e Cauda 
+		 * */
+		dividirLista(Lista, 1, CabecaLista, Cauda), 
+		/* Transforma a lista de um elemento CabecaLista em um elemento 
+		 *  Cabeca. 
+		 * */
+		dadoNaPosicao(Cabeca, CabecaLista, 0), 
+		/* Chama o predicado privado_TempoTotalDeTrabalho. 
+		 * */
+		privado_TempoTotalDeTrabalho(Cabeca, Tempo), 
+		/* Adiciona na ListaTempo o tempo da empresa em Cabeca. 
+		 * */
+		inseridoNoFinal(Tempo, ListaTempoEntrada, ListaTempoSaida), 
+		/* Chama recursivamente este predicado para processar o resto da 
+		 *  lista. 
+		 * */
+		privado_CarregarTempoDeTrabalho(Cauda, ListaTempoSaida).
+
+	/* Dado o NomeDaEmpresa, faz todas as requisições ';' para o predicado 
+	 *  privado_QualTempoDeTrabalho e cria uma lista de TemposTrabalho.
+	 * Depois faz a soma dos TemposTrabalho e retorna na variável TempoTotal.
+	 * */
+	privado_TempoTotalDeTrabalho( NomeDaEmpresa, TempoTotal ) :-
+		findall(Tempo, privado_QualTempoDeTrabalho(NomeDaEmpresa, Tempo), 
+		        TemposTrabalho),
+		somaDosElementos(TemposTrabalho, TempoTotal).
+		
+		/* Retorna o tempo de trabalho em uma empresa NomeDaEmpresa
+		 *  armazenada no predicado informacoesProfissionais. 
+		 * A cada vez que se faz um requisição ';' a este predicado, ele 
+		 *  retorna a o tempo da empresa NomeDaEmpresa, caso a empresa 
+		 *  pega no predicado informacoesProfissionais não seja NomeDaEmpresa, 
+		 *  retorna 0 em TempoDeTrabalho, caso contrário, retorna o 
+		 *  TempoDeTrabalho.
+		 * */
+		privado_QualTempoDeTrabalho(NomeDaEmpresa, TempoDeTrabalho) :-
+			/* Primeiro, carrego a lista de informacoesProfissionais. 
+			 * */
+			informacoesProfissionais(L),
+			/* Segundo, pego o nome da empresa. 
+			 * */
+			dadoNaPosicao(Nome, L, 1),
+			/* Terceiro, verifico se o Nome carregado é o NomeDaEmpresa que 
+			 * queremos. 
+			 * */
+			( NomeDaEmpresa = Nome ->
+				/* Quarto, carregamos o tempo de trabalho da pessoa na variável 
+				 * TempoDeTrabalho. 
+				 * */
+				dadoNaPosicao(TempoInicial, L, 3),
+				dadoNaPosicao(TempoFinal,L,4),
+				TempoDeTrabalho is TempoFinal - TempoInicial
+			;
+				/* Ajusto o valor padrão de TempoDeTrabalho 
+				* */
+				TempoDeTrabalho is 0
+			).
+
+	/* Faz todas as requisições ';' para o predicado privado_QualEmpresa e 
+	 *  cria um lista contendo todas as empresas.
+	 * Depois retira desta lista todos os repetidos e retorna essa lista em 
+	 *  ListaDeEmpresas.
+	 * */
+	privado_CarregaLista( ListaDeEmpresas ) :-
+		findall( Empresa, privado_QualEmpresa( Empresa ), Lista ),
+		sort(Lista, ListaDeEmpresas).
+	
+		/* Retorna o Nome da Empresa armazenada no predicado 
+		 *  informacoesProfissionais. A cada vez que se faz um requisição ';' 
+		 *  a este predicado, ele retorna a próxima empresa, até não existirem 
+		 *  mais informacoesProfissionais.
+		 * */
+		privado_QualEmpresa(NomeDaEmpresa) :-
+			/* Primeiro carrego a lista de informacoesProfissionais. 
+			* */
+			informacoesProfissionais(L),
+			/* Segundo pego o nome da empresa. 
+			* */
+			dadoNaPosicao(NomeDaEmpresa, L, 1).
+
+
 /* Questão 21 ###########################################################
  * Qual a pessoa mais citada como referência? Exiba seu currículo.
  * O algoritmo cria, inicialmente, duas listas de listas, uma com todas
