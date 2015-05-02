@@ -267,8 +267,8 @@ isHeadMember(P, L) :-
  * Dado um Lista retorna o Maior elemento dela.
  * */
 maiorElemento([X],X).
-maiorElemento([X|Xs],X) :- privado_ehMaior_Max(Xs,Y), X >= Y.
-maiorElemento([X|Xs],N) :- privado_ehMaior_Max(Xs,N), N > X.
+maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
+maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
 
 /* Esta funcao percorre uma lista removendo a primeira ocorrencia de um elemento
  * e criando uma nova lista com tal. Apos, a funcao eh aplicada recursivamente
