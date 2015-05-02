@@ -234,3 +234,37 @@ qualReferenciaMaisCitada(Referencia) :-
 		dividirLista(L,5,_,Ref).
 
 
+/* Questão 22 ##########################################################
+ * Qual a pessoa com maior quantidade de colegas referenciados (de curso
+ * ou de trabalho)? Exiba seu currículo.
+ *
+ * ***O predicado principal gera duas listas de listas com todos os
+ * ***resultados dos predicados abaixo, falta encontrar os nomes
+ * ***repetidos nestas duplas e adicionar tudo em apenas um valor só
+ * ***para obter o resultado que queremos.
+ * */
+qualPessoaMaiorQtdReferencias(Lista, Lista2) :-
+findall(Ref, privado_PegarReferenciasAcademicas2(Ref), Lista),
+findall(Ref2, privado_PegarReferenciasProfissionais2(Ref2), Lista2).
+ 
+	/* Este predicado gera duplas com o nome da pessoa e a quantidade de
+	 * referências de um dado fato de informacoesAcademicas.
+	 * */
+	privado_PegarReferenciasAcademicas2(Ref) :-
+	informacoesAcademicas(L),
+	dividirLista(L,6,L1,L2),
+	dadoNaPosicao(Nome, L1, 0),
+	length(L2, N),
+	add(N, [], Final),
+	add(Nome, Final, Ref).
+
+	/* Este predicado gera duplas com o nome da pessoa e a quantidade de
+	 * referências de um dado fato de informacoesProfissionais.
+	 * */ 
+	privado_PegarReferenciasProfissionais2(Ref) :-
+	informacoesProfissionais(L),
+	dividirLista(L,5,L1,L2),
+	dadoNaPosicao(Nome, L1, 0),
+	length(L2, N),
+	add(N, [], Final),
+	add(Nome, Final, Ref).
