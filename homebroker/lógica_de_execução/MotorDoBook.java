@@ -31,7 +31,7 @@ public final class MotorDoBook implements Runnable
     
     private final BookDeOfertas bookDeOfertas;
     
-    private final MonitorDoBook janelaDoBook;
+    private final MonitorDoBook monitorDoBook;
     
     private MotorDoBook()
     {
@@ -47,7 +47,7 @@ public final class MotorDoBook implements Runnable
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         this.bookDeOfertas = BookDeOfertas.getInstância();
-        this.janelaDoBook = MonitorDoBook.getInstance();
+        this.monitorDoBook = MonitorDoBook.getInstance();
     }
     
     /**
@@ -70,9 +70,9 @@ public final class MotorDoBook implements Runnable
      */
     private void atualizarListaDeOfertas()
     {
-        final int indice = this.janelaDoBook.getNúmeroDeOfertas();
+        final int indice = this.monitorDoBook.getNúmeroDeOfertas();
         final String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
-        this.janelaDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
+        this.monitorDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
         
         if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
         {
@@ -85,7 +85,7 @@ public final class MotorDoBook implements Runnable
      */
     public void exibirBookDeOfertas()
     {
-        this.janelaDoBook.setVisible( true );
+        this.monitorDoBook.setVisible( true );
     }
     
     /**
@@ -105,12 +105,12 @@ public final class MotorDoBook implements Runnable
                     + "\n\n this.bookDeOfertas.existemNovasOfertas( "
                     + "this.janelaDoBook.getNúmeroDeOfertas()"
                     + this.bookDeOfertas.existemNovasOfertas(
-                        this.janelaDoBook.getNúmeroDeOfertas() );
+                        this.monitorDoBook.getNúmeroDeOfertas() );
                 MotorDoBook.LOG.severe( texto );
             }
             this.bookDeOfertas.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
             
-            if( this.bookDeOfertas.existemNovasOfertas( this.janelaDoBook.getNúmeroDeOfertas() ) )
+            if( this.bookDeOfertas.existemNovasOfertas( this.monitorDoBook.getNúmeroDeOfertas() ) )
             {
                 this.atualizarListaDeOfertas();
             }
