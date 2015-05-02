@@ -26,6 +26,12 @@ pertence( D, [_|L] ) :- pertence( D, L ).
 inseridoNoFinal( D, [], [D] ).
 inseridoNoFinal( D, [X | L], [X | LM] ) :- inseridoNoFinal( D, L, LM ).
 
+/* Predicado: add(Item, List, NewList).
+ * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o dado
+ * D no inicio.
+ * */
+ add(Item, List, [Item|List]).
+
 
 /* Predicado: substituidoDoInicio(D, L, LM)
  * Definição: D é um dado, L é uma lista e LM é a lista L com
@@ -310,5 +316,9 @@ indexOf([_|Tail], Element, Index):-
   	Index is Index1+1.  % and increment the resulting index
 	
 	
-	
+/* Predicado que mapeia length para uma lista de listas, retornando uma nova lista X
+ * composta pelo comprimento de cada uma de suas listas.
+ * */
+ lengthOfListsOnList(L,X):-
+    maplist(length,L,X).
 	
