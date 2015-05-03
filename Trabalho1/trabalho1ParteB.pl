@@ -674,47 +674,121 @@ privado_TotalReferenciasA(NomePessoa, TotalRef) :-
 imprimirCurriculo(Pessoas_Interno) :-
 	
 	/* Pega a cabeça da lista como uma lista e a lista Cauda */
-	dividirLista(Pessoas_Interno, 1, CabecaLista, Cauda), 
+	dividirLista(Pessoas_Interno, 1, CabecaLista, RestoDasPessoas), 
 	
-	/* Transforma a lista CabecaLista em um elemento Nome. */
+	/* Transforma a lista CabecaLista no elemento Nome da pessoa. */
 	dadoNaPosicao(Nome, CabecaLista, 0), 
 	
-	/* Carrega as informações pessoais */
+	/* Carrega todas as imformações pessoais. */
 	informacoesPessoais(InformacoesPessoais),
-	informacoesAcademicas(InformacoesAcademicas),
-	informacoesProfissionais(InformacoesProfissionais), 
-	
-	/* Pega a data de nascimento no banco de dados. */
 	dadoNaPosicao(NomeDaPessoa, InformacoesPessoais, 0),
 	NomeDaPessoa == Nome,
-	dadoNaPosicao(DataDeNascimento, InformacoesPessoais, 1), 
 	
 	/* Imprime na tela a apresentação e o nome da pessoa */
-	write('\nO curriculo da pessoa:\n'), write(Nome),
+	dadoNaPosicao(DataDeNascimento, InformacoesPessoais, 1), 
+	write('\n Curriculo'),
+	write('\nNome: '), write(Nome),
 	
-	/* Imprime a DataDeNascimento no formato padrão do swi-prolog */
+	/* Imprime a DataDeNascimento no formato padrão do swi-prolog como 
+	 *   Dia/Mês/Ano. */
 	privado_ImprimirCurriculoNascimento(DataDeNascimento),
 	
+	/* Imprime qual a cidade da pessoa. */
+	dadoNaPosicao(CidadeDaPessoa, InformacoesPessoais, 2),
+	write('\nCidade: '), write(CidadeDaPessoa),
 	
+	/* Imprime o telefone da pessoa. */
+	qualTelefone(Nome, Telefones),
+	write('\nTelefone(s): '), write(Telefones),
 	
-	/* Encerra a consulta por currículos, pois somente existe 1 */
-	!.
+	/* Imprime um separador */
+	write('\n'),
+	
+	/* Imprime todas as formações acadêmicas de todos os cursos. */
+	findall(_, privado_ImprimirCurriculoAcademicas(Nome), _ ),
+	
+	/* Imprime todas as formações profisionais de todos os trabalhos. */
+	findall(_, privado_ImprimirCurriculoProfissionais(Nome), _ ),
+	
+	/* Chama a recursão que imprime os outros currilos */
+	imprimirCurriculo(RestoDasPessoas).
 
 
 /* Imprime a DataDeNascimento que deve estar no formato padrão do 
- *   swi-prolog date.
+ *   swi-prolog date como Dia/Mês/Ano..
  * */
 privado_ImprimirCurriculoNascimento(DataDeNascimento) :-
 	date_time_stamp(DataDeNascimento, Data), 
     convert_time(Data, Ano, Mes, Dia,_,_,_,_),
-    write('\nData de Nascimento\n'), 
+    write('\nData de Nascimento: '), 
     write(Dia), write('/'), write(Mes), write('/'), write(Ano).
 
+/* Imprime todas as formações academicas de uma pessoa.
+ * */
+privado_ImprimirCurriculoAcademicas(Nome) :-
+	/* Carrega as informações acadêmicas. */
+	informacoesAcademicas(InformacoesAcademicas),
+	dadoNaPosicao(NomeDaPessoa, InformacoesAcademicas, 0),
+	NomeDaPessoa == Nome,
+	
+	/* Imprime o nome do curso. */
+	dadoNaPosicao(Curso, InformacoesAcademicas, 1),
+	write('\nFomardo no Curso de: '), write(Curso),
+	
+	/* Imprime o Nome da Instituição. */
+	dadoNaPosicao(Instituicao, InformacoesAcademicas, 2),
+	write('\nNa instituicao: '), write(Instituicao),
+	
+	/* Imprime nome completo do orientador. */
+	dadoNaPosicao(Orientador, InformacoesAcademicas, 3),
+	write('\nNome do Orientador: '), write(Orientador),
+	
+	/* Imprime nome completo de colegas de curso. */
+	dividirLista( InformacoesAcademicas, 6, _, Referencias ),
+	write('\nCom as referencias academicas: '), write(Referencias),
+	
+	/* Imprime o ano de ingresso no curso. */
+	dadoNaPosicao(Ingresso, InformacoesAcademicas, 4),
+	write('\nIngressou no Ano de: '), write(Ingresso),
+	
+	/* Imprime o ano de termino do curso. */
+	dadoNaPosicao(Termino, InformacoesAcademicas, 5),
+	write('\nFormou-se no Ano de: '), write(Termino),
+	
+	/* Imprime um separador */
+	write('\n').
 
 
-
-
-
+/* Imprime todas as formações academicas de uma pessoa.
+ * */
+privado_ImprimirCurriculoProfissionais(Nome) :-
+	/* Carrega as informações profissionais. */
+	informacoesProfissionais(InformacoesProfissionais),
+	dadoNaPosicao(NomeDaPessoa, InformacoesProfissionais, 0),
+	NomeDaPessoa == Nome,
+	
+	/* Imprime o nome da empresa. */
+	dadoNaPosicao(Empresa, InformacoesProfissionais, 1),
+	write('\nTrabalhou da Empresa: '), write(Empresa),
+	
+	/* Imprime o nome do cargo. */
+	dadoNaPosicao(Cargo, InformacoesProfissionais, 2),
+	write('\nNo Cargo de: '), write(Cargo),
+	
+	/* Imprime nome completo de colegas de trabalhos. */
+	dividirLista( InformacoesProfissionais, 5, _, Referencias ),
+	write('\nCom as referencias profissionais: '), write(Referencias),
+	
+	/* Imprime o ano de ingresso no cargo. */
+	dadoNaPosicao(Ingresso, InformacoesProfissionais, 3),
+	write('\nContratado no Ano de: '), write(Ingresso),
+	
+	/* Imprime o ano de termino do cargo. */
+	dadoNaPosicao(Termino, InformacoesProfissionais, 4),
+	write('\nDesligado no Ano de: '), write(Termino),
+	
+	/* Imprime um separador */
+	write('\n').
 
 
 
