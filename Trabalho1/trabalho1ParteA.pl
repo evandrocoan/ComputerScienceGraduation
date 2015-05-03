@@ -4,11 +4,17 @@
 /* ############################ Programa ###################################*/
 /* Questão 1 ###############################################################
  * Qual o telefone de uma dada pessoa?
- * 
- * Primeiro testo se a pessoa é a cabeça da lista.
- * Segundo pego o telefone dela nesta lista na quarta posição.
  * */
-qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
+qualTelefone(Nome_Interno, Telefones_Interno) :-
+	/* Faz todas as requisições ';' para privado_QualTelefoneDe, e pega o 
+	 *   uma lista contendo todos os telefones de uma dada pessoa. */
+	findall( Telefone, privado_QualTelefone(Nome_Interno, Telefone), 
+														Telefones_Interno).
+	
+	/* Primeiro testo se a pessoa é a cabeça da lista. 
+	 * Segundo pego o telefone dela nesta lista na quarta posição. */
+	privado_QualTelefone(Nome, Telefone) :- 
+		informacoesPessoais([Nome, _, _, Telefone]).
 
 
 /* Questão 2 ###############################################################
