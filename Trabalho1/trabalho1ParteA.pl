@@ -126,7 +126,7 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 	 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 		 * */
 		informacoesAcademicas(Lista), 
-		isHeadMember(Nome, Lista), 
+		ehMemboDaCabeca(Nome, Lista), 
 		dividirLista(Lista, 6, _, Colegas).
 	
 		/* Primeiro, tiro a parte inicial da lista.
@@ -134,7 +134,7 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 		 * */
 		privado_QuaisDeTrabalho(Nome, Colegas) :-
 			informacoesProfissionais(Lista), 
-			isHeadMember(Nome, Lista), 
+			ehMemboDaCabeca(Nome, Lista), 
 			dividirLista(Lista, 5, _, Colegas).
 
 

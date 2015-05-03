@@ -21,29 +21,30 @@ pertence( D, [_|L] ) :- pertence( D, L ).
 
 /* Predicado: inseridoNoFinal(D, L, LM)
  * Definição: D é um dado, L é uma lista e LM é a lista L mais o dado
- * D no final.
+ *   D no final.
  * */
 inseridoNoFinal( D, [], [D] ).
 inseridoNoFinal( D, [X | L], [X | LM] ) :- inseridoNoFinal( D, L, LM ).
 
+
 /* Predicado: add(Item, List, NewList).
- * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o dado
- * D no inicio.
+ * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o 
+ *   dado D no inicio.
  * */
 adicionarNoInicio(Item, List, [Item|List]).
 
 
 /* Predicado: substituidoDoInicio(D, L, LM)
  * Definição: D é um dado, L é uma lista e LM é a lista L com
- * D no lugar do primeiro dado de L.
+ *   D no lugar do primeiro dado de L.
  * */
 substituidoDoInicio( D, [_ | L], [D | L] ).
 
 
 /* Predicado: substituidoDaPos(D, Pos, L, LM)
  * Definição: D é um dado, Pos é a posição do dado a ser substituído,
- * L é uma lista e LM é a lista L com D no lugar do dado de L que está
- * na posição Pos.
+ *   L é uma lista e LM é a lista L com D no lugar do dado de L que está
+ *   na posição Pos.
  * */
 substituidoDaPos( D, 0, [_ | L], [D | L] ).
 substituidoDaPos( D, Pos, [K|L], [K|LM] ) :-
@@ -52,8 +53,8 @@ substituidoDaPos( D, Pos, [K|L], [K|LM] ) :-
 
 /* Predicado: invertida(L, LM)
  * Definição: L é uma lista e LM é a lista L com os dados
- * invertidos (o primeriro de L será o último de LM,
- * o segundo de L será o penúltimo de LM e assim por diante).
+ *   invertidos (o primeriro de L será o último de LM,
+ *   o segundo de L será o penúltimo de LM e assim por diante).
  * */
 invertida( [], [] ).
 invertida( [D | L], LI ) :- mesmoTamanho( L, LM ),
@@ -61,7 +62,7 @@ invertida( [D | L], LI ) :- mesmoTamanho( L, LM ),
     invertida( LM, L ).
 
 /* Este predicado-gambiarra cria uma lista de variáveis do mesmo
- * tamanho de uma lista constante, se a outra for deixada variável.
+ *   tamanho de uma lista constante, se a outra for deixada variável.
  * */
 mesmoTamanho( [], [] ).
 mesmoTamanho( [_|L], [_|M] ) :- mesmoTamanho( L, M ).
@@ -69,7 +70,7 @@ mesmoTamanho( [_|L], [_|M] ) :- mesmoTamanho( L, M ).
 
 /* Predicado: temOcorrencias(D,L,O)
  * Definição: D é um dado, L é uma lista e O é um número que indica
- * quantas vezes D aparece na lista L.
+ *   quantas vezes D aparece na lista L.
  * */
 temOcorrencias( D, L, O ) :- dataset( L, Data ),
             pertence( p( D, O ), Data ).
@@ -79,8 +80,8 @@ temOcorrencias( D, L, 0 ) :- dataset( L, Data ),
 
 /* datainsert( D, Data, Idata )
  * Definição: Data é uma lista de pares (X, N), em que X é um elemento
- * e N é um número, e Idata é esta lista de pares, com o par (D, N)
- * com o N incrementado em um.
+ *   e N é um número, e Idata é esta lista de pares, com o par (D, N)
+ *   com o N incrementado em um.
  * */
 datainsert( D, [], [p(D, 1)] ).
 datainsert( D, [p(D, N) | L], [p(D, M) | L] ) :- !, M is N + 1.
@@ -90,7 +91,7 @@ datainsert( D, [K | Data], [K | Idata] ) :-
 
 /* dataset( L, Data )
  * Definição: L é uma lista de dados, Data é uma lista de pares (X, N),
- * em que X é um elemento de L e N é sua quantidade de aparições em L.
+ *   em que X é um elemento de L e N é sua quantidade de aparições em L.
  * */
 dataset( [], [] ).
 dataset( [D | L], Idata ) :- dataset( L, Data ),
@@ -99,8 +100,8 @@ dataset( [D | L], Idata ) :- dataset( L, Data ),
 
 /* Predicado: semOcorrencias(D,L,LM)
  * Definição: D é um dado, L é uma lista e LM é a lista L sem a
- * presença do dado D. A ordem dos dados em LM tem que ser a
- * mesma de L.
+ *   presença do dado D. A ordem dos dados em LM tem que ser a
+ *   mesma de L.
  * */
 semOcorrencias( _, [], [] ).
 semOcorrencias( D, [D | L], LM ) :- !, semOcorrencias( D, L, LM ).
@@ -109,7 +110,7 @@ semOcorrencias( D, [K | L], [K | LM] ) :- semOcorrencias( D, L, LM ).
 
 /* Predicado: concatenadas(L1, L2, LC)
  * Definição: L1 e L2 são listas e LC é a lista contendo todos os dados
- * de L1 seguidos de todos os dados de L2.
+ *   de L1 seguidos de todos os dados de L2.
  * */
 concatenadas( [], L, L ).
 concatenadas( [D | L1], L2, [D | LC] ) :- concatenadas( L1, L2, LC ).
@@ -132,16 +133,16 @@ privado_ehMaior_Max( X, X, X ).
 
 /* Predicado: primeiroEUltimo(L, LPU)
  * Definição: L é uma lista e LPU é uma lista contendo o primeiro
- * e o último dados de L.
+ *   e o último dados de L.
  * */
 primeiroEUltimo( L, [P, U] ) :- primeiro( L, P ), ultimo( L, U ).
 
 
 /* Predicado: nivelada(L,LN)
  * Definição: L é uma lista que pode conter outras listas e LN é uma
- * lista formada pelos dados de L com uma diferença: quando um dado de
- * L for uma lista então os dados desta lista são incluídos na lista
- * LN.
+ *   lista formada pelos dados de L com uma diferença: quando um dado de
+ *   L for uma lista então os dados desta lista são incluídos na lista
+ *   LN.
  *
  * Exemplo: ? nivelada([a,b, [c, d], e], LN).
  * LN = [a, b, c, d, e]
@@ -165,17 +166,9 @@ ehLista( [] ).
 ehLista( [_ | L] ) :- ehLista( L ).
 
 
-/* Predicado: invertida2(L,LI)
- * Definição: L é uma lista e LI é uma lista formada pelos membros de
- * L só que na ordem inversa. A implementação não deve usar o predicado 
- * concatenadas.
- * */
-% O predicado invertida( L, LI ) atende às especificações.
-
-
 /* Predicado: impares(L, LI)
  * Definição: L é uma lista e LI é uma lista que contém os dados de L
- * nas posições ímpares.
+ *   nas posições ímpares.
  * */
 impares( [], [] ).
 impares( [_ | L], LN ) :- pares( L, LN ).
@@ -190,7 +183,7 @@ pares( [D | L], [D | LN] ) :- impares( L, LN ).
 
 /* Predicado: maioresQue(L1, Limite, L2)
  * Definição: L1 é uma lista de números, L2 é uma lista que contém
- * dados de L1 que são maiores que Limite.
+ *   dados de L1 que são maiores que Limite.
  * */
 maioresQue( [], _, [] ).
 maioresQue( [D | L1], Limite, [D | L2] ) :- D > Limite, !,
@@ -206,7 +199,7 @@ monteLista( D, M, [D | L] ) :- N is M-1, monteLista( D, N, L ).
 
 
 /* Verifica o comprimento de uma lista e imprime os passos intermediários
- * da contagem na tela em uma nova linha cada. 
+ *   da contagem na tela em uma nova linha cada. 
  * */
 comprimentoDaLista([],0).
 comprimentoDaLista([_|L],N) :- 
@@ -217,8 +210,8 @@ comprimentoDaLista([_|L],N) :-
 
 
 /* Dada uma posição K, dadoDeInfoNaPosicao(Posicao, dadoDeRetorno), 
- * retorna um elemento em uma dada posição na lista definida no predicado 
- * informacoesPessoais([...]) 
+ *   retorna um elemento em uma dada posição na lista definida no predicado 
+ *   informacoesPessoais([...]) 
  * */
 dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
     informacoesPessoais(L), 
@@ -227,7 +220,7 @@ dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :-
 
 /* dadoNaPosicao(Dado, Lista, Posicao).
  * Dada uma posição Posicao retorna um elemento Dado em uma dada posição na 
- * lista Lista.
+ *   lista Lista.
  * */
 dadoNaPosicao(X, [X|_], 0).
 dadoNaPosicao(X,[_|L],K) :- 
@@ -248,7 +241,7 @@ somaDosElementos([CabecaDaLista|Lista], Soma0, Soma) :-
 
 /* Recebe os parametros, dividirLista(L,N,L1,L2). 
  * Uma lista L e cria duas listas, L1 e L2, onde a primeira contém N elementos 
- * e a segunda o restante.
+ *   e a segunda o restante.
  * */
 dividirLista(L,0,[],L).
 dividirLista([X|Xs],N,[X|Ys],Zs) :- 
@@ -257,11 +250,13 @@ dividirLista([X|Xs],N,[X|Ys],Zs) :-
 	dividirLista(Xs,N1,Ys,Zs).
 
 
-/* Verifica se uma element P é membro da cabeça da lista. Faz isso para garantir 
- * que não seja retornado verdadeiro caso P seja encontrado no final da lista.
+/* Verifica se uma element P é membro da cabeça da lista. Faz isso para  
+ *   garantir que não seja retornado verdadeiro caso P seja encontrado no final 
+ *   da lista.
  * */
-isHeadMember(P, L) :- 
+ehMemboDaCabeca(P, L) :- 
 	L = [P|_].
+
 
 /* maiorElemento( Lista, Maior )
  * Dado um Lista retorna o Maior elemento dela.
@@ -270,55 +265,58 @@ maiorElemento([X],X).
 maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
 maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
 
-/* Esta funcao percorre uma lista removendo a primeira ocorrencia de um elemento
- * e criando uma nova lista com tal. Apos, a funcao eh aplicada recursivamente
- * nestas novas listas ateh que se obtenha uma lista vazia.
- * A primeira clausula de listMax é o caso base, que checa se a lista eh vazia.
- * A segunda clausula de listMax é a clausula iterativa que checa se esta eh a
- * primeira vez que vemos tal elemento; a lista de argumentos ja vistos eh mantida
- * no segundo argumento deste predicado; o terceiro argumento coleta os remanescentes(
- * que nao foram vistos pela primeira vez).
- */	
-listMax(L, M):-
-listMax(L, [], [], M).
 
-listMax([], Seen, MMax, Max):-
+/* 
+ * Esta funcao percorre uma lista removendo a primeira ocorrencia de um 
+ *   elemento e criando uma nova lista com tal. Apos, a funcao eh aplicada 
+ *   recursivamente nestas novas listas ateh que se obtenha uma lista vazia.
+ * A primeira clausula de listaMaxima é o caso base, que checa se a lista eh vazia.
+ * A segunda clausula de listaMaxima é a clausula iterativa que checa se esta eh a
+ *   primeira vez que vemos tal elemento; a lista de argumentos ja vistos eh 
+ *   mantida no segundo argumento deste predicado; o terceiro argumento coleta 
+ *   os remanescentes(que nao foram vistos pela primeira vez).
+ */	
+listaMaxima(L, M):-
+listaMaxima(L, [], [], M).
+
+listaMaxima([], Seen, MMax, Max):-
 	MMax = [] -> 
 		Max = Seen 
 	; 
-		listMax(MMax, [], [], Max).
+		listaMaxima(MMax, [], [], Max).
 
-listMax([H|T], Seen, MMax, Max):-
+listaMaxima([H|T], Seen, MMax, Max):-
   	( member(H, Seen) ->
-	    listMax(T, Seen, [H|MMax], Max) 
+	    listaMaxima(T, Seen, [H|MMax], Max) 
 	;
-	    listMax(T, [H|Seen], MMax, Max)
+	    listaMaxima(T, [H|Seen], MMax, Max)
     ).
 
 
-/* predicado: posicaoDoMaior(Lista, Posicao)
+/* Predicado: posicaoDoMaior(Lista, Posicao)
  * Onde Lista é uma lista de números
- * e Posicao será a posição do maior elemento.
+ *   e Posicao será a posição do maior elemento.
  * */
 posicaoDoMaior(Lista_Interno, Posicao_Interno) :- 
 	/* Calcula o maior elemento */
 	max_list(Lista_Interno, Maximo),
 	/* Calcula a posicao do maior elemento */
-	indexOf( Lista_Interno, Maximo, Posicao_Interno ).
+	indiceDoElemento( Lista_Interno, Maximo, Posicao_Interno ).
 
-/* predicado(Lista, Elemento, Indice).
+
+/* Predicado(Lista, Elemento, Indice).
  * Encontra todas as ocorrências de um Elemento em uma Lista e retorna na 
- * variável Indice.
+ *   variável Indice.
  * */
-indexOf([Element|_], Element, 0). % We found the element
-indexOf([_|Tail], Element, Index):-
-  	indexOf(Tail, Element, Index1), % Check in the tail of the list
-  	Index is Index1+1.  % and increment the resulting index
-	
-	
-/* Predicado que mapeia length para uma lista de listas, retornando uma nova lista X
- * composta pelo comprimento de cada uma de suas listas.
+indiceDoElemento([Elemento|_], Elemento, 0). % Emcontramos o elemento
+indiceDoElemento([_|Cauda], Elemento, Indice):-
+  	indiceDoElemento(Cauda, Elemento, Indice1), % Checa na cauda da lista
+  	Indice is Indice1 + 1.  % e incrementa o indice resultante.
+
+
+/* Predicado que mapeia length para uma lista de listas, retornando uma nova 
+ *   lista X composta pelo comprimento de cada uma de suas listas.
  * */
- lengthOfListsOnList(L,X):-
+comprimentoDeListasComoLista(L,X):-
     maplist(length,L,X).
 	

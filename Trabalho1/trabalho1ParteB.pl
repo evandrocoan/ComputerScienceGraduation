@@ -57,12 +57,12 @@ qualCursoMaisLongoDe(Nome, CursoLista) :-
  * 
  * Primeiro pego a instituição de cada pessoa do banco de dados e crio
  *   uma nova lista.
- * Segundo, aplico o predicado listMax que retorna o elemento da lista
+ * Segundo, aplico o predicado listaMaxima que retorna o elemento da lista
  *   com o maior número de ocorrências.
  * */
 qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
 	findall(Instit, privado_criarListaDeInstituicoes(Instit), Inst),
-	listMax(Inst,Instituicao).
+	listaMaxima(Inst,Instituicao).
 	
 	privado_criarListaDeInstituicoes(Instituicao) :-
 	informacoesAcademicas(L),
@@ -238,10 +238,10 @@ maisTempoEmUmCargo(Pessoas, Cargos) :-
 	 *   aconteder caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
 	 *   maior tempo em um cargo.*/
 	findall(Pessoa, privado_MaisTempoEmUmCargo(Pessoa, _), Pessoas),
-	findall(Cargo, privado_MaisTempoEmUmCargo(_, Cargo), Cargos).
+	findall(Cargo, privado_MaisTempoEmUmCargo(_, Cargo), Cargos),
 	/* 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um 
 	 *   cargo. */
-	/*imprimirCurriculo(Pessoas).*/
+	imprimirCurriculo(Pessoas).
 
 privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	/* 1) Faço uma lista de pessoas. */
@@ -487,7 +487,7 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
  *   profissionais.
  * Após, cada lista é transformada em uma lista simples usando append,
  *   e então são concatenadas em apenas uma única lista.
- * Por fim, esta lista é passada pelo predicado listmax que nos retorna
+ * Por fim, esta lista é passada pelo predicado listaMaxima que nos retorna
  *   o elemento de maior ocorrência.
  * */
 qualReferenciaMaisCitada(Referencia) :-
@@ -496,7 +496,7 @@ qualReferenciaMaisCitada(Referencia) :-
 	append(Lista, ListaRef),
 	append(Lista2, ListaRef2),
 	concatenadas(ListaRef, ListaRef2, ListaRefCompleta),
-	listMax(ListaRefCompleta,Referencia).
+	listaMaxima(ListaRefCompleta,Referencia).
 
 	/* Este predicado divide a lista de 'informacoesAcademicas' em duas
 	 * listas, onde uma delas é uma lista de Referencias. 
@@ -531,139 +531,129 @@ qualPessoaComMaiorQtdReferencias(Resposta, Quantidade) :-
 	privado_CarregarReferencias(Pessoas),
 	nb_getval(qtdReferencias, ListaRef),
 	maiorElemento(ListaRef, Quantidade),
-	indexOf(ListaRef, Quantidade, I),
+	indiceDoElemento(ListaRef, Quantidade, I),
 	dadoNaPosicao(Resposta, Pessoas, I).
- 
-/* Predicado que cria uma lista com todas as pessoas do banco de dados.
- */
-privado_MakeList(Pessoas) :-
-	findall(Nome, privado_Pessoas(Nome), Lista),
-	sort(Lista, Pessoas).
-		
-/* Predicado auxiliar para privado_MakeList(Pessoas); este adquire o
- *   nome da pessoa.
- */
-privado_Pessoas(Nomes) :-
-	informacoesAcademicas(L),
-	dadoNaPosicao(Nomes, L, 0).
-	
-/* Pega a lista Referencias_Interno, e chama o predicado 
- *   privado_CarregarReferencias.
- * */
-privado_CarregarReferencias(Referencias_Interno) :-
-	/* Chama o predicado que realizada a recursão.
-	 * */
-	privado_CarregarReferencias(Referencias_Interno, []).
-	 
-	/* Salva a lista qtdReferencias.
-	  * */
-	privado_CarregarReferencias([], Cauda) :-
-		nb_setval(qtdReferencias, Cauda),
-		!.
-	
-/* Predicado que criará a lista com a quantidade de referencias de cada
- *   pessoa.
- * */
-privado_CarregarReferencias(Lista, Lista2) :-
-	/* Divido a lista em cabeça(contendo o nome da pessoa) e cauda(resto).
-	 * */
-	dividirLista(Lista, 1, CabecaLista, Cauda),
-	/* Pego o nome da pessoa.
-	 * */
-	dadoNaPosicao(Cabeca, CabecaLista, 0),
-	/* Calculo o seu total de referências profissionais.
-	 */
-	privado_TotalReferenciasP(Cabeca, Aux1),
-	/* Calculo o seu total de referências academicas.
-	 * */
-	privado_TotalReferenciasA(Cabeca, Aux2),
-	/* Calculo o seu total de referências.
-	 * */
-	Ref is Aux1 + Aux2,
-	/* Insiro na lista de referências.
-	 * */
-	inseridoNoFinal(Ref, Lista2, ListaRef),
-	/* Realizo a recursão.
-	 * */
-	privado_CarregarReferencias(Cauda, ListaRef).
-	
-/* Predicado que calcula o total de referencias profissionais de uma dada
- *   pessoa.
- * */	
-privado_TotalReferenciasP(NomePessoa, TotalRef) :-
-	/* Faz todas as requisições ';' para o predicado 
-	 *   privado_QtdReferenciasP e cria uma lista de TotalRef.
-	 * */
-	findall(Qtd, privado_QtdReferenciasP(NomePessoa, Qtd), List),
-	somaDosElementos(List, TotalRef).
-	
-/* Retorna a quantidade de referências profissionais de uma pessoa do
- *   banco de dados em informacoesProfissionais. 
- * A cada vez que se faz um requisição ';' a este predicado, ele 
- *   retorna a quantidade de referências caso Pessoa(nome) seja igual
- *   ao Nome encontrado em informacoesProfissionais, caso não seja, é 
- *   retornado 0 em QtdRef
- * */
- privado_QtdReferenciasP(Pessoa, QtdRef) :-
-	/* Primeiro carrego uma lista de informacoesProfissionais.
-	 * */
-	informacoesProfissionais(L),
-	/* Segundo, pego um Nome.
-	 * */
-	dadoNaPosicao(Nome, L, 0),
-	/* Terceiro, confiro se Pessoa e Nome são iguais.
-	 * */
-	(Pessoa = Nome ->
-		/* Caso sim, divido a lista para pegar apenas suas referências e 
-		 *   calculo o seu tamanho.
-		 * */
-		dividirLista(L,5,_,L2),
-		length(L2,N),
-		QtdRef is N
-	;
-		/* Caso não, retorno 0.
-		 * */
-		QtdRef is 0
-	).
-	
-/* Predicado que calcula o total de referencias academicas de uma dada
- *   pessoa.
- * */
-privado_TotalReferenciasA(NomePessoa, TotalRef) :-
-	/* Faz todas as requisições ';' para o predicado 
-	 *   privado_QtdReferenciasA e cria uma lista de TotalRef.
-	 * */
-	findall(Qtd, privado_QtdReferenciasA(NomePessoa, Qtd), List),
-	somaDosElementos(List, TotalRef).
 
-/* Retorna a quantidade de referências acadêmicas de uma pessoa do
- *   banco de dados em informacoesAcademicas. 
- * A cada vez que se faz um requisição ';' a este predicado, ele 
- *   retorna a quantidade de referências caso Pessoa(nome) seja igual
- *   ao Nome encontrado em informacoesAcademicas, caso não seja, é 
- *   retornado 0 em QtdRef
- * */	
- privado_QtdReferenciasA(Pessoa, QtdRef) :-
-	/* Primeiro carrego uma lista de informacoesAcademicas.
-	 * */
-	informacoesAcademicas(L),
-	/* Segundo, pego um Nome.
-	 * */
-	dadoNaPosicao(Nome, L, 0),
-	/* Terceiro, confiro se Pessoa e Nome são iguais.
-	 * */
-	(Pessoa = Nome ->
-		/* Caso sim, divido a lista para pegar apenas suas referências e calculo
-		 *   o seu tamanho.
-		 * */
-		dividirLista(L,6,_,L2),
-		length(L2,N),
-		QtdRef is N
-	;
-		/* Caso não, retorno 0.
-		 * */
-		QtdRef is 0
-	).
+	/* Predicado que cria uma lista com todas as pessoas do banco de dados. */
+	privado_MakeList(Pessoas) :-
+		findall(Nome, privado_Pessoas(Nome), Lista),
+		sort(Lista, Pessoas).
+			
+	/* Predicado auxiliar para privado_MakeList(Pessoas); este adquire o
+	 *   nome da pessoa. */
+	privado_Pessoas(Nomes) :-
+		informacoesAcademicas(L),
+		dadoNaPosicao(Nomes, L, 0).
+		
+	/* Pega a lista Referencias_Interno, e chama o predicado 
+	 *   privado_CarregarReferencias. */
+	privado_CarregarReferencias(Referencias_Interno) :-
+		
+		/* Chama o predicado que realizada a recursão. */
+		privado_CarregarReferencias(Referencias_Interno, []).
+		 
+		/* Salva a lista qtdReferencias. */
+		privado_CarregarReferencias([], Cauda) :-
+			nb_setval(qtdReferencias, Cauda),
+			!.
+		
+	/* Predicado que criará a lista com a quantidade de referencias de cada
+	 *   pessoa. */
+	privado_CarregarReferencias(Lista, Lista2) :-
+		
+		/* Divido a lista em cabeça(contendo o nome da pessoa) e 
+		 *   cauda(resto). */
+		dividirLista(Lista, 1, CabecaLista, Cauda),
+		
+		/* Pego o nome da pessoa. */
+		dadoNaPosicao(Cabeca, CabecaLista, 0),
+		
+		/* Calculo o seu total de referências profissionais. */
+		privado_TotalReferenciasP(Cabeca, Aux1),
+		
+		/* Calculo o seu total de referências academicas. */
+		privado_TotalReferenciasA(Cabeca, Aux2),
+		
+		/* Calculo o seu total de referências. */
+		Ref is Aux1 + Aux2,
+		
+		/* Insiro na lista de referências. */
+		inseridoNoFinal(Ref, Lista2, ListaRef),
+		
+		/* Realizo a recursão. */
+		privado_CarregarReferencias(Cauda, ListaRef).
+		
+	/* Predicado que calcula o total de referencias profissionais de uma dada
+	 *   pessoa.
+	 * */	
+	privado_TotalReferenciasP(NomePessoa, TotalRef) :-
+		
+		/* Faz todas as requisições ';' para o predicado 
+		 *   privado_QtdReferenciasP e cria uma lista de TotalRef. */
+		findall(Qtd, privado_QtdReferenciasP(NomePessoa, Qtd), List),
+		somaDosElementos(List, TotalRef).
+		
+	/* Retorna a quantidade de referências profissionais de uma pessoa do
+	 *   banco de dados em informacoesProfissionais. 
+	 * A cada vez que se faz um requisição ';' a este predicado, ele 
+	 *   retorna a quantidade de referências caso Pessoa(nome) seja igual
+	 *   ao Nome encontrado em informacoesProfissionais, caso não seja, é 
+	 *   retornado 0 em QtdRef */
+	privado_QtdReferenciasP(Pessoa, QtdRef) :-
+		
+		/* Primeiro carrego uma lista de informacoesProfissionais. */
+		informacoesProfissionais(L),
+		
+		/* Segundo, pego um Nome. */
+		dadoNaPosicao(Nome, L, 0),
+		
+		/* Terceiro, confiro se Pessoa e Nome são iguais. */
+		(Pessoa = Nome ->
+		
+			/* Caso sim, divido a lista para pegar apenas suas referências e 
+			 *   calculo o seu tamanho. */
+			dividirLista(L,5,_,L2),
+			length(L2,N),
+			QtdRef is N
+		;
+			/* Caso não, retorno 0. */
+			QtdRef is 0
+		).
+		
+	/* Predicado que calcula o total de referencias academicas de uma dada
+	 *   pessoa. */
+	privado_TotalReferenciasA(NomePessoa, TotalRef) :-
+		/* Faz todas as requisições ';' para o predicado 
+		 *   privado_QtdReferenciasA e cria uma lista de TotalRef. */
+		findall(Qtd, privado_QtdReferenciasA(NomePessoa, Qtd), List),
+		somaDosElementos(List, TotalRef).
+	
+	/* Retorna a quantidade de referências acadêmicas de uma pessoa do
+	 *   banco de dados em informacoesAcademicas. 
+	 * A cada vez que se faz um requisição ';' a este predicado, ele 
+	 *   retorna a quantidade de referências caso Pessoa(nome) seja igual
+	 *   ao Nome encontrado em informacoesAcademicas, caso não seja, é 
+	 *   retornado 0 em QtdRef */	
+	privado_QtdReferenciasA(Pessoa, QtdRef) :-
+		
+		/* Primeiro carrego uma lista de informacoesAcademicas. */
+		informacoesAcademicas(L),
+		
+		/* Segundo, pego um Nome. */
+		dadoNaPosicao(Nome, L, 0),
+		
+		/* Terceiro, confiro se Pessoa e Nome são iguais. */
+		(Pessoa = Nome ->
+		
+			/* Caso sim, divido a lista para pegar apenas suas referências e 
+			 *   calculo o seu tamanho. */
+			dividirLista(L,6,_,L2),
+			length(L2,N),
+			QtdRef is N
+		;
+			/* Caso não, retorno 0. */
+			QtdRef is 0
+		).
 
 
 /* ###########################################################################
@@ -721,7 +711,6 @@ imprimirCurriculo(Pessoas_Interno) :-
 		
 		/* Chama a recursão que imprime os outros currilos */
 		privado_ImprimirCurriculo(RestoDasPessoas, NovoCurriculoNumero).
-	
 	
 	/* Imprime a DataDeNascimento que deve estar no formato padrão do 
 	 *   swi-prolog date como Dia/Mês/Ano..
@@ -798,11 +787,4 @@ imprimirCurriculo(Pessoas_Interno) :-
 		/* Imprime o ano de termino do cargo. */
 		dadoNaPosicao(Termino, InformacoesProfissionais, 4),
 		write('\nDesligado no Ano de: '), write(Termino).
-
-
-
-
-
-
-
 
