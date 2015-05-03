@@ -128,7 +128,7 @@ informacoesProfissionais( ['Juca Juquinha', 'Brasil Telecom',
 informacoesProfissionais( ['Storn Front', 'Microsoft', 
 'Assistente Sexual', 2009, 2015 ] ).
 informacoesProfissionais( ['Storn Front', 'Google', 
-'Programador Senior', 1998, 2000, 'Marcelo Cabrera' ] ).
+'Programador Senior', 2001, 2008, 'Marcelo Cabrera' ] ).
 informacoesProfissionais( ['Storn Front', 'Apple', 
 'Puxa Saco', 2001, 2008, 'Michael Jackson', 'Britney Spears' ] ).
 
@@ -160,12 +160,14 @@ informacoesProfissionais( ['Lucas Troll', 'Google',
 /* Robson Troller
  * */
 informacoesProfissionais( ['Robson Troller', 'Google', 
-'Exorcista', 2000, 2015, 'Homer Simpson', 'Marge Simpson' ] ).
+'Exorcista', 1979, 2015, 'Homer Simpson', 'Marge Simpson' ] ).
 
 /* Stiven Stronger
  * */
 informacoesProfissionais( ['Stiven Stronger', 'TIM', 
-'Re-exorcista', 1999, 2011, 'Simpser Simpson', 'Bart Simpser' ] ).
+'Re-exorcista', 1980, 2015, 'Simpser Simpson', 'Bart Simpser' ] ).
+informacoesProfissionais( ['Stiven Stronger', 'Google', 
+'Repuxador de Saco', 2015, 2040, 'Demi Lovato', 'Avicii' ] ).
 
 /* Roger Rocker
  * */

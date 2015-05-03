@@ -4,11 +4,17 @@
 /* ############################ Programa ###################################*/
 /* Questão 1 ###############################################################
  * Qual o telefone de uma dada pessoa?
- * 
- * Primeiro testo se a pessoa é a cabeça da lista.
- * Segundo pego o telefone dela nesta lista na quarta posição.
  * */
-qualTelefoneDe(Nome,Telefone) :- informacoesPessoais([Nome, _, _, Telefone]).
+qualTelefone(Nome_Interno, Telefones_Interno) :-
+	/* Faz todas as requisições ';' para privado_QualTelefoneDe, e pega o 
+	 *   uma lista contendo todos os telefones de uma dada pessoa. */
+	findall( Telefone, privado_QualTelefone(Nome_Interno, Telefone), 
+														Telefones_Interno).
+	
+	/* Primeiro testo se a pessoa é a cabeça da lista. 
+	 * Segundo pego o telefone dela nesta lista na quarta posição. */
+	privado_QualTelefone(Nome, Telefone) :- 
+		informacoesPessoais([Nome, _, _, Telefone]).
 
 
 /* Questão 2 ###############################################################
@@ -30,9 +36,9 @@ quemMoraEm(Cidade, Nomes) :-
  * Terceiro, calcula sua idade.
  * */
 qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa,[_|L],1),
+	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa, L, 0),
 	NomeDaPessoa == Nome,
-	dadoNaPosicao(DataDeNascimento,[_|L],2),
+	dadoNaPosicao(DataDeNascimento, L, 1),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
 	/* Primeiro, converto a data de aniversário Data para um TimeStamp 
@@ -63,10 +69,10 @@ quaisComMaisDe30Anos(Nomes) :-
 	 * */
 	privado_QuaisComMaisDe30Anos(Nome) :-
 		informacoesPessoais(L),
-		dadoNaPosicao(DataDeNascimento,[_|L],2),
+		dadoNaPosicao(DataDeNascimento, L, 1),
 		privado_CalcularIdade(DataDeNascimento, Idade),
 		Idade > 30,
-		dadoNaPosicao(Nome,[_|L],1).
+		dadoNaPosicao(Nome, L, 0).
 
 
 /* Questão 5 ###############################################################
@@ -97,9 +103,9 @@ quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
 	 * */
 	privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(NomeDaPessoa, [_|L], 1),
+		dadoNaPosicao(NomeDaPessoa, L, 0),
 		NomeDaPessoa == Nome,
-		dadoNaPosicao(Orientadores, [_|L], 4).
+		dadoNaPosicao(Orientadores, L, 3).
 
 
 /* Questão 7 ###############################################################
@@ -120,7 +126,7 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 	 	 * Segundo, retorno o restante da lista, isto é, o nome dos colegas.
 		 * */
 		informacoesAcademicas(Lista), 
-		isHeadMember(Nome, Lista), 
+		ehMemboDaCabeca(Nome, Lista), 
 		dividirLista(Lista, 6, _, Colegas).
 	
 		/* Primeiro, tiro a parte inicial da lista.
@@ -128,7 +134,7 @@ quaisColegasDe(Nome, ColegasDaPessoaNivelada) :-
 		 * */
 		privado_QuaisDeTrabalho(Nome, Colegas) :-
 			informacoesProfissionais(Lista), 
-			isHeadMember(Nome, Lista), 
+			ehMemboDaCabeca(Nome, Lista), 
 			dividirLista(Lista, 5, _, Colegas).
 
 
@@ -149,7 +155,7 @@ quaisNaoTemReferencia(Nomes) :-
 	 * */
 	privado_QuaisNaoTemReferencia(Nomes) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(Nomes, [_|L], 1),
+		dadoNaPosicao(Nomes, L, 0),
 		privado_QuaisColegasDe1(Nomes, Colegas),
 		length(Colegas, Tamanho),
 		Tamanho == 0.
@@ -208,7 +214,7 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
 	 * */
 	privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
+		dadoNaPosicao(InstituicaoDaPessoa, L, 2),
 		InstituicaoDaPessoa == Instituicao,
 		Quantidade is 1.
 
@@ -232,11 +238,11 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
 	 * */
 	privado_QuemComMaisDe5Anos(Nome) :- 
 		informacoesProfissionais(L),
-		dadoNaPosicao(DataInicial,[_|L],4),
-		dadoNaPosicao(DataFinal,[_|L],5),
+		dadoNaPosicao(DataInicial, L, 3),
+		dadoNaPosicao(DataFinal,L, 4),
 		TempoDeExperiencia is DataFinal - DataInicial,
 		TempoDeExperiencia > 5,
-		dadoNaPosicao(Nome,[_|L],1).
+		dadoNaPosicao(Nome, L, 0).
 
 
 /* Questão 12 ################################################################
@@ -250,10 +256,10 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
  * */
 tempoDeEstudoEmCadaCurso(NomeDaPessoa, TempoDeEstudo) :-
 	informacoesAcademicas(L),
-	dadoNaPosicao(Nome, [_|L], 1),
+	dadoNaPosicao(Nome, L, 0),
 	Nome == NomeDaPessoa,
-	dadoNaPosicao(DataInicial,[_|L],5),
-	dadoNaPosicao(DataFinal,[_|L],6),
+	dadoNaPosicao(DataInicial, L, 4),
+	dadoNaPosicao(DataFinal, L, 5),
 	TempoDeEstudo is DataFinal - DataInicial.
 
 
