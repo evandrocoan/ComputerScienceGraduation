@@ -31,13 +31,13 @@ quemEstudouNaInstituicao(Instituicao, Nomes) :-
  * Cria uma lista com os cursos dessa dada pessoa.
  * Pega a retorna o curso que se encontra na posição de maior.
  * */
-qualCursoMaisLongoDe( Nome, CursoLista ) :-
+qualCursoMaisLongoDe(Nome, CursoLista) :-
 	/* Faz todas as requisições, e cria uma lista com os cursos de maior 
 	 *   duração, isto é, os cursos com o mesmo tempo de duração.
 	 * */
-	findall(Curso, privado_QualCursoMaisLongoDe( Nome, Curso ), CursoLista).
+	findall(Curso, privado_QualCursoMaisLongoDe(Nome, Curso), CursoLista).
 	
-	privado_QualCursoMaisLongoDe( Nome, Curso ) :- 
+	privado_QualCursoMaisLongoDe(Nome, Curso) :- 
 		/* Pega os tempos dos cursos e coloca na ListaTempos.
 		 * */
 	    findall(Curso, tempoDeEstudoEmCadaCurso(Nome, Curso), ListaTempos),
@@ -90,7 +90,7 @@ qualInstituicaoEnsinoComMaisPessoas(Instituicao) :-
  *   nome da empresa 1 está na posição 1 da lista NomesDasEmpresas.
  * */
 maiorTempoDeServico(Empresas) :-
-	findall(Empresa, maiorTempoDeServicoAll(Empresa), Empresas ).
+	findall(Empresa, maiorTempoDeServicoAll(Empresa), Empresas).
 
 maiorTempoDeServicoAll(Empresa) :-
 	/* Passo 1, colocar o nome de todas as empresas em uma lista ordenada
@@ -144,7 +144,7 @@ maiorTempoDeServicoAll(Empresa) :-
 	
 	/* Dado o NomeDaEmpresa, calculo o tempo total.
 	 * */
-	privado_TempoTotalDeTrabalho( NomeDaEmpresa, TempoTotal ) :-
+	privado_TempoTotalDeTrabalho(NomeDaEmpresa, TempoTotal) :-
 		/* Faz todas as requisições ';' para o predicado 
 		 *   privado_QualTempoDeTrabalho e cria uma lista de TemposTrabalho.
 		 * */
@@ -172,7 +172,7 @@ maiorTempoDeServicoAll(Empresa) :-
 			/* Terceiro, verifico se o Nome carregado é o NomeDaEmpresa que 
 			 * queremos. 
 			 * */
-			( NomeDaEmpresa = Nome ->
+			(NomeDaEmpresa = Nome ->
 				/* Quarto, carregamos o tempo de trabalho da pessoa na variável 
 				 * TempoDeTrabalho. 
 				 * */
@@ -187,10 +187,10 @@ maiorTempoDeServicoAll(Empresa) :-
 
 	/* Cria um lista contendo todas as empresas.
 	 * */
-	privado_CarregaLista( ListaDeEmpresas ) :-
+	privado_CarregaLista(ListaDeEmpresas) :-
 		/* Faz todas as requisições ';' para o predicado privado_QualEmpresa.
 		 * */
-		findall( Empresa, privado_QualEmpresa( Empresa ), Lista ),
+		findall(Empresa, privado_QualEmpresa(Empresa), Lista),
 		/* Retira desta lista todos os repetidos e retorna essa lista em 
 		 *   ListaDeEmpresas.
 		 * */
@@ -237,8 +237,8 @@ maisTempoEmUmCargo(Pessoas, Cargos) :-
 	/*6) Refaço a consulta e crio uma lista de Pessoas e Cargos. Isso tem que 
 	 *   aconteder caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
 	 *   maior tempo em um cargo.*/
-	findall( Pessoa, privado_MaisTempoEmUmCargo(Pessoa, _), Pessoas ),
-	findall( Cargo, privado_MaisTempoEmUmCargo( _, Cargo), Cargos ).
+	findall(Pessoa, privado_MaisTempoEmUmCargo(Pessoa, _), Pessoas),
+	findall(Cargo, privado_MaisTempoEmUmCargo(_, Cargo), Cargos).
 	/* 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um 
 	 *   cargo. */
 	/*imprimirCurriculo(Pessoas).*/
@@ -250,8 +250,8 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	/* 4) Com todos os NomesDasPessoas, crio a lista NomesDosMaioresCargos de 
 	 *   todas as pessoas e outra lista TemposDosMaioresCargos de todas as 
 	 *   pessoas. */
-	privado_CarregarMaioresCargos( NomesDasPessoas, NomesDosMaioresCargos, 
-													TemposDosMaioresCargos ),
+	privado_CarregarMaioresCargos(NomesDasPessoas, NomesDosMaioresCargos, 
+													TemposDosMaioresCargos),
 													
 	/* 5) Descubro qual a posição da pessoa que possui o maior cargo e retorno 
 	 *   o nome do cargo na posição de maior na lista de NomesDosMaioresCargos
@@ -265,11 +265,11 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	/* Recebendo todos os NomesDasPessoas como uma lista, cria a lista 
 	 *   NomesDosMaioresCargos de todas as pessoas e outra lista 
 	 *   TemposDosMaioresCargos de todas as pessoas. */
-	privado_CarregarMaioresCargos( NomesDasPessoas, NomesDosMaioresCargos, 
-												TemposDosMaioresCargos ) :-
+	privado_CarregarMaioresCargos(NomesDasPessoas, NomesDosMaioresCargos, 
+												TemposDosMaioresCargos) :-
 		/* Chama o predicado que realizada a recursão.*/
 		privado_CarregarMaioresCargos(NomesDasPessoas, [], [], 
-							NomesDosMaioresCargos, TemposDosMaioresCargos ).
+							NomesDosMaioresCargos, TemposDosMaioresCargos).
 
 	/* Retorna a lista contendo o resultado acumulado na recursão.
 	 * */ 
@@ -281,74 +281,76 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 		copy_term(TemposDosMaioresCargos, TemposDosMaioresCargos_Interno).
 	
 	/* Corpo principal da recursão que interege com todos os elementos de 
-	 *   NomesDosCargos_Interno, e coloca o resultado da iteração na 
-	 *   TemposDosCargos_Interno.
+	 *   NomesDasPessoas_Interno, e coloca o resultado da iteração na 
+	 *   ListaEntradaCargo e ListaEntradaTempo.
 	 * */
 	privado_CarregarMaioresCargos(NomesDasPessoas_Interno, 
 	ListaEntradaCargo, ListaEntradaTempo, NomesDosMaioresCargos_Interno, 
 											TemposDosMaioresCargos_Interno) :-
 		/* Pega o primeiro nome da lista NomesDasPessoas_Interno e coloca 
 		 *   o restante da lista em Cauda. */
-		dividirLista(NomesDasPessoas_Interno, 1, CabecaLista, Cauda), 
+		dividirLista(NomesDasPessoas_Interno, 1, CabecaLista, RestoDaLista), 
 		
 		/* Transforma a lista de 1 elemento CabecaLista em um elemento 
-		 *   Cabeca. */
-		dadoNaPosicao(Cabeca, CabecaLista, 0), 
+		 *   NomeDaPessoa. */
+		dadoNaPosicao(NomeDaPessoa, CabecaLista, 0), 
 		
-		/* Calcula qual o MaiorCargoNome e MaiorCargoTempo da Cabeca. */
-		privado_QualTodosMaiorCargoDe(Cabeca, MaiorCargoNome, MaiorCargoTempo),
+		/* Calcula qual o MaiorCargoNome e MaiorCargoTempo do NomeDaPessoa. */
+		privado_QualTodosMaiorCargoDe(NomeDaPessoa, MaiorCargoNome, 
+															MaiorCargoTempo),
 		
-		/* Adiciona na ListaSaidaCargo o nome do maior cargo em Cabeca. */
+		/* Adiciona na ListaSaidaCargo o nome do maior cargo do NomeDaPessoa. */
 		inseridoNoFinal(MaiorCargoNome, ListaEntradaCargo, ListaSaidaCargo), 
 		
-		/* Adiciona na ListaSaidaTempo o tempo do maior cargo em Cabeca. */
+		/* Adiciona na ListaSaidaTempo o tempo do maior cargo de 
+		 *   NomeDaPessoa. */
 		inseridoNoFinal(MaiorCargoTempo, ListaEntradaTempo, ListaSaidaTempo), 
 		
 		/* Chama recursivamente este predicado para processar o resto da 
 		 *   lista. */
-		privado_CarregarMaioresCargos(Cauda, ListaSaidaCargo, 
+		privado_CarregarMaioresCargos(RestoDaLista, ListaSaidaCargo, 
 		ListaSaidaTempo, NomesDosMaioresCargos_Interno, 
-											TemposDosMaioresCargos_Interno ).
+											TemposDosMaioresCargos_Interno).
 
 	/* 2) Para cada pessoa na lista: */
 	/* Dado o nome de uma pessoa NomeDaPessoa, retorna uma lista contendo 
 	 *   os MaiorCargoNome_Interno's (quando há empate de maiores) e o 
 	 *   MaiorCargoTempo_Interno. */
-	privado_QualTodosMaiorCargoDe( NomeDaPessoa, MaiorCargoNome_Interno, 
-												MaiorCargoTempo_Interno ) :-
+	privado_QualTodosMaiorCargoDe(NomeDaPessoa, MaiorCargoNome_Interno, 
+												MaiorCargoTempo_Interno) :-
 		/* Realiza todas as requisições ';' para privado_QualMaiorCargoDe, e
 		 *   cria uma lista contendo todos os cargos que tem o maior tempo, 
 		 *   isto é, quando ha empate de tempo. */
-		 findall(Maior, privado_QualMaiorCargoDe( NomeDaPessoa, Maior, _ ), 
-		 											MaiorCargoNome_Interno ),
-		 privado_QualMaiorCargoDe( NomeDaPessoa, _, MaiorCargoTempo_Interno ),
+		 findall(Maior, privado_QualMaiorCargoDe(NomeDaPessoa, Maior, _), 
+		 											MaiorCargoNome_Interno),
+		 privado_QualMaiorCargoDe(NomeDaPessoa, _, MaiorCargoTempo_Interno),
 		 /* Força encerra as requisições desta cláusula. Isto é necessário 
-		  * por que a requisições depois do findall acima, por padrão é feita 
-		  *   várias vezes até se encerrar os maiores cargos. */
+		  *   por que a requisições depois do findall acima, por padrão são  
+		  *   feitas várias vezes até se encerrar os maiores cargos. */
 		 !.
 	
 	/* Dado o nome de uma pessoa NomeDaPessoa, retorna MaiorCargoNome_Interno, 
 	 *   e o MaiorCargoTempo_Interno. */
-	privado_QualMaiorCargoDe( NomeDaPessoa, MaiorCargoNome_Interno, 
-												MaiorCargoTempo_Interno ) :-
+	privado_QualMaiorCargoDe(NomeDaPessoa, MaiorCargoNome_Interno, 
+												MaiorCargoTempo_Interno) :-
 		/* Crio uma lista de nomes de cargos que ela tenha, ordenada e 
-		 *   com repetição. */
+		 *   sem repetição. */
 		privado_CriarListaCargos(NomeDaPessoa, NomesDosCargos),
 		
-		/* Crio uma lista com os tempos dos cargos, correspondente a lista de 
-		 *   NomesDosCargos. */
+		/* Crio uma lista com os TemposDosCargos, correspondente a lista de 
+		 *   NomesDosCargos de um NomeDaPessoa. */
 		privado_CarregarTemposDosCargos(NomeDaPessoa, NomesDosCargos, 
 															TemposDosCargos),
-		/* 3) Pego a posição do maior cargo dela e retorno o nome do cargo 
-		 *   que se encontra na posição do maior cargo.
+		/* 3) Pego a posição do maior cargo dela e retorno o 
+		 *   MaiorCargoNome_Interno e o MaiorCargoTempo_Interno, que se 
+		 *   encontram na posição do maior cargo.
 		 * */
 		posicaoDoMaior(TemposDosCargos, Posicao),
 	    dadoNaPosicao(MaiorCargoNome_Interno, NomesDosCargos, Posicao),
 	    dadoNaPosicao(MaiorCargoTempo_Interno, TemposDosCargos, Posicao).
 	
-		/* Carrega uma lista com os tempos dos cargos da lista 
-		 *   NomesDosCargos_Interno da pessoa NomeDaPessoa_Interno na lista 
-		 *   TemposDosCargos_Interno.
+		/* Carrego a lista NomesDosCargos_Interno e TemposDosCargos_Interno 
+		 *    de NomeDaPessoa_Interno.
 		 * */
 		privado_CarregarTemposDosCargos(NomeDaPessoa_Interno, 
 						NomesDosCargos_Interno, TemposDosCargos_Interno) :-
@@ -362,36 +364,40 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 													TemposDosCargos_Interno) :-	
 			copy_term(TemposDosCargos, TemposDosCargos_Interno).
 		
-		/* Corpo principal da recursão que interege com todos os elementos da 
-		 *   ListaEntrada, e coloca o resultado da iteração na 
-		 *   TemposDosCargos_Interno.
+		/* Corpo principal da recursão que interege com todos os elementos de 
+		 *   NomesDosCargos_Interno, de NomeDaPessoa_Interno e coloca o 
+		 *   resultado da iteração em ListaSaida.
+		 * A lista final conterá o tempo total de um dado cargo, mesmo que 
+		 *   esse cargo tenha ocorrido em diversos trabalhos, por exemplo, 
+		 *   trabalhou 5 anos como Professor na escola x, e mais 8 anos na 
+		 *   escola y.
 		 * */
 		privado_CarregarTemposDosCargos(NomeDaPessoa_Interno, 
 			NomesDosCargos_Interno, ListaEntrada, TemposDosCargos_Interno) :-
 			/* Pega o primeiro cargo de NomesDosCargos_Interno e coloca o 
-			 *  restante dos cargos em Cauda. */
-			dividirLista(NomesDosCargos_Interno, 1, CabecaLista, Cauda), 
+			 *  restante dos cargos em Restante. */
+			dividirLista(NomesDosCargos_Interno, 1, CabecaLista, Restante), 
 			
 			/* Transforma a lista de 1 elemento CabecaLista em um elemento 
 			 *   Cabeca. */
-			dadoNaPosicao(Cabeca, CabecaLista, 0), 
+			dadoNaPosicao(NomeDoCargo, CabecaLista, 0), 
 			
-			/* Calculo qual o Tempo total do cargo Cabeca de 
+			/* Calculo qual o Tempo total do NomeDoCargo de 
 			 *   NomeDaPessoa_Interno */
-			privado_TempoTotalDoCargo(NomeDaPessoa_Interno, Cabeca, Tempo), 
+			privado_TempoTotalDoCargo(NomeDaPessoa_Interno, NomeDoCargo, Tempo), 
 			
-			/* Adiciona na ListaSaida o tempo do cargo em Cabeca. */
+			/* Adiciona na ListaSaida o tempo do cargo em NomeDoCargo. */
 			inseridoNoFinal(Tempo, ListaEntrada, ListaSaida), 
 			
 			/* Chama recursivamente este predicado para processar o resto da 
 			 *   lista. */
-			privado_CarregarTemposDosCargos(NomeDaPessoa_Interno, Cauda, 
+			privado_CarregarTemposDosCargos(NomeDaPessoa_Interno, Restante, 
 										ListaSaida, TemposDosCargos_Interno).
 		
 		/* Dado o NomeDaPessoa e o NomeDoCargo, calculo o tempo total desse 
 		 *   cargo.
 		 * */
-		privado_TempoTotalDoCargo( NomeDaPessoa, NomeDoCargo, TempoTotal ) :-
+		privado_TempoTotalDoCargo(NomeDaPessoa, NomeDoCargo, TempoTotal) :-
 			/* Faz todas as requisições ';' para o predicado 
 			 *   privado_TempoDoCargo e cria uma lista de TemposTrabalho.
 			 * */
@@ -401,18 +407,20 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 			 * */
 			somaDosElementos(TemposDoCargo, TempoTotal).
 			
-			/* Retorna o tempo de cargo em uma pessoa NomeDaPessoa, NomeDoCargo
-			 *   armazenada no predicado informacoesProfissionais. 
+			/* Retorna o tempo de cargo em uma pessoa NomeDaPessoa_Interno, 
+			 *   NomeDoCargo_Interno armazenada no predicado 
+			 *   informacoesProfissionais. 
 			 * A cada vez que se faz um requisição ';' a este predicado, ele 
-			 *   retorna o tempo do cargo NomeDaPessoa, NomeDoCargo, caso a 
-			 *   empresa pega no predicado informacoesProfissionais não seja 
-			 *   NomeDaPessoa e NomeDoCargo retorna 0 em TempoDeCargo, caso 
-			 *   contrário, retorna o Tempo De Cargo.
+			 *   retorna o TempoDeCargo de NomeDaPessoa_Interno e 
+			 *   NomeDoCargo_Interno, caso a empresa pega no predicado 
+			 *   informacoesProfissionais não seja NomeDaPessoa_Interno e 
+			 *   NomeDoCargo_Interno retorna 0 em TempoDeCargo, caso contrário, 
+			 *   retorna o TempoDeCargo.
 			 * */
 			privado_TempoDoCargo(NomeDaPessoa_Interno, NomeDoCargo_Interno, 
 															TempoDeCargo) :-
 				/* Primeiro, carrego a lista de informacoesProfissionais. */
-				informacoesProfissionais(L),
+				informacoesProfissionais(L), 
 				
 				/* Segundo, pego o nome da pessoa e do cargo. 
 				 * */
@@ -421,28 +429,26 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 				/* Terceiro, verifico se o Nome e o Cargo carregado é o 
 				 * NomeDaPessoa_Interno e NomeDoCargo_Interno que queremos. 
 				 * */
-				( NomeDaPessoa_Interno = Nome, Cargo = NomeDoCargo_Interno ->
-					/* Quarto, carregamos o tempo de cargo da pessoa na 
-					 * variável TempoDeTrabalho. 
-					 * */
+				(NomeDaPessoa_Interno = Nome, Cargo = NomeDoCargo_Interno ->
+					/* Quarto, carregamos o TempoDeCargo da pessoa. */
 					dadoNaPosicao(TempoInicial, L, 3),
 					dadoNaPosicao(TempoFinal,L,4),
 					TempoDeCargo is TempoFinal - TempoInicial
 				;
-					/* Ajusto o valor padrão de TempoDeCargo. 
-					* */
+					/* Ajusto o valor padrão de TempoDeCargo. */
 					TempoDeCargo is 0
 				).
 		
 		/* Para uma pessoa Nome, cria uma lista de nomes de Cargos que ela 
-		 *   tenha, ordenado e com repetição.
+		 *   tenha, ordenado e sem repetição.
 		 * */
-		privado_CriarListaCargos(Nome, Cargos) :-
-			findall( Cargo, privado_CarregarCargo( Nome, Cargo ), Cargos ).
+		privado_CriarListaCargos(Nome_Interno, Cargos_Interno) :-
+			findall(Cargo, privado_CarregarCargo(Nome_Interno, Cargo), Cargos),
+			sort(Cargos, Cargos_Interno).
 			
 			/* Para um dado Nome, retorna o Cargo dele.
 			 * */
-			privado_CarregarCargo( NomeDaPessoa, CargoDaPessoa ) :-
+			privado_CarregarCargo(NomeDaPessoa, CargoDaPessoa) :-
 				informacoesProfissionais(L),
 				dadoNaPosicao(Nome, L, 0),
 				Nome == NomeDaPessoa, 
@@ -453,7 +459,7 @@ privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	privado_CarregaListaNomes(NomesDasPessoas) :- 
 		/* Faz todas as requisições ';' para o predicado privado_QualPessoa.
 		 * */
-		findall( Nome, privado_QualPessoa( Nome ), Lista ),
+		findall(Nome, privado_QualPessoa(Nome), Lista),
 		/* Retira desta lista todos os repetidos e retorna essa lista em 
 		 *   NomesDasPessoas.
 		 * */
@@ -658,4 +664,61 @@ privado_TotalReferenciasA(NomePessoa, TotalRef) :-
 		 * */
 		QtdRef is 0
 	).
+
+
+/* ###########################################################################
+ * Imprime o currículo na tela, dado uma lista com nomes de Pessas na base de 
+ *   dados. Caso não seja entradado alguém, imprime uma mensagem de erro na
+ *   tela.
+ * */
+imprimirCurriculo(Pessoas_Interno) :-
+	
+	/* Pega a cabeça da lista como uma lista e a lista Cauda */
+	dividirLista(Pessoas_Interno, 1, CabecaLista, Cauda), 
+	
+	/* Transforma a lista CabecaLista em um elemento Nome. */
+	dadoNaPosicao(Nome, CabecaLista, 0), 
+	
+	/* Carrega as informações pessoais */
+	informacoesPessoais(InformacoesPessoais),
+	informacoesAcademicas(InformacoesAcademicas),
+	informacoesProfissionais(InformacoesProfissionais), 
+	
+	/* Pega a data de nascimento no banco de dados. */
+	dadoNaPosicao(NomeDaPessoa, InformacoesPessoais, 0),
+	NomeDaPessoa == Nome,
+	dadoNaPosicao(DataDeNascimento, InformacoesPessoais, 1), 
+	
+	/* Imprime na tela a apresentação e o nome da pessoa */
+	write('\nO curriculo da pessoa:\n'), write(Nome),
+	
+	/* Imprime a DataDeNascimento no formato padrão do swi-prolog */
+	privado_ImprimirCurriculoNascimento(DataDeNascimento),
+	
+	
+	
+	/* Encerra a consulta por currículos, pois somente existe 1 */
+	!.
+
+
+/* Imprime a DataDeNascimento que deve estar no formato padrão do 
+ *   swi-prolog date.
+ * */
+privado_ImprimirCurriculoNascimento(DataDeNascimento) :-
+	date_time_stamp(DataDeNascimento, Data), 
+    convert_time(Data, Ano, Mes, Dia,_,_,_,_),
+    write('\nData de Nascimento\n'), 
+    write(Dia), write('/'), write(Mes), write('/'), write(Ano).
+
+
+
+
+
+
+
+
+
+
+
+
 
