@@ -227,11 +227,11 @@ privado_CarregaLista(ListaDeEmpresas) :-
  *   nome do cargo na posição de maior na lista de nomes dos maiores cargos, 
  *   e retorno o nome dessa pessoa na lista NomesDasPessoas.
  * 6) Refaço a consulta e crio uma lista de Pessoas e Cargos. Isso tem que 
- *   aconteder caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
+ *   acontecer caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
  *   maior tempo em um cargo. 
- *   O resultado de retorno do predicado será duas lista com correspondência
+ *   O resultado de retorno do predicado será duas listas com correspondência
  *   um-para-um, isto é, o nome na posição 1, corresponde a listas de cargos
- *   que essa pessa pode ter, e se trata de uma lista por que a pessoa pode 
+ *   que essa pessoa pode ter, e se trata de uma lista por que a pessoa pode 
  *   ter de todos, os maiores cargos onde eles empatam em tempo.
  * 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um cargo. 
  * */
@@ -245,7 +245,10 @@ maisTempoEmUmCargo(Pessoas, Cargos) :-
 	
 	/* 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um 
 	 *   cargo. */
-	imprimirCurriculo(Pessoas).
+	imprimirCurriculo(Pessoas),
+	
+	/* Encerra a execução */
+	!.
 
 privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	/* 1) Faço uma lista de pessoas. */
@@ -499,7 +502,8 @@ qualReferenciaMaisCitada(Referencia) :-
 	append(Lista, ListaRef),
 	append(Lista2, ListaRef2),
 	concatenadas(ListaRef, ListaRef2, ListaRefCompleta),
-	listaMaxima(ListaRefCompleta,Referencia).
+	listaMaxima(ListaRefCompleta,Referencia_T),
+	primeiro(Referencia_T, Referencia).
 
 	/* Este predicado divide a lista de 'informacoesAcademicas' em duas
 	 * listas, onde uma delas é uma lista de Referencias. 
@@ -516,7 +520,7 @@ qualReferenciaMaisCitada(Referencia) :-
 		dividirLista(L,5,_,Ref).
 
 
-/* Questão 22 ##########################################################
+/* Questão 22 ###############################################################
  * Qual a pessoa com maior quantidade de colegas referenciados (de curso
  *   ou de trabalho)? Exiba seu currículo.
  *
@@ -529,13 +533,14 @@ qualReferenciaMaisCitada(Referencia) :-
  *   índice e retornado o nome da pessoa de mesmo índice na lista de 
  *   pessoas.
  * */
-qualPessoaComMaiorQtdReferencias(Resposta, Quantidade) :-
+qualPessoaComMaiorQtdReferencias(Resposta) :-
 	privado_MakeList(Pessoas),
 	privado_CarregarReferencias(Pessoas),
 	nb_getval(qtdReferencias, ListaRef),
 	maiorElemento(ListaRef, Quantidade),
 	indiceDoElemento(ListaRef, Quantidade, I),
-	dadoNaPosicao(Resposta, Pessoas, I).
+	dadoNaPosicao(Resposta, Pessoas, I),
+	imprimirCurriculo([Resposta]).
 
 	/* Predicado que cria uma lista com todas as pessoas do banco de dados. */
 	privado_MakeList(Pessoas) :-
@@ -659,6 +664,19 @@ qualPessoaComMaiorQtdReferencias(Resposta, Quantidade) :-
 		).
 
 
+/* Questão 23 ################################################################
+ * Considerando que todas as pessoas, que estudaram em uma dada instituição 
+ *   ou trabalharam em uma dada empresa, tem um certo relacionamento. Qual 
+ *   é a quantidade de tais relacionamentos para uma dada pessoa?
+ * 
+ * Dado uma pessoa. 
+ * 1) Calcula a quantidade de relacionamentos de trabalho.
+ * 2) Calcula a quantidade de relacionamentos de faculdade.
+ * 3) 
+ * */
+
+
+
 /* ###########################################################################
  * Imprime o currículo na tela, dado uma lista com nomes de Pessas na base de 
  *   dados. Caso não seja entradado alguém, imprime uma mensagem de erro na
@@ -668,7 +686,10 @@ imprimirCurriculo(Pessoas_Interno) :-
 	/* Chama a recursão que imprime o currículo. */
 	privado_ImprimirCurriculo(Pessoas_Interno, 1).
 	
-	/* Imprime o curriculo de acordo com o seu numero */
+	/* Encerra a recursão quando termina a lista Pessoas_Interno. */
+	privado_ImprimirCurriculo([], _).
+	
+	/* Imprime o currículo de acordo com o seu numero */
 	privado_ImprimirCurriculo(Pessoas_Interno, CurriculoNumero) :-
 		
 		/* Pega a cabeça da lista como uma lista e a lista Cauda */
@@ -737,7 +758,7 @@ imprimirCurriculo(Pessoas_Interno) :-
 		
 		/* Imprime o nome do curso. */
 		dadoNaPosicao(Curso, InformacoesAcademicas, 1),
-		write('\nFomardo no Curso de: '), write(Curso),
+		write('\nFormado no Curso de: '), write(Curso),
 		
 		/* Imprime o Nome da Instituição. */
 		dadoNaPosicao(Instituicao, InformacoesAcademicas, 2),
