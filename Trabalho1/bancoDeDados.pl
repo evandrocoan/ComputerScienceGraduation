@@ -166,8 +166,8 @@ informacoesProfissionais( ['Robson Troller', 'Google',
  * */
 informacoesProfissionais( ['Stiven Stronger', 'TIM', 
 'Re-exorcista', 1980, 2015, 'Simpser Simpson', 'Bart Simpser' ] ).
-informacoesProfissionais( ['Stiven Stronger', 'TIM', 
-'Repuxador de Saco', 1980, 2015, 'Demi Lovato', 'Avicii' ] ).
+informacoesProfissionais( ['Stiven Stronger', 'Google', 
+'Repuxador de Saco', 2015, 2040, 'Demi Lovato', 'Avicii' ] ).
 
 /* Roger Rocker
  * */
