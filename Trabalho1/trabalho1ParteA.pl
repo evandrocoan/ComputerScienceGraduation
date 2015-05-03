@@ -250,10 +250,10 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
  * */
 tempoDeEstudoEmCadaCurso(NomeDaPessoa, TempoDeEstudo) :-
 	informacoesAcademicas(L),
-	dadoNaPosicao(Nome, [_|L], 1),
+	dadoNaPosicao(Nome, L, 0),
 	Nome == NomeDaPessoa,
-	dadoNaPosicao(DataInicial,[_|L],5),
-	dadoNaPosicao(DataFinal,[_|L],6),
+	dadoNaPosicao(DataInicial, L, 4),
+	dadoNaPosicao(DataFinal, L, 5),
 	TempoDeEstudo is DataFinal - DataInicial.
 
 
