@@ -30,9 +30,9 @@ quemMoraEm(Cidade, Nomes) :-
  * Terceiro, calcula sua idade.
  * */
 qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa,[_|L],1),
+	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa, L, 0),
 	NomeDaPessoa == Nome,
-	dadoNaPosicao(DataDeNascimento,[_|L],2),
+	dadoNaPosicao(DataDeNascimento, L, 1),
 	privado_CalcularIdade(DataDeNascimento, Idade).
 
 	/* Primeiro, converto a data de aniversário Data para um TimeStamp 
@@ -63,10 +63,10 @@ quaisComMaisDe30Anos(Nomes) :-
 	 * */
 	privado_QuaisComMaisDe30Anos(Nome) :-
 		informacoesPessoais(L),
-		dadoNaPosicao(DataDeNascimento,[_|L],2),
+		dadoNaPosicao(DataDeNascimento, L, 1),
 		privado_CalcularIdade(DataDeNascimento, Idade),
 		Idade > 30,
-		dadoNaPosicao(Nome,[_|L],1).
+		dadoNaPosicao(Nome, L, 0).
 
 
 /* Questão 5 ###############################################################
@@ -97,9 +97,9 @@ quaisOrientadoresDe(Nome, OrientadoresDaPessoa) :-
 	 * */
 	privado_QuaisOrientadoresDe(Nome, Orientadores) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(NomeDaPessoa, [_|L], 1),
+		dadoNaPosicao(NomeDaPessoa, L, 0),
 		NomeDaPessoa == Nome,
-		dadoNaPosicao(Orientadores, [_|L], 4).
+		dadoNaPosicao(Orientadores, L, 3).
 
 
 /* Questão 7 ###############################################################
@@ -149,7 +149,7 @@ quaisNaoTemReferencia(Nomes) :-
 	 * */
 	privado_QuaisNaoTemReferencia(Nomes) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(Nomes, [_|L], 1),
+		dadoNaPosicao(Nomes, L, 0),
 		privado_QuaisColegasDe1(Nomes, Colegas),
 		length(Colegas, Tamanho),
 		Tamanho == 0.
@@ -208,7 +208,7 @@ quantosEstudaramNa(Lugar, QuatidadeDePessoas) :-
 	 * */
 	privado_QuantosEstudaramNa(Instituicao, Quantidade) :-
 		informacoesAcademicas(L), 
-		dadoNaPosicao(InstituicaoDaPessoa, [_|L], 3),
+		dadoNaPosicao(InstituicaoDaPessoa, L, 2),
 		InstituicaoDaPessoa == Instituicao,
 		Quantidade is 1.
 
@@ -232,11 +232,11 @@ quemComMaisDe5Anos(NomesDasPessoas) :-
 	 * */
 	privado_QuemComMaisDe5Anos(Nome) :- 
 		informacoesProfissionais(L),
-		dadoNaPosicao(DataInicial,[_|L],4),
-		dadoNaPosicao(DataFinal,[_|L],5),
+		dadoNaPosicao(DataInicial, L, 3),
+		dadoNaPosicao(DataFinal,L, 4),
 		TempoDeExperiencia is DataFinal - DataInicial,
 		TempoDeExperiencia > 5,
-		dadoNaPosicao(Nome,[_|L],1).
+		dadoNaPosicao(Nome, L, 0).
 
 
 /* Questão 12 ################################################################
