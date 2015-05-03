@@ -209,21 +209,41 @@ maiorTempoDeServicoAll(Empresa) :-
 			 * */
 			dadoNaPosicao(NomeDaEmpresa, L, 1).
 
-/* Questão 20 ##############################################################
+/* Questão 20 ############ TEMPO DE IMPLEMENTAÇÃO: 8 HORAS! ################
  * Qual a pessoa que mais tempo ficou em um cargo e qual e este cargo? 
  * Exiba seu currículo.
  *
  * 1) Faço uma lista de pessoas.
- * 2) Para cada pessoa na lista, crio uma lista de nomes de cargos que ela tenha 
- *   e outra lista com os tempos dos cargos, correspondente a lista de nomes.
+ * 2) Para cada pessoa na lista, crio uma lista de nomes de cargos que ela  
+ *   tenha e outra lista com os tempos dos cargos, correspondente a lista de 
+ *   nomes.
  * 3) Pego a posição do maior cargo dela e retorno o nome do cargo que se 
  *   encontra na posição do maior cargo.
  * 4) Crio uma lista com os nomes dos maiores cargos de todas as pessoas e 
  *   outra lista com os tempos dos maiores cargos das pessoas.
  * 5) Descubro qual a posição da pessoa que possui o maior cargo e retorno o 
- *   nome do cargo na posição de maior na lista de nomes dos maiores cargos.
+ *   nome do cargo na posição de maior na lista de nomes dos maiores cargos, 
+ *   e retorno o nome dessa pessoa na lista NomesDasPessoas.
+ * 6) Refaço a consulta e crio uma lista de Pessoas e Cargos. Isso tem que 
+ *   aconteder caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
+ *   maior tempo em um cargo. 
+ *   O resultado de retorno do predicado será duas lista com correspondência
+ *   um-para-um, isto é, o nome na posição 1, corresponde a listas de cargos
+ *   que essa pessa pode ter, e se trata de uma lista por que a pessoa pode 
+ *   ter de todos, os maiores cargos onde eles empatam em tempo.
+ * 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um cargo.
  * */
-maisTempoEmUmCargo(Pessoa, Cargo) :-
+maisTempoEmUmCargo(Pessoas, Cargos) :-
+	/*6) Refaço a consulta e crio uma lista de Pessoas e Cargos. Isso tem que 
+	 *   aconteder caso haja empate, isto é, mais de uma pessoa tenha o mesmo 
+	 *   maior tempo em um cargo.*/
+	findall( Pessoa, privado_MaisTempoEmUmCargo(Pessoa, _), Pessoas ),
+	findall( Cargo, privado_MaisTempoEmUmCargo( _, Cargo), Cargos ).
+	/* 7) Imprimo o currículo da lista de Pessoas que mais ficaram em um 
+	 *   cargo. */
+	/*imprimirCurriculo(Pessoas).*/
+
+privado_MaisTempoEmUmCargo(Pessoa, Cargo) :-
 	/* 1) Faço uma lista de pessoas. */
 	privado_CarregaListaNomes(NomesDasPessoas),
 	
@@ -231,14 +251,23 @@ maisTempoEmUmCargo(Pessoa, Cargo) :-
 	 *   todas as pessoas e outra lista TemposDosMaioresCargos de todas as 
 	 *   pessoas. */
 	privado_CarregarMaioresCargos( NomesDasPessoas, NomesDosMaioresCargos, 
-													TemposDosMaioresCargos ).
+													TemposDosMaioresCargos ),
+													
+	/* 5) Descubro qual a posição da pessoa que possui o maior cargo e retorno 
+	 *   o nome do cargo na posição de maior na lista de NomesDosMaioresCargos
+	 *   e retorno o nome dessa pessoa na lista NomesDasPessoas.
+	 * */
+	posicaoDoMaior(TemposDosMaioresCargos, Posicao),
+    dadoNaPosicao(Cargo, NomesDosMaioresCargos, Posicao),
+    dadoNaPosicao(Pessoa, NomesDasPessoas, Posicao).
 	
+	/* ######################## Predicados Auxiliares ###################### */
 	/* Recebendo todos os NomesDasPessoas como uma lista, cria a lista 
 	 *   NomesDosMaioresCargos de todas as pessoas e outra lista 
 	 *   TemposDosMaioresCargos de todas as pessoas. */
 	privado_CarregarMaioresCargos( NomesDasPessoas, NomesDosMaioresCargos, 
 												TemposDosMaioresCargos ) :-
-		/* Chama o predicado que realizada a recursão.*/ write('Estou em 1\n'),
+		/* Chama o predicado que realizada a recursão.*/
 		privado_CarregarMaioresCargos(NomesDasPessoas, [], [], 
 							NomesDosMaioresCargos, TemposDosMaioresCargos ).
 
@@ -247,7 +276,7 @@ maisTempoEmUmCargo(Pessoa, Cargo) :-
 	privado_CarregarMaioresCargos([], NomesDosMaioresCargos, 
 			TemposDosMaioresCargos, NomesDosMaioresCargos_Interno, 
 											TemposDosMaioresCargos_Interno) :-	
-				write('Estou em 1.5\n'),
+												
 		copy_term(NomesDosMaioresCargos, NomesDosMaioresCargos_Interno), 
 		copy_term(TemposDosMaioresCargos, TemposDosMaioresCargos_Interno).
 	
@@ -255,10 +284,9 @@ maisTempoEmUmCargo(Pessoa, Cargo) :-
 	 *   NomesDosCargos_Interno, e coloca o resultado da iteração na 
 	 *   TemposDosCargos_Interno.
 	 * */
-	privado_CarregarTemposDosCargos(NomesDasPessoas_Interno, 
+	privado_CarregarMaioresCargos(NomesDasPessoas_Interno, 
 	ListaEntradaCargo, ListaEntradaTempo, NomesDosMaioresCargos_Interno, 
 											TemposDosMaioresCargos_Interno) :-
-		write('Estou em 2\n'),
 		/* Pega o primeiro nome da lista NomesDasPessoas_Interno e coloca 
 		 *   o restante da lista em Cauda. */
 		dividirLista(NomesDasPessoas_Interno, 1, CabecaLista, Cauda), 
@@ -268,7 +296,7 @@ maisTempoEmUmCargo(Pessoa, Cargo) :-
 		dadoNaPosicao(Cabeca, CabecaLista, 0), 
 		
 		/* Calcula qual o MaiorCargoNome e MaiorCargoTempo da Cabeca. */
-		privado_QualMaiorCargoDe( Cabeca, MaiorCargoNome, MaiorCargoTempo ),
+		privado_QualTodosMaiorCargoDe(Cabeca, MaiorCargoNome, MaiorCargoTempo),
 		
 		/* Adiciona na ListaSaidaCargo o nome do maior cargo em Cabeca. */
 		inseridoNoFinal(MaiorCargoNome, ListaEntradaCargo, ListaSaidaCargo), 
@@ -278,12 +306,28 @@ maisTempoEmUmCargo(Pessoa, Cargo) :-
 		
 		/* Chama recursivamente este predicado para processar o resto da 
 		 *   lista. */
-		privado_CarregarTemposDosCargos(Cauda, ListaSaidaCargo, 
+		privado_CarregarMaioresCargos(Cauda, ListaSaidaCargo, 
 		ListaSaidaTempo, NomesDosMaioresCargos_Interno, 
 											TemposDosMaioresCargos_Interno ).
 
-	/* 2) Para cada pessoa na lista:
-	 * Dado o nome de uma pessoa NomeDaPessoa, retorna MaiorCargoNome_Interno, 
+	/* 2) Para cada pessoa na lista: */
+	/* Dado o nome de uma pessoa NomeDaPessoa, retorna uma lista contendo 
+	 *   os MaiorCargoNome_Interno's (quando há empate de maiores) e o 
+	 *   MaiorCargoTempo_Interno. */
+	privado_QualTodosMaiorCargoDe( NomeDaPessoa, MaiorCargoNome_Interno, 
+												MaiorCargoTempo_Interno ) :-
+		/* Realiza todas as requisições ';' para privado_QualMaiorCargoDe, e
+		 *   cria uma lista contendo todos os cargos que tem o maior tempo, 
+		 *   isto é, quando ha empate de tempo. */
+		 findall(Maior, privado_QualMaiorCargoDe( NomeDaPessoa, Maior, _ ), 
+		 											MaiorCargoNome_Interno ),
+		 privado_QualMaiorCargoDe( NomeDaPessoa, _, MaiorCargoTempo_Interno ),
+		 /* Força encerra as requisições desta cláusula. Isto é necessário 
+		  * por que a requisições depois do findall acima, por padrão é feita 
+		  *   várias vezes até se encerrar os maiores cargos. */
+		 !.
+	
+	/* Dado o nome de uma pessoa NomeDaPessoa, retorna MaiorCargoNome_Interno, 
 	 *   e o MaiorCargoTempo_Interno. */
 	privado_QualMaiorCargoDe( NomeDaPessoa, MaiorCargoNome_Interno, 
 												MaiorCargoTempo_Interno ) :-
