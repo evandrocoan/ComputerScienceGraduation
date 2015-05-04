@@ -672,10 +672,190 @@ qualPessoaComMaiorQtdReferencias(Resposta) :-
  * Dado uma pessoa. 
  * 1) Calcula a quantidade de relacionamentos de trabalho.
  * 2) Calcula a quantidade de relacionamentos de faculdade.
- * 3) 
+ * 3) Soma os relacionamentos e retorna a Quantidade.
+ *
+ * 1) Pego o nome da pessoa, descubro em quais empresas/instituições ele 
+ *  trabalhou/estudou.
+ * 2) Para cada empresa/instituição que ela trabalhou/estudou, passo em todas 
+ *   as outras pessoas e verifico se elas também trabalharam/estudaram nessa 
+ *   empresa/instituição e somo o total de pessoas que trabalharam nessas 
+ *   empresas/instituições, sem recontar a pessoa fornecida.
  * */
+quantidadeDeRelacionamentos(Nome, Quantidade) :-
+	
+	/* Pego o nome da pessoa, descubro em quais empresas ele trabalha. */
+	privado_RelacionamentosDeTrabalho(Nome, Empresas), 
+	
+	/* Descubro em quais Instituições ela estudou. */
+	privado_RelacionamentosDeInstituicao(Nome, Instituicao),
+	
+	/* Calcula quantas pessoas trabalham nas Empresas da lista. */
+	privado_RelacionamentosQuantosTrabalham(Nome, Empresas, 
+														QuantidadeEmpresas),
+														
+	/* Calcula quantas pessoas esturam nas Instituições da lista. */
+	privado_RelacionamentosQuantosCursaram(Nome, Instituicao, 
+														QuantidadeInstituicao),
+														
+	/* Calcula a quantidade total de relacionamentos. */
+	Quantidade is QuantidadeInstituicao + QuantidadeEmpresas.
+	
+	/* Recebe uma lista de Instituições e retorna a Quantidade de pessoas que 
+	 *   estudaram nelas.
+	 * */
+	privado_RelacionamentosQuantosCursaram(Nome, Instituicoes, Quantidade ) :-
+		
+		privado_RelacionamentosQuantosCursaram(Nome, Instituicoes, 0, 
+																Quantidade ),
+		!.
+		
+	/* Funcioamento interno de privado_RelacionamentosQuantosTrabalham */
+	privado_RelacionamentosQuantosCursaram(_, [], QuantidadeTemp, 
+																Quantidade ) :-
+		
+		copy_term(QuantidadeTemp, Quantidade).
+	
+	/* Funcioamento interno de privado_RelacionamentosQuantosTrabalham */
+	privado_RelacionamentosQuantosCursaram(PessoaAtual, Instituicoes, 
+												QuantidadeTemp, Quantidade ) :-
 
+		dividirLista(Instituicoes, 1, InstituicaoTemp, RestoInstituicoes),
+		primeiro(InstituicaoTemp, Instituicao),
+		privado_QuantosCursaramNesseCurso(PessoaAtual, Instituicao, 
+															QuantidadeTemp2),
+		NovaQuantidadeTemp is QuantidadeTemp + QuantidadeTemp2,
+		privado_RelacionamentosQuantosCursaram(PessoaAtual, RestoInstituicoes, 
+											NovaQuantidadeTemp, Quantidade ).
+	
+	/* Recebe uma Instituicao e retorna Quantidade de pessoas que estudaram, 
+	 *   nela descontado a PessoaAtual fornecida como parâmetro.
+	 * */
+	privado_QuantosCursaramNesseCurso(PessoaAtual, Instituicao, Quantidade) :-
+	
+		findall(QuantidadeTemp, privado_QuantosCursaramNesseCursoTemp(
+					PessoaAtual, Instituicao, QuantidadeTemp), QuantidadeLista ), 
+		somaDosElementos(QuantidadeLista, Quantidade).
+		
+		privado_QuantosCursaramNesseCursoTemp(PessoaAtual, Instituicao, 
+																Quantidade) :-
+			
+			informacoesAcademicas(InformacoesAcademicas),
+			dadoNaPosicao(InstituicaoTemp, InformacoesAcademicas, 2),
+			dadoNaPosicao(PessoaAtualTemp, InformacoesAcademicas, 0),
+			( InstituicaoTemp = Instituicao -> 
+				( PessoaAtual \= PessoaAtualTemp ->
+					Quantidade is 1
+				;
+					Quantidade is 0
+				)
+			;
+				Quantidade is 0
+			).
+	
+	/* Recebe um Nome e retorna uma lista de Instituicoes em que a pessoa 
+	 *   estudou.
+	 * */
+	privado_RelacionamentosDeInstituicao(Nome, Instituicoes) :-
+		
+		/* Faz todas as requisições ';' para o predicado 
+		 *   privado_QualInstituicao. */
+		findall(Instituicao, privado_QualInstituicao(Nome, Instituicao), 
+															InstituicoesTemp),
+		
+		/* Retira desta lista todos os repetidos e retorna essa lista em 
+		 *   Instituicoes. */
+		sort(InstituicoesTemp, Instituicoes).
+	
+		/* Retorna o Nome da Instituicao armazenada no predicado 
+		 *   informacoesAcademicas. A cada vez que se faz um requisição ';' 
+		 *   a este predicado, ele retorna a próxima Instituicao, até não 
+		 *   existirem mais informacoesAcademicas.
+		 * */
+		privado_QualInstituicao(Nome, NomeDaInstituicao) :-
+			informacoesAcademicas(L),
+			dadoNaPosicao(NomeTemp, L, 0),
+			NomeTemp = Nome,
+			dadoNaPosicao(NomeDaInstituicao, L, 2).
+	
+	
+	
+	
+	
+	/* Recebe uma lista de Empresas e retorna a Quantidade de pessoas que 
+	 * Trabalham nessas empresas.
+	 * */
+	privado_RelacionamentosQuantosTrabalham(Nome, Empresas, Quantidade ) :-
+		
+		privado_RelacionamentosQuantosTrabalham(Nome, Empresas, 0, 
+																Quantidade ),
+		!.
+		
+	/* Funcioamento interno de privado_RelacionamentosQuantosTrabalham */
+	privado_RelacionamentosQuantosTrabalham(_, [], QuantidadeTemp, 
+																Quantidade ) :-
+		
+		copy_term(QuantidadeTemp, Quantidade).
+	
+	/* Funcioamento interno de privado_RelacionamentosQuantosTrabalham */
+	privado_RelacionamentosQuantosTrabalham(PessoaAtual, Empresas, 
+												QuantidadeTemp, Quantidade ) :-
 
+		dividirLista(Empresas, 1, EmpresaTemp, RestoEmpresas),
+		primeiro(EmpresaTemp, Empresa),
+		privado_QuantosTrabalhamNessaEmpresa(PessoaAtual, Empresa, 
+															QuantidadeTemp2),
+		NovaQuantidadeTemp is QuantidadeTemp + QuantidadeTemp2,
+		privado_RelacionamentosQuantosTrabalham(PessoaAtual, RestoEmpresas, 
+											NovaQuantidadeTemp, Quantidade ).
+	
+	/* Recebe uma Empresa e retorna Quantidade de pessoas que trabalham nela, 
+	 *   descontado a PessoaAtual fornecida como parâmetro.
+	 * */
+	privado_QuantosTrabalhamNessaEmpresa(PessoaAtual, Empresa, Quantidade) :-
+	
+		findall(QuantidadeTemp, privado_QuantosTrabalhamNessaEmpresaTemp(
+					PessoaAtual, Empresa, QuantidadeTemp), QuantidadeLista ), 
+		somaDosElementos(QuantidadeLista, Quantidade).
+		
+		privado_QuantosTrabalhamNessaEmpresaTemp(PessoaAtual, Empresa, 
+																Quantidade) :-
+			
+			informacoesProfissionais(InformacoesProfissionais),
+			dadoNaPosicao(EmpresaTemp, InformacoesProfissionais, 1),
+			dadoNaPosicao(PessoaAtualTemp, InformacoesProfissionais, 0),
+			( EmpresaTemp = Empresa -> 
+				( PessoaAtual \= PessoaAtualTemp ->
+					Quantidade is 1
+				;
+					Quantidade is 0
+				)
+			;
+				Quantidade is 0
+			).
+
+	/* Recebe um Nome e retorna uma lista de Empresas em que a pessoa trabalha.
+	 * */
+	privado_RelacionamentosDeTrabalho(Nome, Empresas) :-
+		
+		/* Faz todas as requisições ';' para o predicado privado_QualEmpresa. */
+		findall(Empresa, privado_QualEmpresa(Nome, Empresa), Empresas_Temp),
+		
+		/* Retira desta lista todos os repetidos e retorna essa lista em 
+		 *   Empresas. */
+		sort(Empresas_Temp, Empresas).
+	
+		/* Retorna o Nome da Empresa armazenada no predicado 
+		 *   informacoesProfissionais. A cada vez que se faz um requisição ';' 
+		 *   a este predicado, ele retorna a próxima empresa, até não existirem 
+		 *   mais informacoesProfissionais.
+		 * */
+		privado_QualEmpresa(Nome, NomeDaEmpresa) :-
+			/* Primeiro carrego a lista de informacoesProfissionais. */
+			informacoesProfissionais(L),
+			dadoNaPosicao(NomeTemp, L, 0),
+			NomeTemp = Nome,
+			/* Segundo pego o nome da empresa. */
+			dadoNaPosicao(NomeDaEmpresa, L, 1).
 
 /* ###########################################################################
  * Imprime o currículo na tela, dado uma lista com nomes de Pessas na base de 
