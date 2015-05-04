@@ -30,30 +30,35 @@ quemMoraEm(Cidade, Nomes) :-
 /* Questão 3 ###############################################################
  * Qual a idade de uma dada pessoa?
  *
- * Pega a data de nascimento de uma dada pessoa e calcula sua idade.
- * Primeiro, encontra a pessoa na lista informacoesPessoais.
- * Segundo, pega sua DataDeNascimento da lista L de informações da Pessoa.
- * Terceiro, calcula sua idade.
+ * Pegar a data de nascimento de uma dada pessoa e calcula sua idade.
+ *
+ * 1) Encontra a pessoa na lista informacoesPessoais.
+ * 2) Pega sua DataDeNascimento da lista L de informações da Pessoa.
+ * 3) Calcula sua idade.
  * */
 qualIdadeDe(Nome, Idade) :- 
-	informacoesPessoais(L), dadoNaPosicao(NomeDaPessoa, L, 0),
+	informacoesPessoais(L), 
+	dadoNaPosicao(NomeDaPessoa, L, 0),
 	NomeDaPessoa == Nome,
 	dadoNaPosicao(DataDeNascimento, L, 1),
-	privado_CalcularIdade(DataDeNascimento, Idade).
+	privado_CalcularIdade(DataDeNascimento, Idade),
+	!.
 
-	/* Primeiro, converto a data de aniversário Data para um TimeStamp 
-	 *  DataDeAniver. 
-	 * Segundo, consigo a data atual e armazeno em outro TimeStamp DataAtual.
-	 * Terceiro, obtenho Ano do aniversário de DataDeAniver.
-	 * Quarto, obtenho Ano atual de DataDeAniver.
-	 * Quinto, calculo a idade da pessoa.
+	/* 1) Eu converto o predicado recebido como parametro Data em uma 
+	 *   lista List. 
+	 * 2) Removo o primeiro e desnecessário elemento Data da lista List.
+	 * 3) Calculo o AnoAniversario.
+	 * 4) Consigo a DataAtual.
+	 * 5) Converto a DataAtual para AnoAtual.
+	 * 6) Calculo a idade da pessoa e retorno na variável Idade.
 	 * */
 	privado_CalcularIdade(Data, Idade) :-
-	    date_time_stamp(Data, DataDeAniver),
+	    Data =.. List,
+	    dividirLista(List, 1, _, DataTemp), 
+	    dadoNaPosicao(AnoAniversario, DataTemp, 0),
 	    get_time(DataAtual),
-	    convert_time(DataDeAniver, AnoAniver, _, _,_,_,_,_),
 	    convert_time(DataAtual, AnoAtual, _, _, _,_,_,_),
-	    Idade is AnoAtual - AnoAniver.
+	    Idade is AnoAtual - AnoAniversario.
 
 
 /* Questão 4 ###############################################################
