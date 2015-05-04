@@ -322,7 +322,8 @@ tempoMedioDeEstudo(TempoMedio) :-
  * Qual o nome de todas as pessoas da lista ?
  * */
 nomeDeTodasAsPessoas(ListaDeNomes) :-
-	findall(Nome, privado_Nomes(Nome), ListaDeNomes).
+	findall(Nome, privado_Nomes(Nome), ListaDeNomesTemp),
+	sort(ListaDeNomesTemp, ListaDeNomes).
 
 	privado_Nomes(Nome) :-
 		dadoDeInfoNaPosicao(1,Nome).

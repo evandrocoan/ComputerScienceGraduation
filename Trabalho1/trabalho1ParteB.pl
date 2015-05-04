@@ -777,10 +777,6 @@ quantidadeDeRelacionamentos(Nome, Quantidade) :-
 			NomeTemp = Nome,
 			dadoNaPosicao(NomeDaInstituicao, L, 2).
 	
-	
-	
-	
-	
 	/* Recebe uma lista de Empresas e retorna a Quantidade de pessoas que 
 	 * Trabalham nessas empresas.
 	 * */
@@ -856,6 +852,75 @@ quantidadeDeRelacionamentos(Nome, Quantidade) :-
 			NomeTemp = Nome,
 			/* Segundo pego o nome da empresa. */
 			dadoNaPosicao(NomeDaEmpresa, L, 1).
+
+
+/* Questão 24 ##############################################################
+ * Qual a pessoa com a maior quantidade de relacionamentos (segundo a 
+ *   definição da questão anterior)? Exiba seu currículo.
+ * 
+ * 1) Crio uma lista contendo o nome de todas as pessoas, sem repetição e 
+ *   em ordem.
+ * 2) A partir da lista de nomes, crio outra lista contendo a quantidade de 
+ *   relacionamentos, onde existe a correspondência 1 para 1 entre a lista de 
+ *   nomes e a lista de relacionamentos, isto á, para o nome na posição 1 da 
+ *   lista de nomes, existe na lista de relacionamentos na posição 1, a sua 
+ *   quantidade de relacionamentos.
+ * 3) Encontro a posição do maior elemento na lista de relacionamentos e 
+ *   retorno o nome da pessoa correspondente na lista de nomes.
+ * 4) Imprimo o currículo na tela.
+ * 5) A cada vez pode-se fazer a requisição ‘;’ que encontrar outras pessoas 
+ *   com a maior quantidade, caso haja empate.
+ * */
+maiorQuantidadeDeRelacionamentos(Nome) :-
+	
+	nomeDeTodasAsPessoas(Nomes),
+	privado_QuantidadeRelacionamentos(Nomes, Relacionamentos),
+	posicaoDoMaior(Relacionamentos, Posicao),
+	dadoNaPosicao(Nome, Nomes, Posicao),
+	imprimirCurriculo([Nome]).
+	
+	/* Retorna uma lista Relacionamentos contendo em ordem a quantidade de 
+	 *   relacionamentos que cada pessoa da lista Nomes tem.
+	 * */
+	privado_QuantidadeRelacionamentos(Nomes, Relacionamentos) :-
+		
+		privado_QuantidadeRelacionamentos(Nomes, [], Relacionamentos).
+	
+	privado_QuantidadeRelacionamentos([], Temp, Relacionamentos) :-
+		
+		copy_term(Temp, Relacionamentos).
+		
+	privado_QuantidadeRelacionamentos(Nomes, Temp, Relacionamentos) :-
+		
+		dividirLista(Nomes, 1, NomeTemp, RestoNomes),
+		primeiro(NomeTemp, Nome),
+		quantidadeDeRelacionamentos(Nome, Quantidade),
+		inseridoNoFinal(Quantidade, Temp, TempSaida),
+		privado_QuantidadeRelacionamentos(RestoNomes, TempSaida, 
+															Relacionamentos).
+
+
+/* Questão 25 ###############################################################
+ * Crie uma pergunta qualquer (ainda não feita) que envolva a determinação 
+ *   de máximo ou de mínimo de um conjunto numérico.
+ * 
+ * Qual a idade da pessoa mais velha?
+ * 
+ * 1) Crio uma lista contendo a idade de todas as pessoas.
+ * 2) Pego qual a maior idade dessa lista e retorno em Idade
+ */
+qualMaiorIdade(Idade) :-
+	
+	findall( IdadeTemp, privado_QualMaiorIdade(IdadeTemp), Idades),
+	maiorElemento(Idades, Idade),
+	!.
+	
+	privado_QualMaiorIdade(Idade) :-
+		informacoesPessoais(L),
+		dadoNaPosicao(DataDeNascimento, L, 1),
+		privado_CalcularIdade(DataDeNascimento, Idade).
+
+
 
 /* ###########################################################################
  * Imprime o currículo na tela, dado uma lista com nomes de Pessas na base de 
