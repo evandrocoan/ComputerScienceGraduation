@@ -16,8 +16,7 @@ public final class Homebroker
     /**
      * Motor responsável pela lógica da interface gráfica principal do programa.
      */
-    private static MotorDoHomebroker motor = MotorDoHomebroker
-        .getInstância();
+    private final MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
     
     private Homebroker()
     {
@@ -34,11 +33,11 @@ public final class Homebroker
      *            "com dicas de contas para se logar."
      */
     @SuppressWarnings( "all" )
-    private static void iniciarSistema( final String[] args )
+    private void iniciarSistema( final String[] args )
     {
         if( ( args == null ) || ( args.length == 0 ) )
         {
-            Homebroker.modoDeLogin();
+            this.modoDeLogin();
         } else
         {
             boolean exitLoop = false;
@@ -48,11 +47,11 @@ public final class Homebroker
                 switch( args[i] )
                 {
                 case "teste":
-                    Homebroker.modoDeTeste();
+                    this.modoDeTeste();
                     break;
                 
                 case "dica":
-                    Homebroker.modoDeDica();
+                    this.modoDeDica();
                     break;
                 
                 case "ajuda":
@@ -83,18 +82,18 @@ public final class Homebroker
      * @param args caso receba o argumento 'teste' abre o programa em uma conta
      *            teste.
      */
-    public static void main( final String... args )
+    public void main( final String... args )
     {
-        Homebroker.iniciarSistema( args );
+        new Homebroker().iniciarSistema( args );
     }
     
     /**
      * Inicia o sistema em modo de teste exibindo dica de contas para logar.
      */
-    private static void modoDeDica()
+    private void modoDeDica()
     {
         // encapsula o motor para evitar o synthetic-access
-        final MotorDoHomebroker motor = Homebroker.motor;
+        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -122,10 +121,10 @@ public final class Homebroker
     /**
      * Inicia o sistema o login no sistema.
      */
-    private static void modoDeLogin()
+    private void modoDeLogin()
     {
         // encapsula a janela para evitar o synthetic-access
-        final MotorDoHomebroker motor = Homebroker.motor;
+        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -153,10 +152,10 @@ public final class Homebroker
     /**
      * Inicia o sistema em modo de teste.
      */
-    private static void modoDeTeste()
+    private void modoDeTeste()
     {
         // encapsula o motor para evitar o synthetic-access
-        final MotorDoHomebroker motor = Homebroker.motor;
+        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.

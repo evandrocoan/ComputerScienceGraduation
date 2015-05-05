@@ -151,7 +151,7 @@ public class SuperConstructor extends JFrame
         
         private static final long serialVersionUID = 1L;
         
-        @SuppressWarnings( { "unused", "synthetic-access" } )
+        @SuppressWarnings( { "synthetic-access" } )
         SecondDialog( final Frame parent, final boolean modal )
         {
             // super(parent); // < --- Makes this dialog
