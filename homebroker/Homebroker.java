@@ -1,9 +1,10 @@
 /**
  * 
  */
-package homebroker.interface_gráfica;
+package homebroker;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.interface_gráfica.JanelaDeLogin;
+import homebroker.interface_gráfica.JanelaDoHomebroker;
 
 import javax.swing.SwingUtilities;
 
@@ -23,11 +24,6 @@ public final class Homebroker
     {
         new Homebroker().iniciarSistema( args );
     }
-    
-    /**
-     * Motor responsável pela lógica da interface gráfica principal do programa.
-     */
-    private final MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
     
     private Homebroker()
     {
@@ -60,11 +56,11 @@ public final class Homebroker
                 case "teste":
                     this.modoDeTeste();
                     break;
-                
+                    
                 case "dica":
                     this.modoDeDica();
                     break;
-                
+                    
                 case "ajuda":
                     System.out.println( "Comandos disponívels:\n"
                         + "teste: abre o programa em mode de teste sem dica"
@@ -73,7 +69,7 @@ public final class Homebroker
                         + "com dicas de contas para se logar." );
                     exitLoop = true;
                     break;
-                
+                    
                 default:
                     System.out.println( "Linha de Comando inválido! " + args[i] );
                     exitLoop = true;
@@ -92,8 +88,6 @@ public final class Homebroker
      */
     private void modoDeDica()
     {
-        // encapsula o motor para evitar o synthetic-access
-        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -109,8 +103,8 @@ public final class Homebroker
                 final JanelaDeLogin janelaDeLogin;
                 final JanelaDoHomebroker janelaDoHomebroker;
                 
-                janelaDeLogin = JanelaDeLogin.getInstância( motor );
-                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                janelaDeLogin = JanelaDeLogin.getInstância();
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância();
                 
                 janelaDeLogin.loginNoSistema( "dica" );
                 janelaDoHomebroker.setVisible( true );
@@ -123,8 +117,6 @@ public final class Homebroker
      */
     private void modoDeLogin()
     {
-        // encapsula a janela para evitar o synthetic-access
-        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -140,8 +132,8 @@ public final class Homebroker
                 final JanelaDeLogin janelaDeLogin;
                 final JanelaDoHomebroker janelaDoHomebroker;
                 
-                janelaDeLogin = JanelaDeLogin.getInstância( motor );
-                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                janelaDeLogin = JanelaDeLogin.getInstância();
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância();
                 
                 janelaDeLogin.loginNoSistema( "login" );
                 janelaDoHomebroker.setVisible( true );
@@ -154,8 +146,6 @@ public final class Homebroker
      */
     private void modoDeTeste()
     {
-        // encapsula o motor para evitar o synthetic-access
-        final MotorDoHomebroker motor = this.motor;
         /**
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
@@ -171,8 +161,8 @@ public final class Homebroker
                 final JanelaDeLogin janelaDeLogin;
                 final JanelaDoHomebroker janelaDoHomebroker;
                 
-                janelaDeLogin = JanelaDeLogin.getInstância( motor );
-                janelaDoHomebroker = JanelaDoHomebroker.getInstância( motor );
+                janelaDeLogin = JanelaDeLogin.getInstância();
+                janelaDoHomebroker = JanelaDoHomebroker.getInstância();
                 
                 janelaDeLogin.loginNoSistema( "teste" );
                 janelaDoHomebroker.setVisible( true );
