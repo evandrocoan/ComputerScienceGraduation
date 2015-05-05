@@ -29,6 +29,24 @@ public final class MotorDoHomebroker
         new MotorDoHomebroker();
     
     /**
+     * Retorna a única instancia existe do MotorDoHomebroker.
+     * 
+     * @return INSTANCE a única instancia existe da JanelaPrincipal.
+     */
+    public static MotorDoHomebroker getInstância()
+    {
+        return MotorDoHomebroker.INSTÂNCIA;
+    }
+    
+    /**
+     * Encerrra a execução do Homebroker.
+     */
+    public static void sairDoSistema()
+    {
+        System.exit( 0 );
+    }
+    
+    /**
      * Classe responsável pelo controle da lógica de dados do BookDeOfertas.
      */
     private final MotorDoBook motorDoBook = MotorDoBook.getInstance();
@@ -68,6 +86,13 @@ public final class MotorDoHomebroker
         
         // Cria contas fictícias
         this.contasTeste = UtiliárioDeContas.criarContasFicticia( 30, "123" );
+    }
+    
+    public boolean adicionarOfertaDeCompra( final double preço,
+        final int quantidade, final String nome )
+    {
+        return this.motorDoBook.adicionarOfertaDeCompra( preço, quantidade,
+            nome );
     }
     
     /**
@@ -186,23 +211,5 @@ public final class MotorDoHomebroker
             }
         }
         return false;
-    }
-    
-    /**
-     * Retorna a única instancia existe do MotorDoHomebroker.
-     * 
-     * @return INSTANCE a única instancia existe da JanelaPrincipal.
-     */
-    public static MotorDoHomebroker getInstância()
-    {
-        return MotorDoHomebroker.INSTÂNCIA;
-    }
-    
-    /**
-     * Encerrra a execução do Homebroker.
-     */
-    public static void sairDoSistema()
-    {
-        System.exit( 0 );
     }
 }
