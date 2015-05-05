@@ -117,7 +117,7 @@ public final class MotorDoHomebroker
     
     public boolean bloquearConta( final String nome )
     {
-        return UtiliárioDeContas.definirAdministrador( nome, this.contasTeste );
+        return UtiliárioDeContas.bloquearConta( nome, this.contasTeste );
     }
     
     /**

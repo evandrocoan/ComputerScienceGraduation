@@ -40,7 +40,7 @@ public final class UtiliárioDeContas
         int contador = 0;
         for( final Conta conta: contas )
         {
-            texto.append( conta.getNome() );
+            texto.append( conta.getNome() ).append( conta.isBloqueada() );
             texto.append( ", " );
             if( Biblioteca.quebrarLinha( contador ) )
             {
@@ -60,7 +60,7 @@ public final class UtiliárioDeContas
     @SuppressWarnings( "all" )
     public static List< Conta > criarContasFicticia( final int quantidade,
         final String senha )
-    {
+        {
         final ArrayList< Conta > contasTeste = new ArrayList<>();
         contasTeste.add( new Conta( "admin", "admin", 2000.5 * Biblioteca
             .gerarNumeroAleatorio(), true, new Inventario() ) );
@@ -85,7 +85,7 @@ public final class UtiliárioDeContas
                 + contasTeste.get( 0 ).getNome() );
         }
         return contasTeste;
-    }
+        }
     
     /**
      * Cria um inventário fictício de ações contendo 5 ações fictícias.
@@ -128,7 +128,7 @@ public final class UtiliárioDeContas
         }
     }
     
-    public static boolean definirAdministrador( final String nome,
+    public static boolean bloquearConta( final String nome,
         final List< Conta > contas )
     {
         for( final Conta conta: contas )

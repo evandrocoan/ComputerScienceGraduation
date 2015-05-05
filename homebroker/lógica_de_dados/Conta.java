@@ -49,11 +49,6 @@ public class Conta
         return this.senha.equals( senha );
     }
     
-    public boolean isAdministradora()
-    {
-        return this.administrador;
-    }
-    
     public boolean definirBloqueada()
     {
         return this.bloqueada = true;
@@ -75,8 +70,6 @@ public class Conta
         return false;
     }
     
-// #################################### Client Access ##########
-    
     /**
      * @param nomeAção nome da ação.
      * @return true se ela existe false caso contrário.
@@ -94,8 +87,6 @@ public class Conta
     {
         return this.inventario.existeQuantidade( quantidade );
     }
-    
-    // #################################### Client Access ##########
     
     /**
      * Retorna o inventário do cliente. Este contém todas as ações compradas por
@@ -160,6 +151,11 @@ public class Conta
         return this.getInventario().inventarioToString();
     }
     
+    public boolean isAdministradora()
+    {
+        return this.administrador;
+    }
+    
     public boolean isBloqueada()
     {
         return this.bloqueada;
@@ -185,7 +181,6 @@ public class Conta
         return false;
     }
     
-    // #################################### Administrador Access ##########
     /**
      * Define no nome do cliente. Somente o administrador tem acesso a essa
      * funcionanlidade.

@@ -39,12 +39,9 @@ public final class JanelaDeBloqueio extends JFrame
     
     private final MotorDoHomebroker motor;
     
-    private final String dica;
-    
     private JanelaDeBloqueio( final MotorDoHomebroker motor )
     {
         this.motor = motor;
-        this.dica = motor.contasTesteToString();
     }
     
     /**
@@ -76,7 +73,8 @@ public final class JanelaDeBloqueio extends JFrame
             nome =
                 JOptionPane.showInputDialog(
                     ( inputError? "" : "Usuário inválidos\n\n" )
-                        + this.dica + "\n\nInsira qual conta será bloqueada: " );
+                        + this.motor.contasTesteToString() +
+                        "\n\nInsira qual conta será bloqueada: " );
             
             if( nome == null )
             {
