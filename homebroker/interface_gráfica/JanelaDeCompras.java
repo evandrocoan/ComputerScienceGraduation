@@ -21,6 +21,22 @@ public final class JanelaDeCompras extends JFrame
     
     private static JanelaDeCompras instância;
     
+    /**
+     * @param motor o motor do Homebroker.
+     * @return instância uma intância da janela de login.
+     */
+    public static JanelaDeCompras getInstância( final MotorDoHomebroker motor )
+    {
+        synchronized( JanelaDeCompras.class )
+        {
+            if( JanelaDeCompras.instância == null )
+            {
+                JanelaDeCompras.instância = new JanelaDeCompras( motor );
+            }
+        }
+        return JanelaDeCompras.instância;
+    }
+    
     private final MotorDoHomebroker motor;
     
     private JanelaDeCompras( final MotorDoHomebroker motor )
@@ -58,7 +74,7 @@ public final class JanelaDeCompras extends JFrame
             {
                 return;
             }
-            sucesso = this.motor.adicionarOfertaDeVenda( preço,
+            sucesso = this.motor.adicionarOfertaDeCompra( preço,
                 quantidade, nome );
         }
         
@@ -67,21 +83,17 @@ public final class JanelaDeCompras extends JFrame
     private String getNome()
     {
         boolean sucesso = false;
-        boolean nÉsimaVez = false;
         String açãoParaVender = null;
         
         while( !sucesso )
         {
-            açãoParaVender = JOptionPane.showInputDialog(
-                ( nÉsimaVez? "Ação não existênte!\n\n" : "" )
-                    + "Lista de ações disponíveis para venda: \n"
-                    + this.motor.inventarioToString() );
+            açãoParaVender = JOptionPane.showInputDialog( "Insira o nome da "
+                + "ação que deseja comprar: " );
             if( açãoParaVender == null )
             {
                 return null;
             }
-            sucesso = this.motor.existeNoInvetário( açãoParaVender );
-            nÉsimaVez = true;
+            sucesso = true;
         }
         return açãoParaVender;
     }
@@ -104,39 +116,23 @@ public final class JanelaDeCompras extends JFrame
     private int getQuantidade( final String açãoParaVender )
     {
         boolean sucesso = false;
-        boolean nÉsimaVez = false;
         int quantidade = 0;
         
         while( !sucesso )
         {
-            final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
-                ? "Quantidade não existênte!\n\n" : "" )
-                + "Insira a quantidade da ação:", Integer
-                .toString( this.motor.getQuantidade( açãoParaVender ) ) );
+            final String imput =
+                JOptionPane.showInputDialog( "Insira a quantidade da ação:",
+                    Integer.toString(
+                        this.motor.getQuantidade( açãoParaVender ) ) );
             if( imput == null )
             {
                 return 0;
             }
             quantidade = (int) Double.parseDouble( imput );
-            sucesso = this.motor.existeQuantidade( quantidade );
-            nÉsimaVez = true;
+            // sucesso = this.motor.existeQuantidadeNoInvetário( quantidade );
+            // TODO
+            sucesso = true;
         }
         return quantidade;
-    }
-    
-    /**
-     * @param motor o motor do Homebroker.
-     * @return instância uma intância da janela de login.
-     */
-    public static JanelaDeCompras getInstância( final MotorDoHomebroker motor )
-    {
-        synchronized( JanelaDeCompras.class )
-        {
-            if( JanelaDeCompras.instância == null )
-            {
-                JanelaDeCompras.instância = new JanelaDeCompras( motor );
-            }
-        }
-        return JanelaDeCompras.instância;
     }
 }
