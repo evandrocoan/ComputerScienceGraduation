@@ -27,7 +27,7 @@ public class Conta
      * @param inventario o inventário do usuário.
      */
     public Conta( final String nome, final String senha, final double saldo,
-            final boolean administrador, final Inventario inventario )
+        final boolean administrador, final Inventario inventario )
     {
         this.nome = nome;
         this.senha = senha;
@@ -45,6 +45,11 @@ public class Conta
     public boolean checkSenha( final String senha )
     {
         return this.senha.equals( senha );
+    }
+    
+    public boolean contaAdministradora()
+    {
+        return this.administrador;
     }
     
     /**
@@ -81,25 +86,7 @@ public class Conta
         return this.inventario.existeQuantidade( quantidade );
     }
     
-    /**
-     * @param nome o nome da ação a procurar o preço.
-     * @return preço o preço da ação encontrada.
-     */
-    public double getPreço( final String nome )
-    {
-        return this.inventario.getPreço( nome );
-    }
-    
     // #################################### Client Access ##########
-    
-    /**
-     * @param nome o nome da ação para encontrar a quantidade.
-     * @return quantidade a quantidade de ação disponíveis.
-     */
-    public int getQuantidade( final String nome )
-    {
-        return this.inventario.getQuantidade( nome );
-    }
     
     /**
      * Retorna o inventário do cliente. Este contém todas as ações compradas por
@@ -121,6 +108,24 @@ public class Conta
     public String getNome()
     {
         return this.nome;
+    }
+    
+    /**
+     * @param nome o nome da ação a procurar o preço.
+     * @return preço o preço da ação encontrada.
+     */
+    public double getPreço( final String nome )
+    {
+        return this.inventario.getPreço( nome );
+    }
+    
+    /**
+     * @param nome o nome da ação para encontrar a quantidade.
+     * @return quantidade a quantidade de ação disponíveis.
+     */
+    public int getQuantidade( final String nome )
+    {
+        return this.inventario.getQuantidade( nome );
     }
     
     /**

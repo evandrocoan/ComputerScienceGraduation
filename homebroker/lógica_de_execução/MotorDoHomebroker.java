@@ -116,6 +116,15 @@ public final class MotorDoHomebroker
     }
     
     /**
+     * @return true caso haja alguma conta que esteja autenticada tenha
+     *         privilégio de administrador.
+     */
+    public boolean contaAdministradora()
+    {
+        return this.contaAutenticada.contaAdministradora();
+    }
+    
+    /**
      * @return true caso haja alguma conta está altenticada, false caso
      *         contrário.
      */
