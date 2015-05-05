@@ -82,7 +82,7 @@ public final class PainelDoHomebroker extends JPanel
         + "Digite 'v' para para ver o inventario\n"
         + "Digite 'ov' para enviar uma ordem de venda\n"
         + "Digite 'oc' para criar um ordem de compra\n"
-        // + "Digite 'c' para para criar uma conta!\n"
+        + "Digite 'c' para para criar uma conta!\n"
         + "Digite 'm' para ver o mercado!\n";
     
     /**
@@ -110,6 +110,34 @@ public final class PainelDoHomebroker extends JPanel
         
         Biblioteca.trocarFontes( this, new Font( this.getName(),
             Frame.NORMAL, 20 ) );
+    }
+    
+    /**
+     * Inicia o processo de criação da conta de um usuário do sistema
+     * 
+     * //@return conta a conta criada
+     */
+    public void cadastrarUsuário()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = this.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeCadastro janelaDeCadastro;
+                janelaDeCadastro = JanelaDeCadastro.getInstância( motor );
+                janelaDeCadastro.efetuarCadastro();
+            }
+        } );
     }
     
     /**
@@ -197,22 +225,6 @@ public final class PainelDoHomebroker extends JPanel
     }
     
     /**
-     * Inicia o processo de criação da conta de um usuário do sistema
-     * 
-     * //@return conta a conta criada
-     */
-    public void criarUsuario()
-    {
-        // TODO
-        // String nome = JOptionPane.showInputDialog( "Digite seu nome:" );
-        // String senha = JOptionPane.showInputDialog( "Digite sua senha:" );
-        // Conta conta = new Conta( nome, senha, 0, false, new Inventario() );
-        // ( String nome, String senha, double saldo,boolean
-        // administrador, Inventario inventario )
-        // return conta;
-    }
-    
-    /**
      * Chama a janela responsável por realizar venda da ação.
      */
     private void efetuarCompra()
@@ -283,10 +295,9 @@ public final class PainelDoHomebroker extends JPanel
         case "v":
             this.mostrarInventário();
             break;
-        // case "c":
-        // TODO
-        // this.criarUsuario();
-        // break;
+        case "c":
+            this.cadastrarUsuário();
+            break;
         case "ov":
             this.efetuarVenda();
             break;

@@ -4,6 +4,7 @@
 package homebroker.lógica_de_execução;
 
 import homebroker.lógica_de_dados.Conta;
+import homebroker.lógica_de_dados.Inventario;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -86,6 +87,13 @@ public final class MotorDoHomebroker
         
         // Cria contas fictícias
         this.contasTeste = UtiliárioDeContas.criarContasFicticia( 30, "123" );
+    }
+    
+    public boolean adicionarConta( final double saldo, final int cpf,
+        final String nome, final String senha )
+    {
+        return this.contasTeste.add( new Conta( nome, senha, saldo,
+            false, new Inventario() ) );
     }
     
     public boolean adicionarOfertaDeCompra( final double preço,
