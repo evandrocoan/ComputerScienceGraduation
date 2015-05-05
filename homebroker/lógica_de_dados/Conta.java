@@ -67,27 +67,27 @@ public class Conta
      * @param nomeAção nome da ação.
      * @return true se ela existe false caso contrário.
      */
-    public boolean existeAçãoNoInvetário( final String nomeAção )
+    public boolean existeNoInvetário( final String nomeAção )
     {
-        return this.inventario.existeAçãoNoInvetário( nomeAção );
+        return this.inventario.existeNoInvetário( nomeAção );
     }
     
     /**
      * @param quantidade a quantidade de ações
      * @return true se existe a quantidade especificada, false caso contrário.
      */
-    public boolean existeQuantidadeNoInvetário( final int quantidade )
+    public boolean existeQuantidade( final int quantidade )
     {
-        return this.inventario.existeQuantidadeNoInvetário( quantidade );
+        return this.inventario.existeQuantidade( quantidade );
     }
     
     /**
      * @param nome o nome da ação a procurar o preço.
      * @return preço o preço da ação encontrada.
      */
-    public double getAçãoPreço( final String nome )
+    public double getPreço( final String nome )
     {
-        return this.inventario.getAçãoPreço( nome );
+        return this.inventario.getPreço( nome );
     }
     
     // #################################### Client Access ##########
@@ -96,9 +96,9 @@ public class Conta
      * @param nome o nome da ação para encontrar a quantidade.
      * @return quantidade a quantidade de ação disponíveis.
      */
-    public int getAçãoQuantidade( final String nome )
+    public int getQuantidade( final String nome )
     {
-        return this.inventario.getAçãoQuantidade( nome );
+        return this.inventario.getQuantidade( nome );
     }
     
     /**
