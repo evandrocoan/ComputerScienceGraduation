@@ -15,6 +15,7 @@ public class Conta
     private double saldo;
     private final boolean administrador;
     private final Inventario inventario;
+    private boolean bloqueada;
     
     /**
      * Cosntrutor padrão que cria um objeto da classe, sem realizar nenhum tipo
@@ -33,6 +34,7 @@ public class Conta
         this.senha = senha;
         this.saldo = saldo;
         this.administrador = administrador;
+        this.bloqueada = false;
         this.inventario = inventario;
     }
     
@@ -47,9 +49,14 @@ public class Conta
         return this.senha.equals( senha );
     }
     
-    public boolean contaAdministradora()
+    public boolean isAdministradora()
     {
         return this.administrador;
+    }
+    
+    public boolean definirBloqueada()
+    {
+        return this.bloqueada = true;
     }
     
     /**
@@ -67,6 +74,8 @@ public class Conta
         
         return false;
     }
+    
+// #################################### Client Access ##########
     
     /**
      * @param nomeAção nome da ação.
@@ -149,6 +158,11 @@ public class Conta
     public String inventarioToString()
     {
         return this.getInventario().inventarioToString();
+    }
+    
+    public boolean isBloqueada()
+    {
+        return this.bloqueada;
     }
     
     /**

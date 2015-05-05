@@ -115,20 +115,25 @@ public final class MotorDoHomebroker
         return this.motorDoBook.adicionarOfertaDeVenda( preço, quantidade, nome );
     }
     
+    public boolean bloquearConta( final String nome )
+    {
+        return UtiliárioDeContas.definirAdministrador( nome, this.contasTeste );
+    }
+    
     /**
      * @return true caso haja alguma conta que esteja autenticada tenha
      *         privilégio de administrador.
      */
-    public boolean contaAdministradora()
+    public boolean isAdministradora()
     {
-        return this.contaAutenticada.contaAdministradora();
+        return this.contaAutenticada.isAdministradora();
     }
     
     /**
      * @return true caso haja alguma conta está altenticada, false caso
      *         contrário.
      */
-    public boolean contaEstáAutenticada()
+    public boolean isAutenticada()
     {
         return this.contaAutenticada != null;
     }

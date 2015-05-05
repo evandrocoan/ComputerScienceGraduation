@@ -28,14 +28,6 @@ public final class UtiliárioDeContas
     private static final Logger LOG = Logger.getLogger( "MotorDoHomebroker" );
     
     /**
-     * Serve para tornar a classe uma classe utilitária.
-     */
-    private UtiliárioDeContas()
-    {
-        UtiliárioDeContas.LOG.setLevel( Level.OFF );
-    }
-    
-    /**
      * Transforma um ArrayList de contas e uma String
      * 
      * @param contas um ArrayList contendo as contas
@@ -68,7 +60,7 @@ public final class UtiliárioDeContas
     @SuppressWarnings( "all" )
     public static List< Conta > criarContasFicticia( final int quantidade,
         final String senha )
-        {
+    {
         final ArrayList< Conta > contasTeste = new ArrayList<>();
         contasTeste.add( new Conta( "admin", "admin", 2000.5 * Biblioteca
             .gerarNumeroAleatorio(), true, new Inventario() ) );
@@ -93,7 +85,7 @@ public final class UtiliárioDeContas
                 + contasTeste.get( 0 ).getNome() );
         }
         return contasTeste;
-        }
+    }
     
     /**
      * Cria um inventário fictício de ações contendo 5 ações fictícias.
@@ -134,5 +126,26 @@ public final class UtiliárioDeContas
                     + Biblioteca.gerarNumeroAleatorio() );
             conta.getInventario().adicionarAoInventario( ação );
         }
+    }
+    
+    public static boolean definirAdministrador( final String nome,
+        final List< Conta > contas )
+    {
+        for( final Conta conta: contas )
+        {
+            if( conta.getNome().equals( nome ) )
+            {
+                return conta.definirBloqueada();
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Serve para tornar a classe uma classe utilitária.
+     */
+    private UtiliárioDeContas()
+    {
+        UtiliárioDeContas.LOG.setLevel( Level.OFF );
     }
 }

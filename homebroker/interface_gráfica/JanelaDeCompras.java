@@ -49,7 +49,7 @@ public final class JanelaDeCompras extends JFrame
      */
     public void efetuarCompra()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
