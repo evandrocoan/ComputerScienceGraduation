@@ -31,6 +31,16 @@ public final class BookDeOfertas
     private static final BookDeOfertas INSTÂNCIA = new BookDeOfertas();
     
     /**
+     * Serve para implementação do padrão de projeto singleton.
+     * 
+     * @return INSTANCE a única instancia existe do BookDeOfertas.
+     */
+    public static BookDeOfertas getInstância()
+    {
+        return BookDeOfertas.INSTÂNCIA;
+    }
+    
+    /**
      * As ofertas do mercado realizadas.
      */
     private final List< OfertaDoMercado > ofertasDoMercado;
@@ -47,6 +57,13 @@ public final class BookDeOfertas
             throw new IllegalStateException( "Objeto já instânciado!" );
         }
         this.ofertasDoMercado = new ArrayList<>();
+    }
+    
+    public boolean adicionarOfertaDeCompra( final double preço,
+        final int quantidade, final String nome )
+    {
+        return this.ofertasDoMercado.add( new OfertaDoMercado( preço,
+            quantidade, nome, "Compra" ) );
     }
     
     /**
@@ -103,15 +120,5 @@ public final class BookDeOfertas
     public String ofertaToString( final int indice )
     {
         return this.ofertasDoMercado.get( indice ).ofertaToString();
-    }
-    
-    /**
-     * Serve para implementação do padrão de projeto singleton.
-     * 
-     * @return INSTANCE a única instancia existe do BookDeOfertas.
-     */
-    public static BookDeOfertas getInstância()
-    {
-        return BookDeOfertas.INSTÂNCIA;
     }
 }
