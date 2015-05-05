@@ -80,7 +80,7 @@ public final class JanelaDeVendas extends JFrame
             {
                 return null;
             }
-            sucesso = this.motor.existeAçãoNoInvetário( açãoParaVender );
+            sucesso = this.motor.existeNoInvetário( açãoParaVender );
             nÉsimaVez = true;
         }
         return açãoParaVender;
@@ -90,7 +90,7 @@ public final class JanelaDeVendas extends JFrame
     {
         final String imput = JOptionPane.showInputDialog(
             "Insira o preço da ação:",
-            Double.toString( this.motor.getAçãoPreço( açãoParaVender ) ) );
+            Double.toString( this.motor.getPreço( açãoParaVender ) ) );
         if( imput == null )
         {
             return 0;
@@ -112,13 +112,13 @@ public final class JanelaDeVendas extends JFrame
             final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
                 ? "Quantidade não existênte!\n\n" : "" )
                 + "Insira a quantidade da ação:", Integer
-                .toString( this.motor.getAçãoQuantidade( açãoParaVender ) ) );
+                .toString( this.motor.getQuantidade( açãoParaVender ) ) );
             if( imput == null )
             {
                 return 0;
             }
             quantidade = (int) Double.parseDouble( imput );
-            sucesso = this.motor.existeQuantidadeNoInvetário( quantidade );
+            sucesso = this.motor.existeQuantidade( quantidade );
             nÉsimaVez = true;
         }
         return quantidade;

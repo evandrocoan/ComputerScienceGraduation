@@ -115,47 +115,47 @@ public final class MotorDoHomebroker
     }
     
     /**
-     * {@link homebroker.lógica_de_dados.Conta#existeAçãoNoInvetário(String)}
+     * {@link homebroker.lógica_de_dados.Conta#existeNoInvetário(String)}
      * 
      * @param açãoParaVender o nome da ação.
      * @return true caso ele exista, false caso contrário.
      */
-    public boolean existeAçãoNoInvetário( final String açãoParaVender )
+    public boolean existeNoInvetário( final String açãoParaVender )
     {
-        return this.contaAutenticada.existeAçãoNoInvetário( açãoParaVender );
+        return this.contaAutenticada.existeNoInvetário( açãoParaVender );
     }
     
     /**
-     * {@link homebroker.lógica_de_dados.Conta#existeQuantidadeNoInvetário(int)}
+     * {@link homebroker.lógica_de_dados.Conta#existeQuantidade(int)}
      * 
      * @param quantidade a quantidade de ações.
      * @return true caso exista, false caso contrário.
      */
-    public boolean existeQuantidadeNoInvetário( final int quantidade )
+    public boolean existeQuantidade( final int quantidade )
     {
-        return this.contaAutenticada.existeQuantidadeNoInvetário( quantidade );
+        return this.contaAutenticada.existeQuantidade( quantidade );
     }
     
     /**
-     * {@link homebroker.lógica_de_dados.Conta#getAçãoPreço(String)}
+     * {@link homebroker.lógica_de_dados.Conta#getPreço(String)}
      * 
      * @param açãoParaVender o nome da ação.
      * @return preço o preço da ação.
      */
-    public double getAçãoPreço( final String açãoParaVender )
+    public double getPreço( final String açãoParaVender )
     {
-        return this.contaAutenticada.getAçãoPreço( açãoParaVender );
+        return this.contaAutenticada.getPreço( açãoParaVender );
     }
     
     /**
-     * {@link homebroker.lógica_de_dados.Conta#getAçãoQuantidade(String)}
+     * {@link homebroker.lógica_de_dados.Conta#getQuantidade(String)}
      * 
      * @param açãoParaVender o nome da ação para vender.
      * @return a quantidade de ações.
      */
-    public int getAçãoQuantidade( final String açãoParaVender )
+    public int getQuantidade( final String açãoParaVender )
     {
-        return this.contaAutenticada.getAçãoQuantidade( açãoParaVender );
+        return this.contaAutenticada.getQuantidade( açãoParaVender );
     }
     
     /**

@@ -35,7 +35,7 @@ public class Inventario
      * @param nomeAção o nome da ação.
      * @return true se ela existe false caso contrário.
      */
-    public boolean existeAçãoNoInvetário( final String nomeAção )
+    public boolean existeNoInvetário( final String nomeAção )
     {
         boolean existe = false;
         
@@ -54,7 +54,7 @@ public class Inventario
      * @param quantidade a quantidade de ações.
      * @return true se existe a quantidade de ações especificada.
      */
-    public boolean existeQuantidadeNoInvetário( final int quantidade )
+    public boolean existeQuantidade( final int quantidade )
     {
         boolean existe = false;
         
@@ -73,7 +73,7 @@ public class Inventario
      * @param nome o nome da ação a procurar o preço.
      * @return o preço da ação.
      */
-    public double getAçãoPreço( final String nome )
+    public double getPreço( final String nome )
     {
         double preço = 0;
         
@@ -91,7 +91,7 @@ public class Inventario
      * @param nome o nome da ação.
      * @return quantidade a quantidade de ações existentes no invetário.
      */
-    public int getAçãoQuantidade( final String nome )
+    public int getQuantidade( final String nome )
     {
         int quantidade = 0;
         
