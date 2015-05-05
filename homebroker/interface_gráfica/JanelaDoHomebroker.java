@@ -28,6 +28,23 @@ public final class JanelaDoHomebroker extends JFrame
     private static JanelaDoHomebroker instância;
     
     /**
+     * @return instância a instância da janela.
+     */
+    public static JanelaDoHomebroker getInstância()
+    {
+        synchronized( JanelaDoHomebroker.class )
+        {
+            if( JanelaDoHomebroker.instância == null )
+            {
+                final MotorDoHomebroker motor =
+                    MotorDoHomebroker.getInstância();
+                JanelaDoHomebroker.instância = new JanelaDoHomebroker( motor );
+            }
+        }
+        return JanelaDoHomebroker.instância;
+    }
+    
+    /**
      * Armazean o painel do homebroker.
      */
     private final PainelDoHomebroker painelPrincipal;
@@ -59,23 +76,6 @@ public final class JanelaDoHomebroker extends JFrame
         
         // Ajusta a janela ao tamanho dos elementos.
         this.pack();
-    }
-    
-    /**
-     * @param motor o motor do homebroker.
-     * @return instância a instância da janela.
-     */
-    public static JanelaDoHomebroker getInstância(
-        final MotorDoHomebroker motor )
-    {
-        synchronized( JanelaDoHomebroker.class )
-        {
-            if( JanelaDoHomebroker.instância == null )
-            {
-                JanelaDoHomebroker.instância = new JanelaDoHomebroker( motor );
-            }
-        }
-        return JanelaDoHomebroker.instância;
     }
     
 }

@@ -19,6 +19,23 @@ public final class JanelaDeLogin extends JFrame
     
     private static JanelaDeLogin instância;
     
+    /**
+     * @return instância uma intância da janela de login.
+     */
+    public static JanelaDeLogin getInstância()
+    {
+        synchronized( JanelaDeLogin.class )
+        {
+            if( JanelaDeLogin.instância == null )
+            {
+                final MotorDoHomebroker motor =
+                    MotorDoHomebroker.getInstância();
+                JanelaDeLogin.instância = new JanelaDeLogin( motor );
+            }
+        }
+        return JanelaDeLogin.instância;
+    }
+    
     private final MotorDoHomebroker motor;
     
     private JanelaDeLogin( final MotorDoHomebroker motor )
@@ -41,12 +58,12 @@ public final class JanelaDeLogin extends JFrame
         case "login":
             this.loginNoSistemaInterno( "" );
             break;
-        
+            
         case "teste":
             JOptionPane.showMessageDialog( null, "Sessão de teste!" );
             this.motor.loginNoSistemaChecagem( "admin", "admin" );
             break;
-        
+            
         case "dica":
             JOptionPane.showMessageDialog( null, "Sessão de teste "
                 + "COM dica de contas no login!" );
@@ -55,7 +72,7 @@ public final class JanelaDeLogin extends JFrame
             
             this.loginNoSistemaInterno( dica.toString() );
             break;
-        
+            
         default:
             System.out.println( "Comando de Login inválido! " + darDica );
             break;
@@ -75,7 +92,7 @@ public final class JanelaDeLogin extends JFrame
         {
             usuário = JOptionPane.showInputDialog(
                 ( inputError? "" : "Usuário ou senha inválidos\n\n" )
-                    + "Insira qual conta será feito login: " + dica );
+                + "Insira qual conta será feito login: " + dica );
             
             if( ( usuário == null ) )
             {
@@ -96,21 +113,5 @@ public final class JanelaDeLogin extends JFrame
         {
             System.exit( 0 );
         }
-    }
-    
-    /**
-     * @param motor o motor do Homebroker.
-     * @return instância uma intância da janela de login.
-     */
-    public static JanelaDeLogin getInstância( final MotorDoHomebroker motor )
-    {
-        synchronized( JanelaDeLogin.class )
-        {
-            if( JanelaDeLogin.instância == null )
-            {
-                JanelaDeLogin.instância = new JanelaDeLogin( motor );
-            }
-        }
-        return JanelaDeLogin.instância;
     }
 }
