@@ -22,12 +22,21 @@ public final class MotorDoBook implements Runnable
      * instânciado antes que o construtor desta classe, pois este construtor
      * precisa de deste objeto já instânciado para ser monitorado pelo log.
      */
-    private static final Logger LOG = Logger.getLogger( MotorDoBook.class.getName() );
+    private static final Logger LOG =
+        Logger.getLogger( MotorDoBook.class.getName() );
     
     /**
      * Por padrão, este tipo de instânciação é thread safe.
      */
     private static final MotorDoBook INSTÂNCIA = new MotorDoBook();
+    
+    /**
+     * @return the instance
+     */
+    public static MotorDoBook getInstance()
+    {
+        return MotorDoBook.INSTÂNCIA;
+    }
     
     private final BookDeOfertas bookDeOfertas;
     
@@ -48,6 +57,14 @@ public final class MotorDoBook implements Runnable
         }
         this.bookDeOfertas = BookDeOfertas.getInstância();
         this.monitorDoBook = MonitorDoBook.getInstance();
+    }
+    
+    public boolean adicionarOfertaDeCompra( final double preço,
+        final int quantidade,
+        final String nome )
+    {
+        return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade,
+            nome );
     }
     
     /**
@@ -71,7 +88,8 @@ public final class MotorDoBook implements Runnable
     private void atualizarListaDeOfertas()
     {
         final int indice = this.monitorDoBook.getNúmeroDeOfertas();
-        final String ofertaDoMercado = this.bookDeOfertas.ofertaToString( indice );
+        final String ofertaDoMercado =
+            this.bookDeOfertas.ofertaToString( indice );
         this.monitorDoBook.adicionarOfertaDeMercado( ofertaDoMercado );
         
         if( MotorDoBook.LOG.isLoggable( Level.SEVERE ) )
@@ -122,13 +140,5 @@ public final class MotorDoBook implements Runnable
                 // TODO
             }
         }
-    }
-    
-    /**
-     * @return the instance
-     */
-    public static MotorDoBook getInstance()
-    {
-        return MotorDoBook.INSTÂNCIA;
     }
 }

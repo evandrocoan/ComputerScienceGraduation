@@ -14,6 +14,17 @@ import javax.swing.SwingUtilities;
 public final class Homebroker
 {
     /**
+     * Método principal que inicia a execução do programa.
+     * 
+     * @param args caso receba o argumento 'teste' abre o programa em uma conta
+     *            teste.
+     */
+    public static void main( final String... args )
+    {
+        new Homebroker().iniciarSistema( args );
+    }
+    
+    /**
      * Motor responsável pela lógica da interface gráfica principal do programa.
      */
     private final MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
@@ -74,17 +85,6 @@ public final class Homebroker
                 }
             }
         }
-    }
-    
-    /**
-     * Método principal que inicia a execução do programa.
-     * 
-     * @param args caso receba o argumento 'teste' abre o programa em uma conta
-     *            teste.
-     */
-    public void main( final String... args )
-    {
-        new Homebroker().iniciarSistema( args );
     }
     
     /**
