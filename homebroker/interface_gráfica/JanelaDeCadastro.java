@@ -49,7 +49,7 @@ public final class JanelaDeCadastro extends JFrame
      */
     public void efetuarCadastro()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );

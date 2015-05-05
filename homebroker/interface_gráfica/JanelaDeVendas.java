@@ -33,7 +33,7 @@ public final class JanelaDeVendas extends JFrame
      */
     public void efetuarVenda()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
