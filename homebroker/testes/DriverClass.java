@@ -3,7 +3,7 @@
  */
 package homebroker.testes;
 
-import homebroker.interface_gráfica.Homebroker;
+import homebroker.Homebroker;
 
 /**
  * Esta classe inicia o programa principal em mode de teste.

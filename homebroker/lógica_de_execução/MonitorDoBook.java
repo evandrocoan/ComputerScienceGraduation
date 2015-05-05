@@ -33,7 +33,8 @@ public final class MonitorDoBook extends JFrame
      * instânciado antes que o construtor desta classe, pois este construtor
      * precisa de deste objeto já instânciado para ser monitorado pelo log.
      */
-    private static final Logger LOG = Logger.getLogger( MotorDoBook.class.getName() );
+    private static final Logger LOG = Logger.getLogger(
+        MonitorDoBook.class.getName() );
     
     /**
      * Por padrão, este tipo de instânciação é thread safe.

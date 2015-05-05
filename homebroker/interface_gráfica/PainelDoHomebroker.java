@@ -14,9 +14,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import util.Biblioteca;
 
@@ -32,13 +34,32 @@ public final class PainelDoHomebroker extends JPanel
      */
     private static final long serialVersionUID = -4450248854153724051L;
     
-    private static JanelaDoHomebroker janela =
-        JanelaDoHomebroker.getInstância( MotorDoHomebroker.getInstância() );
-    
     /**
      * Contém a única instância do painel.
      */
     private static PainelDoHomebroker instância;
+    
+    /**
+     * @param motor o motor do programa.
+     * @return instância uma intância da janela de login.
+     */
+    public static PainelDoHomebroker
+        getInstância( final MotorDoHomebroker motor )
+    {
+        synchronized( PainelDoHomebroker.class )
+        {
+            if( PainelDoHomebroker.instância == null )
+            {
+                PainelDoHomebroker.instância = new PainelDoHomebroker( motor );
+            }
+        }
+        return PainelDoHomebroker.instância;
+    }
+    
+    /**
+     * Comtém o motor principal.
+     */
+    private final MotorDoHomebroker motor;
     
     /**
      * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -52,25 +73,30 @@ public final class PainelDoHomebroker extends JPanel
     private transient JButton botãoDeComandos;
     
     /**
+     * Contém as informações de apresentação e como utilizar o programa. Tais
+     * informações serão aprentadas na interface gráfica ao usuário.
+     */
+    private final String campoDeAjuda = "Bem-vindo ao sistema "
+        + "tabajara de cadastro de ações!\n"
+        + "Digite 's' para fechar o programa.\n"
+        + "Digite 'v' para para ver o inventario\n"
+        + "Digite 'ov' para enviar uma ordem de venda\n"
+        + "Digite 'oc' para criar um ordem de compra\n"
+        + "Digite 'c' para para criar uma conta!\n"
+        + "Digite 'm' para ver o mercado!\n";
+    
+    /**
      * Cria um painel para colocar os botões, caixas de texto, ...
      */
-    private PainelDoHomebroker()
+    private PainelDoHomebroker( final MotorDoHomebroker motor )
     {
+        this.motor = motor;
+        
         // Configura os compomentos
         this.configurarEntradaDeComandos();
         this.configurarBotãoDeComandos();
         
-        /**
-         * Contém as informações de apresentação e como utilizar o programa.
-         * Tais informações serão aprentadas na interface gráfica ao usuário.
-         */
-        final JTextArea campoDeAjuda = new JTextArea( "Bem-vindo ao sistema "
-            + "tabajara de cadastro de ações!\n"
-            + "Digite 's' para fechar o programa.\n"
-            + "Digite 'v' para para ver o inventario\n"
-            + "Digite 'ov' para enviar uma ordem de venda\n"
-            // + "Digite 'c' para para criar uma conta!\n"
-            + "Digite 'm' para ver o mercado!\n" );
+        final JTextArea campoDeAjuda = new JTextArea( this.campoDeAjuda );
         campoDeAjuda.setEditable( false );
         campoDeAjuda.setFocusable( false );
         
@@ -84,6 +110,34 @@ public final class PainelDoHomebroker extends JPanel
         
         Biblioteca.trocarFontes( this, new Font( this.getName(),
             Frame.NORMAL, 20 ) );
+    }
+    
+    /**
+     * Inicia o processo de criação da conta de um usuário do sistema
+     * 
+     * //@return conta a conta criada
+     */
+    public void cadastrarUsuário()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = this.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeCadastro janelaDeCadastro;
+                janelaDeCadastro = JanelaDeCadastro.getInstância( motor );
+                janelaDeCadastro.efetuarCadastro();
+            }
+        } );
     }
     
     /**
@@ -101,7 +155,7 @@ public final class PainelDoHomebroker extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                PainelDoHomebroker.this.enviarComando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
             }
         } );
         
@@ -126,7 +180,7 @@ public final class PainelDoHomebroker extends JPanel
             @Override
             public void actionPerformed( final ActionEvent ae )
             {
-                PainelDoHomebroker.this.enviarComando( ae.getActionCommand() );
+                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
             }
         } );
         
@@ -171,11 +225,98 @@ public final class PainelDoHomebroker extends JPanel
     }
     
     /**
-     * Envia um comando entrado pelo usuário ao interpretador de comandos.
+     * Chama a janela responsável por realizar venda da ação.
      */
-    void enviarComando( final String comando )
+    private void efetuarCompra()
     {
-        PainelDoHomebroker.janela.enviarCommando( comando );
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = this.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeCompras janelaDeCompras;
+                janelaDeCompras = JanelaDeCompras.getInstância( motor );
+                janelaDeCompras.efetuarCompra();
+            }
+        } );
+    }
+    
+    /**
+     * Chama a janela responsável por realizar venda da ação.
+     */
+    private void efetuarVenda()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = this.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeVendas janelaDeVendas;
+                janelaDeVendas = JanelaDeVendas.getInstância( motor );
+                janelaDeVendas.efetuarVenda();
+            }
+        } );
+    }
+    
+    /**
+     * Menu principal que exibe as opções de operação no mercado e na carteira
+     * de ações do cliente.
+     */
+    protected void enviarCommando( String comando )
+    {
+        if( comando == null )
+        {
+            comando = "s";
+        }
+        
+        switch( comando )
+        {
+        case "s":
+            MotorDoHomebroker.sairDoSistema();
+            break;
+        case "v":
+            this.mostrarInventário();
+            break;
+        case "c":
+            this.cadastrarUsuário();
+            break;
+        case "ov":
+            this.efetuarVenda();
+            break;
+        case "oc":
+            this.efetuarCompra();
+            break;
+        case "m":
+            this.motor.exibirBookDeOfertas();
+            break;
+        default:
+            this.imputError();
+            break;
+        }
+    }
+    
+    private void imputError()
+    {
+        JOptionPane.showMessageDialog( null, "Você digitou uma "
+            + "opção inválida!\n\n" + this.campoDeAjuda );
     }
     
     /**
@@ -187,17 +328,17 @@ public final class PainelDoHomebroker extends JPanel
     }
     
     /**
-     * @return instância uma intância da janela de login.
+     * Exibe o inventário da conta atualmente autenticada.
      */
-    public static PainelDoHomebroker getInstância()
+    public void mostrarInventário()
     {
-        synchronized( PainelDoHomebroker.class )
+        if( !this.motor.contaEstáAutenticada() )
         {
-            if( PainelDoHomebroker.instância == null )
-            {
-                PainelDoHomebroker.instância = new PainelDoHomebroker();
-            }
+            JOptionPane.showMessageDialog( null, "Não há "
+                + "nenhuma conta carregada no sistema!" );
+            return;
         }
-        return PainelDoHomebroker.instância;
+        JOptionPane.showMessageDialog( null,
+            this.motor.inventarioToString() );
     }
 }
