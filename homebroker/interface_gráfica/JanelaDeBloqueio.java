@@ -72,16 +72,18 @@ public final class JanelaDeBloqueio extends JFrame
         {
             nome =
                 JOptionPane.showInputDialog(
-                    ( inputError? "" : "Usuário inválidos\n\n" )
+                    ( inputError? "" : "Usuário inválido!\n\n" )
                         + this.motor.contasTesteToString() +
                         "\n\nInsira qual conta será bloqueada: " );
             
             if( nome == null )
             {
-                break;
+                return;
             }
             inputError = this.motor.bloquearConta( nome );
             
         } while( !inputError );
+        
+        JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
     }
 }
