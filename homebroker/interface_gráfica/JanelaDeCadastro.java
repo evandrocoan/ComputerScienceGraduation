@@ -21,6 +21,22 @@ public final class JanelaDeCadastro extends JFrame
     
     private static JanelaDeCadastro instância;
     
+    /**
+     * @param motor o motor do Homebroker.
+     * @return instância uma intância da janela de login.
+     */
+    public static JanelaDeCadastro getInstância( final MotorDoHomebroker motor )
+    {
+        synchronized( JanelaDeCadastro.class )
+        {
+            if( JanelaDeCadastro.instância == null )
+            {
+                JanelaDeCadastro.instância = new JanelaDeCadastro( motor );
+            }
+        }
+        return JanelaDeCadastro.instância;
+    }
+    
     private final MotorDoHomebroker motor;
     
     private JanelaDeCadastro( final MotorDoHomebroker motor )
@@ -48,95 +64,101 @@ public final class JanelaDeCadastro extends JFrame
             {
                 return;
             }
-            final double preço = this.getPreçoAção( nome );
-            if( preço == 0 )
+            final String senha = this.getSenha();
+            if( senha == null )
             {
                 return;
             }
-            final int quantidade = this.getQuantidadeAção( nome );
-            if( quantidade == 0 )
+            final double saldo = this.getSaldo();
+            if( saldo == -1 )
             {
                 return;
             }
-            sucesso = this.motor.adicionarOfertaDeVenda( preço,
-                quantidade, nome );
+            final int cpf = this.getCPF();
+            if( cpf == 0 )
+            {
+                return;
+            }
+            sucesso = this.motor.adicionarConta( saldo, cpf, nome, senha );
         }
         
+    }
+    
+    private int getCPF()
+    {
+        boolean sucesso = false;
+        boolean nÉsimaVez = false;
+        int cpf = 0;
+        
+        while( !sucesso )
+        {
+            final String input = JOptionPane.showInputDialog(
+                ( nÉsimaVez? "CPF inválido!\n\n" : "" )
+                + "Insira um CPF:" );
+            if( input == null )
+            {
+                return 0;
+            }
+            try
+            {
+                cpf = (int) Double.parseDouble( input );
+                sucesso = String.valueOf( cpf ).length() == 9;
+            } catch( final Exception e )
+            {
+                // TODO
+            }
+            nÉsimaVez = true;
+        }
+        return cpf;
     }
     
     private String getNome()
     {
-        boolean sucesso = false;
-        boolean nÉsimaVez = false;
-        String açãoParaVender = null;
+        String nome = null;
         
-        while( !sucesso )
-        {
-            açãoParaVender = JOptionPane.showInputDialog(
-                ( nÉsimaVez? "Ação não existênte!\n\n" : "" )
-                    + "Lista de ações disponíveis para venda: \n"
-                    + this.motor.inventarioToString() );
-            if( açãoParaVender == null )
-            {
-                return null;
-            }
-            sucesso = this.motor.existeNoInvetário( açãoParaVender );
-            nÉsimaVez = true;
-        }
-        return açãoParaVender;
+        nome =
+            JOptionPane.showInputDialog(
+                "Insira o nome novo do acionista: \n" );
+        
+        return nome;
     }
     
-    private double getPreçoAção( final String açãoParaVender )
-    {
-        final String imput = JOptionPane.showInputDialog(
-            "Insira o preço da ação:",
-            Double.toString( this.motor.getPreço( açãoParaVender ) ) );
-        if( imput == null )
-        {
-            return 0;
-        }
-        double preço;
-        
-        preço = Double.parseDouble( imput );
-        return preço;
-    }
-    
-    private int getQuantidadeAção( final String açãoParaVender )
+    private double getSaldo()
     {
         boolean sucesso = false;
         boolean nÉsimaVez = false;
-        int quantidade = 0;
+        int input = 0;
         
         while( !sucesso )
         {
-            final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
-                ? "Quantidade não existênte!\n\n" : "" )
-                + "Insira a quantidade da ação:", Integer
-                .toString( this.motor.getQuantidade( açãoParaVender ) ) );
-            if( imput == null )
+            final String inputString = JOptionPane.showInputDialog(
+                ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
+                + "Insira o saldo do novo acionista:" );
+            if( inputString == null )
             {
-                return 0;
+                return -1;
             }
-            quantidade = (int) Double.parseDouble( imput );
-            sucesso = this.motor.existeQuantidade( quantidade );
+            try
+            {
+                input = (int) Double.parseDouble( inputString );
+                sucesso = true;
+            } catch( final Exception e )
+            {
+                // TODO
+            }
             nÉsimaVez = true;
         }
-        return quantidade;
+        return input;
     }
     
-    /**
-     * @param motor o motor do Homebroker.
-     * @return instância uma intância da janela de login.
-     */
-    public static JanelaDeCadastro getInstância( final MotorDoHomebroker motor )
+    private String getSenha()
     {
-        synchronized( JanelaDeCadastro.class )
-        {
-            if( JanelaDeCadastro.instância == null )
-            {
-                JanelaDeCadastro.instância = new JanelaDeCadastro( motor );
-            }
-        }
-        return JanelaDeCadastro.instância;
+        String nome = null;
+        
+        nome =
+            JOptionPane.showInputDialog(
+                "Insira a senha do novo acionista: \n" );
+        
+        return nome;
     }
 }

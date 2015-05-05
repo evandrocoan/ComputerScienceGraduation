@@ -123,7 +123,7 @@ public final class JanelaDeCompras extends JFrame
             final String imput =
                 JOptionPane.showInputDialog( "Insira a quantidade da ação:",
                     Integer.toString(
-                        this.motor.getAçãoQuantidade( açãoParaVender ) ) );
+                        this.motor.getQuantidade( açãoParaVender ) ) );
             if( imput == null )
             {
                 return 0;
