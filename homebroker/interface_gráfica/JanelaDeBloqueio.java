@@ -14,11 +14,6 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeBloqueio extends JFrame
 {
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -272784152689390567L;
-    
     private static JanelaDeBloqueio instância;
     
     /**
@@ -73,8 +68,8 @@ public final class JanelaDeBloqueio extends JFrame
             nome =
                 JOptionPane.showInputDialog(
                     ( inputError? "" : "Usuário inválido!\n\n" )
-                        + this.motor.contasTesteToString() +
-                        "\n\nInsira qual conta será bloqueada: " );
+                    + this.motor.contasTesteToString() +
+                    "\n\nInsira qual conta será bloqueada: " );
             
             if( nome == null )
             {

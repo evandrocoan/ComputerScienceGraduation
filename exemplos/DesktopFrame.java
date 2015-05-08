@@ -51,10 +51,6 @@ import javax.swing.JPanel;
  */
 public class DesktopFrame extends JFrame
 {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private final JDesktopPane theDesktop;
     
     /**
@@ -77,44 +73,40 @@ public class DesktopFrame extends JFrame
         
         // set up listener for newFrame menu item
         newFrame.addActionListener(
-                
-                new ActionListener() // anonymous inner class
-        {
-            // display new internal window
-            @SuppressWarnings( "synthetic-access" )
-            @Override
-            public void actionPerformed( final ActionEvent event )
+            
+            new ActionListener() // anonymous inner class
             {
-                // create internal frame
-                final JInternalFrame frame =
-                                new JInternalFrame( "Internal Frame", true, true, true,
-                                true );
-                
-                final MyJPanel panel = new MyJPanel(); // create new panel
-                frame.add( panel, BorderLayout.CENTER ); // add panel
-                frame.pack(); // set internal frame to size of contents
-                
-                DesktopFrame.this.theDesktop.add( frame ); // attach
-                // internal
-                // frame
-                frame.setVisible( true ); // show internal frame
-            } // end method actionPerformed
-        } // end anonymous inner class
-        ); // end call to addActionListener
+                // display new internal window
+                @SuppressWarnings( "synthetic-access" )
+                @Override
+                public void actionPerformed( final ActionEvent event )
+                {
+                    // create internal frame
+                    final JInternalFrame frame =
+                        new JInternalFrame( "Internal Frame", true, true, true,
+                            true );
+                    
+                    final MyJPanel panel = new MyJPanel(); // create new panel
+                    frame.add( panel, BorderLayout.CENTER ); // add panel
+                    frame.pack(); // set internal frame to size of contents
+                    
+                    DesktopFrame.this.theDesktop.add( frame ); // attach
+                    // internal
+                    // frame
+                    frame.setVisible( true ); // show internal frame
+                } // end method actionPerformed
+            } // end anonymous inner class
+            ); // end call to addActionListener
     } // end constructor DesktopFrame
 } // end class DesktopFrame
 
 // class to display an ImageIcon on a panel
 class MyJPanel extends JPanel
 {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private static Random generator = new Random();
     private final ImageIcon picture; // image to be displayed
     private final String[] images = { "yellowflowers.png", "purpleflowers.png",
-            "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
+        "redflowers.png", "redflowers2.png", "lavenderflowers.png" };
     
     // load image
     public MyJPanel()
@@ -128,7 +120,7 @@ class MyJPanel extends JPanel
     public Dimension getPreferredSize()
     {
         return new Dimension( this.picture.getIconWidth(),
-                this.picture.getIconHeight() );
+            this.picture.getIconHeight() );
     } // end method getPreferredSize
     
     // display imageIcon on panel

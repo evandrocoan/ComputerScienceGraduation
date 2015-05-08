@@ -18,11 +18,6 @@ import javax.swing.WindowConstants;
 public final class JanelaDoHomebroker extends JFrame
 {
     /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -7263112844101186140L;
-    
-    /**
      * Contém a única instância desta classe.
      */
     private static JanelaDoHomebroker instância;

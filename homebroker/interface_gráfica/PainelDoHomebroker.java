@@ -30,11 +30,6 @@ import util.Biblioteca;
 public final class PainelDoHomebroker extends JPanel
 {
     /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -4450248854153724051L;
-    
-    /**
      * Contém a única instância do painel.
      */
     private static PainelDoHomebroker instância;
@@ -44,7 +39,7 @@ public final class PainelDoHomebroker extends JPanel
      * @return instância uma intância da janela de login.
      */
     public static PainelDoHomebroker
-    getInstância( final MotorDoHomebroker motor )
+        getInstância( final MotorDoHomebroker motor )
     {
         synchronized( PainelDoHomebroker.class )
         {
