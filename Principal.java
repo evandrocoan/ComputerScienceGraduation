@@ -17,7 +17,7 @@ public class Principal
      * ter um método toString que gere valores que possam significativamente
      * representar a string.
      * 
-     * @param enumeração
+     * @param enumeração uma enumeração.
      * @return string uma string representado a enumeração
      */
     public static String enumeraçãoToString( final Enumeration< ? > enumeração )
@@ -32,28 +32,34 @@ public class Principal
         return string;
     }
     
-    /**
-     * @param args
-     * @throws ExeçãoElementoNãoEncontrado
-     */
-    public static void main( final String[] args )
-            throws ExeçãoElementoNãoEncontrado
-    {
-        Principal.testeGenéricoHashtable();
-        Principal.testeDeGrau();
-        
-        Principal.finalizarTestes();
-        Principal.testeDaBase();
-        
-        org.junit.runner.JUnitCore.main( "GrafoTest" );
-    }
-    
     private static void finalizarTestes()
     {
         System.out.println( Principal.falharam + " testes de "
                 + Principal.total + " falharam!" );
         System.out.println( ( Principal.total - Principal.falharam )
                 + " testes de " + Principal.total + " foram bem sucedidos!" );
+    }
+    
+    /**
+     * @param args os argumentos do chamada.
+     */
+    public static void main( final String[] args )
+    {
+        Principal.testeGenéricoHashtable();
+        
+        try
+        {
+            Principal.testeDeGrau();
+            
+        } catch( final ExeçãoElementoNãoEncontrado exeção )
+        {
+            // TODO
+        }
+        
+        Principal.finalizarTestes();
+        Principal.testeDaBase();
+        
+        org.junit.runner.JUnitCore.main( "GrafoTest" );
     }
     
     private static void testeDaBase()
@@ -102,8 +108,8 @@ public class Principal
         {
             grafo.adicionarVértice( nomes );
             grafo.adicionarVértice( "Franca" );
-            grafo.conectarVértice( "Franca", nomes );
-            grafo.conectarVértice( "Brazil", nomes );
+            grafo.conectarVértices( "Franca", nomes );
+            grafo.conectarVértices( "Brazil", nomes );
             
         } catch( final ExeçãoVérticeJáExistente e1 )
         {
