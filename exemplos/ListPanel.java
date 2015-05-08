@@ -58,17 +58,15 @@ public class ListPanel extends JFrame
         
         @Override
         public Component getListCellRendererComponent( final JList< ? > list,
-                final Object value, final int index, final boolean isSelected,
-                final boolean cellHasFocus )
+            final Object value, final int index, final boolean isSelected,
+            final boolean cellHasFocus )
         {
             final JButton renderer = (JButton) value;
             renderer.setBackground( isSelected? Color.red : list
-                    .getBackground() );
+                .getBackground() );
             return renderer;
         }
     }
-    
-    private static final long serialVersionUID = 1L;
     
     /**
      * @param text
@@ -155,7 +153,7 @@ public class ListPanel extends JFrame
             public void adjustmentValueChanged( final AdjustmentEvent e )
             {
                 System.out.println( "JScrollBar's current value = "
-                        + scrollBar.getValue() );
+                    + scrollBar.getValue() );
             }
         } );
         this.add( scroll1 );
@@ -169,7 +167,7 @@ public class ListPanel extends JFrame
             public void adjustmentValueChanged( final AdjustmentEvent e )
             {
                 System.out.println( "JScrollBar's current value = "
-                        + scrollBar1.getValue() );
+                    + scrollBar1.getValue() );
             }
         } );
         

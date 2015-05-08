@@ -12,11 +12,6 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeLogin extends JFrame
 {
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = 8318664325738146734L;
-    
     private static JanelaDeLogin instância;
     
     /**
@@ -58,12 +53,12 @@ public final class JanelaDeLogin extends JFrame
         case "login":
             this.loginNoSistemaInterno( "" );
             break;
-            
+        
         case "teste":
             JOptionPane.showMessageDialog( null, "Sessão de teste!" );
             this.motor.loginNoSistemaChecagem( "admin", "admin" );
             break;
-            
+        
         case "dica":
             JOptionPane.showMessageDialog( null, "Sessão de teste "
                 + "COM dica de contas no login!" );
@@ -72,7 +67,7 @@ public final class JanelaDeLogin extends JFrame
             
             this.loginNoSistemaInterno( dica.toString() );
             break;
-            
+        
         default:
             System.out.println( "Comando de Login inválido! " + darDica );
             break;
@@ -92,7 +87,7 @@ public final class JanelaDeLogin extends JFrame
         {
             usuário = JOptionPane.showInputDialog(
                 ( inputError? "" : "Usuário ou senha inválidos\n\n" )
-                + "Insira qual conta será feito login: " + dica );
+                    + "Insira qual conta será feito login: " + dica );
             
             if( ( usuário == null ) )
             {

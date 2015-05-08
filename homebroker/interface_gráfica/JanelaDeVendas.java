@@ -14,12 +14,23 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeVendas extends JFrame
 {
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -272784152689390567L;
-    
     private static JanelaDeVendas instância;
+    
+    /**
+     * @param motor o motor do Homebroker.
+     * @return instância uma intância da janela de login.
+     */
+    public static JanelaDeVendas getInstância( final MotorDoHomebroker motor )
+    {
+        synchronized( JanelaDeVendas.class )
+        {
+            if( JanelaDeVendas.instância == null )
+            {
+                JanelaDeVendas.instância = new JanelaDeVendas( motor );
+            }
+        }
+        return JanelaDeVendas.instância;
+    }
     
     private final MotorDoHomebroker motor;
     
@@ -33,7 +44,7 @@ public final class JanelaDeVendas extends JFrame
      */
     public void efetuarVenda()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
@@ -74,8 +85,8 @@ public final class JanelaDeVendas extends JFrame
         {
             açãoParaVender = JOptionPane.showInputDialog(
                 ( nÉsimaVez? "Ação não existênte!\n\n" : "" )
-                    + "Lista de ações disponíveis para venda: \n"
-                    + this.motor.inventarioToString() );
+                + "Lista de ações disponíveis para venda: \n"
+                + this.motor.inventarioToString() );
             if( açãoParaVender == null )
             {
                 return null;
@@ -122,21 +133,5 @@ public final class JanelaDeVendas extends JFrame
             nÉsimaVez = true;
         }
         return quantidade;
-    }
-    
-    /**
-     * @param motor o motor do Homebroker.
-     * @return instância uma intância da janela de login.
-     */
-    public static JanelaDeVendas getInstância( final MotorDoHomebroker motor )
-    {
-        synchronized( JanelaDeVendas.class )
-        {
-            if( JanelaDeVendas.instância == null )
-            {
-                JanelaDeVendas.instância = new JanelaDeVendas( motor );
-            }
-        }
-        return JanelaDeVendas.instância;
     }
 }

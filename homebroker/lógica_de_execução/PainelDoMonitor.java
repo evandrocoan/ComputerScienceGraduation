@@ -22,11 +22,6 @@ import javax.swing.JScrollPane;
 public final class PainelDoMonitor extends JPanel
 {
     /**
-     * 
-     */
-    private static final long serialVersionUID = 9104840444093828978L;
-    
-    /**
      * Resposável por realizar o debug do programa, quando ativado. Deve ser
      * instânciado antes que o construtor desta classe, pois este construtor
      * precisa de deste objeto já instânciado para ser monitorado pelo log.
@@ -39,6 +34,14 @@ public final class PainelDoMonitor extends JPanel
      */
     private static final PainelDoMonitor INSTÂNCIA =
         new PainelDoMonitor();
+    
+    /**
+     * @return the instância
+     */
+    public static PainelDoMonitor getInstância()
+    {
+        return PainelDoMonitor.INSTÂNCIA;
+    }
     
     final DefaultListModel< String > modeloPadrãoDeLista =
         new DefaultListModel<>();
@@ -67,13 +70,5 @@ public final class PainelDoMonitor extends JPanel
         final JScrollPane painelRolável =
             new JScrollPane( this.listaDeOfertas );
         this.add( painelRolável, BorderLayout.CENTER );
-    }
-    
-    /**
-     * @return the instância
-     */
-    public static PainelDoMonitor getInstância()
-    {
-        return PainelDoMonitor.INSTÂNCIA;
     }
 }

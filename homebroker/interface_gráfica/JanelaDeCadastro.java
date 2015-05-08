@@ -14,11 +14,6 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeCadastro extends JFrame
 {
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -272784152689390567L;
-    
     private static JanelaDeCadastro instância;
     
     /**
@@ -49,7 +44,7 @@ public final class JanelaDeCadastro extends JFrame
      */
     public void efetuarCadastro()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
@@ -94,7 +89,7 @@ public final class JanelaDeCadastro extends JFrame
         {
             final String input = JOptionPane.showInputDialog(
                 ( nÉsimaVez? "CPF inválido!\n\n" : "" )
-                + "Insira um CPF:" );
+                    + "Insira um CPF:" );
             if( input == null )
             {
                 return 0;
@@ -133,7 +128,7 @@ public final class JanelaDeCadastro extends JFrame
         {
             final String inputString = JOptionPane.showInputDialog(
                 ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
-                + "Insira o saldo do novo acionista:" );
+                    + "Insira o saldo do novo acionista:" );
             if( inputString == null )
             {
                 return -1;

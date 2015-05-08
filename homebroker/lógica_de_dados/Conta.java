@@ -15,6 +15,7 @@ public class Conta
     private double saldo;
     private final boolean administrador;
     private final Inventario inventario;
+    private boolean bloqueada;
     
     /**
      * Cosntrutor padrão que cria um objeto da classe, sem realizar nenhum tipo
@@ -27,12 +28,13 @@ public class Conta
      * @param inventario o inventário do usuário.
      */
     public Conta( final String nome, final String senha, final double saldo,
-            final boolean administrador, final Inventario inventario )
+        final boolean administrador, final Inventario inventario )
     {
         this.nome = nome;
         this.senha = senha;
         this.saldo = saldo;
         this.administrador = administrador;
+        this.bloqueada = false;
         this.inventario = inventario;
     }
     
@@ -45,6 +47,11 @@ public class Conta
     public boolean checkSenha( final String senha )
     {
         return this.senha.equals( senha );
+    }
+    
+    public boolean definirBloqueada()
+    {
+        return this.bloqueada = true;
     }
     
     /**
@@ -82,26 +89,6 @@ public class Conta
     }
     
     /**
-     * @param nome o nome da ação a procurar o preço.
-     * @return preço o preço da ação encontrada.
-     */
-    public double getPreço( final String nome )
-    {
-        return this.inventario.getPreço( nome );
-    }
-    
-    // #################################### Client Access ##########
-    
-    /**
-     * @param nome o nome da ação para encontrar a quantidade.
-     * @return quantidade a quantidade de ação disponíveis.
-     */
-    public int getQuantidade( final String nome )
-    {
-        return this.inventario.getQuantidade( nome );
-    }
-    
-    /**
      * Retorna o inventário do cliente. Este contém todas as ações compradas por
      * ele.
      * 
@@ -121,6 +108,24 @@ public class Conta
     public String getNome()
     {
         return this.nome;
+    }
+    
+    /**
+     * @param nome o nome da ação a procurar o preço.
+     * @return preço o preço da ação encontrada.
+     */
+    public double getPreço( final String nome )
+    {
+        return this.inventario.getPreço( nome );
+    }
+    
+    /**
+     * @param nome o nome da ação para encontrar a quantidade.
+     * @return quantidade a quantidade de ação disponíveis.
+     */
+    public int getQuantidade( final String nome )
+    {
+        return this.inventario.getQuantidade( nome );
     }
     
     /**
@@ -146,6 +151,16 @@ public class Conta
         return this.getInventario().inventarioToString();
     }
     
+    public boolean isAdministradora()
+    {
+        return this.administrador;
+    }
+    
+    public boolean isBloqueada()
+    {
+        return this.bloqueada;
+    }
+    
     /**
      * Retira dinheiro da conta.
      * 
@@ -166,7 +181,6 @@ public class Conta
         return false;
     }
     
-    // #################################### Administrador Access ##########
     /**
      * Define no nome do cliente. Somente o administrador tem acesso a essa
      * funcionanlidade.

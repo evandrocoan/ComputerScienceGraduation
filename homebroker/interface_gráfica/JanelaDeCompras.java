@@ -14,11 +14,6 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeCompras extends JFrame
 {
-    /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -272784152689390567L;
-    
     private static JanelaDeCompras instância;
     
     /**
@@ -49,7 +44,7 @@ public final class JanelaDeCompras extends JFrame
      */
     public void efetuarCompra()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );

@@ -30,11 +30,6 @@ import util.Biblioteca;
 public final class PainelDoHomebroker extends JPanel
 {
     /**
-     * Implementa a serialização do swing.
-     */
-    private static final long serialVersionUID = -4450248854153724051L;
-    
-    /**
      * Contém a única instância do painel.
      */
     private static PainelDoHomebroker instância;
@@ -80,6 +75,7 @@ public final class PainelDoHomebroker extends JPanel
         + "tabajara de cadastro de ações!\n"
         + "Digite 's' para fechar o programa.\n"
         + "Digite 'v' para para ver o inventario\n"
+        + "Digite 'b' para para ver o inventario\n"
         + "Digite 'ov' para enviar uma ordem de venda\n"
         + "Digite 'oc' para criar um ordem de compra\n"
         + "Digite 'c' para para criar uma conta!\n"
@@ -112,6 +108,29 @@ public final class PainelDoHomebroker extends JPanel
             Frame.NORMAL, 20 ) );
     }
     
+    private void bloquearUmUsuário()
+    {
+        // encapsula o motor para evitar o synthetic-access
+        final MotorDoHomebroker motor = this.motor;
+        /**
+         * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+         * Swing não é thread-safe.
+         */
+        SwingUtilities.invokeLater( new Runnable()
+        {
+            /**
+             * Executa o homebroker.
+             */
+            @Override
+            public void run()
+            {
+                final JanelaDeBloqueio janelaDeCadastro;
+                janelaDeCadastro = JanelaDeBloqueio.getInstância( motor );
+                janelaDeCadastro.efetuarBloqueio();
+            }
+        } );
+    }
+    
     /**
      * Inicia o processo de criação da conta de um usuário do sistema
      * 
@@ -133,9 +152,9 @@ public final class PainelDoHomebroker extends JPanel
             @Override
             public void run()
             {
-                final JanelaDeCadastro janelaDeCadastro;
-                janelaDeCadastro = JanelaDeCadastro.getInstância( motor );
-                janelaDeCadastro.efetuarCadastro();
+                final JanelaDeCadastro janela;
+                janela = JanelaDeCadastro.getInstância( motor );
+                janela.efetuarCadastro();
             }
         } );
     }
@@ -295,6 +314,9 @@ public final class PainelDoHomebroker extends JPanel
         case "v":
             this.mostrarInventário();
             break;
+        case "b":
+            this.bloquearUmUsuário();
+            break;
         case "c":
             this.cadastrarUsuário();
             break;
@@ -332,7 +354,7 @@ public final class PainelDoHomebroker extends JPanel
      */
     public void mostrarInventário()
     {
-        if( !this.motor.contaEstáAutenticada() )
+        if( !this.motor.isAutenticada() )
         {
             JOptionPane.showMessageDialog( null, "Não há "
                 + "nenhuma conta carregada no sistema!" );
