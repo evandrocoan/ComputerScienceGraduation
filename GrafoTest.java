@@ -27,6 +27,12 @@ public class GrafoTest
     
     String[] nomes;
     
+    @Test
+    public void desconectarVérticesObjectObjectTest()
+    {
+        
+    }
+    
     /**
      * É executado antes que um teste inicia. Os testes execuram na seguinte
      * ordem: setUp(), test1(), printBye(), setUp(), test2(), printBye()...
@@ -61,7 +67,7 @@ public class GrafoTest
     
     @Test
     public void testAdicionarVértice() throws ExeçãoElementoNãoEncontrado,
-    ExeçãoVérticeJáExistente
+        ExeçãoVérticeJáExistente
     {
         this.grafo.adicionarVértice( "Brasil" );
         Assert.assertEquals( 0, this.grafo.grauDoVértice( "Brasil" ) );
