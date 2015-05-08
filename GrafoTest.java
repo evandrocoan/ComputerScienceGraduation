@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-@SuppressWarnings( { "static-method" } )
 public class GrafoTest
 {
     /**
@@ -26,7 +25,7 @@ public class GrafoTest
     Grafo grafo;
     
     String[] nomes;
-    
+
     @Test
     public void desconectarVérticesObjectObjectTest()
     {
@@ -47,7 +46,7 @@ public class GrafoTest
     }
     
     @Test
-    public void testAdcionarVérticeConectadoÀObjectObjectArray()
+    public void adcionarVérticeConectadoÀObjectObjectArrayTest()
         throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
     {
         this.grafo.adicionarVértice( this.nomes );
@@ -80,7 +79,7 @@ public class GrafoTest
     }
     
     @Test
-    public void testAdicionarVérticeConectadoÀObjectEnumerationOfQ()
+    public void adicionarVérticeConectadoÀObjectEnumerationTest()
         throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
     {
         final Vector< String > adjacente = new Vector<>();
@@ -99,4 +98,16 @@ public class GrafoTest
         GrafoTest.LOG.info( this.grafo.toString() + "\n " );
     }
     
+    /**
+     * É executado antes que um teste inicia. Os testes execuram na seguinte
+     * ordem: setUp(), test1(), printBye(), setUp(), test2(), printBye()...
+     */
+    @Before
+    public void setUp()
+    {
+        this.nomes =
+            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        
+        this.grafo = new Grafo();
+    }
 }
