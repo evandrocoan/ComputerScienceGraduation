@@ -51,8 +51,84 @@ import javax.swing.WindowConstants;
 @SuppressWarnings( "javadoc" )
 public class SuperConstructor extends JFrame
 {
+    private class FirstDialog extends JDialog
+    {
+        FirstDialog( final Frame parent )
+        {
+            super( parent, "FirstDialog" );
+            this.setPreferredSize( new Dimension( 200, 200 ) );
+            this.setLocationRelativeTo( parent );
+            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+            this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
+            final JButton bNext = new JButton( "Show next dialog" );
+            bNext.addActionListener( new ActionListener()
+            {
+                @SuppressWarnings( "unused" )
+                @Override
+                public void actionPerformed( final ActionEvent evt )
+                {
+                    new SecondDialog( parent, false );
+                }
+            } );
+            this.add( bNext, BorderLayout.NORTH );
+            final JButton bClose = new JButton( "Close" );
+            bClose.addActionListener( new ActionListener()
+            {
+                @Override
+                public void actionPerformed( final ActionEvent evt )
+                {
+                    FirstDialog.this.setVisible( false );
+                }
+            } );
+            this.add( bClose, BorderLayout.SOUTH );
+            this.pack();
+            this.setVisible( true );
+        }
+    }
     
-    private static final long serialVersionUID = 1L;
+    private class SecondDialog extends JDialog
+    {
+        @SuppressWarnings( { "synthetic-access" } )
+        SecondDialog( final Frame parent, final boolean modal )
+        {
+            // super(parent); // < --- Makes this dialog
+            // unfocusable as long as FirstDialog is visible
+            this.setPreferredSize( new Dimension( 200, 200 ) );
+            this.setLocation( 300, 50 );
+            this.setModal( modal );
+            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+            this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
+            final JButton bClose = new JButton( "Close" );
+            bClose.addActionListener( new ActionListener()
+            {
+                @Override
+                public void actionPerformed( final ActionEvent evt )
+                {
+                    SecondDialog.this.setVisible( false );
+                }
+            } );
+            this.add( bClose, BorderLayout.SOUTH );
+            this.pack();
+            this.setVisible( true );
+        }
+    }
+    
+    /**
+     * @param args
+     */
+    public static void main( final String args[] )
+    {
+        EventQueue.invokeLater( new Runnable()
+        {
+            
+            @SuppressWarnings( "unused" )
+            @Override
+            public void run()
+            {
+                new SuperConstructor();
+            }
+        } );
+    }
     
     private int i;
     
@@ -89,90 +165,5 @@ public class SuperConstructor extends JFrame
         this.add( bClose, BorderLayout.NORTH );
         this.pack();
         this.setVisible( true );
-    }
-    
-    /**
-     * @param args
-     */
-    public static void main( final String args[] )
-    {
-        EventQueue.invokeLater( new Runnable()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void run()
-            {
-                new SuperConstructor();
-            }
-        } );
-    }
-    
-    private class FirstDialog extends JDialog
-    {
-        
-        private static final long serialVersionUID = 1L;
-        
-        FirstDialog( final Frame parent )
-        {
-            super( parent, "FirstDialog" );
-            this.setPreferredSize( new Dimension( 200, 200 ) );
-            this.setLocationRelativeTo( parent );
-            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-            this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
-            final JButton bNext = new JButton( "Show next dialog" );
-            bNext.addActionListener( new ActionListener()
-            {
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    new SecondDialog( parent, false );
-                }
-            } );
-            this.add( bNext, BorderLayout.NORTH );
-            final JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    FirstDialog.this.setVisible( false );
-                }
-            } );
-            this.add( bClose, BorderLayout.SOUTH );
-            this.pack();
-            this.setVisible( true );
-        }
-    }
-    
-    private class SecondDialog extends JDialog
-    {
-        
-        private static final long serialVersionUID = 1L;
-        
-        @SuppressWarnings( { "synthetic-access" } )
-        SecondDialog( final Frame parent, final boolean modal )
-        {
-            // super(parent); // < --- Makes this dialog
-            // unfocusable as long as FirstDialog is visible
-            this.setPreferredSize( new Dimension( 200, 200 ) );
-            this.setLocation( 300, 50 );
-            this.setModal( modal );
-            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-            this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
-            final JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    SecondDialog.this.setVisible( false );
-                }
-            } );
-            this.add( bClose, BorderLayout.SOUTH );
-            this.pack();
-            this.setVisible( true );
-        }
     }
 }
