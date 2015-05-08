@@ -1,14 +1,30 @@
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-@SuppressWarnings( "javadoc" )
+@SuppressWarnings( { "static-method" } )
 public class GrafoTest
 {
+    /**
+     * Resposável por realizar o debug do programa.
+     */
+    private static final Logger LOG = Logger.getLogger( GrafoTest.class
+        .getName() );
+    
+    @BeforeClass
+    public static void configureLOG()
+    {
+        GrafoTest.LOG.setLevel( Level.ALL );
+    }
+    
     Grafo grafo;
+    
     String[] nomes;
     
     /**
@@ -19,17 +35,17 @@ public class GrafoTest
     public void setUp()
     {
         this.nomes =
-                new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
         
         this.grafo = new Grafo();
     }
     
     @Test
     public void testAdcionarVérticeConectadoÀObjectObjectArray()
-            throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
+        throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
     {
         this.grafo.adicionarVértice( this.nomes );
-        this.grafo.conectarVértice( "Brasil", this.nomes );
+        this.grafo.conectarVértices( "Brasil", this.nomes );
         
         Assert.assertEquals( 6, this.grafo.grauDoVértice( "Brasil" ) );
         
@@ -39,17 +55,27 @@ public class GrafoTest
         
         this.grafo.conectarVértices( "Tcheca", "Tcheca" );
         Assert.assertEquals( 3, this.grafo.grauDoVértice( "Tcheca" ) );
+        
+        GrafoTest.LOG.info( this.grafo.toString() + "\n " );
     }
     
     @Test
-    public void testAdicionarVértice()
+    public void testAdicionarVértice() throws ExeçãoElementoNãoEncontrado,
+    ExeçãoVérticeJáExistente
     {
-        Assert.fail( "Not yet implemented" );
+        this.grafo.adicionarVértice( "Brasil" );
+        Assert.assertEquals( 0, this.grafo.grauDoVértice( "Brasil" ) );
+        
+        this.grafo.adicionarVértice( "China" );
+        this.grafo.conectarVértices( "Brasil", "China" );
+        Assert.assertEquals( 1, this.grafo.grauDoVértice( "Brasil" ) );
+        
+        GrafoTest.LOG.info( this.grafo.toString() + "\n " );
     }
     
     @Test
     public void testAdicionarVérticeConectadoÀObjectEnumerationOfQ()
-            throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
+        throws ExeçãoVérticeJáExistente, ExeçãoElementoNãoEncontrado
     {
         final Vector< String > adjacente = new Vector<>();
         adjacente.add( this.nomes[1] );
@@ -63,120 +89,8 @@ public class GrafoTest
         this.grafo.adicionarVértice( "Tcheca" );
         this.grafo.conectarVértices( "Tcheca", "França" );
         Assert.assertEquals( 3, this.grafo.grauDoVértice( "França" ) );
-    }
-    
-    @Test
-    public void testAdicionarVérticeObjectArray()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testConectarVérticesObjectObject()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testConectarVérticesObjectObjectArray()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testCriarUmGrafoCompleto()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testDesconectarVértices()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testEstãoConectados()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testGrafo()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testGrafoObjectArray()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testGrauDoVértice()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testHáAntiCliqueNesteGrafoDe()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testHáCliqueNesteGrafo()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testObterAdjacentes()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testObterAdjacentesEmArranjo()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testObterGrafoComplementar()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testObterSubGrafoDoVértice()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testObterVérticesDoGrafo()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testRemoverVértice()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testTamanhoDoGrafo()
-    {
-        Assert.fail( "Not yet implemented" );
-    }
-    
-    @Test
-    public void testToString()
-    {
-        Assert.fail( "Not yet implemented" );
+        
+        GrafoTest.LOG.info( this.grafo.toString() + "\n " );
     }
     
 }
