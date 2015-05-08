@@ -24,11 +24,6 @@ import util.Biblioteca;
 public final class MonitorDoBook extends JFrame
 {
     /**
-     * 
-     */
-    private static final long serialVersionUID = 2978670135770143966L;
-    
-    /**
      * Resposável por realizar o debug do programa, quando ativado. Deve ser
      * instânciado antes que o construtor desta classe, pois este construtor
      * precisa de deste objeto já instânciado para ser monitorado pelo log.
@@ -41,6 +36,14 @@ public final class MonitorDoBook extends JFrame
      */
     private static final MonitorDoBook INSTÂNCIA =
         new MonitorDoBook();
+    
+    /**
+     * @return the instance
+     */
+    public static MonitorDoBook getInstance()
+    {
+        return MonitorDoBook.INSTÂNCIA;
+    }
     
     private final PainelDoMonitor painelPrincipal;
     
@@ -99,13 +102,5 @@ public final class MonitorDoBook extends JFrame
     public int getNúmeroDeOfertas()
     {
         return this.painelPrincipal.modeloPadrãoDeLista.getSize();
-    }
-    
-    /**
-     * @return the instance
-     */
-    public static MonitorDoBook getInstance()
-    {
-        return MonitorDoBook.INSTÂNCIA;
     }
 }
