@@ -1,3 +1,5 @@
+package grafo;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -66,7 +68,7 @@ public class GrafoTest
     
     @Test
     public void testAdicionarVértice() throws ElementoNãoEncontrado,
-        VérticeJáExistente
+    VérticeJáExistente
     {
         GrafoTest.grafo.adicionaVértice( "Brasil" );
         Assert.assertEquals( 0, GrafoTest.grafo.grau( "Brasil" ) );
@@ -116,7 +118,7 @@ public class GrafoTest
     
     @Test
     public void testAdjacentes() throws ElementoNãoEncontrado,
-        VérticeJáExistente
+    VérticeJáExistente
     {
         final String[] nomesArray =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -169,7 +171,7 @@ public class GrafoTest
     
     @Test
     public void testEstãoConectados() throws ElementoNãoEncontrado,
-        VérticeJáExistente
+    VérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -180,7 +182,7 @@ public class GrafoTest
     
     @Test
     public void testRemoverVértice() throws ElementoNãoEncontrado,
-        VérticeJáExistente
+    VérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
