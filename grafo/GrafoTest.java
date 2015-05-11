@@ -67,8 +67,8 @@ public class GrafoTest
     }
     
     @Test
-    public void testAdicionarVértice() throws ElementoNãoEncontrado,
-    VérticeJáExistente
+    public void testAdicionarVértice() throws ExeçãoVérticeNãoExistente,
+    ExeçãoVérticeJáExistente
     {
         GrafoTest.grafo.adicionaVértice( "Brasil" );
         Assert.assertEquals( 0, GrafoTest.grafo.grau( "Brasil" ) );
@@ -80,7 +80,7 @@ public class GrafoTest
     
     @Test
     public void testAdicionarVérticeConectadoÀObjectEnumeration()
-        throws VérticeJáExistente, ElementoNãoEncontrado
+        throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -100,7 +100,7 @@ public class GrafoTest
     
     @Test
     public void testAdicionarVérticeConectadoÀObjectObjectArray()
-        throws VérticeJáExistente, ElementoNãoEncontrado
+        throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -117,8 +117,8 @@ public class GrafoTest
     }
     
     @Test
-    public void testAdjacentes() throws ElementoNãoEncontrado,
-    VérticeJáExistente
+    public void testAdjacentes() throws ExeçãoVérticeNãoExistente,
+    ExeçãoVérticeJáExistente
     {
         final String[] nomesArray =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -147,7 +147,7 @@ public class GrafoTest
     
     @Test
     public void testDesconectarVérticesObjectObject()
-        throws VérticeJáExistente, ElementoNãoEncontrado
+        throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -170,8 +170,8 @@ public class GrafoTest
     }
     
     @Test
-    public void testEstãoConectados() throws ElementoNãoEncontrado,
-    VérticeJáExistente
+    public void testEstãoConectados() throws ExeçãoVérticeNãoExistente,
+    ExeçãoVérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -181,8 +181,8 @@ public class GrafoTest
     }
     
     @Test
-    public void testRemoverVértice() throws ElementoNãoEncontrado,
-    VérticeJáExistente
+    public void testRemoverVértice() throws ExeçãoVérticeNãoExistente,
+    ExeçãoVérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -195,7 +195,7 @@ public class GrafoTest
     }
     
     @Test
-    public void testUmVértice() throws VérticeJáExistente
+    public void testUmVértice() throws ExeçãoVérticeJáExistente
     {
         final String[] nomesArray =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };

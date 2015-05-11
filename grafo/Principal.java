@@ -15,26 +15,6 @@ import org.junit.runner.notification.Failure;
  */
 public class Principal
 {
-    /**
-     * Retorna uma representação em string da enumeração. Esta enumeração deve
-     * ter um método toString que gere valores que possam significativamente
-     * representar a string.
-     * 
-     * @param enumeração uma enumeração.
-     * @return string uma string representado a enumeração
-     */
-    public static String enumeraçãoToString( final Enumeration< ? > enumeração )
-    {
-        String string = "";
-        
-        while( enumeração.hasMoreElements() )
-        {
-            final Object elemento = enumeração.nextElement();
-            string += elemento + " ";
-        }
-        return string;
-    }
-    
     public static void main( final String[] args )
     {
         Principal.testeGenéricoHashtable();
@@ -78,12 +58,10 @@ public class Principal
         arestasDoVértice2.put( chaveDoVértice1, vértice1 );
         
         // imprime o resultado
-        System.out.println( Principal.enumeraçãoToString( arestasDoVértice1
-            .elements() )
+        System.out.println( Principal.toString( arestasDoVértice1.elements() )
             + "(deve ter impresso o vértice 2)" );
         
-        System.out.println( Principal.enumeraçãoToString( arestasDoVértice2
-            .elements() )
+        System.out.println( Principal.toString( arestasDoVértice2.elements() )
             + "(deve ter impresso o vértice 1)\n" );
     }
     
@@ -105,5 +83,25 @@ public class Principal
         System.out.printf( minhaEnumeração.nextElement() + " " );
         System.out.printf( minhaEnumeração.nextElement() + " " );
         System.out.printf( minhaEnumeração.nextElement() + " \n" );
+    }
+    
+    /**
+     * Retorna uma representação em string da enumeração. Esta enumeração deve
+     * ter um método toString que gere valores que possam significativamente
+     * representar a string.
+     * 
+     * @param enumeração uma enumeração.
+     * @return string uma string representado a enumeração
+     */
+    public static String toString( final Enumeration< ? > enumeração )
+    {
+        String string = "";
+        
+        while( enumeração.hasMoreElements() )
+        {
+            final Object elemento = enumeração.nextElement();
+            string += elemento + " ";
+        }
+        return string;
     }
 }
