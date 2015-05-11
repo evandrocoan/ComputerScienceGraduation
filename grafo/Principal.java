@@ -19,15 +19,7 @@ public class Principal
     {
         Principal.testeGenéricoHashtable();
         Principal.testeDaBase();
-        
-        // org.junit.runner.JUnitCore.main( "GrafoTest" );
-        final Result result = JUnitCore.runClasses( GrafoTest.class );
-        for( final Failure failure: result.getFailures() )
-        {
-            System.out.println( "Teste falhou: " + failure.getDescription() );
-        }
-        System.out.println( "\nTodos os testes funcinaram? "
-            + ( result.wasSuccessful()? "Sim!" : "NÃO!!!!!!!!!!!!!!!!!!!" ) );
+        Principal.testes();
     }
     
     private static void testeDaBase()
@@ -85,6 +77,31 @@ public class Principal
         System.out.printf( minhaEnumeração.nextElement() + " \n" );
     }
     
+    /** 
+     * 
+     */
+    private static void testes()
+    {
+        final Result result = JUnitCore.runClasses( GrafoTest.class );
+        final StringBuilder mensagem = new StringBuilder();
+        if( result.getFailureCount() > 0 )
+        {
+            mensagem.append( "############## OS SEGUINTES TESTES FALHARAM!! "
+                + "#####################################\n" );
+        } else
+        {
+            mensagem.append( "############## TODOS OS TESTES FORAM EXECUTADOS "
+                + "COM SUCESSO!! #######################\n" );
+        }
+        
+        for( final Failure failure: result.getFailures() )
+        {
+            mensagem.append( failure.getDescription() ).append( '\n' );
+            mensagem.append( failure.getMessage() ).append( '\n' );
+        }
+        System.out.println( mensagem );
+    }
+    
     /**
      * Retorna uma representação em string da enumeração. Esta enumeração deve
      * ter um método toString que gere valores que possam significativamente
@@ -103,5 +120,9 @@ public class Principal
             string += elemento + " ";
         }
         return string;
+    }
+    
+    private Principal()
+    {
     }
 }

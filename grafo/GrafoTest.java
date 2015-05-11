@@ -68,7 +68,7 @@ public class GrafoTest
     
     @Test
     public void testAdicionarVértice() throws ExeçãoVérticeNãoExistente,
-    ExeçãoVérticeJáExistente
+        ExeçãoVérticeJáExistente
     {
         GrafoTest.grafo.adicionaVértice( "Brasil" );
         Assert.assertEquals( 0, GrafoTest.grafo.grau( "Brasil" ) );
@@ -118,7 +118,7 @@ public class GrafoTest
     
     @Test
     public void testAdjacentes() throws ExeçãoVérticeNãoExistente,
-    ExeçãoVérticeJáExistente
+        ExeçãoVérticeJáExistente
     {
         final String[] nomesArray =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -171,7 +171,7 @@ public class GrafoTest
     
     @Test
     public void testEstãoConectados() throws ExeçãoVérticeNãoExistente,
-    ExeçãoVérticeJáExistente
+        ExeçãoVérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -182,7 +182,7 @@ public class GrafoTest
     
     @Test
     public void testRemoverVértice() throws ExeçãoVérticeNãoExistente,
-    ExeçãoVérticeJáExistente
+        ExeçãoVérticeJáExistente
     {
         final String[] nomes =
             new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
@@ -205,5 +205,38 @@ public class GrafoTest
         final Object umVértice = GrafoTest.grafo.umVértice();
         
         Assert.assertTrue( GrafoTest.grafo.contémVertice( umVértice ) );
+    }
+    
+    @Test
+    public void testUmVérticeObject() throws ExeçãoVérticeJáExistente,
+        ExeçãoVérticeNãoExistente
+    {
+        final String[] nomesArray =
+            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        
+        GrafoTest.grafo.adicionaVértice( nomesArray );
+        
+        Object umVértice = GrafoTest.grafo.umVértice( nomesArray[0] );
+        Assert.assertEquals( umVértice, nomesArray[0] );
+        
+        umVértice = GrafoTest.grafo.umVértice( nomesArray[2] );
+        Assert.assertEquals( umVértice, nomesArray[2] );
+        
+        Exception exeção = null;
+        try
+        {
+            GrafoTest.grafo.umVértice( "Cuba" );
+            Assert.fail( "Exeção uma exeção deve ser lançada!" );
+        } catch( final ExeçãoVérticeNãoExistente e )
+        {
+            exeção = e;
+        }
+        Assert.assertTrue( exeção instanceof ExeçãoVérticeNãoExistente );
+    }
+    
+    @Test( expected = ExeçãoVérticeNãoExistente.class )
+    public void testUmVérticeObjectExeption() throws ExeçãoVérticeNãoExistente
+    {
+        GrafoTest.grafo.umVértice( "Cuba" );
     }
 }

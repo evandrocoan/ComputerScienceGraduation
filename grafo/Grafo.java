@@ -299,6 +299,16 @@ public class Grafo
     }
     
     /**
+     * Verifica se este grafo é um árvore.
+     * 
+     * @return true se é arvore, false caso contrário.
+     */
+    public boolean éÁrvore()
+    {
+        return false;
+    }
+    
+    /**
      * Verifica se dois vértices estão conectados.
      * 
      * @param vértice1 o primeiro vértice.
@@ -349,7 +359,7 @@ public class Grafo
     }
     
     /**
-     * Retorna o número de vértices de G.
+     * Retorna o número de vértices deste Grafo..
      * 
      * @return um inteiro.
      */
@@ -359,7 +369,7 @@ public class Grafo
     }
     
     /**
-     * Remove um vértice de G, juntamente com todas as conexões.
+     * Remove um vértice deste Grafo., juntamente com todas as conexões.
      * 
      * @param vértice o vértice do grafo.
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
@@ -437,7 +447,7 @@ public class Grafo
     }
     
     /**
-     * Retorna um vértice qualquer de G.
+     * Retorna um vértice qualquer deste Grafo..
      * 
      * @return um vértice.
      */
@@ -447,7 +457,24 @@ public class Grafo
     }
     
     /**
-     * Retorna um conjunto contendo os vértices de G.
+     * Retorna um vértice qualquer deste Grafo..
+     * 
+     * @param vértice um vértice para retornar.
+     * @return um vértice.
+     * @throws ExeçãoVérticeNãoExistente caso o vértice não exista.
+     */
+    public Object umVértice( final Object vértice )
+        throws ExeçãoVérticeNãoExistente
+    {
+        if( !this.contémVertice( vértice ) )
+        {
+            throw new ExeçãoVérticeNãoExistente( vértice, this );
+        }
+        return vértice;
+    }
+    
+    /**
+     * Retorna um conjunto contendo os vértices deste Grafo..
      * 
      * @return uma enumeração.
      */
