@@ -1,7 +1,9 @@
 ﻿package grafo;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,8 +118,7 @@ public class Grafo
      * @throws ElementoNãoEncontrado caso o vértice não seja encontrado.
      * @throws VérticeJáExistente caso o vértice já exista.
      */
-    public void
-    adicionaVértice( final Object vértice, final Object[] adjacentes )
+    public void adicionaVértice( final Object vértice, final Object[] adjacentes )
         throws ElementoNãoEncontrado, VérticeJáExistente
     {
         this.adicionaVértice( vértice );
@@ -195,8 +196,7 @@ public class Grafo
      * @param vértices uma enumeração de vértices para conectar.
      * @throws ElementoNãoEncontrado caso o vértice não seja encontrado.
      */
-    public void
-    conecta( final Object vértice1, final Enumeration< ? > vértices )
+    public void conecta( final Object vértice1, final Enumeration< ? > vértices )
         throws ElementoNãoEncontrado
     {
         while( vértices.hasMoreElements() )
@@ -306,8 +306,7 @@ public class Grafo
      * @return true se conectados, false caso contrário.
      * @throws ElementoNãoEncontrado caso algum vértice não seja encontrado.
      */
-    public boolean
-    estãoConectados( final Object vértice1, final Object vértice2 )
+    public boolean estãoConectados( final Object vértice1, final Object vértice2 )
         throws ElementoNãoEncontrado
     {
         if( !this.vértices.containsKey( vértice1 ) )
@@ -397,11 +396,14 @@ public class Grafo
     public String toString()
     {
         String grafo = "( ";
-        final Enumeration< Object > vérticesDoGrafo = this.vértices();
+        final Set< ? > vérticesConjuto = this.vértices();
         
-        while( vérticesDoGrafo.hasMoreElements() )
+        final Enumeration< ? > vértices =
+            Collections.enumeration( vérticesConjuto );
+        
+        while( vértices.hasMoreElements() )
         {
-            final Object vértice = vérticesDoGrafo.nextElement();
+            final Object vértice = vértices.nextElement();
             grafo += vértice + "(";
             
             Enumeration< ? > adjacentes;
@@ -427,7 +429,7 @@ public class Grafo
             }
             grafo += ")";
             
-            if( vérticesDoGrafo.hasMoreElements() )
+            if( vértices.hasMoreElements() )
             {
                 grafo += ", ";
             }
@@ -451,8 +453,8 @@ public class Grafo
      * 
      * @return uma enumeração.
      */
-    public Enumeration< Object > vértices()
+    public Set< ? > vértices()
     {
-        return this.vértices.keys();
+        return this.vértices.keySet();
     }
 }
