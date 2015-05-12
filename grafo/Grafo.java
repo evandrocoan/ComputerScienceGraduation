@@ -1,9 +1,14 @@
 package grafo;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 import java.util.Iterator;
 import java.util.Vector;
+
+import java.util.Set;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -120,6 +125,7 @@ public class Grafo
      */
     public void adicionaVértice( final Object vértice, final Object[] adjacentes )
         throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+
     {
         this.adicionaVértice( vértice );
         
@@ -540,11 +546,15 @@ public class Grafo
     public String toString()
     {
         String grafo = "( ";
-        final Enumeration< ? > vérticesDoGrafo = this.vértices();
         
-        while( vérticesDoGrafo.hasMoreElements() )
+        final Set< ? > vérticesConjuto = this.vértices();
+        
+        final Enumeration< ? > vértices =
+            Collections.enumeration( vérticesConjuto );
+        
+        while( vértices.hasMoreElements() )
         {
-            final Object vértice = vérticesDoGrafo.nextElement();
+            final Object vértice = vértices.nextElement();
             grafo += vértice + "(";
             
             Enumeration< ? > adjacentes;
@@ -570,7 +580,7 @@ public class Grafo
             }
             grafo += ")";
             
-            if( vérticesDoGrafo.hasMoreElements() )
+            if( vértices.hasMoreElements() )
             {
                 grafo += ", ";
             }
@@ -611,9 +621,8 @@ public class Grafo
      * 
      * @return uma enumeração.
      */
-    public Enumeration< ? > vértices()
+    public Set< ? > vértices()
     {
-        
-        return this.vértices.keys();
+        return this.vértices.keySet();
     }
 }
