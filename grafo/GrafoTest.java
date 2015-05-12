@@ -1,7 +1,7 @@
 package grafo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -82,8 +82,9 @@ public class GrafoTest
     public void testAdicionarVérticeConectadoÀObjectEnumeration()
         throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
-        final String[] nomes =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        final String[] nomes = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         final Vector< String > adjacentesVector = new Vector<>();
         adjacentesVector.add( nomes[1] );
         adjacentesVector.add( nomes[4] );
@@ -102,8 +103,9 @@ public class GrafoTest
     public void testAdicionarVérticeConectadoÀObjectObjectArray()
         throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
-        final String[] nomes =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        final String[] nomes = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         GrafoTest.grafo.adicionaVértice( nomes );
         GrafoTest.grafo.conecta( nomes[0], nomes );
         Assert.assertEquals( 5, GrafoTest.grafo.grau( nomes[0] ) );
@@ -120,27 +122,24 @@ public class GrafoTest
     public void testAdjacentes() throws ExeçãoVérticeNãoExistente,
         ExeçãoVérticeJáExistente
     {
-        final String[] nomesArray =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        final String[] nomesArray = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
+        GrafoTest.grafo.adicionaVértice( nomesArray );
+        GrafoTest.grafo.conecta( nomesArray[0], nomesArray );
         
         final Vector< String > nomesVetor =
             new Vector<>( Arrays.asList( nomesArray ) );
-        
         final Iterator< String > nomesIterador = nomesVetor.iterator();
-        final Enumeration< ? > nomesEnumeration = nomesVetor.elements();
-        
-        GrafoTest.grafo.adicionaVértice( nomesEnumeration );
-        GrafoTest.grafo.conecta( nomesArray[0], nomesEnumeration );
         
         final Enumeration< ? > adjacentes =
             GrafoTest.grafo.adjacentes( nomesArray[0] );
-        
-        final List< ? > adjacentesConjunto = new ArrayList<>( nomesVetor );
+        final List< ? > adjacentesLista = Collections.list( adjacentes );
         
         while( adjacentes.hasMoreElements() )
         {
             final Object objeto = nomesIterador.next();
-            Assert.assertTrue( adjacentesConjunto.contains( objeto ) );
+            Assert.assertTrue( adjacentesLista.contains( objeto ) );
         }
         Assert.assertTrue( 5 == GrafoTest.grafo.ordem() );
     }
@@ -149,12 +148,12 @@ public class GrafoTest
     public void testDesconectarVérticesObjectObject()
         throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
     {
-        final String[] nomes =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
-        final Vector< String > adjacente = new Vector<>();
-        adjacente.add( nomes[1] );
-        adjacente.add( nomes[4] );
-        final Enumeration< ? > adjacentes = adjacente.elements();
+        final String[] nomes = {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
+        final Vector< String > adjacentes = new Vector<>();
+        adjacentes.add( nomes[1] );
+        adjacentes.add( nomes[4] );
         
         GrafoTest.grafo.adicionaVértice( nomes );
         GrafoTest.grafo.adicionaVértice( "França", adjacentes );
@@ -170,22 +169,95 @@ public class GrafoTest
     }
     
     @Test
+    public void testÉCompleto() throws ExeçãoVérticeJáExistente,
+        ExeçãoVérticeNãoExistente
+    {
+        final String[] nomes = {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
+        GrafoTest.grafo.adicionaVértice( nomes );
+        GrafoTest.grafo.conecta( nomes, nomes );
+        Assert.assertTrue( GrafoTest.grafo.éCompleto() );
+        
+        GrafoTest.grafo.desconecta( nomes[0], nomes[0] );
+        GrafoTest.grafo.desconecta( nomes[1], nomes[1] );
+        GrafoTest.grafo.desconecta( nomes[2], nomes[2] );
+        GrafoTest.grafo.desconecta( nomes[3], nomes[3] );
+        GrafoTest.grafo.desconecta( nomes[4], nomes[4] );
+        Assert.assertTrue( GrafoTest.grafo.éCompleto() );
+        
+        GrafoTest.grafo.desconecta( nomes[0], nomes[1] );
+        Assert.assertFalse( GrafoTest.grafo.éCompleto() );
+        
+        GrafoTest.grafo.conecta( nomes[0], nomes[0] );
+        GrafoTest.grafo.conecta( nomes[1], nomes[1] );
+        GrafoTest.grafo.conecta( nomes[2], nomes[2] );
+        GrafoTest.grafo.conecta( nomes[3], nomes[3] );
+        GrafoTest.grafo.conecta( nomes[4], nomes[4] );
+        Assert.assertFalse( GrafoTest.grafo.éCompleto() );
+        
+        GrafoTest.grafo.conecta( nomes[0], nomes[1] );
+        GrafoTest.grafo.desconecta( nomes[1], nomes[4] );
+        Assert.assertFalse( GrafoTest.grafo.éCompleto() );
+        
+        GrafoTest.grafo.conecta( nomes[1], nomes[4] );
+        Assert.assertTrue( GrafoTest.grafo.éCompleto() );
+    }
+    
+    @Test
+    public void testÉRegular() throws ExeçãoVérticeJáExistente,
+    ExeçãoVérticeNãoExistente
+    {
+        final String[] nomesArray = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
+        GrafoTest.grafo.adicionaVértice( nomesArray );
+        Assert.assertTrue( GrafoTest.grafo.éRegular() );
+        
+        GrafoTest.grafo.conecta( nomesArray[0], nomesArray[1] );
+        Assert.assertFalse( GrafoTest.grafo.éRegular() );
+        
+        GrafoTest.grafo.conecta( nomesArray[2], nomesArray[3] );
+        Assert.assertFalse( GrafoTest.grafo.éRegular() );
+        
+        GrafoTest.grafo.adicionaVértice( "Turquia" );
+        GrafoTest.grafo.conecta( nomesArray[4], "Turquia" );
+        Assert.assertTrue( GrafoTest.grafo.éRegular() );
+    }
+    
+    @Test
     public void testEstãoConectados() throws ExeçãoVérticeNãoExistente,
         ExeçãoVérticeJáExistente
     {
-        final String[] nomes =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        final String[] nomes = {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         GrafoTest.grafo.adicionaVértice( nomes );
         GrafoTest.grafo.conecta( nomes[0], nomes );
         Assert.assertTrue( GrafoTest.grafo.estãoConectados( nomes[0], "USA" ) );
     }
     
     @Test
+    public void testFechoTransitivo() throws ExeçãoVérticeJáExistente,
+        ExeçãoVérticeNãoExistente
+    {
+        final String[] nomes = {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
+        GrafoTest.grafo.adicionaVértice( nomes );
+        GrafoTest.grafo.conecta( nomes, nomes );
+        
+        final Enumeration< ? > fechoTransitivo =
+            GrafoTest.grafo.fechoTransitivo( nomes[0] );
+    } // TODO
+    
+    @Test
     public void testRemoverVértice() throws ExeçãoVérticeNãoExistente,
         ExeçãoVérticeJáExistente
     {
-        final String[] nomes =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
+        final String[] nomes = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         GrafoTest.grafo.adicionaVértice( nomes );
         GrafoTest.grafo.conecta( nomes[0], nomes );
         Assert.assertTrue( GrafoTest.grafo.estãoConectados( nomes[0], "USA" ) );
@@ -197,13 +269,11 @@ public class GrafoTest
     @Test
     public void testUmVértice() throws ExeçãoVérticeJáExistente
     {
-        final String[] nomesArray =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
-        
+        final String[] nomesArray = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         GrafoTest.grafo.adicionaVértice( nomesArray );
-        
         final Object umVértice = GrafoTest.grafo.umVértice();
-        
         Assert.assertTrue( GrafoTest.grafo.contémVertice( umVértice ) );
     }
     
@@ -211,11 +281,10 @@ public class GrafoTest
     public void testUmVérticeObject() throws ExeçãoVérticeJáExistente,
         ExeçãoVérticeNãoExistente
     {
-        final String[] nomesArray =
-            new String[] { "Brasil", "USA", "China", "Hong Kong", "Japão" };
-        
+        final String[] nomesArray = new String[] {
+            "Brasil", "USA", "China", "Hong Kong", "Japão"
+        };
         GrafoTest.grafo.adicionaVértice( nomesArray );
-        
         Object umVértice = GrafoTest.grafo.umVértice( nomesArray[0] );
         Assert.assertEquals( umVértice, nomesArray[0] );
         
