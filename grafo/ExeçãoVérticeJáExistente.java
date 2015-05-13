@@ -4,7 +4,7 @@ package grafo;
  * 
  * @author Professional
  */
-public class VérticeJáExistente extends Exception
+public class ExeçãoVérticeJáExistente extends Exception
 {
     private final Object vértice;
     private final Grafo grafo;
@@ -13,7 +13,7 @@ public class VérticeJáExistente extends Exception
      * @param vértice o vértice do grafo.
      * @param grafo o objeto do grafo.
      */
-    public VérticeJáExistente( final Object vértice, final Grafo grafo )
+    public ExeçãoVérticeJáExistente( final Object vértice, final Grafo grafo )
     {
         this.vértice = vértice;
         this.grafo = grafo;

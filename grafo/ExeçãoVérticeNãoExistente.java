@@ -4,7 +4,7 @@ package grafo;
  * 
  * @author Professional
  */
-public class ElementoNãoEncontrado extends Exception
+public class ExeçãoVérticeNãoExistente extends Exception
 {
     private Object vértice;
     private final Grafo grafo;
@@ -13,7 +13,7 @@ public class ElementoNãoEncontrado extends Exception
      * @param vértice o vértice do grafo
      * @param grafo o objeto do grafo
      */
-    public ElementoNãoEncontrado( final Object vértice, final Grafo grafo )
+    public ExeçãoVérticeNãoExistente( final Object vértice, final Grafo grafo )
     {
         this.vértice = vértice;
         this.grafo = grafo;
