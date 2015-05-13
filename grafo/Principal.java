@@ -15,39 +15,11 @@ import org.junit.runner.notification.Failure;
  */
 public class Principal
 {
-    /**
-     * Retorna uma representação em string da enumeração. Esta enumeração deve
-     * ter um método toString que gere valores que possam significativamente
-     * representar a string.
-     * 
-     * @param enumeração uma enumeração.
-     * @return string uma string representado a enumeração
-     */
-    public static String enumeraçãoToString( final Enumeration< ? > enumeração )
-    {
-        String string = "";
-        
-        while( enumeração.hasMoreElements() )
-        {
-            final Object elemento = enumeração.nextElement();
-            string += elemento + " ";
-        }
-        return string;
-    }
-    
     public static void main( final String[] args )
     {
         Principal.testeGenéricoHashtable();
         Principal.testeDaBase();
-        
-        // org.junit.runner.JUnitCore.main( "GrafoTest" );
-        final Result result = JUnitCore.runClasses( GrafoTest.class );
-        for( final Failure failure: result.getFailures() )
-        {
-            System.out.println( "Teste falhou: " + failure.getDescription() );
-        }
-        System.out.println( "\nTodos os testes funcinaram? "
-            + ( result.wasSuccessful()? "Sim!" : "NÃO!!!!!!!!!!!!!!!!!!!" ) );
+        Principal.testes();
     }
     
     private static void testeDaBase()
@@ -78,12 +50,10 @@ public class Principal
         arestasDoVértice2.put( chaveDoVértice1, vértice1 );
         
         // imprime o resultado
-        System.out.println( Principal.enumeraçãoToString( arestasDoVértice1
-            .elements() )
+        System.out.println( Principal.toString( arestasDoVértice1.elements() )
             + "(deve ter impresso o vértice 2)" );
         
-        System.out.println( Principal.enumeraçãoToString( arestasDoVértice2
-            .elements() )
+        System.out.println( Principal.toString( arestasDoVértice2.elements() )
             + "(deve ter impresso o vértice 1)\n" );
     }
     
@@ -105,5 +75,54 @@ public class Principal
         System.out.printf( minhaEnumeração.nextElement() + " " );
         System.out.printf( minhaEnumeração.nextElement() + " " );
         System.out.printf( minhaEnumeração.nextElement() + " \n" );
+    }
+    
+    /** 
+     * 
+     */
+    private static void testes()
+    {
+        final Result result = JUnitCore.runClasses( GrafoTest.class );
+        final StringBuilder mensagem = new StringBuilder();
+        if( result.getFailureCount() > 0 )
+        {
+            mensagem.append( "############## OS SEGUINTES TESTES FALHARAM!! "
+                + "#####################################\n" );
+        } else
+        {
+            mensagem.append( "############## TODOS OS TESTES FORAM EXECUTADOS "
+                + "COM SUCESSO!! #######################\n" );
+        }
+        
+        for( final Failure failure: result.getFailures() )
+        {
+            mensagem.append( failure.getDescription() ).append( '\n' );
+            mensagem.append( failure.getMessage() ).append( '\n' );
+        }
+        System.out.println( mensagem );
+    }
+    
+    /**
+     * Retorna uma representação em string da enumeração. Esta enumeração deve
+     * ter um método toString que gere valores que possam significativamente
+     * representar a string.
+     * 
+     * @param enumeração uma enumeração.
+     * @return string uma string representado a enumeração
+     */
+    public static String toString( final Enumeration< ? > enumeração )
+    {
+        String string = "";
+        
+        while( enumeração.hasMoreElements() )
+        {
+            final Object elemento = enumeração.nextElement();
+            string += elemento + " ";
+        }
+        return string;
+    }
+    
+    private Principal()
+    {
     }
 }
