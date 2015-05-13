@@ -1,8 +1,9 @@
 package grafo;
 
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
@@ -32,7 +33,7 @@ public class Grafo
     /**
      * Serve para armazenar os vértices do grafo e suas arestas.
      */
-    private final Hashtable< Object, Hashtable< Object, Object >> vértices;
+    private final HashMap< Object, HashMap< Object, Object >> vértices;
     
     /**
      * Prepara a estrutura para ser utilizada como um grafo. Antes de ser criado
@@ -41,7 +42,7 @@ public class Grafo
     public Grafo()
     {
         Grafo.LOG.setLevel( Level.OFF );
-        this.vértices = new Hashtable<>();
+        this.vértices = new HashMap<>();
     }
     
     /**
@@ -89,7 +90,7 @@ public class Grafo
         {
             throw new ExeçãoVérticeJáExistente( vértice, this );
         }
-        this.vértices.put( vértice, new Hashtable<>() );
+        this.vértices.put( vértice, new HashMap<>() );
     }
     
     /**
@@ -122,7 +123,7 @@ public class Grafo
      */
     public void adicionaVértice( final Object vértice, final Object[] adjacentes )
         throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-    
+        
     {
         this.adicionaVértice( vértice );
         
@@ -194,17 +195,17 @@ public class Grafo
      * @return os vértices como uma enumeração.
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
-    public Enumeration< ? > adjacentes( final Object vértice )
+    public Collection< ? > adjacentes( final Object vértice )
         throws ExeçãoVérticeNãoExistente
-        {
+    {
         if( !this.vértices.containsKey( vértice ) )
         {
             throw new ExeçãoVérticeNãoExistente( vértice, this );
         }
-        final Hashtable< ?, ? > arestas = this.vértices.get( vértice );
+        final HashMap< ?, ? > arestas = this.vértices.get( vértice );
         
-        return arestas.elements();
-        }
+        return arestas.values();
+    }
     
     /**
      * Retorna os vértices adjacentes de um dado vértice.
@@ -216,13 +217,14 @@ public class Grafo
     public Object[] adjacentesEmArranjo( final Object vértice )
         throws ExeçãoVérticeNãoExistente
     {
-        final Enumeration< ? > enumeração = this.adjacentes( vértice );
+        final Collection< ? > coleção = this.adjacentes( vértice );
+        final Iterator< ? > iterador = coleção.iterator();
         final Object[] adjacentes = new Object[this.grau( vértice )];
         
         int índice = 0;
-        while( enumeração.hasMoreElements() )
+        while( iterador.hasNext() )
         {
-            adjacentes[índice] = enumeração.nextElement();
+            adjacentes[índice] = iterador.next();
             índice++;
         }
         return adjacentes;
@@ -266,10 +268,10 @@ public class Grafo
         final Integer chaveDoVértice1 = Integer.valueOf( vértice1.hashCode() );
         final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
         
-        // pega a Hashtable de arestas do vértice
-        final Hashtable< Object, Object > arestasDoVértice1 =
+        // pega a HashMap de arestas do vértice
+        final HashMap< Object, Object > arestasDoVértice1 =
             this.vértices.get( vértice1 );
-        final Hashtable< Object, Object > arestasDoVértice2 =
+        final HashMap< Object, Object > arestasDoVértice2 =
             this.vértices.get( vértice2 );
         
         // conecta o vértice1 com o vértice2
@@ -346,10 +348,10 @@ public class Grafo
         final Integer chaveDoVértice1 = Integer.valueOf( vértice1.hashCode() );
         final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
         
-        // pega a Hashtable de arestas do vértice
-        final Hashtable< Object, Object > arestasDoVértice1 =
+        // pega a HashMap de arestas do vértice
+        final HashMap< Object, Object > arestasDoVértice1 =
             this.vértices.get( vértice1 );
-        final Hashtable< Object, Object > arestasDoVértice2 =
+        final HashMap< Object, Object > arestasDoVértice2 =
             this.vértices.get( vértice2 );
         
         // desconecta o vértice1 do vértice2
@@ -443,7 +445,7 @@ public class Grafo
             throw new ExeçãoVérticeNãoExistente( vértice2, this );
         }
         // os adjacentes dele
-        final Hashtable< ?, ? > adjacentes = this.vértices.get( vértice1 );
+        final HashMap< ?, ? > adjacentes = this.vértices.get( vértice1 );
         
         final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
         
@@ -475,7 +477,7 @@ public class Grafo
         {
             throw new ExeçãoVérticeNãoExistente( vértice, this );
         }
-        final Hashtable< ?, ? > arestas = this.vértices.get( vértice );
+        final HashMap< ?, ? > arestas = this.vértices.get( vértice );
         
         int size = 0;
         
@@ -501,7 +503,7 @@ public class Grafo
      */
     private Set< ? > procuraFechoTransitivo( final Object vértice,
         final HashSet< ? > hashSet )
-    {
+        {
         /*
          * TODO @formatter:off
          * 
@@ -517,7 +519,7 @@ public class Grafo
          *  retorna ft
          */ // @formatter:on
         return null;
-    }
+        }
     
     /**
      * Remove um vértice deste Grafo., juntamente com todas as conexões.
@@ -532,11 +534,12 @@ public class Grafo
         {
             throw new ExeçãoVérticeNãoExistente( vértice, this );
         }
-        final Enumeration< ? > adjacentes = this.adjacentes( vértice );
+        final Collection< ? > adjacentes = this.adjacentes( vértice );
+        final Iterator< ? > iterador = adjacentes.iterator();
         
-        while( adjacentes.hasMoreElements() )
+        while( iterador.hasNext() )
         {
-            this.desconecta( vértice, adjacentes.nextElement() );
+            this.desconecta( vértice, iterador.next() );
         }
         this.vértices.remove( vértice );
     }
@@ -580,16 +583,18 @@ public class Grafo
             final Object vértice = vértices.next();
             grafo += vértice + "(";
             
-            Enumeration< ? > adjacentes;
+            Collection< ? > adjacentes;
+            Iterator< ? > iterador;
             try
             {
                 adjacentes = this.adjacentes( vértice );
+                iterador = adjacentes.iterator();
                 
-                while( adjacentes.hasMoreElements() )
+                while( iterador.hasNext() )
                 {
-                    grafo = grafo + " " + adjacentes.nextElement();
+                    grafo = grafo + " " + iterador.next();
                     
-                    if( adjacentes.hasMoreElements() )
+                    if( iterador.hasNext() )
                     {
                         grafo += ",";
                     } else
@@ -619,7 +624,7 @@ public class Grafo
      */
     public Object umVértice()
     {
-        return this.vértices.keys().nextElement();
+        return this.vértices.keySet().iterator().next();
     }
     
     /**
