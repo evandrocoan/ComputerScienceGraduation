@@ -1,14 +1,11 @@
 package grafo;
 
-import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
-
 import java.util.Iterator;
-import java.util.Vector;
-
 import java.util.Set;
-
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -125,7 +122,7 @@ public class Grafo
      */
     public void adicionaVértice( final Object vértice, final Object[] adjacentes )
         throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-
+    
     {
         this.adicionaVértice( vértice );
         
@@ -199,7 +196,7 @@ public class Grafo
      */
     public Enumeration< ? > adjacentes( final Object vértice )
         throws ExeçãoVérticeNãoExistente
-    {
+        {
         if( !this.vértices.containsKey( vértice ) )
         {
             throw new ExeçãoVérticeNãoExistente( vértice, this );
@@ -207,7 +204,7 @@ public class Grafo
         final Hashtable< ?, ? > arestas = this.vértices.get( vértice );
         
         return arestas.elements();
-    }
+        }
     
     /**
      * Retorna os vértices adjacentes de um dado vértice.
@@ -382,11 +379,13 @@ public class Grafo
     public boolean éCompleto() throws ExeçãoVérticeNãoExistente
     {
         final int n = this.ordem() - 1;
-        final Enumeration< ? > vértices = this.vértices();
         
-        while( vértices.hasMoreElements() )
+        final Set< ? > vérticesConjuto = this.vértices();
+        final Iterator< ? > vértices = vérticesConjuto.iterator();
+        
+        while( vértices.hasNext() )
         {
-            final Object próximo = vértices.nextElement();
+            final Object próximo = vértices.next();
             
             if( ( ( this.grau( próximo ) != n ) && !this.temLaço( próximo ) )
                 || ( ( this.grau( próximo ) != ( n + 1 ) ) && this
@@ -409,11 +408,13 @@ public class Grafo
     public boolean éRegular() throws ExeçãoVérticeNãoExistente
     {
         final int grau = this.grau( this.umVértice() );
-        final Enumeration< ? > vértices = this.vértices();
         
-        while( vértices.hasMoreElements() )
+        final Set< ? > vérticesConjunto = this.vértices();
+        final Iterator< ? > vértices = vérticesConjunto.iterator();
+        
+        while( vértices.hasNext() )
         {
-            final int grauTemp = this.grau( vértices.nextElement() );
+            final int grauTemp = this.grau( vértices.next() );
             if( grau != grauTemp )
             {
                 return false;
@@ -456,10 +457,11 @@ public class Grafo
      * @param vértice um vértice deste grafo.
      * @return um conjunto contendo o fecho transitivo.
      */
-    public Enumeration< ? > fechoTransitivo( final Object vértice )
+    public Set< ? > fechoTransitivo( final Object vértice )
     {
         // TODO Auto-generated method stub
-        return null;
+        
+        return new HashSet<>();
     }
     
     /**
@@ -548,13 +550,11 @@ public class Grafo
         String grafo = "( ";
         
         final Set< ? > vérticesConjuto = this.vértices();
+        final Iterator< ? > vértices = vérticesConjuto.iterator();
         
-        final Enumeration< ? > vértices =
-            Collections.enumeration( vérticesConjuto );
-        
-        while( vértices.hasMoreElements() )
+        while( vértices.hasNext() )
         {
-            final Object vértice = vértices.nextElement();
+            final Object vértice = vértices.next();
             grafo += vértice + "(";
             
             Enumeration< ? > adjacentes;
@@ -580,7 +580,7 @@ public class Grafo
             }
             grafo += ")";
             
-            if( vértices.hasMoreElements() )
+            if( vértices.hasNext() )
             {
                 grafo += ", ";
             }

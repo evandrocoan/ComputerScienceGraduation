@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -247,7 +248,7 @@ public class GrafoTest
         GrafoTest.grafo.adicionaVértice( nomes );
         GrafoTest.grafo.conecta( nomes, nomes );
         
-        final Enumeration< ? > fechoTransitivo =
+        final Set< ? > fechoTransitivo =
             GrafoTest.grafo.fechoTransitivo( nomes[0] );
     } // TODO
     
