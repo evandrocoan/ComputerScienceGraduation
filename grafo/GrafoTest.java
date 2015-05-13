@@ -1,10 +1,9 @@
 package grafo;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -133,14 +132,13 @@ public class GrafoTest
             new Vector<>( Arrays.asList( nomesArray ) );
         final Iterator< String > nomesIterador = nomesVetor.iterator();
         
-        final Enumeration< ? > adjacentes =
+        final Collection< ? > adjacentes =
             GrafoTest.grafo.adjacentes( nomesArray[0] );
-        final List< ? > adjacentesLista = Collections.list( adjacentes );
         
-        while( adjacentes.hasMoreElements() )
+        while( nomesIterador.hasNext() )
         {
             final Object objeto = nomesIterador.next();
-            Assert.assertTrue( adjacentesLista.contains( objeto ) );
+            Assert.assertTrue( adjacentes.contains( objeto ) );
         }
         Assert.assertTrue( 5 == GrafoTest.grafo.ordem() );
     }
@@ -240,7 +238,7 @@ public class GrafoTest
     
     @Test
     public void testFechoTransitivo() throws ExeçãoVérticeJáExistente,
-        ExeçãoVérticeNãoExistente
+        ExeçãoVérticeNãoExistente // TODO
     {
         final String[] nomes = {
             "Brasil", "USA", "China", "Hong Kong", "Japão"
@@ -250,7 +248,7 @@ public class GrafoTest
         
         final Set< ? > fechoTransitivo =
             GrafoTest.grafo.fechoTransitivo( nomes[0] );
-    } // TODO
+    }
     
     @Test
     public void testRemoverVértice() throws ExeçãoVérticeNãoExistente,
