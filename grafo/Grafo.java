@@ -459,9 +459,7 @@ public class Grafo
      */
     public Set< ? > fechoTransitivo( final Object vértice )
     {
-        // TODO Auto-generated method stub
-        
-        return new HashSet<>();
+        return this.procuraFechoTransitivo( vértice, new HashSet<>() );
     }
     
     /**
@@ -494,6 +492,31 @@ public class Grafo
     public int ordem()
     {
         return this.vértices.size();
+    }
+    
+    /**
+     * @param vértice
+     * @param hashSet
+     * @return
+     */
+    private Set< ? > procuraFechoTransitivo( final Object vértice,
+        final HashSet< ? > hashSet )
+    {
+        /*
+         * TODO @formatter:off
+         * 
+         *  "Privado - utilizada por G.fechoTransitivo"
+         *
+         *  ft := Conjunto.novo
+         *  jáVisitados.adiciona(v)
+         *  Para cada vAdjG.adjacentes(v) faça 
+         *     Se ~ jáVisitados.pertence(vAdj) Então
+         *        ft := ft.uniao(G.procuraFechoTransitivo(vAdj,jáVisitados))
+         *     Fim Se
+         *  Fim
+         *  retorna ft
+         */ // @formatter:on
+        return null;
     }
     
     /**
