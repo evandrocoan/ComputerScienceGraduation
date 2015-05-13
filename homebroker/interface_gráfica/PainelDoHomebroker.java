@@ -38,8 +38,7 @@ public final class PainelDoHomebroker extends JPanel
      * @param motor o motor do programa.
      * @return instância uma intância da janela de login.
      */
-    public static PainelDoHomebroker
-        getInstância( final MotorDoHomebroker motor )
+    public static PainelDoHomebroker getInstância( final MotorDoHomebroker motor )
     {
         synchronized( PainelDoHomebroker.class )
         {
@@ -72,14 +71,14 @@ public final class PainelDoHomebroker extends JPanel
      * informações serão aprentadas na interface gráfica ao usuário.
      */
     private final String campoDeAjuda = "Bem-vindo ao sistema "
-        + "tabajara de cadastro de ações!\n"
+        + "tabajara de cadastro de ações.\n"
         + "Digite 's' para fechar o programa.\n"
-        + "Digite 'v' para para ver o inventario\n"
-        + "Digite 'b' para para ver o inventario\n"
-        + "Digite 'ov' para enviar uma ordem de venda\n"
-        + "Digite 'oc' para criar um ordem de compra\n"
-        + "Digite 'c' para para criar uma conta!\n"
-        + "Digite 'm' para ver o mercado!\n";
+        + "Digite 'v' para para ver o inventario.\n"
+        + "Digite 'b' para para bloquerar uma conta de usuário.\n"
+        + "Digite 'ov' para enviar uma ordem de venda.\n"
+        + "Digite 'oc' para criar um ordem de compra.\n"
+        + "Digite 'c' para para criar uma conta.\n"
+        + "Digite 'm' para ver o mercado.\n";
     
     /**
      * Cria um painel para colocar os botões, caixas de texto, ...
@@ -104,8 +103,8 @@ public final class PainelDoHomebroker extends JPanel
         this.add( this.entradaDeComandos, BorderLayout.NORTH );
         this.add( campoDeAjuda, BorderLayout.EAST );
         
-        Biblioteca.trocarFontes( this, new Font( this.getName(),
-            Frame.NORMAL, 20 ) );
+        Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL,
+            20 ) );
     }
     
     private void bloquearUmUsuário()
@@ -188,8 +187,7 @@ public final class PainelDoHomebroker extends JPanel
      */
     private void configurarEntradaDeComandos()
     {
-        this.entradaDeComandos =
-            new JTextField( "  Insira qual seu comando  " );
+        this.entradaDeComandos = new JTextField( "  Insira qual seu comando  " );
         
         this.entradaDeComandos.addActionListener( new ActionListener()
         {
@@ -360,7 +358,6 @@ public final class PainelDoHomebroker extends JPanel
                 + "nenhuma conta carregada no sistema!" );
             return;
         }
-        JOptionPane.showMessageDialog( null,
-            this.motor.inventarioToString() );
+        JOptionPane.showMessageDialog( null, this.motor.inventarioToString() );
     }
 }
