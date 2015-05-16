@@ -28,6 +28,11 @@ import java.util.logging.Logger;
  */
 public class Grafo
 {
+    /**
+     * Resposável por realizar o debug do programa, quando ativado. Deve ser
+     * instânciado antes que o construtor desta classe, pois este construtor
+     * precisa de deste objeto já instânciado para ser monitorado pelo log.
+     */
     private static final Logger LOG = Logger.getLogger( Grafo.class.getName() );
     
     /**
@@ -65,7 +70,7 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Enumeration< ? > vértices )
-        throws ExeçãoVérticeJáExistente
+            throws ExeçãoVérticeJáExistente
     {
         if( this.vértices.containsKey( vértices ) )
         {
@@ -84,7 +89,7 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Object vértice )
-        throws ExeçãoVérticeJáExistente
+            throws ExeçãoVérticeJáExistente
     {
         if( this.vértices.containsKey( vértice ) )
         {
@@ -102,8 +107,8 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Object vértice,
-        final Enumeration< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
-        ExeçãoVérticeJáExistente
+            final Enumeration< ? > adjacentes )
+                    throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
     {
         this.adicionaVértice( vértice );
         
@@ -122,8 +127,8 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Object vértice, final Object[] adjacentes )
-        throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-        
+            throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+    
     {
         this.adicionaVértice( vértice );
         
@@ -142,8 +147,8 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Object vértice,
-        final Vector< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
-        ExeçãoVérticeJáExistente
+            final Vector< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
+            ExeçãoVérticeJáExistente
     {
         this.adicionaVértice( vértice );
         
@@ -162,7 +167,7 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Object[] vértices )
-        throws ExeçãoVérticeJáExistente
+            throws ExeçãoVérticeJáExistente
     {
         for( int índice = 0; índice < vértices.length; índice++ )
         {
@@ -177,7 +182,7 @@ public class Grafo
      * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
      */
     public void adicionaVértice( final Vector< Object > vértices )
-        throws ExeçãoVérticeJáExistente
+            throws ExeçãoVérticeJáExistente
     {
         final Iterator< Object > vérticesIterador = vértices.iterator();
         
@@ -196,8 +201,8 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public Collection< ? > adjacentes( final Object vértice )
-        throws ExeçãoVérticeNãoExistente
-    {
+            throws ExeçãoVérticeNãoExistente
+            {
         if( !this.vértices.containsKey( vértice ) )
         {
             throw new ExeçãoVérticeNãoExistente( vértice, this );
@@ -205,7 +210,7 @@ public class Grafo
         final HashMap< ?, ? > arestas = this.vértices.get( vértice );
         
         return arestas.values();
-    }
+            }
     
     /**
      * Retorna os vértices adjacentes de um dado vértice.
@@ -215,7 +220,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public Object[] adjacentesEmArranjo( final Object vértice )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         final Collection< ? > coleção = this.adjacentes( vértice );
         final Iterator< ? > iterador = coleção.iterator();
@@ -238,7 +243,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public void conecta( final Object vértice1, final Enumeration< ? > vértices )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         while( vértices.hasMoreElements() )
         {
@@ -254,7 +259,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public void conecta( final Object vértice1, final Object vértice2 )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         if( !this.vértices.containsKey( vértice1 ) )
         {
@@ -269,10 +274,10 @@ public class Grafo
         final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
         
         // pega a HashMap de arestas do vértice
-        final HashMap< Object, Object > arestasDoVértice1 =
-            this.vértices.get( vértice1 );
-        final HashMap< Object, Object > arestasDoVértice2 =
-            this.vértices.get( vértice2 );
+        final HashMap< Object, Object > arestasDoVértice1 = this.vértices
+                .get( vértice1 );
+        final HashMap< Object, Object > arestasDoVértice2 = this.vértices
+                .get( vértice2 );
         
         // conecta o vértice1 com o vértice2
         arestasDoVértice1.put( chaveDoVértice2, vértice2 );
@@ -287,7 +292,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public void conecta( final Object vértice1, final Object[] vértices )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         for( int índice = 0; índice < vértices.length; índice++ )
         {
@@ -304,7 +309,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
      */
     public void conecta( final Object[] vértices1, final Object[] vértices2 )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         for( int índice1 = 0; índice1 < vértices1.length; índice1++ )
         {
@@ -334,7 +339,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
      */
     public void desconecta( final Object vértice1, final Object vértice2 )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         if( !this.vértices.containsKey( vértice1 ) )
         {
@@ -349,10 +354,10 @@ public class Grafo
         final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
         
         // pega a HashMap de arestas do vértice
-        final HashMap< Object, Object > arestasDoVértice1 =
-            this.vértices.get( vértice1 );
-        final HashMap< Object, Object > arestasDoVértice2 =
-            this.vértices.get( vértice2 );
+        final HashMap< Object, Object > arestasDoVértice1 = this.vértices
+                .get( vértice1 );
+        final HashMap< Object, Object > arestasDoVértice2 = this.vértices
+                .get( vértice2 );
         
         // desconecta o vértice1 do vértice2
         arestasDoVértice1.remove( chaveDoVértice2 );
@@ -390,8 +395,8 @@ public class Grafo
             final Object próximo = vértices.next();
             
             if( ( ( this.grau( próximo ) != n ) && !this.temLaço( próximo ) )
-                || ( ( this.grau( próximo ) != ( n + 1 ) ) && this
-                    .temLaço( próximo ) ) )
+                    || ( ( this.grau( próximo ) != ( n + 1 ) ) && this
+                            .temLaço( próximo ) ) )
             {
                 return false;
             }
@@ -434,7 +439,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
      */
     public boolean estãoConectados( final Object vértice1, final Object vértice2 )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         if( !this.vértices.containsKey( vértice1 ) )
         {
@@ -461,7 +466,8 @@ public class Grafo
      */
     public Set< ? > fechoTransitivo( final Object vértice )
     {
-        return this.procuraFechoTransitivo( vértice, new HashSet<>() );
+        final Set< Object > jáVisitados = new HashSet<>();
+        return this.procuraFechoTransitivo( vértice, jáVisitados );
     }
     
     /**
@@ -496,15 +502,10 @@ public class Grafo
         return this.vértices.size();
     }
     
-    /**
-     * @param vértice
-     * @param hashSet
-     * @return
-     */
     private Set< ? > procuraFechoTransitivo( final Object vértice,
-        final HashSet< ? > hashSet )
-        {
-        /*
+            final Set< Object > jáVisitados )
+    {
+        /*    
          * TODO @formatter:off
          * 
          *  "Privado - utilizada por G.fechoTransitivo"
@@ -518,8 +519,60 @@ public class Grafo
          *  Fim
          *  retorna ft
          */ // @formatter:on
-        return null;
+        
+        final Set< Object > fechoTransitivo = new HashSet<>();
+        jáVisitados.add( vértice );
+        
+        Collection< ? > adjacentes = null;
+        try
+        {
+            adjacentes = this.adjacentes( vértice );
+            
+        } catch( final ExeçãoVérticeNãoExistente e )
+        {
+            e.printStackTrace();
         }
+        final Iterator< ? > iterador = adjacentes.iterator();
+        
+        while( iterador.hasNext() )
+        {
+            final Object objeto = iterador.next();
+            if( !jáVisitados.contains( objeto ) )
+            {
+                final Set< ? > conjunto = this.procuraFechoTransitivo( objeto,
+                        jáVisitados );
+                final Iterator< ? > iterador2 = conjunto.iterator();
+                
+                while( iterador2.hasNext() )
+                {
+                    fechoTransitivo.add( iterador2.next() );
+                }
+            }
+        }
+        return fechoTransitivo;
+    }
+    
+    /**
+     * Remove os laços de todos os vértices desse grafo.
+     */
+    public void removerLaços()
+    { // TODO
+        final Set< ? > vértices = this.vértices();
+        final Iterator< ? > iterador = vértices.iterator();
+        
+        while( iterador.hasNext() )
+        {
+            final Object vértice = iterador.next();
+            try
+            {
+                this.desconecta( vértice, vértice );
+                
+            } catch( final ExeçãoVérticeNãoExistente e )
+            {
+                e.printStackTrace();
+            }
+        }
+    }
     
     /**
      * Remove um vértice deste Grafo., juntamente com todas as conexões.
@@ -528,7 +581,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
      */
     public void removerVértice( final Object vértice )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         if( !this.vértices.containsKey( vértice ) )
         {
@@ -562,7 +615,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente não exista o vértice neste grafo.
      */
     public boolean temLaço( final Object vértice )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         return this.estãoConectados( vértice, vértice );
     }
@@ -635,7 +688,7 @@ public class Grafo
      * @throws ExeçãoVérticeNãoExistente caso o vértice não exista.
      */
     public Object umVértice( final Object vértice )
-        throws ExeçãoVérticeNãoExistente
+            throws ExeçãoVérticeNãoExistente
     {
         if( !this.contémVertice( vértice ) )
         {
