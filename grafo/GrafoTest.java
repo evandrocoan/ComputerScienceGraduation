@@ -167,6 +167,86 @@ public class GrafoTest
    }
    
    @Test
+   public void testÉÁrvore1() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      /* TODO @formatter:off
+		 * 
+		 * 
+		 */ // @formatter:on 
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
+      Assert.assertFalse( GrafoTest.grafo.éÁrvore() );
+   }
+   
+   @Test
+   public void testÉÁrvore2() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes[0], nomes[1] );
+      GrafoTest.grafo.conecta( nomes[0], nomes[2] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[3] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[4] );
+      Assert.assertTrue( GrafoTest.grafo.éÁrvore() );
+      
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.conecta( nomes[2], "João1" );
+      GrafoTest.grafo.conecta( nomes[2], "João2" );
+      Assert.assertTrue( GrafoTest.grafo.éÁrvore() );
+   }
+   
+   @Test
+   public void testÉÁrvore3() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes[0], nomes[1] );
+      GrafoTest.grafo.conecta( nomes[0], nomes[2] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[3] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[4] );
+      Assert.assertTrue( GrafoTest.grafo.éÁrvore() );
+      
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.conecta( nomes[0], "João1" );
+      GrafoTest.grafo.conecta( nomes[0], "João2" );
+      Assert.assertTrue( GrafoTest.grafo.éÁrvore() );
+   }
+   
+   @Test
+   public void testÉÁrvore4() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes[0], nomes[1] );
+      GrafoTest.grafo.conecta( nomes[0], nomes[2] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[3] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[4] );
+      Assert.assertTrue( GrafoTest.grafo.éÁrvore() );
+      
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.conecta( nomes[0], "João1" );
+      GrafoTest.grafo.conecta( nomes[0], "João2" );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      Assert.assertFalse( GrafoTest.grafo.éÁrvore() );
+   }
+   
+   @Test
    public void testÉCompleto() throws ExeçãoVérticeJáExistente,
             ExeçãoVérticeNãoExistente
    {
@@ -654,6 +734,35 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 13, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   @SuppressWarnings( "boxing" )
+   public void testHáCiclos() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   { // TODO
+      final int[] números = new int[25];
+      for( int i = 0; i < 25; i++ )
+      {
+         números[i] = i;
+      }
+      GrafoTest.grafo.adicionaVértice( números );
+      
+      GrafoTest.grafo.conecta( 3, 2 );
+      GrafoTest.grafo.conecta( 5, 20 );
+      GrafoTest.grafo.conecta( 5, 11 );
+      GrafoTest.grafo.conecta( 20, 11 );
+      GrafoTest.grafo.conecta( 22, 18 );
+      GrafoTest.grafo.conecta( 15, 14 );
+      GrafoTest.grafo.conecta( 13, 8 );
+      GrafoTest.grafo.conecta( 14, 4 );
+      GrafoTest.grafo.conecta( 21, 24 );
+      GrafoTest.grafo.conecta( 19, 24 );
+      GrafoTest.grafo.conecta( 17, 9 );
+      GrafoTest.grafo.conecta( 16, 17 );
+      GrafoTest.grafo.conecta( 17, 19 );
+      
+      Assert.assertTrue( GrafoTest.grafo.háCiclos() );
    }
    
    @Test

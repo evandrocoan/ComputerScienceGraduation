@@ -1,5 +1,6 @@
 package grafo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -371,8 +372,7 @@ public class Grafo
     */
    public boolean éÁrvore()
    {
-      // TODO
-      return false;
+      return this.éConexo() && !this.háCiclos();
    }
    
    /**
@@ -502,6 +502,96 @@ public class Grafo
       size = size + arestas.size();
       
       return size;
+   }
+   
+   /**
+    * Verifica se este grafo contém ciclos.
+    * 
+    * @return true se este grafo contém ciclos.
+    */
+   public boolean háCiclos()
+   {
+      // Marca todos os vértices deste grafom com já visitados e não parte da
+      // pilha de chamadas recursivas.
+      final boolean visited[] = new boolean[this.ordem()];
+      for( int i = 0; i < this.ordem(); i++ )
+      {
+         visited[i] = false;
+      }
+      
+      final Object[] vérticesDoGrafo = this.vértices().toArray();
+      
+      // Call the recursive helper function to detect cycle in different
+      // DFS trees
+      for( int u = 0; u < this.ordem(); u++ )
+      {
+         if( !visited[u] )
+         {
+            if( this.háCiclosRecursivo( u, -1, visited, vérticesDoGrafo ) )
+            {
+               return true;
+            }
+         }
+      }
+      
+      return false;
+   }
+   
+   /**
+    * Uma função recursiva que usa um array boolean de visitados para detectar
+    * ciclos em um subgrafo alcançável a partir de um certo vértice.
+    * 
+    * @param indiceDoVérticeAtual a posição do vértice atual no array de objetos
+    *           deste grafo.
+    * @param indiceDoVérticeAnterior a posição do vértice anterior no array de
+    *           objetos deste grafo.
+    * @param vérticesJáVisitados um array de boolean informando se um dado
+    *           vértice deste grafo já foi visitado.
+    * @param vérticesDoGrafo um array contendo todos os vértices deste grafo.
+    * @return true se foi encontro um ciclo, false caso contrário.
+    */
+   private boolean háCiclosRecursivo( final int indiceDoVérticeAtual,
+      final int indiceDoVérticeAnterior, final boolean[] vérticesJáVisitados,
+      final Object[] vérticesDoGrafo )
+   {
+      // Marca o vértice atual como já visitado
+      vérticesJáVisitados[indiceDoVérticeAtual] = true;
+      
+      // Recorre para todos os vértices adjacentes a esse vértice.
+      Set< Object > adjacentes = new HashSet<>();
+      try
+      {
+         adjacentes = this.adjacentes( vérticesDoGrafo[indiceDoVérticeAtual] );
+      } catch( final ExeçãoVérticeNãoExistente e )
+      {
+         e.printStackTrace();
+      }
+      final Iterator< Object > iterador = adjacentes.iterator();
+      
+      while( iterador.hasNext() )
+      {
+         final ArrayList< Object > arrayList = new ArrayList<>(
+                  Arrays.asList( vérticesDoGrafo ) );
+         final int posição = arrayList.indexOf( iterador.next() );
+         
+         // Se um adjacente não é visitado, em seguida, recorre para estes
+         // adjacentes
+         if( !vérticesJáVisitados[posição] )
+         {
+            if( this.háCiclosRecursivo( posição, indiceDoVérticeAtual,
+                     vérticesJáVisitados, vérticesDoGrafo ) )
+            {
+               return true;
+            }
+         } else
+            // Se um adjacente é visitado e não é o vértice anterior ao vértice
+            // atual, então está ocorrendo um ciclo.
+            if( posição != indiceDoVérticeAnterior )
+            {
+               return true;
+            }
+      }
+      return false;
    }
    
    /**
