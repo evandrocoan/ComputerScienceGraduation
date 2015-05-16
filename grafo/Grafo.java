@@ -277,10 +277,8 @@ public class Grafo
       final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
       
       // pega a HashMap de arestas do vértice
-      final HashMap< Object, Object > arestasDoVértice1 = this.vértices
-               .get( vértice1 );
-      final HashMap< Object, Object > arestasDoVértice2 = this.vértices
-               .get( vértice2 );
+      final HashMap< Object, Object > arestasDoVértice1 = this.vértices.get( vértice1 );
+      final HashMap< Object, Object > arestasDoVértice2 = this.vértices.get( vértice2 );
       
       // conecta o vértice1 com o vértice2
       arestasDoVértice1.put( chaveDoVértice2, vértice2 );
@@ -357,10 +355,8 @@ public class Grafo
       final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
       
       // pega a HashMap de arestas do vértice
-      final HashMap< Object, Object > arestasDoVértice1 = this.vértices
-               .get( vértice1 );
-      final HashMap< Object, Object > arestasDoVértice2 = this.vértices
-               .get( vértice2 );
+      final HashMap< Object, Object > arestasDoVértice1 = this.vértices.get( vértice1 );
+      final HashMap< Object, Object > arestasDoVértice2 = this.vértices.get( vértice2 );
       
       // desconecta o vértice1 do vértice2
       arestasDoVértice1.remove( chaveDoVértice2 );
@@ -398,13 +394,23 @@ public class Grafo
          final Object próximo = vértices.next();
          
          if( ( ( this.grau( próximo ) != n ) && !this.temLaço( próximo ) )
-                  || ( ( this.grau( próximo ) != ( n + 1 ) ) && this
-                           .temLaço( próximo ) ) )
+                  || ( ( this.grau( próximo ) != ( n + 1 ) ) && this.temLaço( próximo ) ) )
          {
             return false;
          }
       }
       return true;
+   }
+   
+   /**
+    * Verifica se existe pelo menos um caminho que entre cada par de vértices
+    * deste grafo.
+    * 
+    * @return true se este grafo é conexo, false caso contrário.
+    */
+   public boolean éConexo()
+   {
+      return this.vértices().equals( this.fechoTransitivo( this.umVértice() ) );
    }
    
    /**
@@ -472,8 +478,8 @@ public class Grafo
    {
       final Set< Object > jáVisitados = new HashSet<>();
       final Set< Object > fechoTransitivo = new HashSet<>();
-      return this
-               .procuraFechoTransitivo( vértice, fechoTransitivo, jáVisitados );
+      fechoTransitivo.add( vértice );
+      return this.procuraFechoTransitivo( vértice, fechoTransitivo, jáVisitados );
    }
    
    /**
@@ -511,24 +517,9 @@ public class Grafo
    private Set< Object > procuraFechoTransitivo( final Object vértice,
       final Set< Object > fechoTransitivo, final Set< Object > jáVisitados )
    {
-      /* 
-       * TODO @formatter:off
-       * 
-       *  "Privado - utilizada por G.fechoTransitivo"
-       *
-       *  ft := Conjunto.novo
-       *  jáVisitados.adiciona(v)
-       *  Para cada vAdjG.adjacentes(v) faça 
-       *     Se ~ jáVisitados.pertence(vAdj) Então
-       *        ft := ft.uniao(G.procuraFechoTransitivo(vAdj,jáVisitados))
-       *     Fim Se
-       *  Fim
-       *  retorna ft
-       */ // @formatter:on
-      
       jáVisitados.add( vértice );
       
-      Collection< ? > adjacentes = null;
+      Collection< ? > adjacentes = new HashSet<>();
       try
       {
          adjacentes = this.adjacentes( vértice );
@@ -559,7 +550,7 @@ public class Grafo
     * Remove os laços de todos os vértices desse grafo.
     */
    public void removerLaços()
-   { // TODO
+   {
       final Set< ? > vértices = this.vértices();
       final Iterator< ? > iterador = vértices.iterator();
       

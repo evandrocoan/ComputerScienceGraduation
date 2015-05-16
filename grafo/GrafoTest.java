@@ -128,12 +128,11 @@ public class GrafoTest
       GrafoTest.grafo.adicionaVértice( nomesArray );
       GrafoTest.grafo.conecta( nomesArray[0], nomesArray );
       
-      final Vector< String > nomesVetor = new Vector<>( Arrays
-               .asList( nomesArray ) );
+      final Vector< String > nomesVetor = new Vector<>(
+               Arrays.asList( nomesArray ) );
       final Iterator< String > nomesIterador = nomesVetor.iterator();
       
-      final Collection< ? > adjacentes = GrafoTest.grafo
-               .adjacentes( nomesArray[0] );
+      final Collection< ? > adjacentes = GrafoTest.grafo.adjacentes( nomesArray[0] );
       
       while( nomesIterador.hasNext() )
       {
@@ -204,6 +203,38 @@ public class GrafoTest
    }
    
    @Test
+   public void testÉConexo() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
+      Assert.assertTrue( GrafoTest.grafo.éConexo() );
+      
+      GrafoTest.grafo.removerLaços();
+      Assert.assertTrue( GrafoTest.grafo.éConexo() );
+      
+      GrafoTest.grafo.adicionaVértice( "João" );
+      Assert.assertFalse( GrafoTest.grafo.éConexo() );
+      
+      GrafoTest.grafo.conecta( nomes[0], nomes[0] );
+      GrafoTest.grafo.conecta( nomes[1], nomes[1] );
+      GrafoTest.grafo.conecta( nomes[2], nomes[2] );
+      GrafoTest.grafo.conecta( nomes[3], nomes[3] );
+      GrafoTest.grafo.conecta( nomes[4], nomes[4] );
+      Assert.assertFalse( GrafoTest.grafo.éConexo() );
+      
+      GrafoTest.grafo.conecta( nomes[0], "João" );
+      GrafoTest.grafo.desconecta( nomes[1], nomes[4] );
+      Assert.assertTrue( GrafoTest.grafo.éConexo() );
+      
+      GrafoTest.grafo.conecta( nomes[1], nomes[4] );
+      Assert.assertTrue( GrafoTest.grafo.éConexo() );
+   }
+   
+   @Test
    public void testÉRegular() throws ExeçãoVérticeJáExistente,
             ExeçãoVérticeNãoExistente
    {
@@ -237,40 +268,55 @@ public class GrafoTest
    }
    
    @Test
-   public void testFechoTransitivo() throws ExeçãoVérticeJáExistente,
-            ExeçãoVérticeNãoExistente // TODO
+   public void testFechoTransitivo1() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
    {
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
       GrafoTest.grafo.adicionaVértice( nomes );
       GrafoTest.grafo.conecta( nomes, nomes );
-      GrafoTest.grafo.removerLaços();
       
-      // #########################Parte 1###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 1" );
       }
-      Set< Object > fechoTransitivoTeste = GrafoTest.grafo
-               .fechoTransitivo( nomes[0] );
-      Set< Object > fechoTransitivoModelo = GrafoTest.grafo
-               .adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 4, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo2() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 2###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 2" );
       }
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      
       GrafoTest.grafo.adicionaVértice( "João1" );
       GrafoTest.grafo.adicionaVértice( "João2" );
       GrafoTest.grafo.adicionaVértice( "João3" );
@@ -283,40 +329,42 @@ public class GrafoTest
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
-         System.out.println( "Teste: " + próximo );
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 4, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo3() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 3###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 3" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
       GrafoTest.grafo.conecta( "João1", nomes[0] );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      while( iteradorModelo.hasNext() )
-      {
-         final Object próximo = iteradorModelo.next();
-         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
-      }
-      Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
       
-      // #########################Parte 4###################################
-      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
-      {
-         System.err.println( "Parte 4" );
-      }
-      GrafoTest.grafo.conecta( "João1", "João2" );
-      
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
-      fechoTransitivoModelo.add( "João2" );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -324,95 +372,273 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 6, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo4() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 5###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 4" );
+      }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
+      fechoTransitivoModelo.add( "João2" );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo5() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
+      
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 5" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
       GrafoTest.grafo.conecta( "João2", "João3" );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João3" );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      fechoTransitivoModelo.add( "João2" );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 8, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo6() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 6###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 6" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      GrafoTest.grafo.conecta( "João2", "João3" );
       GrafoTest.grafo.conecta( "João4", "João5" );
       GrafoTest.grafo.conecta( "João5", "João6" );
       GrafoTest.grafo.conecta( "João7", "João8" );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João3" );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      fechoTransitivoModelo.add( "João2" );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 8, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo7() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 7###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 7" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      GrafoTest.grafo.conecta( "João2", "João3" );
+      GrafoTest.grafo.conecta( "João4", "João5" );
+      GrafoTest.grafo.conecta( "João5", "João6" );
+      GrafoTest.grafo.conecta( "João7", "João8" );
+      
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 2, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 3, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo8() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 8###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 8" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      GrafoTest.grafo.conecta( "João2", "João3" );
+      GrafoTest.grafo.conecta( "João4", "João5" );
+      GrafoTest.grafo.conecta( "João5", "João6" );
+      GrafoTest.grafo.conecta( "João7", "João8" );
+      
       GrafoTest.grafo.conecta( "João6", "João7" );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
       fechoTransitivoModelo.add( "João8" );
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 4, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+   }
+   
+   @Test
+   public void testFechoTransitivo9() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.conecta( nomes, nomes );
       
-      // #########################Parte 9###################################
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
          System.err.println( "Parte 9" );
       }
+      GrafoTest.grafo.adicionaVértice( "João1" );
+      GrafoTest.grafo.adicionaVértice( "João2" );
+      GrafoTest.grafo.adicionaVértice( "João3" );
+      GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
+      
+      GrafoTest.grafo.conecta( "João1", nomes[0] );
+      GrafoTest.grafo.conecta( "João1", "João2" );
+      GrafoTest.grafo.conecta( "João2", "João3" );
+      GrafoTest.grafo.conecta( "João4", "João5" );
+      GrafoTest.grafo.conecta( "João5", "João6" );
+      GrafoTest.grafo.conecta( "João7", "João8" );
+      GrafoTest.grafo.conecta( "João6", "João7" );
       GrafoTest.grafo.conecta( "João8", nomes[3] );
       
-      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
-      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      
+      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
       fechoTransitivoModelo.add( "João8" );
@@ -420,14 +646,14 @@ public class GrafoTest
       final Set< Object > temporário = GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.addAll( temporário );
       
-      iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
-      Assert.assertEquals( 12, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 13, fechoTransitivoTeste.size() );
    }
    
    @Test
@@ -439,7 +665,6 @@ public class GrafoTest
       };
       GrafoTest.grafo.adicionaVértice( nomes );
       GrafoTest.grafo.conecta( nomes, nomes );
-      
       GrafoTest.grafo.removerLaços();
       
       final Set< ? > vértices = GrafoTest.grafo.vértices();
