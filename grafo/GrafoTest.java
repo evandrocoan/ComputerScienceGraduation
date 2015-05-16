@@ -33,7 +33,7 @@ public class GrafoTest
    @BeforeClass
    public static void configureLOG()
    {
-      GrafoTest.LOG.setLevel( Level.ALL );
+      GrafoTest.LOG.setLevel( Level.INFO );
    }
    
    @Rule
@@ -46,7 +46,7 @@ public class GrafoTest
          String className = description.getClassName();
          className = className.substring( className.lastIndexOf( '.' ) + 1 );
          final String message = className + " " + methodName;
-         System.err.printf( "Starting JUnit-test: " + message + " " );
+         System.out.println( "Starting JUnit-test: " + message + " " );
       }
    };
    
@@ -248,10 +248,15 @@ public class GrafoTest
       GrafoTest.grafo.removerLaços();
       
       // #########################Parte 1###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 1" );
+      }
       Set< Object > fechoTransitivoTeste = GrafoTest.grafo
                .fechoTransitivo( nomes[0] );
       Set< Object > fechoTransitivoModelo = GrafoTest.grafo
                .adjacentes( nomes[0] );
+      
       Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
@@ -262,10 +267,18 @@ public class GrafoTest
       Assert.assertEquals( 4, fechoTransitivoTeste.size() );
       
       // #########################Parte 2###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 2" );
+      }
       GrafoTest.grafo.adicionaVértice( "João1" );
       GrafoTest.grafo.adicionaVértice( "João2" );
       GrafoTest.grafo.adicionaVértice( "João3" );
       GrafoTest.grafo.adicionaVértice( "João4" );
+      GrafoTest.grafo.adicionaVértice( "João5" );
+      GrafoTest.grafo.adicionaVértice( "João6" );
+      GrafoTest.grafo.adicionaVértice( "João7" );
+      GrafoTest.grafo.adicionaVértice( "João8" );
       
       while( iteradorModelo.hasNext() )
       {
@@ -276,6 +289,10 @@ public class GrafoTest
       Assert.assertEquals( 4, fechoTransitivoTeste.size() );
       
       // #########################Parte 3###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 3" );
+      }
       GrafoTest.grafo.conecta( "João1", nomes[0] );
       
       fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
@@ -290,13 +307,15 @@ public class GrafoTest
       Assert.assertEquals( 5, fechoTransitivoTeste.size() );
       
       // #########################Parte 4###################################
-      GrafoTest.grafo.conecta( "João2", "João1" );
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 4" );
+      }
+      GrafoTest.grafo.conecta( "João1", "João2" );
       
       fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
-      
       fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( "João2" );
-      
       iteradorModelo = fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
@@ -305,6 +324,110 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 6, fechoTransitivoTeste.size() );
+      
+      // #########################Parte 5###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 5" );
+      }
+      GrafoTest.grafo.conecta( "João2", "João3" );
+      
+      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( "João3" );
+      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+      
+      // #########################Parte 6###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 6" );
+      }
+      GrafoTest.grafo.conecta( "João4", "João5" );
+      GrafoTest.grafo.conecta( "João5", "João6" );
+      GrafoTest.grafo.conecta( "João7", "João8" );
+      
+      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( "João3" );
+      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+      
+      // #########################Parte 7###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 7" );
+      }
+      
+      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João6" );
+      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 2, fechoTransitivoTeste.size() );
+      
+      // #########################Parte 8###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 8" );
+      }
+      GrafoTest.grafo.conecta( "João6", "João7" );
+      
+      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João6" );
+      fechoTransitivoModelo.add( "João7" );
+      fechoTransitivoModelo.add( "João8" );
+      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 4, fechoTransitivoTeste.size() );
+      
+      // #########################Parte 9###################################
+      if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+      {
+         System.err.println( "Parte 9" );
+      }
+      GrafoTest.grafo.conecta( "João8", nomes[3] );
+      
+      fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João6" );
+      fechoTransitivoModelo.add( "João7" );
+      fechoTransitivoModelo.add( "João8" );
+      
+      final Set< Object > temporário = GrafoTest.grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.addAll( temporário );
+      
+      iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
+      }
+      Assert.assertEquals( 12, fechoTransitivoTeste.size() );
    }
    
    @Test

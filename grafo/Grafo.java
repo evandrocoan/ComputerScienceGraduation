@@ -544,7 +544,10 @@ public class Grafo
          final Object objeto = iterador.next();
          if( !jáVisitados.contains( objeto ) )
          {
-            System.out.println( "Objeto: " + objeto );
+            if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+            {
+               System.out.println( "Objeto: " + objeto );
+            }
             fechoTransitivo.add( objeto );
             this.procuraFechoTransitivo( objeto, fechoTransitivo, jáVisitados );
          }
