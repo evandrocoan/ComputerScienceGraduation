@@ -52,16 +52,21 @@ public class Grafo
    }
    
    /**
-    * Cria um grafo contendo os vértices passados como parâmetros.
+    * Cria um grafo contendo o vértice passados como parâmetro.
     * 
-    * @param vértices um array de vértices.
-    * @throws ExeçãoVérticeJáExistente caso já exista um vértice passado como
-    *            parametro no grafo.
+    * @param vértice um vértices.
     */
-   public Grafo( final Object vértices ) throws ExeçãoVérticeJáExistente
+   public Grafo( final Object vértice )
    {
       this(); // chama o construtor que prepara a estrutura
-      this.adicionaVértice( vértices );
+      try
+      {
+         this.adicionaVértice( vértice );
+         
+      } catch( final ExeçãoVérticeJáExistente e )
+      {
+         e.printStackTrace();
+      }
    }
    
    /**
@@ -371,7 +376,7 @@ public class Grafo
     * 
     * @return true se é arvore, false caso contrário.
     */
-   public boolean éÁrvore()
+   public boolean é�?rvore()
    {
       return this.éConexo() && !this.háCiclos();
    }
