@@ -19,10 +19,6 @@ public class Principal
    public static void main( final String[] args )
             throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
    {
-      Principal.testeGenéricoHashtable();
-      Principal.testeDaBase();
-      Principal.testes();
-      
       final Grafo grafo = new Grafo();
       
       for( int i = 0; i < 25; i++ )
@@ -38,7 +34,7 @@ public class Principal
       grafo.conecta( 13, 8 );
       grafo.conecta( 14, 4 );
       grafo.conecta( 21, 24 );
-      grafo.conecta( 19, 24 );
+      grafo.conecta( 19, 23 );
       grafo.conecta( 17, 9 );
       grafo.conecta( 16, 17 );
       grafo.conecta( 17, 19 );
@@ -46,6 +42,10 @@ public class Principal
       System.out.println( "Grafo: " + grafo );
       
       System.out.println( "Há ciclos? " + grafo.háCiclos() );
+      
+      Principal.testeGenéricoHashtable();
+      Principal.testeDaBase();
+      Principal.testes();
    }
    
    private static void testeDaBase()
@@ -103,9 +103,9 @@ public class Principal
       System.out.printf( minhaEnumeração.nextElement() + " \n" );
    }
    
-   /** 
-     * 
-     */
+   /**
+    * Chama o motor de testes JUnit.
+    */
    private static void testes()
    {
       final Result result = JUnitCore.runClasses( GrafoTest.class );
