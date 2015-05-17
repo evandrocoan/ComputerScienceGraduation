@@ -2,6 +2,8 @@ package grafo;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -15,9 +17,23 @@ import org.junit.runner.notification.Failure;
  */
 public class Principal
 {
-   @SuppressWarnings( "boxing" )
    public static void main( final String[] args )
             throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+   {
+      Principal.testeCiclo();
+      Principal.testeFecho();
+      Principal.testeGenéricoHashtable();
+      Principal.testeDaBase();
+      Principal.executarTodosOs50Testes();
+   }
+   
+   /**
+    * @throws ExeçãoVérticeNãoExistente
+    * @throws ExeçãoVérticeJáExistente
+    */
+   @SuppressWarnings( "boxing" )
+   private static void testeCiclo() throws ExeçãoVérticeNãoExistente,
+            ExeçãoVérticeJáExistente
    {
       final Grafo grafo = new Grafo();
       
@@ -40,12 +56,7 @@ public class Principal
       grafo.conecta( 17, 19 );
       
       System.out.println( "Grafo: " + grafo );
-      
       System.out.println( "Há ciclos? " + grafo.háCiclos() );
-      
-      Principal.testeGenéricoHashtable();
-      Principal.testeDaBase();
-      Principal.testes();
    }
    
    private static void testeDaBase()
@@ -83,6 +94,62 @@ public class Principal
                + "(deve ter impresso o vértice 1)\n" );
    }
    
+   /**
+    * @throws ExeçãoVérticeJáExistente
+    * @throws ExeçãoVérticeNãoExistente
+    */
+   private static void testeFecho() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      // Fecho transitivo
+      final String[] nomes = {
+               "Brasil", "USA", "China", "Hong Kong", "Japão"
+      };
+      final Grafo grafo = new Grafo();
+      
+      grafo.adicionaVértice( nomes );
+      grafo.adicionaVértice( "João1" );
+      grafo.adicionaVértice( "João2" );
+      grafo.adicionaVértice( "João3" );
+      grafo.adicionaVértice( "João4" );
+      grafo.adicionaVértice( "João5" );
+      grafo.adicionaVértice( "João6" );
+      grafo.adicionaVértice( "João7" );
+      grafo.adicionaVértice( "João8" );
+      
+      grafo.conecta( nomes, nomes );
+      grafo.conecta( "João1", nomes[0] );
+      grafo.conecta( "João1", "João2" );
+      grafo.conecta( "João2", "João3" );
+      grafo.conecta( "João4", "João5" );
+      grafo.conecta( "João5", "João6" );
+      grafo.conecta( "João7", "João8" );
+      grafo.conecta( "João6", "João7" );
+      grafo.conecta( "João8", nomes[3] );
+      
+      final Set< Object > fechoTransitivoTeste =
+               grafo.fechoTransitivo( "João4" );
+      
+      final Set< Object > fechoTransitivoModelo = grafo.adjacentes( "João4" );
+      final Set< Object > temporário = grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( "João4" );
+      fechoTransitivoModelo.add( "João6" );
+      fechoTransitivoModelo.add( "João7" );
+      fechoTransitivoModelo.add( "João8" );
+      fechoTransitivoModelo.addAll( temporário );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         System.out.println( "Deve ser true: "
+                  + fechoTransitivoTeste.contains( próximo ) );
+      }
+      System.out.println( "O tamanho deve ser 13: "
+               + fechoTransitivoTeste.size() );
+   }
+   
    private static void testeGenéricoHashtable()
    {
       // cria uma table hash
@@ -106,7 +173,7 @@ public class Principal
    /**
     * Chama o motor de testes JUnit.
     */
-   private static void testes()
+   private static void executarTodosOs50Testes()
    {
       final Result result = JUnitCore.runClasses( GrafoTest.class );
       final StringBuilder mensagem = new StringBuilder();
