@@ -538,16 +538,13 @@ public class Grafo
    }
    
    /**
-    * Uma função recursiva que usa um array boolean de visitados para detectar
-    * ciclos em um subgrafo alcançável a partir de um certo vértice.
+    * Uma função recursiva que detecta ciclos em um subgrafo alcançável a partir
+    * de um certo vértice.
     * 
-    * @param vérticeAtual a posição do vértice atual no array de objetos deste
-    *           grafo.
-    * @param vérticeAnterior a posição do vértice anterior no array de objetos
-    *           deste grafo.
-    * @param vérticesJáVisitados um array de boolean informando se um dado
-    *           vértice deste grafo já foi visitado.
-    * @param vérticesDoGrafo um array contendo todos os vértices deste grafo.
+    * @param vérticeAtual o vértice atual da busca.
+    * @param vérticeAnterior o vértice anterior da busca.
+    * @param vérticesJáVisitados um conjunto contendo os vértices já visitados.
+    * @param vérticesDoGrafo um conjunto contendo todos os vértices deste grafo.
     * @return true se foi encontro um ciclo, false caso contrário.
     */
    private boolean háCiclosRecursivo( final Object vérticeAtual,

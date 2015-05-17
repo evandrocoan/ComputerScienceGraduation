@@ -128,11 +128,12 @@ public class GrafoTest
       GrafoTest.grafo.adicionaVértice( nomesArray );
       GrafoTest.grafo.conecta( nomesArray[0], nomesArray );
       
-      final Vector< String > nomesVetor = new Vector<>(
-               Arrays.asList( nomesArray ) );
+      final Vector< String > nomesVetor =
+               new Vector<>( Arrays.asList( nomesArray ) );
       final Iterator< String > nomesIterador = nomesVetor.iterator();
       
-      final Collection< ? > adjacentes = GrafoTest.grafo.adjacentes( nomesArray[0] );
+      final Collection< ? > adjacentes =
+               GrafoTest.grafo.adjacentes( nomesArray[0] );
       
       while( nomesIterador.hasNext() )
       {
@@ -357,9 +358,11 @@ public class GrafoTest
       {
          System.err.println( "Parte 1" );
       }
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
       final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
@@ -386,9 +389,11 @@ public class GrafoTest
       {
          System.err.println( "Parte 2" );
       }
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
       final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
@@ -435,9 +440,11 @@ public class GrafoTest
       
       GrafoTest.grafo.conecta( "João1", nomes[0] );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
       final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
@@ -476,9 +483,11 @@ public class GrafoTest
       GrafoTest.grafo.conecta( "João1", nomes[0] );
       GrafoTest.grafo.conecta( "João1", "João2" );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João2" );
       
@@ -519,9 +528,11 @@ public class GrafoTest
       GrafoTest.grafo.conecta( "João1", "João2" );
       GrafoTest.grafo.conecta( "João2", "João3" );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João2" );
@@ -566,9 +577,11 @@ public class GrafoTest
       GrafoTest.grafo.conecta( "João5", "João6" );
       GrafoTest.grafo.conecta( "João7", "João8" );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( nomes[0] );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( nomes[0] );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( nomes[0] );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João2" );
@@ -613,9 +626,11 @@ public class GrafoTest
       GrafoTest.grafo.conecta( "João5", "João6" );
       GrafoTest.grafo.conecta( "João7", "João8" );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( "João4" );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( "João4" );
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       
@@ -661,9 +676,11 @@ public class GrafoTest
       
       GrafoTest.grafo.conecta( "João6", "João7" );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( "João4" );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( "João4" );
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
@@ -711,9 +728,11 @@ public class GrafoTest
       GrafoTest.grafo.conecta( "João6", "João7" );
       GrafoTest.grafo.conecta( "João8", nomes[3] );
       
-      final Set< Object > fechoTransitivoTeste = GrafoTest.grafo.fechoTransitivo( "João4" );
+      final Set< Object > fechoTransitivoTeste =
+               GrafoTest.grafo.fechoTransitivo( "João4" );
       
-      final Set< Object > fechoTransitivoModelo = GrafoTest.grafo.adjacentes( "João4" );
+      final Set< Object > fechoTransitivoModelo =
+               GrafoTest.grafo.adjacentes( "João4" );
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
