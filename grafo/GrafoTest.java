@@ -88,10 +88,10 @@ public class GrafoTest
       final Vector< String > adjacentesVector = new Vector<>();
       adjacentesVector.add( nomes[1] );
       adjacentesVector.add( nomes[4] );
-      final Enumeration< ? > adjacentes = adjacentesVector.elements();
+      final Enumeration< String > adjacentes = adjacentesVector.elements();
       
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.adicionaVértice( "França", adjacentes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.adicionaVérticeEnum( "França", adjacentes );
       Assert.assertEquals( 2, GrafoTest.grafo.grau( "França" ) );
       
       GrafoTest.grafo.adicionaVértice( "Tcheca" );
@@ -106,8 +106,8 @@ public class GrafoTest
       final String[] nomes = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes[0], nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArray( nomes[0], nomes );
       Assert.assertEquals( 5, GrafoTest.grafo.grau( nomes[0] ) );
       
       GrafoTest.grafo.adicionaVértice( "Tcheca" );
@@ -125,14 +125,14 @@ public class GrafoTest
       final String[] nomesArray = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomesArray );
-      GrafoTest.grafo.conecta( nomesArray[0], nomesArray );
+      GrafoTest.grafo.adicionaVérticeArray( nomesArray );
+      GrafoTest.grafo.conectaArray( nomesArray[0], nomesArray );
       
       final Vector< String > nomesVetor =
                new Vector<>( Arrays.asList( nomesArray ) );
       final Iterator< String > nomesIterador = nomesVetor.iterator();
       
-      final Collection< ? > adjacentes =
+      final Collection< Object > adjacentes =
                GrafoTest.grafo.adjacentes( nomesArray[0] );
       
       while( nomesIterador.hasNext() )
@@ -154,8 +154,8 @@ public class GrafoTest
       adjacentes.add( nomes[1] );
       adjacentes.add( nomes[4] );
       
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.adicionaVértice( "França", adjacentes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.adicionaVérticeVector( "França", adjacentes );
       Assert.assertEquals( 2, GrafoTest.grafo.grau( "França" ) );
       
       GrafoTest.grafo.adicionaVértice( "Tcheca" );
@@ -174,8 +174,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       Assert.assertFalse( GrafoTest.grafo.éÁrvore() );
    }
    
@@ -186,7 +186,7 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
       GrafoTest.grafo.conecta( nomes[0], nomes[1] );
       GrafoTest.grafo.conecta( nomes[0], nomes[2] );
       GrafoTest.grafo.conecta( nomes[1], nomes[3] );
@@ -207,7 +207,7 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
       GrafoTest.grafo.conecta( nomes[0], nomes[1] );
       GrafoTest.grafo.conecta( nomes[0], nomes[2] );
       GrafoTest.grafo.conecta( nomes[1], nomes[3] );
@@ -228,7 +228,7 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
       GrafoTest.grafo.conecta( nomes[0], nomes[1] );
       GrafoTest.grafo.conecta( nomes[0], nomes[2] );
       GrafoTest.grafo.conecta( nomes[1], nomes[3] );
@@ -250,8 +250,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       Assert.assertTrue( GrafoTest.grafo.éCompleto() );
       
       GrafoTest.grafo.desconecta( nomes[0], nomes[0] );
@@ -286,8 +286,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       Assert.assertTrue( GrafoTest.grafo.éConexo() );
       
       GrafoTest.grafo.removerLaços();
@@ -318,7 +318,7 @@ public class GrafoTest
       final String[] nomesArray = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomesArray );
+      GrafoTest.grafo.adicionaVérticeArray( nomesArray );
       Assert.assertTrue( GrafoTest.grafo.éRegular() );
       
       GrafoTest.grafo.conecta( nomesArray[0], nomesArray[1] );
@@ -339,8 +339,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes[0], nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArray( nomes[0], nomes );
       Assert.assertTrue( GrafoTest.grafo.estãoConectados( nomes[0], "USA" ) );
    }
    
@@ -351,8 +351,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -365,7 +365,8 @@ public class GrafoTest
                GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -373,6 +374,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -382,8 +384,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -396,7 +398,8 @@ public class GrafoTest
                GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       GrafoTest.grafo.adicionaVértice( "João1" );
       GrafoTest.grafo.adicionaVértice( "João2" );
@@ -413,6 +416,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -422,8 +426,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -447,7 +451,8 @@ public class GrafoTest
                GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.add( nomes[0] );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -455,6 +460,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 6, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 6, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -464,8 +470,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -491,7 +497,8 @@ public class GrafoTest
       fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.add( "João2" );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -499,6 +506,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 7, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 7, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -508,8 +516,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -537,7 +545,8 @@ public class GrafoTest
       fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João2" );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -545,6 +554,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 8, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 8, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -554,8 +564,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -586,7 +596,8 @@ public class GrafoTest
       fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João2" );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -594,6 +605,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 8, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 8, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -603,8 +615,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -634,7 +646,8 @@ public class GrafoTest
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -642,6 +655,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 3, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 3, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -651,8 +665,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -686,7 +700,8 @@ public class GrafoTest
       fechoTransitivoModelo.add( "João7" );
       fechoTransitivoModelo.add( "João8" );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -694,6 +709,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 5, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 5, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -703,8 +719,8 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       
       if( GrafoTest.LOG.isLoggable( Level.FINE ) )
       {
@@ -733,15 +749,19 @@ public class GrafoTest
       
       final Set< Object > fechoTransitivoModelo =
                GrafoTest.grafo.adjacentes( "João4" );
+      fechoTransitivoModelo.add( "João2" );
+      fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
       fechoTransitivoModelo.add( "João8" );
+      fechoTransitivoModelo.add( nomes[0] );
       
       final Set< Object > temporário = GrafoTest.grafo.adjacentes( nomes[0] );
       fechoTransitivoModelo.addAll( temporário );
       
-      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      final Iterator< Object > iteradorModelo =
+               fechoTransitivoModelo.iterator();
       
       while( iteradorModelo.hasNext() )
       {
@@ -749,6 +769,7 @@ public class GrafoTest
          Assert.assertTrue( fechoTransitivoTeste.contains( próximo ) );
       }
       Assert.assertEquals( 13, fechoTransitivoTeste.size() );
+      Assert.assertEquals( 13, fechoTransitivoModelo.size() );
    }
    
    @Test
@@ -785,11 +806,11 @@ public class GrafoTest
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes, nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArrayArray( nomes, nomes );
       GrafoTest.grafo.removerLaços();
       
-      final Set< ? > vértices = GrafoTest.grafo.vértices();
+      final Set< Object > vértices = GrafoTest.grafo.vértices();
       final Object[] vérticesObjeto = vértices.toArray();
       
       for( int i = 0; i < 5; i++ )
@@ -807,8 +828,8 @@ public class GrafoTest
       final String[] nomes = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomes );
-      GrafoTest.grafo.conecta( nomes[0], nomes );
+      GrafoTest.grafo.adicionaVérticeArray( nomes );
+      GrafoTest.grafo.conectaArray( nomes[0], nomes );
       Assert.assertTrue( GrafoTest.grafo.estãoConectados( nomes[0], "USA" ) );
       
       GrafoTest.grafo.removerVértice( nomes[1] );
@@ -821,7 +842,7 @@ public class GrafoTest
       final String[] nomesArray = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomesArray );
+      GrafoTest.grafo.adicionaVérticeArray( nomesArray );
       final Object umVértice = GrafoTest.grafo.umVértice();
       Assert.assertTrue( GrafoTest.grafo.contémVertice( umVértice ) );
    }
@@ -833,7 +854,7 @@ public class GrafoTest
       final String[] nomesArray = new String[] {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
-      GrafoTest.grafo.adicionaVértice( nomesArray );
+      GrafoTest.grafo.adicionaVérticeArray( nomesArray );
       Object umVértice = GrafoTest.grafo.umVértice( nomesArray[0] );
       Assert.assertEquals( umVértice, nomesArray[0] );
       

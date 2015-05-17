@@ -17,11 +17,37 @@ import org.junit.runner.notification.Failure;
  */
 public class Principal
 {
+   /**
+    * Chama o motor de testes JUnit.
+    */
+   private static void executarTodosOs50Testes()
+   {
+      final Result result = JUnitCore.runClasses( GrafoTest.class );
+      final StringBuilder mensagem = new StringBuilder();
+      if( result.getFailureCount() > 0 )
+      {
+         mensagem.append( "############## OS SEGUINTES TESTES FALHARAM!! "
+                  + "#####################################\n" );
+      } else
+      {
+         mensagem.append( "############## TODOS OS TESTES FORAM EXECUTADOS "
+                  + "COM SUCESSO!! #######################\n" );
+      }
+      
+      for( final Failure failure: result.getFailures() )
+      {
+         mensagem.append( failure.getDescription() ).append( '\n' );
+         mensagem.append( failure.getMessage() ).append( '\n' );
+      }
+      System.out.println( mensagem );
+   }
+   
    public static void main( final String[] args )
             throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
    {
       Principal.testeCiclo();
-      Principal.testeFecho();
+      Principal.testeFechoString();
+      Principal.testeFechoInt();
       Principal.testeGenéricoHashtable();
       Principal.testeDaBase();
       Principal.executarTodosOs50Testes();
@@ -35,25 +61,17 @@ public class Principal
    private static void testeCiclo() throws ExeçãoVérticeNãoExistente,
             ExeçãoVérticeJáExistente
    {
+      System.out.println( "\nTeste ciclo: " );
       final Grafo grafo = new Grafo();
       
-      for( int i = 0; i < 25; i++ )
+      for( int i = 0; i < 6; i++ )
       {
          grafo.adicionaVértice( i );
       }
-      grafo.conecta( 5, 20 );// ciclo
-      grafo.conecta( 5, 11 );
-      grafo.conecta( 20, 11 );// ciclo
-      grafo.conecta( 3, 2 );
-      grafo.conecta( 22, 18 );
-      grafo.conecta( 15, 14 );
-      grafo.conecta( 13, 8 );
-      grafo.conecta( 14, 4 );
-      grafo.conecta( 21, 24 );
-      grafo.conecta( 19, 23 );
-      grafo.conecta( 17, 9 );
-      grafo.conecta( 16, 17 );
-      grafo.conecta( 17, 19 );
+      grafo.conecta( 3, 2 );// ciclo
+      grafo.conecta( 5, 2 );
+      grafo.conecta( 3, 5 );// ciclo
+      grafo.conecta( 1, 4 );
       
       System.out.println( "Grafo: " + grafo );
       System.out.println( "Há ciclos? " + grafo.háCiclos() );
@@ -61,6 +79,7 @@ public class Principal
    
    private static void testeDaBase()
    {
+      System.out.println( "\nTeste da base: " );
       final Hashtable< Object, Hashtable< Object, Object >> vértices =
                new Hashtable<>();
       
@@ -97,17 +116,64 @@ public class Principal
    /**
     * @throws ExeçãoVérticeJáExistente
     * @throws ExeçãoVérticeNãoExistente
+    * 
     */
-   private static void testeFecho() throws ExeçãoVérticeJáExistente,
+   @SuppressWarnings( "boxing" )
+   private static void testeFechoInt() throws ExeçãoVérticeJáExistente,
             ExeçãoVérticeNãoExistente
    {
+      System.out.println( "\nTeste fecho transitivo com int: " );
+      // Fecho transitivo
+      final Grafo grafo = new Grafo();
+      
+      grafo.adicionaVértice( 0 );
+      grafo.adicionaVértice( 1 );
+      grafo.adicionaVértice( 2 );
+      grafo.adicionaVértice( 3 );
+      grafo.adicionaVértice( 4 );
+      grafo.adicionaVértice( 5 );
+      
+      grafo.conecta( 1, 0 );
+      grafo.conecta( 1, 2 );
+      grafo.conecta( 2, 4 );
+      grafo.conecta( 5, 3 );
+      
+      final Set< Object > fechoTransitivoTeste = grafo.fechoTransitivo( 4 );
+      
+      final Set< Object > fechoTransitivoModelo = grafo.adjacentes( 4 );
+      fechoTransitivoModelo.add( 4 );
+      fechoTransitivoModelo.add( 0 );
+      fechoTransitivoModelo.add( 1 );
+      
+      final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
+      
+      int i = 1;
+      while( iteradorModelo.hasNext() )
+      {
+         final Object próximo = iteradorModelo.next();
+         System.out.println( i++ + " - Deve ser true: "
+                  + fechoTransitivoTeste.contains( próximo ) );
+      }
+      System.out.println( "O tamanho deve ser 4: "
+               + fechoTransitivoTeste.size() );
+      System.out.println( "Grafo: " + grafo );
+   }
+   
+   /**
+    * @throws ExeçãoVérticeJáExistente
+    * @throws ExeçãoVérticeNãoExistente
+    */
+   private static void testeFechoString() throws ExeçãoVérticeJáExistente,
+            ExeçãoVérticeNãoExistente
+   {
+      System.out.println( "\nTeste fecho transitivo com String: " );
       // Fecho transitivo
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
       final Grafo grafo = new Grafo();
       
-      grafo.adicionaVértice( nomes );
+      grafo.adicionaVérticeArray( nomes );
       grafo.adicionaVértice( "João1" );
       grafo.adicionaVértice( "João2" );
       grafo.adicionaVértice( "João3" );
@@ -117,7 +183,7 @@ public class Principal
       grafo.adicionaVértice( "João7" );
       grafo.adicionaVértice( "João8" );
       
-      grafo.conecta( nomes, nomes );
+      grafo.conectaArrayArray( nomes, nomes );
       grafo.conecta( "João1", nomes[0] );
       grafo.conecta( "João1", "João2" );
       grafo.conecta( "João2", "João3" );
@@ -132,18 +198,22 @@ public class Principal
       
       final Set< Object > fechoTransitivoModelo = grafo.adjacentes( "João4" );
       final Set< Object > temporário = grafo.adjacentes( nomes[0] );
+      fechoTransitivoModelo.add( "João2" );
+      fechoTransitivoModelo.add( "João3" );
       fechoTransitivoModelo.add( "João4" );
       fechoTransitivoModelo.add( "João6" );
       fechoTransitivoModelo.add( "João7" );
       fechoTransitivoModelo.add( "João8" );
+      fechoTransitivoModelo.add( nomes[0] );
       fechoTransitivoModelo.addAll( temporário );
       
       final Iterator< ? > iteradorModelo = fechoTransitivoModelo.iterator();
       
+      int i = 1;
       while( iteradorModelo.hasNext() )
       {
          final Object próximo = iteradorModelo.next();
-         System.out.println( "Deve ser true: "
+         System.out.println( i++ + " - Deve ser true: "
                   + fechoTransitivoTeste.contains( próximo ) );
       }
       System.out.println( "O tamanho deve ser 13: "
@@ -152,6 +222,8 @@ public class Principal
    
    private static void testeGenéricoHashtable()
    {
+      System.out.println( "\nTeste genérico da Hashtable: " );
+      
       // cria uma table hash
       final Hashtable< Integer, String > minhaHashtable = new Hashtable<>();
       minhaHashtable.put( new Integer( 1 ), "A" );
@@ -168,31 +240,6 @@ public class Principal
       System.out.printf( minhaEnumeração.nextElement() + " " );
       System.out.printf( minhaEnumeração.nextElement() + " " );
       System.out.printf( minhaEnumeração.nextElement() + " \n" );
-   }
-   
-   /**
-    * Chama o motor de testes JUnit.
-    */
-   private static void executarTodosOs50Testes()
-   {
-      final Result result = JUnitCore.runClasses( GrafoTest.class );
-      final StringBuilder mensagem = new StringBuilder();
-      if( result.getFailureCount() > 0 )
-      {
-         mensagem.append( "############## OS SEGUINTES TESTES FALHARAM!! "
-                  + "#####################################\n" );
-      } else
-      {
-         mensagem.append( "############## TODOS OS TESTES FORAM EXECUTADOS "
-                  + "COM SUCESSO!! #######################\n" );
-      }
-      
-      for( final Failure failure: result.getFailures() )
-      {
-         mensagem.append( failure.getDescription() ).append( '\n' );
-         mensagem.append( failure.getMessage() ).append( '\n' );
-      }
-      System.out.println( mensagem );
    }
    
    /**
