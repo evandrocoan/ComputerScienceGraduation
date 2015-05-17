@@ -170,10 +170,6 @@ public class GrafoTest
    public void testÉÁrvore1() throws ExeçãoVérticeJáExistente,
             ExeçãoVérticeNãoExistente
    {
-      /* TODO @formatter:off
-		 * 
-		 * 
-		 */ // @formatter:on 
       final String[] nomes = {
                "Brasil", "USA", "China", "Hong Kong", "Japão"
       };
@@ -737,32 +733,30 @@ public class GrafoTest
    }
    
    @Test
-   @SuppressWarnings( "boxing" )
    public void testHáCiclos() throws ExeçãoVérticeJáExistente,
             ExeçãoVérticeNãoExistente
-   { // TODO
-      final int[] números = new int[25];
+   {
       for( int i = 0; i < 25; i++ )
       {
-         números[i] = i;
+         GrafoTest.grafo.adicionaVértice( Integer.valueOf( i ) );
       }
-      GrafoTest.grafo.adicionaVértice( números );
-      
-      GrafoTest.grafo.conecta( 3, 2 );
-      GrafoTest.grafo.conecta( 5, 20 );
-      GrafoTest.grafo.conecta( 5, 11 );
-      GrafoTest.grafo.conecta( 20, 11 );
-      GrafoTest.grafo.conecta( 22, 18 );
-      GrafoTest.grafo.conecta( 15, 14 );
-      GrafoTest.grafo.conecta( 13, 8 );
-      GrafoTest.grafo.conecta( 14, 4 );
-      GrafoTest.grafo.conecta( 21, 24 );
-      GrafoTest.grafo.conecta( 19, 24 );
-      GrafoTest.grafo.conecta( 17, 9 );
-      GrafoTest.grafo.conecta( 16, 17 );
-      GrafoTest.grafo.conecta( 17, 19 );
-      
+      GrafoTest.grafo.conecta( Integer.valueOf( 3 ), Integer.valueOf( 2 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 5 ), Integer.valueOf( 20 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 5 ), Integer.valueOf( 11 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 20 ), Integer.valueOf( 11 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 22 ), Integer.valueOf( 18 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 15 ), Integer.valueOf( 14 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 13 ), Integer.valueOf( 8 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 14 ), Integer.valueOf( 4 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 21 ), Integer.valueOf( 24 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 19 ), Integer.valueOf( 24 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 17 ), Integer.valueOf( 9 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 16 ), Integer.valueOf( 17 ) );
+      GrafoTest.grafo.conecta( Integer.valueOf( 17 ), Integer.valueOf( 19 ) );
       Assert.assertTrue( GrafoTest.grafo.háCiclos() );
+      
+      GrafoTest.grafo.desconecta( Integer.valueOf( 5 ), Integer.valueOf( 11 ) );
+      Assert.assertFalse( GrafoTest.grafo.háCiclos() );
    }
    
    @Test

@@ -1,6 +1,5 @@
 package grafo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -109,8 +108,8 @@ public class Grafo
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
    public void adicionaVértice( final Object vértice,
-      final Enumeration< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
-            ExeçãoVérticeJáExistente
+            final Enumeration< ? > adjacentes )
+            throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
    {
       this.adicionaVértice( vértice );
       
@@ -128,10 +127,8 @@ public class Grafo
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
-   public void
-            adicionaVértice( final Object vértice, final Object[] adjacentes )
-                     throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   
+   public void adicionaVértice( final Object vértice, final Object[] adjacentes )
+            throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
    {
       this.adicionaVértice( vértice );
       
@@ -150,7 +147,7 @@ public class Grafo
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
    public void adicionaVértice( final Object vértice,
-      final Vector< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
+            final Vector< ? > adjacentes ) throws ExeçãoVérticeNãoExistente,
             ExeçãoVérticeJáExistente
    {
       this.adicionaVértice( vértice );
@@ -278,8 +275,10 @@ public class Grafo
       final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
       
       // pega a HashMap de arestas do vértice
-      final HashMap< Object, Object > arestasDoVértice1 = this.vértices.get( vértice1 );
-      final HashMap< Object, Object > arestasDoVértice2 = this.vértices.get( vértice2 );
+      final HashMap< Object, Object > arestasDoVértice1 =
+               this.vértices.get( vértice1 );
+      final HashMap< Object, Object > arestasDoVértice2 =
+               this.vértices.get( vértice2 );
       
       // conecta o vértice1 com o vértice2
       arestasDoVértice1.put( chaveDoVértice2, vértice2 );
@@ -356,8 +355,10 @@ public class Grafo
       final Integer chaveDoVértice2 = Integer.valueOf( vértice2.hashCode() );
       
       // pega a HashMap de arestas do vértice
-      final HashMap< Object, Object > arestasDoVértice1 = this.vértices.get( vértice1 );
-      final HashMap< Object, Object > arestasDoVértice2 = this.vértices.get( vértice2 );
+      final HashMap< Object, Object > arestasDoVértice1 =
+               this.vértices.get( vértice1 );
+      final HashMap< Object, Object > arestasDoVértice2 =
+               this.vértices.get( vértice2 );
       
       // desconecta o vértice1 do vértice2
       arestasDoVértice1.remove( chaveDoVértice2 );
@@ -394,7 +395,8 @@ public class Grafo
          final Object próximo = vértices.next();
          
          if( ( ( this.grau( próximo ) != n ) && !this.temLaço( próximo ) )
-                  || ( ( this.grau( próximo ) != ( n + 1 ) ) && this.temLaço( próximo ) ) )
+                  || ( ( this.grau( próximo ) != ( n + 1 ) ) && this
+                           .temLaço( próximo ) ) )
          {
             return false;
          }
@@ -447,9 +449,8 @@ public class Grafo
     * @return true se conectados, false caso contrário.
     * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
-   public boolean
-            estãoConectados( final Object vértice1, final Object vértice2 )
-                     throws ExeçãoVérticeNãoExistente
+   public boolean estãoConectados( final Object vértice1, final Object vértice2 )
+            throws ExeçãoVérticeNãoExistente
    {
       if( !this.vértices.containsKey( vértice1 ) )
       {
@@ -479,7 +480,8 @@ public class Grafo
       final Set< Object > jáVisitados = new HashSet<>();
       final Set< Object > fechoTransitivo = new HashSet<>();
       fechoTransitivo.add( vértice );
-      return this.procuraFechoTransitivo( vértice, fechoTransitivo, jáVisitados );
+      return this
+               .procuraFechoTransitivo( vértice, fechoTransitivo, jáVisitados );
    }
    
    /**
@@ -510,24 +512,22 @@ public class Grafo
     * @return true se este grafo contém ciclos.
     */
    public boolean háCiclos()
-   {
-      // Marca todos os vértices deste grafom com já visitados e não parte da
-      // pilha de chamadas recursivas.
-      final boolean visited[] = new boolean[this.ordem()];
-      for( int i = 0; i < this.ordem(); i++ )
-      {
-         visited[i] = false;
-      }
+   { // TODO
+      final Set< Object > vérticesJáVisitados = new HashSet<>();
       
-      final Object[] vérticesDoGrafo = this.vértices().toArray();
+      final Set< Object > vérticesDoGrafo = this.vértices();
+      final Iterator< Object > iterador = vérticesDoGrafo.iterator();
       
       // Call the recursive helper function to detect cycle in different
       // DFS trees
-      for( int u = 0; u < this.ordem(); u++ )
+      while( iterador.hasNext() )
       {
-         if( !visited[u] )
+         final Object vérticeAtual = iterador.next();
+         
+         if( !vérticesJáVisitados.contains( vérticeAtual ) )
          {
-            if( this.háCiclosRecursivo( u, -1, visited, vérticesDoGrafo ) )
+            if( this.háCiclosRecursivo( vérticeAtual, vérticeAtual,
+                     vérticesJáVisitados, vérticesDoGrafo ) )
             {
                return true;
             }
@@ -541,27 +541,29 @@ public class Grafo
     * Uma função recursiva que usa um array boolean de visitados para detectar
     * ciclos em um subgrafo alcançável a partir de um certo vértice.
     * 
-    * @param indiceDoVérticeAtual a posição do vértice atual no array de objetos
+    * @param vérticeAtual a posição do vértice atual no array de objetos deste
+    *           grafo.
+    * @param vérticeAnterior a posição do vértice anterior no array de objetos
     *           deste grafo.
-    * @param indiceDoVérticeAnterior a posição do vértice anterior no array de
-    *           objetos deste grafo.
     * @param vérticesJáVisitados um array de boolean informando se um dado
     *           vértice deste grafo já foi visitado.
     * @param vérticesDoGrafo um array contendo todos os vértices deste grafo.
     * @return true se foi encontro um ciclo, false caso contrário.
     */
-   private boolean háCiclosRecursivo( final int indiceDoVérticeAtual,
-      final int indiceDoVérticeAnterior, final boolean[] vérticesJáVisitados,
-      final Object[] vérticesDoGrafo )
-   {
-      // Marca o vértice atual como já visitado
-      vérticesJáVisitados[indiceDoVérticeAtual] = true;
+   private boolean háCiclosRecursivo( final Object vérticeAtual,
+            final Object vérticeAnterior,
+            final Set< Object > vérticesJáVisitados,
+            final Set< Object > vérticesDoGrafo )
+   { // TODO
+     // Marca o vértice atual como já visitado
+      vérticesJáVisitados.add( vérticeAtual );
       
       // Recorre para todos os vértices adjacentes a esse vértice.
       Set< Object > adjacentes = new HashSet<>();
       try
       {
-         adjacentes = this.adjacentes( vérticesDoGrafo[indiceDoVérticeAtual] );
+         adjacentes = this.adjacentes( vérticeAtual );
+         
       } catch( final ExeçãoVérticeNãoExistente e )
       {
          e.printStackTrace();
@@ -570,15 +572,13 @@ public class Grafo
       
       while( iterador.hasNext() )
       {
-         final ArrayList< Object > arrayList = new ArrayList<>(
-                  Arrays.asList( vérticesDoGrafo ) );
-         final int posição = arrayList.indexOf( iterador.next() );
+         final Object próximoVértice = iterador.next();
          
          // Se um adjacente não é visitado, em seguida, recorre para estes
          // adjacentes
-         if( !vérticesJáVisitados[posição] )
+         if( !vérticesJáVisitados.contains( próximoVértice ) )
          {
-            if( this.háCiclosRecursivo( posição, indiceDoVérticeAtual,
+            if( this.háCiclosRecursivo( próximoVértice, vérticeAtual,
                      vérticesJáVisitados, vérticesDoGrafo ) )
             {
                return true;
@@ -586,7 +586,7 @@ public class Grafo
          } else
             // Se um adjacente é visitado e não é o vértice anterior ao vértice
             // atual, então está ocorrendo um ciclo.
-            if( posição != indiceDoVérticeAnterior )
+            if( !próximoVértice.equals( vérticeAnterior ) )
             {
                return true;
             }
@@ -605,7 +605,7 @@ public class Grafo
    }
    
    private Set< Object > procuraFechoTransitivo( final Object vértice,
-      final Set< Object > fechoTransitivo, final Set< Object > jáVisitados )
+            final Set< Object > fechoTransitivo, final Set< Object > jáVisitados )
    {
       jáVisitados.add( vértice );
       
@@ -786,7 +786,7 @@ public class Grafo
     * 
     * @return uma enumeração.
     */
-   public Set< ? > vértices()
+   public Set< Object > vértices()
    {
       return this.vértices.keySet();
    }
