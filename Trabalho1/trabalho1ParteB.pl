@@ -900,6 +900,24 @@ maiorQuantidadeDeRelacionamentos(Nome) :-
 															Relacionamentos).
 
 
+:-begin_tests(maiorQuantidadeDeRelacionamentos).
+
+test(maiorQuantidadeDeRelacionamentos) :-
+	
+	findall(A, maiorQuantidadeDeRelacionamentos(A), All),
+	primeiro(All, A2), 
+    assertion(A2 == 'Stiven Stronger').
+    
+test(privado_QuantidadeRelacionamentos) :-
+	
+	findall(A, privado_QuantidadeRelacionamentos(['Stiven Stronger'], A), 
+															Relacionamentos),
+	primeiro(Relacionamentos, R),
+    assertion(R =:= 8).
+    
+:-end_tests(maiorQuantidadeDeRelacionamentos).
+
+
 /* Questão 25 ###############################################################
  * Crie uma pergunta qualquer (ainda não feita) que envolva a determinação 
  *   de máximo ou de mínimo de um conjunto numérico.
@@ -920,6 +938,17 @@ qualMaiorIdade(Idade) :-
 		dadoNaPosicao(DataDeNascimento, L, 1),
 		privado_CalcularIdade(DataDeNascimento, Idade).
 
+
+:-begin_tests(qualMaiorIdade).
+
+test(qualMaiorIdade) :-
+	
+    A is 2^3,
+    qualMaiorIdade(Idade),
+    assertion( Idade == 44 ),
+    assertion(A == 8).
+    
+:-end_tests(qualMaiorIdade).
 
 
 /* ###########################################################################
@@ -1056,4 +1085,14 @@ imprimirCurriculo(Pessoas_Interno) :-
 		/* Imprime o ano de termino do cargo. */
 		dadoNaPosicao(Termino, InformacoesProfissionais, 4),
 		write('\nDesligado no Ano de: '), write(Termino).
+
+
+:-begin_tests(imprimirCurriculo).
+
+test(imprimirCurriculo) :-
+	
+    A is 2^3,
+    assertion(A == 8).
+    
+:-end_tests(imprimirCurriculo).
 
