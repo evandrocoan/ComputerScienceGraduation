@@ -40,7 +40,7 @@ public final class JanelaDoHomebroker extends JFrame
     }
     
     /**
-     * Armazean o painel do homebroker.
+     * Armazenam o painel do homebroker.
      */
     private final PainelDoHomebroker painelPrincipal;
     

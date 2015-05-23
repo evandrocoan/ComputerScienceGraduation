@@ -36,7 +36,7 @@ public final class PainelDoHomebroker extends JPanel
     
     /**
      * @param motor o motor do programa.
-     * @return instância uma intância da janela de login.
+     * @return instância uma instância da janela de login.
      */
     public static PainelDoHomebroker getInstância( final MotorDoHomebroker motor )
     {
@@ -51,7 +51,7 @@ public final class PainelDoHomebroker extends JPanel
     }
     
     /**
-     * Comtém o motor principal.
+     * Contém o motor principal.
      */
     private final MotorDoHomebroker motor;
     
@@ -68,13 +68,13 @@ public final class PainelDoHomebroker extends JPanel
     
     /**
      * Contém as informações de apresentação e como utilizar o programa. Tais
-     * informações serão aprentadas na interface gráfica ao usuário.
+     * informações serão apresentadas na interface gráfica ao usuário.
      */
     private final String campoDeAjuda = "Bem-vindo ao sistema "
         + "tabajara de cadastro de ações.\n"
         + "Digite 's' para fechar o programa.\n"
         + "Digite 'v' para para ver o inventario.\n"
-        + "Digite 'b' para para bloquerar uma conta de usuário.\n"
+        + "Digite 'b' para para bloquear uma conta de usuário.\n"
         + "Digite 'ov' para enviar uma ordem de venda.\n"
         + "Digite 'oc' para criar um ordem de compra.\n"
         + "Digite 'c' para para criar uma conta.\n"
@@ -95,7 +95,7 @@ public final class PainelDoHomebroker extends JPanel
         campoDeAjuda.setEditable( false );
         campoDeAjuda.setFocusable( false );
         
-        // Define o gerênciador de layout utilizado.
+        // Define o gerenciador de layout utilizado.
         super.setLayout( new BorderLayout() );
         
         // Adiciona os componentes ao painel principal
@@ -115,18 +115,10 @@ public final class PainelDoHomebroker extends JPanel
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
          */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            /**
-             * Executa o homebroker.
-             */
-            @Override
-            public void run()
-            {
-                final JanelaDeBloqueio janelaDeCadastro;
-                janelaDeCadastro = JanelaDeBloqueio.getInstância( motor );
-                janelaDeCadastro.efetuarBloqueio();
-            }
+        SwingUtilities.invokeLater( () -> {
+            final JanelaDeBloqueio janelaDeCadastro;
+            janelaDeCadastro = JanelaDeBloqueio.getInstância( motor );
+            janelaDeCadastro.efetuarBloqueio();
         } );
     }
     
@@ -143,18 +135,10 @@ public final class PainelDoHomebroker extends JPanel
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
          */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            /**
-             * Executa o homebroker.
-             */
-            @Override
-            public void run()
-            {
-                final JanelaDeCadastro janela;
-                janela = JanelaDeCadastro.getInstância( motor );
-                janela.efetuarCadastro();
-            }
+        SwingUtilities.invokeLater( () -> {
+            final JanelaDeCadastro janela;
+            janela = JanelaDeCadastro.getInstância( motor );
+            janela.efetuarCadastro();
         } );
     }
     
@@ -189,17 +173,8 @@ public final class PainelDoHomebroker extends JPanel
     {
         this.entradaDeComandos = new JTextField( "  Insira qual seu comando  " );
         
-        this.entradaDeComandos.addActionListener( new ActionListener()
-        {
-            /**
-             * Obtém o texto digitado.
-             */
-            @Override
-            public void actionPerformed( final ActionEvent ae )
-            {
-                PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
-            }
-        } );
+        this.entradaDeComandos.addActionListener(
+                ae -> PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() ) );
         
         this.entradaDeComandos.addMouseListener( new MouseAdapter()
         {
@@ -252,18 +227,10 @@ public final class PainelDoHomebroker extends JPanel
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
          */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            /**
-             * Executa o homebroker.
-             */
-            @Override
-            public void run()
-            {
-                final JanelaDeCompras janelaDeCompras;
-                janelaDeCompras = JanelaDeCompras.getInstância( motor );
-                janelaDeCompras.efetuarCompra();
-            }
+        SwingUtilities.invokeLater( () -> {
+            final JanelaDeCompras janelaDeCompras;
+            janelaDeCompras = JanelaDeCompras.getInstância( motor );
+            janelaDeCompras.efetuarCompra();
         } );
     }
     
@@ -278,18 +245,10 @@ public final class PainelDoHomebroker extends JPanel
          * Programando um trabalho para o Event Dispatcher Thread. Porque Java
          * Swing não é thread-safe.
          */
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            /**
-             * Executa o homebroker.
-             */
-            @Override
-            public void run()
-            {
-                final JanelaDeVendas janelaDeVendas;
-                janelaDeVendas = JanelaDeVendas.getInstância( motor );
-                janelaDeVendas.efetuarVenda();
-            }
+        SwingUtilities.invokeLater( () -> {
+            final JanelaDeVendas janelaDeVendas;
+            janelaDeVendas = JanelaDeVendas.getInstância( motor );
+            janelaDeVendas.efetuarVenda();
         } );
     }
     
