@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 public final class MotorDoHomebroker
 {
     /**
-     * Resposável por realizar o debug do programa, quando ativado. Deve ser
-     * instânciado antes que o construtor desta classe, pois este construtor
-     * precisa de deste objeto já instânciado para ser monitorado pelo log.
+     * Responsável por realizar o debug do programa, quando ativado. Deve ser
+     * instanciado antes que o construtor desta classe, pois este construtor
+     * precisa de deste objeto já instanciado para ser monitorado pelo log.
      */
     private static final Logger LOG = Logger.getLogger( "MotorDoHomebroker" );
     
@@ -30,9 +30,9 @@ public final class MotorDoHomebroker
         new MotorDoHomebroker();
     
     /**
-     * Retorna a única instancia existe do MotorDoHomebroker.
+     * Retorna a única instância existe do MotorDoHomebroker.
      * 
-     * @return INSTANCE a única instancia existe da JanelaPrincipal.
+     * @return INSTANCE a única instância existe da JanelaPrincipal.
      */
     public static MotorDoHomebroker getInstância()
     {
@@ -40,7 +40,7 @@ public final class MotorDoHomebroker
     }
     
     /**
-     * Encerrra a execução do Homebroker.
+     * Encerra a execução do Homebroker.
      */
     public static void sairDoSistema()
     {
@@ -65,8 +65,8 @@ public final class MotorDoHomebroker
     
     /**
      * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
-     * sigleton. O atributo JanelaPrincipal.janelaPricipal não é inicializado
-     * devio a sua construção necessitar de um objeto deste construtor.
+     * singleton. O atributo JanelaPrincipal.janelaPrincipal não é inicializado
+     * devido a sua construção necessitar de um objeto deste construtor.
      */
     private MotorDoHomebroker()
     {
@@ -139,7 +139,7 @@ public final class MotorDoHomebroker
     }
     
     /**
-     * @return string uma string reprensentado as contas teste.
+     * @return string uma string representando as contas teste.
      */
     public String contasTesteToString()
     {
