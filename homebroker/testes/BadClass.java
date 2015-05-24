@@ -2,7 +2,7 @@ package homebroker.testes;
 
 /**
  * 
- * @author Professional
+ * @author Evandro  Coan
  */
 @SuppressWarnings( { "all" } )
 public class BadClass
