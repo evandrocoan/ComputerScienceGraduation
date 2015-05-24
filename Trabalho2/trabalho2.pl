@@ -133,13 +133,95 @@ incluirInformacoesPessoais(Nome) :-
     DataDeNascimentoMes, DataDeNascimentoDia),  
     NomeDaCidade, NumeroDoTelefone ] ], 
     assert(Predicado),
-     
+    
     /* Lista todas as clausulas e grava no arquivo */
     tell('Trabalho1/bancoDeDados.pl'),
     listing(informacoesAcademicas),
     listing(informacoesPessoais), 
     listing(informacoesProfissionais), 
     told. 
+
+
+/* Excluir todas as informações Profissionais de uma Pessoa passada como 
+ *   parâmetro.
+ * */
+excluirInformacoesProfissionais(Nome) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    findall( _, retract(informacoesProfissionais([Nome|_])), _ ),
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+/* Excluir as informações Profissionais de uma Pessoa e uma dada Empresa 
+ *   passados como parâmetro.
+ * */
+excluirInformacoesProfissionais(Nome, Empresa) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    findall( _, retract(informacoesProfissionais([Nome|[Empresa|_]])), _ ), 
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+/* Excluir todas as informações Academicas de uma Pessoa passada como 
+ *   parâmetro.
+ * */
+excluirInformacoesAcademicas(Nome) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    findall( _, retract(informacoesAcademicas([Nome|_])), _ ),
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+/* Excluir todas as informações Academicas de uma Pessoa e um dado Curso 
+ *   passados como parâmetro.
+ * */
+excluirInformacoesAcademicas(Nome, Curso) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    findall( _, retract(informacoesAcademicas([Nome|[Curso|_]])), _ ),
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+/* Excluir todas as informações Pessoais, Academicas e Profisionais de uma 
+ *   Pessoa passada como parâmetro.
+ * */
+excluirInformacoesPessoais(Nome) :-
+    privado_ExcluirInformacoesPessoais(Nome),
+    excluirInformacoesAcademicas(Nome),
+    excluirInformacoesProfissionais(Nome),
+    !.
+
+privado_ExcluirInformacoesPessoais(Nome) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    findall( _, retract(informacoesPessoais([Nome|_])), _ ),
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
 
 
 
