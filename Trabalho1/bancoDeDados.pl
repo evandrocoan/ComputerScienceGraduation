@@ -3,6 +3,8 @@
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
 
+:- dynamic informacoesAcademicas/1.
+
 /* Roger Rocker
  * */
 informacoesAcademicas( ['Roger Rocker', 'Ciencias da Computacao', 
@@ -63,6 +65,8 @@ informacoesAcademicas( ['Lucas Troll', 'Medicina',
  * Nome, data de nascimento, cidade, telefone 
  * */
 
+:- dynamic informacoesPessoais/1.
+
 /* Juca Juquinha
  * */
 informacoesPessoais( ['Juca Juquinha', date( 1990, 1, 10 ), 
@@ -117,6 +121,8 @@ informacoesPessoais( ['Roger Rocker', date( 1976, 11, 20 ),
  * Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
  * Nome Completo de Colegas como Referências...
  * */
+
+:- dynamic informacoesProfissionais/1.
 
 /* Juca Juquinha
  * */
