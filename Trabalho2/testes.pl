@@ -59,3 +59,24 @@ teste :-
 	listing(informacoesProfissionais),
 	told.
 
+incluirDadosPara(Nome) :-
+    write('Entre com o nome do novo dado, iniciado com letra minuscula\n'), 
+    write(', sem espacos e terminado por um : '), 
+    read(NomeDoNovoDado), 
+    write('Entre com o valor do novo dado DIGITE ENTRE ASPAS SIMPLES: '), 
+    read(ValorDoNovoDado), 
+    consult('Trabalho1/bancoDeDados.pl'), 
+    Predicado =.. [NomeDoNovoDado,Nome,ValorDoNovoDado],
+    assert(Predicado), 
+    
+    /* carregarListaDePredicados( listaDePredicados ) */
+    /* listaDePredicados <- add Predicado */
+    /* ouvirPrecidados( listaDePredicados ) */
+    
+    /* Lista todas as clausulas informacoesProfissionais e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),   
+    told.
+
+
+
+
