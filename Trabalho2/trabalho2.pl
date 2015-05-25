@@ -16,7 +16,7 @@ importarTrabalho1ParteB :- ['Trabalho1/trabalho1ParteB.pl'].
 /* Incluir novo dado para uma pessoa. Ao chamar este predicado se passa o 
  *   nome da pessoa que se deseja incluir novas informações profissionais. 
  *
- * Organização das informações profissionais. ################################
+ * Organização das Informações Profissionais. ################################
  * Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
  * Nome Completo de Colegas como Referências...
  * */
@@ -58,7 +58,7 @@ incluirInformacoesProfissionais(Nome) :-
 /* Incluir novo dado para uma pessoa. Ao chamar este predicado se passa o 
  *   nome da pessoa que se deseja incluir novas informações academicas. 
  *
- * Organização das informações acadêmicas. ###################################
+ * Organização das Informações Acadêmicas. ###################################
  * Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
@@ -104,7 +104,7 @@ incluirInformacoesAcademicas(Nome) :-
 /* Incluir novo dado para uma pessoa. Ao chamar este predicado se passa o 
  *   nome da pessoa que se deseja incluir novas informações pessoais. 
  *
- * Organização das informações pessoais. #####################################
+ * Organização das Informações Pessoais. #####################################
  * Nome, data de nascimento, cidade, telefone  
  * */
 incluirInformacoesPessoais(Nome) :-
@@ -275,6 +275,54 @@ alterarTelefone(Nome, Telefone) :-
     told.
 
 
+/* Retorna um Currículo para um dado Nome. Este currículo é uma lista 
+ *   é composta pelas Informações Pessoais, uma Lista de Informações 
+ *   Academicas e uma lista de Informações Profissionais. E cada uma das 
+ *   Informações é também outra lista contendo:
+ *
+ *   Organização das Informações Pessoais. ###################################
+ *   Nome, data de nascimento, cidade, telefone  
+ *   
+ *   Organização das Informações Profissionais. ##############################
+ *   Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
+ *   Nome Completo de Colegas como Referências...
+ *   
+ *   Organização das Informações Acadêmicas. #################################
+ *   Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
+ *   Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
+ * */
+curriculosPeloNome(Nome, Curriculo) :-
+	% Carrega as informações Pessoais
+    informacoesPessoais(Pessoais), 
+    dadoNaPosicao(NomeDaPessoa, Pessoais, 0),
+    NomeDaPessoa == Nome,
+    
+    % Carrega todas as Informações Acadêmicas
+    findall( Academica, privado_CurriculoAcademicas(Nome, Academica), 
+                                                                Academicas),
+    
+    % Carrega todas as Informações Pessoais
+    findall( Profissional, privado_CurriculoProfissionais(Nome, Profissional), 
+                                                                Profissionais),
+
+    Curriculo = [Pessoais, Academicas, Profissionais],
+    !.
+
+    /* Carrega informações academicas. 
+     * */  
+    privado_CurriculoAcademicas(Nome, Academica) :-
+	    informacoesAcademicas(Academicas), 
+	    dadoNaPosicao(NomeDaPessoa, Academicas, 0),
+	    NomeDaPessoa == Nome,
+	    copy_term(Academicas, Academica).
+
+    /* Carrega informações profissionais. 
+     * */
+    privado_CurriculoProfissionais(Nome, Profissional) :-
+        informacoesAcademicas(Profissionais), 
+        dadoNaPosicao(NomeDaPessoa, Profissionais, 0),
+        NomeDaPessoa == Nome,
+        copy_term(Profissionais, Profissional).
 
 
 
