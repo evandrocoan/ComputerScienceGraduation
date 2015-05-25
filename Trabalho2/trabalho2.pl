@@ -223,6 +223,63 @@ privado_ExcluirInformacoesPessoais(Nome) :-
     told.
 
 
+/* Altera a Cidade de uma dada Pessoa.
+ * */
+alterarCidade(Nome, Cidade) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    
+    % cria um cópia temporária das informacoesPessoais e paga elas.
+    informacoesPessoais(Info),
+    dadoNaPosicao(NomeDaPessoa, Info, 0),
+    NomeDaPessoa == Nome,
+    findall( _, retract(informacoesPessoais([Nome|_])), _ ),
+    
+    % altera as informações temporárias e salva elas.
+    substituidoDaPos(Cidade, 2, Info, NovaInfo),
+    adicionarNoInicio('informacoesPessoais', [NovaInfo], AuxNovaInfo),
+    Predicado =.. AuxNovaInfo,
+    assert(Predicado), 
+    !,
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+/* Altera o Telefone de uma dada Pessoa.
+ * */
+alterarTelefone(Nome, Telefone) :-
+    consult('Trabalho1/bancoDeDados.pl'), 
+    
+    % cria um cópia temporária das informacoesPessoais e paga elas.
+    informacoesPessoais(Info),
+    dadoNaPosicao(NomeDaPessoa, Info, 0),
+    NomeDaPessoa == Nome,
+    findall( _, retract(informacoesPessoais([Nome|_])), _ ),
+    
+    % altera as informações temporárias e salva elas.
+    substituidoDaPos(Telefone, 3, Info, NovaInfo),
+    adicionarNoInicio('informacoesPessoais', [NovaInfo], AuxNovaInfo),
+    Predicado =.. AuxNovaInfo,
+    assert(Predicado), 
+    !,
+    
+    /* Lista todas as clausulas e grava no arquivo */
+    tell('Trabalho1/bancoDeDados.pl'),
+    listing(informacoesAcademicas),
+    listing(informacoesPessoais), 
+    listing(informacoesProfissionais), 
+    told.
+
+
+
+
+
+
+
 
 
 
