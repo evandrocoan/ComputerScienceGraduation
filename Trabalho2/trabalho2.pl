@@ -433,8 +433,118 @@ curriculosPelaInstituicao(Instituicao, Curriculos) :-
                                        Curriculos_Saida, CurriculosRetorno ).
 
 
+/* Retorna uma lista com os Currículo de todas as Pessoas para uma dada  
+ *   Empresa. Cada currículo é uma lista é composta pelas Informações  
+ *   Pessoais, uma Lista de Informações Academicas e uma lista de 
+ *   Informações Profissionais. Onde cada uma das Informações é também 
+ *   outra lista contendo:
+ *
+ *   Organização das Informações Pessoais. ###################################
+ *   Nome, data de nascimento, cidade, telefone  
+ *   
+ *   Organização das Informações Profissionais. ##############################
+ *   Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
+ *   Nome Completo de Colegas como Referências...
+ *   
+ *   Organização das Informações Acadêmicas. #################################
+ *   Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
+ *   Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
+ * */
+curriculosPelaEmpresa(Empresa, Curriculos) :-
+    % Cria uma lista contendo o nome de todas as pessoas de uma dada cidade.
+    findall( Nome, privado_CurriculosPelaEmpresa(Empresa, Nome), Nomes), 
+
+    % Para cada um dos Nomes da lista, cria uma lista contendo os currículos.
+    privado_CurriculosPelaEmpresaRecursivo(Nomes, Curriculos),
+    !.
+    
+    /* Para uma dada Empresa, retorna o nome das pessoas que moram nela.
+     * */
+    privado_CurriculosPelaEmpresa(Empresa, Nome) :-
+        informacoesProfissionais(Profissionais), 
+        dadoNaPosicao(NomeDaEmpresa, Profissionais, 1),
+        NomeDaEmpresa == Empresa,
+        dadoNaPosicao(Nome, Profissionais, 0).
+
+    /* Cria uma lista contendo todos os Currículos para cada um dos Nomes.
+     * */
+    privado_CurriculosPelaEmpresaRecursivo(Nomes, Curriculos) :-
+        privado_CurriculosPelaEmpresaRecursivoInterno(Nomes, [], 
+                                                                   Curriculos).
+
+        /* Funcionamento interno de privado_CurriculosPelaEmpresaRecursivo. 
+         * */
+        privado_CurriculosPelaEmpresaRecursivoInterno([], Curriculos, 
+                                                         CurriculosRetorno) :-
+            copy_term(Curriculos, CurriculosRetorno).
+        
+        /* Funcionamento interno de privado_CurriculosPelaEmpresaRecursivo. 
+         * */
+        privado_CurriculosPelaEmpresaRecursivoInterno([Nome|Nomes], 
+                                            Curriculos, CurriculosRetorno ) :-
+            curriculoPeloNome(Nome, Curriculo), 
+            inseridoNoFinal(Curriculo, Curriculos, Curriculos_Saida), 
+            privado_CurriculosPelaEmpresaRecursivoInterno(Nomes, 
+                                       Curriculos_Saida, CurriculosRetorno ).
 
 
+/* Retorna uma lista com os Currículo de todas as Pessoas para uma dada Cidade e
+ *   uma Idade mínima. Cada currículo é uma lista é composta pelas Informações  
+ *   Pessoais, uma Lista de Informações Academicas e uma lista de 
+ *   Informações Profissionais. Onde cada uma das Informações é também 
+ *   outra lista contendo:
+ *
+ *   Organização das Informações Pessoais. ###################################
+ *   Nome, data de nascimento, cidade, telefone  
+ *   
+ *   Organização das Informações Profissionais. ##############################
+ *   Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
+ *   Nome Completo de Colegas como Referências...
+ *   
+ *   Organização das Informações Acadêmicas. #################################
+ *   Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
+ *   Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
+ * */
+curriculosPelaIdadeCidade(Idade, Cidade, Curriculos) :-
+    % Cria uma lista contendo o nome de todas as pessoas de uma dada cidade.
+    findall( Nome, privado_CurriculosPelaIdadeCidade(Idade, Cidade, Nome), 
+                                                                        Nomes), 
+
+    % Para cada um dos Nomes da lista, cria uma lista contendo os currículos.
+    privado_CurriculosPelaIdadeCidadeRecursivo(Nomes, Curriculos),
+    !.
+    
+    /* Para uma dada IdadeCidade, retorna o nome das pessoas que moram nela.
+     * */
+    privado_CurriculosPelaIdadeCidade(Idade, Cidade, Nome) :-
+        informacoesPessoais(Pessoais), 
+        dadoNaPosicao(NomeDaCidade, Pessoais, 2),
+        dadoNaPosicao(NomeDaPessoa, Pessoais, 0),
+        qualIdadeDe(NomeDaPessoa, IdadeDaPessoa),
+        NomeDaCidade == Cidade, 
+        IdadeDaPessoa > Idade,
+        copy_term(NomeDaPessoa, Nome).
+
+    /* Cria uma lista contendo todos os Currículos para cada um dos Nomes.
+     * */
+    privado_CurriculosPelaIdadeCidadeRecursivo(Nomes, Curriculos) :-
+        privado_CurriculosPelaIdadeCidadeRecursivoInterno(Nomes, [], 
+                                                                   Curriculos).
+
+        /* Funcionamento interno de privado_CurriculosPelaIdadeCidadeRecursivo. 
+         * */
+        privado_CurriculosPelaIdadeCidadeRecursivoInterno([], Curriculos, 
+                                                         CurriculosRetorno) :-
+            copy_term(Curriculos, CurriculosRetorno).
+        
+        /* Funcionamento interno de privado_CurriculosPelaIdadeCidadeRecursivo. 
+         * */
+        privado_CurriculosPelaIdadeCidadeRecursivoInterno([Nome|Nomes], 
+                                            Curriculos, CurriculosRetorno ) :-
+            curriculoPeloNome(Nome, Curriculo), 
+            inseridoNoFinal(Curriculo, Curriculos, Curriculos_Saida), 
+            privado_CurriculosPelaIdadeCidadeRecursivoInterno(Nomes, 
+                                       Curriculos_Saida, CurriculosRetorno ).
 
 
 
