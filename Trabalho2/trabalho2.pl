@@ -218,7 +218,7 @@ privado_ExcluirInformacoesPessoais(Nome) :-
     /* Lista todas as clausulas e grava no arquivo */
     tell('Trabalho1/bancoDeDados.pl'),
     listing(informacoesAcademicas),
-    listing(informacoesPessoais), 
+    listing(informacoesPessoais),  
     listing(informacoesProfissionais), 
     told.
 
@@ -254,7 +254,7 @@ alterarCidade(Nome, Cidade) :-
 alterarTelefone(Nome, Telefone) :-
     consult('Trabalho1/bancoDeDados.pl'), 
     
-    % cria um cópia temporária das informacoesPessoais e paga elas.
+    % cria um cópia temporária das informacoesPessoais e apaga elas.
     informacoesPessoais(Info),
     dadoNaPosicao(NomeDaPessoa, Info, 0),
     NomeDaPessoa == Nome,
@@ -522,7 +522,7 @@ curriculosPelaIdadeCidade(Idade, Cidade, Curriculos) :-
         dadoNaPosicao(NomeDaPessoa, Pessoais, 0),
         qualIdadeDe(NomeDaPessoa, IdadeDaPessoa),
         NomeDaCidade == Cidade, 
-        IdadeDaPessoa > Idade,
+        IdadeDaPessoa > Idade, 
         copy_term(NomeDaPessoa, Nome).
 
     /* Cria uma lista contendo todos os Currículos para cada um dos Nomes.
