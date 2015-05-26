@@ -27,7 +27,7 @@ inseridoNoFinal( D, [], [D] ).
 inseridoNoFinal( D, [X | L], [X | LM] ) :- inseridoNoFinal( D, L, LM ).
 
 
-/* Predicado: add(Item, List, NewList).
+/* Predicado: adicionarNoInicio(Item, List, NewList).
  * Definição: Item é um dado, List é uma lista e NewList é a lista L mais o 
  *   dado D no inicio.
  * */
