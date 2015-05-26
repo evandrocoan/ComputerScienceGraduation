@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20110701' xmlns:uml='http://www.omg.org/spec/UML/20110701'>
+ <documentation exporter='Oracle JDeveloper' exporterVersion='12.1.3.0.0'/>
+ <uml:Package xmi:type='uml:Package' xmi:uuid='urn:uuid:48a34a64-a7b1-4f60-aa17-676a2183bc22'
+   name='exerdiagativ'
+   visibility='public'/>
+</xmi:XMI>

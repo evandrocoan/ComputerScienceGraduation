@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20110701' xmlns:uml='http://www.omg.org/spec/UML/20110701'>
+ <documentation exporter='Oracle JDeveloper' exporterVersion='12.1.3.0.0'/>
+ <uml:Activity xmi:type='uml:Activity' xmi:uuid='urn:uuid:d08b96d4-9d92-4270-a719-f58d758734ac'
+   isAbstract='false'
+   isActive='false'
+   isFinalSpecialization='false'
+   isLeaf='false'
+   isReadOnly='false'
+   isReentrant='true'
+   isSingleExecution='false'
+   name='Author'
+   visibility='public'>
+  <partition href='urn:uuid:9a65c609-6f08-49f2-ac19-4eb325809373'/>
+  <partition href='urn:uuid:57262bd0-d50f-496c-b70f-dedae82dda56'/>
+  <partition href='urn:uuid:779fe8c4-dde5-426a-adbe-c3fa88d887ce'/>
+  <partition href='urn:uuid:f3d73747-17f7-4cb3-9e94-26180f99f8af'/>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:fe116fcb-d23f-4aca-b427-df9cfc1aea3f'
+    isLeaf='false'
+    name='ControlFlow1'>
+   <source href='urn:uuid:38ed4e08-d9c0-4272-9f87-a6fa9d9662ae'/>
+   <target href='urn:uuid:573655e0-c2ff-4700-ba78-0f64cadbef1f'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:a40ba7b0-4725-4b86-b1cd-9bd29dfb0834'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:59e46370-1bb0-43fe-ab64-df577215c88c'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:2aa4c111-037e-4c00-8ba5-cc5372bbfcfb'
+    isLeaf='false'
+    name='ControlFlow2'>
+   <source href='urn:uuid:573655e0-c2ff-4700-ba78-0f64cadbef1f'/>
+   <target href='urn:uuid:85a3458a-02a7-4127-8250-fd71d1f84d8f'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:1a80550d-35d4-49e2-812e-d6f7ced9bede'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:425c4b42-14c8-4021-964e-3ff6e6d6acfe'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:b78b1cf0-15dc-4520-80f1-68559c2a269a'
+    isLeaf='false'
+    name='ControlFlow3'>
+   <source href='urn:uuid:85a3458a-02a7-4127-8250-fd71d1f84d8f'/>
+   <target href='urn:uuid:c5e255e8-2db9-488a-bafd-3107c3948c97'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:6fab495e-0ac3-43ad-a4aa-caa773c6b7e1'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:e881d8a1-0c5c-4764-a1c3-d5c72a1f6a7e'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:d88ef85a-0fd8-41bd-b514-f9f310255eb6'
+    isLeaf='false'
+    name='[Existe dado compatível]'>
+   <source href='urn:uuid:c5e255e8-2db9-488a-bafd-3107c3948c97'/>
+   <target href='urn:uuid:573655e0-c2ff-4700-ba78-0f64cadbef1f'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:503041d8-6352-4146-8da3-99ee200a8168'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:4904acf4-d111-47d4-ad30-1ef6ad268128'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:5c0d7834-c5dc-4635-857d-bbea5ea372ae'
+    isLeaf='false'
+    name='[else]'>
+   <source href='urn:uuid:c5e255e8-2db9-488a-bafd-3107c3948c97'/>
+   <target href='urn:uuid:40913749-05f4-4b9b-ae00-74f052277d6b'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:ecb0beed-be43-4a94-a8b4-4d9975f8c063'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:6d3c8d87-e3ce-41c5-9282-bf30c5569fb7'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:be2c14c3-125a-46dd-9cc0-7635bbd927ff'
+    isLeaf='false'
+    name='ControlFlow5'>
+   <source href='urn:uuid:40913749-05f4-4b9b-ae00-74f052277d6b'/>
+   <target href='urn:uuid:dac03a66-19dd-4cc7-bf76-acd6f1acef71'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:a3d1ddbe-1717-4a61-96df-b496d554ce5b'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:f44ce9d7-6d9f-4e19-8e25-e931dd4abec2'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:936fbd72-289c-4c34-a09f-0c95cfcbf3f7'
+    isLeaf='false'
+    name='ControlFlow7'>
+   <source href='urn:uuid:dac03a66-19dd-4cc7-bf76-acd6f1acef71'/>
+   <target href='urn:uuid:d2bd503e-09b0-4884-a6c1-f49a013f2d90'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:4ea80ee6-ac1d-45b5-8740-00157091797b'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:ec7a930e-05c6-4294-bd6b-7f556f5ca927'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:806f056b-8bc6-4f5d-8b3f-72df23332e4e'
+    isLeaf='false'
+    name='ControlFlow8'>
+   <source href='urn:uuid:d2bd503e-09b0-4884-a6c1-f49a013f2d90'/>
+   <target href='urn:uuid:187efe36-2d9e-4b15-b5a8-3b465845b674'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:102e9b46-7de1-4ee7-bcc3-f170a3035929'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:a69d24a2-4873-4ec4-8081-d0c17825f210'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <group xmi:type='uml:ActivityPartition' xmi:uuid='urn:uuid:9a65c609-6f08-49f2-ac19-4eb325809373'
+    isDimension='false'
+    isExternal='false'
+    name='Submeter Artigo'/>
+  <group xmi:type='uml:ActivityPartition' xmi:uuid='urn:uuid:57262bd0-d50f-496c-b70f-dedae82dda56'
+    isDimension='false'
+    isExternal='false'
+    name='Envia dados'/>
+  <group xmi:type='uml:ActivityPartition' xmi:uuid='urn:uuid:779fe8c4-dde5-426a-adbe-c3fa88d887ce'
+    isDimension='false'
+    isExternal='false'
+    name='Author'>
+   <node href='urn:uuid:573655e0-c2ff-4700-ba78-0f64cadbef1f'/>
+   <node href='urn:uuid:40913749-05f4-4b9b-ae00-74f052277d6b'/>
+   <node href='urn:uuid:d2bd503e-09b0-4884-a6c1-f49a013f2d90'/>
+  </group>
+  <group xmi:type='uml:ActivityPartition' xmi:uuid='urn:uuid:f3d73747-17f7-4cb3-9e94-26180f99f8af'
+    isDimension='false'
+    isExternal='false'
+    name='Sistema'>
+   <node href='urn:uuid:85a3458a-02a7-4127-8250-fd71d1f84d8f'/>
+   <node href='urn:uuid:dac03a66-19dd-4cc7-bf76-acd6f1acef71'/>
+  </group>
+  <node xmi:type='uml:InitialNode' xmi:uuid='urn:uuid:38ed4e08-d9c0-4272-9f87-a6fa9d9662ae'
+    isLeaf='false'
+    name='InitialNode1'>
+   <outgoing href='urn:uuid:fe116fcb-d23f-4aca-b427-df9cfc1aea3f'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:573655e0-c2ff-4700-ba78-0f64cadbef1f'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='Envia dados'>
+   <inPartition href='urn:uuid:779fe8c4-dde5-426a-adbe-c3fa88d887ce'/>
+   <incoming href='urn:uuid:fe116fcb-d23f-4aca-b427-df9cfc1aea3f'/>
+   <incoming href='urn:uuid:d88ef85a-0fd8-41bd-b514-f9f310255eb6'/>
+   <outgoing href='urn:uuid:2aa4c111-037e-4c00-8ba5-cc5372bbfcfb'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:85a3458a-02a7-4127-8250-fd71d1f84d8f'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='Confere dados'>
+   <inPartition href='urn:uuid:f3d73747-17f7-4cb3-9e94-26180f99f8af'/>
+   <incoming href='urn:uuid:2aa4c111-037e-4c00-8ba5-cc5372bbfcfb'/>
+   <outgoing href='urn:uuid:b78b1cf0-15dc-4520-80f1-68559c2a269a'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:40913749-05f4-4b9b-ae00-74f052277d6b'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='Upload'>
+   <inPartition href='urn:uuid:779fe8c4-dde5-426a-adbe-c3fa88d887ce'/>
+   <incoming href='urn:uuid:5c0d7834-c5dc-4635-857d-bbea5ea372ae'/>
+   <outgoing href='urn:uuid:be2c14c3-125a-46dd-9cc0-7635bbd927ff'/>
+  </node>
+  <node xmi:type='uml:DecisionNode' xmi:uuid='urn:uuid:c5e255e8-2db9-488a-bafd-3107c3948c97'
+    isLeaf='false'
+    name='OrNode2'>
+   <incoming href='urn:uuid:b78b1cf0-15dc-4520-80f1-68559c2a269a'/>
+   <outgoing href='urn:uuid:d88ef85a-0fd8-41bd-b514-f9f310255eb6'/>
+   <outgoing href='urn:uuid:5c0d7834-c5dc-4635-857d-bbea5ea372ae'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:dac03a66-19dd-4cc7-bf76-acd6f1acef71'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='Gera ID'>
+   <inPartition href='urn:uuid:f3d73747-17f7-4cb3-9e94-26180f99f8af'/>
+   <incoming href='urn:uuid:be2c14c3-125a-46dd-9cc0-7635bbd927ff'/>
+   <outgoing href='urn:uuid:936fbd72-289c-4c34-a09f-0c95cfcbf3f7'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:d2bd503e-09b0-4884-a6c1-f49a013f2d90'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='Recebe ID'>
+   <inPartition href='urn:uuid:779fe8c4-dde5-426a-adbe-c3fa88d887ce'/>
+   <incoming href='urn:uuid:936fbd72-289c-4c34-a09f-0c95cfcbf3f7'/>
+   <outgoing href='urn:uuid:806f056b-8bc6-4f5d-8b3f-72df23332e4e'/>
+  </node>
+  <node xmi:type='uml:ActivityFinalNode' xmi:uuid='urn:uuid:187efe36-2d9e-4b15-b5a8-3b465845b674'
+    isLeaf='false'
+    name='ActivityFinalNode1'>
+   <incoming href='urn:uuid:806f056b-8bc6-4f5d-8b3f-72df23332e4e'/>
+  </node>
+ </uml:Activity>
+</xmi:XMI>
