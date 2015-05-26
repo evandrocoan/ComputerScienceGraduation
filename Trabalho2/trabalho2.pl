@@ -37,7 +37,7 @@ incluirInformacoesProfissionais(Nome) :-
     write('Seguido por um ponto.'),
     read(AnoDeTermino), 
     
-    write('Quais os Colegas de Profissao? (Insira seus nomes entre \n' ), 
+    write('Quais os Colegas de Profissao? (Insira seus nomes entre ' ), 
     write('aspas simples e separados por virgula) '),
     write('Seguido por um ponto.'),
     read(ColegasDeProfissao),
@@ -83,8 +83,8 @@ incluirInformacoesAcademicas(Nome) :-
     write('Seguido por um ponto.'),
     read(AnoDeTermino), 
     
-    write('Qual o Nome completo do Orientador? '), 
-    write('(Insira entre aspas simples) Seguido por um ponto.'),
+    write('Quais os Colegas de Curso ou Professores? (Insira seus nomes ' ), 
+    write('entre aspas simples e separados por virgula) '),
     read(ColegasDeReferencia),
 
     consult('Trabalho1/bancoDeDados.pl'), 
@@ -109,15 +109,15 @@ incluirInformacoesAcademicas(Nome) :-
  * */
 incluirInformacoesPessoais(Nome) :-
     write('Qual a Dia de Nascimento? '), 
-    write('(Insira separado por virgula: ano,mes,dia) Seguido por um ponto.'),
+    write('Seguido por um ponto.'),
     read(DataDeNascimentoDia),
     
     write('Qual o Mes de Nascimento? '), 
-    write('(Insira separado por virgula: ano,mes,dia) Seguido por um ponto.'),
+    write('Seguido por um ponto.'),
     read(DataDeNascimentoMes),
     
     write('Qual o Ano de Nascimento? '), 
-    write('(Insira separado por virgula: ano,mes,dia) Seguido por um ponto.'),
+    write('Seguido por um ponto.'),
     read(DataDeNascimentoAno),
     
     write('Qual o nome da Cidade? '), 
@@ -218,7 +218,7 @@ privado_ExcluirInformacoesPessoais(Nome) :-
     /* Lista todas as clausulas e grava no arquivo */
     tell('Trabalho1/bancoDeDados.pl'),
     listing(informacoesAcademicas),
-    listing(informacoesPessoais), 
+    listing(informacoesPessoais),  
     listing(informacoesProfissionais), 
     told.
 
@@ -254,7 +254,7 @@ alterarCidade(Nome, Cidade) :-
 alterarTelefone(Nome, Telefone) :-
     consult('Trabalho1/bancoDeDados.pl'), 
     
-    % cria um cópia temporária das informacoesPessoais e paga elas.
+    % cria um cópia temporária das informacoesPessoais e apaga elas.
     informacoesPessoais(Info),
     dadoNaPosicao(NomeDaPessoa, Info, 0),
     NomeDaPessoa == Nome,
@@ -522,7 +522,7 @@ curriculosPelaIdadeCidade(Idade, Cidade, Curriculos) :-
         dadoNaPosicao(NomeDaPessoa, Pessoais, 0),
         qualIdadeDe(NomeDaPessoa, IdadeDaPessoa),
         NomeDaCidade == Cidade, 
-        IdadeDaPessoa > Idade,
+        IdadeDaPessoa > Idade, 
         copy_term(NomeDaPessoa, Nome).
 
     /* Cria uma lista contendo todos os Currículos para cada um dos Nomes.
