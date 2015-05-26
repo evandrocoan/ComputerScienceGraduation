@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20110701' xmlns:uml='http://www.omg.org/spec/UML/20110701'>
+ <documentation exporter='Oracle JDeveloper' exporterVersion='12.1.3.0.0'/>
+ <uml:Activity xmi:type='uml:Activity' xmi:uuid='urn:uuid:7af0f86d-18c0-4c79-af5c-2756e080f938'
+   isAbstract='false'
+   isActive='false'
+   isFinalSpecialization='false'
+   isLeaf='false'
+   isReadOnly='false'
+   isReentrant='true'
+   isSingleExecution='false'
+   name='Activity2'
+   visibility='public'>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:be32d59d-2956-4123-b5fe-820603107608'
+    isLeaf='false'
+    name='ControlFlow1'>
+   <source href='urn:uuid:4f355995-cdb0-4549-8e88-5ede88169774'/>
+   <target href='urn:uuid:ed0f10af-49a1-43a9-8bb4-7675204784d8'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:e59a639c-3093-4378-80c0-f468b23c60a4'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:cbbeadd8-8bba-470c-91ac-8ca8e513c76c'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:a8c34903-464f-4df1-89b9-21fc6451e251'
+    isLeaf='false'
+    name='ControlFlow2'>
+   <source href='urn:uuid:ed0f10af-49a1-43a9-8bb4-7675204784d8'/>
+   <target href='urn:uuid:ccfed0de-c6a1-4332-baaa-5e4088e4947a'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:0f284432-2d7a-422a-a5d6-7bbb0e8a5959'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:31c12269-cdba-4c3a-8b3d-f13cee59e569'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:4fc7900d-9008-450e-bacd-cb880dbcd373'
+    isLeaf='false'
+    name='ControlFlow3'>
+   <source href='urn:uuid:ccfed0de-c6a1-4332-baaa-5e4088e4947a'/>
+   <target href='urn:uuid:e26b6e4f-f149-4223-b05c-bdc570cf2cd6'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:f13da8e9-ad4c-4748-9f7b-35ca9c39509a'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:aa100994-57cf-48cc-882b-2dff52fa81fd'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:51b9c29f-356a-4bd5-97ce-d5841bea4d53'
+    isLeaf='false'
+    name='ControlFlow4'>
+   <source href='urn:uuid:e26b6e4f-f149-4223-b05c-bdc570cf2cd6'/>
+   <target href='urn:uuid:1b3f5ddc-3367-4400-bd69-f2a3ebc8ae54'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:7df96258-6071-46b0-8438-ee5ba3c39204'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:5c9e4bde-d525-468a-9e71-19a5ee4f62ad'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:c18675b5-dc4a-47c5-a6d3-d37edf4330ec'
+    isLeaf='false'
+    name='ControlFlow5'>
+   <source href='urn:uuid:1b3f5ddc-3367-4400-bd69-f2a3ebc8ae54'/>
+   <target href='urn:uuid:5bb6405e-bfd3-4c79-9761-9b3a41188cdf'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:a7887bb9-42bb-4a82-be5d-2d390a5701f8'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:8ff274b2-6205-4691-9f0e-e3f33c6d682f'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:de7984b3-477a-4570-bf17-380d2a30b475'
+    isLeaf='false'
+    name='[s != null]'>
+   <source href='urn:uuid:23efcc4a-fb70-4732-9d84-640447b85b83'/>
+   <target href='urn:uuid:b9969d32-1e0d-4061-bbe6-50a92225491c'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:0161d752-dc05-45f4-b134-72935a0da43b'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:1fac97ba-787e-4ca3-9c77-0e71db94083c'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:54eb03a5-c57c-4d7d-806c-5164c804895d'
+    isLeaf='false'
+    name='ControlFlow7'>
+   <source href='urn:uuid:b9969d32-1e0d-4061-bbe6-50a92225491c'/>
+   <target href='urn:uuid:67d65b9d-0d16-4ae0-89a0-bb8ac9205f8a'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:5304cf35-3a66-4837-97ca-002614289d0d'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:34642153-863e-42b8-8a97-5fd0beeeed05'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:80d7b2cc-e231-4328-814c-681c81cf38b2'
+    isLeaf='false'
+    name='ControlFlow8'>
+   <source href='urn:uuid:67d65b9d-0d16-4ae0-89a0-bb8ac9205f8a'/>
+   <target href='urn:uuid:5bb6405e-bfd3-4c79-9761-9b3a41188cdf'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:1f7fff91-97a6-4021-88d5-2b73fe5492fb'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:9366170a-7efc-44f8-be54-5ea78f1e154c'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:8707e780-0196-437c-8002-0bd09b1db514'
+    isLeaf='false'
+    name='ControlFlow6'>
+   <source href='urn:uuid:5bb6405e-bfd3-4c79-9761-9b3a41188cdf'/>
+   <target href='urn:uuid:23efcc4a-fb70-4732-9d84-640447b85b83'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:b539fd1a-f9cd-4d05-91f8-3f0fdd97c431'
+     value='true'
+     visibility='public'/>
+   <ownedComment xmi:type='uml:Comment' xmi:uuid='urn:uuid:66834cdc-f62c-4ed1-adf9-2a648ae81301'
+     body='uml_atv:HIDDEN'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:8cc079de-c86b-4fe0-a88d-4021f02f2c53'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:1d39971f-9494-428e-a74e-b9e54aaab98b'
+    isLeaf='false'
+    name='[else]'>
+   <source href='urn:uuid:23efcc4a-fb70-4732-9d84-640447b85b83'/>
+   <target href='urn:uuid:866cc26b-19d5-4810-84ee-febdeb1b3f19'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:6ec66ee5-42ce-45e3-be4d-093e14ba6818'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:9aee0b7d-0efb-43d5-997c-f915f8d0ce07'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <edge xmi:type='uml:ControlFlow' xmi:uuid='urn:uuid:17443b66-1bfd-46dc-9a6e-f27202ab2690'
+    isLeaf='false'
+    name='ControlFlow10'>
+   <source href='urn:uuid:866cc26b-19d5-4810-84ee-febdeb1b3f19'/>
+   <target href='urn:uuid:d9edbe29-ef2d-4732-b5fb-35aa74857c6b'/>
+   <guard xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:5cdaa2a8-ff8e-4d9f-9150-422b97a998aa'
+     value='true'
+     visibility='public'/>
+   <weight xmi:type='uml:LiteralString' xmi:uuid='urn:uuid:9b918180-0371-4e45-a65c-f5ac85332f03'
+     value='1'
+     visibility='public'/>
+  </edge>
+  <node xmi:type='uml:InitialNode' xmi:uuid='urn:uuid:4f355995-cdb0-4549-8e88-5ede88169774'
+    isLeaf='false'
+    name='InitialNode1'>
+   <outgoing href='urn:uuid:be32d59d-2956-4123-b5fe-820603107608'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:ed0f10af-49a1-43a9-8bb4-7675204784d8'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='String s = &quot;&quot;'>
+   <incoming href='urn:uuid:be32d59d-2956-4123-b5fe-820603107608'/>
+   <outgoing href='urn:uuid:a8c34903-464f-4df1-89b9-21fc6451e251'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:ccfed0de-c6a1-4332-baaa-5e4088e4947a'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='swimmers = new Vector()]'>
+   <incoming href='urn:uuid:a8c34903-464f-4df1-89b9-21fc6451e251'/>
+   <outgoing href='urn:uuid:4fc7900d-9008-450e-bacd-cb880dbcd373'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:e26b6e4f-f149-4223-b05c-bdc570cf2cd6'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='InputFile f = new InputFile(filename)'>
+   <incoming href='urn:uuid:4fc7900d-9008-450e-bacd-cb880dbcd373'/>
+   <outgoing href='urn:uuid:51b9c29f-356a-4bd5-97ce-d5841bea4d53'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:1b3f5ddc-3367-4400-bd69-f2a3ebc8ae54'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='s= f.readLine()'>
+   <incoming href='urn:uuid:51b9c29f-356a-4bd5-97ce-d5841bea4d53'/>
+   <outgoing href='urn:uuid:c18675b5-dc4a-47c5-a6d3-d37edf4330ec'/>
+  </node>
+  <node xmi:type='uml:MergeNode' xmi:uuid='urn:uuid:5bb6405e-bfd3-4c79-9761-9b3a41188cdf'
+    isLeaf='false'
+    name='OrNode1'>
+   <incoming href='urn:uuid:c18675b5-dc4a-47c5-a6d3-d37edf4330ec'/>
+   <incoming href='urn:uuid:80d7b2cc-e231-4328-814c-681c81cf38b2'/>
+   <outgoing href='urn:uuid:8707e780-0196-437c-8002-0bd09b1db514'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:b9969d32-1e0d-4061-bbe6-50a92225491c'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='swimmers.addElement(new Swimmer(s))'>
+   <incoming href='urn:uuid:de7984b3-477a-4570-bf17-380d2a30b475'/>
+   <outgoing href='urn:uuid:54eb03a5-c57c-4d7d-806c-5164c804895d'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:67d65b9d-0d16-4ae0-89a0-bb8ac9205f8a'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='s= f.readLine()'>
+   <incoming href='urn:uuid:54eb03a5-c57c-4d7d-806c-5164c804895d'/>
+   <outgoing href='urn:uuid:80d7b2cc-e231-4328-814c-681c81cf38b2'/>
+  </node>
+  <node xmi:type='uml:OpaqueAction' xmi:uuid='urn:uuid:866cc26b-19d5-4810-84ee-febdeb1b3f19'
+    isLeaf='false'
+    isLocallyReentrant='false'
+    name='f.close()'>
+   <incoming href='urn:uuid:1d39971f-9494-428e-a74e-b9e54aaab98b'/>
+   <outgoing href='urn:uuid:17443b66-1bfd-46dc-9a6e-f27202ab2690'/>
+  </node>
+  <node xmi:type='uml:DecisionNode' xmi:uuid='urn:uuid:23efcc4a-fb70-4732-9d84-640447b85b83'
+    isLeaf='false'
+    name='OrNode2'>
+   <incoming href='urn:uuid:8707e780-0196-437c-8002-0bd09b1db514'/>
+   <outgoing href='urn:uuid:de7984b3-477a-4570-bf17-380d2a30b475'/>
+   <outgoing href='urn:uuid:1d39971f-9494-428e-a74e-b9e54aaab98b'/>
+   <ownedComment xmi:type='uml:Comment' xmi:uuid='urn:uuid:34bba21c-0e9f-4dc3-9bf1-9cf84010187e'
+     body='uml_atv:HIDDEN'/>
+  </node>
+  <node xmi:type='uml:ActivityFinalNode' xmi:uuid='urn:uuid:d9edbe29-ef2d-4732-b5fb-35aa74857c6b'
+    isLeaf='false'
+    name='ActivityFinalNode1'>
+   <incoming href='urn:uuid:17443b66-1bfd-46dc-9a6e-f27202ab2690'/>
+  </node>
+ </uml:Activity>
+</xmi:XMI>

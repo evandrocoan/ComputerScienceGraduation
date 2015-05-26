@@ -10,10 +10,14 @@ import javax.swing.SwingUtilities;
 
 /**
  * 
- * @author Professional
+ * @author Evandro  Coan
  */
 public class Homebroker
 {
+   private Homebroker()
+   {
+   }
+   
    /**
     * Método principal que inicia a execução do programa.
     * 
@@ -25,15 +29,11 @@ public class Homebroker
       new Homebroker().iniciarSistema( args );
    }
    
-   private Homebroker()
-   {
-   }
-   
    /**
     * Realiza a leitura dos parâmetros passados por linha de comando. Caso não
     * haja nenhum parâmetro, inicia a interface gráfica de login no sistema.
     * 
-    * @param args "Os comandos disponívels:\n" +
+    * @param args "Os comandos disponíveis:\n" +
     *           "teste: abre o programa em mode de teste sem dica" +
     *           "das contas para se logar\n" +
     *           "dica: o mesmo que teste, mas abre o programa " +
@@ -62,7 +62,7 @@ public class Homebroker
                break;
             
             case "ajuda":
-               System.out.println( "Comandos disponívels:\n"
+               System.out.println( "Comandos disponíveis:\n"
                         + "teste: abre o programa em mode de teste sem dica"
                         + "das contas para se logar\n"
                         + "dica: o mesmo que teste, mas abre o programa "
@@ -92,7 +92,8 @@ public class Homebroker
        * Programando um trabalho para o Event Dispatcher Thread. Porque Java
        * Swing não é thread-safe.
        */
-      SwingUtilities.invokeLater( () -> {
+      SwingUtilities.invokeLater( ( ) ->
+      {
          final JanelaDeLogin janelaDeLogin;
          final JanelaDoHomebroker janelaDoHomebroker;
          
@@ -113,7 +114,8 @@ public class Homebroker
        * Programando um trabalho para o Event Dispatcher Thread. Porque Java
        * Swing não é thread-safe.
        */
-      SwingUtilities.invokeLater( () -> {
+      SwingUtilities.invokeLater( ( ) ->
+      {
          final JanelaDeLogin janelaDeLogin;
          final JanelaDoHomebroker janelaDoHomebroker;
          
@@ -134,9 +136,10 @@ public class Homebroker
        * Programando um trabalho para o Event Dispatcher Thread. Porque Java
        * Swing não é thread-safe.
        */
-      SwingUtilities.invokeLater( () -> {
+      SwingUtilities.invokeLater( ( ) ->
+      {
          final JanelaDeLogin janelaDeLogin;
-         final JanelaDoHomebroker janelaDoHomebroker; 
+         final JanelaDoHomebroker janelaDoHomebroker;
          
          janelaDeLogin = JanelaDeLogin.getInstância();
          janelaDoHomebroker = JanelaDoHomebroker.getInstância();
