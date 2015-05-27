@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 /**
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class JanelaDeCadastro extends JFrame
 {

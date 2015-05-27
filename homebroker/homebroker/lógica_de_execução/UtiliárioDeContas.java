@@ -16,7 +16,7 @@ import util.Biblioteca;
 
 /**
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class UtiliárioDeContas
 {

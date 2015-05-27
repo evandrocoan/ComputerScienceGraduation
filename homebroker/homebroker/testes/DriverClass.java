@@ -8,7 +8,7 @@ import homebroker.Homebroker;
 /**
  * Esta classe inicia o programa principal em mode de teste.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class DriverClass
 {

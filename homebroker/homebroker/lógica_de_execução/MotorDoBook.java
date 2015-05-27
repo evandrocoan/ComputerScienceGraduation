@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 /**
  * Cuida da execução do BookDeOfertas.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class MotorDoBook implements Runnable
 {

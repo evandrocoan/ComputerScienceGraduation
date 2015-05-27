@@ -6,7 +6,7 @@ package homebroker.lógica_de_dados;
 /**
  * Representa uma conta de um usário/administrador em um homebroker.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public class Conta
 {

@@ -25,7 +25,7 @@ import util.Biblioteca;
 /**
  * Representa o painel principal da janela principal.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class PainelDoHomebroker extends JPanel
 {

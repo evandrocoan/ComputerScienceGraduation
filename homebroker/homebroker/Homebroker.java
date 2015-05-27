@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public class Homebroker
 {

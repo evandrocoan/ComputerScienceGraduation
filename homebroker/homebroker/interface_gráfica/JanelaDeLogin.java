@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 /**
  * Classe que realiza o login do usuário no sistema.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class JanelaDeLogin extends JFrame
 {

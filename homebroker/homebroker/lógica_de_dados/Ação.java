@@ -8,7 +8,7 @@ package homebroker.lógica_de_dados;
  * uma ação com um nome e valor de mercado. Cada objeto contém também o número
  * de ações que ele representa.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public class Ação
 {

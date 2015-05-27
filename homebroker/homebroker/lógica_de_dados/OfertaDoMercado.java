@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 /**
  * Representa uma oferta de venta ou compra.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public class OfertaDoMercado
 {

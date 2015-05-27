@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 /**
  * Classe que constrói a interface gráfica do book de ofertas.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class PainelDoMonitor extends JPanel
 {

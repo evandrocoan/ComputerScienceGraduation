@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class MotorDoHomebroker
 {

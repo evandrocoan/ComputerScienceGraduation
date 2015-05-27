@@ -11,7 +11,7 @@ import util.Biblioteca;
 /**
  * Representa um inventário de um cliente.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public class Inventario
 {

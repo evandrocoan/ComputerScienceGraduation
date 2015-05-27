@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Inicia a interface gráfica que exibe o book de ofertas com as ordens de
  * compra e venda sendo feitas em tempo real.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class BookDeOfertas
 {

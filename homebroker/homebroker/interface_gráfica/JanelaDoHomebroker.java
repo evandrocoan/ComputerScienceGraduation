@@ -13,7 +13,7 @@ import javax.swing.WindowConstants;
 /**
  * Janela principal que contém o programa e inicia a execução do Homebroker.
  * 
- * @author Evandro  Coan
+ * @author Professional
  */
 public final class JanelaDoHomebroker extends JFrame
 {
