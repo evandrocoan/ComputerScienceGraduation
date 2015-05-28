@@ -173,7 +173,7 @@ public class Principal
       };
       final Grafo grafo = new Grafo();
       
-      grafo.adicionaVérticeArray( nomes );
+      grafo.adicionaVértices( nomes );
       grafo.adicionaVértice( "João1" );
       grafo.adicionaVértice( "João2" );
       grafo.adicionaVértice( "João3" );
@@ -183,7 +183,7 @@ public class Principal
       grafo.adicionaVértice( "João7" );
       grafo.adicionaVértice( "João8" );
       
-      grafo.conectaArrayArray( nomes, nomes );
+      grafo.conecta( nomes, nomes );
       grafo.conecta( "João1", nomes[0] );
       grafo.conecta( "João1", "João2" );
       grafo.conecta( "João2", "João3" );
