@@ -319,4 +319,21 @@ indiceDoElemento([_|Cauda], Elemento, Indice):-
  * */
 comprimentoDeListasComoLista(L,X):-
     maplist(length,L,X).
-	
+
+
+/* Converte um conjunto (a,b,c,...) para um lista [a,b,c,...]
+ * */
+converterConjutoParaLista((A,B), [A|Bs]) :- 
+    converterConjutoParaLista(B, Bs), 
+    !.
+
+converterConjutoParaLista(T, [T]).
+
+
+
+
+
+
+
+
+
