@@ -18,3 +18,5 @@ importarTrabalho2ParteA :- ['Trabalho2/trabalho2ParteA.pl'].
 
 
 
+
+
