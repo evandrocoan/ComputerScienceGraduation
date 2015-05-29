@@ -42,6 +42,41 @@ public final class JanelaDeVendas extends JFrame
    /**
     * Efetua a venda de ações.
     */
+   public void efetuarCompra()
+   {
+      if( !this.motor.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há "
+                  + "nenhuma conta carregada no sistema!" );
+         return;
+      }
+      boolean sucesso = false;
+      
+      while( !sucesso )
+      {
+         final String nome = this.getNome();
+         if( nome == null )
+         {
+            return;
+         }
+         final double preço = this.getPreço( nome );
+         if( preço == 0 )
+         {
+            return;
+         }
+         final int quantidade = this.getQuantidade( nome );
+         if( quantidade == 0 )
+         {
+            return;
+         }
+         sucesso = this.motor.adicionarOfertaDeCompra( preço, quantidade, nome );
+      }
+      
+   }
+   
+   /**
+    * Efetua a venda de ações.
+    */
    public void efetuarVenda()
    {
       if( !this.motor.isAutenticada() )
@@ -74,6 +109,25 @@ public final class JanelaDeVendas extends JFrame
       
    }
    
+   private String getNome()
+   {
+      boolean sucesso = false;
+      String açãoParaVender = null;
+      
+      while( !sucesso )
+      {
+         açãoParaVender =
+                  JOptionPane.showInputDialog( "Insira o nome da "
+                           + "ação que deseja comprar: " );
+         if( açãoParaVender == null )
+         {
+            return null;
+         }
+         sucesso = true;
+      }
+      return açãoParaVender;
+   }
+   
    private String getNomeAção()
    {
       boolean sucesso = false;
@@ -97,6 +151,23 @@ public final class JanelaDeVendas extends JFrame
       return açãoParaVender;
    }
    
+   private double getPreço( final String açãoParaVender )
+   {
+      final String imput =
+               JOptionPane
+                        .showInputDialog( "Insira o preço da ação:", Double
+                                 .toString( this.motor
+                                          .getPreço( açãoParaVender ) ) );
+      if( imput == null )
+      {
+         return 0;
+      }
+      double preço;
+      
+      preço = Double.parseDouble( imput );
+      return preço;
+   }
+   
    private double getPreçoAção( final String açãoParaVender )
    {
       final String imput =
@@ -112,6 +183,29 @@ public final class JanelaDeVendas extends JFrame
       
       preço = Double.parseDouble( imput );
       return preço;
+   }
+   
+   private int getQuantidade( final String açãoParaVender )
+   {
+      boolean sucesso = false;
+      int quantidade = 0;
+      
+      while( !sucesso )
+      {
+         final String imput =
+                  JOptionPane.showInputDialog( "Insira a quantidade da ação:",
+                           Integer.toString( this.motor
+                                    .getQuantidade( açãoParaVender ) ) );
+         if( imput == null )
+         {
+            return 0;
+         }
+         quantidade = (int) Double.parseDouble( imput );
+         // sucesso = this.motor.existeQuantidadeNoInvetário( quantidade );
+         // TODO
+         sucesso = true;
+      }
+      return quantidade;
    }
    
    private int getQuantidadeAção( final String açãoParaVender )

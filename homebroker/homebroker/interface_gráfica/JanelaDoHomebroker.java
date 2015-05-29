@@ -3,8 +3,6 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
-
 import java.awt.Frame;
 
 import javax.swing.JFrame;
@@ -28,20 +26,14 @@ public final class JanelaDoHomebroker extends JFrame
    private final PainelDoHomebroker painelPrincipal;
    
    /**
-    * Motor principal do programa.
-    */
-   private final MotorDoHomebroker motor;
-   
-   /**
     * Construtor que cria a janela principal do programa.
     */
-   private JanelaDoHomebroker( final MotorDoHomebroker motor )
+   private JanelaDoHomebroker()
    {
       super( "HomeBroker Tabajara" );
-      this.motor = motor;
       
       // Adiciona o painel principal nesta janela
-      this.painelPrincipal = PainelDoHomebroker.getInstância( this.motor );
+      this.painelPrincipal = PainelDoHomebroker.getInstância();
       this.painelPrincipal.setDoubleBuffered( true );
       this.add( this.painelPrincipal );
       
@@ -65,8 +57,7 @@ public final class JanelaDoHomebroker extends JFrame
       {
          if( JanelaDoHomebroker.instância == null )
          {
-            final MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
-            JanelaDoHomebroker.instância = new JanelaDoHomebroker( motor );
+            JanelaDoHomebroker.instância = new JanelaDoHomebroker();
          }
       }
       return JanelaDoHomebroker.instância;

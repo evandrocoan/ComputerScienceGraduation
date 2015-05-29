@@ -34,10 +34,16 @@ public final class PainelDoHomebroker extends JPanel
     */
    private static PainelDoHomebroker instância;
    
+   private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
+   
    /**
     * Contém o motor principal.
     */
-   private final MotorDoHomebroker motor;
+   private static final JanelaDeCadastro JANELA_DE_CADASTRO =
+            homebroker.interface_gráfica.JanelaDeCadastro.getInstância();
+   
+   private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
+            .getInstância( PainelDoHomebroker.motor );
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -61,17 +67,16 @@ public final class PainelDoHomebroker extends JPanel
             + "Digite 'b' para para bloquear uma conta de usuário.\n"
             + "Digite 'ov' para enviar uma ordem de venda.\n"
             + "Digite 'oc' para criar um ordem de compra.\n"
+            + "Digite 'ex' para excluir uma conta.\n"
             + "Digite 'c' para para criar uma conta.\n"
             + "Digite 'm' para ver o mercado.\n";
    
    /**
     * Cria um painel para colocar os botões, caixas de texto, ...
     */
-   private PainelDoHomebroker( final MotorDoHomebroker motor )
+   private PainelDoHomebroker()
    {
-      this.motor = motor;
-      
-      // Configura os compomentos
+      // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
       
@@ -92,16 +97,15 @@ public final class PainelDoHomebroker extends JPanel
    }
    
    /**
-    * @param motor o motor do programa.
     * @return instância uma instância da janela de login.
     */
-   public static PainelDoHomebroker getInstância( final MotorDoHomebroker motor )
+   public static PainelDoHomebroker getInstância()
    {
       synchronized( PainelDoHomebroker.class )
       {
          if( PainelDoHomebroker.instância == null )
          {
-            PainelDoHomebroker.instância = new PainelDoHomebroker( motor );
+            PainelDoHomebroker.instância = new PainelDoHomebroker();
          }
       }
       return PainelDoHomebroker.instância;
@@ -110,16 +114,13 @@ public final class PainelDoHomebroker extends JPanel
    private void bloquearUmUsuário()
    {
       // encapsula o motor para evitar o synthetic-access
-      final MotorDoHomebroker motor = this.motor;
-      /**
-       * Programando um trabalho para o Event Dispatcher Thread. Porque Java
-       * Swing não é thread-safe.
-       */
+      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
+      
+      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
+      // Swing não é thread-safe.
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeBloqueio janelaDeCadastro;
-         janelaDeCadastro = JanelaDeBloqueio.getInstância( motor );
-         janelaDeCadastro.efetuarBloqueio();
+         janela.efetuarBloqueio();
       } );
    }
    
@@ -131,15 +132,12 @@ public final class PainelDoHomebroker extends JPanel
    public void cadastrarUsuário()
    {
       // encapsula o motor para evitar o synthetic-access
-      final MotorDoHomebroker motor = this.motor;
-      /**
-       * Programando um trabalho para o Event Dispatcher Thread. Porque Java
-       * Swing não é thread-safe.
-       */
+      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
+      
+      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
+      // Swing não é thread-safe.
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeCadastro janela;
-         janela = JanelaDeCadastro.getInstância( motor );
          janela.efetuarCadastro();
       } );
    }
@@ -224,16 +222,13 @@ public final class PainelDoHomebroker extends JPanel
    private void efetuarCompra()
    {
       // encapsula o motor para evitar o synthetic-access
-      final MotorDoHomebroker motor = this.motor;
-      /**
-       * Programando um trabalho para o Event Dispatcher Thread. Porque Java
-       * Swing não é thread-safe.
-       */
+      final JanelaDeVendas janela = PainelDoHomebroker.JANELA_DE_VENDAS;
+      
+      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
+      // Swing não é thread-safe.
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeCompras janelaDeCompras;
-         janelaDeCompras = JanelaDeCompras.getInstância( motor );
-         janelaDeCompras.efetuarCompra();
+         janela.efetuarCompra();
       } );
    }
    
@@ -243,16 +238,13 @@ public final class PainelDoHomebroker extends JPanel
    private void efetuarVenda()
    {
       // encapsula o motor para evitar o synthetic-access
-      final MotorDoHomebroker motor = this.motor;
-      /**
-       * Programando um trabalho para o Event Dispatcher Thread. Porque Java
-       * Swing não é thread-safe.
-       */
+      final JanelaDeVendas janela = PainelDoHomebroker.JANELA_DE_VENDAS;
+      
+      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
+      // Swing não é thread-safe.
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeVendas janelaDeVendas;
-         janelaDeVendas = JanelaDeVendas.getInstância( motor );
-         janelaDeVendas.efetuarVenda();
+         janela.efetuarVenda();
       } );
    }
    
@@ -284,16 +276,32 @@ public final class PainelDoHomebroker extends JPanel
       case "ov":
          this.efetuarVenda();
          break;
+      case "ex":
+         this.excluirConta();
+         break;
       case "oc":
          this.efetuarCompra();
          break;
       case "m":
-         this.motor.exibirBookDeOfertas();
+         PainelDoHomebroker.motor.exibirBookDeOfertas();
          break;
       default:
          this.imputError();
          break;
       }
+   }
+   
+   private void excluirConta()
+   {
+      // encapsula o motor para evitar o synthetic-access
+      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
+      
+      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
+      // Swing não é thread-safe.
+      SwingUtilities.invokeLater( ( ) ->
+      {
+         janela.excluirConta();
+      } );
    }
    
    private void imputError()
@@ -313,14 +321,15 @@ public final class PainelDoHomebroker extends JPanel
    /**
     * Exibe o inventário da conta atualmente autenticada.
     */
-   public void mostrarInventário()
+   private void mostrarInventário()
    {
-      if( !this.motor.isAutenticada() )
+      if( !PainelDoHomebroker.motor.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há "
                   + "nenhuma conta carregada no sistema!" );
          return;
       }
-      JOptionPane.showMessageDialog( null, this.motor.inventarioToString() );
+      JOptionPane.showMessageDialog( null,
+               PainelDoHomebroker.motor.inventarioToString() );
    }
 }
