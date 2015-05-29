@@ -18,25 +18,44 @@ public final class JanelaDeCadastro extends JFrame
    
    private final MotorDoHomebroker motor;
    
-   private JanelaDeCadastro( final MotorDoHomebroker motor )
+   private JanelaDeCadastro()
    {
-      this.motor = motor;
+      this.motor = MotorDoHomebroker.getInstância();
    }
    
    /**
-    * @param motor o motor do Homebroker.
     * @return instância uma instância da janela de login.
     */
-   public static JanelaDeCadastro getInstância( final MotorDoHomebroker motor )
+   public static JanelaDeCadastro getInstância()
    {
       synchronized( JanelaDeCadastro.class )
       {
          if( JanelaDeCadastro.instância == null )
          {
-            JanelaDeCadastro.instância = new JanelaDeCadastro( motor );
+            JanelaDeCadastro.instância = new JanelaDeCadastro();
          }
       }
       return JanelaDeCadastro.instância;
+   }
+   
+   /**
+    * Efetua a venda de ações.
+    */
+   public void efetuarBloqueio()
+   {
+      if( !this.motor.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há "
+                  + "nenhuma conta carregada no sistema!" );
+         return;
+      }
+      if( !this.motor.isAdministradora() )
+      {
+         JOptionPane.showMessageDialog( null, "Acesso negado! "
+                  + "Você precisa ter privilégio de administrador." );
+         return;
+      }
+      this.solicitarConta();
    }
    
    /**
@@ -79,6 +98,18 @@ public final class JanelaDeCadastro extends JFrame
       
    }
    
+   /**
+    * 
+    */
+   public void excluirConta()
+   {
+      /* TODO @formatter:off
+       * 
+       * 
+       */ //@formatter:on
+      
+   }
+   
    private int getCPF()
    {
       boolean sucesso = false;
@@ -100,7 +131,7 @@ public final class JanelaDeCadastro extends JFrame
             sucesso = String.valueOf( cpf ).length() == 9;
          } catch( final Exception e )
          {
-            // TODO
+            e.printStackTrace();
          }
          nÉsimaVez = true;
       }
@@ -140,7 +171,7 @@ public final class JanelaDeCadastro extends JFrame
             sucesso = true;
          } catch( final Exception e )
          {
-            // TODO
+            e.printStackTrace();
          }
          nÉsimaVez = true;
       }
@@ -156,5 +187,28 @@ public final class JanelaDeCadastro extends JFrame
                         .showInputDialog( "Insira a senha do novo acionista: \n" );
       
       return nome;
+   }
+   
+   private void solicitarConta()
+   {
+      String nome = null;
+      boolean inputError = true;
+      do
+      {
+         nome =
+                  JOptionPane.showInputDialog( ( inputError? ""
+                           : "Usuário inválido!\n\n" )
+                           + this.motor.contasTesteToString()
+                           + "\n\nInsira qual conta será bloqueada: " );
+         
+         if( nome == null )
+         {
+            return;
+         }
+         inputError = this.motor.bloquearConta( nome );
+         
+      } while( !inputError );
+      
+      JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
    }
 }
