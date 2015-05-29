@@ -61,6 +61,7 @@ public final class PainelDoHomebroker extends JPanel
             + "Digite 'b' para para bloquear uma conta de usuário.\n"
             + "Digite 'ov' para enviar uma ordem de venda.\n"
             + "Digite 'oc' para criar um ordem de compra.\n"
+            + "Digite 'ex' para excluir uma conta.\n"
             + "Digite 'c' para para criar uma conta.\n"
             + "Digite 'm' para ver o mercado.\n";
    
@@ -71,7 +72,7 @@ public final class PainelDoHomebroker extends JPanel
    {
       this.motor = motor;
       
-      // Configura os compomentos
+      // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
       
@@ -117,9 +118,9 @@ public final class PainelDoHomebroker extends JPanel
        */
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeBloqueio janelaDeCadastro;
-         janelaDeCadastro = JanelaDeBloqueio.getInstância( motor );
-         janelaDeCadastro.efetuarBloqueio();
+         final JanelaDeBloqueio janela;
+         janela = JanelaDeBloqueio.getInstância( motor );
+         janela.efetuarBloqueio();
       } );
    }
    
@@ -231,9 +232,9 @@ public final class PainelDoHomebroker extends JPanel
        */
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeCompras janelaDeCompras;
-         janelaDeCompras = JanelaDeCompras.getInstância( motor );
-         janelaDeCompras.efetuarCompra();
+         final JanelaDeCompras janela;
+         janela = JanelaDeCompras.getInstância( motor );
+         janela.efetuarCompra();
       } );
    }
    
@@ -250,9 +251,9 @@ public final class PainelDoHomebroker extends JPanel
        */
       SwingUtilities.invokeLater( ( ) ->
       {
-         final JanelaDeVendas janelaDeVendas;
-         janelaDeVendas = JanelaDeVendas.getInstância( motor );
-         janelaDeVendas.efetuarVenda();
+         final JanelaDeVendas janela;
+         janela = JanelaDeVendas.getInstância( motor );
+         janela.efetuarVenda();
       } );
    }
    
@@ -284,6 +285,9 @@ public final class PainelDoHomebroker extends JPanel
       case "ov":
          this.efetuarVenda();
          break;
+      case "ex":
+         this.excluirConta();
+         break;
       case "oc":
          this.efetuarCompra();
          break;
@@ -294,6 +298,22 @@ public final class PainelDoHomebroker extends JPanel
          this.imputError();
          break;
       }
+   }
+   
+   private void excluirConta()
+   {
+      // encapsula o motor para evitar o synthetic-access
+      final MotorDoHomebroker motor = this.motor;
+      /**
+       * Programando um trabalho para o Event Dispatcher Thread. Porque Java
+       * Swing não é thread-safe.
+       */
+      SwingUtilities.invokeLater( ( ) ->
+      {
+         final JanelaDeBloqueio janela;
+         janela = JanelaDeBloqueio.getInstância( motor );
+         janela.excluirConta();
+      } );
    }
    
    private void imputError()
@@ -313,7 +333,7 @@ public final class PainelDoHomebroker extends JPanel
    /**
     * Exibe o inventário da conta atualmente autenticada.
     */
-   public void mostrarInventário()
+   private void mostrarInventário()
    {
       if( !this.motor.isAutenticada() )
       {

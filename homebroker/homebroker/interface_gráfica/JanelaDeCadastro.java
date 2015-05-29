@@ -25,7 +25,7 @@ public final class JanelaDeCadastro extends JFrame
    
    /**
     * @param motor o motor do Homebroker.
-    * @return instância uma intância da janela de login.
+    * @return instância uma instância da janela de login.
     */
    public static JanelaDeCadastro getInstância( final MotorDoHomebroker motor )
    {

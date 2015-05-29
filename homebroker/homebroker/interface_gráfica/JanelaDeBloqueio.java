@@ -25,7 +25,7 @@ public final class JanelaDeBloqueio extends JFrame
    
    /**
     * @param motor o motor do Homebroker.
-    * @return instância uma intância desta janela.
+    * @return instância uma instância desta janela.
     */
    public static JanelaDeBloqueio getInstância( final MotorDoHomebroker motor )
    {
@@ -57,6 +57,18 @@ public final class JanelaDeBloqueio extends JFrame
          return;
       }
       this.solicitarConta();
+   }
+   
+   /**
+    * 
+    */
+   public void excluirConta()
+   {
+      /* TODO @formatter:off
+       * 
+       * 
+       */ //@formatter:on
+      
    }
    
    private void solicitarConta()
