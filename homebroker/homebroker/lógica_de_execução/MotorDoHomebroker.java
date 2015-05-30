@@ -3,12 +3,11 @@
  */
 package homebroker.lógica_de_execução;
 
-import homebroker.lógica_de_dados.Conta;
-import homebroker.lógica_de_dados.Inventario;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import util.UtiliárioDeContas;
 
 /**
  * @author Professional
@@ -28,11 +27,6 @@ public final class MotorDoHomebroker
    private static final MotorDoHomebroker INSTÂNCIA = new MotorDoHomebroker();
    
    /**
-    * Classe responsável pelo controle da lógica de dados do BookDeOfertas.
-    */
-   private final MotorDoBook motorDoBook = MotorDoBook.getInstance();
-   
-   /**
     * As contasTeste que serão utilizadas para simular a adição de contas no
     * sistema, isto é, as contas criadas somente existirão temporariamente.
     */
@@ -42,6 +36,8 @@ public final class MotorDoHomebroker
     * A conta para qual se estará operando o inventário e no mercado de ações.
     */
    private transient Conta contaAutenticada;
+   
+   private final BookDeOfertas bookDeOfertas;
    
    /**
     * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
@@ -61,9 +57,7 @@ public final class MotorDoHomebroker
       {
          throw new IllegalStateException( "Objeto já instanciado!" );
       }
-      // Liga o book de ofertas
-      final Thread processoDoBook = new Thread( this.motorDoBook );
-      processoDoBook.start();
+      this.bookDeOfertas = BookDeOfertas.getInstância();
       
       // Cria contas fictícias
       this.contasTeste = UtiliárioDeContas.criarContasFicticia( 30, "123" );
@@ -90,14 +84,22 @@ public final class MotorDoHomebroker
    public boolean adicionarConta( final double saldo, final int cpf,
             final String nome, final String senha )
    {
-      return this.contasTeste.add( new Conta( nome, senha, saldo, false,
-               new Inventario() ) );
+      return this.contasTeste.add( new Conta( nome, senha, saldo, false, null 
+      ) );
    }
    
+   /**
+    * @param preço o preço da ação.
+    * @param quantidade a quantidade de ações.
+    * @param nome o nome a ação.
+    *
+    * @return true caso a operação tenha sucesso.
+    */
    public boolean adicionarOfertaDeCompra( final double preço,
             final int quantidade, final String nome )
    {
-      return this.motorDoBook.adicionarOfertaDeCompra( preço, quantidade, nome );
+      return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade,
+               nome );
    }
    
    /**
@@ -110,7 +112,8 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeVenda( final double preço,
             final int quantidade, final String nome )
    {
-      return this.motorDoBook.adicionarOfertaDeVenda( preço, quantidade, nome );
+      return this.bookDeOfertas
+               .adicionarOfertaDeVenda( preço, quantidade, nome );
    }
    
    public boolean bloquearConta( final String nome )
@@ -127,22 +130,20 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * Exibe o book de ofertas.
+    * Dado o código de uma oferta, informa se existem novas ofertas lançadas no
+    * mercado a partir da oferta informada.
+    *
+    * @param númeroDeOfertas a última oferta visualizada
+    * @return true se existem novas ofertas, false caso contrário.
+    * @see BookDeOfertas#existemNovasOfertas(int)
     */
-   public void exibirBookDeOfertas()
+   public boolean existemNovasOfertas( final int númeroDeOfertas )
    {
-      if( MotorDoHomebroker.LOG.isLoggable( Level.SEVERE ) )
-      {
-         if( this.motorDoBook == null )
-         {
-            MotorDoHomebroker.LOG.severe( "motorDoBook é null!" );
-         }
-      }
-      this.motorDoBook.exibirBookDeOfertas();
+      return this.bookDeOfertas.existemNovasOfertas( númeroDeOfertas );
    }
    
    /**
-    * {@link homebroker.lógica_de_dados.Conta#existeNoInvetário(String)}
+    * {@link homebroker.lógica_de_execução.Conta#existeNoInvetário(String)}
     *
     * @param açãoParaVender o nome da ação.
     *
@@ -154,7 +155,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * {@link homebroker.lógica_de_dados.Conta#existeQuantidade(int)}
+    * {@link homebroker.lógica_de_execução.Conta#existeQuantidade(int)}
     *
     * @param quantidade a quantidade de ações.
     *
@@ -166,7 +167,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * {@link homebroker.lógica_de_dados.Conta#getPreço(String)}
+    * {@link homebroker.lógica_de_execução.Conta#getPreço(String)}
     *
     * @param açãoParaVender o nome da ação.
     *
@@ -178,7 +179,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * {@link homebroker.lógica_de_dados.Conta#getQuantidade(String)}
+    * {@link homebroker.lógica_de_execução.Conta#getQuantidade(String)}
     *
     * @param açãoParaVender o nome da ação para vender.
     *
@@ -190,7 +191,8 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * @return @see {@link homebroker.lógica_de_dados.Conta#inventarioToString()}
+    * @return @see
+    *         {@link homebroker.lógica_de_execução.Conta#inventarioToString()}
     */
    public String inventarioToString()
    {
@@ -235,5 +237,15 @@ public final class MotorDoHomebroker
          }
       }
       return false;
+   }
+   
+   /**
+    * @param indice qual oferta buscar
+    * @return açãoEmOferta uma String representando uma ação em oferta.
+    * @see BookDeOfertas#ofertaToString(int)
+    */
+   public String ofertaToString( final int indice )
+   {
+      return this.bookDeOfertas.ofertaToString( indice );
    }
 }

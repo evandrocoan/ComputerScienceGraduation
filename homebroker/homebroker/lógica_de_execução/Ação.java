@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker.lógica_de_dados;
+package homebroker.lógica_de_execução;
 
 /**
  * Representa um ação do mercado de valores. Cada objeto desta classe representa

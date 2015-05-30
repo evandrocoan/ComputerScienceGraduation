@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package homebroker.lógica_de_execução;
+package homebroker.interface_gráfica;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -16,25 +16,26 @@ import javax.swing.JScrollPane;
 
 /**
  * Classe que constrói a interface gráfica do book de ofertas.
- * 
+ *
  * @author Professional
  */
-public final class PainelDoMonitor extends JPanel
+public final class PainelDaJanelaDeOfertas extends JPanel
 {
    /**
-    * Resposável por realizar o debug do programa, quando ativado. Deve ser
-    * instânciado antes que o construtor desta classe, pois este construtor
-    * precisa de deste objeto já instânciado para ser monitorado pelo log.
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser
+    * instanciado antes que o construtor desta classe, pois este construtor
+    * precisa de deste objeto já instanciado para ser monitorado pelo log.
     */
-   private static final Logger LOG = Logger.getLogger( PainelDoMonitor.class
-            .getName() );
+   private static final Logger LOG = Logger
+            .getLogger( PainelDaJanelaDeOfertas.class.getName() );
    
    /**
-    * Por padrão, este tipo de instânciação é thread safe.
+    * Por padrão, este tipo de instanciação é thread safe.
     */
-   private static final PainelDoMonitor INSTÂNCIA = new PainelDoMonitor();
+   private static final PainelDaJanelaDeOfertas INSTÂNCIA =
+            new PainelDaJanelaDeOfertas();
    
-   final DefaultListModel< String > modeloPadrãoDeLista =
+   private final DefaultListModel< String > modeloPadrãoDeLista =
             new DefaultListModel<>();
    
    private final JList< String > listaDeOfertas = new JList<>(
@@ -43,11 +44,11 @@ public final class PainelDoMonitor extends JPanel
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
     */
-   private PainelDoMonitor()
+   private PainelDaJanelaDeOfertas()
    {
-      PainelDoMonitor.LOG.setLevel( Level.OFF );
+      PainelDaJanelaDeOfertas.LOG.setLevel( Level.OFF );
       
-      if( PainelDoMonitor.LOG.isLoggable( Level.SEVERE ) )
+      if( PainelDaJanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
          JOptionPane.showMessageDialog( null,
                   "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
@@ -65,8 +66,18 @@ public final class PainelDoMonitor extends JPanel
    /**
     * @return the instância
     */
-   public static PainelDoMonitor getInstância()
+   public static PainelDaJanelaDeOfertas getInstância()
    {
-      return PainelDoMonitor.INSTÂNCIA;
+      return PainelDaJanelaDeOfertas.INSTÂNCIA;
+   }
+   
+   public void adicionarOferta( final String ofertaDeMercado )
+   {
+      this.modeloPadrãoDeLista.addElement( ofertaDeMercado );
+   }
+   
+   public int tamanhoDaLista()
+   {
+      return this.modeloPadrãoDeLista.getSize();
    }
 }
