@@ -45,6 +45,9 @@ public final class PainelDoHomebroker extends JPanel
    private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
             .getInstância( PainelDoHomebroker.motor );
    
+   private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas
+            .getInstância();
+   
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
     */
@@ -76,6 +79,11 @@ public final class PainelDoHomebroker extends JPanel
     */
    private PainelDoHomebroker()
    {
+      // Liga o book de ofertas
+      final Thread processoDoBook =
+               new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
+      processoDoBook.start();
+      
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
@@ -295,7 +303,7 @@ public final class PainelDoHomebroker extends JPanel
          this.efetuarCompra();
          break;
       case "m":
-         PainelDoHomebroker.motor.exibirBookDeOfertas();
+         this.exibirBookDeOfertas();
          break;
       default:
          this.imputError();
@@ -318,6 +326,14 @@ public final class PainelDoHomebroker extends JPanel
             janela.excluirConta();
          }
       } );
+   }
+   
+   /**
+    * Exibe o book de ofertas.
+    */
+   private void exibirBookDeOfertas()
+   {
+      PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
    }
    
    private void imputError()

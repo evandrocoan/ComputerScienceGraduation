@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker.lógica_de_dados;
+package homebroker.lógica_de_execução;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
+ *
  * Inicia a interface gráfica que exibe o book de ofertas com as ordens de
  * compra e venda sendo feitas em tempo real.
- * 
+ *
  * @author Professional
  */
 public final class BookDeOfertas
@@ -51,8 +51,8 @@ public final class BookDeOfertas
    
    /**
     * Serve para implementação do padrão de projeto singleton.
-    * 
-    * @return INSTANCE a única instancia existe do BookDeOfertas.
+    *
+    * @return INSTANCE a única instância existe do BookDeOfertas.
     */
    public static BookDeOfertas getInstância()
    {
@@ -68,9 +68,9 @@ public final class BookDeOfertas
    
    /**
     * Cria uma ordem de venda de uma ação no book de ofertas.
-    * 
+    *
     * @param preço o preço da oferta
-    * @param quantidade a quatidada
+    * @param quantidade a quantidade
     * @param açãoAComprar o nome da ação
     * @return true se a oferta foi adicionada com sucesso.
     */
@@ -84,7 +84,7 @@ public final class BookDeOfertas
    /**
     * Dado o código de uma oferta, informa se existem novas ofertas lançadas no
     * mercado a partir da oferta informada.
-    * 
+    *
     * @param ultimaOferta a última oferta visualizada
     * @return true se existem novas ofertas, false caso contrário.
     */

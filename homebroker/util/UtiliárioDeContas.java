@@ -1,18 +1,16 @@
 /**
  * 
  */
-package homebroker.lógica_de_execução;
+package util;
 
-import homebroker.lógica_de_dados.Ação;
-import homebroker.lógica_de_dados.Conta;
-import homebroker.lógica_de_dados.Inventario;
+import homebroker.lógica_de_execução.Ação;
+import homebroker.lógica_de_execução.Conta;
+import homebroker.lógica_de_execução.Inventario;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import util.Biblioteca;
 
 /**
  * 

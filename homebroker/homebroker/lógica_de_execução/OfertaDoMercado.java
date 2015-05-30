@@ -1,7 +1,7 @@
 /**
  * Pacote principal que contém o Homebroker.
  */
-package homebroker.lógica_de_dados;
+package homebroker.lógica_de_execução;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
