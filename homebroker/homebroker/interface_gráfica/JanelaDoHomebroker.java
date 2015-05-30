@@ -83,11 +83,13 @@ public final class JanelaDoHomebroker extends JFrame
       {
       case "login":
          this.loginNoSistemaInterno( "" );
+         this.setVisible( true );
          break;
       
       case "teste":
          JOptionPane.showMessageDialog( null, "Sessão de teste!" );
          this.motor.loginNoSistemaChecagem( "admin", "admin" );
+         this.setVisible( true );
          break;
       
       case "dica":
@@ -97,6 +99,7 @@ public final class JanelaDoHomebroker extends JFrame
          dica.append( '\n' ).append( this.motor.contasTesteToString() );
          
          this.loginNoSistemaInterno( dica.toString() );
+         this.setVisible( true );
          break;
       
       default:
@@ -141,6 +144,5 @@ public final class JanelaDoHomebroker extends JFrame
       {
          System.exit( 0 );
       }
-      this.setVisible( true );
    }
 }

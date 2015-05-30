@@ -3,11 +3,12 @@
  */
 package homebroker.lógica_de_execução;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import util.UtiliárioDeContas;
+import util.Biblioteca;
 
 /**
  * @author Professional
@@ -60,7 +61,7 @@ public final class MotorDoHomebroker
       this.bookDeOfertas = BookDeOfertas.getInstância();
       
       // Cria contas fictícias
-      this.contasTeste = UtiliárioDeContas.criarContasFicticia( 30, "123" );
+      this.criarContasFicticia( 30, "123" );
    }
    
    /**
@@ -84,8 +85,8 @@ public final class MotorDoHomebroker
    public boolean adicionarConta( final double saldo, final int cpf,
             final String nome, final String senha )
    {
-      return this.contasTeste.add( new Conta( nome, senha, saldo, false, null 
-      ) );
+      return this.contasTeste
+               .add( new Conta( nome, senha, saldo, false, null ) );
    }
    
    /**
@@ -118,15 +119,117 @@ public final class MotorDoHomebroker
    
    public boolean bloquearConta( final String nome )
    {
-      return UtiliárioDeContas.bloquearConta( nome, this.contasTeste );
+      for( final Conta conta: this.contasTeste )
+      {
+         if( conta.getNome().equals( nome ) )
+         {
+            return conta.definirBloqueada();
+         }
+      }
+      return false;
    }
    
    /**
-    * @return string uma string representando as contas teste.
+    * Transforma um ArrayList de contas e uma String
+    *
+    * @return texto um texto contendo os nomes das contas de teste criadas.
     */
    public String contasTesteToString()
    {
-      return UtiliárioDeContas.contasTesteToString( this.contasTeste );
+      final StringBuffer texto = new StringBuffer();
+      
+      int contador = 0;
+      for( final Conta conta: this.contasTeste )
+      {
+         texto.append( conta.getNome() ).append(
+                  ( conta.isBloqueada()? "(1)" : "(0)" ) );
+         texto.append( ", " );
+         if( Biblioteca.quebrarLinha( contador ) )
+         {
+            texto.append( '\n' );
+         }
+         contador = contador + 1;
+      }
+      return texto.append( "\n(1) = Bloqueada, (0) = Desbloqueada." )
+               .toString();
+   }
+   
+   /**
+    * Cria contas teste para o sistema.
+    *
+    * @param quantidade a quantidade de contas teste para se criar
+    * @param senha senha que as contas de teste terão
+    */
+   public void criarContasFicticia( final int quantidade, final String senha )
+   {
+      final ArrayList< Conta > contasTeste = new ArrayList<>();
+      contasTeste.add( new Conta( "admin", "admin", 2000.5 * Biblioteca
+               .gerarNumeroAleatorio(), true, new Inventario() ) );
+      
+      this.criarInventarioFicticio( contasTeste.get( 0 ), quantidade );
+      
+      Conta contaTeste;
+      
+      for( int i = 0; i < quantidade; i++ )
+      {
+         contaTeste =
+                  new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
+                           2000.5 * Biblioteca.gerarNumeroAleatorio(), false,
+                           new Inventario() );
+         this.criarInventarioFicticio( contaTeste, quantidade );
+         
+         contasTeste.add( contaTeste );
+      }
+      if( MotorDoHomebroker.LOG.isLoggable( Level.SEVERE ) )
+      {
+         MotorDoHomebroker.LOG.severe( "Estou em criarContasFictícias "
+                  + contasTeste.get( 0 ).getNome() );
+      }
+      this.contasTeste = contasTeste;
+   }
+   
+   /**
+    * Cria um inventário fictício de ações contendo 5 ações fictícias.
+    *
+    * @param conta a conta que irá receber as ações fictícias.
+    * @param quantidade a quantidade de ações fictícias para se criar.
+    */
+   public void criarInventarioFicticio( final Conta conta, final int quantidade )
+   {
+      Ação ação;
+      
+      for( int i = 0; i < ( quantidade / 5 ); i++ )
+      {
+         ação =
+                  new Ação( 2.2 + Biblioteca.gerarNumeroAleatorio(),
+                           10 + Biblioteca.gerarNumeroAleatorio(),
+                           "Tabajara SA" + Biblioteca.gerarNumeroAleatorio() );
+         conta.getInventario().adicionarAoInventario( ação );
+         
+         ação =
+                  new Ação( 22.2 + Biblioteca.gerarNumeroAleatorio(),
+                           100 + Biblioteca.gerarNumeroAleatorio(),
+                           "Tabajara SO" + Biblioteca.gerarNumeroAleatorio() );
+         conta.getInventario().adicionarAoInventario( ação );
+         
+         ação =
+                  new Ação( 200.2 + Biblioteca.gerarNumeroAleatorio(),
+                           1000 + Biblioteca.gerarNumeroAleatorio(),
+                           "Tabajara SP" + Biblioteca.gerarNumeroAleatorio() );
+         conta.getInventario().adicionarAoInventario( ação );
+         
+         ação =
+                  new Ação( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
+                           10000 + Biblioteca.gerarNumeroAleatorio(),
+                           "Tabajara ST" + Biblioteca.gerarNumeroAleatorio() );
+         conta.getInventario().adicionarAoInventario( ação );
+         
+         ação =
+                  new Ação( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
+                           10000 + Biblioteca.gerarNumeroAleatorio(),
+                           "Tabajara SS" + Biblioteca.gerarNumeroAleatorio() );
+         conta.getInventario().adicionarAoInventario( ação );
+      }
    }
    
    /**
