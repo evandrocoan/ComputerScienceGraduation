@@ -13,17 +13,17 @@ import java.util.logging.Logger;
 /**
  * Representa um Grafo. Implementa as ações básicas descritas em
  * http://www.inf.ufsc.br/grafos/represen/algoritmos/grafo.html.
- * 
+ *
  * Esta implementação pode ser feita em qualquer linguagem de programação, mas
  * deve explicitamente apresentar a estrutura de grafos. Por exemplo, se for
  * feita numa linguagem de programação orientada a objetos deve existir uma
  * classe Grafo.
- * 
+ *
  * Os critérios de avaliação incluem:
- * 
+ *
  * estrutura do código; legibilidade do código; eficácia e eficiência (esperada
  * complexidade O(1) para as operações básicas)
- * 
+ *
  * @author Evandro  Coan
  */
 public class Grafo
@@ -52,8 +52,8 @@ public class Grafo
    
    /**
     * Cria um grafo contendo o vértice passados como parâmetro.
-    * 
-    * @param vértice um vértices.
+    *
+    * @param vértice um vértice.
     */
    public Grafo( final Object vértice )
    {
@@ -69,8 +69,8 @@ public class Grafo
    }
    
    /**
-    * Adiciona um novo vértice em G.
-    * 
+    * Adiciona um novo vértice neste Grafo.
+    *
     * @param vértice um vértice.
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
@@ -85,11 +85,11 @@ public class Grafo
    }
    
    /**
-    * Adiciona um novo vértice em G, conectado a vários vértices.
-    * 
+    * Adiciona um novo vértice neste Grafo, conectado a vários vértices.
+    *
     * @param vértice um vértice.
     * @param adjacentes uma enumeração de vértices adjacentes.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
    public void adicionaVérticeConectado( final Object vértice,
@@ -105,11 +105,11 @@ public class Grafo
    }
    
    /**
-    * Adiciona um novo vértice em G, conectado a vários vértices.
-    * 
+    * Adiciona um novo vértice neste Grafo, conectado a vários vértices.
+    *
     * @param vértice um vértice.
     * @param adjacentes um arranjo de vértices adjacentes.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
    public void adicionaVérticeConectado( final Object vértice,
@@ -125,11 +125,11 @@ public class Grafo
    }
    
    /**
-    * Adiciona um novo vértice em G, conectado a vários vértices.
-    * 
+    * Adiciona um novo vértice neste Grafo, conectado a vários vértices.
+    *
     * @param vértice um vértice.
     * @param adjacentes um vetor de vértices adjacentes.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
     */
    public void adicionaVérticeConectado( final Object vértice,
@@ -147,10 +147,10 @@ public class Grafo
    }
    
    /**
-    * Adiciona vários novos vértices em G.
-    * 
+    * Adiciona vários novos vértices neste Grafo.
+    *
     * @param vértices uma enumeração de vértices para se adicionar.
-    * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
+    * @throws ExeçãoVérticeJáExistente caso algum vértice já exista.
     */
    public void adicionaVértices( final Enumeration< ? > vértices )
             throws ExeçãoVérticeJáExistente
@@ -166,10 +166,10 @@ public class Grafo
    }
    
    /**
-    * Adiciona vários novos vértices em G.
-    * 
+    * Adiciona vários novos vértices neste Grafo.
+    *
     * @param vértices um arranjo de vértices.
-    * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
+    * @throws ExeçãoVérticeJáExistente caso algum vértice já exista.
     */
    public void adicionaVértices( final Object[] vértices )
             throws ExeçãoVérticeJáExistente
@@ -181,10 +181,10 @@ public class Grafo
    }
    
    /**
-    * Adiciona vários novos vértices em G.
-    * 
+    * Adiciona vários novos vértices neste Grafo.
+    *
     * @param vértices um vetor de vértices.
-    * @throws ExeçãoVérticeJáExistente caso o vértice já exista.
+    * @throws ExeçãoVérticeJáExistente caso algum vértice já exista.
     */
    public void adicionaVértices( final Vector< ? > vértices )
             throws ExeçãoVérticeJáExistente
@@ -200,9 +200,9 @@ public class Grafo
    
    /**
     * Retorna os vértices adjacentes de um dado vértice.
-    * 
-    * @param vértice um vértice.
-    * @return os vértices como uma enumeração.
+    *
+    * @param vértice um vértice pertencente a este Grafo.
+    * @return os vértices como um conjunto da interface Set<>().
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
     */
    public Set< Object > adjacentes( final Object vértice )
@@ -217,9 +217,9 @@ public class Grafo
    
    /**
     * Retorna os vértices adjacentes de um dado vértice.
-    * 
-    * @param vértice um vértice do grafo.
-    * @return os vértices com um array.
+    *
+    * @param vértice um vértice pertencente a este Grafo.
+    * @return os vértices como um array.
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
     */
    public Object[] adjacentesEmArranjo( final Object vértice )
@@ -239,11 +239,11 @@ public class Grafo
    }
    
    /**
-    * Conecta os vértices v1 em uma enumeração de vértices em G.
-    * 
-    * @param vértice1 o primeiro vértice a conectar.
-    * @param vértices uma enumeração de vértices para conectar.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * Conecta um vértice1 em outros vértices pertencentes a este Grafo.
+    *
+    * @param vértice1 o primeiro vértice.
+    * @param vértices uma enumeração de vértices.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
    public void conecta( final Object vértice1, final Enumeration< ? > vértices )
             throws ExeçãoVérticeNãoExistente
@@ -255,11 +255,11 @@ public class Grafo
    }
    
    /**
-    * Conecta os vértices v1 e v2 em G.
-    * 
-    * @param vértice1 o primeiro vértice a conectar.
-    * @param vértice2 o segundo vértice a conectar.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * Conecta dois vértices pertencentes a este Grafo.
+    *
+    * @param vértice1 o primeiro vértice.
+    * @param vértice2 o segundo vértice.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
    public void conecta( final Object vértice1, final Object vértice2 )
             throws ExeçãoVérticeNãoExistente
@@ -282,11 +282,11 @@ public class Grafo
    }
    
    /**
-    * Conecta os vértices v1 em um arranjo de vértices em G.
-    * 
-    * @param vértice1 o primeiro vértice a conectar.
-    * @param vértices um array de vértices para conectar.
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    * Conecta um vértice1 em outros vértices pertencentes a este Grafo.
+    *
+    * @param vértice1 o primeiro vértice.
+    * @param vértices um array de vértices.
+    * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
    public void conecta( final Object vértice1, final Object[] vértices )
             throws ExeçãoVérticeNãoExistente
@@ -298,11 +298,10 @@ public class Grafo
    }
    
    /**
-    * Conecta todos os vértices do arranjo vértices1 em todos os vértices do
-    * arranjo vértice2.
-    * 
-    * @param vértices1 um array de vértices.
-    * @param vértices2 um array de vértices.
+    * Conecta todos os vértices1 em todos os vértices2.
+    *
+    * @param vértices1 o primeiro array de vértices.
+    * @param vértices2 o segundo array de vértices.
     * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
    public void conecta( final Object[] vértices1, final Object[] vértices2 )
@@ -318,10 +317,10 @@ public class Grafo
    }
    
    /**
-    * Informa se um dado vértice existe nesse grafo.
-    * 
+    * Informa se um vértice existe nesse grafo.
+    *
     * @param vértice um vértice.
-    * @return true se existe, false caso contrário.
+    * @return true caso exista, false caso contrário.
     */
    public boolean contémVertice( final Object vértice )
    {
@@ -329,8 +328,8 @@ public class Grafo
    }
    
    /**
-    * Desconecta dois vértices.
-    * 
+    * Desconecta dois vértices pertencentes a este Grafo.
+    *
     * @param vértice1 o primeiro vértice.
     * @param vértice2 o segundo vértice.
     * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
@@ -358,8 +357,8 @@ public class Grafo
    /**
     * Verifica se este Grafo é uma árvore, ou seja, verifica se não há ciclos e
     * se este é um grafo conexo.
-    * 
-    * @return true se é arvore, false caso contrário.
+    *
+    * @return true caso seja uma arvore, false caso contrário.
     */
    public boolean éÁrvore()
    {
@@ -367,8 +366,9 @@ public class Grafo
    }
    
    /**
-    * Verifica se cada vértice de G está conectados a todos os outros vértices.
-    * 
+    * Verifica se este Grafo é completo, ou seja, caso todos os vértices deste
+    * Grafo estão conectados a todos os outros vértices.
+    *
     * @return true caso este grafo seja completo, false caso contrário.
     * @throws ExeçãoVérticeNãoExistente caso esta estrutura não represente um
     *            grafo, isto é, não contenha vértices.
@@ -395,10 +395,10 @@ public class Grafo
    }
    
    /**
-    * Verifica se existe pelo menos um caminho que entre cada par de vértices
-    * deste grafo.
-    * 
-    * @return true se este grafo é conexo, false caso contrário.
+    * Verifica se este Grafo é conexo, ou seja, caso existe pelo menos um
+    * caminho que entre cada par de vértices deste grafo.
+    *
+    * @return true caso este grafo seja conexo, false caso contrário.
     */
    public boolean éConexo()
    {
@@ -406,10 +406,10 @@ public class Grafo
    }
    
    /**
-    * Verifica se todos os vértices de G possuem o mesmo grau, ou seja, se este
-    * é um grafo regular.
-    * 
-    * @return true se este é um grafo regular, false caso contrário.
+    * Verifica se este grafo é regular, ou seja, caso todos os vértices deste
+    * Grafo possuam o mesmo grau.
+    *
+    * @return true caso este seja um grafo regular, false caso contrário.
     * @throws ExeçãoVérticeNãoExistente caso esta estrutura não represente um
     *            grafo, isto é, não contenha vértices.
     */
@@ -432,11 +432,11 @@ public class Grafo
    }
    
    /**
-    * Verifica se dois vértices estão conectados.
-    * 
+    * Verifica se dois vértices deste Grafo estão conectados.
+    *
     * @param vértice1 o primeiro vértice.
     * @param vértice2 o segundo vértice.
-    * @return true se conectados, false caso contrário.
+    * @return true caso estejam conectados, false caso contrário.
     * @throws ExeçãoVérticeNãoExistente caso algum vértice não seja encontrado.
     */
    public boolean estãoConectados( final Object vértice1, final Object vértice2 )
@@ -457,24 +457,56 @@ public class Grafo
    }
    
    /**
-    * Retorna um conjunto contendo todos os vértices deste Grafo que são
-    * transitivamente alcançáveis partindo-se do vértice.
-    * 
+    * Retorna o fecho transitivo a partir de um vértice deste Grafo. Ou seja, um
+    * conjunto contendo todos os vértices deste Grafo que são transitivamente
+    * alcançáveis partindo-se de um vértice.
+    *
     * @param vértice um vértice deste grafo.
-    * @return um conjunto contendo o fecho transitivo.
+    * @return um conjunto da interface Set<>().
     */
    public Set< Object > fechoTransitivo( final Object vértice )
    {
       final Set< Object > jáVisitados = new HashSet<>();
       final Set< Object > fechoTransitivo = new HashSet<>();
       fechoTransitivo.add( vértice );
-      return this
-               .procuraFechoTransitivo( vértice, fechoTransitivo, jáVisitados );
+      return this.fechoTransitivoBusca( vértice, fechoTransitivo, jáVisitados );
+   }
+   
+   private Set< Object > fechoTransitivoBusca( final Object vértice,
+            final Set< Object > fechoTransitivo, final Set< Object > jáVisitados )
+   {
+      jáVisitados.add( vértice );
+      
+      Collection< Object > adjacentes = new HashSet<>();
+      try
+      {
+         adjacentes = this.adjacentes( vértice );
+         
+      } catch( final ExeçãoVérticeNãoExistente e )
+      {
+         e.printStackTrace();
+      }
+      final Iterator< Object > iterador = adjacentes.iterator();
+      
+      while( iterador.hasNext() )
+      {
+         final Object objeto = iterador.next();
+         if( !jáVisitados.contains( objeto ) )
+         {
+            if( GrafoTest.LOG.isLoggable( Level.FINE ) )
+            {
+               System.out.println( "Objeto: " + objeto );
+            }
+            fechoTransitivo.add( objeto );
+            this.fechoTransitivoBusca( objeto, fechoTransitivo, jáVisitados );
+         }
+      }
+      return fechoTransitivo;
    }
    
    /**
-    * Retorna o número de vértices adjacentes a v em G.
-    * 
+    * Retorna o número de vértices adjacentes a um vértice neste Grafo.
+    *
     * @param vértice um vértice.
     * @return um inteiro.
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
@@ -496,8 +528,8 @@ public class Grafo
    
    /**
     * Verifica se este grafo contém ciclos.
-    * 
-    * @return true se este grafo contém ciclos.
+    *
+    * @return true caso contenha ciclos, false caso contrário.
     */
    public boolean háCiclos()
    {
@@ -514,7 +546,7 @@ public class Grafo
          
          if( !vérticesJáVisitados.contains( vérticeAtual ) )
          {
-            if( this.háCiclosRecursivo( vérticeAtual, vérticeAtual,
+            if( this.háCiclosBusca( vérticeAtual, vérticeAtual,
                      vérticesJáVisitados, vérticesDoGrafo ) )
             {
                return true;
@@ -524,17 +556,7 @@ public class Grafo
       return false;
    }
    
-   /**
-    * Uma função recursiva que detecta ciclos em um sub-grafo alcançável a
-    * partir de um certo vértice.
-    * 
-    * @param vérticeAtual o vértice atual da busca.
-    * @param vérticeAnterior o vértice anterior da busca.
-    * @param vérticesJáVisitados um conjunto contendo os vértices já visitados.
-    * @param vérticesDoGrafo um conjunto contendo todos os vértices deste grafo.
-    * @return true se foi encontro um ciclo, false caso contrário.
-    */
-   private boolean háCiclosRecursivo( final Object vérticeAtual,
+   private boolean háCiclosBusca( final Object vérticeAtual,
             final Object vérticeAnterior,
             final Set< Object > vérticesJáVisitados,
             final Set< Object > vérticesDoGrafo )
@@ -562,7 +584,7 @@ public class Grafo
          // adjacentes
          if( !vérticesJáVisitados.contains( próximoVértice ) )
          {
-            if( this.háCiclosRecursivo( próximoVértice, vérticeAtual,
+            if( this.háCiclosBusca( próximoVértice, vérticeAtual,
                      vérticesJáVisitados, vérticesDoGrafo ) )
             {
                return true;
@@ -579,45 +601,13 @@ public class Grafo
    }
    
    /**
-    * Retorna o número de vértices deste Grafo..
-    * 
+    * Retorna o número de vértices deste Grafo.
+    *
     * @return um inteiro.
     */
    public int ordem()
    {
       return this.vértices.size();
-   }
-   
-   private Set< Object > procuraFechoTransitivo( final Object vértice,
-            final Set< Object > fechoTransitivo, final Set< Object > jáVisitados )
-   {
-      jáVisitados.add( vértice );
-      
-      Collection< Object > adjacentes = new HashSet<>();
-      try
-      {
-         adjacentes = this.adjacentes( vértice );
-         
-      } catch( final ExeçãoVérticeNãoExistente e )
-      {
-         e.printStackTrace();
-      }
-      final Iterator< Object > iterador = adjacentes.iterator();
-      
-      while( iterador.hasNext() )
-      {
-         final Object objeto = iterador.next();
-         if( !jáVisitados.contains( objeto ) )
-         {
-            if( GrafoTest.LOG.isLoggable( Level.FINE ) )
-            {
-               System.out.println( "Objeto: " + objeto );
-            }
-            fechoTransitivo.add( objeto );
-            this.procuraFechoTransitivo( objeto, fechoTransitivo, jáVisitados );
-         }
-      }
-      return fechoTransitivo;
    }
    
    /**
@@ -643,9 +633,9 @@ public class Grafo
    }
    
    /**
-    * Remove um vértice deste Grafo., juntamente com todas as conexões.
-    * 
-    * @param vértice o vértice do grafo.
+    * Remove um vértice deste Grafo, juntamente com todas suas as conexões.
+    *
+    * @param vértice um vértice deste Grafo.
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
     */
    public void removerVértice( final Object vértice )
@@ -666,9 +656,9 @@ public class Grafo
    }
    
    /**
-    * Informa quanto vértices o grafo possui.
-    * 
-    * @return resultado
+    * Informa quantos vértices este Grafo possui.
+    *
+    * @return um inteiro.
     */
    public int tamanhoDoGrafo()
    {
@@ -676,11 +666,11 @@ public class Grafo
    }
    
    /**
-    * Informa se um dado vértice deste grafo possui laço.
-    * 
-    * @param vértice um vértice deste grafo.
-    * @return true caso possua laço, false contrário.
-    * @throws ExeçãoVérticeNãoExistente não exista o vértice neste grafo.
+    * Informa se um certo vértice deste grafo possui laço.
+    *
+    * @param vértice um vértice.
+    * @return true caso o vértice possua laço, false contrário.
+    * @throws ExeçãoVérticeNãoExistente caso não exista o vértice neste grafo.
     */
    public boolean temLaço( final Object vértice )
             throws ExeçãoVérticeNãoExistente
@@ -689,7 +679,7 @@ public class Grafo
    }
    
    /**
-    * Retorna uma representação em string do grafo.
+    * Retorna uma representação em string deste grafo.
     */
    @Override
    public String toString()
@@ -739,8 +729,8 @@ public class Grafo
    }
    
    /**
-    * Retorna um vértice qualquer deste Grafo..
-    * 
+    * Retorna um vértice qualquer deste Grafo.
+    *
     * @return um vértice.
     */
    public Object umVértice()
@@ -749,10 +739,10 @@ public class Grafo
    }
    
    /**
-    * Retorna um vértice qualquer deste Grafo..
-    * 
-    * @param vértice um vértice para retornar.
-    * @return um vértice.
+    * Retorna um vértice qualquer deste Grafo.
+    *
+    * @param vértice um vértice.
+    * @return o vértice.
     * @throws ExeçãoVérticeNãoExistente caso o vértice não exista.
     */
    public Object umVértice( final Object vértice )
@@ -766,9 +756,9 @@ public class Grafo
    }
    
    /**
-    * Retorna um conjunto contendo os vértices deste Grafo..
-    * 
-    * @return uma enumeração.
+    * Retorna um conjunto contendo todos os vértices deste Grafo.
+    *
+    * @return um conjunto da interface Set<>().
     */
    public Set< Object > vértices()
    {
