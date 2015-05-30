@@ -3,10 +3,7 @@
  */
 package homebroker;
 
-import homebroker.interface_gráfica.JanelaDeLogin;
 import homebroker.interface_gráfica.JanelaDoHomebroker;
-
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -14,8 +11,11 @@ import javax.swing.SwingUtilities;
  */
 public class Homebroker
 {
+   private final JanelaDoHomebroker janela;
+   
    private Homebroker()
    {
+      this.janela = JanelaDoHomebroker.getInstância();
    }
    
    /**
@@ -88,23 +88,7 @@ public class Homebroker
     */
    private void modoDeDica()
    {
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            final JanelaDeLogin janelaDeLogin;
-            final JanelaDoHomebroker janelaDoHomebroker;
-            
-            janelaDeLogin = JanelaDeLogin.getInstância();
-            janelaDoHomebroker = JanelaDoHomebroker.getInstância();
-            
-            janelaDeLogin.loginNoSistema( "dica" );
-            janelaDoHomebroker.setVisible( true );
-         }
-      } );
+      this.janela.loginNoSistema( "dica" );
    }
    
    /**
@@ -112,23 +96,7 @@ public class Homebroker
     */
    private void modoDeLogin()
    {
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            final JanelaDeLogin janelaDeLogin;
-            final JanelaDoHomebroker janelaDoHomebroker;
-            
-            janelaDeLogin = JanelaDeLogin.getInstância();
-            janelaDoHomebroker = JanelaDoHomebroker.getInstância();
-            
-            janelaDeLogin.loginNoSistema( "login" );
-            janelaDoHomebroker.setVisible( true );
-         }
-      } );
+      this.janela.loginNoSistema( "login" );
    }
    
    /**
@@ -136,22 +104,6 @@ public class Homebroker
     */
    private void modoDeTeste()
    {
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            final JanelaDeLogin janelaDeLogin;
-            final JanelaDoHomebroker janelaDoHomebroker;
-            
-            janelaDeLogin = JanelaDeLogin.getInstância();
-            janelaDoHomebroker = JanelaDoHomebroker.getInstância();
-            
-            janelaDeLogin.loginNoSistema( "teste" );
-            janelaDoHomebroker.setVisible( true );
-         }
-      } );
+      this.janela.loginNoSistema( "teste" );
    }
 }
