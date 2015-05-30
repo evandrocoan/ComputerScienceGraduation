@@ -24,7 +24,7 @@ import util.Biblioteca;
 
 /**
  * Representa o painel principal da janela principal.
- * 
+ *
  * @author Professional
  */
 public final class PainelDoHomebroker extends JPanel
@@ -126,7 +126,7 @@ public final class PainelDoHomebroker extends JPanel
    
    /**
     * Inicia o processo de criação da conta de um usuário do sistema
-    * 
+    *
     * //@return conta a conta criada
     */
    public void cadastrarUsuário()
@@ -136,9 +136,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarCadastro();
+         @Override
+         public void run()
+         {
+            janela.efetuarCadastro();
+         }
       } );
    }
    
@@ -226,9 +230,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarCompra();
+         @Override
+         public void run()
+         {
+            janela.efetuarCompra();
+         }
       } );
    }
    
@@ -242,9 +250,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarVenda();
+         @Override
+         public void run()
+         {
+            janela.efetuarVenda();
+         }
       } );
    }
    
@@ -298,9 +310,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.excluirConta();
+         @Override
+         public void run()
+         {
+            janela.excluirConta();
+         }
       } );
    }
    
