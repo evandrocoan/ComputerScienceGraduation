@@ -24,7 +24,7 @@ import util.Biblioteca;
 
 /**
  * Representa o painel principal da janela principal.
- * 
+ *
  * @author Professional
  */
 public final class PainelDoHomebroker extends JPanel
@@ -44,6 +44,9 @@ public final class PainelDoHomebroker extends JPanel
    
    private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
             .getInstância( PainelDoHomebroker.motor );
+   
+   private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas
+            .getInstância();
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -76,6 +79,11 @@ public final class PainelDoHomebroker extends JPanel
     */
    private PainelDoHomebroker()
    {
+      // Liga o book de ofertas
+      final Thread processoDoBook =
+               new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
+      processoDoBook.start();
+      
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
@@ -126,7 +134,7 @@ public final class PainelDoHomebroker extends JPanel
    
    /**
     * Inicia o processo de criação da conta de um usuário do sistema
-    * 
+    *
     * //@return conta a conta criada
     */
    public void cadastrarUsuário()
@@ -136,9 +144,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarCadastro();
+         @Override
+         public void run()
+         {
+            janela.efetuarCadastro();
+         }
       } );
    }
    
@@ -226,9 +238,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarCompra();
+         @Override
+         public void run()
+         {
+            janela.efetuarCompra();
+         }
       } );
    }
    
@@ -242,9 +258,13 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.efetuarVenda();
+         @Override
+         public void run()
+         {
+            janela.efetuarVenda();
+         }
       } );
    }
    
@@ -283,7 +303,7 @@ public final class PainelDoHomebroker extends JPanel
          this.efetuarCompra();
          break;
       case "m":
-         PainelDoHomebroker.motor.exibirBookDeOfertas();
+         this.exibirBookDeOfertas();
          break;
       default:
          this.imputError();
@@ -298,10 +318,22 @@ public final class PainelDoHomebroker extends JPanel
       
       // Programando um trabalho para o Event Dispatcher Thread. Porque Java
       // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
+      SwingUtilities.invokeLater( new Runnable()
       {
-         janela.excluirConta();
+         @Override
+         public void run()
+         {
+            janela.excluirConta();
+         }
       } );
+   }
+   
+   /**
+    * Exibe o book de ofertas.
+    */
+   private void exibirBookDeOfertas()
+   {
+      PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
    }
    
    private void imputError()
