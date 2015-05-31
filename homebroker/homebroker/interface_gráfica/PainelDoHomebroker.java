@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import util.Biblioteca;
 
@@ -121,15 +120,7 @@ public final class PainelDoHomebroker extends JPanel
    
    private void bloquearUmUsuário()
    {
-      // encapsula o motor para evitar o synthetic-access
-      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
-      
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( ( ) ->
-      {
-         janela.efetuarBloqueio();
-      } );
+      PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarBloqueio();
    }
    
    /**
@@ -139,19 +130,7 @@ public final class PainelDoHomebroker extends JPanel
     */
    public void cadastrarUsuário()
    {
-      // encapsula o motor para evitar o synthetic-access
-      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
-      
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            janela.efetuarCadastro();
-         }
-      } );
+      PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarCadastro();
    }
    
    /**
@@ -185,8 +164,14 @@ public final class PainelDoHomebroker extends JPanel
    {
       this.entradaDeComandos = new JTextField( "  Insira qual seu comando  " );
       
-      this.entradaDeComandos.addActionListener( ae -> PainelDoHomebroker.this
-               .enviarCommando( ae.getActionCommand() ) );
+      this.entradaDeComandos.addActionListener( new ActionListener()
+      {
+         @Override
+         public void actionPerformed( final ActionEvent ae )
+         {
+            PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
+         }
+      } );
       
       this.entradaDeComandos.addMouseListener( new MouseAdapter()
       {
@@ -233,19 +218,7 @@ public final class PainelDoHomebroker extends JPanel
     */
    private void efetuarCompra()
    {
-      // encapsula o motor para evitar o synthetic-access
-      final JanelaDeVendas janela = PainelDoHomebroker.JANELA_DE_VENDAS;
-      
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            janela.efetuarCompra();
-         }
-      } );
+      PainelDoHomebroker.JANELA_DE_VENDAS.efetuarCompra();
    }
    
    /**
@@ -253,19 +226,7 @@ public final class PainelDoHomebroker extends JPanel
     */
    private void efetuarVenda()
    {
-      // encapsula o motor para evitar o synthetic-access
-      final JanelaDeVendas janela = PainelDoHomebroker.JANELA_DE_VENDAS;
-      
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            janela.efetuarVenda();
-         }
-      } );
+      PainelDoHomebroker.JANELA_DE_VENDAS.efetuarVenda();
    }
    
    /**
@@ -313,19 +274,7 @@ public final class PainelDoHomebroker extends JPanel
    
    private void excluirConta()
    {
-      // encapsula o motor para evitar o synthetic-access
-      final JanelaDeCadastro janela = PainelDoHomebroker.JANELA_DE_CADASTRO;
-      
-      // Programando um trabalho para o Event Dispatcher Thread. Porque Java
-      // Swing não é thread-safe.
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            janela.excluirConta();
-         }
-      } );
+      PainelDoHomebroker.JANELA_DE_CADASTRO.excluirConta();
    }
    
    /**
