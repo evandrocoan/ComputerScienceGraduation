@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package homebroker.interface_gráfica;
 
@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * 
+ *
  * @author Professional
  */
 public final class JanelaDeCadastro extends JFrame
@@ -39,7 +39,7 @@ public final class JanelaDeCadastro extends JFrame
    }
    
    /**
-    * Efetua a venda de ações.
+    * Efetua o bloqueio de uma conta.
     */
    public void efetuarBloqueio()
    {
@@ -55,11 +55,19 @@ public final class JanelaDeCadastro extends JFrame
                   + "Você precisa ter privilégio de administrador." );
          return;
       }
-      this.solicitarConta();
+      final String conta =
+               this.solicitarConta( "\n\nInsira qual conta será bloqueada: " );
+      
+      if( conta != null )
+      {
+         JOptionPane
+                  .showMessageDialog( null, "Bloqueio realizado com sucesso!" );
+         this.motor.bloquearConta( conta );
+      }
    }
    
    /**
-    * Efetua a venda de ações.
+    * Efetua o cadastro de uma nova conta no Sistema.
     */
    public void efetuarCadastro()
    {
@@ -95,19 +103,22 @@ public final class JanelaDeCadastro extends JFrame
          }
          sucesso = this.motor.adicionarConta( saldo, cpf, nome, senha );
       }
-      
+      JOptionPane.showMessageDialog( null, "Conta cadastrada com sucesso!" );
    }
    
    /**
-    * 
+    * Exclui uma conta do sistema.
     */
    public void excluirConta()
    {
       /* TODO @formatter:off
-       * 
-       * 
+       *
+       *
        */ //@formatter:on
+      final String conta =
+               this.solicitarConta( "Insira a conta a ser excluída:" );
       
+      this.motor.excluirConta( conta );
    }
    
    private int getCPF()
@@ -189,7 +200,7 @@ public final class JanelaDeCadastro extends JFrame
       return nome;
    }
    
-   private void solicitarConta()
+   private String solicitarConta( final String pergunta )
    {
       String nome = null;
       boolean inputError = true;
@@ -199,16 +210,17 @@ public final class JanelaDeCadastro extends JFrame
                   JOptionPane.showInputDialog( ( inputError? ""
                            : "Usuário inválido!\n\n" )
                            + this.motor.contasTesteToString()
-                           + "\n\nInsira qual conta será bloqueada: " );
+                           + "\n\n"
+                           + pergunta );
          
          if( nome == null )
          {
-            return;
+            return null;
          }
-         inputError = this.motor.bloquearConta( nome );
+         inputError = this.motor.existeAConta( nome );
          
       } while( !inputError );
       
-      JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
+      return nome;
    }
 }

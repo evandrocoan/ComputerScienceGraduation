@@ -16,6 +16,7 @@ public class OfertaDoMercado
    private static final Logger LOG = Logger.getLogger( OfertaDoMercado.class
             .getName() );
    
+   private final Conta conta;
    private final Ação açãoEmOferta;
    private final String tipoDeOferta;
    
@@ -24,12 +25,14 @@ public class OfertaDoMercado
     * @param quantidade a quantidade de ações.
     * @param ação o nome da ação.
     * @param tipoDeOferta o tipo da oferta
+    * @param conta a conta qual faz a oferta
     */
    public OfertaDoMercado( final double preço, final int quantidade,
-            final String ação, final String tipoDeOferta )
+            final String ação, final String tipoDeOferta, final Conta conta )
    {
       OfertaDoMercado.LOG.setLevel( Level.OFF );
       
+      this.conta = conta;
       this.açãoEmOferta = new Ação( preço, quantidade, ação );
       this.tipoDeOferta = tipoDeOferta;
       OfertaDoMercado.LOG.setLevel( Level.OFF );
@@ -41,6 +44,14 @@ public class OfertaDoMercado
    public Ação getAçãoEmOferta()
    {
       return this.açãoEmOferta;
+   }
+   
+   /**
+    * @return the conta
+    */
+   public Conta getConta()
+   {
+      return this.conta;
    }
    
    /**

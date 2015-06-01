@@ -41,11 +41,6 @@ public final class BookDeOfertas
    private BookDeOfertas()
    {
       BookDeOfertas.LOG.setLevel( Level.OFF );
-      
-      if( BookDeOfertas.INSTÂNCIA != null )
-      {
-         throw new IllegalStateException( "Objeto já instanciado!" );
-      }
       this.ofertasDoMercado = new ArrayList<>();
    }
    
@@ -59,11 +54,18 @@ public final class BookDeOfertas
       return BookDeOfertas.INSTÂNCIA;
    }
    
+   /**
+    * @param preço o preço da oferta
+    * @param quantidade a quantidade
+    * @param nome o nome da ação
+    * @param conta a conta qual faz oferta
+    * @return true se a oferta foi adicionada com sucesso.
+    * */
    public boolean adicionarOfertaDeCompra( final double preço,
-            final int quantidade, final String nome )
+            final int quantidade, final String nome, final Conta conta )
    {
       return this.ofertasDoMercado.add( new OfertaDoMercado( preço, quantidade,
-               nome, "Compra" ) );
+               nome, "Compra", conta ) );
    }
    
    /**
@@ -71,14 +73,38 @@ public final class BookDeOfertas
     *
     * @param preço o preço da oferta
     * @param quantidade a quantidade
-    * @param açãoAComprar o nome da ação
+    * @param nome o nome da ação
+    * @param conta a conta qual faz oferta
     * @return true se a oferta foi adicionada com sucesso.
     */
    public boolean adicionarOfertaDeVenda( final double preço,
-            final int quantidade, final String açãoAComprar )
+            final int quantidade, final String nome, final Conta conta )
    {
+      if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+      {
+         BookDeOfertas.LOG.fine( "Estou em: " + this.getClass()
+                  + "adicionarOfertaDeVenda" );
+      }
       return this.ofertasDoMercado.add( new OfertaDoMercado( preço, quantidade,
-               açãoAComprar, "Venda" ) );
+               nome, "Venda", conta ) );
+   }
+   
+   /**
+    * @param conta a conta no qual terá suas ordens canceladas.
+    */
+   public void cancelarOfertas( final Conta conta )
+   {
+      /* TODO @formatter:off
+       * 
+       * 
+       */ //@formatter:on
+      for( final OfertaDoMercado oferta: this.ofertasDoMercado )
+      {
+         if( ( conta ).equals( oferta.getConta() ) )
+         {
+            this.ofertasDoMercado.remove( oferta );
+         }
+      }
    }
    
    /**
