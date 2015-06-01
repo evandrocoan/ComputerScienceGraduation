@@ -48,16 +48,6 @@ public final class MotorDoHomebroker
    private MotorDoHomebroker()
    {
       MotorDoHomebroker.LOG.setLevel( Level.OFF );
-      
-      if( MotorDoHomebroker.LOG.isLoggable( Level.SEVERE ) )
-      {
-         MotorDoHomebroker.LOG
-                  .severe( "Estou no construtor de ProgramaPrincipal()" );
-      }
-      if( MotorDoHomebroker.INSTÂNCIA != null )
-      {
-         throw new IllegalStateException( "Objeto já instanciado!" );
-      }
       this.bookDeOfertas = BookDeOfertas.getInstância();
       
       // Cria contas fictícias
@@ -100,7 +90,7 @@ public final class MotorDoHomebroker
             final int quantidade, final String nome )
    {
       return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade,
-               nome );
+               nome, this.contaAutenticada );
    }
    
    /**
@@ -113,8 +103,8 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeVenda( final double preço,
             final int quantidade, final String nome )
    {
-      return this.bookDeOfertas
-               .adicionarOfertaDeVenda( preço, quantidade, nome );
+      return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade,
+               nome, this.contaAutenticada );
    }
    
    public boolean bloquearConta( final String nome )
@@ -233,6 +223,40 @@ public final class MotorDoHomebroker
    }
    
    /**
+    * @param nome uma string contendo o nome da conta a ser excluída.
+    */
+   public void excluirConta( final String nome )
+   {
+      /* TODO @formatter:off
+       *
+       *
+       */ //@formatter:on
+      int index = 0;
+      for( final Conta conta: this.contasTeste )
+      {
+         if( conta.getNome().equals( nome ) )
+         {
+            this.bookDeOfertas.cancelarOfertas( conta );
+            this.contasTeste.remove( index );
+         }
+         index++;
+      }
+      
+   }
+   
+   public boolean existeAConta( final String nome )
+   {
+      for( final Conta conta: this.contasTeste )
+      {
+         if( conta.getNome().equals( nome ) )
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+   
+   /**
     * Dado o código de uma oferta, informa se existem novas ofertas lançadas no
     * mercado a partir da oferta informada.
     *
@@ -258,15 +282,16 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * {@link homebroker.lógica_de_execução.Conta#existeQuantidade(int)}
+    * {@link homebroker.lógica_de_execução.Conta#existeQuantidade(int, String)}
     *
     * @param quantidade a quantidade de ações.
+    * @param ação o nome da ação.
     *
     * @return true caso exista, false caso contrário.
     */
-   public boolean existeQuantidade( final int quantidade )
+   public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      return this.contaAutenticada.existeQuantidade( quantidade );
+      return this.contaAutenticada.existeQuantidade( quantidade, ação );
    }
    
    /**

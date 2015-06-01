@@ -51,27 +51,29 @@ public final class JanelaDeVendas extends JFrame
          return;
       }
       boolean sucesso = false;
-      
+      System.out.println( "Aqui1" );
       while( !sucesso )
       {
-         final String nome = this.getNome();
+         final String nome = this.getNome( false );
          if( nome == null )
          {
             return;
          }
-         final double preço = this.getPreço( nome );
+         final double preço = this.getPreço( nome, false );
          if( preço == 0 )
          {
             return;
          }
-         final int quantidade = this.getQuantidade( nome );
+         final int quantidade = this.getQuantidade( nome, false );
          if( quantidade == 0 )
          {
             return;
          }
          sucesso = this.motor.adicionarOfertaDeCompra( preço, quantidade, nome );
       }
-      
+      System.out.println( "Aqui2" );
+      JOptionPane.showMessageDialog( null,
+               "Oferta de compra realizada com sucesso!" );
    }
    
    /**
@@ -89,46 +91,37 @@ public final class JanelaDeVendas extends JFrame
       
       while( !sucesso )
       {
-         final String nome = this.getNomeAção();
+         final String nome = this.getNome( true );
          if( nome == null )
          {
             return;
          }
-         final double preço = this.getPreçoAção( nome );
+         final double preço = this.getPreço( nome, true );
          if( preço == 0 )
          {
             return;
          }
-         final int quantidade = this.getQuantidadeAção( nome );
+         final int quantidade = this.getQuantidade( nome, true );
          if( quantidade == 0 )
          {
             return;
          }
          sucesso = this.motor.adicionarOfertaDeVenda( preço, quantidade, nome );
       }
-      
+      JOptionPane.showMessageDialog( null,
+               "Oferta de venda realizada com sucesso!" );
    }
    
-   private String getNome()
-   {
-      boolean sucesso = false;
-      String açãoParaVender = null;
-      
-      while( !sucesso )
-      {
-         açãoParaVender =
-                  JOptionPane.showInputDialog( "Insira o nome da "
-                           + "ação que deseja comprar: " );
-         if( açãoParaVender == null )
-         {
-            return null;
-         }
-         sucesso = true;
-      }
-      return açãoParaVender;
-   }
-   
-   private String getNomeAção()
+   /**
+    * Obtém do usuário o nome da ação necessária para efetuar alguma operação
+    * sobre seu inventário.
+    * 
+    * @param ação o nome da ação.
+    * @param modo um boolean informando se deve ser verificado a existência da
+    *           ação informada no inventário.
+    * @return a quantidade.
+    */
+   private String getNome( final boolean modo )
    {
       boolean sucesso = false;
       boolean nÉsimaVez = false;
@@ -145,19 +138,29 @@ public final class JanelaDeVendas extends JFrame
          {
             return null;
          }
-         sucesso = this.motor.existeNoInventário( açãoParaVender );
+         sucesso = modo? this.motor.existeNoInventário( açãoParaVender ) : true;
          nÉsimaVez = true;
       }
       return açãoParaVender;
    }
    
-   private double getPreço( final String açãoParaVender )
+   /**
+    * Obtém do usuário o preço da ação necessária para efetuar alguma operação
+    * sobre seu inventário.
+    * 
+    * @param ação o nome da ação.
+    * @param modo um boolean informando se deve ser verificado a existência da
+    *           ação informada no inventário.
+    * @return preço o preço da ação.
+    */
+   private double getPreço( final String ação, final boolean modo )
    {
       final String imput =
                JOptionPane
-                        .showInputDialog( "Insira o preço da ação:", Double
-                                 .toString( this.motor
-                                          .getPreço( açãoParaVender ) ) );
+                        .showInputDialog(
+                                 "Insira o preço da ação:",
+                                 ( modo? Double.toString( this.motor
+                                          .getPreço( ação ) ) : "" ) );
       if( imput == null )
       {
          return 0;
@@ -168,47 +171,16 @@ public final class JanelaDeVendas extends JFrame
       return preço;
    }
    
-   private double getPreçoAção( final String açãoParaVender )
-   {
-      final String imput =
-               JOptionPane
-                        .showInputDialog( "Insira o preço da ação:", Double
-                                 .toString( this.motor
-                                          .getPreço( açãoParaVender ) ) );
-      if( imput == null )
-      {
-         return 0;
-      }
-      double preço;
-      
-      preço = Double.parseDouble( imput );
-      return preço;
-   }
-   
-   private int getQuantidade( final String açãoParaVender )
-   {
-      boolean sucesso = false;
-      int quantidade = 0;
-      
-      while( !sucesso )
-      {
-         final String imput =
-                  JOptionPane.showInputDialog( "Insira a quantidade da ação:",
-                           Integer.toString( this.motor
-                                    .getQuantidade( açãoParaVender ) ) );
-         if( imput == null )
-         {
-            return 0;
-         }
-         quantidade = (int) Double.parseDouble( imput );
-         // sucesso = this.motor.existeQuantidadeNoInvetário( quantidade );
-         // TODO
-         sucesso = true;
-      }
-      return quantidade;
-   }
-   
-   private int getQuantidadeAção( final String açãoParaVender )
+   /**
+    * Obtém do usuário a quantidade de ações necessária para efetuar alguma
+    * operação sobre seu inventário.
+    * 
+    * @param ação o nome da ação.
+    * @param modo um boolean informando se deve ser verificado a existência da
+    *           ação informada no inventário.
+    * @return a quantidade.
+    */
+   private int getQuantidade( final String ação, final boolean modo )
    {
       boolean sucesso = false;
       boolean nÉsimaVez = false;
@@ -217,17 +189,17 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          final String imput =
-                  JOptionPane.showInputDialog( ( nÉsimaVez
-                           ? "Quantidade não existente!\n\n" : "" )
-                           + "Insira a quantidade da ação:",
-                           Integer.toString( this.motor
-                                    .getQuantidade( açãoParaVender ) ) );
+                  JOptionPane.showInputDialog(
+                           ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
+                                    + "Insira a quantidade da ação:",
+                           ( modo? Integer.toString( this.motor
+                                    .getQuantidade( ação ) ) : "" ) );
          if( imput == null )
          {
             return 0;
          }
          quantidade = (int) Double.parseDouble( imput );
-         sucesso = this.motor.existeQuantidade( quantidade );
+         sucesso = modo? this.motor.existeQuantidade( quantidade, ação ) : true;
          nÉsimaVez = true;
       }
       return quantidade;

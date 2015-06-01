@@ -52,21 +52,24 @@ public class Inventario
    
    /**
     * @param quantidade a quantidade de ações.
+    * @param ação a ação a se procurar.
     * @return true se existe a quantidade de ações especificada.
     */
-   public boolean existeQuantidade( final int quantidade )
+   public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      boolean existe = false;
+      this.existeNoInvetário( ação );
       
-      for( final Ação ação: this.listaDeAções )
+      int indiceAção = 0;
+      for( final Ação açãoTemp: this.listaDeAções )
       {
-         if( ação.getQuantidade() >= quantidade )
+         if( açãoTemp.getNome().equals( ação ) )
          {
-            existe = true;
             break;
          }
+         indiceAção++;
       }
-      return existe;
+      final Ação açãoTemp = this.listaDeAções.get( indiceAção );
+      return açãoTemp.getQuantidade() >= quantidade;
    }
    
    /**
@@ -97,7 +100,7 @@ public class Inventario
    
    /**
     * @param nome o nome da ação.
-    * @return quantidade a quantidade de ações existentes no invetário.
+    * @return quantidade a quantidade de ações existentes no inventário.
     */
    public int getQuantidade( final String nome )
    {
@@ -117,7 +120,7 @@ public class Inventario
     * Retorna o inventário representado como uma String. Essa String é composta
     * pelos nomes das ações no inventário.
     * 
-    * @return inventario o inventário reprensentado como um String
+    * @return inventario o inventário representado como um String
     */
    public String inventarioToString()
    {
@@ -159,13 +162,12 @@ public class Inventario
    }
    
    /**
-    * Definife, e portanto sobre-escreve o
+    * Define, e portanto sobre-escreve o inventário.
     * 
     * @param listaDeAções a listaDeAções em forma de um ArrayList< Ação >
     */
-   @SuppressWarnings( "cast" )
    public void setInventario( final List< Ação > listaDeAções )
    {
-      this.listaDeAções = (ArrayList< Ação >) listaDeAções;
+      this.listaDeAções = listaDeAções;
    }
 }
