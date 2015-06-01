@@ -81,11 +81,12 @@ public class Conta
    
    /**
     * @param quantidade a quantidade de ações
+    * @param ação o nome da ação.
     * @return true se existe a quantidade especificada, false caso contrário.
     */
-   public boolean existeQuantidade( final int quantidade )
+   public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      return this.inventario.existeQuantidade( quantidade );
+      return this.inventario.existeQuantidade( quantidade, ação );
    }
    
    /**
