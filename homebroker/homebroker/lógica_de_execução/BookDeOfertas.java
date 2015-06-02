@@ -98,8 +98,10 @@ public final class BookDeOfertas
        * 
        * 
        */ //@formatter:on
-      for( final OfertaDoMercado oferta: this.ofertasDoMercado )
+      for( int i = 0; i < this.ofertasDoMercado.size(); i++ )
       {
+         final OfertaDoMercado oferta = this.ofertasDoMercado.get( i );
+         
          if( ( conta ).equals( oferta.getConta() ) )
          {
             this.ofertasDoMercado.remove( oferta );
