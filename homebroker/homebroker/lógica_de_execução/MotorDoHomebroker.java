@@ -75,8 +75,7 @@ public final class MotorDoHomebroker
    public boolean adicionarConta( final double saldo, final int cpf,
             final String nome, final String senha )
    {
-      return this.contas
-               .add( new Conta( nome, senha, saldo, false, null ) );
+      return this.contas.add( new Conta( nome, senha, saldo, false, null ) );
    }
    
    /**
@@ -227,11 +226,6 @@ public final class MotorDoHomebroker
     */
    public void excluirConta( final String nome )
    {
-      /* TODO @formatter:off
-       *
-       *
-       */ //@formatter:on
-      
       for( int index = 0; index < this.contas.size(); index++ )
       {
          final Conta conta = this.contas.get( index );

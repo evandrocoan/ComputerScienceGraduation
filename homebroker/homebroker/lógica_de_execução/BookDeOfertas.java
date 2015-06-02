@@ -94,10 +94,6 @@ public final class BookDeOfertas
     */
    public void cancelarOfertas( final Conta conta )
    {
-      /* TODO @formatter:off
-       * 
-       * 
-       */ //@formatter:on
       for( int i = 0; i < this.ofertasDoMercado.size(); i++ )
       {
          final OfertaDoMercado oferta = this.ofertasDoMercado.get( i );

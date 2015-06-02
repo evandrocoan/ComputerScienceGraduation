@@ -103,15 +103,25 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
     */
    private void atualizarListaDeOfertas()
    {
-      final int indice = this.getNúmeroDeOfertas();
-      final String ofertaDoMercado = // TODO null pointer se reiniciar a o
-// monitoramento
-               JanelaDeOfertas.motor.ofertaToString( indice );
-      this.adicionarOfertaDeMercado( ofertaDoMercado );
+      int indice = this.getNúmeroDeOfertas();
       
-      if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+      while( true )
       {
-         JanelaDeOfertas.LOG.severe( ofertaDoMercado );
+         try
+         {
+            final String ofertaDoMercado =
+                     JanelaDeOfertas.motor.ofertaToString( indice );
+            this.adicionarOfertaDeMercado( ofertaDoMercado );
+            
+            if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+            {
+               JanelaDeOfertas.LOG.severe( ofertaDoMercado );
+            }
+         } catch( final Exception e )
+         {
+            break;
+         }
+         indice++;
       }
    }
    

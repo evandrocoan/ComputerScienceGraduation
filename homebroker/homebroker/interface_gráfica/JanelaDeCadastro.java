@@ -111,10 +111,6 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      /* TODO @formatter:off
-       *
-       *
-       */ //@formatter:on
       final String conta =
                this.solicitarConta( "Insira a conta a ser excluída:" );
       
