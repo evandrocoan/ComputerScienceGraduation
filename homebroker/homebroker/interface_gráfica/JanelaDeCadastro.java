@@ -119,6 +119,12 @@ public final class JanelaDeCadastro extends JFrame
                this.solicitarConta( "Insira a conta a ser excluída:" );
       
       this.motor.excluirConta( conta );
+      
+      if( conta != null )
+      {
+         JOptionPane.showMessageDialog( null, "Conta " + conta
+                  + "excluída com sucesso!" );
+      }
    }
    
    private int getCPF()
