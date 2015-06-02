@@ -231,17 +231,17 @@ public final class MotorDoHomebroker
        *
        *
        */ //@formatter:on
-      int index = 0;
-      for( final Conta conta: this.contasTeste )
+      
+      for( int index = 0; index < this.contasTeste.size(); index++ )
       {
+         final Conta conta = this.contasTeste.get( index );
+         
          if( conta.getNome().equals( nome ) )
          {
             this.bookDeOfertas.cancelarOfertas( conta );
             this.contasTeste.remove( index );
          }
-         index++;
       }
-      
    }
    
    public boolean existeAConta( final String nome )
