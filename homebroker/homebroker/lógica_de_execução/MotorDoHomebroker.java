@@ -31,7 +31,7 @@ public final class MotorDoHomebroker
     * As contasTeste que serão utilizadas para simular a adição de contas no
     * sistema, isto é, as contas criadas somente existirão temporariamente.
     */
-   public transient List< Conta > contasTeste;
+   public transient List< Conta > contas;
    
    /**
     * A conta para qual se estará operando o inventário e no mercado de ações.
@@ -75,7 +75,7 @@ public final class MotorDoHomebroker
    public boolean adicionarConta( final double saldo, final int cpf,
             final String nome, final String senha )
    {
-      return this.contasTeste
+      return this.contas
                .add( new Conta( nome, senha, saldo, false, null ) );
    }
    
@@ -109,7 +109,7 @@ public final class MotorDoHomebroker
    
    public boolean bloquearConta( final String nome )
    {
-      for( final Conta conta: this.contasTeste )
+      for( final Conta conta: this.contas )
       {
          if( conta.getNome().equals( nome ) )
          {
@@ -129,7 +129,7 @@ public final class MotorDoHomebroker
       final StringBuffer texto = new StringBuffer();
       
       int contador = 0;
-      for( final Conta conta: this.contasTeste )
+      for( final Conta conta: this.contas )
       {
          texto.append( conta.getNome() ).append(
                   ( conta.isBloqueada()? "(1)" : "(0)" ) );
@@ -175,7 +175,7 @@ public final class MotorDoHomebroker
          MotorDoHomebroker.LOG.severe( "Estou em criarContasFictícias "
                   + contasTeste.get( 0 ).getNome() );
       }
-      this.contasTeste = contasTeste;
+      this.contas = contasTeste;
    }
    
    /**
@@ -231,22 +231,22 @@ public final class MotorDoHomebroker
        *
        *
        */ //@formatter:on
-      int index = 0;
-      for( final Conta conta: this.contasTeste )
+      
+      for( int index = 0; index < this.contas.size(); index++ )
       {
+         final Conta conta = this.contas.get( index );
+         
          if( conta.getNome().equals( nome ) )
          {
             this.bookDeOfertas.cancelarOfertas( conta );
-            this.contasTeste.remove( index );
+            this.contas.remove( index );
          }
-         index++;
       }
-      
    }
    
    public boolean existeAConta( final String nome )
    {
-      for( final Conta conta: this.contasTeste )
+      for( final Conta conta: this.contas )
       {
          if( conta.getNome().equals( nome ) )
          {
@@ -356,7 +356,7 @@ public final class MotorDoHomebroker
    public boolean loginNoSistemaChecagem( final String usuário,
             final String senha )
    {
-      for( final Conta conta: this.contasTeste )
+      for( final Conta conta: this.contas )
       {
          if( conta.getNome().equals( usuário ) && conta.checkSenha( senha ) )
          {

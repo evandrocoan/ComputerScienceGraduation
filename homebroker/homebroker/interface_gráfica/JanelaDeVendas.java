@@ -51,7 +51,7 @@ public final class JanelaDeVendas extends JFrame
          return;
       }
       boolean sucesso = false;
-      System.out.println( "Aqui1" );
+      
       while( !sucesso )
       {
          final String nome = this.getNome( false );
@@ -71,7 +71,6 @@ public final class JanelaDeVendas extends JFrame
          }
          sucesso = this.motor.adicionarOfertaDeCompra( preço, quantidade, nome );
       }
-      System.out.println( "Aqui2" );
       JOptionPane.showMessageDialog( null,
                "Oferta de compra realizada com sucesso!" );
    }
