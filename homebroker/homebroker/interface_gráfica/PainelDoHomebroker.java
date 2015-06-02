@@ -187,17 +187,20 @@ public final class PainelDoHomebroker extends JPanel
       
       this.entradaDeComandos.addKeyListener( new KeyAdapter()
       {
+         private boolean primeiraVez = true;
+         
          /**
-          * Limpa a caixa de texto ao entrar mais que 2 caracteres.
+          * Limpa a caixa de texto ao apertar esc e na primeira vez que se
+          * escreve na caixa de texto.
           */
          @Override
          public void keyPressed( final KeyEvent evt )
          {
-            if( ( evt.getKeyCode() != KeyEvent.VK_ENTER )
-                     && ( PainelDoHomebroker.this.conteúdo().length() > 1 ) )
+            if( ( evt.getKeyCode() == KeyEvent.VK_ESCAPE ) || this.primeiraVez )
             {
                PainelDoHomebroker.this.limpar();
             }
+            this.primeiraVez = false;
          }
       } );
       
