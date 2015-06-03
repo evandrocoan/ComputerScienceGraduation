@@ -11,9 +11,9 @@ import java.util.logging.Logger;
  * 
  * @author Professional
  */
-public class OfertaDoMercado
+public class Oferta
 {
-   private static final Logger LOG = Logger.getLogger( OfertaDoMercado.class
+   private static final Logger LOG = Logger.getLogger( Oferta.class
             .getName() );
    
    private final Conta conta;
@@ -27,21 +27,21 @@ public class OfertaDoMercado
     * @param tipoDeOferta o tipo da oferta
     * @param conta a conta qual faz a oferta
     */
-   public OfertaDoMercado( final double preço, final int quantidade,
+   public Oferta( final double preço, final int quantidade,
             final String ação, final String tipoDeOferta, final Conta conta )
    {
-      OfertaDoMercado.LOG.setLevel( Level.OFF );
+      Oferta.LOG.setLevel( Level.OFF );
       
       this.conta = conta;
       this.açãoEmOferta = new Ação( preço, quantidade, ação );
       this.tipoDeOferta = tipoDeOferta;
-      OfertaDoMercado.LOG.setLevel( Level.OFF );
+      Oferta.LOG.setLevel( Level.OFF );
    }
    
    /**
     * @return the açõesEmOferta
     */
-   public Ação getAçãoEmOferta()
+   public Ação getAção()
    {
       return this.açãoEmOferta;
    }
@@ -69,13 +69,13 @@ public class OfertaDoMercado
    {
       final String açãoEmOferta =
                "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
-                        + this.getAçãoEmOferta().getNome() + " - Preço: "
-                        + this.getAçãoEmOferta().getPreço() + " - Quantidade: "
-                        + this.getAçãoEmOferta().getQuantidade();
+                        + this.getAção().getNome() + " - Preço: "
+                        + this.getAção().getPreço() + " - Quantidade: "
+                        + this.getAção().getQuantidade();
       
-      if( OfertaDoMercado.LOG.isLoggable( Level.SEVERE ) )
+      if( Oferta.LOG.isLoggable( Level.SEVERE ) )
       {
-         OfertaDoMercado.LOG.severe( açãoEmOferta );
+         Oferta.LOG.severe( açãoEmOferta );
       }
       
       return açãoEmOferta;
