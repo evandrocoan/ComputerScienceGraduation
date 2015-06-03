@@ -33,7 +33,12 @@ public final class BookDeOfertas
    /**
     * As ofertas do mercado realizadas.
     */
-   private final List< OfertaDoMercado > ofertasDoMercado;
+   private final List< Oferta > ofertas;
+   
+   /**
+    * As vendas do mercado realizados.
+    */
+   private final List< Venda > vendas;
    
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
@@ -41,7 +46,8 @@ public final class BookDeOfertas
    private BookDeOfertas()
    {
       BookDeOfertas.LOG.setLevel( Level.OFF );
-      this.ofertasDoMercado = new ArrayList<>();
+      this.ofertas = new ArrayList<>();
+      this.vendas = new ArrayList<>();
    }
    
    /**
@@ -64,8 +70,13 @@ public final class BookDeOfertas
    public boolean adicionarOfertaDeCompra( final double preço,
             final int quantidade, final String nome, final Conta conta )
    {
-      return this.ofertasDoMercado.add( new OfertaDoMercado( preço, quantidade,
-               nome, "Compra", conta ) );
+      final Oferta novaOferta =
+               new Oferta( preço, quantidade, nome, "Compra", conta );
+      
+      final boolean resultado = this.ofertas.add( novaOferta );
+      
+      this.realizarVenda( novaOferta );
+      return resultado;
    }
    
    /**
@@ -85,8 +96,13 @@ public final class BookDeOfertas
          BookDeOfertas.LOG.fine( "Estou em: " + this.getClass()
                   + "adicionarOfertaDeVenda" );
       }
-      return this.ofertasDoMercado.add( new OfertaDoMercado( preço, quantidade,
-               nome, "Venda", conta ) );
+      final Oferta novaOferta =
+               new Oferta( preço, quantidade, nome, "Venda", conta );
+      
+      final boolean resultado = this.ofertas.add( novaOferta );
+      
+      this.realizarVenda( novaOferta );
+      return resultado;
    }
    
    /**
@@ -94,13 +110,13 @@ public final class BookDeOfertas
     */
    public void cancelarOfertas( final Conta conta )
    {
-      for( int i = 0; i < this.ofertasDoMercado.size(); i++ )
+      for( int i = 0; i < this.ofertas.size(); i++ )
       {
-         final OfertaDoMercado oferta = this.ofertasDoMercado.get( i );
+         final Oferta oferta = this.ofertas.get( i );
          
          if( ( conta ).equals( oferta.getConta() ) )
          {
-            this.ofertasDoMercado.remove( oferta );
+            this.ofertas.remove( oferta );
          }
       }
    }
@@ -114,7 +130,7 @@ public final class BookDeOfertas
     */
    public boolean existemNovasOfertas( final int ultimaOferta )
    {
-      final int númeroDeOfertas = this.ofertasDoMercado.size() - 1;
+      final int númeroDeOfertas = this.ofertas.size() - 1;
       
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
@@ -122,18 +138,15 @@ public final class BookDeOfertas
                   + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas
                   + "<" + ultimaOferta + ")" );
       }
-      
       if( númeroDeOfertas < ultimaOferta )
       {
          return false;
       }
-      
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
          BookDeOfertas.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
                   + ( númeroDeOfertas > ultimaOferta ) );
       }
-      
       return númeroDeOfertas > ultimaOferta;
    }
    
@@ -143,6 +156,82 @@ public final class BookDeOfertas
     */
    public String ofertaToString( final int indice )
    {
-      return this.ofertasDoMercado.get( indice ).ofertaToString();
+      return this.ofertas.get( indice ).ofertaToString();
+   }
+   
+   private void realizarVenda( final Oferta oferta )
+   {
+      if( oferta.getTipoDeOferta().equals( "Venda" ) )
+      {
+         this.realizarVendaProcura1( oferta );
+         
+      } else
+      {
+         this.realizarVendaProcura2( oferta );
+      }
+   }
+   
+   private void realizarVendaAjuste( final Oferta venda, final Oferta compra )
+   {
+      final Conta conta1 = venda.getConta();
+      final Conta conta2 = compra.getConta();
+      final Ação ação1 = venda.getAção();
+      final Ação ação2 = compra.getAção();
+      
+      if( ação1.getQuantidade() > ação2.getQuantidade() )
+      {
+         conta1.setSaldo( conta1.getSaldo()
+                  + ( ação1.getPreço() * ação1.getQuantidade() ) );
+         conta2.setSaldo( conta2.getSaldo()
+                  - ( ação1.getPreço() * ação1.getQuantidade() ) );
+         
+         this.adicionarOfertaDeVenda( ação1.getPreço(), ação1.getQuantidade()
+                  - ação2.getQuantidade(), ação1.getNome(), conta1 );
+      }
+      if( ação1.getQuantidade() < ação2.getQuantidade() )
+      {
+         conta1.setSaldo( conta1.getSaldo()
+                  + ( ação1.getPreço() * ação1.getQuantidade() ) );
+         conta2.setSaldo( conta2.getSaldo()
+                  - ( ação1.getPreço() * ação1.getQuantidade() ) );
+         
+         this.adicionarOfertaDeCompra( ação2.getPreço(), ação2.getQuantidade()
+                  - ação1.getQuantidade(), ação2.getNome(), conta2 );
+      }
+      if( ação1.getQuantidade() == ação2.getQuantidade() )
+      {
+         conta1.setSaldo( conta1.getSaldo()
+                  + ( ação1.getPreço() * ação1.getQuantidade() ) );
+         conta2.setSaldo( conta2.getSaldo()
+                  - ( ação1.getPreço() * ação1.getQuantidade() ) );
+      }
+   }
+   
+   private void realizarVendaProcura1( final Oferta venda )
+   {
+      for( int index = 0; index < this.ofertas.size(); index++ )
+      {
+         final Oferta compra = this.ofertas.get( index );
+         
+         if( venda.getAção().getPreço() <= compra.getAção().getPreço() )
+         {
+            this.vendas.add( new Venda( venda, compra ) );
+            this.realizarVendaAjuste( venda, compra );
+         }
+      }
+   }
+   
+   private void realizarVendaProcura2( final Oferta compra )
+   {
+      for( int index = 0; index < this.ofertas.size(); index++ )
+      {
+         final Oferta venda = this.ofertas.get( index );
+         
+         if( compra.getAção().getPreço() >= venda.getAção().getPreço() )
+         {
+            this.vendas.add( new Venda( compra, venda ) );
+            this.realizarVendaAjuste( venda, compra );
+         }
+      }
    }
 }
