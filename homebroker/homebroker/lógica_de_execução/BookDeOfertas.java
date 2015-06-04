@@ -130,9 +130,8 @@ public final class BookDeOfertas
       
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
-         BookDeOfertas.LOG
-            .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
-               + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
+         BookDeOfertas.LOG.severe( "1 - númeroDeOfertas < ultimaOferta = "
+            + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
       if( númeroDeOfertas < ultimaOferta )
       {
@@ -203,10 +202,13 @@ public final class BookDeOfertas
       {
          final Oferta compra = this.ofertas.get( index );
          
-         if( venda.getAção().getPreço() <= compra.getAção().getPreço() )
+         if( compra.getTipoDeOferta().equals( "Compra" ) )
          {
-            this.vendas.add( new Venda( venda, compra ) );
-            this.realizarVendaAjuste( venda, compra );
+            if( venda.getAção().getPreço() <= compra.getAção().getPreço() )
+            {
+               this.vendas.add( new Venda( venda, compra ) );
+               this.realizarVendaAjuste( venda, compra );
+            }
          }
       }
    }
@@ -217,10 +219,13 @@ public final class BookDeOfertas
       {
          final Oferta venda = this.ofertas.get( index );
          
-         if( compra.getAção().getPreço() >= venda.getAção().getPreço() )
+         if( venda.getTipoDeOferta().equals( "Venda" ) )
          {
-            this.vendas.add( new Venda( compra, venda ) );
-            this.realizarVendaAjuste( venda, compra );
+            if( compra.getAção().getPreço() >= venda.getAção().getPreço() )
+            {
+               this.vendas.add( new Venda( compra, venda ) );
+               this.realizarVendaAjuste( venda, compra );
+            }
          }
       }
    }
