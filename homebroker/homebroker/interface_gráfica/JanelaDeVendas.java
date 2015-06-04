@@ -1,5 +1,5 @@
 /**
- * 
+ *  
  */
 package homebroker.interface_gráfica;
 
@@ -46,8 +46,7 @@ public final class JanelaDeVendas extends JFrame
    {
       if( !this.motor.isAutenticada() )
       {
-         JOptionPane.showMessageDialog( null, "Não há "
-                  + "nenhuma conta carregada no sistema!" );
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
       boolean sucesso = false;
@@ -71,8 +70,7 @@ public final class JanelaDeVendas extends JFrame
          }
          sucesso = this.motor.adicionarOfertaDeCompra( preço, quantidade, nome );
       }
-      JOptionPane.showMessageDialog( null,
-               "Oferta de compra realizada com sucesso!" );
+      JOptionPane.showMessageDialog( null, "Oferta de compra realizada com sucesso!" );
    }
    
    /**
@@ -82,8 +80,7 @@ public final class JanelaDeVendas extends JFrame
    {
       if( !this.motor.isAutenticada() )
       {
-         JOptionPane.showMessageDialog( null, "Não há "
-                  + "nenhuma conta carregada no sistema!" );
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
       boolean sucesso = false;
@@ -107,8 +104,7 @@ public final class JanelaDeVendas extends JFrame
          }
          sucesso = this.motor.adicionarOfertaDeVenda( preço, quantidade, nome );
       }
-      JOptionPane.showMessageDialog( null,
-               "Oferta de venda realizada com sucesso!" );
+      JOptionPane.showMessageDialog( null, "Oferta de venda realizada com sucesso!" );
    }
    
    /**
@@ -129,8 +125,7 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          açãoParaVender =
-                  JOptionPane.showInputDialog( ( nÉsimaVez
-                           ? "Ação não existente!\n\n" : "" )
+                  JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
                            + "Lista de ações disponíveis para venda: \n"
                            + this.motor.inventarioToString() );
          if( açãoParaVender == null )
@@ -155,11 +150,8 @@ public final class JanelaDeVendas extends JFrame
    private double getPreço( final String ação, final boolean modo )
    {
       final String imput =
-               JOptionPane
-                        .showInputDialog(
-                                 "Insira o preço da ação:",
-                                 ( modo? Double.toString( this.motor
-                                          .getPreço( ação ) ) : "" ) );
+               JOptionPane.showInputDialog( "Insira o preço da ação:",
+                        ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
       if( imput == null )
       {
          return 0;
@@ -188,11 +180,9 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          final String imput =
-                  JOptionPane.showInputDialog(
-                           ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
-                                    + "Insira a quantidade da ação:",
-                           ( modo? Integer.toString( this.motor
-                                    .getQuantidade( ação ) ) : "" ) );
+                  JOptionPane.showInputDialog( ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
+                           + "Insira a quantidade da ação:",
+                           ( modo? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
          if( imput == null )
          {
             return 0;

@@ -93,8 +93,7 @@ public final class JanelaDoHomebroker extends JFrame
          break;
       
       case "dica":
-         JOptionPane.showMessageDialog( null, "Sessão de teste "
-                  + "COM dica de contas no login!" );
+         JOptionPane.showMessageDialog( null, "Sessão de teste " + "COM dica de contas no login!" );
          final StringBuilder dica = new StringBuilder();
          dica.append( '\n' ).append( this.motor.contasTesteToString() );
          
@@ -120,17 +119,14 @@ public final class JanelaDoHomebroker extends JFrame
       do
       {
          usuário =
-                  JOptionPane.showInputDialog( ( inputError? ""
-                           : "Usuário ou senha inválidos\n\n" )
+                  JOptionPane.showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
                            + "Insira qual conta será feito login: " + dica );
          
          if( ( usuário == null ) )
          {
             break;
          }
-         senha =
-                  JOptionPane.showInputDialog( "Insira qual senha para a "
-                           + "conta: " + usuário );
+         senha = JOptionPane.showInputDialog( "Insira qual senha para a " + "conta: " + usuário );
          
          if( ( senha == null ) )
          {
