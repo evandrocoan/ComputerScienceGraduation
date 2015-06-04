@@ -176,8 +176,8 @@ public final class BookDeOfertas
       
       if( ação1.getQuantidade() > ação2.getQuantidade() )
       {
-         conta1.setSaldo( conta1.getSaldo() + ( ação1.getPreço() * ação1.getQuantidade() ) );
-         conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação1.getQuantidade() ) );
+         conta1.setSaldo( conta1.getSaldo() + ( ação1.getPreço() * ação2.getQuantidade() ) );
+         conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação2.getQuantidade() ) );
          
          this.adicionarOfertaDeVenda( ação1.getPreço(),
             ação1.getQuantidade() - ação2.getQuantidade(), ação1.getNome(), conta1 );
