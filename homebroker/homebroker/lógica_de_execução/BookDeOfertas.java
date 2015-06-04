@@ -67,7 +67,7 @@ public final class BookDeOfertas
     * @return true se a oferta foi adicionada com sucesso.
     * */
    public boolean adicionarOfertaDeCompra( final double preço, final int quantidade,
-            final String nome, final Conta conta )
+      final String nome, final Conta conta )
    {
       final Oferta novaOferta = new Oferta( preço, quantidade, nome, "Compra", conta );
       
@@ -87,7 +87,7 @@ public final class BookDeOfertas
     * @return true se a oferta foi adicionada com sucesso.
     */
    public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
-            final String nome, final Conta conta )
+      final String nome, final Conta conta )
    {
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
@@ -130,9 +130,9 @@ public final class BookDeOfertas
       
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
-         BookDeOfertas.LOG.severe( "1 - númeroDeOfertas < ultimaOferta = "
-                  + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas + "<" + ultimaOferta
-                  + ")" );
+         BookDeOfertas.LOG
+            .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
+               + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
       if( númeroDeOfertas < ultimaOferta )
       {
@@ -141,7 +141,7 @@ public final class BookDeOfertas
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
          BookDeOfertas.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
-                  + ( númeroDeOfertas > ultimaOferta ) );
+            + ( númeroDeOfertas > ultimaOferta ) );
       }
       return númeroDeOfertas > ultimaOferta;
    }
@@ -180,7 +180,7 @@ public final class BookDeOfertas
          conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação1.getQuantidade() ) );
          
          this.adicionarOfertaDeVenda( ação1.getPreço(),
-                  ação1.getQuantidade() - ação2.getQuantidade(), ação1.getNome(), conta1 );
+            ação1.getQuantidade() - ação2.getQuantidade(), ação1.getNome(), conta1 );
       }
       if( ação1.getQuantidade() < ação2.getQuantidade() )
       {
@@ -188,7 +188,7 @@ public final class BookDeOfertas
          conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação1.getQuantidade() ) );
          
          this.adicionarOfertaDeCompra( ação2.getPreço(),
-                  ação2.getQuantidade() - ação1.getQuantidade(), ação2.getNome(), conta2 );
+            ação2.getQuantidade() - ação1.getQuantidade(), ação2.getNome(), conta2 );
       }
       if( ação1.getQuantidade() == ação2.getQuantidade() )
       {
