@@ -26,20 +26,16 @@ public final class PainelDaJanelaDeOfertas extends JPanel
     * instanciado antes que o construtor desta classe, pois este construtor
     * precisa de deste objeto já instanciado para ser monitorado pelo log.
     */
-   private static final Logger LOG = Logger
-            .getLogger( PainelDaJanelaDeOfertas.class.getName() );
+   private static final Logger LOG = Logger.getLogger( PainelDaJanelaDeOfertas.class.getName() );
    
    /**
     * Por padrão, este tipo de instanciação é thread safe.
     */
-   private static final PainelDaJanelaDeOfertas INSTÂNCIA =
-            new PainelDaJanelaDeOfertas();
+   private static final PainelDaJanelaDeOfertas INSTÂNCIA = new PainelDaJanelaDeOfertas();
    
-   private final DefaultListModel< String > modeloPadrãoDeLista =
-            new DefaultListModel<>();
+   private final DefaultListModel< String > modeloPadrãoDeLista = new DefaultListModel<>();
    
-   private final JList< String > listaDeOfertas = new JList<>(
-            this.modeloPadrãoDeLista );
+   private final JList< String > listaDeOfertas = new JList<>( this.modeloPadrãoDeLista );
    
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.

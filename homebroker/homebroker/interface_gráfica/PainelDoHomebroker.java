@@ -44,8 +44,7 @@ public final class PainelDoHomebroker extends JPanel
    private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
             .getInstância( PainelDoHomebroker.motor );
    
-   private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas
-            .getInstância();
+   private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -62,15 +61,12 @@ public final class PainelDoHomebroker extends JPanel
     * Contém as informações de apresentação e como utilizar o programa. Tais
     * informações serão apresentadas na interface gráfica ao usuário.
     */
-   private final String campoDeAjuda = "Bem-vindo ao sistema "
-            + "tabajara de cadastro de ações.\n"
-            + "Digite 's' para fechar o programa.\n"
-            + "Digite 'v' para para ver o inventario.\n"
+   private final String campoDeAjuda = "Bem-vindo ao sistema " + "tabajara de cadastro de ações.\n"
+            + "Digite 's' para fechar o programa.\n" + "Digite 'v' para para ver o inventario.\n"
             + "Digite 'b' para para bloquear uma conta de usuário.\n"
             + "Digite 'ov' para enviar uma ordem de venda.\n"
             + "Digite 'oc' para criar um ordem de compra.\n"
-            + "Digite 'ex' para excluir uma conta.\n"
-            + "Digite 'c' para para criar uma conta.\n"
+            + "Digite 'ex' para excluir uma conta.\n" + "Digite 'c' para para criar uma conta.\n"
             + "Digite 'm' para ver o mercado.\n";
    
    /**
@@ -79,8 +75,7 @@ public final class PainelDoHomebroker extends JPanel
    private PainelDoHomebroker()
    {
       // Liga o book de ofertas
-      final Thread processoDoBook =
-               new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
+      final Thread processoDoBook = new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
       processoDoBook.start();
       
       // Configura os componentes
@@ -99,8 +94,7 @@ public final class PainelDoHomebroker extends JPanel
       this.add( this.entradaDeComandos, BorderLayout.NORTH );
       this.add( campoDeAjuda, BorderLayout.EAST );
       
-      Biblioteca.trocarFontes( this,
-               new Font( this.getName(), Frame.NORMAL, 20 ) );
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
    }
    
    /**
@@ -290,8 +284,8 @@ public final class PainelDoHomebroker extends JPanel
    
    private void imputError()
    {
-      JOptionPane.showMessageDialog( null, "Você digitou uma "
-               + "opção inválida!\n\n" + this.campoDeAjuda );
+      JOptionPane.showMessageDialog( null, "Você digitou uma " + "opção inválida!\n\n"
+               + this.campoDeAjuda );
    }
    
    /**
@@ -309,11 +303,9 @@ public final class PainelDoHomebroker extends JPanel
    {
       if( !PainelDoHomebroker.motor.isAutenticada() )
       {
-         JOptionPane.showMessageDialog( null, "Não há "
-                  + "nenhuma conta carregada no sistema!" );
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
-      JOptionPane.showMessageDialog( null,
-               PainelDoHomebroker.motor.inventarioToString() );
+      JOptionPane.showMessageDialog( null, PainelDoHomebroker.motor.inventarioToString() );
    }
 }

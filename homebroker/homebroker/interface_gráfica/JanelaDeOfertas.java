@@ -30,8 +30,7 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
     * instanciado antes que o construtor desta classe, pois este construtor
     * precisa de deste objeto já instanciado para ser monitorado pelo log.
     */
-   private static final Logger LOG = Logger.getLogger( JanelaDeOfertas.class
-            .getName() );
+   private static final Logger LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
    
    /**
     * Por padrão, este tipo de instanciação é thread safe.
@@ -49,8 +48,7 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
       
       if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
-         JOptionPane.showMessageDialog( null,
-                  "Estou no construtor da JanelaDoBook!" );
+         JOptionPane.showMessageDialog( null, "Estou no construtor da JanelaDoBook!" );
       }
       if( JanelaDeOfertas.INSTÂNCIA != null )
       {
@@ -58,13 +56,11 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
       }
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
-      final Dimension tamanhoDaJanela =
-               Toolkit.getDefaultToolkit().getScreenSize();
+      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
       final int width = (int) tamanhoDaJanela.getWidth();
       final int height = (int) tamanhoDaJanela.getHeight();
       
-      final Dimension tamanhoDaJanelaReduzido =
-               new Dimension( width - 100, height - 100 );
+      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
@@ -74,8 +70,7 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
       this.painelPrincipal = PainelDaJanelaDeOfertas.getInstância();
       this.setContentPane( this.painelPrincipal );
       
-      Biblioteca.trocarFontes( this,
-               new Font( this.getName(), Frame.NORMAL, 24 ) );
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 24 ) );
    }
    
    /**
@@ -103,15 +98,24 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
     */
    private void atualizarListaDeOfertas()
    {
-      final int indice = this.getNúmeroDeOfertas();
-      final String ofertaDoMercado = // TODO null pointer se reiniciar a o
-// monitoramento
-               JanelaDeOfertas.motor.ofertaToString( indice );
-      this.adicionarOfertaDeMercado( ofertaDoMercado );
+      int indice = this.getNúmeroDeOfertas();
       
-      if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+      while( true )
       {
-         JanelaDeOfertas.LOG.severe( ofertaDoMercado );
+         try
+         {
+            final String ofertaDoMercado = JanelaDeOfertas.motor.ofertaToString( indice );
+            this.adicionarOfertaDeMercado( ofertaDoMercado );
+            
+            if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+            {
+               JanelaDeOfertas.LOG.severe( ofertaDoMercado );
+            }
+         } catch( final Exception e )
+         {
+            break;
+         }
+         indice++;
       }
    }
    
@@ -148,8 +152,7 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
          
          JanelaDeOfertas.motor.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
          
-         if( JanelaDeOfertas.motor.existemNovasOfertas( this
-                  .getNúmeroDeOfertas() ) )
+         if( JanelaDeOfertas.motor.existemNovasOfertas( this.getNúmeroDeOfertas() ) )
          {
             this.atualizarListaDeOfertas();
          }
