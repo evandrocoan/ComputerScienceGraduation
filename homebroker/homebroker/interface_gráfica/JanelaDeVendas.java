@@ -5,38 +5,100 @@ package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.MotorDoHomebroker;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
+
+import util.Biblioteca;
 
 /**
  * 
  * @author Professional
  */
-public final class JanelaDeVendas extends JFrame
+public final class JanelaDeVendas extends JFrame implements Runnable
 {
+   /**
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser
+    * instanciado antes que o construtor desta classe, pois este construtor
+    * precisa de deste objeto já instanciado para ser monitorado pelo log.
+    */
+   private static final Logger LOG = Logger.getLogger( JanelaDeVendas.class.getName() );
+   
    private static JanelaDeVendas instância;
-   
    private final MotorDoHomebroker motor;
+   private final PainelDaJanelaDeVendas painelPrincipal;
    
-   private JanelaDeVendas( final MotorDoHomebroker motor )
+   private JanelaDeVendas()
    {
-      this.motor = motor;
+      super( "Book De Vendas" );
+      
+      JanelaDeVendas.LOG.setLevel( Level.OFF );
+      this.painelPrincipal = PainelDaJanelaDeVendas.getInstância();
+      this.motor = MotorDoHomebroker.getInstância();
+      
+      this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+      
+      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
+      final int width = (int) tamanhoDaJanela.getWidth();
+      final int height = (int) tamanhoDaJanela.getHeight();
+      
+      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
+      
+      this.setSize( tamanhoDaJanelaReduzido );
+      this.setPreferredSize( tamanhoDaJanelaReduzido );
+      this.setBounds( 50, 50, width - 100, height - 100 );
+      this.setVisible( false );
+      this.setContentPane( this.painelPrincipal );
+      
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 24 ) );
    }
    
    /**
-    * @param motor o motor do Homebroker.
     * @return instância uma instância da janela de login.
     */
-   public static JanelaDeVendas getInstância( final MotorDoHomebroker motor )
+   public static JanelaDeVendas getInstância()
    {
       synchronized( JanelaDeVendas.class )
       {
          if( JanelaDeVendas.instância == null )
          {
-            JanelaDeVendas.instância = new JanelaDeVendas( motor );
+            JanelaDeVendas.instância = new JanelaDeVendas();
          }
       }
       return JanelaDeVendas.instância;
+   }
+   
+   /**
+    * Atualiza a lista de ofertas do book de ofertas.
+    */
+   private void atualizarListaDeOfertas()
+   {
+      int indice = this.painelPrincipal.tamanhoDaLista();
+      
+      while( true )
+      {
+         try
+         {
+            final String ofertaDoMercado = this.motor.ofertaToString( indice );
+            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
+            
+            if( JanelaDeVendas.LOG.isLoggable( Level.SEVERE ) )
+            {
+               JanelaDeVendas.LOG.severe( ofertaDoMercado );
+            }
+         } catch( final Exception e )
+         {
+            break;
+         }
+         indice++;
+      }
    }
    
    /**
@@ -191,5 +253,42 @@ public final class JanelaDeVendas extends JFrame
          nÉsimaVez = true;
       }
       return quantidade;
+   }
+   
+   /**
+    * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000
+    * milisegundos caso haja mudanças.
+    *
+    * @see java.lang.Runnable#run()
+    */
+   @Override
+   public void run()
+   {
+      while( true )
+      {
+         if( JanelaDeVendas.LOG.isLoggable( Level.SEVERE ) )
+         {
+            final String texto =
+               "Estou em JanelaDoBook chamando o teste "
+                  + "\n\n this.bookDeOfertas.existemNovasOfertas( "
+                  + "this.janelaDoBook.getNúmeroDeOfertas()"
+                  + this.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() );
+            JanelaDeVendas.LOG.severe( texto );
+         }
+         
+         this.motor.adicionarOfertaDeCompra( 10, 5, "Tabajara SAS" );
+         
+         if( this.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() ) )
+         {
+            this.atualizarListaDeOfertas();
+         }
+         try
+         {
+            Thread.sleep( 10000 );
+         } catch( final InterruptedException e )
+         {
+            e.printStackTrace();
+         }
+      }
    }
 }

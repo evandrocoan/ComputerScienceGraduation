@@ -88,6 +88,11 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeCompra( final double preço, final int quantidade,
       final String nome )
    {
+      if( this.contaAutenticada == null )
+      {
+         return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
+            this.contas.get( 1 ) );
+      }
       return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
          this.contaAutenticada );
    }
@@ -102,6 +107,11 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
       final String nome )
    {
+      if( this.contaAutenticada == null )
+      {
+         return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
+            this.contas.get( 2 ) );
+      }
       return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
          this.contaAutenticada );
    }

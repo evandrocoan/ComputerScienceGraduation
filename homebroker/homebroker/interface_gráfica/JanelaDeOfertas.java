@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -43,17 +42,9 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
    
    private JanelaDeOfertas()
    {
-      super( "Monitor do Book De Ofertas" );
+      super( "Book De Ofertas" );
       JanelaDeOfertas.LOG.setLevel( Level.OFF );
       
-      if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
-      {
-         JOptionPane.showMessageDialog( null, "Estou no construtor da JanelaDoBook!" );
-      }
-      if( JanelaDeOfertas.INSTÂNCIA != null )
-      {
-         throw new IllegalStateException( "Objeto já instanciado!" );
-      }
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
       final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
@@ -82,30 +73,18 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
    }
    
    /**
-    * Adiciona uma oferta de mercado ao book de ofertas.
-    *
-    * @param ofertaDeMercado uma String representando a oferta de mercado para
-    *           se adicionar ao book de ofertas. Os caracteres de quebra de
-    *           linhas desta String serão ignorados.
-    */
-   public void adicionarOfertaDeMercado( final String ofertaDeMercado )
-   {
-      this.painelPrincipal.adicionarOferta( ofertaDeMercado );
-   }
-   
-   /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
    private void atualizarListaDeOfertas()
    {
-      int indice = this.getNúmeroDeOfertas();
+      int indice = this.painelPrincipal.tamanhoDaLista();
       
       while( true )
       {
          try
          {
             final String ofertaDoMercado = JanelaDeOfertas.motor.ofertaToString( indice );
-            this.adicionarOfertaDeMercado( ofertaDoMercado );
+            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
             
             if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
             {
@@ -117,15 +96,6 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
          }
          indice++;
       }
-   }
-   
-   /**
-    * @return númeroDeOfertas o número de ofertas já inseridas no book de
-    *         ofertas.
-    */
-   public int getNúmeroDeOfertas()
-   {
-      return this.painelPrincipal.tamanhoDaLista();
    }
    
    /**
@@ -145,13 +115,13 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
                "Estou em JanelaDoBook chamando o teste "
                   + "\n\n this.bookDeOfertas.existemNovasOfertas( "
                   + "this.janelaDoBook.getNúmeroDeOfertas()"
-                  + JanelaDeOfertas.motor.existemNovasOfertas( this.getNúmeroDeOfertas() );
+                  + JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() );
             JanelaDeOfertas.LOG.severe( texto );
          }
          
          JanelaDeOfertas.motor.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
          
-         if( JanelaDeOfertas.motor.existemNovasOfertas( this.getNúmeroDeOfertas() ) )
+         if( JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() ) )
          {
             this.atualizarListaDeOfertas();
          }

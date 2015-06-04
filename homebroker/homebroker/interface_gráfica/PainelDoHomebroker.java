@@ -33,17 +33,13 @@ public final class PainelDoHomebroker extends JPanel
     */
    private static PainelDoHomebroker instância;
    
-   private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
-   
    /**
     * Contém o motor principal.
     */
-   private static final JanelaDeCadastro JANELA_DE_CADASTRO =
-      homebroker.interface_gráfica.JanelaDeCadastro.getInstância();
+   private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
    
-   private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
-      .getInstância( PainelDoHomebroker.motor );
-   
+   private static final JanelaDeCadastro JANELA_DE_CADASTRO = JanelaDeCadastro.getInstância();
+   private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas.getInstância();
    private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
    
    /**
@@ -61,12 +57,13 @@ public final class PainelDoHomebroker extends JPanel
     * Contém as informações de apresentação e como utilizar o programa. Tais
     * informações serão apresentadas na interface gráfica ao usuário.
     */
-   private final String campoDeAjuda = "Bem-vindo ao sistema " + "tabajara de cadastro de ações.\n"
-      + "Digite 's' para fechar o programa.\n" + "Digite 'v' para para ver o inventario.\n"
+   private final String campoDeAjuda = "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
+      + "Digite 's' para fechar o programa.\n" + "Digite 'i' para para ver o inventario.\n"
       + "Digite 'b' para para bloquear uma conta de usuário.\n"
       + "Digite 'ov' para enviar uma ordem de venda.\n"
       + "Digite 'oc' para criar um ordem de compra.\n" + "Digite 'ex' para excluir uma conta.\n"
-      + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n";
+      + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n"
+      + "Digite 'v' para ver as vendas.\n";
    
    /**
     * Cria um painel para colocar os botões, caixas de texto, ...
@@ -74,8 +71,10 @@ public final class PainelDoHomebroker extends JPanel
    private PainelDoHomebroker()
    {
       // Liga o book de ofertas
-      final Thread processoDoBook = new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
-      processoDoBook.start();
+      final Thread processoDeOfertas = new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
+      final Thread processoDeVendas = new Thread( PainelDoHomebroker.JANELA_DE_VENDAS );
+      processoDeOfertas.start();
+      processoDeVendas.start();
       
       // Configura os componentes
       this.configurarEntradaDeComandos();
@@ -109,21 +108,6 @@ public final class PainelDoHomebroker extends JPanel
          }
       }
       return PainelDoHomebroker.instância;
-   }
-   
-   private void bloquearUmUsuário()
-   {
-      PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarBloqueio();
-   }
-   
-   /**
-    * Inicia o processo de criação da conta de um usuário do sistema
-    *
-    * //@return conta a conta criada
-    */
-   public void cadastrarUsuário()
-   {
-      PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarCadastro();
    }
    
    /**
@@ -210,22 +194,6 @@ public final class PainelDoHomebroker extends JPanel
    }
    
    /**
-    * Chama a janela responsável por realizar venda da ação.
-    */
-   private void efetuarCompra()
-   {
-      PainelDoHomebroker.JANELA_DE_VENDAS.efetuarCompra();
-   }
-   
-   /**
-    * Chama a janela responsável por realizar venda da ação.
-    */
-   private void efetuarVenda()
-   {
-      PainelDoHomebroker.JANELA_DE_VENDAS.efetuarVenda();
-   }
-   
-   /**
     * Menu principal que exibe as opções de operação no mercado e na carteira de
     * ações do cliente.
     */
@@ -241,44 +209,34 @@ public final class PainelDoHomebroker extends JPanel
       case "s":
          MotorDoHomebroker.sairDoSistema();
          break;
-      case "v":
+      case "i":
          this.mostrarInventário();
          break;
       case "b":
-         this.bloquearUmUsuário();
+         PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarBloqueio();
          break;
       case "c":
-         this.cadastrarUsuário();
+         PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarCadastro();
          break;
       case "ov":
-         this.efetuarVenda();
+         PainelDoHomebroker.JANELA_DE_VENDAS.efetuarVenda();
          break;
       case "ex":
-         this.excluirConta();
+         PainelDoHomebroker.JANELA_DE_CADASTRO.excluirConta();
          break;
       case "oc":
-         this.efetuarCompra();
+         PainelDoHomebroker.JANELA_DE_VENDAS.efetuarCompra();
          break;
       case "m":
-         this.exibirBookDeOfertas();
+         PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
+         break;
+      case "v":
+         PainelDoHomebroker.JANELA_DE_VENDAS.setVisible( true );
          break;
       default:
          this.imputError();
          break;
       }
-   }
-   
-   private void excluirConta()
-   {
-      PainelDoHomebroker.JANELA_DE_CADASTRO.excluirConta();
-   }
-   
-   /**
-    * Exibe o book de ofertas.
-    */
-   private void exibirBookDeOfertas()
-   {
-      PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
    }
    
    private void imputError()
