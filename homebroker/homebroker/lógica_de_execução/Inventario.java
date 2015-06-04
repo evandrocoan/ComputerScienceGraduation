@@ -57,19 +57,21 @@ public class Inventario
     */
    public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      this.existeNoInvetário( ação );
-      
-      int indiceAção = 0;
-      for( final Ação açãoTemp: this.listaDeAções )
+      if( this.existeNoInvetário( ação ) )
       {
-         if( açãoTemp.getNome().equals( ação ) )
+         int indiceAção = 0;
+         for( final Ação açãoTemp: this.listaDeAções )
          {
-            break;
+            if( açãoTemp.getNome().equals( ação ) )
+            {
+               break;
+            }
+            indiceAção++;
          }
-         indiceAção++;
+         final Ação açãoTemp = this.listaDeAções.get( indiceAção );
+         return açãoTemp.getQuantidade() >= quantidade;
       }
-      final Ação açãoTemp = this.listaDeAções.get( indiceAção );
-      return açãoTemp.getQuantidade() >= quantidade;
+      return false;
    }
    
    /**
