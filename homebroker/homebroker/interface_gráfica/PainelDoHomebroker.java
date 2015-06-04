@@ -141,7 +141,7 @@ public final class PainelDoHomebroker extends JPanel
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
-            PainelDoHomebroker.this.enviarCommando( ae.getActionCommand() );
+            PainelDoHomebroker.this.enviarCommando( PainelDoHomebroker.this.conteúdo() );
          }
       } );
       
