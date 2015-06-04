@@ -1,5 +1,5 @@
 /**
- * 
+ *  
  */
 package homebroker.lógica_de_execução;
 

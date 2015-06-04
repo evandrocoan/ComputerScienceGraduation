@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package homebroker;
 
@@ -63,10 +63,9 @@ public class Homebroker
             
             case "ajuda":
                System.out.println( "Comandos disponíveis:\n"
-                        + "teste: abre o programa em mode de teste sem dica"
-                        + "das contas para se logar\n"
-                        + "dica: o mesmo que teste, mas abre o programa "
-                        + "com dicas de contas para se logar." );
+                  + "teste: abre o programa em mode de teste sem dica"
+                  + "das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa "
+                  + "com dicas de contas para se logar." );
                exitLoop = true;
                break;
             

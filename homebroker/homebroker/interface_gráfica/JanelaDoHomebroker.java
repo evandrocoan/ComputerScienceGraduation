@@ -119,8 +119,8 @@ public final class JanelaDoHomebroker extends JFrame
       do
       {
          usuário =
-                  JOptionPane.showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
-                           + "Insira qual conta será feito login: " + dica );
+            JOptionPane.showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
+               + "Insira qual conta será feito login: " + dica );
          
          if( ( usuário == null ) )
          {
