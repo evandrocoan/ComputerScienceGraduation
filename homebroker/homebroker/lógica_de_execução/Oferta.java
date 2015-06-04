@@ -27,7 +27,7 @@ public class Oferta
     * @param conta a conta qual faz a oferta
     */
    public Oferta( final double preço, final int quantidade, final String ação,
-            final String tipoDeOferta, final Conta conta )
+      final String tipoDeOferta, final Conta conta )
    {
       Oferta.LOG.setLevel( Level.OFF );
       
@@ -67,9 +67,9 @@ public class Oferta
    public String ofertaToString()
    {
       final String açãoEmOferta =
-               "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
-                        + this.getAção().getNome() + " - Preço: " + this.getAção().getPreço()
-                        + " - Quantidade: " + this.getAção().getQuantidade();
+         "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: " + this.getAção().getNome()
+            + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
+            + this.getAção().getQuantidade();
       
       if( Oferta.LOG.isLoggable( Level.SEVERE ) )
       {

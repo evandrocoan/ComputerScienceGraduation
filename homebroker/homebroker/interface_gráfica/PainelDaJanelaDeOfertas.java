@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package homebroker.interface_gráfica;
 
@@ -47,7 +47,7 @@ public final class PainelDaJanelaDeOfertas extends JPanel
       if( PainelDaJanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
          JOptionPane.showMessageDialog( null,
-                  "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
+            "Estou no construtor do PainelPrincipal da JanelaDoBook!" );
       }
       
       this.setLayout( new GridLayout( 0, 1 ) );

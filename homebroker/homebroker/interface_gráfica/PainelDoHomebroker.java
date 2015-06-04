@@ -39,10 +39,10 @@ public final class PainelDoHomebroker extends JPanel
     * Contém o motor principal.
     */
    private static final JanelaDeCadastro JANELA_DE_CADASTRO =
-            homebroker.interface_gráfica.JanelaDeCadastro.getInstância();
+      homebroker.interface_gráfica.JanelaDeCadastro.getInstância();
    
    private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas
-            .getInstância( PainelDoHomebroker.motor );
+      .getInstância( PainelDoHomebroker.motor );
    
    private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
    
@@ -62,12 +62,11 @@ public final class PainelDoHomebroker extends JPanel
     * informações serão apresentadas na interface gráfica ao usuário.
     */
    private final String campoDeAjuda = "Bem-vindo ao sistema " + "tabajara de cadastro de ações.\n"
-            + "Digite 's' para fechar o programa.\n" + "Digite 'v' para para ver o inventario.\n"
-            + "Digite 'b' para para bloquear uma conta de usuário.\n"
-            + "Digite 'ov' para enviar uma ordem de venda.\n"
-            + "Digite 'oc' para criar um ordem de compra.\n"
-            + "Digite 'ex' para excluir uma conta.\n" + "Digite 'c' para para criar uma conta.\n"
-            + "Digite 'm' para ver o mercado.\n";
+      + "Digite 's' para fechar o programa.\n" + "Digite 'v' para para ver o inventario.\n"
+      + "Digite 'b' para para bloquear uma conta de usuário.\n"
+      + "Digite 'ov' para enviar uma ordem de venda.\n"
+      + "Digite 'oc' para criar um ordem de compra.\n" + "Digite 'ex' para excluir uma conta.\n"
+      + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n";
    
    /**
     * Cria um painel para colocar os botões, caixas de texto, ...
@@ -285,7 +284,7 @@ public final class PainelDoHomebroker extends JPanel
    private void imputError()
    {
       JOptionPane.showMessageDialog( null, "Você digitou uma " + "opção inválida!\n\n"
-               + this.campoDeAjuda );
+         + this.campoDeAjuda );
    }
    
    /**

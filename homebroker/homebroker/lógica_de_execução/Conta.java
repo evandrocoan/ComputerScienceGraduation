@@ -28,7 +28,7 @@ public class Conta
     * @param inventario o inventário do usuário.
     */
    public Conta( final String nome, final String senha, final double saldo,
-            final boolean administrador, final Inventario inventario )
+      final boolean administrador, final Inventario inventario )
    {
       this.nome = nome;
       this.senha = senha;

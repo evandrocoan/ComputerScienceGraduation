@@ -1,5 +1,5 @@
 /**
- *  
+ *   
  */
 package homebroker.interface_gráfica;
 
@@ -125,9 +125,8 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          açãoParaVender =
-                  JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
-                           + "Lista de ações disponíveis para venda: \n"
-                           + this.motor.inventarioToString() );
+            JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
+               + "Lista de ações disponíveis para venda: \n" + this.motor.inventarioToString() );
          if( açãoParaVender == null )
          {
             return null;
@@ -150,8 +149,8 @@ public final class JanelaDeVendas extends JFrame
    private double getPreço( final String ação, final boolean modo )
    {
       final String imput =
-               JOptionPane.showInputDialog( "Insira o preço da ação:",
-                        ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
+         JOptionPane.showInputDialog( "Insira o preço da ação:",
+            ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
       if( imput == null )
       {
          return 0;
@@ -180,9 +179,9 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          final String imput =
-                  JOptionPane.showInputDialog( ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
-                           + "Insira a quantidade da ação:",
-                           ( modo? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
+            JOptionPane.showInputDialog( ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
+               + "Insira a quantidade da ação:",
+               ( modo? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
          if( imput == null )
          {
             return 0;

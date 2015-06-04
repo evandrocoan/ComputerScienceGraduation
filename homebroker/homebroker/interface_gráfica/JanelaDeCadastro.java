@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package homebroker.interface_gráfica;
 
@@ -51,7 +51,7 @@ public final class JanelaDeCadastro extends JFrame
       if( !this.motor.isAdministradora() )
       {
          JOptionPane.showMessageDialog( null, "Acesso negado! "
-                  + "Você precisa ter privilégio de administrador." );
+            + "Você precisa ter privilégio de administrador." );
          return;
       }
       final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: " );
@@ -126,8 +126,8 @@ public final class JanelaDeCadastro extends JFrame
       while( !sucesso )
       {
          final String input =
-                  JOptionPane.showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n" : "" )
-                           + "Insira um CPF:" );
+            JOptionPane
+               .showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n" : "" ) + "Insira um CPF:" );
          if( input == null )
          {
             return 0;
@@ -163,8 +163,8 @@ public final class JanelaDeCadastro extends JFrame
       while( !sucesso )
       {
          final String inputString =
-                  JOptionPane.showInputDialog( ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
-                           + "Insira o saldo do novo acionista:" );
+            JOptionPane.showInputDialog( ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
+               + "Insira o saldo do novo acionista:" );
          if( inputString == null )
          {
             return -1;
@@ -198,8 +198,8 @@ public final class JanelaDeCadastro extends JFrame
       do
       {
          nome =
-                  JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-                           + this.motor.contasTesteToString() + "\n\n" + pergunta );
+            JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
+               + this.motor.contasTesteToString() + "\n\n" + pergunta );
          
          if( nome == null )
          {

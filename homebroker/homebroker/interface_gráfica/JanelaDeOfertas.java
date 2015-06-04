@@ -142,11 +142,10 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
          if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
          {
             final String texto =
-                     "Estou em JanelaDoBook chamando o teste "
-                              + "\n\n this.bookDeOfertas.existemNovasOfertas( "
-                              + "this.janelaDoBook.getNúmeroDeOfertas()"
-                              + JanelaDeOfertas.motor.existemNovasOfertas( this
-                                       .getNúmeroDeOfertas() );
+               "Estou em JanelaDoBook chamando o teste "
+                  + "\n\n this.bookDeOfertas.existemNovasOfertas( "
+                  + "this.janelaDoBook.getNúmeroDeOfertas()"
+                  + JanelaDeOfertas.motor.existemNovasOfertas( this.getNúmeroDeOfertas() );
             JanelaDeOfertas.LOG.severe( texto );
          }
          
