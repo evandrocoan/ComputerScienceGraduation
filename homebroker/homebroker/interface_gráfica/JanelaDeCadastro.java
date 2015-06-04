@@ -45,8 +45,7 @@ public final class JanelaDeCadastro extends JFrame
    {
       if( !this.motor.isAutenticada() )
       {
-         JOptionPane.showMessageDialog( null, "Não há "
-                  + "nenhuma conta carregada no sistema!" );
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
       if( !this.motor.isAdministradora() )
@@ -55,13 +54,11 @@ public final class JanelaDeCadastro extends JFrame
                   + "Você precisa ter privilégio de administrador." );
          return;
       }
-      final String conta =
-               this.solicitarConta( "\n\nInsira qual conta será bloqueada: " );
+      final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: " );
       
       if( conta != null )
       {
-         JOptionPane
-                  .showMessageDialog( null, "Bloqueio realizado com sucesso!" );
+         JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
          this.motor.bloquearConta( conta );
       }
    }
@@ -73,8 +70,7 @@ public final class JanelaDeCadastro extends JFrame
    {
       if( !this.motor.isAutenticada() )
       {
-         JOptionPane.showMessageDialog( null, "Não há "
-                  + "nenhuma conta carregada no sistema!" );
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
       boolean sucesso = false;
@@ -111,15 +107,13 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      final String conta =
-               this.solicitarConta( "Insira a conta a ser excluída:" );
+      final String conta = this.solicitarConta( "Insira a conta a ser excluída:" );
       
       this.motor.excluirConta( conta );
       
       if( conta != null )
       {
-         JOptionPane.showMessageDialog( null, "Conta " + conta
-                  + "excluída com sucesso!" );
+         JOptionPane.showMessageDialog( null, "Conta " + conta + "excluída com sucesso!" );
       }
    }
    
@@ -132,8 +126,8 @@ public final class JanelaDeCadastro extends JFrame
       while( !sucesso )
       {
          final String input =
-                  JOptionPane.showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n"
-                           : "" ) + "Insira um CPF:" );
+                  JOptionPane.showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n" : "" )
+                           + "Insira um CPF:" );
          if( input == null )
          {
             return 0;
@@ -155,9 +149,7 @@ public final class JanelaDeCadastro extends JFrame
    {
       String nome = null;
       
-      nome =
-               JOptionPane
-                        .showInputDialog( "Insira o nome novo do acionista: \n" );
+      nome = JOptionPane.showInputDialog( "Insira o nome novo do acionista: \n" );
       
       return nome;
    }
@@ -171,8 +163,7 @@ public final class JanelaDeCadastro extends JFrame
       while( !sucesso )
       {
          final String inputString =
-                  JOptionPane.showInputDialog( ( nÉsimaVez
-                           ? "Saldo inválido!\n\n" : "" )
+                  JOptionPane.showInputDialog( ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
                            + "Insira o saldo do novo acionista:" );
          if( inputString == null )
          {
@@ -195,9 +186,7 @@ public final class JanelaDeCadastro extends JFrame
    {
       String nome = null;
       
-      nome =
-               JOptionPane
-                        .showInputDialog( "Insira a senha do novo acionista: \n" );
+      nome = JOptionPane.showInputDialog( "Insira a senha do novo acionista: \n" );
       
       return nome;
    }
@@ -209,11 +198,8 @@ public final class JanelaDeCadastro extends JFrame
       do
       {
          nome =
-                  JOptionPane.showInputDialog( ( inputError? ""
-                           : "Usuário inválido!\n\n" )
-                           + this.motor.contasTesteToString()
-                           + "\n\n"
-                           + pergunta );
+                  JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
+                           + this.motor.contasTesteToString() + "\n\n" + pergunta );
          
          if( nome == null )
          {

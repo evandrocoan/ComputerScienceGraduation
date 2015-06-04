@@ -72,8 +72,8 @@ public final class MotorDoHomebroker
       System.exit( 0 );
    }
    
-   public boolean adicionarConta( final double saldo, final int cpf,
-            final String nome, final String senha )
+   public boolean adicionarConta( final double saldo, final int cpf, final String nome,
+            final String senha )
    {
       return this.contas.add( new Conta( nome, senha, saldo, false, null ) );
    }
@@ -85,11 +85,11 @@ public final class MotorDoHomebroker
     *
     * @return true caso a operação tenha sucesso.
     */
-   public boolean adicionarOfertaDeCompra( final double preço,
-            final int quantidade, final String nome )
+   public boolean adicionarOfertaDeCompra( final double preço, final int quantidade,
+            final String nome )
    {
-      return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade,
-               nome, this.contaAutenticada );
+      return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
+               this.contaAutenticada );
    }
    
    /**
@@ -99,11 +99,11 @@ public final class MotorDoHomebroker
     *
     * @return true caso a operação tenha sucesso.
     */
-   public boolean adicionarOfertaDeVenda( final double preço,
-            final int quantidade, final String nome )
+   public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
+            final String nome )
    {
-      return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade,
-               nome, this.contaAutenticada );
+      return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
+               this.contaAutenticada );
    }
    
    public boolean bloquearConta( final String nome )
@@ -130,8 +130,7 @@ public final class MotorDoHomebroker
       int contador = 0;
       for( final Conta conta: this.contas )
       {
-         texto.append( conta.getNome() ).append(
-                  ( conta.isBloqueada()? "(1)" : "(0)" ) );
+         texto.append( conta.getNome() ).append( ( conta.isBloqueada()? "(1)" : "(0)" ) );
          texto.append( ", " );
          if( Biblioteca.quebrarLinha( contador ) )
          {
@@ -139,8 +138,7 @@ public final class MotorDoHomebroker
          }
          contador = contador + 1;
       }
-      return texto.append( "\n(1) = Bloqueada, (0) = Desbloqueada." )
-               .toString();
+      return texto.append( "\n(1) = Bloqueada, (0) = Desbloqueada." ).toString();
    }
    
    /**
@@ -152,8 +150,8 @@ public final class MotorDoHomebroker
    public void criarContasFicticia( final int quantidade, final String senha )
    {
       final ArrayList< Conta > contasTeste = new ArrayList<>();
-      contasTeste.add( new Conta( "admin", "admin", 2000.5 * Biblioteca
-               .gerarNumeroAleatorio(), true, new Inventario() ) );
+      contasTeste.add( new Conta( "admin", "admin", 2000.5 * Biblioteca.gerarNumeroAleatorio(),
+               true, new Inventario() ) );
       
       this.criarInventarioFicticio( contasTeste.get( 0 ), quantidade );
       
@@ -163,8 +161,7 @@ public final class MotorDoHomebroker
       {
          contaTeste =
                   new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
-                           2000.5 * Biblioteca.gerarNumeroAleatorio(), false,
-                           new Inventario() );
+                           2000.5 * Biblioteca.gerarNumeroAleatorio(), false, new Inventario() );
          this.criarInventarioFicticio( contaTeste, quantidade );
          
          contasTeste.add( contaTeste );
@@ -191,32 +188,32 @@ public final class MotorDoHomebroker
       {
          ação =
                   new Ação( 2.2 + Biblioteca.gerarNumeroAleatorio(),
-                           10 + Biblioteca.gerarNumeroAleatorio(),
-                           "Tabajara SA" + Biblioteca.gerarNumeroAleatorio() );
+                           10 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
+                                    + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
          ação =
                   new Ação( 22.2 + Biblioteca.gerarNumeroAleatorio(),
-                           100 + Biblioteca.gerarNumeroAleatorio(),
-                           "Tabajara SO" + Biblioteca.gerarNumeroAleatorio() );
+                           100 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
+                                    + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
          ação =
                   new Ação( 200.2 + Biblioteca.gerarNumeroAleatorio(),
-                           1000 + Biblioteca.gerarNumeroAleatorio(),
-                           "Tabajara SP" + Biblioteca.gerarNumeroAleatorio() );
+                           1000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SP"
+                                    + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
          ação =
                   new Ação( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
-                           10000 + Biblioteca.gerarNumeroAleatorio(),
-                           "Tabajara ST" + Biblioteca.gerarNumeroAleatorio() );
+                           10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara ST"
+                                    + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
          ação =
                   new Ação( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
-                           10000 + Biblioteca.gerarNumeroAleatorio(),
-                           "Tabajara SS" + Biblioteca.gerarNumeroAleatorio() );
+                           10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SS"
+                                    + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
       }
    }
@@ -347,8 +344,7 @@ public final class MotorDoHomebroker
     *
     * @return true caso seja autenticado a conta
     */
-   public boolean loginNoSistemaChecagem( final String usuário,
-            final String senha )
+   public boolean loginNoSistemaChecagem( final String usuário, final String senha )
    {
       for( final Conta conta: this.contas )
       {

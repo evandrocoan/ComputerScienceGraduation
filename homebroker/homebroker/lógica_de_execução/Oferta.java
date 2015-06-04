@@ -13,8 +13,7 @@ import java.util.logging.Logger;
  */
 public class Oferta
 {
-   private static final Logger LOG = Logger.getLogger( Oferta.class
-            .getName() );
+   private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
    
    private final Conta conta;
    private final Ação açãoEmOferta;
@@ -27,8 +26,8 @@ public class Oferta
     * @param tipoDeOferta o tipo da oferta
     * @param conta a conta qual faz a oferta
     */
-   public Oferta( final double preço, final int quantidade,
-            final String ação, final String tipoDeOferta, final Conta conta )
+   public Oferta( final double preço, final int quantidade, final String ação,
+            final String tipoDeOferta, final Conta conta )
    {
       Oferta.LOG.setLevel( Level.OFF );
       
@@ -69,9 +68,8 @@ public class Oferta
    {
       final String açãoEmOferta =
                "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: "
-                        + this.getAção().getNome() + " - Preço: "
-                        + this.getAção().getPreço() + " - Quantidade: "
-                        + this.getAção().getQuantidade();
+                        + this.getAção().getNome() + " - Preço: " + this.getAção().getPreço()
+                        + " - Quantidade: " + this.getAção().getQuantidade();
       
       if( Oferta.LOG.isLoggable( Level.SEVERE ) )
       {
