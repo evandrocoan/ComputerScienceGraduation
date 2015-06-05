@@ -53,7 +53,7 @@ public final class PainelDoHomebroker extends JPanel
       + "Digite 'ov' para enviar uma ordem de venda.\n"
       + "Digite 'oc' para criar um ordem de compra.\n" + "Digite 'ex' para excluir uma conta.\n"
       + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n"
-      + "Digite 'v' para ver as vendas.\n";
+      + "Digite 'v' para ver as vendas.\n" + "Digite 't' para adicionar 2 ofertas de teste.";
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -116,6 +116,12 @@ public final class PainelDoHomebroker extends JPanel
          }
       }
       return PainelDoHomebroker.instância;
+   }
+   
+   private void adicionarOfertasTeste()
+   {
+      MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SAS" );
+      MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
    }
    
    /**
@@ -273,6 +279,9 @@ public final class PainelDoHomebroker extends JPanel
          break;
       case "v":
          PainelDoHomebroker.JANELA_DE_VENDAS.setVisible( true );
+         break;
+      case "t":
+         this.adicionarOfertasTeste();
          break;
       default:
          this.imputError();

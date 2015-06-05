@@ -39,7 +39,6 @@ public final class JanelaDoHomebroker extends JFrame
       // Liga o book de ofertas
       final Thread processoDeAtualizar = new Thread( new Atualizador() );
       processoDeAtualizar.start();
-      this.adicionarOfertasTeste();
       
       // Adiciona o painel principal nesta janela
       this.painelPrincipal = PainelDoHomebroker.getInstância();
@@ -70,15 +69,6 @@ public final class JanelaDoHomebroker extends JFrame
          }
       }
       return JanelaDoHomebroker.instância;
-   }
-   
-   /**
-    * 
-    */
-   private void adicionarOfertasTeste()
-   {
-      MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SAS" );
-      MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
    }
    
    /**
