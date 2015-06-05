@@ -53,11 +53,11 @@ public final class JanelaDeVendas extends JFrame
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 50, 50, width - 100, height - 100 );
+      this.setBounds( 250, 150, width - 400, height - 400 );
       this.setVisible( false );
       this.setContentPane( this.painelPrincipal );
       
-      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 24 ) );
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 18 ) );
    }
    
    /**

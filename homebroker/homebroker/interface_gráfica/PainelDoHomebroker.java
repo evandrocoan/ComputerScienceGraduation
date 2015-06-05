@@ -6,6 +6,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -45,13 +47,13 @@ public final class PainelDoHomebroker extends JPanel
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
     */
-   private transient JTextField entradaDeComandos;
+   private JTextField entradaDeComandos;
    
    /**
     * Botão que envia ao usuário os comandos que estão no campo
     * entradaDeComandos.
     */
-   private transient JButton botãoDeComandos;
+   private JButton botãoDeComandos;
    
    /**
     * Contém as informações de apresentação e como utilizar o programa. Tais
@@ -65,6 +67,8 @@ public final class PainelDoHomebroker extends JPanel
       + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n"
       + "Digite 'v' para ver as vendas.\n";
    
+   private JButton botãoDeOfertas;
+   
    /**
     * Cria um painel para colocar os botões, caixas de texto, ...
     */
@@ -73,6 +77,7 @@ public final class PainelDoHomebroker extends JPanel
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
+      this.configurarBotãoDeOfertas();
       
       final JTextArea campoDeAjuda = new JTextArea( this.campoDeAjuda );
       campoDeAjuda.setEditable( false );
@@ -81,12 +86,26 @@ public final class PainelDoHomebroker extends JPanel
       // Define o gerenciador de layout utilizado.
       super.setLayout( new BorderLayout() );
       
+      // Configura um painel de botões.
+      final JPanel painelDeBotões = new JPanel( new GridBagLayout() );
+      final GridBagConstraints gbc = new GridBagConstraints();
+      
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      gbc.gridwidth = 2;
+      painelDeBotões.add( this.botãoDeComandos, gbc );
+      
+      gbc.gridx = 2;
+      gbc.gridy = 0;
+      gbc.gridwidth = 2;
+      painelDeBotões.add( this.botãoDeOfertas, gbc );
+      
       // Adiciona os componentes ao painel principal
-      this.add( this.botãoDeComandos, BorderLayout.WEST );
       this.add( this.entradaDeComandos, BorderLayout.NORTH );
       this.add( campoDeAjuda, BorderLayout.EAST );
+      this.add( painelDeBotões, BorderLayout.WEST );
       
-      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 22 ) );
    }
    
    /**
@@ -113,9 +132,6 @@ public final class PainelDoHomebroker extends JPanel
       this.botãoDeComandos = new JButton( "Enviar comando" );
       this.botãoDeComandos.addActionListener( new ActionListener()
       {
-         /**
-          * Processa o comando na caixa de texto principal
-          */
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
@@ -124,8 +140,27 @@ public final class PainelDoHomebroker extends JPanel
       } );
       
       // Configura o botão principal
-      this.botãoDeComandos.setPreferredSize( new Dimension( 250, 35 ) );
+      this.botãoDeComandos.setPreferredSize( new Dimension( 200, 35 ) );
       this.botãoDeComandos.setFocusable( false );
+   }
+   
+   private void configurarBotãoDeOfertas()
+   {
+      final JanelaDeOfertas JANELA_DE_OFERTAS = PainelDoHomebroker.JANELA_DE_OFERTAS;
+      
+      this.botãoDeOfertas = new JButton( "Janela de Ofertas" );
+      this.botãoDeOfertas.addActionListener( new ActionListener()
+      {
+         @Override
+         public void actionPerformed( final ActionEvent ae )
+         {
+            JANELA_DE_OFERTAS.setVisible( true );
+         }
+      } );
+      
+      // Configura o botão principal
+      this.botãoDeOfertas.setPreferredSize( new Dimension( 220, 35 ) );
+      this.botãoDeOfertas.setFocusable( false );
    }
    
    /**

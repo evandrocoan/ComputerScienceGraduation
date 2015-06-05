@@ -50,7 +50,7 @@ public final class JanelaDoHomebroker extends JFrame
       this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
       
       // Abre a janela maximizado
-      this.setLocation( 350, 150 );
+      this.setLocation( 250, 150 );
       // this.setExtendedState( Frame.MAXIMIZED_BOTH );
       
       // Ajusta a janela ao tamanho dos elementos.
