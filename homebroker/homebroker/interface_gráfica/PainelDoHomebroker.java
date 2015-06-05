@@ -75,6 +75,10 @@ public final class PainelDoHomebroker extends JPanel
     */
    private PainelDoHomebroker()
    {
+      // Liga o book de ofertas
+      final Thread processoDeAtualizar = new Thread( new Atualizador() );
+      processoDeAtualizar.start();
+      
       // Define o gerenciador de layout utilizado.
       super.setLayout( new BorderLayout() );
       
@@ -96,9 +100,6 @@ public final class PainelDoHomebroker extends JPanel
       gbc.gridy = -1;
       gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeOfertas, gbc );
-      gbc.gridx = 0;
-      gbc.gridy = -1;
-      gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeVendas, gbc );
       
       final GridBagConstraints separatorConstraint = new GridBagConstraints();
@@ -108,13 +109,7 @@ public final class PainelDoHomebroker extends JPanel
       separatorConstraint.weighty = 1.0;
       painelDeBotões.add( new JSeparator( SwingConstants.HORIZONTAL ), separatorConstraint );
       
-      gbc.gridx = 0;
-      gbc.gridy = -1;
-      gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeTeste1, gbc );
-      gbc.gridx = 0;
-      gbc.gridy = -1;
-      gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeTeste2, gbc );
       
       // Adiciona os componentes ao painel principal

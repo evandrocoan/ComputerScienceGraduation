@@ -36,10 +36,6 @@ public final class JanelaDoHomebroker extends JFrame
       super( "HomeBroker Tabajara" );
       this.motor = MotorDoHomebroker.getInstância();
       
-      // Liga o book de ofertas
-      final Thread processoDeAtualizar = new Thread( new Atualizador() );
-      processoDeAtualizar.start();
-      
       // Adiciona o painel principal nesta janela
       this.painelPrincipal = PainelDoHomebroker.getInstância();
       this.painelPrincipal.setDoubleBuffered( true );
@@ -50,7 +46,7 @@ public final class JanelaDoHomebroker extends JFrame
       
       // Abre a janela maximizado
       this.setLocation( 210, 10 );
-      //this.setLocation( 250, 150 );
+      // this.setLocation( 250, 150 );
       // this.setExtendedState( Frame.MAXIMIZED_BOTH );
       
       // Ajusta a janela ao tamanho dos elementos.
@@ -75,9 +71,8 @@ public final class JanelaDoHomebroker extends JFrame
    /**
     * Método de realiza o login no sistema.
     *
-    * @param darDica uma dica que será aprensetada no menu do login.
-    *           Inicialmente ela serve para exibir quais contas estão
-    *           disponíveis para login.
+    * @param darDica uma dica que será aprensetada no menu do login. Inicialmente ela serve para
+    *           exibir quais contas estão disponíveis para login.
     */
    @SuppressWarnings( "all" )
    public void loginNoSistema( final String darDica )
@@ -120,8 +115,8 @@ public final class JanelaDoHomebroker extends JFrame
       boolean inputError = true;
       do
       {
-         usuário =
-            JOptionPane.showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
+         usuário = JOptionPane
+            .showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
                + "Insira qual conta será feito login: " + dica );
          
          if( ( usuário == null ) )
