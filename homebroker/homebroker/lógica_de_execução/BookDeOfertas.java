@@ -39,6 +39,11 @@ public final class BookDeOfertas
     */
    private final List< Venda > vendas;
    
+   @SuppressWarnings( "unused" )
+   private final Venda venda = null;
+   @SuppressWarnings( "unused" )
+   private final Oferta oferta = null;
+   
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
     */
