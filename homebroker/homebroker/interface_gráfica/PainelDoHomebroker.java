@@ -91,14 +91,15 @@ public final class PainelDoHomebroker extends JPanel
       // Configura um painel de botões.
       final JPanel painelDeBotões = new JPanel( new GridBagLayout() );
       final GridBagConstraints gbc = new GridBagConstraints();
+      
       gbc.gridx = 0;
       gbc.gridy = -1;
       gbc.gridwidth = 1;
-      painelDeBotões.add( this.botãoDeTeste1, gbc );
+      painelDeBotões.add( this.botãoDeOfertas, gbc );
       gbc.gridx = 0;
       gbc.gridy = -1;
       gbc.gridwidth = 1;
-      painelDeBotões.add( this.botãoDeTeste2, gbc );
+      painelDeBotões.add( this.botãoDeVendas, gbc );
       
       final GridBagConstraints separatorConstraint = new GridBagConstraints();
       separatorConstraint.gridx = 0;
@@ -110,11 +111,11 @@ public final class PainelDoHomebroker extends JPanel
       gbc.gridx = 0;
       gbc.gridy = -1;
       gbc.gridwidth = 1;
-      painelDeBotões.add( this.botãoDeOfertas, gbc );
+      painelDeBotões.add( this.botãoDeTeste1, gbc );
       gbc.gridx = 0;
       gbc.gridy = -1;
       gbc.gridwidth = 1;
-      painelDeBotões.add( this.botãoDeVendas, gbc );
+      painelDeBotões.add( this.botãoDeTeste2, gbc );
       
       // Adiciona os componentes ao painel principal
       this.add( this.botãoDeComandos, BorderLayout.WEST );
