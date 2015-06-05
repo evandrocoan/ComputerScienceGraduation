@@ -18,6 +18,7 @@ public class Oferta
    private final Conta conta;
    private final Ação açãoEmOferta;
    private final String tipoDeOferta;
+   private boolean utilidade;
    
    /**
     * @param preço o preço da ação.
@@ -62,6 +63,14 @@ public class Oferta
    }
    
    /**
+    * @return true se esta oferta já foi utilizada, false caso contrário.
+    */
+   public boolean isUtilidade()
+   {
+      return this.utilidade;
+   }
+   
+   /**
     * @return açãoEmOferta uma String representando uma ação em oferta.
     */
    public String ofertaToString()
@@ -77,5 +86,13 @@ public class Oferta
       }
       
       return açãoEmOferta;
+   }
+   
+   /**
+    * Marca essa oferta como já computada por uma venda.
+    */
+   public void setUtilidade()
+   {
+      this.utilidade = false;
    }
 }

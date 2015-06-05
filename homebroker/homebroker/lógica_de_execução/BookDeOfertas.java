@@ -70,9 +70,7 @@ public final class BookDeOfertas
       final String nome, final Conta conta )
    {
       final Oferta novaOferta = new Oferta( preço, quantidade, nome, "Compra", conta );
-      
       final boolean resultado = this.ofertas.add( novaOferta );
-      
       this.realizarVenda( novaOferta );
       return resultado;
    }
@@ -89,14 +87,8 @@ public final class BookDeOfertas
    public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
       final String nome, final Conta conta )
    {
-      if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
-      {
-         BookDeOfertas.LOG.fine( "Estou em: " + this.getClass() + "adicionarOfertaDeVenda" );
-      }
       final Oferta novaOferta = new Oferta( preço, quantidade, nome, "Venda", conta );
-      
       final boolean resultado = this.ofertas.add( novaOferta );
-      
       this.realizarVenda( novaOferta );
       return resultado;
    }
@@ -130,8 +122,9 @@ public final class BookDeOfertas
       
       if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
       {
-         BookDeOfertas.LOG.severe( "1 - númeroDeOfertas < ultimaOferta = "
-            + ( númeroDeOfertas < ultimaOferta ) + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
+         BookDeOfertas.LOG
+            .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
+               + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
       if( númeroDeOfertas < ultimaOferta )
       {
@@ -156,13 +149,16 @@ public final class BookDeOfertas
    
    private void realizarVenda( final Oferta oferta )
    {
-      if( oferta.getTipoDeOferta().equals( "Venda" ) )
+      if( oferta.isUtilidade() )
       {
-         this.realizarVendaProcura1( oferta );
-         
-      } else
-      {
-         this.realizarVendaProcura2( oferta );
+         if( oferta.getTipoDeOferta().equals( "Venda" ) )
+         {
+            this.realizarVendaProcura1( oferta );
+            
+         } else
+         {
+            this.realizarVendaProcura2( oferta );
+         }
       }
    }
    
@@ -194,6 +190,8 @@ public final class BookDeOfertas
          conta1.setSaldo( conta1.getSaldo() + ( ação1.getPreço() * ação1.getQuantidade() ) );
          conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação1.getQuantidade() ) );
       }
+      venda.setUtilidade();
+      compra.setUtilidade();
    }
    
    private void realizarVendaProcura1( final Oferta venda )
@@ -202,7 +200,8 @@ public final class BookDeOfertas
       {
          final Oferta compra = this.ofertas.get( index );
          
-         if( compra == null )
+         if( ( compra == null ) || !compra.getAção().getNome().equals( venda.getAção().getNome() )
+            || !compra.isUtilidade() )
          {
             break;
          }
@@ -223,7 +222,7 @@ public final class BookDeOfertas
       {
          final Oferta venda = this.ofertas.get( index );
          
-         if( venda == null )
+         if( ( venda == null ) || !venda.getAção().getNome().equals( compra.getAção().getNome() ) )
          {
             break;
          }

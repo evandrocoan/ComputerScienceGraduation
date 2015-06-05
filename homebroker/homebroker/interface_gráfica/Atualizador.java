@@ -24,7 +24,7 @@ public class Atualizador implements Runnable
    {
       while( true )
       {
-         MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 5, "Tabajara SAS" );
+         MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SAS" );
          MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
          
          SwingUtilities.invokeLater( new Runnable()
@@ -39,7 +39,7 @@ public class Atualizador implements Runnable
          
          try
          {
-            Thread.sleep( 1000 );
+            Thread.sleep( 5000 );
          } catch( final InterruptedException e )
          {
             e.printStackTrace();
