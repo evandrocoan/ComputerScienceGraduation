@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -80,25 +81,31 @@ public final class JanelaDeVendas extends JFrame implements Runnable
     */
    private void atualizarListaDeVendas()
    {
-      int indice = this.painelPrincipal.tamanhoDaLista();
+      final MotorDoHomebroker motor = this.motor;
+      final PainelDaJanelaDeVendas painelPrincipal = this.painelPrincipal;
       
-      while( true )
+      SwingUtilities.invokeLater( new Runnable()
       {
-         try
+         @Override
+         public void run()
          {
-            final String vendaDoMercado = this.motor.vendaToString( indice );
-            this.painelPrincipal.adicionarVenda( vendaDoMercado );
+            int indice = painelPrincipal.tamanhoDaLista();
             
-            if( JanelaDeVendas.LOG.isLoggable( Level.SEVERE ) )
+            while( true )
             {
-               JanelaDeVendas.LOG.severe( vendaDoMercado );
+               try
+               {
+                  final String vendaDoMercado = motor.vendaToString( indice );
+                  painelPrincipal.adicionarVenda( vendaDoMercado );
+                  
+               } catch( final Exception e )
+               {
+                  break;
+               }
+               indice++;
             }
-         } catch( final Exception e )
-         {
-            break;
          }
-         indice++;
-      }
+      } );
    }
    
    /**
@@ -278,9 +285,10 @@ public final class JanelaDeVendas extends JFrame implements Runnable
          
          this.motor.adicionarOfertaDeCompra( 10, 5, "Tabajara SAS" );
          
-         if( this.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() ) )
+         if( JanelaDeVendas.this.motor.existemNovasOfertas( JanelaDeVendas.this.painelPrincipal
+            .tamanhoDaLista() ) )
          {
-            this.atualizarListaDeVendas();
+            JanelaDeVendas.this.atualizarListaDeVendas();
          }
          try
          {

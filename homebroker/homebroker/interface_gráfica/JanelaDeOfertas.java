@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -31,13 +32,8 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
     */
    private static final Logger LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
    
-   /**
-    * Por padrão, este tipo de instanciação é thread safe.
-    */
    private static final JanelaDeOfertas INSTÂNCIA = new JanelaDeOfertas();
-   
    private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
-   
    private final PainelDaJanelaDeOfertas painelPrincipal;
    
    private JanelaDeOfertas()
@@ -77,25 +73,31 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
     */
    private void atualizarListaDeOfertas()
    {
-      int indice = this.painelPrincipal.tamanhoDaLista();
+      final MotorDoHomebroker motor = JanelaDeOfertas.motor;
+      final PainelDaJanelaDeOfertas painelPrincipal = this.painelPrincipal;
       
-      while( true )
+      SwingUtilities.invokeLater( new Runnable()
       {
-         try
+         @Override
+         public void run()
          {
-            final String ofertaDoMercado = JanelaDeOfertas.motor.ofertaToString( indice );
-            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
+            int indice = painelPrincipal.tamanhoDaLista();
             
-            if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+            while( true )
             {
-               JanelaDeOfertas.LOG.severe( ofertaDoMercado );
+               try
+               {
+                  final String ofertaDoMercado = motor.ofertaToString( indice );
+                  painelPrincipal.adicionarOferta( ofertaDoMercado );
+                  
+               } catch( final Exception e )
+               {
+                  break;
+               }
+               indice++;
             }
-         } catch( final Exception e )
-         {
-            break;
          }
-         indice++;
-      }
+      } );
    }
    
    /**
@@ -115,15 +117,17 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
                "Estou em JanelaDoBook chamando o teste "
                   + "\n\n this.bookDeOfertas.existemNovasOfertas( "
                   + "this.janelaDoBook.getNúmeroDeOfertas()"
-                  + JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() );
+                  + JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal
+                     .tamanhoDaLista() );
             JanelaDeOfertas.LOG.severe( texto );
          }
          
          JanelaDeOfertas.motor.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
          
-         if( JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() ) )
+         if( JanelaDeOfertas.motor.existemNovasOfertas( JanelaDeOfertas.this.painelPrincipal
+            .tamanhoDaLista() ) )
          {
-            this.atualizarListaDeOfertas();
+            JanelaDeOfertas.this.atualizarListaDeOfertas();
          }
          try
          {

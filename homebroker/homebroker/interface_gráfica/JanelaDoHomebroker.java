@@ -5,8 +5,6 @@ package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.MotorDoHomebroker;
 
-import java.awt.Frame;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
@@ -47,8 +45,8 @@ public final class JanelaDoHomebroker extends JFrame
       this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
       
       // Abre a janela maximizado
-      this.setLocation( 50, 50 );
-      this.setExtendedState( Frame.MAXIMIZED_BOTH );
+      this.setLocation( 350, 150 );
+      // this.setExtendedState( Frame.MAXIMIZED_BOTH );
       
       // Ajusta a janela ao tamanho dos elementos.
       this.pack();
@@ -87,7 +85,6 @@ public final class JanelaDoHomebroker extends JFrame
          break;
       
       case "teste":
-         JOptionPane.showMessageDialog( null, "Sessão de teste!" );
          this.motor.loginNoSistemaChecagem( "admin", "admin" );
          this.setVisible( true );
          break;
