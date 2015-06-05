@@ -3,8 +3,6 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
-
 import javax.swing.SwingUtilities;
 
 /**
@@ -24,9 +22,6 @@ public class Atualizador implements Runnable
    {
       while( true )
       {
-         MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SAS" );
-         MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
-         
          SwingUtilities.invokeLater( new Runnable()
          {
             @Override

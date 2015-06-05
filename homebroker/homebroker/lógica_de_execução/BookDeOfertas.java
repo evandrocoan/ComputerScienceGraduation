@@ -173,7 +173,8 @@ public final class BookDeOfertas
       {
          conta1.setSaldo( conta1.getSaldo() + ( ação1.getPreço() * ação2.getQuantidade() ) );
          conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação2.getQuantidade() ) );
-         
+         // TODO criar outra método para ajustar o saldo, esse não funciona pois a conta precisa ser 
+         // administradora para poder alterar o saldo. 
          this.adicionarOfertaDeVenda( ação1.getPreço(),
             ação1.getQuantidade() - ação2.getQuantidade(), ação1.getNome(), conta1 );
       }

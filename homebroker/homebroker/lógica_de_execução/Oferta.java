@@ -35,6 +35,7 @@ public class Oferta
       this.conta = conta;
       this.açãoEmOferta = new Ação( preço, quantidade, ação );
       this.tipoDeOferta = tipoDeOferta;
+      this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
    }
    
