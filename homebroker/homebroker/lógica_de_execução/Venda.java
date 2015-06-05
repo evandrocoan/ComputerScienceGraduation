@@ -51,7 +51,7 @@ public class Venda
    
    public String vendaToString()
    {
-      final String açãoEmOferta = "Venda da ação: " + this.getOferta1().getAção().getNome()
+      final String açãoEmOferta = "Venda da ação: " + this.getOferta1().getNome()
          + " realizada ao preço de: " + this.getPreço() + " na quantidade de: "
          + this.getQuantidade();
       
