@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -23,7 +22,7 @@ import util.Biblioteca;
  *
  * @author Professional
  */
-public final class JanelaDeOfertas extends JFrame implements Runnable
+public final class JanelaDeOfertas extends JFrame
 {
    /**
     * Responsável por realizar o debug do programa, quando ativado. Deve ser
@@ -71,71 +70,22 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
    /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
-   private void atualizarListaDeOfertas()
+   void atualizarListaDeOfertas()
    {
-      final MotorDoHomebroker motor = JanelaDeOfertas.motor;
-      final PainelDaJanelaDeOfertas painelPrincipal = this.painelPrincipal;
+      int indice = this.painelPrincipal.tamanhoDaLista();
       
-      SwingUtilities.invokeLater( new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            int indice = painelPrincipal.tamanhoDaLista();
-            
-            while( true )
-            {
-               try
-               {
-                  final String ofertaDoMercado = motor.ofertaToString( indice );
-                  painelPrincipal.adicionarOferta( ofertaDoMercado );
-                  
-               } catch( final Exception e )
-               {
-                  break;
-               }
-               indice++;
-            }
-         }
-      } );
-   }
-   
-   /**
-    * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000
-    * milisegundos caso haja mudanças.
-    *
-    * @see java.lang.Runnable#run()
-    */
-   @Override
-   public void run()
-   {
       while( true )
       {
-         if( JanelaDeOfertas.LOG.isLoggable( Level.SEVERE ) )
-         {
-            final String texto =
-               "Estou em JanelaDoBook chamando o teste "
-                  + "\n\n this.bookDeOfertas.existemNovasOfertas( "
-                  + "this.janelaDoBook.getNúmeroDeOfertas()"
-                  + JanelaDeOfertas.motor.existemNovasOfertas( this.painelPrincipal
-                     .tamanhoDaLista() );
-            JanelaDeOfertas.LOG.severe( texto );
-         }
-         
-         JanelaDeOfertas.motor.adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
-         
-         if( JanelaDeOfertas.motor.existemNovasOfertas( JanelaDeOfertas.this.painelPrincipal
-            .tamanhoDaLista() ) )
-         {
-            JanelaDeOfertas.this.atualizarListaDeOfertas();
-         }
          try
          {
-            Thread.sleep( 900 );
-         } catch( final InterruptedException e )
+            final String ofertaDoMercado = JanelaDeOfertas.motor.ofertaToString( indice );
+            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
+            
+         } catch( final Exception e )
          {
-            e.printStackTrace();
+            break;
          }
+         indice++;
       }
    }
 }

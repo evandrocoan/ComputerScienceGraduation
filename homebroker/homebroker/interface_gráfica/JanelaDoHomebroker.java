@@ -36,6 +36,10 @@ public final class JanelaDoHomebroker extends JFrame
       super( "HomeBroker Tabajara" );
       this.motor = MotorDoHomebroker.getInstância();
       
+      // Liga o book de ofertas
+      final Thread processoDeAtualizar = new Thread( new Atualizador() );
+      processoDeAtualizar.start();
+      
       // Adiciona o painel principal nesta janela
       this.painelPrincipal = PainelDoHomebroker.getInstância();
       this.painelPrincipal.setDoubleBuffered( true );

@@ -70,12 +70,6 @@ public final class PainelDoHomebroker extends JPanel
     */
    private PainelDoHomebroker()
    {
-      // Liga o book de ofertas
-      final Thread processoDeOfertas = new Thread( PainelDoHomebroker.JANELA_DE_OFERTAS );
-      final Thread processoDeVendas = new Thread( PainelDoHomebroker.JANELA_DE_VENDAS );
-      processoDeOfertas.start();
-      processoDeVendas.start();
-      
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();

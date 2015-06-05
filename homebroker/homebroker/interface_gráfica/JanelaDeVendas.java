@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -23,7 +22,7 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public final class JanelaDeVendas extends JFrame implements Runnable
+public final class JanelaDeVendas extends JFrame
 {
    /**
     * Responsável por realizar o debug do programa, quando ativado. Deve ser
@@ -79,33 +78,23 @@ public final class JanelaDeVendas extends JFrame implements Runnable
    /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
-   private void atualizarListaDeVendas()
+   void atualizarListaDeVendas()
    {
-      final MotorDoHomebroker motor = this.motor;
-      final PainelDaJanelaDeVendas painelPrincipal = this.painelPrincipal;
+      int indice = this.painelPrincipal.tamanhoDaLista();
       
-      SwingUtilities.invokeLater( new Runnable()
+      while( true )
       {
-         @Override
-         public void run()
+         try
          {
-            int indice = painelPrincipal.tamanhoDaLista();
+            final String vendaDoMercado = this.motor.vendaToString( indice );
+            this.painelPrincipal.adicionarVenda( vendaDoMercado );
             
-            while( true )
-            {
-               try
-               {
-                  final String vendaDoMercado = motor.vendaToString( indice );
-                  painelPrincipal.adicionarVenda( vendaDoMercado );
-                  
-               } catch( final Exception e )
-               {
-                  break;
-               }
-               indice++;
-            }
+         } catch( final Exception e )
+         {
+            break;
          }
-      } );
+         indice++;
+      }
    }
    
    /**
@@ -260,43 +249,5 @@ public final class JanelaDeVendas extends JFrame implements Runnable
          nÉsimaVez = true;
       }
       return quantidade;
-   }
-   
-   /**
-    * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000
-    * milisegundos caso haja mudanças.
-    *
-    * @see java.lang.Runnable#run()
-    */
-   @Override
-   public void run()
-   {
-      while( true )
-      {
-         if( JanelaDeVendas.LOG.isLoggable( Level.SEVERE ) )
-         {
-            final String texto =
-               "Estou em JanelaDoBook chamando o teste "
-                  + "\n\n this.bookDeOfertas.existemNovasOfertas( "
-                  + "this.janelaDoBook.getNúmeroDeOfertas()"
-                  + this.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() );
-            JanelaDeVendas.LOG.severe( texto );
-         }
-         
-         this.motor.adicionarOfertaDeCompra( 10, 5, "Tabajara SAS" );
-         
-         if( JanelaDeVendas.this.motor.existemNovasOfertas( JanelaDeVendas.this.painelPrincipal
-            .tamanhoDaLista() ) )
-         {
-            JanelaDeVendas.this.atualizarListaDeVendas();
-         }
-         try
-         {
-            Thread.sleep( 1000 );
-         } catch( final InterruptedException e )
-         {
-            e.printStackTrace();
-         }
-      }
    }
 }
