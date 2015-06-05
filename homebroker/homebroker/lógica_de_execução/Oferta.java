@@ -75,15 +75,15 @@ public class Oferta
     */
    public String ofertaToString()
    {
-      final String açãoEmOferta =
-         "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: " + this.getAção().getNome()
-            + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
-            + this.getAção().getQuantidade();
+      String ordem = String.format( "Ordem de %-8s", this.getTipoDeOferta() );
       
-      if( Oferta.LOG.isLoggable( Level.SEVERE ) )
+      if( this.getTipoDeOferta().equals( "Venda" ) )
       {
-         Oferta.LOG.severe( açãoEmOferta );
+         ordem = ordem + " ";
       }
+      final String açãoEmOferta =
+         ordem + " - Nome da ação: " + this.getAção().getNome() + " - Preço: "
+            + this.getAção().getPreço() + " - Quantidade: " + this.getAção().getQuantidade();
       
       return açãoEmOferta;
    }
