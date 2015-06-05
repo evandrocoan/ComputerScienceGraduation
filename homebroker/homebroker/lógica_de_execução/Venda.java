@@ -11,11 +11,16 @@ public class Venda
 {
    private final Oferta oferta1;
    private final Oferta oferta2;
+   private final double preço;
+   private final int quantidade;
    
-   public Venda( final Oferta primeiraOferta, final Oferta segundaOferta )
+   public Venda( final Oferta primeiraOferta, final Oferta segundaOferta, final double preço,
+      final int quantidade )
    {
       this.oferta1 = primeiraOferta;
       this.oferta2 = segundaOferta;
+      this.preço = preço;
+      this.quantidade = quantidade;
    }
    
    /**
@@ -32,5 +37,24 @@ public class Venda
    public Oferta getOferta2()
    {
       return this.oferta2;
+   }
+   
+   public double getPreço()
+   {
+      return this.preço;
+   }
+   
+   public int getQuantidade()
+   {
+      return this.quantidade;
+   }
+   
+   public String vendaToString()
+   {
+      final String açãoEmOferta = "Venda da ação: " + this.getOferta1().getAção().getNome()
+         + " realizada ao preço de: " + this.getPreço() + " na quantidade de: "
+         + this.getQuantidade();
+      
+      return açãoEmOferta;
    }
 }

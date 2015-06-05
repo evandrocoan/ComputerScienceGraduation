@@ -18,6 +18,7 @@ public class Oferta
    private final Conta conta;
    private final Ação açãoEmOferta;
    private final String tipoDeOferta;
+   private boolean utilidade;
    
    /**
     * @param preço o preço da ação.
@@ -34,6 +35,7 @@ public class Oferta
       this.conta = conta;
       this.açãoEmOferta = new Ação( preço, quantidade, ação );
       this.tipoDeOferta = tipoDeOferta;
+      this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
    }
    
@@ -62,20 +64,36 @@ public class Oferta
    }
    
    /**
+    * @return true se esta oferta já foi utilizada, false caso contrário.
+    */
+   public boolean isUtilidade()
+   {
+      return this.utilidade;
+   }
+   
+   /**
     * @return açãoEmOferta uma String representando uma ação em oferta.
     */
    public String ofertaToString()
    {
-      final String açãoEmOferta =
-         "Ordem de " + this.getTipoDeOferta() + " - Nome da ação: " + this.getAção().getNome()
-            + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
-            + this.getAção().getQuantidade();
+      String ordem = String.format( "Ordem de %-6s", this.getTipoDeOferta() );
       
-      if( Oferta.LOG.isLoggable( Level.SEVERE ) )
+      if( this.getTipoDeOferta().equals( "Venda" ) )
       {
-         Oferta.LOG.severe( açãoEmOferta );
+         ordem = ordem + " ";
       }
+      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção().getNome()
+         + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
+         + this.getAção().getQuantidade();
       
       return açãoEmOferta;
+   }
+   
+   /**
+    * Marca essa oferta como já computada por uma venda.
+    */
+   public void setUtilidade()
+   {
+      this.utilidade = false;
    }
 }
