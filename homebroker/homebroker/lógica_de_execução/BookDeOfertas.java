@@ -191,8 +191,6 @@ public final class BookDeOfertas
          conta1.setSaldo( conta1.getSaldo() + ( ação1.getPreço() * ação1.getQuantidade() ) );
          conta2.setSaldo( conta2.getSaldo() - ( ação1.getPreço() * ação1.getQuantidade() ) );
       }
-      venda.setUtilidade();
-      compra.setUtilidade();
    }
    
    private void realizarVendaProcura1( final Oferta venda )
@@ -210,6 +208,8 @@ public final class BookDeOfertas
          {
             if( venda.getAção().getPreço() <= compra.getAção().getPreço() )
             {
+               venda.setUtilidade();
+               compra.setUtilidade();
                this.vendas.add( new Venda( venda, compra ) );
                this.realizarVendaAjuste( venda, compra );
             }
