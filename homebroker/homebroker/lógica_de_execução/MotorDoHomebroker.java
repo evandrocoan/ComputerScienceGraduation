@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.lógica_de_execução;
 
@@ -16,9 +16,9 @@ import util.Biblioteca;
 public final class MotorDoHomebroker
 {
    /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser
-    * instanciado antes que o construtor desta classe, pois este construtor
-    * precisa de deste objeto já instanciado para ser monitorado pelo log.
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
+    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
+    * monitorado pelo log.
     */
    private static final Logger LOG = Logger.getLogger( "MotorDoHomebroker" );
    
@@ -28,8 +28,8 @@ public final class MotorDoHomebroker
    private static final MotorDoHomebroker INSTÂNCIA = new MotorDoHomebroker();
    
    /**
-    * As contasTeste que serão utilizadas para simular a adição de contas no
-    * sistema, isto é, as contas criadas somente existirão temporariamente.
+    * As contasTeste que serão utilizadas para simular a adição de contas no sistema, isto é, as
+    * contas criadas somente existirão temporariamente.
     */
    public transient List< Conta > contas;
    
@@ -41,9 +41,9 @@ public final class MotorDoHomebroker
    private final BookDeOfertas bookDeOfertas;
    
    /**
-    * Construtor que inicializa a o motorDoHomebroker e implementa o padrão
-    * singleton. O atributo JanelaPrincipal.janelaPrincipal não é inicializado
-    * devido a sua construção necessitar de um objeto deste construtor.
+    * Construtor que inicializa a o motorDoHomebroker e implementa o padrão singleton. O atributo
+    * JanelaPrincipal.janelaPrincipal não é inicializado devido a sua construção necessitar de um
+    * objeto deste construtor.
     */
    private MotorDoHomebroker()
    {
@@ -169,9 +169,8 @@ public final class MotorDoHomebroker
       
       for( int i = 0; i < quantidade; i++ )
       {
-         contaTeste =
-            new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
-               2000.5 * Biblioteca.gerarNumeroAleatorio(), false, new Inventario() );
+         contaTeste = new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
+            2000.5 * Biblioteca.gerarNumeroAleatorio(), false, new Inventario() );
          this.criarInventarioFicticio( contaTeste, quantidade );
          
          contasTeste.add( contaTeste );
@@ -196,34 +195,29 @@ public final class MotorDoHomebroker
       
       for( int i = 0; i < ( quantidade / 5 ); i++ )
       {
-         ação =
-            new Ação( 2.2 + Biblioteca.gerarNumeroAleatorio(),
-               10 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
-                  + Biblioteca.gerarNumeroAleatorio() );
+         ação = new Ação( 2.2 + Biblioteca.gerarNumeroAleatorio(),
+            10 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SA"
+               + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
-         ação =
-            new Ação( 22.2 + Biblioteca.gerarNumeroAleatorio(),
-               100 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
-                  + Biblioteca.gerarNumeroAleatorio() );
+         ação = new Ação( 22.2 + Biblioteca.gerarNumeroAleatorio(),
+            100 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SO"
+               + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
-         ação =
-            new Ação( 200.2 + Biblioteca.gerarNumeroAleatorio(),
-               1000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SP"
-                  + Biblioteca.gerarNumeroAleatorio() );
+         ação = new Ação( 200.2 + Biblioteca.gerarNumeroAleatorio(),
+            1000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SP"
+               + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
-         ação =
-            new Ação( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
-               10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara ST"
-                  + Biblioteca.gerarNumeroAleatorio() );
+         ação = new Ação( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
+            10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara ST"
+               + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
          
-         ação =
-            new Ação( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
-               10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SS"
-                  + Biblioteca.gerarNumeroAleatorio() );
+         ação = new Ação( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
+            10000 + Biblioteca.gerarNumeroAleatorio(), "Tabajara SS"
+               + Biblioteca.gerarNumeroAleatorio() );
          conta.getInventario().adicionarAoInventario( ação );
       }
    }
@@ -258,8 +252,8 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * Dado o código de uma oferta, informa se existem novas ofertas lançadas no
-    * mercado a partir da oferta informada.
+    * Dado o código de uma oferta, informa se existem novas ofertas lançadas no mercado a partir da
+    * oferta informada.
     *
     * @param númeroDeOfertas a última oferta visualizada
     * @return true se existem novas ofertas, false caso contrário.
@@ -320,8 +314,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * @return @see
-    *         {@link homebroker.lógica_de_execução.Conta#inventarioToString()}
+    * @return @see {@link homebroker.lógica_de_execução.Conta#inventarioToString()}
     */
    public String inventarioToString()
    {
@@ -329,8 +322,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * @return true caso haja alguma conta que esteja autenticada tenha
-    *         privilégio de administrador.
+    * @return true caso haja alguma conta que esteja autenticada tenha privilégio de administrador.
     */
    public boolean isAdministradora()
    {
@@ -338,8 +330,7 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * @return true caso haja alguma conta está autenticada, false caso
-    *         contrário.
+    * @return true caso haja alguma conta está autenticada, false caso contrário.
     */
    public boolean isAutenticada()
    {

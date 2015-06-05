@@ -1,5 +1,5 @@
 /**
- *  
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.lógica_de_execução;
 

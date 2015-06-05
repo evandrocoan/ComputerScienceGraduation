@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.interface_gráfica;
 
@@ -125,9 +125,8 @@ public final class JanelaDeCadastro extends JFrame
       
       while( !sucesso )
       {
-         final String input =
-            JOptionPane
-               .showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n" : "" ) + "Insira um CPF:" );
+         final String input = JOptionPane.showInputDialog( ( nÉsimaVez? "CPF inválido!\n\n" : "" )
+            + "Insira um CPF:" );
          if( input == null )
          {
             return 0;
@@ -162,9 +161,8 @@ public final class JanelaDeCadastro extends JFrame
       
       while( !sucesso )
       {
-         final String inputString =
-            JOptionPane.showInputDialog( ( nÉsimaVez? "Saldo inválido!\n\n" : "" )
-               + "Insira o saldo do novo acionista:" );
+         final String inputString = JOptionPane.showInputDialog( ( nÉsimaVez? "Saldo inválido!\n\n"
+            : "" ) + "Insira o saldo do novo acionista:" );
          if( inputString == null )
          {
             return -1;
@@ -197,9 +195,8 @@ public final class JanelaDeCadastro extends JFrame
       boolean inputError = true;
       do
       {
-         nome =
-            JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-               + this.motor.contasTesteToString() + "\n\n" + pergunta );
+         nome = JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
+            + this.motor.contasTesteToString() + "\n\n" + pergunta );
          
          if( nome == null )
          {

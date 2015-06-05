@@ -1,5 +1,5 @@
 /**
- *   
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.interface_gráfica;
 
