@@ -40,18 +40,16 @@ public final class JanelaDeOfertas extends JFrame
       super( "Book De Ofertas" );
       JanelaDeOfertas.LOG.setLevel( Level.OFF );
       
-      this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-      
       final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
       final int width = (int) tamanhoDaJanela.getWidth();
       final int height = (int) tamanhoDaJanela.getHeight();
-      
       final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 250, 150, width - 400, height - 400 );
+      this.setBounds( 200, 250, width - 400, height - 400 );
       this.setVisible( false );
+      this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
       this.painelPrincipal = PainelDaJanelaDeOfertas.getInstância();
       this.setContentPane( this.painelPrincipal );
