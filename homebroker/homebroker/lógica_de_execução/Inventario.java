@@ -23,8 +23,7 @@ public class Inventario
     * Adiciona um ação do inventario de ações do cliente.
     * 
     * @param acao a ação para se adicionar
-    * @return true caso possa adicionar a ação ao inventário, false caso
-    *         contrário
+    * @return true caso possa adicionar a ação ao inventário, false caso contrário
     */
    public boolean adicionarAoInventario( final Ação acao )
    {
@@ -119,8 +118,8 @@ public class Inventario
    }
    
    /**
-    * Retorna o inventário representado como uma String. Essa String é composta
-    * pelos nomes das ações no inventário.
+    * Retorna o inventário representado como uma String. Essa String é composta pelos nomes das
+    * ações no inventário.
     * 
     * @return inventario o inventário representado como um String
     */

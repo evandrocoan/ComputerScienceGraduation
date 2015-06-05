@@ -16,7 +16,7 @@ public class Oferta
    private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
    
    private final Conta conta;
-   private final Ação açãoEmOferta;
+   private final Ação ação;
    private final String tipoDeOferta;
    private boolean utilidade;
    
@@ -33,7 +33,7 @@ public class Oferta
       Oferta.LOG.setLevel( Level.OFF );
       
       this.conta = conta;
-      this.açãoEmOferta = new Ação( preço, quantidade, ação );
+      this.ação = new Ação( preço, quantidade, ação );
       this.tipoDeOferta = tipoDeOferta;
       this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
@@ -44,7 +44,7 @@ public class Oferta
     */
    public Ação getAção()
    {
-      return this.açãoEmOferta;
+      return this.ação;
    }
    
    /**
@@ -53,6 +53,14 @@ public class Oferta
    public Conta getConta()
    {
       return this.conta;
+   }
+   
+   /**
+    * @return o nome da ação deste oferta.
+    */
+   public String getNome()
+   {
+      return this.ação.getNome();
    }
    
    /**

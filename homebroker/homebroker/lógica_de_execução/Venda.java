@@ -1,5 +1,5 @@
 /**
- *  
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.lógica_de_execução;
 
@@ -51,7 +51,7 @@ public class Venda
    
    public String vendaToString()
    {
-      final String açãoEmOferta = "Venda da ação: " + this.getOferta1().getAção().getNome()
+      final String açãoEmOferta = "Venda da ação: " + this.getOferta1().getNome()
          + " realizada ao preço de: " + this.getPreço() + " na quantidade de: "
          + this.getQuantidade();
       

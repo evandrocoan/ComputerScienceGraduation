@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.interface_gráfica;
 
@@ -12,8 +12,8 @@ import javax.swing.SwingUtilities;
 public class Atualizador implements Runnable
 {
    /**
-    * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000
-    * milisegundos caso haja mudanças.
+    * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000 milisegundos caso
+    * haja mudanças.
     *
     * @see java.lang.Runnable#run()
     */

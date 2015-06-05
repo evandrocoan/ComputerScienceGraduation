@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.interface_gráfica;
 
@@ -22,9 +22,9 @@ import javax.swing.JScrollPane;
 public final class PainelDaJanelaDeOfertas extends JPanel
 {
    /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser
-    * instanciado antes que o construtor desta classe, pois este construtor
-    * precisa de deste objeto já instanciado para ser monitorado pelo log.
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
+    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
+    * monitorado pelo log.
     */
    private static final Logger LOG = Logger.getLogger( PainelDaJanelaDeOfertas.class.getName() );
    
