@@ -18,8 +18,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import util.Biblioteca;
 
@@ -44,6 +46,9 @@ public final class PainelDoHomebroker extends JPanel
    private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas.getInstância();
    private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
    
+   private final JButton botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
+   private final JButton botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
+   
    private final JButton botãoDeOfertas = new JButton( "Janela de Ofertas" );
    private final JButton botãoDeVendas = new JButton( "Janela de Vendas" );
    private final JTextArea campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
@@ -53,7 +58,7 @@ public final class PainelDoHomebroker extends JPanel
       + "Digite 'ov' para enviar uma ordem de venda.\n"
       + "Digite 'oc' para criar um ordem de compra.\n" + "Digite 'ex' para excluir uma conta.\n"
       + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n"
-      + "Digite 'v' para ver as vendas.\n" + "Digite 't' para adicionar 2 ofertas de teste.";
+      + "Digite 'v' para ver as vendas.\n" + "Digite 't' para adicionar ofertas de teste.";
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -61,8 +66,7 @@ public final class PainelDoHomebroker extends JPanel
    private JTextField entradaDeComandos;
    
    /**
-    * Botão que envia ao usuário os comandos que estão no campo
-    * entradaDeComandos.
+    * Botão que envia ao usuário os comandos que estão no campo entradaDeComandos.
     */
    private JButton botãoDeComandos;
    
@@ -79,6 +83,8 @@ public final class PainelDoHomebroker extends JPanel
       this.configurarBotãoDeComandos();
       this.configurarBotãoDeOfertas();
       this.configurarBotãoDeVendas();
+      this.configurarBotãoDeTeste1();
+      this.configurarBotãoDeTeste2();
       this.campoDeAjudaTexto.setEditable( false );
       this.campoDeAjudaTexto.setFocusable( false );
       
@@ -86,11 +92,27 @@ public final class PainelDoHomebroker extends JPanel
       final JPanel painelDeBotões = new JPanel( new GridBagLayout() );
       final GridBagConstraints gbc = new GridBagConstraints();
       gbc.gridx = 0;
-      gbc.gridy = 0;
+      gbc.gridy = -1;
+      gbc.gridwidth = 1;
+      painelDeBotões.add( this.botãoDeTeste1, gbc );
+      gbc.gridx = 0;
+      gbc.gridy = -1;
+      gbc.gridwidth = 1;
+      painelDeBotões.add( this.botãoDeTeste2, gbc );
+      
+      final GridBagConstraints separatorConstraint = new GridBagConstraints();
+      separatorConstraint.gridx = 0;
+      separatorConstraint.gridy = -1;
+      separatorConstraint.gridwidth = 1;
+      separatorConstraint.weighty = 1.0;
+      painelDeBotões.add( new JSeparator( SwingConstants.HORIZONTAL ), separatorConstraint );
+      
+      gbc.gridx = 0;
+      gbc.gridy = -1;
       gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeOfertas, gbc );
       gbc.gridx = 0;
-      gbc.gridy = 1;
+      gbc.gridy = -1;
       gbc.gridwidth = 1;
       painelDeBotões.add( this.botãoDeVendas, gbc );
       
@@ -120,13 +142,12 @@ public final class PainelDoHomebroker extends JPanel
    
    private void adicionarOfertasTeste()
    {
-      MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SAS" );
-      MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SAS" );
+      MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
+      MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
    }
    
    /**
-    * Cria o botão principal para enviar os comandos da caixa de texto
-    * principal.
+    * Cria o botão principal para enviar os comandos da caixa de texto principal.
     */
    private void configurarBotãoDeComandos()
    {
@@ -139,8 +160,6 @@ public final class PainelDoHomebroker extends JPanel
             PainelDoHomebroker.this.enviarCommando( PainelDoHomebroker.this.conteúdo() );
          }
       } );
-      
-      // Configura o botão principal
       this.botãoDeComandos.setPreferredSize( new Dimension( 200, 35 ) );
       this.botãoDeComandos.setFocusable( false );
    }
@@ -157,10 +176,36 @@ public final class PainelDoHomebroker extends JPanel
             JANELA_DE_OFERTAS.setVisible( true );
          }
       } );
-      
-      // Configura o botão principal
       this.botãoDeOfertas.setPreferredSize( new Dimension( 220, 35 ) );
       this.botãoDeOfertas.setFocusable( false );
+   }
+   
+   private void configurarBotãoDeTeste1()
+   {
+      this.botãoDeTeste1.addActionListener( new ActionListener()
+      {
+         @Override
+         public void actionPerformed( final ActionEvent ae )
+         {
+            MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
+         }
+      } );
+      this.botãoDeTeste1.setPreferredSize( new Dimension( 270, 35 ) );
+      this.botãoDeTeste1.setFocusable( false );
+   }
+   
+   private void configurarBotãoDeTeste2()
+   {
+      this.botãoDeTeste2.addActionListener( new ActionListener()
+      {
+         @Override
+         public void actionPerformed( final ActionEvent ae )
+         {
+            MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
+         }
+      } );
+      this.botãoDeTeste2.setPreferredSize( new Dimension( 270, 35 ) );
+      this.botãoDeTeste2.setFocusable( false );
    }
    
    private void configurarBotãoDeVendas()
@@ -175,8 +220,6 @@ public final class PainelDoHomebroker extends JPanel
             JANELA_DE_VENDAS.setVisible( true );
          }
       } );
-      
-      // Configura o botão principal
       this.botãoDeVendas.setPreferredSize( new Dimension( 220, 35 ) );
       this.botãoDeVendas.setFocusable( false );
    }
@@ -197,11 +240,11 @@ public final class PainelDoHomebroker extends JPanel
          }
       } );
       
+      /**
+       * Limpa a caixa de texto ao clicar com o mouse.
+       */
       this.entradaDeComandos.addMouseListener( new MouseAdapter()
       {
-         /**
-          * Limpa a caixa de texto ao clicar com o mouse.
-          */
          @Override
          public void mouseClicked( final MouseEvent e )
          {
@@ -209,14 +252,13 @@ public final class PainelDoHomebroker extends JPanel
          }
       } );
       
+      /**
+       * Limpa a caixa de texto ao apertar esc e na primeira vez que se escreve na caixa de texto.
+       */
       this.entradaDeComandos.addKeyListener( new KeyAdapter()
       {
          private boolean primeiraVez = true;
          
-         /**
-          * Limpa a caixa de texto ao apertar esc e na primeira vez que se
-          * escreve na caixa de texto.
-          */
          @Override
          public void keyPressed( final KeyEvent evt )
          {
@@ -227,8 +269,6 @@ public final class PainelDoHomebroker extends JPanel
             this.primeiraVez = false;
          }
       } );
-      
-      // Configura a caixaDeTextoPrincipal
       this.entradaDeComandos.setPreferredSize( new Dimension( 250, 35 ) );
    }
    
@@ -241,8 +281,7 @@ public final class PainelDoHomebroker extends JPanel
    }
    
    /**
-    * Menu principal que exibe as opções de operação no mercado e na carteira de
-    * ações do cliente.
+    * Menu principal que exibe as opções de operação no mercado e na carteira de ações do cliente.
     */
    protected void enviarCommando( String comando )
    {
@@ -250,7 +289,6 @@ public final class PainelDoHomebroker extends JPanel
       {
          comando = "s";
       }
-      
       switch( comando )
       {
       case "s":

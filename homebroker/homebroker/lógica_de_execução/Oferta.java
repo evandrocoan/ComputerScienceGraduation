@@ -76,15 +76,15 @@ public class Oferta
     */
    public String ofertaToString()
    {
-      String ordem = String.format( "Ordem de %-8s", this.getTipoDeOferta() );
+      String ordem = String.format( "Ordem de %-6s", this.getTipoDeOferta() );
       
       if( this.getTipoDeOferta().equals( "Venda" ) )
       {
          ordem = ordem + " ";
       }
-      final String açãoEmOferta =
-         ordem + " - Nome da ação: " + this.getAção().getNome() + " - Preço: "
-            + this.getAção().getPreço() + " - Quantidade: " + this.getAção().getQuantidade();
+      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção().getNome()
+         + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
+         + this.getAção().getQuantidade();
       
       return açãoEmOferta;
    }

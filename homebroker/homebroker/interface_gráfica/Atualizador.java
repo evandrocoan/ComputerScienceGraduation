@@ -34,7 +34,7 @@ public class Atualizador implements Runnable
          
          try
          {
-            Thread.sleep( 5000 );
+            Thread.sleep( 1000 );
          } catch( final InterruptedException e )
          {
             e.printStackTrace();

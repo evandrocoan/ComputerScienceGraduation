@@ -90,8 +90,8 @@ public final class MotorDoHomebroker
    {
       if( this.contaAutenticada == null )
       {
-         return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
-            this.contas.get( 1 ) );
+         return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
+            .getInventario().getListaDeAções().get( 2 ).getNome(), this.contas.get( 1 ) );
       }
       return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
          this.contaAutenticada );
@@ -109,8 +109,8 @@ public final class MotorDoHomebroker
    {
       if( this.contaAutenticada == null )
       {
-         return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
-            this.contas.get( 2 ) );
+         return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
+            .getInventario().getListaDeAções().get( 2 ).getNome(), this.contas.get( 2 ) );
       }
       return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
          this.contaAutenticada );

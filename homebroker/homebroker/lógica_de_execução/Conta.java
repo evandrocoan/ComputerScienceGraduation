@@ -18,8 +18,8 @@ public class Conta
    private boolean bloqueada;
    
    /**
-    * Cosntrutor padrão que cria um objeto da classe, sem realizar nenhum tipo
-    * de restrição com os parâmetros que ele recebe.
+    * Construtor padrão que cria um objeto da classe, sem realizar nenhum tipo de restrição com os
+    * parâmetros que ele recebe.
     * 
     * @param nome o nome do usuário.
     * @param senha a senha do usuário.
@@ -36,6 +36,16 @@ public class Conta
       this.administrador = administrador;
       this.bloqueada = false;
       this.inventario = inventario;
+   }
+   
+   /**
+    * Acrescenta ou diminui o saldo.
+    * 
+    * @param ajuste o valor do ajuste.
+    */
+   public void ajustarSaldo( final double ajuste )
+   {
+      this.saldo = this.saldo + ajuste;
    }
    
    /**
@@ -90,11 +100,9 @@ public class Conta
    }
    
    /**
-    * Retorna o inventário do cliente. Este contém todas as ações compradas por
-    * ele.
+    * Retorna o inventário do cliente. Este contém todas as ações compradas por ele.
     * 
-    * @return inventario o inventário do cliente como objeto da classe
-    *         inventário.
+    * @return inventario o inventário do cliente como objeto da classe inventário.
     */
    public Inventario getInventario()
    {
@@ -140,11 +148,11 @@ public class Conta
    }
    
    /**
-    * Retorna o inventário representado como uma String. Essa String é composta
-    * pelos nomes das ações no inventário.
+    * Retorna o inventário representado como uma String. Essa String é composta pelos nomes das
+    * ações no inventário.
     * 
     * 
-    * @return inventario o inventário reprensentado como um String
+    * @return inventario o inventário representado como um String
     * @see #Inventario.inventarioToString()
     */
    public String inventarioToString()
@@ -165,8 +173,8 @@ public class Conta
    /**
     * Retira dinheiro da conta.
     * 
-    * @param quantidade a quantidade de saldo a ser retirada da conta. Caso o
-    *           saldo seja insuficiente não realiza a operação
+    * @param quantidade a quantidade de saldo a ser retirada da conta. Caso o saldo seja
+    *           insuficiente não realiza a operação
     * @return true caso seja realizada a transação, false caso contrário.
     */
    public boolean retirarDinheiro( final double quantidade )
@@ -183,8 +191,7 @@ public class Conta
    }
    
    /**
-    * Define no nome do cliente. Somente o administrador tem acesso a essa
-    * funcionanlidade.
+    * Define no nome do cliente. Somente o administrador tem acesso a essa funcionalidade.
     * 
     * @param nome o nome do cliente a ser definido
     */
@@ -210,8 +217,7 @@ public class Conta
    }
    
    /**
-    * Define a senha do cliente. Somente o administrador tem acesso a essa
-    * funcionanlidade.
+    * Define a senha do cliente. Somente o administrador tem acesso a essa funcionanlidade.
     * 
     * @param senha a senha do cliente a ser definida
     */

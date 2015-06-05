@@ -25,9 +25,9 @@ import util.Biblioteca;
 public final class JanelaDeVendas extends JFrame
 {
    /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser
-    * instanciado antes que o construtor desta classe, pois este construtor
-    * precisa de deste objeto já instanciado para ser monitorado pelo log.
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
+    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
+    * monitorado pelo log.
     */
    private static final Logger LOG = Logger.getLogger( JanelaDeVendas.class.getName() );
    
@@ -53,7 +53,7 @@ public final class JanelaDeVendas extends JFrame
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 300, 250, width - 400, height - 400 );
+      this.setBounds( 640, 365, width - 650, height - 400 );
       this.setVisible( false );
       this.setContentPane( this.painelPrincipal );
       
@@ -166,12 +166,11 @@ public final class JanelaDeVendas extends JFrame
    }
    
    /**
-    * Obtém do usuário o nome da ação necessária para efetuar alguma operação
-    * sobre seu inventário.
+    * Obtém do usuário o nome da ação necessária para efetuar alguma operação sobre seu inventário.
     * 
     * @param ação o nome da ação.
-    * @param modo um boolean informando se deve ser verificado a existência da
-    *           ação informada no inventário.
+    * @param modo um boolean informando se deve ser verificado a existência da ação informada no
+    *           inventário.
     * @return a quantidade.
     */
    private String getNome( final boolean modo )
@@ -182,9 +181,8 @@ public final class JanelaDeVendas extends JFrame
       
       while( !sucesso )
       {
-         açãoParaVender =
-            JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
-               + "Lista de ações disponíveis para venda: \n" + this.motor.inventarioToString() );
+         açãoParaVender = JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
+            + "Lista de ações disponíveis para venda: \n" + this.motor.inventarioToString() );
          if( açãoParaVender == null )
          {
             return null;
@@ -196,19 +194,17 @@ public final class JanelaDeVendas extends JFrame
    }
    
    /**
-    * Obtém do usuário o preço da ação necessária para efetuar alguma operação
-    * sobre seu inventário.
+    * Obtém do usuário o preço da ação necessária para efetuar alguma operação sobre seu inventário.
     * 
     * @param ação o nome da ação.
-    * @param modo um boolean informando se deve ser verificado a existência da
-    *           ação informada no inventário.
+    * @param modo um boolean informando se deve ser verificado a existência da ação informada no
+    *           inventário.
     * @return preço o preço da ação.
     */
    private double getPreço( final String ação, final boolean modo )
    {
-      final String imput =
-         JOptionPane.showInputDialog( "Insira o preço da ação:",
-            ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
+      final String imput = JOptionPane.showInputDialog( "Insira o preço da ação:",
+         ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
       if( imput == null )
       {
          return 0;
@@ -220,12 +216,12 @@ public final class JanelaDeVendas extends JFrame
    }
    
    /**
-    * Obtém do usuário a quantidade de ações necessária para efetuar alguma
-    * operação sobre seu inventário.
+    * Obtém do usuário a quantidade de ações necessária para efetuar alguma operação sobre seu
+    * inventário.
     * 
     * @param ação o nome da ação.
-    * @param modo um boolean informando se deve ser verificado a existência da
-    *           ação informada no inventário.
+    * @param modo um boolean informando se deve ser verificado a existência da ação informada no
+    *           inventário.
     * @return a quantidade.
     */
    private int getQuantidade( final String ação, final boolean modo )
@@ -236,10 +232,9 @@ public final class JanelaDeVendas extends JFrame
       
       while( !sucesso )
       {
-         final String imput =
-            JOptionPane.showInputDialog( ( nÉsimaVez? "Quantidade não existente!\n\n" : "" )
-               + "Insira a quantidade da ação:",
-               ( modo? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
+         final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
+            ? "Quantidade não existente!\n\n" : "" ) + "Insira a quantidade da ação:", ( modo
+            ? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
          if( imput == null )
          {
             return 0;

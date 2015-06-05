@@ -25,9 +25,9 @@ import util.Biblioteca;
 public final class JanelaDeOfertas extends JFrame
 {
    /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser
-    * instanciado antes que o construtor desta classe, pois este construtor
-    * precisa de deste objeto já instanciado para ser monitorado pelo log.
+    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
+    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
+    * monitorado pelo log.
     */
    private static final Logger LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
    
@@ -47,7 +47,7 @@ public final class JanelaDeOfertas extends JFrame
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 200, 250, width - 400, height - 400 );
+      this.setBounds( 10, 365, width - 650, height - 400 );
       this.setVisible( false );
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
