@@ -78,7 +78,7 @@ public final class JanelaDeVendas extends JFrame implements Runnable
    /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
-   private void atualizarListaDeOfertas()
+   private void atualizarListaDeVendas()
    {
       int indice = this.painelPrincipal.tamanhoDaLista();
       
@@ -86,12 +86,12 @@ public final class JanelaDeVendas extends JFrame implements Runnable
       {
          try
          {
-            final String ofertaDoMercado = this.motor.ofertaToString( indice );
-            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
+            final String vendaDoMercado = this.motor.vendaToString( indice );
+            this.painelPrincipal.adicionarVenda( vendaDoMercado );
             
             if( JanelaDeVendas.LOG.isLoggable( Level.SEVERE ) )
             {
-               JanelaDeVendas.LOG.severe( ofertaDoMercado );
+               JanelaDeVendas.LOG.severe( vendaDoMercado );
             }
          } catch( final Exception e )
          {
@@ -280,11 +280,11 @@ public final class JanelaDeVendas extends JFrame implements Runnable
          
          if( this.motor.existemNovasOfertas( this.painelPrincipal.tamanhoDaLista() ) )
          {
-            this.atualizarListaDeOfertas();
+            this.atualizarListaDeVendas();
          }
          try
          {
-            Thread.sleep( 10000 );
+            Thread.sleep( 1000 );
          } catch( final InterruptedException e )
          {
             e.printStackTrace();

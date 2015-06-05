@@ -376,4 +376,9 @@ public final class MotorDoHomebroker
    {
       return this.bookDeOfertas.ofertaToString( indice );
    }
+   
+   public String vendaToString( final int indice )
+   {
+      return this.bookDeOfertas.vendaToString( indice );
+   }
 }

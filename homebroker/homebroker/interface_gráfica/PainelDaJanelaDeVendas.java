@@ -59,7 +59,7 @@ public final class PainelDaJanelaDeVendas extends JPanel
       return PainelDaJanelaDeVendas.INSTÂNCIA;
    }
    
-   public void adicionarOferta( final String ofertaDeMercado )
+   public void adicionarVenda( final String ofertaDeMercado )
    {
       this.modeloPadrãoDeLista.addElement( ofertaDeMercado );
    }

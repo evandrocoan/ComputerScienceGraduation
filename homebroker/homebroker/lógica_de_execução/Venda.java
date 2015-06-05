@@ -33,4 +33,16 @@ public class Venda
    {
       return this.oferta2;
    }
+   
+   public String vendaToString()
+   {
+      final String açãoEmOferta =
+         "Venda da ação: " + this.getOferta1().getAção().getNome() + " realizada de: "
+            + this.getOferta1().getConta().getNome() + " para: "
+            + this.getOferta2().getConta().getNome() + " ao preço de: "
+            + this.getOferta1().getAção().getPreço() + " na quantidade de: "
+            + this.getOferta1().getAção().getQuantidade();
+      
+      return açãoEmOferta;
+   }
 }

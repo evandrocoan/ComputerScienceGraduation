@@ -127,7 +127,7 @@ public final class JanelaDeOfertas extends JFrame implements Runnable
          }
          try
          {
-            Thread.sleep( 10000 );
+            Thread.sleep( 900 );
          } catch( final InterruptedException e )
          {
             e.printStackTrace();

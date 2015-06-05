@@ -202,6 +202,10 @@ public final class BookDeOfertas
       {
          final Oferta compra = this.ofertas.get( index );
          
+         if( compra == null )
+         {
+            break;
+         }
          if( compra.getTipoDeOferta().equals( "Compra" ) )
          {
             if( venda.getAção().getPreço() <= compra.getAção().getPreço() )
@@ -219,6 +223,10 @@ public final class BookDeOfertas
       {
          final Oferta venda = this.ofertas.get( index );
          
+         if( venda == null )
+         {
+            break;
+         }
          if( venda.getTipoDeOferta().equals( "Venda" ) )
          {
             if( compra.getAção().getPreço() >= venda.getAção().getPreço() )
@@ -228,5 +236,10 @@ public final class BookDeOfertas
             }
          }
       }
+   }
+   
+   public String vendaToString( final int indice )
+   {
+      return this.vendas.get( indice ).vendaToString();
    }
 }
