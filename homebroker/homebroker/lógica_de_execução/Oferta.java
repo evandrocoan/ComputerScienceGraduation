@@ -19,7 +19,7 @@ public class Oferta
    private final double preço;
    private final int quantidade;
    private final String ação;
-   private final String tipoDeOferta;
+   private final String tipo;
    private boolean utilidade;
    
    /**
@@ -38,7 +38,7 @@ public class Oferta
       this.preço = preço;
       this.quantidade = quantidade;
       this.ação = ação;
-      this.tipoDeOferta = tipoDeOferta;
+      this.tipo = tipoDeOferta;
       this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
    }
@@ -52,7 +52,7 @@ public class Oferta
    }
    
    /**
-    * @return the açõesEmOferta
+    * @return o nome da ação deste oferta.
     */
    public String getAção()
    {
@@ -68,15 +68,7 @@ public class Oferta
    }
    
    /**
-    * @return o nome da ação deste oferta.
-    */
-   public String getNome()
-   {
-      return this.ação;
-   }
-   
-   /**
-    * @return a o preço da ação deste oferta.
+    * @return o preço da ação deste oferta.
     */
    public double getPreço()
    {
@@ -92,11 +84,11 @@ public class Oferta
    }
    
    /**
-    * @return the tipoDeOferta
+    * @return o tipo desta oferta.
     */
    public String getTipoDeOferta()
    {
-      return this.tipoDeOferta;
+      return this.tipo;
    }
    
    /**
@@ -118,8 +110,8 @@ public class Oferta
       {
          ordem = ordem + " ";
       }
-      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção() + " - Preço: "
-         + this.getAção() + " - Quantidade: " + this.getQuantidade();
+      final String açãoEmOferta = ordem + " - Nome da ação: " + this.ação + " - Preço: "
+         + this.ação + " - Quantidade: " + this.getQuantidade();
       
       return açãoEmOferta;
    }

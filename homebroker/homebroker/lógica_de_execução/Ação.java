@@ -42,7 +42,7 @@ public class Ação
    /**
     * Retorna o preço da ação.
     * 
-    * @return preco o preço da ação
+    * @return preço o preço da ação
     */
    public double getPreço()
    {

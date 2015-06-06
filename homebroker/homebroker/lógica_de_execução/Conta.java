@@ -6,7 +6,7 @@ package homebroker.lógica_de_execução;
 import util.Biblioteca;
 
 /**
- * Representa uma conta de um usário/administrador em um homebroker.
+ * Representa uma conta de um usuário/administrador em um homebroker.
  * 
  * @author Professional
  */
@@ -132,16 +132,6 @@ public class Conta
    }
    
    /**
-    * Retorna o inventário do cliente. Este contém todas as ações compradas por ele.
-    * 
-    * @return inventario o inventário do cliente como objeto da classe inventário.
-    */
-   public Inventario getInventario()
-   {
-      return this.inventário;
-   }
-   
-   /**
     * Retorna o nome do cliente.
     * 
     * @return o nome do cliente.
@@ -198,7 +188,7 @@ public class Conta
     */
    public String inventarioToString()
    {
-      return this.getInventario().inventárioToString();
+      return this.inventário.inventárioToString();
    }
    
    public boolean isAdministradora()
@@ -227,7 +217,6 @@ public class Conta
             this.saldo = this.saldo - quantidade;
          }
       }
-      
       return false;
    }
    

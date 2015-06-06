@@ -182,7 +182,7 @@ public final class BookDeOfertas
          compra.ajustarSaldo( -venda.getPreço() * compra.getQuantidade() );
          
          this.adicionarOfertaDeVenda( venda.getPreço(),
-            venda.getQuantidade() - compra.getQuantidade(), venda.getNome(), venda.getConta() );
+            venda.getQuantidade() - compra.getQuantidade(), venda.getAção(), venda.getConta() );
          
          this.vendas.add( new Venda( venda, compra, venda.getPreço(), compra.getQuantidade() ) );
       }
@@ -195,7 +195,7 @@ public final class BookDeOfertas
          compra.ajustarSaldo( -venda.getPreço() * venda.getQuantidade() );
          
          this.adicionarOfertaDeCompra( compra.getPreço(),
-            compra.getQuantidade() - venda.getQuantidade(), compra.getNome(), compra.getConta() );
+            compra.getQuantidade() - venda.getQuantidade(), compra.getAção(), compra.getConta() );
          
          this.vendas.add( new Venda( venda, compra, venda.getPreço(), venda.getQuantidade() ) );
       }
@@ -214,7 +214,7 @@ public final class BookDeOfertas
       {
          final Oferta compra = this.ofertas.get( index );
          
-         if( !compra.getNome().equals( venda.getNome() ) || !compra.isUtilidade() )
+         if( !compra.getAção().equals( venda.getAção() ) || !compra.isUtilidade() )
          {
             continue;
          }
@@ -237,7 +237,7 @@ public final class BookDeOfertas
       {
          final Oferta venda = this.ofertas.get( index );
          
-         if( !venda.getNome().equals( compra.getNome() ) || !venda.isUtilidade() )
+         if( !venda.getAção().equals( compra.getAção() ) || !venda.isUtilidade() )
          {
             continue;
          }
