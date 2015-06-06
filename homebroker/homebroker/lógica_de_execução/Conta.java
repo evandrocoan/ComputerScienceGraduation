@@ -198,7 +198,7 @@ public class Conta
     */
    public String inventarioToString()
    {
-      return this.getInventario().inventarioToString();
+      return this.getInventario().inventárioToString();
    }
    
    public boolean isAdministradora()
