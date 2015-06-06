@@ -4,9 +4,8 @@
 package homebroker.lógica_de_execução;
 
 /**
- * Representa um ação do mercado de valores. Cada objeto desta classe representa
- * uma ação com um nome e valor de mercado. Cada objeto contém também o número
- * de ações que ele representa.
+ * Representa um ação do mercado de valores. Cada objeto desta classe representa uma ação com um
+ * nome e valor de mercado. Cada objeto contém também o número de ações que ele representa.
  * 
  * @author Professional
  */
@@ -43,7 +42,7 @@ public class Ação
    /**
     * Retorna o preço da ação.
     * 
-    * @return preco o preço da ação
+    * @return preço o preço da ação
     */
    public double getPreço()
    {

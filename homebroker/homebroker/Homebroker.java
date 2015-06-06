@@ -1,5 +1,5 @@
 /**
- * 
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker;
 
@@ -21,8 +21,7 @@ public class Homebroker
    /**
     * Método principal que inicia a execução do programa.
     *
-    * @param args caso receba o argumento 'teste' abre o programa em uma conta
-    *           teste.
+    * @param args caso receba o argumento 'teste' abre o programa em uma conta teste.
     */
    public static void main( final String... args )
    {
@@ -30,13 +29,11 @@ public class Homebroker
    }
    
    /**
-    * Realiza a leitura dos parâmetros passados por linha de comando. Caso não
-    * haja nenhum parâmetro, inicia a interface gráfica de login no sistema.
+    * Realiza a leitura dos parâmetros passados por linha de comando. Caso não haja nenhum
+    * parâmetro, inicia a interface gráfica de login no sistema.
     *
-    * @param args "Os comandos disponíveis:\n" +
-    *           "teste: abre o programa em mode de teste sem dica" +
-    *           "das contas para se logar\n" +
-    *           "dica: o mesmo que teste, mas abre o programa " +
+    * @param args "Os comandos disponíveis:\n" + "teste: abre o programa em mode de teste sem dica"
+    *           + "das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa " +
     *           "com dicas de contas para se logar."
     */
    @SuppressWarnings( "all" )
