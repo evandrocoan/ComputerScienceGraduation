@@ -38,7 +38,7 @@ public final class MotorDoHomebroker
     */
    private transient Conta contaAutenticada;
    
-   private final BookDeOfertas bookDeOfertas;
+   private final Livros livros;
    
    /**
     * Construtor que inicializa a o motorDoHomebroker e implementa o padrão singleton. O atributo
@@ -48,7 +48,7 @@ public final class MotorDoHomebroker
    private MotorDoHomebroker()
    {
       MotorDoHomebroker.LOG.setLevel( Level.OFF );
-      this.bookDeOfertas = BookDeOfertas.getInstância();
+      this.livros = Livros.getInstância();
       
       // Cria contas fictícias
       this.criarContasFicticia( 30, "123" );
@@ -90,10 +90,10 @@ public final class MotorDoHomebroker
    {
       if( this.contaAutenticada == null )
       {
-         return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
+         return this.livros.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 1 ) );
       }
-      return this.bookDeOfertas.adicionarOfertaDeCompra( preço, quantidade, nome,
+      return this.livros.adicionarOfertaDeCompra( preço, quantidade, nome,
          this.contaAutenticada );
    }
    
@@ -109,10 +109,10 @@ public final class MotorDoHomebroker
    {
       if( this.contaAutenticada == null )
       {
-         return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
+         return this.livros.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 2 ) );
       }
-      return this.bookDeOfertas.adicionarOfertaDeVenda( preço, quantidade, nome,
+      return this.livros.adicionarOfertaDeVenda( preço, quantidade, nome,
          this.contaAutenticada );
    }
    
@@ -188,7 +188,7 @@ public final class MotorDoHomebroker
          
          if( conta.getNome().equals( nome ) )
          {
-            this.bookDeOfertas.cancelarOfertas( conta );
+            this.livros.cancelarOfertas( conta );
             this.contas.remove( index );
          }
       }
@@ -212,11 +212,11 @@ public final class MotorDoHomebroker
     *
     * @param númeroDeOfertas a última oferta visualizada
     * @return true se existem novas ofertas, false caso contrário.
-    * @see BookDeOfertas#existemNovasOfertas(int)
+    * @see Livros#existemNovasOfertas(int)
     */
    public boolean existemNovasOfertas( final int númeroDeOfertas )
    {
-      return this.bookDeOfertas.existemNovasOfertas( númeroDeOfertas );
+      return this.livros.existemNovasOfertas( númeroDeOfertas );
    }
    
    /**
@@ -316,15 +316,15 @@ public final class MotorDoHomebroker
    /**
     * @param indice qual oferta buscar
     * @return açãoEmOferta uma String representando uma ação em oferta.
-    * @see BookDeOfertas#ofertaToString(int)
+    * @see Livros#ofertaToString(int)
     */
    public String ofertaToString( final int indice )
    {
-      return this.bookDeOfertas.ofertaToString( indice );
+      return this.livros.ofertaToString( indice );
    }
    
    public String vendaToString( final int indice )
    {
-      return this.bookDeOfertas.vendaToString( indice );
+      return this.livros.vendaToString( indice );
    }
 }

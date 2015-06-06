@@ -15,16 +15,16 @@ import java.util.logging.Logger;
  *
  * @author Professional
  */
-public final class BookDeOfertas
+public final class Livros
 {
    /**
     * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
     * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
     * monitorado pelo log.
     */
-   private static final Logger LOG = Logger.getLogger( BookDeOfertas.class.getName() );
+   private static final Logger LOG = Logger.getLogger( Livros.class.getName() );
    
-   private static BookDeOfertas INSTÂNCIA;
+   private static Livros INSTÂNCIA;
    
    /**
     * As ofertas do mercado realizadas.
@@ -44,9 +44,9 @@ public final class BookDeOfertas
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
     */
-   private BookDeOfertas()
+   private Livros()
    {
-      BookDeOfertas.LOG.setLevel( Level.OFF );
+      Livros.LOG.setLevel( Level.OFF );
       this.ofertas = new ArrayList<>();
       this.vendas = new ArrayList<>();
    }
@@ -56,16 +56,16 @@ public final class BookDeOfertas
     *
     * @return INSTANCE a única instância existe do BookDeOfertas.
     */
-   public static BookDeOfertas getInstância()
+   public static Livros getInstância()
    {
-      synchronized( BookDeOfertas.class )
+      synchronized( Livros.class )
       {
-         if( BookDeOfertas.INSTÂNCIA == null )
+         if( Livros.INSTÂNCIA == null )
          {
-            BookDeOfertas.INSTÂNCIA = new BookDeOfertas();
+            Livros.INSTÂNCIA = new Livros();
          }
       }
-      return BookDeOfertas.INSTÂNCIA;
+      return Livros.INSTÂNCIA;
    }
    
    /**
@@ -129,9 +129,9 @@ public final class BookDeOfertas
    {
       final int númeroDeOfertas = this.ofertas.size() - 1;
       
-      if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+      if( Livros.LOG.isLoggable( Level.SEVERE ) )
       {
-         BookDeOfertas.LOG
+         Livros.LOG
             .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
                + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
@@ -139,9 +139,9 @@ public final class BookDeOfertas
       {
          return false;
       }
-      if( BookDeOfertas.LOG.isLoggable( Level.SEVERE ) )
+      if( Livros.LOG.isLoggable( Level.SEVERE ) )
       {
-         BookDeOfertas.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
+         Livros.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
             + ( númeroDeOfertas > ultimaOferta ) );
       }
       return númeroDeOfertas > ultimaOferta;
