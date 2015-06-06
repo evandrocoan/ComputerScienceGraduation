@@ -3,7 +3,7 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.lógica_de_execução.Fachada;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -14,13 +14,13 @@ import javax.swing.JOptionPane;
  */
 public final class JanelaDeCadastro extends JFrame
 {
-   private static JanelaDeCadastro instância;
+   private static JanelaDeCadastro INSTÂNCIA;
    
-   private final MotorDoHomebroker motor;
+   private final Fachada fachada;
    
    private JanelaDeCadastro()
    {
-      this.motor = MotorDoHomebroker.getInstância();
+      this.fachada = Fachada.getInstância();
    }
    
    /**
@@ -30,12 +30,12 @@ public final class JanelaDeCadastro extends JFrame
    {
       synchronized( JanelaDeCadastro.class )
       {
-         if( JanelaDeCadastro.instância == null )
+         if( JanelaDeCadastro.INSTÂNCIA == null )
          {
-            JanelaDeCadastro.instância = new JanelaDeCadastro();
+            JanelaDeCadastro.INSTÂNCIA = new JanelaDeCadastro();
          }
       }
-      return JanelaDeCadastro.instância;
+      return JanelaDeCadastro.INSTÂNCIA;
    }
    
    /**
@@ -43,12 +43,12 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarBloqueio()
    {
-      if( !this.motor.isAutenticada() )
+      if( !this.fachada.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
-      if( !this.motor.isAdministradora() )
+      if( !this.fachada.isAdministradora() )
       {
          JOptionPane.showMessageDialog( null, "Acesso negado! "
             + "Você precisa ter privilégio de administrador." );
@@ -59,7 +59,7 @@ public final class JanelaDeCadastro extends JFrame
       if( conta != null )
       {
          JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
-         this.motor.bloquearConta( conta );
+         this.fachada.bloquearConta( conta );
       }
    }
    
@@ -68,7 +68,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarCadastro()
    {
-      if( !this.motor.isAutenticada() )
+      if( !this.fachada.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
@@ -97,7 +97,7 @@ public final class JanelaDeCadastro extends JFrame
          {
             return;
          }
-         sucesso = this.motor.adicionarConta( saldo, cpf, nome, senha );
+         sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
       }
       JOptionPane.showMessageDialog( null, "Conta cadastrada com sucesso!" );
    }
@@ -109,7 +109,7 @@ public final class JanelaDeCadastro extends JFrame
    {
       final String conta = this.solicitarConta( "Insira a conta a ser excluída:" );
       
-      this.motor.excluirConta( conta );
+      this.fachada.excluirConta( conta );
       
       if( conta != null )
       {
@@ -196,13 +196,13 @@ public final class JanelaDeCadastro extends JFrame
       do
       {
          nome = JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-            + this.motor.contasTesteToString() + "\n\n" + pergunta );
+            + this.fachada.contasTesteToString() + "\n\n" + pergunta );
          
          if( nome == null )
          {
             return null;
          }
-         inputError = this.motor.existeAConta( nome );
+         inputError = this.fachada.existeAConta( nome );
          
       } while( !inputError );
       

@@ -3,7 +3,7 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.lógica_de_execução.Fachada;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,21 +24,23 @@ import util.Biblioteca;
  */
 public final class JanelaDeOfertas extends JFrame
 {
-   /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
-    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
-    * monitorado pelo log.
-    */
-   private static final Logger LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
+   private static final Logger LOG;
+   private static final JanelaDeOfertas INSTÂNCIA;
    
-   private static final JanelaDeOfertas INSTÂNCIA = new JanelaDeOfertas();
-   private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
-   private final PainelDaJanelaDeOfertas painelPrincipal;
+   static
+   {
+      LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
+      INSTÂNCIA = new JanelaDeOfertas();
+   }
+   
+   private final Fachada fachada;
+   private final PainelDeOfertas painel;
    
    private JanelaDeOfertas()
    {
       super( "Book De Ofertas" );
       JanelaDeOfertas.LOG.setLevel( Level.OFF );
+      this.fachada = Fachada.getInstância();
       
       final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
       final int width = (int) tamanhoDaJanela.getWidth();
@@ -51,8 +53,8 @@ public final class JanelaDeOfertas extends JFrame
       this.setVisible( false );
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
-      this.painelPrincipal = PainelDaJanelaDeOfertas.getInstância();
-      this.setContentPane( this.painelPrincipal );
+      this.painel = PainelDeOfertas.getInstância();
+      this.setContentPane( this.painel );
       
       Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 18 ) );
    }
@@ -70,14 +72,14 @@ public final class JanelaDeOfertas extends JFrame
     */
    void atualizarListaDeOfertas()
    {
-      int indice = this.painelPrincipal.tamanhoDaLista();
+      int indice = this.painel.tamanhoDaLista();
       
       while( true )
       {
          try
          {
-            final String ofertaDoMercado = JanelaDeOfertas.motor.ofertaToString( indice );
-            this.painelPrincipal.adicionarOferta( ofertaDoMercado );
+            final String ofertaDoMercado = this.fachada.ofertaToString( indice );
+            this.painel.adicionarOferta( ofertaDoMercado );
             
          } catch( final Exception e )
          {

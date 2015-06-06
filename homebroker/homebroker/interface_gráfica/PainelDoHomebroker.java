@@ -3,7 +3,7 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.lógica_de_execução.Fachada;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -35,33 +35,30 @@ import util.Biblioteca;
  */
 public final class PainelDoHomebroker extends JPanel
 {
-   /**
-    * Contém a única instância do painel.
-    */
-   private static PainelDoHomebroker instância;
+   private static PainelDoHomebroker INSTÂNCIA;
+   
+   private static final JanelaDeCadastro JANELA_DE_CADASTRO;
+   private static final JanelaDeVendas JANELA_DE_VENDAS;
+   private static final JanelaDeOfertas JANELA_DE_OFERTAS;
+   
+   static
+   {
+      JANELA_DE_CADASTRO = JanelaDeCadastro.getInstância();
+      JANELA_DE_VENDAS = JanelaDeVendas.getInstância();
+      JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
+   }
+   
+   private final Fachada fachada;
+   private final JButton botãoDeTeste1;
+   private final JButton botãoDeTeste2;
+   private final JButton botãoDeOfertas;
+   private final JButton botãoDeVendas;
    
    /**
-    * Contém o motor principal.
+    * Contém as informações dos comandos disponíveis a este programa.
     */
-   private static MotorDoHomebroker motor = MotorDoHomebroker.getInstância();
-   
-   private static final JanelaDeCadastro JANELA_DE_CADASTRO = JanelaDeCadastro.getInstância();
-   private static final JanelaDeVendas JANELA_DE_VENDAS = JanelaDeVendas.getInstância();
-   private static final JanelaDeOfertas JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
-   
-   private final JButton botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
-   private final JButton botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
-   
-   private final JButton botãoDeOfertas = new JButton( "Janela de Ofertas" );
-   private final JButton botãoDeVendas = new JButton( "Janela de Vendas" );
-   private final JTextArea campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
-   private final String campoDeAjuda = "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
-      + "Digite 's' para fechar o programa.\n" + "Digite 'i' para para ver o inventario.\n"
-      + "Digite 'b' para para bloquear uma conta de usuário.\n"
-      + "Digite 'ov' para enviar uma ordem de venda.\n"
-      + "Digite 'oc' para criar um ordem de compra.\n" + "Digite 'ex' para excluir uma conta.\n"
-      + "Digite 'c' para para criar uma conta.\n" + "Digite 'm' para ver o mercado.\n"
-      + "Digite 'v' para ver as vendas.\n" + "Digite 't' para adicionar ofertas de teste.";
+   private final JTextArea campoDeAjudaTexto;
+   private final String campoDeAjuda;
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -81,6 +78,25 @@ public final class PainelDoHomebroker extends JPanel
       // Liga o book de ofertas
       final Thread processoDeAtualizar = new Thread( new Atualizador() );
       processoDeAtualizar.start();
+      
+      this.fachada = Fachada.getInstância();
+      this.botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
+      this.botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
+      
+      this.botãoDeOfertas = new JButton( "Janela de Ofertas" );
+      this.botãoDeVendas = new JButton( "Janela de Vendas" );//@formatter:off
+      this.campoDeAjuda = "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
+         + "Digite 's' para fechar o programa.\n"
+         + "Digite 'i' para para ver o inventario.\n"
+         + "Digite 'b' para para bloquear uma conta de usuário.\n"
+         + "Digite 'ov' para enviar uma ordem de venda.\n"
+         + "Digite 'oc' para criar um ordem de compra.\n"
+         + "Digite 'ex' para excluir uma conta.\n"
+         + "Digite 'c' para para criar uma conta.\n"
+         + "Digite 'm' para ver o mercado.\n"
+         + "Digite 'v' para ver as vendas.\n"
+         + "Digite 't' para adicionar ofertas de teste."; //@formatter:on
+      this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
       
       // Define o gerenciador de layout utilizado.
       super.setLayout( new BorderLayout() );
@@ -131,18 +147,18 @@ public final class PainelDoHomebroker extends JPanel
    {
       synchronized( PainelDoHomebroker.class )
       {
-         if( PainelDoHomebroker.instância == null )
+         if( PainelDoHomebroker.INSTÂNCIA == null )
          {
-            PainelDoHomebroker.instância = new PainelDoHomebroker();
+            PainelDoHomebroker.INSTÂNCIA = new PainelDoHomebroker();
          }
       }
-      return PainelDoHomebroker.instância;
+      return PainelDoHomebroker.INSTÂNCIA;
    }
    
    private void adicionarOfertasTeste()
    {
-      MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
-      MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
+      Fachada.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
+      Fachada.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
    }
    
    /**
@@ -186,7 +202,7 @@ public final class PainelDoHomebroker extends JPanel
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
-            MotorDoHomebroker.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
+            Fachada.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
          }
       } );
       this.botãoDeTeste1.setPreferredSize( new Dimension( 270, 35 ) );
@@ -200,7 +216,7 @@ public final class PainelDoHomebroker extends JPanel
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
-            MotorDoHomebroker.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
+            Fachada.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
          }
       } );
       this.botãoDeTeste2.setPreferredSize( new Dimension( 270, 35 ) );
@@ -291,7 +307,7 @@ public final class PainelDoHomebroker extends JPanel
       switch( comando )
       {
       case "s":
-         MotorDoHomebroker.sairDoSistema();
+         Fachada.sairDoSistema();
          break;
       case "i":
          this.mostrarInventário();
@@ -346,11 +362,11 @@ public final class PainelDoHomebroker extends JPanel
     */
    private void mostrarInventário()
    {
-      if( !PainelDoHomebroker.motor.isAutenticada() )
+      if( !this.fachada.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
       }
-      JOptionPane.showMessageDialog( null, PainelDoHomebroker.motor.inventarioToString() );
+      JOptionPane.showMessageDialog( null, this.fachada.inventarioToString() );
    }
 }

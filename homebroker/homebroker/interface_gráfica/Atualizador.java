@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
  * 
  * @author Professional
  */
-public class Atualizador implements Runnable
+public final class Atualizador implements Runnable
 {
    /**
     * Implementa uma thread que atualiza o book de ofertas em intervalos de 1000 milisegundos caso

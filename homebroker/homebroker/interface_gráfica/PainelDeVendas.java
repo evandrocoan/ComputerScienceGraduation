@@ -18,29 +18,29 @@ import javax.swing.JScrollPane;
  *
  * @author Professional
  */
-public final class PainelDaJanelaDeVendas extends JPanel
+public final class PainelDeVendas extends JPanel
 {
-   /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
-    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
-    * monitorado pelo log.
-    */
-   private static final Logger LOG = Logger.getLogger( PainelDaJanelaDeVendas.class.getName() );
+   private static final Logger LOG;
+   private static final PainelDeVendas INSTÂNCIA;
    
-   /**
-    * Por padrão, este tipo de instanciação é thread safe.
-    */
-   private static final PainelDaJanelaDeVendas INSTÂNCIA = new PainelDaJanelaDeVendas();
+   static
+   {
+      LOG = Logger.getLogger( PainelDeVendas.class.getName() );
+      INSTÂNCIA = new PainelDeVendas();
+   }
    
-   private final DefaultListModel< String > modeloPadrãoDeLista = new DefaultListModel<>();
-   private final JList< String > listaDeVendas = new JList<>( this.modeloPadrãoDeLista );
+   private final DefaultListModel< String > modeloPadrãoDeLista;
+   private final JList< String > listaDeVendas;
    
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
     */
-   private PainelDaJanelaDeVendas()
+   private PainelDeVendas()
    {
-      PainelDaJanelaDeVendas.LOG.setLevel( Level.OFF );
+      PainelDeVendas.LOG.setLevel( Level.OFF );
+      
+      this.modeloPadrãoDeLista = new DefaultListModel<>();
+      this.listaDeVendas = new JList<>( this.modeloPadrãoDeLista );
       
       this.setLayout( new GridLayout( 0, 1 ) );
       this.setSize( super.getSize() );
@@ -54,9 +54,9 @@ public final class PainelDaJanelaDeVendas extends JPanel
    /**
     * @return the instância
     */
-   public static PainelDaJanelaDeVendas getInstância()
+   public static PainelDeVendas getInstância()
    {
-      return PainelDaJanelaDeVendas.INSTÂNCIA;
+      return PainelDeVendas.INSTÂNCIA;
    }
    
    public void adicionarVenda( final String ofertaDeMercado )

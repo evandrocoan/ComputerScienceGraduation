@@ -13,41 +13,33 @@ import util.Biblioteca;
 /**
  * @author Professional
  */
-public final class MotorDoHomebroker
+public final class Fachada
 {
-   /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
-    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
-    * monitorado pelo log.
-    */
-   private static final Logger LOG = Logger.getLogger( "MotorDoHomebroker" );
+   private static final Logger LOG;
+   private static final Fachada INSTÂNCIA;
+   
+   static
+   {
+      LOG = Logger.getLogger( Fachada.class.getName() );
+      INSTÂNCIA = new Fachada();
+   }
    
    /**
-    * Único objeto desta classe.
+    * As contas que serão utilizadas para simular a adição de contas no sistema, isto é, as contas
+    * criadas somente existirão temporariamente.
     */
-   private static final MotorDoHomebroker INSTÂNCIA = new MotorDoHomebroker();
-   
-   /**
-    * As contasTeste que serão utilizadas para simular a adição de contas no sistema, isto é, as
-    * contas criadas somente existirão temporariamente.
-    */
-   public transient List< Conta > contas;
+   public List< Conta > contas;
    
    /**
     * A conta para qual se estará operando o inventário e no mercado de ações.
     */
-   private transient Conta contaAutenticada;
+   private Conta conta;
    
    private final Livros livros;
    
-   /**
-    * Construtor que inicializa a o motorDoHomebroker e implementa o padrão singleton. O atributo
-    * JanelaPrincipal.janelaPrincipal não é inicializado devido a sua construção necessitar de um
-    * objeto deste construtor.
-    */
-   private MotorDoHomebroker()
+   private Fachada()
    {
-      MotorDoHomebroker.LOG.setLevel( Level.OFF );
+      Fachada.LOG.setLevel( Level.OFF );
       this.livros = Livros.getInstância();
       
       // Cria contas fictícias
@@ -55,13 +47,13 @@ public final class MotorDoHomebroker
    }
    
    /**
-    * Retorna a única instância existe do MotorDoHomebroker.
+    * Retorna a única instância existe da Fachada.
     *
-    * @return INSTANCE a única instância existe da JanelaPrincipal.
+    * @return INSTÂNCIA a única instância existe da Fachada.
     */
-   public static MotorDoHomebroker getInstância()
+   public static Fachada getInstância()
    {
-      return MotorDoHomebroker.INSTÂNCIA;
+      return Fachada.INSTÂNCIA;
    }
    
    /**
@@ -88,13 +80,12 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeCompra( final double preço, final int quantidade,
       final String nome )
    {
-      if( this.contaAutenticada == null )
+      if( this.conta == null )
       {
          return this.livros.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 1 ) );
       }
-      return this.livros.adicionarOfertaDeCompra( preço, quantidade, nome,
-         this.contaAutenticada );
+      return this.livros.adicionarOfertaDeCompra( preço, quantidade, nome, this.conta );
    }
    
    /**
@@ -107,13 +98,12 @@ public final class MotorDoHomebroker
    public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
       final String nome )
    {
-      if( this.contaAutenticada == null )
+      if( this.conta == null )
       {
          return this.livros.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 2 ) );
       }
-      return this.livros.adicionarOfertaDeVenda( preço, quantidade, nome,
-         this.contaAutenticada );
+      return this.livros.adicionarOfertaDeVenda( preço, quantidade, nome, this.conta );
    }
    
    public boolean bloquearConta( final String nome )
@@ -228,7 +218,7 @@ public final class MotorDoHomebroker
     */
    public boolean existeNoInventário( final String açãoParaVender )
    {
-      return this.contaAutenticada.existeNoInvetário( açãoParaVender );
+      return this.conta.existeNoInvetário( açãoParaVender );
    }
    
    /**
@@ -241,7 +231,7 @@ public final class MotorDoHomebroker
     */
    public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      return this.contaAutenticada.existeQuantidade( quantidade, ação );
+      return this.conta.existeQuantidade( quantidade, ação );
    }
    
    /**
@@ -253,7 +243,7 @@ public final class MotorDoHomebroker
     */
    public double getPreço( final String açãoParaVender )
    {
-      return this.contaAutenticada.getPreço( açãoParaVender );
+      return this.conta.getPreço( açãoParaVender );
    }
    
    /**
@@ -265,7 +255,7 @@ public final class MotorDoHomebroker
     */
    public int getQuantidade( final String açãoParaVender )
    {
-      return this.contaAutenticada.getQuantidade( açãoParaVender );
+      return this.conta.getQuantidade( açãoParaVender );
    }
    
    /**
@@ -273,7 +263,7 @@ public final class MotorDoHomebroker
     */
    public String inventarioToString()
    {
-      return this.contaAutenticada.inventarioToString();
+      return this.conta.inventarioToString();
    }
    
    /**
@@ -281,7 +271,7 @@ public final class MotorDoHomebroker
     */
    public boolean isAdministradora()
    {
-      return this.contaAutenticada.isAdministradora();
+      return this.conta.isAdministradora();
    }
    
    /**
@@ -289,7 +279,7 @@ public final class MotorDoHomebroker
     */
    public boolean isAutenticada()
    {
-      return this.contaAutenticada != null;
+      return this.conta != null;
    }
    
    /**
@@ -306,7 +296,7 @@ public final class MotorDoHomebroker
       {
          if( conta.getNome().equals( usuário ) && conta.checkSenha( senha ) )
          {
-            this.contaAutenticada = conta;
+            this.conta = conta;
             return true;
          }
       }

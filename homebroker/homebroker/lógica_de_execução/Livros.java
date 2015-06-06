@@ -17,14 +17,14 @@ import java.util.logging.Logger;
  */
 public final class Livros
 {
-   /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
-    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
-    * monitorado pelo log.
-    */
-   private static final Logger LOG = Logger.getLogger( Livros.class.getName() );
-   
    private static Livros INSTÂNCIA;
+   
+   private static final Logger LOG;
+   
+   static
+   {
+      LOG = Logger.getLogger( Livros.class.getName() );
+   }
    
    /**
     * As ofertas do mercado realizadas.
@@ -47,6 +47,7 @@ public final class Livros
    private Livros()
    {
       Livros.LOG.setLevel( Level.OFF );
+      
       this.ofertas = new ArrayList<>();
       this.vendas = new ArrayList<>();
    }
