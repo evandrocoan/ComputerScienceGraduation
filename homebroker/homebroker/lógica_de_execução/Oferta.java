@@ -16,8 +16,10 @@ public class Oferta
    private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
    
    private final Conta conta;
-   private final Ação açãoEmOferta;
-   private final String tipoDeOferta;
+   private final double preço;
+   private final int quantidade;
+   private final String ação;
+   private final String tipo;
    private boolean utilidade;
    
    /**
@@ -33,18 +35,28 @@ public class Oferta
       Oferta.LOG.setLevel( Level.OFF );
       
       this.conta = conta;
-      this.açãoEmOferta = new Ação( preço, quantidade, ação );
-      this.tipoDeOferta = tipoDeOferta;
+      this.preço = preço;
+      this.quantidade = quantidade;
+      this.ação = ação;
+      this.tipo = tipoDeOferta;
       this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
    }
    
    /**
-    * @return the açõesEmOferta
+    * @param ajuste o valor que será ajustado o saldo da conta.
     */
-   public Ação getAção()
+   public void ajustarSaldo( final double ajuste )
    {
-      return this.açãoEmOferta;
+      this.conta.ajustarSaldo( ajuste );
+   }
+   
+   /**
+    * @return o nome da ação deste oferta.
+    */
+   public String getAção()
+   {
+      return this.ação;
    }
    
    /**
@@ -56,11 +68,27 @@ public class Oferta
    }
    
    /**
-    * @return the tipoDeOferta
+    * @return o preço da ação deste oferta.
+    */
+   public double getPreço()
+   {
+      return this.preço;
+   }
+   
+   /**
+    * @return a quantidade de ações deste oferta.
+    */
+   public int getQuantidade()
+   {
+      return this.quantidade;
+   }
+   
+   /**
+    * @return o tipo desta oferta.
     */
    public String getTipoDeOferta()
    {
-      return this.tipoDeOferta;
+      return this.tipo;
    }
    
    /**
@@ -82,9 +110,8 @@ public class Oferta
       {
          ordem = ordem + " ";
       }
-      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção().getNome()
-         + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
-         + this.getAção().getQuantidade();
+      final String açãoEmOferta = ordem + " - Nome da ação: " + this.ação + " - Preço: "
+         + this.ação + " - Quantidade: " + this.getQuantidade();
       
       return açãoEmOferta;
    }

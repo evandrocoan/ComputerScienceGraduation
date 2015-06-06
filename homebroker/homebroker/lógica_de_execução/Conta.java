@@ -3,8 +3,10 @@
  */
 package homebroker.lógica_de_execução;
 
+import util.Biblioteca;
+
 /**
- * Representa uma conta de um usário/administrador em um homebroker.
+ * Representa uma conta de um usuário/administrador em um homebroker.
  * 
  * @author Professional
  */
@@ -14,7 +16,7 @@ public class Conta
    private String senha;
    private double saldo;
    private final boolean administrador;
-   private final Inventario inventario;
+   private final Inventario inventário;
    private boolean bloqueada;
    
    /**
@@ -25,17 +27,16 @@ public class Conta
     * @param senha a senha do usuário.
     * @param saldo o saldo do usuário.
     * @param administrador se é um administrador ou não.
-    * @param inventario o inventário do usuário.
     */
    public Conta( final String nome, final String senha, final double saldo,
-      final boolean administrador, final Inventario inventario )
+      final boolean administrador )
    {
       this.nome = nome;
       this.senha = senha;
       this.saldo = saldo;
       this.administrador = administrador;
       this.bloqueada = false;
-      this.inventario = inventario;
+      this.inventário = new Inventario();
    }
    
    /**
@@ -57,6 +58,37 @@ public class Conta
    public boolean checkSenha( final String senha )
    {
       return this.senha.equals( senha );
+   }
+   
+   /**
+    * Cria um inventário fictício de ações contendo 5 ações fictícias.
+    *
+    * @param quantidade a quantidade de ações fictícias para se criar.
+    */
+   public void criarInventarioFicticio( final int quantidade )
+   {
+      for( int i = 0; i < ( quantidade / 5 ); i++ )
+      {
+         this.inventário.adicionarAoInventario( 2.2 + Biblioteca.gerarNumeroAleatorio(),
+            10 + Biblioteca.gerarNumeroAleatorio(),
+            "Tabajara SA" + Biblioteca.gerarNumeroAleatorio() );
+         
+         this.inventário.adicionarAoInventario( 22.2 + Biblioteca.gerarNumeroAleatorio(),
+            100 + Biblioteca.gerarNumeroAleatorio(),
+            "Tabajara SO" + Biblioteca.gerarNumeroAleatorio() );
+         
+         this.inventário.adicionarAoInventario( 200.2 + Biblioteca.gerarNumeroAleatorio(),
+            1000 + Biblioteca.gerarNumeroAleatorio(),
+            "Tabajara SP" + Biblioteca.gerarNumeroAleatorio() );
+         
+         this.inventário.adicionarAoInventario( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
+            10000 + Biblioteca.gerarNumeroAleatorio(),
+            "Tabajara ST" + Biblioteca.gerarNumeroAleatorio() );
+         
+         this.inventário.adicionarAoInventario( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
+            10000 + Biblioteca.gerarNumeroAleatorio(),
+            "Tabajara SS" + Biblioteca.gerarNumeroAleatorio() );
+      }
    }
    
    public boolean definirBloqueada()
@@ -86,7 +118,7 @@ public class Conta
     */
    public boolean existeNoInvetário( final String nomeAção )
    {
-      return this.inventario.existeNoInvetário( nomeAção );
+      return this.inventário.existeNoInvetário( nomeAção );
    }
    
    /**
@@ -96,17 +128,7 @@ public class Conta
     */
    public boolean existeQuantidade( final int quantidade, final String ação )
    {
-      return this.inventario.existeQuantidade( quantidade, ação );
-   }
-   
-   /**
-    * Retorna o inventário do cliente. Este contém todas as ações compradas por ele.
-    * 
-    * @return inventario o inventário do cliente como objeto da classe inventário.
-    */
-   public Inventario getInventario()
-   {
-      return this.inventario;
+      return this.inventário.existeQuantidade( quantidade, ação );
    }
    
    /**
@@ -120,21 +142,30 @@ public class Conta
    }
    
    /**
+    * @param índice o índice da ação no inventário.
+    * @return o nome da ação.
+    */
+   public String getNome( final int índice )
+   {
+      return this.inventário.getNome( 2 );
+   }
+   
+   /**
     * @param nome o nome da ação a procurar o preço.
-    * @return preço o preço da ação encontrada.
+    * @return o preço da ação encontrada.
     */
    public double getPreço( final String nome )
    {
-      return this.inventario.getPreço( nome );
+      return this.inventário.getPreço( nome );
    }
    
    /**
     * @param nome o nome da ação para encontrar a quantidade.
-    * @return quantidade a quantidade de ação disponíveis.
+    * @return a quantidade de ação disponíveis.
     */
    public int getQuantidade( final String nome )
    {
-      return this.inventario.getQuantidade( nome );
+      return this.inventário.getQuantidade( nome );
    }
    
    /**
@@ -157,7 +188,7 @@ public class Conta
     */
    public String inventarioToString()
    {
-      return this.getInventario().inventarioToString();
+      return this.inventário.inventárioToString();
    }
    
    public boolean isAdministradora()
@@ -186,7 +217,6 @@ public class Conta
             this.saldo = this.saldo - quantidade;
          }
       }
-      
       return false;
    }
    
@@ -217,7 +247,7 @@ public class Conta
    }
    
    /**
-    * Define a senha do cliente. Somente o administrador tem acesso a essa funcionanlidade.
+    * Define a senha do cliente. Somente o administrador tem acesso a essa funcionalidade.
     * 
     * @param senha a senha do cliente a ser definida
     */
