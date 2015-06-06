@@ -48,17 +48,23 @@ public final class PainelDoHomebroker extends JPanel
       JANELA_DE_OFERTAS = JanelaDeOfertas.getInstância();
    }
    
-   private final Fachada fachada;
-   private final JButton botãoDeTeste1;
-   private final JButton botãoDeTeste2;
-   private final JButton botãoDeOfertas;
-   private final JButton botãoDeVendas;
+   private final Fachada fachada = Fachada.getInstância();
+   
+   private JButton botãoDeTeste1;
+   private JButton botãoDeTeste2;
+   private JButton botãoDeOfertas;
+   private JButton botãoDeVendas;
+   
+   /**
+    * Contém vários botões agrupados como uma lista.
+    */
+   private JPanel painelDeBotões;
    
    /**
     * Contém as informações dos comandos disponíveis a este programa.
     */
-   private final JTextArea campoDeAjudaTexto;
-   private final String campoDeAjuda;
+   private JTextArea campoDeAjudaTexto;
+   private String campoDeAjuda;
    
    /**
     * Campo onde para entrada de comandos para o programa em forma de texto.
@@ -79,63 +85,20 @@ public final class PainelDoHomebroker extends JPanel
       final Thread processoDeAtualizar = new Thread( new Atualizador() );
       processoDeAtualizar.start();
       
-      this.fachada = Fachada.getInstância();
-      this.botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
-      this.botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
-      
-      this.botãoDeOfertas = new JButton( "Janela de Ofertas" );
-      this.botãoDeVendas = new JButton( "Janela de Vendas" );//@formatter:off
-      this.campoDeAjuda = "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
-         + "Digite 's' para fechar o programa.\n"
-         + "Digite 'i' para para ver o inventario.\n"
-         + "Digite 'b' para para bloquear uma conta de usuário.\n"
-         + "Digite 'ov' para enviar uma ordem de venda.\n"
-         + "Digite 'oc' para criar um ordem de compra.\n"
-         + "Digite 'ex' para excluir uma conta.\n"
-         + "Digite 'c' para para criar uma conta.\n"
-         + "Digite 'm' para ver o mercado.\n"
-         + "Digite 'v' para ver as vendas.\n"
-         + "Digite 't' para adicionar ofertas de teste."; //@formatter:on
-      this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
-      
       // Define o gerenciador de layout utilizado.
       super.setLayout( new BorderLayout() );
       
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();
-      this.configurarBotãoDeOfertas();
-      this.configurarBotãoDeVendas();
-      this.configurarBotãoDeTeste1();
-      this.configurarBotãoDeTeste2();
-      this.campoDeAjudaTexto.setEditable( false );
-      this.campoDeAjudaTexto.setFocusable( false );
-      
-      // Configura um painel de botões.
-      final JPanel painelDeBotões = new JPanel( new GridBagLayout() );
-      final GridBagConstraints gbc = new GridBagConstraints();
-      
-      gbc.gridx = 0;
-      gbc.gridy = -1;
-      gbc.gridwidth = 1;
-      painelDeBotões.add( this.botãoDeOfertas, gbc );
-      painelDeBotões.add( this.botãoDeVendas, gbc );
-      
-      final GridBagConstraints separatorConstraint = new GridBagConstraints();
-      separatorConstraint.gridx = 0;
-      separatorConstraint.gridy = -1;
-      separatorConstraint.gridwidth = 1;
-      separatorConstraint.weighty = 1.0;
-      painelDeBotões.add( new JSeparator( SwingConstants.HORIZONTAL ), separatorConstraint );
-      
-      painelDeBotões.add( this.botãoDeTeste1, gbc );
-      painelDeBotões.add( this.botãoDeTeste2, gbc );
+      this.configurarCampoDeAjuda();
+      this.configurarPainelDeBotões();
       
       // Adiciona os componentes ao painel principal
       this.add( this.botãoDeComandos, BorderLayout.WEST );
       this.add( this.entradaDeComandos, BorderLayout.NORTH );
       this.add( this.campoDeAjudaTexto, BorderLayout.EAST );
-      this.add( painelDeBotões, BorderLayout.CENTER );
+      this.add( this.painelDeBotões, BorderLayout.CENTER );
       
       Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 22 ) );
    }
@@ -239,6 +202,26 @@ public final class PainelDoHomebroker extends JPanel
       this.botãoDeVendas.setFocusable( false );
    }
    
+   private void configurarCampoDeAjuda()
+   {
+      this.campoDeAjuda =//@formatter:off
+         "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
+         + "Digite 's' para fechar o programa.\n" 
+         + "Digite 'i' para para ver o inventario.\n"
+         + "Digite 'b' para para bloquear uma conta de usuário.\n"
+         + "Digite 'ov' para enviar uma ordem de venda.\n"
+         + "Digite 'oc' para criar um ordem de compra.\n" 
+         + "Digite 'ex' para excluir uma conta.\n"
+         + "Digite 'c' para para criar uma conta.\n" 
+         + "Digite 'm' para ver o mercado.\n"
+         + "Digite 'v' para ver as vendas.\n" 
+         + "Digite 't' para adicionar ofertas de teste."; // @formatter:on
+      this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
+      
+      this.campoDeAjudaTexto.setEditable( false );
+      this.campoDeAjudaTexto.setFocusable( false );
+   }
+   
    /**
     * Configura o campo de texto para entrada de comandos para o programa.
     */
@@ -285,6 +268,41 @@ public final class PainelDoHomebroker extends JPanel
          }
       } );
       this.entradaDeComandos.setPreferredSize( new Dimension( 250, 35 ) );
+   }
+   
+   private void configurarPainelDeBotões()
+   {
+      this.painelDeBotões = new JPanel( new GridBagLayout() );
+      
+      this.botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
+      this.botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
+      this.botãoDeOfertas = new JButton( "Janela de Ofertas" );
+      this.botãoDeVendas = new JButton( "Janela de Vendas" );
+      
+      this.configurarBotãoDeOfertas();
+      this.configurarBotãoDeVendas();
+      this.configurarBotãoDeTeste1();
+      this.configurarBotãoDeTeste2();
+      
+      final GridBagConstraints gridBagConstraint = new GridBagConstraints();
+      final GridBagConstraints separatorConstraint = new GridBagConstraints();
+      
+      gridBagConstraint.gridx = 0;
+      gridBagConstraint.gridwidth = 1;
+      separatorConstraint.gridx = 0;
+      separatorConstraint.gridwidth = 1;
+      separatorConstraint.weighty = 1;
+      
+      separatorConstraint.gridy = 2;
+      this.painelDeBotões.add( new JSeparator( SwingConstants.HORIZONTAL ), separatorConstraint );
+      gridBagConstraint.gridy = 0;
+      this.painelDeBotões.add( this.botãoDeOfertas, gridBagConstraint );
+      gridBagConstraint.gridy = 1;
+      this.painelDeBotões.add( this.botãoDeVendas, gridBagConstraint );
+      gridBagConstraint.gridy = 3;
+      this.painelDeBotões.add( this.botãoDeTeste1, gridBagConstraint );
+      gridBagConstraint.gridy = 4;
+      this.painelDeBotões.add( this.botãoDeTeste2, gridBagConstraint );
    }
    
    /**
