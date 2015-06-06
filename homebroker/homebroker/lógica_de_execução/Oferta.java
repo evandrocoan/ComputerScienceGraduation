@@ -16,7 +16,9 @@ public class Oferta
    private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
    
    private final Conta conta;
-   private final Ação ação;
+   private final double preço;
+   private final int quantidade;
+   private final String ação;
    private final String tipoDeOferta;
    private boolean utilidade;
    
@@ -33,16 +35,26 @@ public class Oferta
       Oferta.LOG.setLevel( Level.OFF );
       
       this.conta = conta;
-      this.ação = new Ação( preço, quantidade, ação );
+      this.preço = preço;
+      this.quantidade = quantidade;
+      this.ação = ação;
       this.tipoDeOferta = tipoDeOferta;
       this.utilidade = true;
       Oferta.LOG.setLevel( Level.OFF );
    }
    
    /**
+    * @param ajuste o valor que será ajustado o saldo da conta.
+    */
+   public void ajustarSaldo( final double ajuste )
+   {
+      this.conta.ajustarSaldo( ajuste );
+   }
+   
+   /**
     * @return the açõesEmOferta
     */
-   public Ação getAção()
+   public String getAção()
    {
       return this.ação;
    }
@@ -60,7 +72,23 @@ public class Oferta
     */
    public String getNome()
    {
-      return this.ação.getNome();
+      return this.ação;
+   }
+   
+   /**
+    * @return a o preço da ação deste oferta.
+    */
+   public double getPreço()
+   {
+      return this.preço;
+   }
+   
+   /**
+    * @return a quantidade de ações deste oferta.
+    */
+   public int getQuantidade()
+   {
+      return this.quantidade;
    }
    
    /**
@@ -90,9 +118,8 @@ public class Oferta
       {
          ordem = ordem + " ";
       }
-      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção().getNome()
-         + " - Preço: " + this.getAção().getPreço() + " - Quantidade: "
-         + this.getAção().getQuantidade();
+      final String açãoEmOferta = ordem + " - Nome da ação: " + this.getAção() + " - Preço: "
+         + this.getAção() + " - Quantidade: " + this.getQuantidade();
       
       return açãoEmOferta;
    }

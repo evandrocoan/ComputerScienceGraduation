@@ -31,6 +31,17 @@ public class Inventario
    }
    
    /**
+    * @param preço o preço da ação.
+    * @param quantidade a quantidade de ações.
+    * @param nome o nome da ação.
+    */
+   public void adicionarAoInventario( final double preço, final int quantidade, final String nome )
+   {
+      final Ação ação = new Ação( preço, quantidade, nome );
+      this.adicionarAoInventario( ação );
+   }
+   
+   /**
     * @param nomeAção o nome da ação.
     * @return true se ela existe false caso contrário.
     */
@@ -79,6 +90,15 @@ public class Inventario
    public List< Ação > getListaDeAções()
    {
       return this.listaDeAções;
+   }
+   
+   /**
+    * @param índice o índice da ação.
+    * @return o nome da ação.
+    */
+   public String getNome( final int índice )
+   {
+      return this.getListaDeAções().get( índice ).getNome();
    }
    
    /**
