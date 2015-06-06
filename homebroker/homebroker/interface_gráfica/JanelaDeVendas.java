@@ -1,9 +1,9 @@
 /**
- *   
+ * Pacote principal que contém o Homebroker.
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.lógica_de_execução.Fachada;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,24 +24,24 @@ import util.Biblioteca;
  */
 public final class JanelaDeVendas extends JFrame
 {
-   /**
-    * Responsável por realizar o debug do programa, quando ativado. Deve ser instanciado antes que o
-    * construtor desta classe, pois este construtor precisa de deste objeto já instanciado para ser
-    * monitorado pelo log.
-    */
-   private static final Logger LOG = Logger.getLogger( JanelaDeVendas.class.getName() );
+   private static final Logger LOG;
+   private static JanelaDeVendas INSTÂNCIA;
    
-   private static JanelaDeVendas instância;
-   private final MotorDoHomebroker motor;
-   private final PainelDaJanelaDeVendas painelPrincipal;
+   static
+   {
+      LOG = Logger.getLogger( JanelaDeVendas.class.getName() );
+   }
+   
+   private final Fachada fachada;
+   private final PainelDeVendas painel;
    
    private JanelaDeVendas()
    {
       super( "Book De Vendas" );
       
       JanelaDeVendas.LOG.setLevel( Level.OFF );
-      this.painelPrincipal = PainelDaJanelaDeVendas.getInstância();
-      this.motor = MotorDoHomebroker.getInstância();
+      this.painel = PainelDeVendas.getInstância();
+      this.fachada = Fachada.getInstância();
       
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
@@ -55,7 +55,7 @@ public final class JanelaDeVendas extends JFrame
       this.setPreferredSize( tamanhoDaJanelaReduzido );
       this.setBounds( 640, 365, width - 650, height - 400 );
       this.setVisible( false );
-      this.setContentPane( this.painelPrincipal );
+      this.setContentPane( this.painel );
       
       Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 18 ) );
    }
@@ -67,12 +67,12 @@ public final class JanelaDeVendas extends JFrame
    {
       synchronized( JanelaDeVendas.class )
       {
-         if( JanelaDeVendas.instância == null )
+         if( JanelaDeVendas.INSTÂNCIA == null )
          {
-            JanelaDeVendas.instância = new JanelaDeVendas();
+            JanelaDeVendas.INSTÂNCIA = new JanelaDeVendas();
          }
       }
-      return JanelaDeVendas.instância;
+      return JanelaDeVendas.INSTÂNCIA;
    }
    
    /**
@@ -80,14 +80,14 @@ public final class JanelaDeVendas extends JFrame
     */
    void atualizarListaDeVendas()
    {
-      int indice = this.painelPrincipal.tamanhoDaLista();
+      int indice = this.painel.tamanhoDaLista();
       
       while( true )
       {
          try
          {
-            final String vendaDoMercado = this.motor.vendaToString( indice );
-            this.painelPrincipal.adicionarVenda( vendaDoMercado );
+            final String vendaDoMercado = this.fachada.vendaToString( indice );
+            this.painel.adicionarVenda( vendaDoMercado );
             
          } catch( final Exception e )
          {
@@ -102,7 +102,7 @@ public final class JanelaDeVendas extends JFrame
     */
    public void efetuarCompra()
    {
-      if( !this.motor.isAutenticada() )
+      if( !this.fachada.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
@@ -126,7 +126,7 @@ public final class JanelaDeVendas extends JFrame
          {
             return;
          }
-         sucesso = this.motor.adicionarOfertaDeCompra( preço, quantidade, nome );
+         sucesso = this.fachada.adicionarOfertaDeCompra( preço, quantidade, nome );
       }
       JOptionPane.showMessageDialog( null, "Oferta de compra realizada com sucesso!" );
    }
@@ -136,7 +136,7 @@ public final class JanelaDeVendas extends JFrame
     */
    public void efetuarVenda()
    {
-      if( !this.motor.isAutenticada() )
+      if( !this.fachada.isAutenticada() )
       {
          JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
          return;
@@ -160,7 +160,7 @@ public final class JanelaDeVendas extends JFrame
          {
             return;
          }
-         sucesso = this.motor.adicionarOfertaDeVenda( preço, quantidade, nome );
+         sucesso = this.fachada.adicionarOfertaDeVenda( preço, quantidade, nome );
       }
       JOptionPane.showMessageDialog( null, "Oferta de venda realizada com sucesso!" );
    }
@@ -182,12 +182,12 @@ public final class JanelaDeVendas extends JFrame
       while( !sucesso )
       {
          açãoParaVender = JOptionPane.showInputDialog( ( nÉsimaVez? "Ação não existente!\n\n" : "" )
-            + "Lista de ações disponíveis para venda: \n" + this.motor.inventarioToString() );
+            + "Lista de ações disponíveis para venda: \n" + this.fachada.inventarioToString() );
          if( açãoParaVender == null )
          {
             return null;
          }
-         sucesso = modo? this.motor.existeNoInventário( açãoParaVender ) : true;
+         sucesso = modo? this.fachada.existeNoInventário( açãoParaVender ) : true;
          nÉsimaVez = true;
       }
       return açãoParaVender;
@@ -204,7 +204,7 @@ public final class JanelaDeVendas extends JFrame
    private double getPreço( final String ação, final boolean modo )
    {
       final String imput = JOptionPane.showInputDialog( "Insira o preço da ação:",
-         ( modo? Double.toString( this.motor.getPreço( ação ) ) : "" ) );
+         ( modo? Double.toString( this.fachada.getPreço( ação ) ) : "" ) );
       if( imput == null )
       {
          return 0;
@@ -234,13 +234,13 @@ public final class JanelaDeVendas extends JFrame
       {
          final String imput = JOptionPane.showInputDialog( ( nÉsimaVez
             ? "Quantidade não existente!\n\n" : "" ) + "Insira a quantidade da ação:", ( modo
-            ? Integer.toString( this.motor.getQuantidade( ação ) ) : "" ) );
+            ? Integer.toString( this.fachada.getQuantidade( ação ) ) : "" ) );
          if( imput == null )
          {
             return 0;
          }
          quantidade = (int) Double.parseDouble( imput );
-         sucesso = modo? this.motor.existeQuantidade( quantidade, ação ) : true;
+         sucesso = modo? this.fachada.existeQuantidade( quantidade, ação ) : true;
          nÉsimaVez = true;
       }
       return quantidade;

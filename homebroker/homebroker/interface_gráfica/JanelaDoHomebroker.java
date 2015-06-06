@@ -3,7 +3,7 @@
  */
 package homebroker.interface_gráfica;
 
-import homebroker.lógica_de_execução.MotorDoHomebroker;
+import homebroker.lógica_de_execução.Fachada;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,14 +19,14 @@ public final class JanelaDoHomebroker extends JFrame
    /**
     * Contém a única instância desta classe.
     */
-   private static JanelaDoHomebroker instância;
+   private static JanelaDoHomebroker INSTÂNCIA;
    
    /**
     * Armazenam o painel do homebroker.
     */
-   private final PainelDoHomebroker painelPrincipal;
+   private final PainelDoHomebroker painel;
    
-   private final MotorDoHomebroker motor;
+   private final Fachada fachada;
    
    /**
     * Construtor que cria a janela principal do programa.
@@ -34,12 +34,12 @@ public final class JanelaDoHomebroker extends JFrame
    private JanelaDoHomebroker()
    {
       super( "HomeBroker Tabajara" );
-      this.motor = MotorDoHomebroker.getInstância();
+      this.fachada = Fachada.getInstância();
       
       // Adiciona o painel principal nesta janela
-      this.painelPrincipal = PainelDoHomebroker.getInstância();
-      this.painelPrincipal.setDoubleBuffered( true );
-      this.add( this.painelPrincipal );
+      this.painel = PainelDoHomebroker.getInstância();
+      this.painel.setDoubleBuffered( true );
+      this.add( this.painel );
       
       // Define que a janela deve fechar ao sair.
       this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
@@ -60,12 +60,12 @@ public final class JanelaDoHomebroker extends JFrame
    {
       synchronized( JanelaDoHomebroker.class )
       {
-         if( JanelaDoHomebroker.instância == null )
+         if( JanelaDoHomebroker.INSTÂNCIA == null )
          {
-            JanelaDoHomebroker.instância = new JanelaDoHomebroker();
+            JanelaDoHomebroker.INSTÂNCIA = new JanelaDoHomebroker();
          }
       }
-      return JanelaDoHomebroker.instância;
+      return JanelaDoHomebroker.INSTÂNCIA;
    }
    
    /**
@@ -85,14 +85,14 @@ public final class JanelaDoHomebroker extends JFrame
          break;
       
       case "teste":
-         this.motor.loginNoSistemaChecagem( "admin", "admin" );
+         this.fachada.loginNoSistemaChecagem( "admin", "admin" );
          this.setVisible( true );
          break;
       
       case "dica":
          JOptionPane.showMessageDialog( null, "Sessão de teste " + "COM dica de contas no login!" );
          final StringBuilder dica = new StringBuilder();
-         dica.append( '\n' ).append( this.motor.contasTesteToString() );
+         dica.append( '\n' ).append( this.fachada.contasTesteToString() );
          
          this.loginNoSistemaInterno( dica.toString() );
          this.setVisible( true );
@@ -106,7 +106,7 @@ public final class JanelaDoHomebroker extends JFrame
    
    /**
     * @param dica
-    * @param motor
+    * @param fachada
     */
    private void loginNoSistemaInterno( final String dica )
    {
@@ -129,7 +129,7 @@ public final class JanelaDoHomebroker extends JFrame
          {
             break;
          }
-         inputError = this.motor.loginNoSistemaChecagem( usuário, senha );
+         inputError = this.fachada.loginNoSistemaChecagem( usuário, senha );
          
       } while( !inputError );
       

@@ -17,18 +17,17 @@ public class Inventario
 {
    private final static char SEPARADOR = ';';
    
-   private List< Ação > listaDeAções = new ArrayList<>();
+   private final List< Ação > inventário = new ArrayList<>();
    
    /**
-    * Adiciona um ação do inventario de ações do cliente.
-    * 
-    * @param acao a ação para se adicionar
-    * @return true caso possa adicionar a ação ao inventário, false caso
-    *         contrário
+    * @param preço o preço da ação.
+    * @param quantidade a quantidade de ações.
+    * @param nome o nome da ação.
     */
-   public boolean adicionarAoInventario( final Ação acao )
+   public void adicionarAoInventario( final double preço, final int quantidade, final String nome )
    {
-      return this.listaDeAções.add( acao );
+      final Ação ação = new Ação( preço, quantidade, nome );
+      this.inventário.add( ação );
    }
    
    /**
@@ -39,7 +38,7 @@ public class Inventario
    {
       boolean existe = false;
       
-      for( final Ação ação: this.listaDeAções )
+      for( final Ação ação: this.inventário )
       {
          if( ação.getNome().equals( nomeAção ) )
          {
@@ -60,7 +59,7 @@ public class Inventario
       if( this.existeNoInvetário( ação ) )
       {
          int indiceAção = 0;
-         for( final Ação açãoTemp: this.listaDeAções )
+         for( final Ação açãoTemp: this.inventário )
          {
             if( açãoTemp.getNome().equals( ação ) )
             {
@@ -68,18 +67,19 @@ public class Inventario
             }
             indiceAção++;
          }
-         final Ação açãoTemp = this.listaDeAções.get( indiceAção );
+         final Ação açãoTemp = this.inventário.get( indiceAção );
          return açãoTemp.getQuantidade() >= quantidade;
       }
       return false;
    }
    
    /**
-    * @return listaDeAções a listaDeAções em forma de um ArrayList< Ação >
+    * @param índice o índice da ação.
+    * @return o nome da ação.
     */
-   public List< Ação > getListaDeAções()
+   public String getNome( final int índice )
    {
-      return this.listaDeAções;
+      return this.inventário.get( índice ).getNome();
    }
    
    /**
@@ -90,7 +90,7 @@ public class Inventario
    {
       double preço = 0;
       
-      for( final Ação ação: this.listaDeAções )
+      for( final Ação ação: this.inventário )
       {
          if( ( ação.getNome() ).equals( nome ) )
          {
@@ -108,7 +108,7 @@ public class Inventario
    {
       int quantidade = 0;
       
-      for( final Ação ação: this.listaDeAções )
+      for( final Ação ação: this.inventário )
       {
          if( ação.getNome().equals( nome ) )
          {
@@ -119,20 +119,20 @@ public class Inventario
    }
    
    /**
-    * Retorna o inventário representado como uma String. Essa String é composta
-    * pelos nomes das ações no inventário.
+    * Retorna o inventário representado como uma String. Essa String é composta pelos nomes das
+    * ações no inventário.
     * 
     * @return inventario o inventário representado como um String
     */
-   public String inventarioToString()
+   public String inventárioToString()
    {
-      if( this.listaDeAções.size() == 0 )
+      if( this.inventário.size() == 0 )
       {
          return "Não há ações nesta conta";
       }
       final StringBuilder enviar = new StringBuilder();
       
-      for( final Ação i: this.listaDeAções )
+      for( final Ação i: this.inventário )
       {
          enviar.append( i.getNome() + Inventario.SEPARADOR + " " );
          int contadorDeChar = 0;
@@ -158,18 +158,15 @@ public class Inventario
     * @param acao a ação para se remover
     * @return true caso possa remover a ação do inventário, false caso contrário
     */
-   public boolean removerDoInventario( final Ação acao )
+   public boolean removerDoInventario( final String acao )
    {
-      return this.listaDeAções.remove( acao );
-   }
-   
-   /**
-    * Define, e portanto sobre-escreve o inventário.
-    * 
-    * @param listaDeAções a listaDeAções em forma de um ArrayList< Ação >
-    */
-   public void setInventario( final List< Ação > listaDeAções )
-   {
-      this.listaDeAções = listaDeAções;
+      for( int i = 0; i < this.inventário.size(); i++ )
+      {
+         if( this.inventário.get( i ).equals( acao ) )
+         {
+            this.inventário.remove( i );
+         }
+      }
+      return false;
    }
 }
