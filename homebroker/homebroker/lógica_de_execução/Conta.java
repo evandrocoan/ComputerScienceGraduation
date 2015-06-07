@@ -15,7 +15,7 @@ public class Conta
    private String nome;
    private String senha;
    private double saldo;
-   private final boolean administrador;
+   private boolean administrador;
    private final Inventario inventário;
    private boolean bloqueada;
    
@@ -218,6 +218,11 @@ public class Conta
          }
       }
       return false;
+   }
+   
+   public void setAdministrador( final boolean privilégio )
+   {
+      this.administrador = privilégio;
    }
    
    /**

@@ -54,12 +54,13 @@ public final class JanelaDeCadastro extends JFrame
             + "Você precisa ter privilégio de administrador." );
          return;
       }
-      final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: " );
+      final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: ", true );
       
       if( conta != null )
       {
-         JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!" );
          this.fachada.bloquearConta( conta );
+         JOptionPane.showMessageDialog( null,
+            "Bloqueio realizado com sucesso!\n\n" + this.fachada.contasToString() );
       }
    }
    
@@ -99,7 +100,8 @@ public final class JanelaDeCadastro extends JFrame
          }
          sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
       }
-      JOptionPane.showMessageDialog( null, "Conta cadastrada com sucesso!" );
+      JOptionPane.showMessageDialog( null,
+         "Conta cadastrada com sucesso!\n\n" + this.fachada.contasToString() );
    }
    
    /**
@@ -107,13 +109,14 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      final String conta = this.solicitarConta( "Insira a conta a ser excluída:" );
+      final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
       
       this.fachada.excluirConta( conta );
       
       if( conta != null )
       {
-         JOptionPane.showMessageDialog( null, "Conta " + conta + "excluída com sucesso!" );
+         JOptionPane.showMessageDialog( null, "Conta " + conta + "excluída com sucesso!\n\n"
+            + this.fachada.contasToString() );
       }
    }
    
@@ -189,20 +192,51 @@ public final class JanelaDeCadastro extends JFrame
       return nome;
    }
    
-   private String solicitarConta( final String pergunta )
+   /**
+    * Efetua a remoção dos privilégios de administrador de uma conta.
+    */
+   public void removerPrivilégios()
+   {
+      if( !this.fachada.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
+         return;
+      }
+      if( !this.fachada.isAdministradora() )
+      {
+         JOptionPane.showMessageDialog( null, "Acesso negado! "
+            + "Você precisa ter privilégio de administrador." );
+         return;
+      }
+      final String conta = this.solicitarConta( "\n\nInsira qual conta perderá " + "privilégios: ",
+         true );
+      
+      if( conta != null )
+      {
+         this.fachada.ajustarPrivilégios( conta, false );
+         JOptionPane.showMessageDialog( null,
+            "Remoção realizado com sucesso!\n\n" + this.fachada.contasToString() );
+      }
+   }
+   
+   private String solicitarConta( final String pergunta, final boolean imunidade )
    {
       String nome = null;
       boolean inputError = true;
       do
       {
          nome = JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-            + this.fachada.contasToString() + "\n\n" + pergunta );
+            + this.fachada.contasToString() + pergunta );
          
          if( nome == null )
          {
             return null;
          }
          inputError = this.fachada.existeAConta( nome );
+         if( imunidade )
+         {
+            inputError = !this.fachada.estáLogadoAgora( nome );
+         }
          
       } while( !inputError );
       
