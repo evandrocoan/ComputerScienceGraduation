@@ -42,8 +42,7 @@ public final class Fachada
       Fachada.LOG.setLevel( Level.OFF );
       this.livros = Livros.getInstância();
       
-      // Cria contas fictícias
-      this.criarContasFicticia( 30, "123" );
+      this.criarContasFicticias( 30, "123" );
    }
    
    /**
@@ -123,7 +122,7 @@ public final class Fachada
     *
     * @return texto um texto contendo os nomes das contas de teste criadas.
     */
-   public String contasTesteToString()
+   public String contasToString()
    {
       final StringBuffer texto = new StringBuffer();
       
@@ -147,7 +146,7 @@ public final class Fachada
     * @param quantidade a quantidade de contas teste para se criar
     * @param senha senha que as contas de teste terão
     */
-   public void criarContasFicticia( final int quantidade, final String senha )
+   public void criarContasFicticias( final int quantidade, final String senha )
    {
       this.contas = new ArrayList<>();
       this.contas.add( new Conta( "admin", "admin", 2000.5 * Biblioteca.gerarNumeroAleatorio(),

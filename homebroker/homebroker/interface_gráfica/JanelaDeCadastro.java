@@ -196,7 +196,7 @@ public final class JanelaDeCadastro extends JFrame
       do
       {
          nome = JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-            + this.fachada.contasTesteToString() + "\n\n" + pergunta );
+            + this.fachada.contasToString() + "\n\n" + pergunta );
          
          if( nome == null )
          {

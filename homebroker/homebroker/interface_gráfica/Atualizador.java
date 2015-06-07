@@ -31,7 +31,6 @@ public final class Atualizador implements Runnable
                JanelaDeOfertas.getInstância().atualizarListaDeOfertas();
             }
          } );
-         
          try
          {
             Thread.sleep( 1000 );

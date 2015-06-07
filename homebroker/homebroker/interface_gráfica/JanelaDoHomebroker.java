@@ -92,7 +92,7 @@ public final class JanelaDoHomebroker extends JFrame
       case "dica":
          JOptionPane.showMessageDialog( null, "Sessão de teste " + "COM dica de contas no login!" );
          final StringBuilder dica = new StringBuilder();
-         dica.append( '\n' ).append( this.fachada.contasTesteToString() );
+         dica.append( '\n' ).append( this.fachada.contasToString() );
          
          this.loginNoSistemaInterno( dica.toString() );
          this.setVisible( true );
