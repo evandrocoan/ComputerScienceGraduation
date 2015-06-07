@@ -38,6 +38,54 @@ public final class JanelaDeCadastro extends JFrame
       return JanelaDeCadastro.INSTÂNCIA;
    }
    
+   public void alterarSenhaMinhaSenha()
+   { // TODO
+      String novaSenha = "1";
+      String novaSenha2 = "2";
+      String senha = null;
+      boolean error = false;
+      do
+      {
+         final String mensagem = ( error? "Senha inválida!\n" : "" )
+            + "Bem vindo ao subsistema de troca de senha!\n"
+            + "Para continuar insira sua senha atual: \n";
+         senha = JOptionPane.showInputDialog( mensagem );
+         
+         if( this.fachada.checarSenha( senha ) )
+         {
+            error = false;
+            
+            while( !novaSenha2.equals( novaSenha ) )
+            {
+               final String menssagem = ( error? "As senhas não conferem!\n" : "" )
+                  + "Insira sua nova senha: \n";
+               novaSenha = JOptionPane.showInputDialog( menssagem );
+               
+               if( novaSenha == null )
+               {
+                  return;
+               }
+               novaSenha2 = JOptionPane.showInputDialog( "Insira sua nova senha novamente: \n" );
+               
+               if( novaSenha2 == null )
+               {
+                  return;
+               }
+               error = true;
+            }
+         }
+         error = true;
+         
+         if( senha == null )
+         {
+            return;
+         }
+      } while( !this.fachada.checarSenha( senha ) );
+      
+      this.fachada.setSenha( novaSenha );
+      JOptionPane.showMessageDialog( null, "Senha alterada com sucesso!" );
+   }
+   
    /**
     * Efetua o bloqueio de uma conta.
     */
@@ -178,11 +226,7 @@ public final class JanelaDeCadastro extends JFrame
    
    private String getSenha()
    {
-      String nome = null;
-      
-      nome = JOptionPane.showInputDialog( "Insira a senha do novo acionista: \n" );
-      
-      return nome;
+      return JOptionPane.showInputDialog( "Insira a senha do novo acionista: \n" );
    }
    
    /**

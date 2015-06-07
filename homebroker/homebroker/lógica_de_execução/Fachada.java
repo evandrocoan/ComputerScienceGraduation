@@ -135,6 +135,15 @@ public final class Fachada
    }
    
    /**
+    * @param senha a senha da conta atualmente autenticada.
+    * @return true caso a senha confira, false caso contrário.
+    */
+   public boolean checarSenha( final String senha )
+   {
+      return this.conta.checkSenha( senha );
+   }
+   
+   /**
     * Transforma um ArrayList de contas e uma String
     *
     * @return texto um texto contendo os nomes das contas de teste criadas.
@@ -365,6 +374,14 @@ public final class Fachada
    public String ofertaToString( final int indice )
    {
       return this.livros.ofertaToString( indice );
+   }
+   
+   /**
+    * @param novaSenha a nova senha da conta atualmente autenticada.
+    */
+   public void setSenha( final String novaSenha )
+   {
+      this.conta.setSenha( novaSenha );
    }
    
    public String vendaToString( final int indice )
