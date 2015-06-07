@@ -353,7 +353,7 @@ public final class PainelDoHomebroker extends JPanel
          PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
          break;
       case "mc":
-         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenha();
+         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenha( null );
          break;
       case "ms":
          PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenhas();
