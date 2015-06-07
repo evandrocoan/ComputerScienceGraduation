@@ -87,7 +87,7 @@ public final class JanelaDeCadastro extends JFrame
    }
    
    /**
-    * 
+    * Permite administrador alterarem a senha de qualquer conta.
     */
    public void alterarSenhas()
    {
