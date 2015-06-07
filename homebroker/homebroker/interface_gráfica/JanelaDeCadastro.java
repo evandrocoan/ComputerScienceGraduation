@@ -105,32 +105,48 @@ public final class JanelaDeCadastro extends JFrame
    
    private void alterarSenhasInterno( final String conta )
    {
-      /* TODO @formatter:off
-       * 
-       * 
-       */ //@formatter:on
       String novaSenha = "1";
       String novaSenha2 = "2";
+      String senha = null;
       boolean error = false;
-      
-      while( !novaSenha2.equals( novaSenha ) )
+      do
       {
-         final String menssagem = ( error? "As senhas não conferem!\n" : "" )
-            + "Insira sua nova senha: \n";
-         novaSenha = JOptionPane.showInputDialog( menssagem );
+         final String mensagem = ( error? "Senha inválida!\n" : "" )
+            + "Bem vindo ao subsistema de troca de senha!\n"
+            + "Para continuar insira sua senha atual: \n";
+         senha = JOptionPane.showInputDialog( mensagem );
          
-         if( novaSenha == null )
+         if( this.fachada.checarSenha( senha, null ) )
          {
-            return;
-         }
-         novaSenha2 = JOptionPane.showInputDialog( "Insira sua nova senha novamente: \n" );
-         
-         if( novaSenha2 == null )
-         {
-            return;
+            error = false;
+            
+            while( !novaSenha2.equals( novaSenha ) )
+            {
+               final String menssagem = ( error? "As senhas não conferem!\n" : "" )
+                  + "Insira sua nova senha: \n";
+               novaSenha = JOptionPane.showInputDialog( menssagem );
+               
+               if( novaSenha == null )
+               {
+                  return;
+               }
+               novaSenha2 = JOptionPane.showInputDialog( "Insira sua nova senha novamente: \n" );
+               
+               if( novaSenha2 == null )
+               {
+                  return;
+               }
+               error = true;
+            }
          }
          error = true;
-      }
+         
+         if( senha == null )
+         {
+            return;
+         }
+      } while( !this.fachada.checarSenha( senha, null ) );
+      
       this.fachada.setSenha( novaSenha, conta );
       JOptionPane.showMessageDialog( null, "Senha alterada com sucesso!" );
    }
