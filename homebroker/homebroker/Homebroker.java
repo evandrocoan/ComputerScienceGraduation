@@ -33,7 +33,7 @@ public class Homebroker
     * parâmetro, inicia a interface gráfica de login no sistema.
     *
     * @param args "Os comandos disponíveis:\n" + "teste: abre o programa em mode de teste sem dica"
-    *           + "das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa " +
+    *           + " das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa " +
     *           "com dicas de contas para se logar."
     */
    @SuppressWarnings( "all" )
@@ -61,7 +61,7 @@ public class Homebroker
             case "ajuda":
                System.out.println( "Comandos disponíveis:\n"
                   + "teste: abre o programa em mode de teste sem dica"
-                  + "das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa "
+                  + " das contas para se logar\n" + "dica: o mesmo que teste, mas abre o programa "
                   + "com dicas de contas para se logar." );
                exitLoop = true;
                break;
