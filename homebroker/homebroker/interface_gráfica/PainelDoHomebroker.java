@@ -214,6 +214,7 @@ public final class PainelDoHomebroker extends JPanel
          + "Digite 'l' para fazer logoff.\n"
          + "Digite 'm' para ver o mercado.\n"
          + "Digite 'mc' para mudar sua senha atual.\n"
+         + "Digite 'ms' para mudar a senha de alguma outra conta.\n"
          + "Digite 'ov' para enviar uma ordem de venda.\n"
          + "Digite 'oc' para criar um ordem de compra.\n" 
          + "Digite 'v' para ver as vendas.\n" 
@@ -352,7 +353,10 @@ public final class PainelDoHomebroker extends JPanel
          PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
          break;
       case "mc":
-         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenhaMinhaSenha();
+         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenha();
+         break;
+      case "ms":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenhas();
          break;
       case "v":
          PainelDoHomebroker.JANELA_DE_VENDAS.setVisible( true );
