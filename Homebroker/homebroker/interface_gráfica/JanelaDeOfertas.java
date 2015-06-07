@@ -49,14 +49,14 @@ public final class JanelaDeOfertas extends JFrame
       
       this.setSize( tamanhoDaJanelaReduzido );
       this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 10, 365, width - 620, height - 400 );
+      this.setBounds( 10, 365, width - 540, height - 400 );
       this.setVisible( false );
       this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
       
       this.painel = PainelDeOfertas.getInstância();
       this.setContentPane( this.painel );
       
-      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 18 ) );
+      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
    }
    
    /**
