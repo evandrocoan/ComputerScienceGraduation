@@ -215,7 +215,8 @@ public final class PainelDoHomebroker extends JPanel
          + "Digite 'c' para para criar uma conta.\n" 
          + "Digite 'm' para ver o mercado.\n"
          + "Digite 'v' para ver as vendas.\n" 
-         + "Digite 't' para adicionar ofertas de teste."; // @formatter:on
+         + "Digite 't' para adicionar ofertas de teste.\n"
+         + "Digite 'a' para remover os privilégios de administrador de uma conta.";// @formatter:on
       this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
       
       this.campoDeAjudaTexto.setEditable( false );
@@ -353,6 +354,9 @@ public final class PainelDoHomebroker extends JPanel
          break;
       case "t":
          this.adicionarOfertasTeste();
+         break;
+      case "a":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.removerPrivilégios();
          break;
       default:
          this.imputError();

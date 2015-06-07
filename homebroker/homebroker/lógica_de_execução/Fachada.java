@@ -105,6 +105,21 @@ public final class Fachada
       return this.livros.adicionarOfertaDeVenda( preço, quantidade, nome, this.conta );
    }
    
+   /**
+    * @param nome a conta a ter os privilégios de administrador removidos.
+    * @param privilégio true se administrador, false caso contrário.
+    */
+   public void ajustarPrivilégios( final String nome, final boolean privilégio )
+   {
+      for( final Conta conta: this.contas )
+      {
+         if( conta.getNome().equals( nome ) )
+         {
+            conta.setAdministrador( privilégio );
+         }
+      }
+   }
+   
    public boolean bloquearConta( final String nome )
    {
       for( final Conta conta: this.contas )
@@ -129,15 +144,20 @@ public final class Fachada
       int contador = 0;
       for( final Conta conta: this.contas )
       {
-         texto.append( conta.getNome() ).append( ( conta.isBloqueada()? "(1)" : "(0)" ) );
-         texto.append( ", " );
+         
+         texto.append( conta.getNome() ).append( " (" )
+            .append( ( conta.isAdministradora()? "1" : "0" ) );
+         texto.append( ( conta.isBloqueada()? "1" : "0" ) );
+         texto.append( "), " );
          if( Biblioteca.quebrarLinha( contador ) )
          {
             texto.append( '\n' );
          }
          contador = contador + 1;
       }
-      return texto.append( "\n(1) = Bloqueada, (0) = Desbloqueada." ).toString();
+      return texto.append(
+         "\n(01) = Bloqueada, (00) = Desbloqueada, (10) = Administrador, "
+            + "(00) = Não administrador." ).toString();
    }
    
    /**
@@ -164,6 +184,15 @@ public final class Fachada
          
          this.contas.add( contaTemp );
       }
+   }
+   
+   /**
+    * @param nome o nome da conta a verificar se está atualmente logged no sistema.
+    * @return true caso sim, false caso contrário.
+    */
+   public boolean estáLogadoAgora( final String nome )
+   {
+      return this.conta.getNome().equals( nome );
    }
    
    /**
