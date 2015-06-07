@@ -91,11 +91,6 @@ public class Conta
       }
    }
    
-   public boolean definirBloqueada()
-   {
-      return this.bloqueada = true;
-   }
-   
    /**
     * Deposit Money.
     * 
@@ -223,6 +218,11 @@ public class Conta
    public void setAdministrador( final boolean privilégio )
    {
       this.administrador = privilégio;
+   }
+   
+   public boolean setBloqueada( final boolean privilégio )
+   {
+      return this.bloqueada = privilégio;
    }
    
    /**

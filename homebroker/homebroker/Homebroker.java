@@ -41,7 +41,7 @@ public class Homebroker
    {
       if( ( args == null ) || ( args.length == 0 ) )
       {
-         this.modoDeLogin();
+         this.janela.loginNoSistema( "dica" );
       } else
       {
          boolean exitLoop = false;
@@ -51,11 +51,11 @@ public class Homebroker
             switch( args[i] )
             {
             case "teste":
-               this.modoDeTeste();
+               this.janela.loginNoSistema( "teste" );
                break;
             
             case "dica":
-               this.modoDeDica();
+               this.janela.loginNoSistema( "dica" );
                break;
             
             case "ajuda":
@@ -77,29 +77,5 @@ public class Homebroker
             }
          }
       }
-   }
-   
-   /**
-    * Inicia o sistema em modo de teste exibindo dica de contas para logar.
-    */
-   private void modoDeDica()
-   {
-      this.janela.loginNoSistema( "dica" );
-   }
-   
-   /**
-    * Inicia o sistema o login no sistema.
-    */
-   private void modoDeLogin()
-   {
-      this.janela.loginNoSistema( "login" );
-   }
-   
-   /**
-    * Inicia o sistema em modo de teste.
-    */
-   private void modoDeTeste()
-   {
-      this.janela.loginNoSistema( "teste" );
    }
 }

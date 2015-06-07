@@ -206,17 +206,18 @@ public final class PainelDoHomebroker extends JPanel
    {
       this.campoDeAjuda =//@formatter:off
          "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
-         + "Digite 's' para fechar o programa.\n" 
-         + "Digite 'i' para para ver o inventario.\n"
+         + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
          + "Digite 'b' para para bloquear uma conta de usuário.\n"
+         + "Digite 'c' para para criar uma conta.\n" 
+         + "Digite 'ex' para excluir uma conta.\n"
+         + "Digite 'i' para ver o inventario.\n"
+         + "Digite 'l' para fazer logoff.\n"
+         + "Digite 'm' para ver o mercado.\n"
          + "Digite 'ov' para enviar uma ordem de venda.\n"
          + "Digite 'oc' para criar um ordem de compra.\n" 
-         + "Digite 'ex' para excluir uma conta.\n"
-         + "Digite 'c' para para criar uma conta.\n" 
-         + "Digite 'm' para ver o mercado.\n"
          + "Digite 'v' para ver as vendas.\n" 
          + "Digite 't' para adicionar ofertas de teste.\n"
-         + "Digite 'a' para remover os privilégios de administrador de uma conta.";// @formatter:on
+         + "Digite 's' para fechar o programa." ;// @formatter:on
       this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
       
       this.campoDeAjudaTexto.setEditable( false );
@@ -357,6 +358,9 @@ public final class PainelDoHomebroker extends JPanel
          break;
       case "a":
          PainelDoHomebroker.JANELA_DE_CADASTRO.removerPrivilégios();
+         break;
+      case "l":
+         JanelaDoHomebroker.getInstância().loginNoSistema( "dica" );
          break;
       default:
          this.imputError();

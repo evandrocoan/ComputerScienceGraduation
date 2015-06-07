@@ -43,24 +43,16 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarBloqueio()
    {
-      if( !this.fachada.isAutenticada() )
+      if( this.fachada.estáAutorizado() )
       {
-         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
-         return;
-      }
-      if( !this.fachada.isAdministradora() )
-      {
-         JOptionPane.showMessageDialog( null, "Acesso negado! "
-            + "Você precisa ter privilégio de administrador." );
-         return;
-      }
-      final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: ", true );
-      
-      if( conta != null )
-      {
-         this.fachada.bloquearConta( conta );
-         JOptionPane.showMessageDialog( null,
-            "Bloqueio realizado com sucesso!\n\n" + this.fachada.contasToString() );
+         final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: ", true );
+         
+         if( conta != null )
+         {
+            this.fachada.bloquearConta( conta );
+            JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!\n\n"
+               + this.fachada.contasToString() );
+         }
       }
    }
    
@@ -69,39 +61,37 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarCadastro()
    {
-      if( !this.fachada.isAutenticada() )
+      if( this.fachada.estáAutorizado() )
       {
-         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
-         return;
+         boolean sucesso = false;
+         
+         while( !sucesso )
+         {
+            final String nome = this.getNome();
+            if( nome == null )
+            {
+               return;
+            }
+            final String senha = this.getSenha();
+            if( senha == null )
+            {
+               return;
+            }
+            final double saldo = this.getSaldo();
+            if( saldo == -1 )
+            {
+               return;
+            }
+            final int cpf = this.getCPF();
+            if( cpf == 0 )
+            {
+               return;
+            }
+            sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
+         }
+         JOptionPane.showMessageDialog( null,
+            "Conta cadastrada com sucesso!\n\n" + this.fachada.contasToString() );
       }
-      boolean sucesso = false;
-      
-      while( !sucesso )
-      {
-         final String nome = this.getNome();
-         if( nome == null )
-         {
-            return;
-         }
-         final String senha = this.getSenha();
-         if( senha == null )
-         {
-            return;
-         }
-         final double saldo = this.getSaldo();
-         if( saldo == -1 )
-         {
-            return;
-         }
-         final int cpf = this.getCPF();
-         if( cpf == 0 )
-         {
-            return;
-         }
-         sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
-      }
-      JOptionPane.showMessageDialog( null,
-         "Conta cadastrada com sucesso!\n\n" + this.fachada.contasToString() );
    }
    
    /**
@@ -109,14 +99,17 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
-      
-      this.fachada.excluirConta( conta );
-      
-      if( conta != null )
+      if( this.fachada.estáAutorizado() )
       {
-         JOptionPane.showMessageDialog( null, "Conta " + conta + "excluída com sucesso!\n\n"
-            + this.fachada.contasToString() );
+         final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
+         
+         this.fachada.excluirConta( conta );
+         
+         if( conta != null )
+         {
+            JOptionPane.showMessageDialog( null, "Conta " + conta + "excluída com sucesso!\n\n"
+               + this.fachada.contasToString() );
+         }
       }
    }
    
@@ -197,25 +190,17 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void removerPrivilégios()
    {
-      if( !this.fachada.isAutenticada() )
+      if( this.fachada.estáAutorizado() )
       {
-         JOptionPane.showMessageDialog( null, "Não há " + "nenhuma conta carregada no sistema!" );
-         return;
-      }
-      if( !this.fachada.isAdministradora() )
-      {
-         JOptionPane.showMessageDialog( null, "Acesso negado! "
-            + "Você precisa ter privilégio de administrador." );
-         return;
-      }
-      final String conta = this.solicitarConta( "\n\nInsira qual conta perderá " + "privilégios: ",
-         true );
-      
-      if( conta != null )
-      {
-         this.fachada.ajustarPrivilégios( conta, false );
-         JOptionPane.showMessageDialog( null,
-            "Remoção realizado com sucesso!\n\n" + this.fachada.contasToString() );
+         final String conta = this.solicitarConta( "\n\nInsira qual conta perderá "
+            + "privilégios: ", true );
+         
+         if( conta != null )
+         {
+            this.fachada.ajustarPrivilégios( conta, false );
+            JOptionPane.showMessageDialog( null, "Remoção realizado com sucesso!\n\n"
+               + this.fachada.contasToString() );
+         }
       }
    }
    

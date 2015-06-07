@@ -45,7 +45,7 @@ public final class JanelaDoHomebroker extends JFrame
       this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
       
       // Abre a janela maximizado
-      this.setLocation( 210, 10 );
+      this.setLocation( 110, 10 );
       // this.setLocation( 250, 150 );
       // this.setExtendedState( Frame.MAXIMIZED_BOTH );
       
@@ -71,13 +71,14 @@ public final class JanelaDoHomebroker extends JFrame
    /**
     * Método de realiza o login no sistema.
     *
-    * @param darDica uma dica que será aprensetada no menu do login. Inicialmente ela serve para
-    *           exibir quais contas estão disponíveis para login.
+    * @param modo uma dica que será aprensetada no menu do login. Inicialmente ela serve para exibir
+    *           quais contas estão disponíveis para login.
     */
    @SuppressWarnings( "all" )
-   public void loginNoSistema( final String darDica )
+   public void loginNoSistema( final String modo )
    {
-      switch( darDica )
+      this.setVisible( false );
+      switch( modo )
       {
       case "login":
          this.loginNoSistemaInterno( "" );
@@ -90,7 +91,6 @@ public final class JanelaDoHomebroker extends JFrame
          break;
       
       case "dica":
-         JOptionPane.showMessageDialog( null, "Sessão de teste " + "COM dica de contas no login!" );
          final StringBuilder dica = new StringBuilder();
          dica.append( '\n' ).append( this.fachada.contasToString() );
          
@@ -99,7 +99,7 @@ public final class JanelaDoHomebroker extends JFrame
          break;
       
       default:
-         System.out.println( "Comando de Login inválido! " + darDica );
+         System.out.println( "Comando de Login inválido! " + modo );
          break;
       }
    }
@@ -115,9 +115,9 @@ public final class JanelaDoHomebroker extends JFrame
       boolean inputError = true;
       do
       {
-         usuário = JOptionPane
-            .showInputDialog( ( inputError? "" : "Usuário ou senha inválidos\n\n" )
-               + "Insira qual conta será feito login: " + dica );
+         usuário = JOptionPane.showInputDialog( ( inputError? ""
+            : "Usuário ou senha inválidos ou bloqueados!\n\n" )
+            + "Insira qual conta será feito login: " + dica );
          
          if( ( usuário == null ) )
          {

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import util.Biblioteca;
 
 /**
@@ -126,7 +128,7 @@ public final class Fachada
       {
          if( conta.getNome().equals( nome ) )
          {
-            return conta.definirBloqueada();
+            return conta.setBloqueada( true );
          }
       }
       return false;
@@ -182,8 +184,32 @@ public final class Fachada
             2000.5 * Biblioteca.gerarNumeroAleatorio(), false );
          contaTemp.criarInventarioFicticio( quantidade );
          
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 5 )
+         {
+            contaTemp.setBloqueada( true );
+         }
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 5 )
+         {
+            contaTemp.setAdministrador( true );
+         }
          this.contas.add( contaTemp );
       }
+   }
+   
+   public boolean estáAutorizado()
+   {
+      if( !this.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
+         return false;
+      }
+      if( !this.isAdministradora() )
+      {
+         JOptionPane.showMessageDialog( null, "Acesso negado! "
+            + "Você precisa ter privilégio de administrador." );
+         return false;
+      }
+      return true;
    }
    
    /**
@@ -322,7 +348,7 @@ public final class Fachada
    {
       for( final Conta conta: this.contas )
       {
-         if( conta.getNome().equals( usuário ) && conta.checkSenha( senha ) )
+         if( conta.getNome().equals( usuário ) && conta.checkSenha( senha ) && !conta.isBloqueada() )
          {
             this.conta = conta;
             return true;
