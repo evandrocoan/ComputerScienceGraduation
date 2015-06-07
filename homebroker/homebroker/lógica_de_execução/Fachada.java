@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-
 import util.Biblioteca;
 
 /**
@@ -135,6 +133,28 @@ public final class Fachada
    }
    
    /**
+    * @param senha a senha da conta atualmente autenticada.
+    * @param nome o nome da conta que terá a senha checada, null para verificar a conta atualmente
+    *           autenticada.
+    * @return true caso a senha confira, false caso contrário.
+    */
+   public boolean checarSenha( final String senha, final String nome )
+   {
+      if( nome == null )
+      {
+         return this.conta.checkSenha( senha );
+      }
+      for( final Conta contaTemp: this.contas )
+      {
+         if( contaTemp.getNome().equals( nome ) )
+         {
+            return contaTemp.checkSenha( senha );
+         }
+      }
+      return false;
+   }
+   
+   /**
     * Transforma um ArrayList de contas e uma String
     *
     * @return texto um texto contendo os nomes das contas de teste criadas.
@@ -184,32 +204,16 @@ public final class Fachada
             2000.5 * Biblioteca.gerarNumeroAleatorio(), false );
          contaTemp.criarInventarioFicticio( quantidade );
          
-         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 5 )
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) == 7 )
          {
             contaTemp.setBloqueada( true );
          }
-         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 5 )
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 7 )
          {
             contaTemp.setAdministrador( true );
          }
          this.contas.add( contaTemp );
       }
-   }
-   
-   public boolean estáAutorizado()
-   {
-      if( !this.isAutenticada() )
-      {
-         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
-         return false;
-      }
-      if( !this.isAdministradora() )
-      {
-         JOptionPane.showMessageDialog( null, "Acesso negado! "
-            + "Você precisa ter privilégio de administrador." );
-         return false;
-      }
-      return true;
    }
    
    /**
@@ -365,6 +369,27 @@ public final class Fachada
    public String ofertaToString( final int indice )
    {
       return this.livros.ofertaToString( indice );
+   }
+   
+   /**
+    * @param novaSenha a nova senha da conta atualmente autenticada.
+    * @param nome o nome da conta que terá a senha alterada, null para alterar a conta atualmente
+    *           autenticada.
+    */
+   public void setSenha( final String novaSenha, final String nome )
+   {
+      if( nome == null )
+      {
+         this.conta.setSenha( novaSenha );
+         return;
+      }
+      for( final Conta contaTemp: this.contas )
+      {
+         if( contaTemp.getNome().equals( nome ) )
+         {
+            contaTemp.setSenha( novaSenha );
+         }
+      }
    }
    
    public String vendaToString( final int indice )

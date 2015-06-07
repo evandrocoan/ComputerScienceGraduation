@@ -39,13 +39,97 @@ public final class JanelaDeCadastro extends JFrame
    }
    
    /**
+    * Efetua a remoção dos privilégios de administrador de uma conta.
+    */
+   public void adicionarPrivilégios()
+   {
+      if( this.isAdministradora() )
+      {
+         final String conta = this.solicitarConta( "Insira qual conta ganhará " + "privilégios: ",
+            true );
+         
+         if( conta != null )
+         {
+            this.fachada.ajustarPrivilégios( conta, true );
+            JOptionPane.showMessageDialog( null,
+               "Adesão realizado com sucesso!\n\n" + this.fachada.contasToString() );
+         }
+      }
+   }
+   
+   public void alterarSenha( final String conta )
+   {
+      String novaSenha = "1";
+      String novaSenha2 = "2";
+      String senha = null;
+      boolean error = false;
+      do
+      {
+         final String mensagem = ( error? "Senha inválida!\n" : "" )
+            + "Bem vindo ao subsistema de troca de senha!\n"
+            + "Para continuar insira sua senha atual: \n";
+         senha = JOptionPane.showInputDialog( mensagem );
+         
+         if( this.fachada.checarSenha( senha, null ) )
+         {
+            error = false;
+            
+            while( !novaSenha2.equals( novaSenha ) )
+            {
+               final String menssagem = ( error? "As senhas não conferem!\n" : "" )
+                  + "Insira sua nova senha: \n";
+               novaSenha = JOptionPane.showInputDialog( menssagem );
+               
+               if( novaSenha == null )
+               {
+                  return;
+               }
+               novaSenha2 = JOptionPane.showInputDialog( "Insira sua nova senha novamente: \n" );
+               
+               if( novaSenha2 == null )
+               {
+                  return;
+               }
+               error = true;
+            }
+         }
+         error = true;
+         
+         if( senha == null )
+         {
+            return;
+         }
+      } while( !this.fachada.checarSenha( senha, null ) );
+      
+      this.fachada.setSenha( novaSenha, conta );
+      JOptionPane.showMessageDialog( null, "Senha alterada com sucesso!" );
+   }
+   
+   /**
+    * Permite administrador alterarem a senha de qualquer conta.
+    */
+   public void alterarSenhas()
+   {
+      if( this.isAdministradora() )
+      {
+         final String conta = this.solicitarConta( "Insira qual conta terá a senha modificada: ",
+            false );
+         if( conta == null )
+         {
+            return;
+         }
+         this.alterarSenha( conta );
+      }
+   }
+   
+   /**
     * Efetua o bloqueio de uma conta.
     */
    public void efetuarBloqueio()
    {
-      if( this.fachada.estáAutorizado() )
+      if( this.isAdministradora() )
       {
-         final String conta = this.solicitarConta( "\n\nInsira qual conta será bloqueada: ", true );
+         final String conta = this.solicitarConta( "Insira qual conta será bloqueada: ", true );
          
          if( conta != null )
          {
@@ -61,7 +145,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarCadastro()
    {
-      if( this.fachada.estáAutorizado() )
+      if( this.isAdministradora() )
       {
          boolean sucesso = false;
          
@@ -99,7 +183,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      if( this.fachada.estáAutorizado() )
+      if( this.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
          
@@ -178,11 +262,26 @@ public final class JanelaDeCadastro extends JFrame
    
    private String getSenha()
    {
-      String nome = null;
-      
-      nome = JOptionPane.showInputDialog( "Insira a senha do novo acionista: \n" );
-      
-      return nome;
+      return JOptionPane.showInputDialog( "Insira a senha do novo acionista: \n" );
+   }
+   
+   /**
+    * @return
+    */
+   private boolean isAdministradora()
+   {
+      if( !this.fachada.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
+         return false;
+      }
+      if( !this.fachada.isAdministradora() )
+      {
+         JOptionPane.showMessageDialog( null, "Acesso negado! "
+            + "Você precisa ter privilégio de administrador." );
+         return false;
+      }
+      return true;
    }
    
    /**
@@ -190,10 +289,10 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void removerPrivilégios()
    {
-      if( this.fachada.estáAutorizado() )
+      if( this.isAdministradora() )
       {
-         final String conta = this.solicitarConta( "\n\nInsira qual conta perderá "
-            + "privilégios: ", true );
+         final String conta = this.solicitarConta( "Insira qual conta perderá " + "privilégios: ",
+            true );
          
          if( conta != null )
          {
@@ -204,14 +303,21 @@ public final class JanelaDeCadastro extends JFrame
       }
    }
    
+   /**
+    * @param pergunta a pergunta feita ao usuário.
+    * @param imunidade true caso não se possa alterar a própria conta.
+    * @return o nome de uma conta válida do sistema.
+    */
    private String solicitarConta( final String pergunta, final boolean imunidade )
    {
       String nome = null;
       boolean inputError = true;
+      boolean error = false;
+      boolean mensagem = false;
       do
       {
-         nome = JOptionPane.showInputDialog( ( inputError? "" : "Usuário inválido!\n\n" )
-            + this.fachada.contasToString() + pergunta );
+         nome = JOptionPane.showInputDialog( ( mensagem? "Usuário inválido!\n\n" : "" ) + pergunta
+            + "\n\n" + this.fachada.contasToString() );
          
          if( nome == null )
          {
@@ -220,10 +326,11 @@ public final class JanelaDeCadastro extends JFrame
          inputError = this.fachada.existeAConta( nome );
          if( imunidade )
          {
-            inputError = !this.fachada.estáLogadoAgora( nome );
+            error = this.fachada.estáLogadoAgora( nome );
          }
+         mensagem = true;
          
-      } while( !inputError );
+      } while( !inputError || error );
       
       return nome;
    }

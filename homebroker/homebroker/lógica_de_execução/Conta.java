@@ -95,16 +95,10 @@ public class Conta
     * Deposit Money.
     * 
     * @param amount a quantidade de saldo a ser colocada na conta.
-    * @return true caso seja realizada a transação, false caso contrário
     */
-   public boolean depositMoney( final double amount )
+   public void depositMoney( final double amount )
    {
-      if( this.administrador )
-      {
-         this.saldo = this.saldo + amount;
-      }
-      
-      return false;
+      this.saldo = this.saldo + amount;
    }
    
    /**
@@ -205,12 +199,10 @@ public class Conta
     */
    public boolean retirarDinheiro( final double quantidade )
    {
-      if( this.administrador )
+      if( this.saldo >= quantidade )
       {
-         if( this.saldo >= quantidade )
-         {
-            this.saldo = this.saldo - quantidade;
-         }
+         this.saldo = this.saldo - quantidade;
+         return true;
       }
       return false;
    }
@@ -232,10 +224,7 @@ public class Conta
     */
    public void setNome( final String nome )
    {
-      if( this.administrador )
-      {
-         this.nome = nome;
-      }
+      this.nome = nome;
    }
    
    /**
@@ -245,10 +234,7 @@ public class Conta
     */
    public void setSaldo( final double saldo )
    {
-      if( this.administrador )
-      {
-         this.saldo = saldo;
-      }
+      this.saldo = saldo;
    }
    
    /**
@@ -258,9 +244,6 @@ public class Conta
     */
    public void setSenha( final String senha )
    {
-      if( this.administrador )
-      {
-         this.senha = senha;
-      }
+      this.senha = senha;
    }
 }

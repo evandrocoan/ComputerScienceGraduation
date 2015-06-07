@@ -207,12 +207,15 @@ public final class PainelDoHomebroker extends JPanel
       this.campoDeAjuda =//@formatter:off
          "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
          + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
+         + "Digite 'ad' para adicionar privilégios de administrador de uma conta.\n"
          + "Digite 'b' para para bloquear uma conta de usuário.\n"
          + "Digite 'c' para para criar uma conta.\n" 
          + "Digite 'ex' para excluir uma conta.\n"
          + "Digite 'i' para ver o inventario.\n"
          + "Digite 'l' para fazer logoff.\n"
          + "Digite 'm' para ver o mercado.\n"
+         + "Digite 'mc' para mudar sua senha atual.\n"
+         + "Digite 'ms' para mudar a senha de alguma outra conta.\n"
          + "Digite 'ov' para enviar uma ordem de venda.\n"
          + "Digite 'oc' para criar um ordem de compra.\n" 
          + "Digite 'v' para ver as vendas.\n" 
@@ -332,6 +335,9 @@ public final class PainelDoHomebroker extends JPanel
       case "i":
          this.mostrarInventário();
          break;
+      case "ad":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.adicionarPrivilégios();
+         break;
       case "b":
          PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarBloqueio();
          break;
@@ -349,6 +355,12 @@ public final class PainelDoHomebroker extends JPanel
          break;
       case "m":
          PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( true );
+         break;
+      case "mc":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenha( null );
+         break;
+      case "ms":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.alterarSenhas();
          break;
       case "v":
          PainelDoHomebroker.JANELA_DE_VENDAS.setVisible( true );
