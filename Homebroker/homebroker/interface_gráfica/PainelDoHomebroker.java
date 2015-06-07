@@ -378,13 +378,13 @@ public final class PainelDoHomebroker extends JPanel
          this.imputError();
          break;
       }
+      this.limpar();
    }
    
    private void imputError()
    {
       JOptionPane.showMessageDialog( null, "Você digitou uma " + "opção inválida!\n\n"
          + this.campoDeAjuda );
-      this.limpar();
    }
    
    /**
