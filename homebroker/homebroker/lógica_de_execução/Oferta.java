@@ -111,7 +111,7 @@ public class Oferta
          ordem = ordem + " ";
       }
       final String açãoEmOferta = ordem + " - Nome da ação: " + this.ação + " - Preço: "
-         + this.ação + " - Quantidade: " + this.getQuantidade();
+         + this.preço + " - Quantidade: " + this.getQuantidade();
       
       return açãoEmOferta;
    }
