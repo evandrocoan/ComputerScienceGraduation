@@ -207,6 +207,7 @@ public final class PainelDoHomebroker extends JPanel
       this.campoDeAjuda =//@formatter:off
          "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
          + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
+         + "Digite 'ad' para adicionar privilégios de administrador de uma conta.\n"
          + "Digite 'b' para para bloquear uma conta de usuário.\n"
          + "Digite 'c' para para criar uma conta.\n" 
          + "Digite 'ex' para excluir uma conta.\n"
@@ -333,6 +334,9 @@ public final class PainelDoHomebroker extends JPanel
          break;
       case "i":
          this.mostrarInventário();
+         break;
+      case "ad":
+         PainelDoHomebroker.JANELA_DE_CADASTRO.adicionarPrivilégios();
          break;
       case "b":
          PainelDoHomebroker.JANELA_DE_CADASTRO.efetuarBloqueio();

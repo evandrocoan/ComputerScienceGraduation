@@ -38,6 +38,25 @@ public final class JanelaDeCadastro extends JFrame
       return JanelaDeCadastro.INSTÂNCIA;
    }
    
+   /**
+    * Efetua a remoção dos privilégios de administrador de uma conta.
+    */
+   public void adicionarPrivilégios()
+   {
+      if( this.isAdministradora() )
+      {
+         final String conta = this.solicitarConta( "Insira qual conta ganhará " + "privilégios: ",
+            true );
+         
+         if( conta != null )
+         {
+            this.fachada.ajustarPrivilégios( conta, true );
+            JOptionPane.showMessageDialog( null,
+               "Adesão realizado com sucesso!\n\n" + this.fachada.contasToString() );
+         }
+      }
+   }
+   
    public void alterarSenha( final String conta )
    {
       String novaSenha = "1";
@@ -272,8 +291,8 @@ public final class JanelaDeCadastro extends JFrame
    {
       if( this.isAdministradora() )
       {
-         final String conta = this.solicitarConta( "\n\nInsira qual conta perderá "
-            + "privilégios: ", true );
+         final String conta = this.solicitarConta( "Insira qual conta perderá " + "privilégios: ",
+            true );
          
          if( conta != null )
          {

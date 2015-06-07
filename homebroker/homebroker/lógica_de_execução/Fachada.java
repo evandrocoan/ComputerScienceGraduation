@@ -204,11 +204,11 @@ public final class Fachada
             2000.5 * Biblioteca.gerarNumeroAleatorio(), false );
          contaTemp.criarInventarioFicticio( quantidade );
          
-         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 7 )
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) == 7 )
          {
             contaTemp.setBloqueada( true );
          }
-         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 5 )
+         if( ( Biblioteca.gerarNumeroAleatorio() % 10 ) > 7 )
          {
             contaTemp.setAdministrador( true );
          }
