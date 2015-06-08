@@ -10,7 +10,7 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public class Conta
+public final class Conta
 {
    private String nome;
    private String senha;
@@ -71,23 +71,23 @@ public class Conta
       {
          this.inventário.adicionarAoInventario( 2.2 + Biblioteca.gerarNumeroAleatorio(),
             10 + Biblioteca.gerarNumeroAleatorio(),
-            "Tabajara SA" + Biblioteca.gerarNumeroAleatorio() );
+            "Minerva-ON" + Biblioteca.gerarNumeroAleatorio() );
          
          this.inventário.adicionarAoInventario( 22.2 + Biblioteca.gerarNumeroAleatorio(),
             100 + Biblioteca.gerarNumeroAleatorio(),
-            "Tabajara SO" + Biblioteca.gerarNumeroAleatorio() );
+            "Bradesco-PN" + Biblioteca.gerarNumeroAleatorio() );
          
          this.inventário.adicionarAoInventario( 200.2 + Biblioteca.gerarNumeroAleatorio(),
             1000 + Biblioteca.gerarNumeroAleatorio(),
-            "Tabajara SP" + Biblioteca.gerarNumeroAleatorio() );
+            "Agrenco-BDR" + Biblioteca.gerarNumeroAleatorio() );
          
          this.inventário.adicionarAoInventario( 2000.2 + Biblioteca.gerarNumeroAleatorio(),
             10000 + Biblioteca.gerarNumeroAleatorio(),
-            "Tabajara ST" + Biblioteca.gerarNumeroAleatorio() );
+            "Brookfield-ON" + Biblioteca.gerarNumeroAleatorio() );
          
          this.inventário.adicionarAoInventario( 200006.2 + Biblioteca.gerarNumeroAleatorio(),
             10000 + Biblioteca.gerarNumeroAleatorio(),
-            "Tabajara SS" + Biblioteca.gerarNumeroAleatorio() );
+            "Excelsior-PN" + Biblioteca.gerarNumeroAleatorio() );
       }
    }
    

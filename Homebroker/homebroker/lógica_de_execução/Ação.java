@@ -9,7 +9,7 @@ package homebroker.lógica_de_execução;
  * 
  * @author Professional
  */
-public class Ação
+public final class Ação
 {
    private double preço;
    private int quantidade;

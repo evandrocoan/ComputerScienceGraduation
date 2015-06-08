@@ -13,7 +13,7 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public class Inventario
+public final class Inventario
 {
    private final static char SEPARADOR = ';';
    

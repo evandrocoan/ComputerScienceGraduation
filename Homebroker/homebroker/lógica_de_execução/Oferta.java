@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * 
  * @author Professional
  */
-public class Oferta
+public final class Oferta
 {
    private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
    

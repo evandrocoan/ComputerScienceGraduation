@@ -33,7 +33,7 @@ public final class JanelaDoHomebroker extends JFrame
     */
    private JanelaDoHomebroker()
    {
-      super( "HomeBroker Tabajara" );
+      super( "Simulador de HomeBroker" );
       this.fachada = Fachada.getInstância();
       
       // Adiciona o painel principal nesta janela

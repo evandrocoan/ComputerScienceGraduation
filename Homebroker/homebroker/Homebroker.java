@@ -9,7 +9,7 @@ import homebroker.interface_gráfica.JanelaDoHomebroker;
  *
  * @author Professional
  */
-public class Homebroker
+public final class Homebroker
 {
    private final JanelaDoHomebroker janela;
    

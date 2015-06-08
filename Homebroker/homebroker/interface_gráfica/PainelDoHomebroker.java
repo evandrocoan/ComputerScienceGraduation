@@ -104,7 +104,7 @@ public final class PainelDoHomebroker extends JPanel
    }
    
    /**
-    * @return instância uma instância da janela de login.
+    * @return INSTÂNCIA uma instância da janela de login.
     */
    public static PainelDoHomebroker getInstância()
    {
@@ -120,8 +120,8 @@ public final class PainelDoHomebroker extends JPanel
    
    private void adicionarOfertasTeste()
    {
-      Fachada.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
-      Fachada.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
+      Fachada.getInstância().adicionarOfertaDeCompra( 12.63, 3, "Banese-ON53" );
+      Fachada.getInstância().adicionarOfertaDeVenda( 10.53, 11, "Banese-ON53" );
    }
    
    /**
@@ -165,7 +165,7 @@ public final class PainelDoHomebroker extends JPanel
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
-            Fachada.getInstância().adicionarOfertaDeVenda( 10, 10, "Tabajara SA" );
+            Fachada.getInstância().adicionarOfertaDeVenda( 10.53, 11, "Banese-ON53" );
          }
       } );
       this.botãoDeTeste1.setPreferredSize( new Dimension( 270, 35 ) );
@@ -179,7 +179,7 @@ public final class PainelDoHomebroker extends JPanel
          @Override
          public void actionPerformed( final ActionEvent ae )
          {
-            Fachada.getInstância().adicionarOfertaDeCompra( 10, 3, "Tabajara SA" );
+            Fachada.getInstância().adicionarOfertaDeCompra( 12.63, 3, "Banese-ON53" );
          }
       } );
       this.botãoDeTeste2.setPreferredSize( new Dimension( 270, 35 ) );
