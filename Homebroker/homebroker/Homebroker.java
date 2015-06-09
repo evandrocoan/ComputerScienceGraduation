@@ -3,7 +3,7 @@
  */
 package homebroker;
 
-import homebroker.interface_gráfica.JanelaDoHomebroker;
+import homebroker.interface_gráfica.JanelaDeLogin;
 
 /**
  *
@@ -11,11 +11,11 @@ import homebroker.interface_gráfica.JanelaDoHomebroker;
  */
 public final class Homebroker
 {
-   private final JanelaDoHomebroker janela;
+   private final JanelaDeLogin janela;
    
    private Homebroker()
    {
-      this.janela = JanelaDoHomebroker.getInstância();
+      this.janela = JanelaDeLogin.getInstância();
    }
    
    /**

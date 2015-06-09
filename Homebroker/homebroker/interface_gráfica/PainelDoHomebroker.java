@@ -35,8 +35,6 @@ import util.Biblioteca;
  */
 public final class PainelDoHomebroker extends JPanel
 {
-   private static PainelDoHomebroker INSTÂNCIA;
-   
    private static final JanelaDeCadastro JANELA_DE_CADASTRO;
    private static final JanelaDeVendas JANELA_DE_VENDAS;
    private static final JanelaDeOfertas JANELA_DE_OFERTAS;
@@ -79,7 +77,7 @@ public final class PainelDoHomebroker extends JPanel
    /**
     * Cria um painel para colocar os botões, caixas de texto, ...
     */
-   private PainelDoHomebroker()
+   public PainelDoHomebroker()
    {
       // Liga o book de ofertas
       final Thread processoDeAtualizar = new Thread( new Atualizador() );
@@ -101,21 +99,6 @@ public final class PainelDoHomebroker extends JPanel
       this.add( this.painelDeBotões, BorderLayout.CENTER );
       
       Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 22 ) );
-   }
-   
-   /**
-    * @return INSTÂNCIA uma instância da janela de login.
-    */
-   public static PainelDoHomebroker getInstância()
-   {
-      synchronized( PainelDoHomebroker.class )
-      {
-         if( PainelDoHomebroker.INSTÂNCIA == null )
-         {
-            PainelDoHomebroker.INSTÂNCIA = new PainelDoHomebroker();
-         }
-      }
-      return PainelDoHomebroker.INSTÂNCIA;
    }
    
    private void adicionarOfertasTeste()
@@ -372,13 +355,47 @@ public final class PainelDoHomebroker extends JPanel
          PainelDoHomebroker.JANELA_DE_CADASTRO.removerPrivilégios();
          break;
       case "l":
-         JanelaDoHomebroker.getInstância().loginNoSistema( "dica" );
-         break;
+         this.fazerReLogin();
+         return;
       default:
          this.imputError();
          break;
       }
       this.limpar();
+   }
+   
+   /**
+    * 
+    */
+   private void fazerReLogin()
+   {
+      PainelDoHomebroker.JANELA_DE_OFERTAS.setVisible( false );
+      PainelDoHomebroker.JANELA_DE_VENDAS.setVisible( false );
+      PainelDoHomebroker.JANELA_DE_CADASTRO.setVisible( false );
+      JanelaDeLogin.getInstância().loginNoSistema( "dica" );
+   }
+   
+   @Override
+   protected void finalize()
+   {
+      try
+      {
+         this.botãoDeTeste1 = null;
+         this.botãoDeTeste2 = null;
+         this.botãoDeOfertas = null;
+         this.botãoDeVendas = null;
+         this.painelDeBotões = null;
+         this.campoDeAjudaTexto = null;
+         this.campoDeAjuda = null;
+         this.entradaDeComandos = null;
+         this.botãoDeComandos = null;
+         
+         super.finalize();
+         
+      } catch( final Throwable exeption )
+      {
+         exeption.printStackTrace();
+      }
    }
    
    private void imputError()
