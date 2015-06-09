@@ -196,6 +196,8 @@ public final class Fachada
       this.contas = new ArrayList<>();
       this.contas.add( new Conta( "admin", "admin", 2000.5 * Biblioteca.gerarNumeroAleatorio(),
          true ) );
+      this.contas.add( new Conta( "user123", "123", 2000.5 * Biblioteca.gerarNumeroAleatorio(),
+         false ) );
       
       this.contas.get( 0 ).criarInventarioFicticio( quantidade );
       
