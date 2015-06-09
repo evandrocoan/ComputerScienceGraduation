@@ -48,7 +48,7 @@ public final class Fachada
    /**
     * Retorna a única instância existe da Fachada.
     *
-    * @return INSTÂNCIA a única instância existe da Fachada.
+    * @return INSTÂNCIA a única instância da Fachada. 
     */
    public static Fachada getInstância()
    {

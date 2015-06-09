@@ -19,7 +19,7 @@ public final class JanelaDoHomebroker extends JFrame
    /**
     * Contém a única instância desta classe.
     */
-   private static JanelaDoHomebroker INSTÂNCIA;
+   private static JanelaDoHomebroker instância;
    
    private final static Fachada fachada = Fachada.getInstância();
    
@@ -61,19 +61,25 @@ public final class JanelaDoHomebroker extends JFrame
    }
    
    /**
-    * @param nova true se precisa construir uma nova janela.
-    * @return instância a instância da janela.
+    * @param nova um boolean true caso precisa destruir a janela anterior e construir uma nova
+    *           janela, false caso queira se pegar a janela já existente.
+    * @return INSTÂNCIA a instância da janela.
     */
    public static JanelaDoHomebroker getInstância( final boolean nova )
    {
       synchronized( JanelaDoHomebroker.class )
       {
-         if( ( JanelaDoHomebroker.INSTÂNCIA == null ) || nova )
+         if( JanelaDoHomebroker.instância == null )
          {
-            JanelaDoHomebroker.INSTÂNCIA = new JanelaDoHomebroker();
+            JanelaDoHomebroker.instância = new JanelaDoHomebroker();
+         }
+         if( nova )
+         {
+            JanelaDoHomebroker.instância.finalize();
+            JanelaDoHomebroker.instância = new JanelaDoHomebroker();
          }
       }
-      return JanelaDoHomebroker.INSTÂNCIA;
+      return JanelaDoHomebroker.instância;
    }
    
    /**
@@ -101,7 +107,7 @@ public final class JanelaDoHomebroker extends JFrame
       try
       {
          this.setVisible( false );
-         JanelaDoHomebroker.INSTÂNCIA = null;
+         JanelaDoHomebroker.instância = null;
          this.painel.finalize();
          this.painel = null;
          super.finalize();

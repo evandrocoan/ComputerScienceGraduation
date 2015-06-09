@@ -59,9 +59,6 @@ public final class JanelaDeOfertas extends JFrame
       Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
    }
    
-   /**
-    * @return the instance
-    */
    public static JanelaDeOfertas getInstância()
    {
       return JanelaDeOfertas.INSTÂNCIA;

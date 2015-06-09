@@ -61,7 +61,7 @@ public final class JanelaDeVendas extends JFrame
    }
    
    /**
-    * @return instância uma instância da janela de login.
+    * @return INSTÂNCIA uma instância da janela de login.
     */
    public static JanelaDeVendas getInstância()
    {

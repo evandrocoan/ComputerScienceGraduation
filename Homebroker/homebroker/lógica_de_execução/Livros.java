@@ -55,7 +55,7 @@ public final class Livros
    /**
     * Serve para implementação do padrão de projeto singleton.
     *
-    * @return INSTANCE a única instância existe do BookDeOfertas.
+    * @return INSTÂNCIA a única instância do BookDeOfertas.
     */
    public static Livros getInstância()
    {

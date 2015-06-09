@@ -24,7 +24,7 @@ public final class JanelaDeCadastro extends JFrame
    }
    
    /**
-    * @return instância uma instância da janela de login.
+    * @return INSTÂNCIA uma instância da janela de login.
     */
    public static JanelaDeCadastro getInstância()
    {

@@ -46,7 +46,7 @@ public final class JanelaDeLogin extends JFrame
    }
    
    /**
-    * @return instância a instância da janela.
+    * @return INSTÂNCIA a instância da janela.
     */
    public static JanelaDeLogin getInstância()
    {

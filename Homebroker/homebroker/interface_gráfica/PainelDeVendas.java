@@ -51,9 +51,6 @@ public final class PainelDeVendas extends JPanel
       this.add( painelRolável, BorderLayout.CENTER );
    }
    
-   /**
-    * @return the instância
-    */
    public static PainelDeVendas getInstância()
    {
       return PainelDeVendas.INSTÂNCIA;
