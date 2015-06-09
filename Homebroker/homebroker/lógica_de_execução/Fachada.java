@@ -64,8 +64,12 @@ public final class Fachada
    }
    
    public boolean adicionarConta( final double saldo, final int cpf, final String nome,
-      final String senha )
+      final String senha ) throws Exception
    {
+      if( !this.isAdministradora() )
+      {
+         throw new Exception( "Necessário privilégios de administrador!" );
+      }
       return this.contas.add( new Conta( nome, senha, saldo, false ) );
    }
    
@@ -108,9 +112,14 @@ public final class Fachada
    /**
     * @param nome a conta a ter os privilégios de administrador removidos.
     * @param privilégio true se administrador, false caso contrário.
+    * @throws Exception caso o usuário autenticado não seja administrador.
     */
-   public void ajustarPrivilégios( final String nome, final boolean privilégio )
+   public void ajustarPrivilégios( final String nome, final boolean privilégio ) throws Exception
    {
+      if( !this.isAdministradora() )
+      {
+         throw new Exception( "Necessário privilégios de administrador!" );
+      }
       for( final Conta conta: this.contas )
       {
          if( conta.getNome().equals( nome ) )
@@ -120,8 +129,12 @@ public final class Fachada
       }
    }
    
-   public boolean bloquearConta( final String nome )
+   public boolean bloquearConta( final String nome ) throws Exception
    {
+      if( !this.isAdministradora() )
+      {
+         throw new Exception( "Necessário privilégios de administrador!" );
+      }
       for( final Conta conta: this.contas )
       {
          if( conta.getNome().equals( nome ) )
@@ -227,9 +240,14 @@ public final class Fachada
    
    /**
     * @param nome uma string contendo o nome da conta a ser excluída.
+    * @throws Exception caso o usuário autenticado não seja administrador.
     */
-   public void excluirConta( final String nome )
+   public void excluirConta( final String nome ) throws Exception
    {
+      if( !this.isAdministradora() )
+      {
+         throw new Exception( "Necessário privilégios de administrador!" );
+      }
       for( int index = 0; index < this.contas.size(); index++ )
       {
          final Conta conta = this.contas.get( index );

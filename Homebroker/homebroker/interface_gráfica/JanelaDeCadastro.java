@@ -50,7 +50,14 @@ public final class JanelaDeCadastro extends JFrame
          
          if( conta != null )
          {
-            this.fachada.ajustarPrivilégios( conta, true );
+            try
+            {
+               this.fachada.ajustarPrivilégios( conta, true );
+               
+            } catch( final Exception exeption )
+            {
+               exeption.printStackTrace();
+            }
             JOptionPane.showMessageDialog( null,
                "Adesão realizado com sucesso!\n\n" + this.fachada.contasToString() );
          }
@@ -133,7 +140,14 @@ public final class JanelaDeCadastro extends JFrame
          
          if( conta != null )
          {
-            this.fachada.bloquearConta( conta );
+            try
+            {
+               this.fachada.bloquearConta( conta );
+               
+            } catch( final Exception exeption )
+            {
+               exeption.printStackTrace();
+            }
             JOptionPane.showMessageDialog( null, "Bloqueio realizado com sucesso!\n\n"
                + this.fachada.contasToString() );
          }
@@ -171,7 +185,14 @@ public final class JanelaDeCadastro extends JFrame
             {
                return;
             }
-            sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
+            try
+            {
+               sucesso = this.fachada.adicionarConta( saldo, cpf, nome, senha );
+               
+            } catch( final Exception exeption )
+            {
+               exeption.printStackTrace();
+            }
          }
          JOptionPane.showMessageDialog( null,
             "Conta cadastrada com sucesso!\n\n" + this.fachada.contasToString() );
@@ -187,7 +208,14 @@ public final class JanelaDeCadastro extends JFrame
       {
          final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
          
-         this.fachada.excluirConta( conta );
+         try
+         {
+            this.fachada.excluirConta( conta );
+            
+         } catch( final Exception exeption )
+         {
+            exeption.printStackTrace();
+         }
          
          if( conta != null )
          {
@@ -277,7 +305,14 @@ public final class JanelaDeCadastro extends JFrame
          
          if( conta != null )
          {
-            this.fachada.ajustarPrivilégios( conta, false );
+            try
+            {
+               this.fachada.ajustarPrivilégios( conta, false );
+               
+            } catch( final Exception exeption )
+            {
+               exeption.printStackTrace();
+            }
             JOptionPane.showMessageDialog( null, "Remoção realizado com sucesso!\n\n"
                + this.fachada.contasToString() );
          }
