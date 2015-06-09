@@ -43,7 +43,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void adicionarPrivilégios()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta ganhará " + "privilégios: ",
             true );
@@ -117,7 +117,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void alterarSenhas()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta terá a senha modificada: ",
             false );
@@ -134,7 +134,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarBloqueio()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta será bloqueada: ", true );
          
@@ -159,7 +159,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarCadastro()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          boolean sucesso = false;
          
@@ -204,7 +204,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
          
@@ -298,7 +298,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void removerPrivilégios()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta perderá " + "privilégios: ",
             true );

@@ -103,7 +103,7 @@ public final class PainelDoHomebroker extends JPanel
    
    private void adicionarOfertasTeste()
    {
-      if( JanelaDoHomebroker.isAdministradora() )
+      if( Utilidades.isAdministradora() )
       {
          Fachada.getInstância().adicionarOfertaDeCompra( 12.63, 3, "Banese-ON53" );
          Fachada.getInstância().adicionarOfertaDeVenda( 10.53, 11, "Banese-ON53" );

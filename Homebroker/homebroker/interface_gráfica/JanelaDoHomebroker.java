@@ -6,7 +6,6 @@ package homebroker.interface_gráfica;
 import homebroker.lógica_de_execução.Fachada;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 /**
@@ -80,25 +79,6 @@ public final class JanelaDoHomebroker extends JFrame
          }
       }
       return JanelaDoHomebroker.instância;
-   }
-   
-   /**
-    * @return true caso esteja logado no sistema uma conta de administrador.
-    */
-   public static boolean isAdministradora()
-   {
-      if( !JanelaDoHomebroker.fachada.isAutenticada() )
-      {
-         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
-         return false;
-      }
-      if( !JanelaDoHomebroker.fachada.isAdministradora() )
-      {
-         JOptionPane.showMessageDialog( null, "Acesso negado! "
-            + "Você precisa ter privilégio de administrador." );
-         return false;
-      }
-      return true;
    }
    
    @Override
