@@ -22,7 +22,7 @@ import util.Biblioteca;
  *
  * @author Professional
  */
-public final class JanelaDeOfertas extends JFrame
+public final class JanelaDeOfertas
 {
    private static final Logger LOG;
    private static final JanelaDeOfertas INSTÂNCIA;
@@ -33,30 +33,17 @@ public final class JanelaDeOfertas extends JFrame
       INSTÂNCIA = new JanelaDeOfertas();
    }
    
+   private final JFrame janela = new JFrame( "Book De Ofertas" );
+   
    private final Fachada fachada;
-   private final PainelDeOfertas painel;
+   private PainelDeOfertas painel;
    
    private JanelaDeOfertas()
    {
-      super( "Book De Ofertas" );
       JanelaDeOfertas.LOG.setLevel( Level.OFF );
       this.fachada = Fachada.getInstância();
       
-      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
-      final int width = (int) tamanhoDaJanela.getWidth();
-      final int height = (int) tamanhoDaJanela.getHeight();
-      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
-      
-      this.setSize( tamanhoDaJanelaReduzido );
-      this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 10, 365, width - 540, height - 400 );
-      this.setVisible( false );
-      this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
-      
-      this.painel = PainelDeOfertas.getInstância();
-      this.setContentPane( this.painel );
-      
-      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
+      this.configurarJanela();
    }
    
    public static JanelaDeOfertas getInstância()
@@ -84,5 +71,31 @@ public final class JanelaDeOfertas extends JFrame
          }
          indice++;
       }
+   }
+   
+   /**
+    * 
+    */
+   private void configurarJanela()
+   {
+      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
+      final int width = (int) tamanhoDaJanela.getWidth();
+      final int height = (int) tamanhoDaJanela.getHeight();
+      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
+      
+      this.janela.setSize( tamanhoDaJanelaReduzido );
+      this.janela.setPreferredSize( tamanhoDaJanelaReduzido );
+      this.janela.setBounds( 10, 365, width - 540, height - 400 );
+      this.janela.setVisible( false );
+      this.janela.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+      this.painel = PainelDeOfertas.getInstância();
+      this.janela.setContentPane( this.painel );
+      
+      Biblioteca.trocarFontes( this.janela, new Font( this.janela.getName(), Frame.NORMAL, 20 ) );
+   }
+   
+   public void setVisible( final boolean b )
+   {
+      this.janela.setVisible( b );
    }
 }
