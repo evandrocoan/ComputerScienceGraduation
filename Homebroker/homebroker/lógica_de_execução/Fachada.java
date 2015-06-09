@@ -48,7 +48,7 @@ public final class Fachada
    /**
     * Retorna a única instância existe da Fachada.
     *
-    * @return INSTÂNCIA a única instância da Fachada. 
+    * @return INSTÂNCIA a única instância da Fachada.
     */
    public static Fachada getInstância()
    {
@@ -83,11 +83,6 @@ public final class Fachada
    public boolean adicionarOfertaDeCompra( final double preço, final int quantidade,
       final String nome )
    {
-      if( this.conta == null )
-      {
-         return this.books.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
-            .getNome( 2 ), this.contas.get( 1 ) );
-      }
       return this.books.adicionarOfertaDeCompra( preço, quantidade, nome, this.conta );
    }
    
@@ -101,11 +96,6 @@ public final class Fachada
    public boolean adicionarOfertaDeVenda( final double preço, final int quantidade,
       final String nome )
    {
-      if( this.conta == null )
-      {
-         return this.books.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
-            .getNome( 2 ), this.contas.get( 2 ) );
-      }
       return this.books.adicionarOfertaDeVenda( preço, quantidade, nome, this.conta );
    }
    
