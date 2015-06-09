@@ -200,7 +200,7 @@ public final class Fachada
       
       for( int i = 0; i < quantidade; i++ )
       {
-         contaTemp = new Conta( "User" + Biblioteca.gerarNumeroAleatorio(), senha,
+         contaTemp = new Conta( "user" + Biblioteca.gerarNumeroAleatorio(), senha,
             2000.5 * Biblioteca.gerarNumeroAleatorio(), false );
          contaTemp.criarInventarioFicticio( quantidade );
          

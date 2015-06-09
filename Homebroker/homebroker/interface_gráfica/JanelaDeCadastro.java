@@ -43,7 +43,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void adicionarPrivilégios()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta ganhará " + "privilégios: ",
             true );
@@ -110,7 +110,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void alterarSenhas()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta terá a senha modificada: ",
             false );
@@ -127,7 +127,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarBloqueio()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta será bloqueada: ", true );
          
@@ -145,7 +145,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void efetuarCadastro()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          boolean sucesso = false;
          
@@ -183,7 +183,7 @@ public final class JanelaDeCadastro extends JFrame
     */
    public void excluirConta()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira a conta a ser excluída:", true );
          
@@ -266,30 +266,11 @@ public final class JanelaDeCadastro extends JFrame
    }
    
    /**
-    * @return
-    */
-   private boolean isAdministradora()
-   {
-      if( !this.fachada.isAutenticada() )
-      {
-         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
-         return false;
-      }
-      if( !this.fachada.isAdministradora() )
-      {
-         JOptionPane.showMessageDialog( null, "Acesso negado! "
-            + "Você precisa ter privilégio de administrador." );
-         return false;
-      }
-      return true;
-   }
-   
-   /**
     * Efetua a remoção dos privilégios de administrador de uma conta.
     */
    public void removerPrivilégios()
    {
-      if( this.isAdministradora() )
+      if( JanelaDoHomebroker.isAdministradora() )
       {
          final String conta = this.solicitarConta( "Insira qual conta perderá " + "privilégios: ",
             true );

@@ -103,8 +103,11 @@ public final class PainelDoHomebroker extends JPanel
    
    private void adicionarOfertasTeste()
    {
-      Fachada.getInstância().adicionarOfertaDeCompra( 12.63, 3, "Banese-ON53" );
-      Fachada.getInstância().adicionarOfertaDeVenda( 10.53, 11, "Banese-ON53" );
+      if( JanelaDoHomebroker.isAdministradora() )
+      {
+         Fachada.getInstância().adicionarOfertaDeCompra( 12.63, 3, "Banese-ON53" );
+         Fachada.getInstância().adicionarOfertaDeVenda( 10.53, 11, "Banese-ON53" );
+      }
    }
    
    /**
@@ -187,23 +190,38 @@ public final class PainelDoHomebroker extends JPanel
    
    private void configurarCampoDeAjuda()
    {
-      this.campoDeAjuda =//@formatter:off
-         "Bem-vindo ao Simulador de Homebroker.\n"
-         + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
-         + "Digite 'ad' para adicionar privilégios de administrador de uma conta.\n"
-         + "Digite 'b' para para bloquear uma conta de usuário.\n"
-         + "Digite 'c' para para criar uma conta.\n" 
-         + "Digite 'ex' para excluir uma conta.\n"
-         + "Digite 'i' para ver o inventario.\n"
-         + "Digite 'l' para fazer logoff.\n"
-         + "Digite 'm' para ver o mercado.\n"
-         + "Digite 'mc' para mudar sua senha atual.\n"
-         + "Digite 'ms' para mudar a senha de alguma outra conta.\n"
-         + "Digite 'ov' para enviar uma ordem de venda.\n"
-         + "Digite 'oc' para criar um ordem de compra.\n" 
-         + "Digite 'v' para ver as vendas.\n" 
-         + "Digite 't' para adicionar ofertas de teste.\n"
-         + "Digite 's' para fechar o programa." ;// @formatter:on
+      if( this.fachada.isAdministradora() )
+      {
+         this.campoDeAjuda =//@formatter:off
+            "Bem-vindo ao Simulador de Homebroker.\n"
+            + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
+            + "Digite 'ad' para adicionar privilégios de administrador de uma conta.\n"
+            + "Digite 'b' para para bloquear uma conta de usuário.\n"
+            + "Digite 'c' para para criar uma conta.\n" 
+            + "Digite 'ex' para excluir uma conta.\n"
+            + "Digite 'i' para ver o inventario.\n"
+            + "Digite 'l' para fazer logoff.\n"
+            + "Digite 'm' para ver o mercado.\n"
+            + "Digite 'mc' para mudar sua senha atual.\n"
+            + "Digite 'ms' para mudar a senha de alguma outra conta.\n"
+            + "Digite 'ov' para enviar uma ordem de venda.\n"
+            + "Digite 'oc' para criar um ordem de compra.\n" 
+            + "Digite 'v' para ver as vendas.\n" 
+            + "Digite 't' para adicionar ofertas de teste.\n"
+            + "Digite 's' para fechar o programa." ;// @formatter:on
+      } else
+      {
+         this.campoDeAjuda =//@formatter:off
+            "Bem-vindo ao Simulador de Homebroker.\n"
+            + "Digite 'i' para ver o inventario.\n"
+            + "Digite 'l' para fazer logoff.\n"
+            + "Digite 'm' para ver o mercado.\n"
+            + "Digite 'mc' para mudar sua senha atual.\n"
+            + "Digite 'ov' para enviar uma ordem de venda.\n"
+            + "Digite 'oc' para criar um ordem de compra.\n" 
+            + "Digite 'v' para ver as vendas.\n" 
+            + "Digite 's' para fechar o programa." ;// @formatter:on
+      }
       this.campoDeAjudaTexto = new JTextArea( this.campoDeAjuda );
       
       this.campoDeAjudaTexto.setEditable( false );
@@ -262,35 +280,43 @@ public final class PainelDoHomebroker extends JPanel
    {
       this.painelDeBotões = new JPanel( new GridBagLayout() );
       
-      this.botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
-      this.botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
       this.botãoDeOfertas = new JButton( "Janela de Ofertas" );
       this.botãoDeVendas = new JButton( "Janela de Vendas" );
       
       this.configurarBotãoDeOfertas();
       this.configurarBotãoDeVendas();
-      this.configurarBotãoDeTeste1();
-      this.configurarBotãoDeTeste2();
       
       final GridBagConstraints gridBagConstraint = new GridBagConstraints();
       final GridBagConstraints separatorConstraint = new GridBagConstraints();
       
-      gridBagConstraint.gridx = 0;
-      gridBagConstraint.gridwidth = 1;
       separatorConstraint.gridx = 0;
       separatorConstraint.gridwidth = 1;
       separatorConstraint.weighty = 1;
-      
       separatorConstraint.gridy = 2;
+      
       this.painelDeBotões.add( new JSeparator( SwingConstants.HORIZONTAL ), separatorConstraint );
+      
+      gridBagConstraint.gridx = 0;
+      gridBagConstraint.gridwidth = 1;
+      
       gridBagConstraint.gridy = 0;
       this.painelDeBotões.add( this.botãoDeOfertas, gridBagConstraint );
       gridBagConstraint.gridy = 1;
       this.painelDeBotões.add( this.botãoDeVendas, gridBagConstraint );
-      gridBagConstraint.gridy = 3;
-      this.painelDeBotões.add( this.botãoDeTeste1, gridBagConstraint );
-      gridBagConstraint.gridy = 4;
-      this.painelDeBotões.add( this.botãoDeTeste2, gridBagConstraint );
+      
+      if( this.fachada.isAdministradora() )
+      {
+         this.botãoDeTeste1 = new JButton( "Adicionar Venda Teste" );
+         this.botãoDeTeste2 = new JButton( "Adicionar Compra Teste" );
+         
+         this.configurarBotãoDeTeste1();
+         this.configurarBotãoDeTeste2();
+         
+         gridBagConstraint.gridy = 3;
+         this.painelDeBotões.add( this.botãoDeTeste1, gridBagConstraint );
+         gridBagConstraint.gridy = 4;
+         this.painelDeBotões.add( this.botãoDeTeste2, gridBagConstraint );
+      }
    }
    
    /**

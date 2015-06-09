@@ -90,7 +90,7 @@ public final class JanelaDeLogin extends JFrame
       
       default:
          System.out.println( "Comando de Login inválido! " + modo );
-         System.exit( 0 );
+         System.exit( 1 );
          break;
       }
       this.janela = JanelaDoHomebroker.getInstância( true );

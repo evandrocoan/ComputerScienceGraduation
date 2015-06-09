@@ -3,7 +3,10 @@
  */
 package homebroker.interface_gráfica;
 
+import homebroker.lógica_de_execução.Fachada;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 /**
@@ -17,6 +20,8 @@ public final class JanelaDoHomebroker extends JFrame
     * Contém a única instância desta classe.
     */
    private static JanelaDoHomebroker INSTÂNCIA;
+   
+   private final static Fachada fachada = Fachada.getInstância();
    
    /**
     * Armazenam o painel do homebroker.
@@ -38,9 +43,16 @@ public final class JanelaDoHomebroker extends JFrame
       // Define que a janela deve fechar ao sair.
       this.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
       
+      if( JanelaDoHomebroker.fachada.isAdministradora() )
+      {
+         this.setLocation( 110, 10 );
+         
+      } else
+      {
+         this.setLocation( 250, 10 );
+      }
+      
       // Abre a janela maximizado
-      this.setLocation( 110, 10 );
-      // this.setLocation( 250, 150 );
       // this.setExtendedState( Frame.MAXIMIZED_BOTH );
       
       // Ajusta a janela ao tamanho dos elementos.
@@ -62,6 +74,25 @@ public final class JanelaDoHomebroker extends JFrame
          }
       }
       return JanelaDoHomebroker.INSTÂNCIA;
+   }
+   
+   /**
+    * @return true caso esteja logado no sistema uma conta de administrador.
+    */
+   public static boolean isAdministradora()
+   {
+      if( !JanelaDoHomebroker.fachada.isAutenticada() )
+      {
+         JOptionPane.showMessageDialog( null, "Não há nenhuma conta carregada no sistema!" );
+         return false;
+      }
+      if( !JanelaDoHomebroker.fachada.isAdministradora() )
+      {
+         JOptionPane.showMessageDialog( null, "Acesso negado! "
+            + "Você precisa ter privilégio de administrador." );
+         return false;
+      }
+      return true;
    }
    
    @Override
