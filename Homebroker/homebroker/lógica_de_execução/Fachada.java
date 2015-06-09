@@ -35,12 +35,12 @@ public final class Fachada
     */
    private Conta conta;
    
-   private final Livros livros;
+   private final Books books;
    
    private Fachada()
    {
       Fachada.LOG.setLevel( Level.OFF );
-      this.livros = Livros.getInstância();
+      this.books = Books.getInstância();
       
       this.criarContasFicticias( 30, "123" );
    }
@@ -85,10 +85,10 @@ public final class Fachada
    {
       if( this.conta == null )
       {
-         return this.livros.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
+         return this.books.adicionarOfertaDeCompra( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 1 ) );
       }
-      return this.livros.adicionarOfertaDeCompra( preço, quantidade, nome, this.conta );
+      return this.books.adicionarOfertaDeCompra( preço, quantidade, nome, this.conta );
    }
    
    /**
@@ -103,10 +103,10 @@ public final class Fachada
    {
       if( this.conta == null )
       {
-         return this.livros.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
+         return this.books.adicionarOfertaDeVenda( preço, quantidade, this.contas.get( 2 )
             .getNome( 2 ), this.contas.get( 2 ) );
       }
-      return this.livros.adicionarOfertaDeVenda( preço, quantidade, nome, this.conta );
+      return this.books.adicionarOfertaDeVenda( preço, quantidade, nome, this.conta );
    }
    
    /**
@@ -254,7 +254,7 @@ public final class Fachada
          
          if( conta.getNome().equals( nome ) )
          {
-            this.livros.cancelarOfertas( conta );
+            this.books.cancelarOfertas( conta );
             this.contas.remove( index );
          }
       }
@@ -278,11 +278,11 @@ public final class Fachada
     *
     * @param númeroDeOfertas a última oferta visualizada
     * @return true se existem novas ofertas, false caso contrário.
-    * @see Livros#existemNovasOfertas(int)
+    * @see Books#existemNovasOfertas(int)
     */
    public boolean existemNovasOfertas( final int númeroDeOfertas )
    {
-      return this.livros.existemNovasOfertas( númeroDeOfertas );
+      return this.books.existemNovasOfertas( númeroDeOfertas );
    }
    
    /**
@@ -382,11 +382,11 @@ public final class Fachada
    /**
     * @param indice qual oferta buscar
     * @return açãoEmOferta uma String representando uma ação em oferta.
-    * @see Livros#ofertaToString(int)
+    * @see Books#ofertaToString(int)
     */
    public String ofertaToString( final int indice )
    {
-      return this.livros.ofertaToString( indice );
+      return this.books.ofertaToString( indice );
    }
    
    /**
@@ -412,6 +412,6 @@ public final class Fachada
    
    public String vendaToString( final int indice )
    {
-      return this.livros.vendaToString( indice );
+      return this.books.vendaToString( indice );
    }
 }

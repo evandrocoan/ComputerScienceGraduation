@@ -15,15 +15,15 @@ import java.util.logging.Logger;
  *
  * @author Professional
  */
-public final class Livros
+public final class Books
 {
-   private static Livros INSTÂNCIA;
+   private static Books INSTÂNCIA;
    
    private static final Logger LOG;
    
    static
    {
-      LOG = Logger.getLogger( Livros.class.getName() );
+      LOG = Logger.getLogger( Books.class.getName() );
    }
    
    /**
@@ -44,9 +44,9 @@ public final class Livros
    /**
     * Construtor do objeto para implementação do padrão de projeto Singleton.
     */
-   private Livros()
+   private Books()
    {
-      Livros.LOG.setLevel( Level.OFF );
+      Books.LOG.setLevel( Level.OFF );
       
       this.ofertas = new ArrayList<>();
       this.vendas = new ArrayList<>();
@@ -57,16 +57,16 @@ public final class Livros
     *
     * @return INSTÂNCIA a única instância do BookDeOfertas.
     */
-   public static Livros getInstância()
+   public static Books getInstância()
    {
-      synchronized( Livros.class )
+      synchronized( Books.class )
       {
-         if( Livros.INSTÂNCIA == null )
+         if( Books.INSTÂNCIA == null )
          {
-            Livros.INSTÂNCIA = new Livros();
+            Books.INSTÂNCIA = new Books();
          }
       }
-      return Livros.INSTÂNCIA;
+      return Books.INSTÂNCIA;
    }
    
    /**
@@ -130,9 +130,9 @@ public final class Livros
    {
       final int númeroDeOfertas = this.ofertas.size() - 1;
       
-      if( Livros.LOG.isLoggable( Level.SEVERE ) )
+      if( Books.LOG.isLoggable( Level.SEVERE ) )
       {
-         Livros.LOG
+         Books.LOG
             .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
                + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
@@ -140,9 +140,9 @@ public final class Livros
       {
          return false;
       }
-      if( Livros.LOG.isLoggable( Level.SEVERE ) )
+      if( Books.LOG.isLoggable( Level.SEVERE ) )
       {
-         Livros.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
+         Books.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
             + ( númeroDeOfertas > ultimaOferta ) );
       }
       return númeroDeOfertas > ultimaOferta;
