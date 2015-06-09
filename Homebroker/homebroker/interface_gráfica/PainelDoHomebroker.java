@@ -205,7 +205,7 @@ public final class PainelDoHomebroker extends JPanel
    private void configurarCampoDeAjuda()
    {
       this.campoDeAjuda =//@formatter:off
-         "Bem-vindo ao sistema tabajara de cadastro de ações.\n"
+         "Bem-vindo ao Simulador de Homebroker.\n"
          + "Digite 'a' para remover os privilégios de administrador de uma conta.\n"
          + "Digite 'ad' para adicionar privilégios de administrador de uma conta.\n"
          + "Digite 'b' para para bloquear uma conta de usuário.\n"
