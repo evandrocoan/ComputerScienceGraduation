@@ -4,6 +4,8 @@
 package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.Fachada;
+import homebroker.lógica_de_execução.ObjetoDeInteresse;
+import homebroker.lógica_de_execução.Observador;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,7 +28,7 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public final class JanelaDeVendas
+public final class JanelaDeVendas extends Observador
 {
    private static JanelaDeVendas INSTÂNCIA;
    
@@ -40,6 +42,11 @@ public final class JanelaDeVendas
    private JanelaDeVendas()
    {
       this.fachada = Fachada.getInstância();
+      
+      // Configura o objeto de interesse
+      this.objetoDeInteresse = new ObjetoDeInteresse();
+      this.objetoDeInteresse.adicionarObservador( this );
+      this.fachada.adicionarObjetoDeInteresse( this.objetoDeInteresse );
       
       this.painel = new JPanel( new GridLayout( 0, 1 ) );
       this.modeloPadrãoDeLista = new DefaultListModel<>();
@@ -73,7 +80,8 @@ public final class JanelaDeVendas
    /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
-   void atualizarListaDeVendas()
+   @Override
+   public void atualizar()
    {
       int indice = this.tamanhoDaLista();
       

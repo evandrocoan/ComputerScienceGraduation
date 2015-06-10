@@ -69,6 +69,16 @@ public final class Fachada
    }
    
    /**
+    * @param objetoDeInteresse mantém uma lista de seus dependentes, chamados de observadores, e
+    *           notifica-los automaticamente de quaisquer mudanças de estado, geralmente chamando um
+    *           de seus métodos
+    */
+   public void adicionarObjetoDeInteresse( final ObjetoDeInteresse objetoDeInteresse )
+   {
+      this.books.adicionarObjetoDeInteresse( objetoDeInteresse );
+   }
+   
+   /**
     * @param preço o preço da ação.
     * @param quantidade a quantidade de ações.
     * @param nome o nome a ação.

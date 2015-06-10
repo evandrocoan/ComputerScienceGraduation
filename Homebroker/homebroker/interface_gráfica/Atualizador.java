@@ -27,7 +27,6 @@ public final class Atualizador implements Runnable
             @Override
             public void run()
             {
-               JanelaDeVendas.getInstância().atualizarListaDeVendas();
                JanelaDeOfertas.getInstância().atualizarListaDeOfertas();
             }
          } );

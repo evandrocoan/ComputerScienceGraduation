@@ -3,11 +3,10 @@
  */
 package homebroker.lógica_de_execução;
 
-import homebroker.Homebroker;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +17,17 @@ import java.util.logging.Level;
  */
 public final class Books
 {
+   private static final Logger LOG;
+   
    private static Books INSTÂNCIA;
+   
+   static
+   {
+      LOG = Logger.getLogger( Books.class.getName() );
+      Books.LOG.setLevel( Level.OFF );
+   }
+   
+   private ObjetoDeInteresse objetoDeInteresse;
    
    /**
     * As ofertas do mercado realizadas.
@@ -32,6 +41,7 @@ public final class Books
    
    @SuppressWarnings( "unused" )
    private final Oferta oferta = null;
+   
    @SuppressWarnings( "unused" )
    private final Venda venda = null;
    
@@ -40,6 +50,8 @@ public final class Books
     */
    private Books()
    {
+      this.objetoDeInteresse = new ObjetoDeInteresse();
+      
       this.ofertas = new ArrayList<>();
       this.vendas = new ArrayList<>();
    }
@@ -59,6 +71,16 @@ public final class Books
          }
       }
       return Books.INSTÂNCIA;
+   }
+   
+   /**
+    * @param objetoDeInteresse mantém uma lista de seus dependentes, chamados de observadores, e
+    *           notifica-los automaticamente de quaisquer mudanças de estado, geralmente chamando um
+    *           de seus métodos
+    */
+   public void adicionarObjetoDeInteresse( final ObjetoDeInteresse objetoDeInteresse )
+   {
+      this.objetoDeInteresse = objetoDeInteresse;
    }
    
    /**
@@ -122,20 +144,20 @@ public final class Books
    {
       final int númeroDeOfertas = this.ofertas.size() - 1;
       
-      if( Homebroker.getLOG().isLoggable( Level.SEVERE ) )
+      if( Books.LOG.isLoggable( Level.SEVERE ) )
       {
-         Homebroker.getLOG().severe(
-            "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta ) + "("
-               + númeroDeOfertas + "<" + ultimaOferta + ")" );
+         Books.LOG
+            .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
+               + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
       if( númeroDeOfertas < ultimaOferta )
       {
          return false;
       }
-      if( Homebroker.getLOG().isLoggable( Level.SEVERE ) )
+      if( Books.LOG.isLoggable( Level.SEVERE ) )
       {
-         Homebroker.getLOG().severe(
-            "2 - númeroDeOfertas > ultimaOferta = " + ( númeroDeOfertas > ultimaOferta ) );
+         Books.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
+            + ( númeroDeOfertas > ultimaOferta ) );
       }
       return númeroDeOfertas > ultimaOferta;
    }
@@ -199,6 +221,7 @@ public final class Books
          
          this.vendas.add( new Venda( venda, compra, venda.getPreço(), venda.getQuantidade() ) );
       }
+      this.objetoDeInteresse.notificarTodosOsObservadores();
    }
    
    synchronized private void realizarVendaProcura1( final Oferta venda )

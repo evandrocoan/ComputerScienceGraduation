@@ -1,22 +1,23 @@
-package homebroker.testes;
 
 /**
  * 
  * @author Professional
  */
-@SuppressWarnings( { "all" } )
+@SuppressWarnings( {
+   "all"
+} )
 public class BadClass
 {
-    /**
+   /**
      * 
      */
-    public void badMethod()
-    {
-        try
-        {
-            final String bad = "";
-        } catch( final Exception e )
-        {
-        }
-    }
+   public void badMethod()
+   {
+      try
+      {
+         final String bad = "";
+      } catch( final Exception e )
+      {
+      }
+   }
 }

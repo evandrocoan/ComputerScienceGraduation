@@ -1,32 +1,28 @@
 /**
- * Use the plural for packages with homogeneous contents and the singular for
- * packages with heterogeneous contents.
+ * Use the plural for packages with homogeneous contents and the singular for packages with
+ * heterogeneous contents.
  * 
- * A class is similar to a database relation. A database relation should be
- * named in the singular as its records are considered to be instances of the
- * relation. The function of a relation is to compose a complex record from
- * simple data.
+ * A class is similar to a database relation. A database relation should be named in the singular as
+ * its records are considered to be instances of the relation. The function of a relation is to
+ * compose a complex record from simple data.
  * 
- * A package, on the other hand, is not a data abstraction. It assists with
- * organization of code and resolution of naming conflicts. If a package is
- * named in the singular, it doesn't mean that each member of the package is an
- * instance of the package; it contains related but heterogeneous concepts. If
- * it is named in the plural (as they often are), I would expect that the
- * package contains homogeneous concepts.
+ * A package, on the other hand, is not a data abstraction. It assists with organization of code and
+ * resolution of naming conflicts. If a package is named in the singular, it doesn't mean that each
+ * member of the package is an instance of the package; it contains related but heterogeneous
+ * concepts. If it is named in the plural (as they often are), I would expect that the package
+ * contains homogeneous concepts.
  * 
- * For example, a type should be named "TaskCollection" instead of
- * "TasksCollection," as it is a collection containing instances of a Task. A
- * package named com.myproject.task does not mean that each contained class is
- * an instance of a task. There might be a TaskHandler, a TaskFactory, etc. A
- * package named com.myproject.tasks, however, would contain different types
- * that are all tasks: TakeOutGarbageTask, DoTheDishesTask, etc.
+ * For example, a type should be named "TaskCollection" instead of "TasksCollection," as it is a
+ * collection containing instances of a Task. A package named com.myproject.task does not mean that
+ * each contained class is an instance of a task. There might be a TaskHandler, a TaskFactory, etc.
+ * A package named com.myproject.tasks, however, would contain different types that are all tasks:
+ * TakeOutGarbageTask, DoTheDishesTask, etc.
  * 
  * @author http://programmers.stackexchange.com/users/20202/matthew-rodatus
  * @see <a
  *      href="http://programmers.stackexchange.com/questions/75919/should-package-names-be-singular-or-plural">
  *      Should package names be singular or plural?</a>
  */
-package exemplos;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -51,119 +47,121 @@ import javax.swing.WindowConstants;
 @SuppressWarnings( "javadoc" )
 public class SuperConstructor extends JFrame
 {
-    private class FirstDialog extends JDialog
-    {
-        FirstDialog( final Frame parent )
-        {
-            super( parent, "FirstDialog" );
-            this.setPreferredSize( new Dimension( 200, 200 ) );
-            this.setLocationRelativeTo( parent );
-            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-            this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
-            final JButton bNext = new JButton( "Show next dialog" );
-            bNext.addActionListener( new ActionListener()
-            {
-                @SuppressWarnings( "unused" )
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    new SecondDialog( parent, false );
-                }
-            } );
-            this.add( bNext, BorderLayout.NORTH );
-            final JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    FirstDialog.this.setVisible( false );
-                }
-            } );
-            this.add( bClose, BorderLayout.SOUTH );
-            this.pack();
-            this.setVisible( true );
-        }
-    }
-    
-    private class SecondDialog extends JDialog
-    {
-        @SuppressWarnings( { "synthetic-access" } )
-        SecondDialog( final Frame parent, final boolean modal )
-        {
-            // super(parent); // < --- Makes this dialog
-            // unfocusable as long as FirstDialog is visible
-            this.setPreferredSize( new Dimension( 200, 200 ) );
-            this.setLocation( 300, 50 );
-            this.setModal( modal );
-            this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
-            this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
-            final JButton bClose = new JButton( "Close" );
-            bClose.addActionListener( new ActionListener()
-            {
-                @Override
-                public void actionPerformed( final ActionEvent evt )
-                {
-                    SecondDialog.this.setVisible( false );
-                }
-            } );
-            this.add( bClose, BorderLayout.SOUTH );
-            this.pack();
-            this.setVisible( true );
-        }
-    }
-    
-    /**
-     * @param args
-     */
-    public static void main( final String args[] )
-    {
-        EventQueue.invokeLater( new Runnable()
-        {
-            
+   private class FirstDialog extends JDialog
+   {
+      FirstDialog( final Frame parent )
+      {
+         super( parent, "FirstDialog" );
+         this.setPreferredSize( new Dimension( 200, 200 ) );
+         this.setLocationRelativeTo( parent );
+         this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+         this.setModalityType( Dialog.ModalityType.DOCUMENT_MODAL );
+         final JButton bNext = new JButton( "Show next dialog" );
+         bNext.addActionListener( new ActionListener()
+         {
             @SuppressWarnings( "unused" )
             @Override
-            public void run()
+            public void actionPerformed( final ActionEvent evt )
             {
-                new SuperConstructor();
+               new SecondDialog( parent, false );
             }
-        } );
-    }
-    
-    private int i;
-    
-    /**
+         } );
+         this.add( bNext, BorderLayout.NORTH );
+         final JButton bClose = new JButton( "Close" );
+         bClose.addActionListener( new ActionListener()
+         {
+            @Override
+            public void actionPerformed( final ActionEvent evt )
+            {
+               FirstDialog.this.setVisible( false );
+            }
+         } );
+         this.add( bClose, BorderLayout.SOUTH );
+         this.pack();
+         this.setVisible( true );
+      }
+   }
+   
+   private class SecondDialog extends JDialog
+   {
+      @SuppressWarnings( {
+         "synthetic-access"
+      } )
+      SecondDialog( final Frame parent, final boolean modal )
+      {
+         // super(parent); // < --- Makes this dialog
+         // unfocusable as long as FirstDialog is visible
+         this.setPreferredSize( new Dimension( 200, 200 ) );
+         this.setLocation( 300, 50 );
+         this.setModal( modal );
+         this.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+         this.setTitle( "SecondDialog " + ( SuperConstructor.this.i++ ) );
+         final JButton bClose = new JButton( "Close" );
+         bClose.addActionListener( new ActionListener()
+         {
+            @Override
+            public void actionPerformed( final ActionEvent evt )
+            {
+               SecondDialog.this.setVisible( false );
+            }
+         } );
+         this.add( bClose, BorderLayout.SOUTH );
+         this.pack();
+         this.setVisible( true );
+      }
+   }
+   
+   private int i;
+   
+   /**
      * 
      */
-    public SuperConstructor()
-    {
-        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        this.setPreferredSize( new Dimension( 300, 300 ) );
-        this.setTitle( "Super constructor" );
-        final Container cp = this.getContentPane();
-        final JButton b = new JButton( "Show dialog" );
-        b.addActionListener( new ActionListener()
-        {
-            
-            @SuppressWarnings( "unused" )
-            @Override
-            public void actionPerformed( final ActionEvent evt )
-            {
-                new FirstDialog( SuperConstructor.this );
-            }
-        } );
-        cp.add( b, BorderLayout.SOUTH );
-        final JButton bClose = new JButton( "Close" );
-        bClose.addActionListener( new ActionListener()
-        {
-            @Override
-            public void actionPerformed( final ActionEvent evt )
-            {
-                System.exit( 0 );
-            }
-        } );
-        this.add( bClose, BorderLayout.NORTH );
-        this.pack();
-        this.setVisible( true );
-    }
+   public SuperConstructor()
+   {
+      this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+      this.setPreferredSize( new Dimension( 300, 300 ) );
+      this.setTitle( "Super constructor" );
+      final Container cp = this.getContentPane();
+      final JButton b = new JButton( "Show dialog" );
+      b.addActionListener( new ActionListener()
+      {
+         
+         @SuppressWarnings( "unused" )
+         @Override
+         public void actionPerformed( final ActionEvent evt )
+         {
+            new FirstDialog( SuperConstructor.this );
+         }
+      } );
+      cp.add( b, BorderLayout.SOUTH );
+      final JButton bClose = new JButton( "Close" );
+      bClose.addActionListener( new ActionListener()
+      {
+         @Override
+         public void actionPerformed( final ActionEvent evt )
+         {
+            System.exit( 0 );
+         }
+      } );
+      this.add( bClose, BorderLayout.NORTH );
+      this.pack();
+      this.setVisible( true );
+   }
+   
+   /**
+    * @param args
+    */
+   public static void main( final String args[] )
+   {
+      EventQueue.invokeLater( new Runnable()
+      {
+         
+         @SuppressWarnings( "unused" )
+         @Override
+         public void run()
+         {
+            new SuperConstructor();
+         }
+      } );
+   }
 }
