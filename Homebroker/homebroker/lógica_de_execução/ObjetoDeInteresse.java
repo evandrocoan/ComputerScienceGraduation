@@ -3,7 +3,7 @@ package homebroker.lógica_de_execução;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjetoDeInteresse
+public final class ObjetoDeInteresse
 {
    private final List< Observador > observadores = new ArrayList<>();
    
