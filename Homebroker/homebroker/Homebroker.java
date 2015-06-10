@@ -4,10 +4,6 @@
 package homebroker;
 
 import homebroker.interface_gráfica.JanelaDeLogin;
-import homebroker.lógica_de_execução.Books;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -15,24 +11,11 @@ import java.util.logging.Logger;
  */
 public final class Homebroker
 {
-   private static final Logger LOG;
-   
-   static
-   {
-      LOG = Logger.getLogger( Books.class.getName() );
-      Homebroker.LOG.setLevel( Level.OFF );
-   }
-   
    private final JanelaDeLogin janela;
    
    private Homebroker()
    {
       this.janela = JanelaDeLogin.getInstância();
-   }
-   
-   public static Logger getLOG()
-   {
-      return Homebroker.LOG;
    }
    
    /**
