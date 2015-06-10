@@ -40,6 +40,7 @@ public final class JanelaDoHomebroker
    private static final JanelaDeCadastro JANELA_DE_CADASTRO;
    private static final JanelaDeVendas JANELA_DE_VENDAS;
    private static final JanelaDeOfertas JANELA_DE_OFERTAS;
+   
    private static JanelaDoHomebroker instância;
    
    static
@@ -55,8 +56,7 @@ public final class JanelaDoHomebroker
    
    private final Fachada fachada = Fachada.getInstância();
    
-   private JFrame janela = new JFrame( "Simulador de HomeBroker" );
-   
+   private JFrame janela;
    private JButton botãoDeTeste1;
    private JButton botãoDeTeste2;
    private JButton botãoDeOfertas;
@@ -97,7 +97,10 @@ public final class JanelaDoHomebroker
       final Thread processoDeAtualizar = new Thread( new Atualizador() );
       processoDeAtualizar.start();
       
+      this.painel = new JPanel( new BorderLayout() );
       this.configurarPainel();
+      
+      this.janela = new JFrame( "Simulador de HomeBroker" );
       this.configurarJanela();
    }
    
@@ -332,9 +335,6 @@ public final class JanelaDoHomebroker
     */
    private void configurarPainel()
    {
-      // Define o gerenciador de layout utilizado.
-      this.painel = new JPanel( new BorderLayout() );
-      
       // Configura os componentes
       this.configurarEntradaDeComandos();
       this.configurarBotãoDeComandos();

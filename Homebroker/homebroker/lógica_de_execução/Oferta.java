@@ -3,8 +3,6 @@
  */
 package homebroker.lógica_de_execução;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Representa uma oferta de venta ou compra.
@@ -13,8 +11,6 @@ import java.util.logging.Logger;
  */
 public final class Oferta
 {
-   private static final Logger LOG = Logger.getLogger( Oferta.class.getName() );
-   
    private final Conta conta;
    private final double preço;
    private final int quantidade;
@@ -32,15 +28,12 @@ public final class Oferta
    public Oferta( final double preço, final int quantidade, final String ação,
       final String tipoDeOferta, final Conta conta )
    {
-      Oferta.LOG.setLevel( Level.OFF );
-      
       this.conta = conta;
       this.preço = preço;
       this.quantidade = quantidade;
       this.ação = ação;
       this.tipo = tipoDeOferta;
       this.utilidade = true;
-      Oferta.LOG.setLevel( Level.OFF );
    }
    
    /**

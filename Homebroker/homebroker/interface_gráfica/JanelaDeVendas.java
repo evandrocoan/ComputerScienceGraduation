@@ -5,15 +5,19 @@ package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.Fachada;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 import util.Biblioteca;
@@ -22,42 +26,28 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public final class JanelaDeVendas extends JFrame
+public final class JanelaDeVendas
 {
-   private static final Logger LOG;
    private static JanelaDeVendas INSTÂNCIA;
    
-   static
-   {
-      LOG = Logger.getLogger( JanelaDeVendas.class.getName() );
-   }
-   
    private final Fachada fachada;
-   private final PainelDeVendas painel;
+   private final JPanel painel;
+   private final JFrame janela;
+   
+   private final DefaultListModel< String > modeloPadrãoDeLista;
+   private final JList< String > listaDeVendas;
    
    private JanelaDeVendas()
    {
-      super( "Book De Vendas" );
-      
-      JanelaDeVendas.LOG.setLevel( Level.OFF );
-      this.painel = PainelDeVendas.getInstância();
       this.fachada = Fachada.getInstância();
       
-      this.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+      this.painel = new JPanel( new GridLayout( 0, 1 ) );
+      this.modeloPadrãoDeLista = new DefaultListModel<>();
+      this.listaDeVendas = new JList<>( this.modeloPadrãoDeLista );
+      this.configurarPainel();
       
-      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
-      final int width = (int) tamanhoDaJanela.getWidth();
-      final int height = (int) tamanhoDaJanela.getHeight();
-      
-      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
-      
-      this.setSize( tamanhoDaJanelaReduzido );
-      this.setPreferredSize( tamanhoDaJanelaReduzido );
-      this.setBounds( 540, 365, width - 550, height - 400 );
-      this.setVisible( false );
-      this.setContentPane( this.painel );
-      
-      Biblioteca.trocarFontes( this, new Font( this.getName(), Frame.NORMAL, 20 ) );
+      this.janela = new JFrame( "Book De Vendas" );
+      this.configurarJanela();
    }
    
    /**
@@ -75,19 +65,24 @@ public final class JanelaDeVendas extends JFrame
       return JanelaDeVendas.INSTÂNCIA;
    }
    
+   public void adicionarVenda( final String ofertaDeMercado )
+   {
+      this.modeloPadrãoDeLista.addElement( ofertaDeMercado );
+   }
+   
    /**
     * Atualiza a lista de ofertas do book de ofertas.
     */
    void atualizarListaDeVendas()
    {
-      int indice = this.painel.tamanhoDaLista();
+      int indice = this.tamanhoDaLista();
       
       while( true )
       {
          try
          {
             final String vendaDoMercado = this.fachada.vendaToString( indice );
-            this.painel.adicionarVenda( vendaDoMercado );
+            this.adicionarVenda( vendaDoMercado );
             
          } catch( final Exception e )
          {
@@ -95,6 +90,39 @@ public final class JanelaDeVendas extends JFrame
          }
          indice++;
       }
+   }
+   
+   private void configurarJanela()
+   {
+      this.janela.setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
+      
+      final Dimension tamanhoDaJanela = Toolkit.getDefaultToolkit().getScreenSize();
+      final int width = (int) tamanhoDaJanela.getWidth();
+      final int height = (int) tamanhoDaJanela.getHeight();
+      
+      final Dimension tamanhoDaJanelaReduzido = new Dimension( width - 100, height - 100 );
+      
+      this.janela.setSize( tamanhoDaJanelaReduzido );
+      this.janela.setPreferredSize( tamanhoDaJanelaReduzido );
+      this.janela.setBounds( 540, 365, width - 550, height - 400 );
+      this.janela.setVisible( false );
+      this.janela.setContentPane( this.painel );
+      
+      Biblioteca.trocarFontes( this.janela, new Font( this.janela.getName(), Frame.NORMAL, 20 ) );
+   }
+   
+   /**
+    * 
+    */
+   private void configurarPainel()
+   {
+      this.painel.setLayout( new GridLayout( 0, 1 ) );
+      this.painel.setSize( this.painel.getSize() );
+      this.painel.setPreferredSize( this.painel.getSize() );
+      this.painel.setVisible( true );
+      
+      final JScrollPane painelRolável = new JScrollPane( this.listaDeVendas );
+      this.painel.add( painelRolável, BorderLayout.CENTER );
    }
    
    /**
@@ -244,5 +272,15 @@ public final class JanelaDeVendas extends JFrame
          nÉsimaVez = true;
       }
       return quantidade;
+   }
+   
+   public void setVisible( final boolean b )
+   {
+      this.janela.setVisible( b );
+   }
+   
+   public int tamanhoDaLista()
+   {
+      return this.modeloPadrãoDeLista.getSize();
    }
 }

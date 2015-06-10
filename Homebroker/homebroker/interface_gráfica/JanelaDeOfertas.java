@@ -11,8 +11,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -30,28 +28,30 @@ import util.Biblioteca;
  */
 public final class JanelaDeOfertas
 {
-   private static final Logger LOG;
    private static final JanelaDeOfertas INSTÂNCIA;
    
    static
    {
-      LOG = Logger.getLogger( JanelaDeOfertas.class.getName() );
       INSTÂNCIA = new JanelaDeOfertas();
    }
    
-   private final JFrame janela = new JFrame( "Book De Ofertas" );
-   private final JPanel painel = new JPanel( new GridLayout( 0, 1 ) );
+   private final JFrame janela;
+   private final JPanel painel;
    private final Fachada fachada;
    
-   private DefaultListModel< String > modeloPadrãoDeLista;
-   private JList< String > listaDeOfertas;
+   private final DefaultListModel< String > modeloPadrãoDeLista;
+   private final JList< String > listaDeOfertas;
    
    private JanelaDeOfertas()
    {
-      JanelaDeOfertas.LOG.setLevel( Level.OFF );
-      
       this.fachada = Fachada.getInstância();
+      
+      this.painel = new JPanel( new GridLayout( 0, 1 ) );
+      this.modeloPadrãoDeLista = new DefaultListModel<>();
+      this.listaDeOfertas = new JList<>( this.modeloPadrãoDeLista );
       this.configurarPainel();
+      
+      this.janela = new JFrame( "Book De Ofertas" );
       this.configurarJanela();
    }
    
@@ -106,11 +106,6 @@ public final class JanelaDeOfertas
    
    private void configurarPainel()
    {
-      JanelaDeOfertas.LOG.setLevel( Level.OFF );
-      
-      this.modeloPadrãoDeLista = new DefaultListModel<>();
-      this.listaDeOfertas = new JList<>( this.modeloPadrãoDeLista );
-      
       this.painel.setSize( this.painel.getSize() );
       this.painel.setPreferredSize( this.painel.getSize() );
       this.painel.setVisible( true );

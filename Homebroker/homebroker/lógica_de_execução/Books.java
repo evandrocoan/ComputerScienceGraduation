@@ -3,10 +3,11 @@
  */
 package homebroker.lógica_de_execução;
 
+import homebroker.Homebroker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,13 +19,6 @@ import java.util.logging.Logger;
 public final class Books
 {
    private static Books INSTÂNCIA;
-   
-   private static final Logger LOG;
-   
-   static
-   {
-      LOG = Logger.getLogger( Books.class.getName() );
-   }
    
    /**
     * As ofertas do mercado realizadas.
@@ -46,8 +40,6 @@ public final class Books
     */
    private Books()
    {
-      Books.LOG.setLevel( Level.OFF );
-      
       this.ofertas = new ArrayList<>();
       this.vendas = new ArrayList<>();
    }
@@ -130,20 +122,20 @@ public final class Books
    {
       final int númeroDeOfertas = this.ofertas.size() - 1;
       
-      if( Books.LOG.isLoggable( Level.SEVERE ) )
+      if( Homebroker.getLOG().isLoggable( Level.SEVERE ) )
       {
-         Books.LOG
-            .severe( "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta )
-               + "(" + númeroDeOfertas + "<" + ultimaOferta + ")" );
+         Homebroker.getLOG().severe(
+            "1 - númeroDeOfertas < ultimaOferta = " + ( númeroDeOfertas < ultimaOferta ) + "("
+               + númeroDeOfertas + "<" + ultimaOferta + ")" );
       }
       if( númeroDeOfertas < ultimaOferta )
       {
          return false;
       }
-      if( Books.LOG.isLoggable( Level.SEVERE ) )
+      if( Homebroker.getLOG().isLoggable( Level.SEVERE ) )
       {
-         Books.LOG.severe( "2 - númeroDeOfertas > ultimaOferta = "
-            + ( númeroDeOfertas > ultimaOferta ) );
+         Homebroker.getLOG().severe(
+            "2 - númeroDeOfertas > ultimaOferta = " + ( númeroDeOfertas > ultimaOferta ) );
       }
       return númeroDeOfertas > ultimaOferta;
    }

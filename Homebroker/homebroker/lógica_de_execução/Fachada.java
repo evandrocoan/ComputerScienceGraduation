@@ -5,8 +5,6 @@ package homebroker.lógica_de_execução;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import util.Biblioteca;
 
@@ -15,12 +13,10 @@ import util.Biblioteca;
  */
 public final class Fachada
 {
-   private static final Logger LOG;
    private static final Fachada INSTÂNCIA;
    
    static
    {
-      LOG = Logger.getLogger( Fachada.class.getName() );
       INSTÂNCIA = new Fachada();
    }
    
@@ -39,7 +35,6 @@ public final class Fachada
    
    private Fachada()
    {
-      Fachada.LOG.setLevel( Level.OFF );
       this.books = Books.getInstância();
       
       this.criarContasFicticias( 30, "123" );
