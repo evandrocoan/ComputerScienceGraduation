@@ -1,8 +1,6 @@
 package homebroker.lógica_de_execução;
 
-public abstract class Observador
+public interface Observador
 {
-   protected ObjetoDeInteresse objetoDeInteresse;
-   
    public abstract void atualizar();
 }
