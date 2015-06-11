@@ -69,13 +69,11 @@ public final class Fachada
    }
    
    /**
-    * @param objetoDeInteresse mantém uma lista de seus dependentes, chamados de observadores, e
-    *           notifica-los automaticamente de quaisquer mudanças de estado, geralmente chamando um
-    *           de seus métodos
+    * @param observador adiciona um observador a lista de observadores da classe Books.
     */
-   public void adicionarObjetoDeInteresse( final ObjetoDeInteresse objetoDeInteresse )
+   public void adicionarObjetoDeInteresse( final Observador observador )
    {
-      this.books.adicionarObjetoDeInteresse( objetoDeInteresse );
+      this.books.adicionarObjetoDeInteresse( observador );
    }
    
    /**

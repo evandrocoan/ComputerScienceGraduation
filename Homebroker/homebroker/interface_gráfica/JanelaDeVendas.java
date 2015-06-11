@@ -4,7 +4,6 @@
 package homebroker.interface_gráfica;
 
 import homebroker.lógica_de_execução.Fachada;
-import homebroker.lógica_de_execução.ObjetoDeInteresse;
 import homebroker.lógica_de_execução.Observador;
 
 import java.awt.BorderLayout;
@@ -28,7 +27,7 @@ import util.Biblioteca;
  * 
  * @author Professional
  */
-public final class JanelaDeVendas extends Observador
+public final class JanelaDeVendas implements Observador
 {
    private static JanelaDeVendas INSTÂNCIA;
    
@@ -44,9 +43,7 @@ public final class JanelaDeVendas extends Observador
       this.fachada = Fachada.getInstância();
       
       // Configura o objeto de interesse
-      this.objetoDeInteresse = new ObjetoDeInteresse();
-      this.objetoDeInteresse.adicionarObservador( this );
-      this.fachada.adicionarObjetoDeInteresse( this.objetoDeInteresse );
+      this.fachada.adicionarObjetoDeInteresse( this );
       
       this.painel = new JPanel( new GridLayout( 0, 1 ) );
       this.modeloPadrãoDeLista = new DefaultListModel<>();
