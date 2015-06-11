@@ -73,7 +73,7 @@ public final class Fachada
     */
    public void adicionarObjetoDeInteresse( final Observador observador )
    {
-      this.books.adicionarObjetoDeInteresse( observador );
+      this.books.adicionarObservador( observador );
    }
    
    /**
