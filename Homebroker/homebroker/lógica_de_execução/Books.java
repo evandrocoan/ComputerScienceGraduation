@@ -74,7 +74,7 @@ public final class Books
    /**
     * @param observador adiciona um observador a lista de observadores desta classe.
     */
-   public void adicionarObjetoDeInteresse( final Observador observador )
+   public void adicionarObservador( final Observador observador )
    {
       this.objetoDeInteresse.adicionarObservador( observador );
    }
