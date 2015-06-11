@@ -27,7 +27,11 @@ public final class Books
       Books.LOG.setLevel( Level.OFF );
    }
    
-   private ObjetoDeInteresse objetoDeInteresse;
+   /**
+    * Mantém uma lista de seus dependentes, chamados de observadores, e notifica-los automaticamente
+    * de quaisquer mudanças de estado, geralmente chamando um de seus métodos
+    */
+   private final ObjetoDeInteresse objetoDeInteresse;
    
    /**
     * As ofertas do mercado realizadas.
@@ -68,13 +72,11 @@ public final class Books
    }
    
    /**
-    * @param objetoDeInteresse mantém uma lista de seus dependentes, chamados de observadores, e
-    *           notifica-los automaticamente de quaisquer mudanças de estado, geralmente chamando um
-    *           de seus métodos
+    * @param observador adiciona um observador a lista de observadores desta classe.
     */
-   public void adicionarObjetoDeInteresse( final ObjetoDeInteresse objetoDeInteresse )
+   public void adicionarObjetoDeInteresse( final Observador observador )
    {
-      this.objetoDeInteresse = objetoDeInteresse;
+      this.objetoDeInteresse.adicionarObservador( observador );
    }
    
    /**
