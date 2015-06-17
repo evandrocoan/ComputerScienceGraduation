@@ -23,7 +23,7 @@ construirGrafo :-
     privado_CarregaListaNomes(Lista),
     carregarGrafo,
     privado_ConstruirGrafo_Recursao(Lista),
-    gravarAlteracoes,
+    gravarGrafo,
     !.
 
 	/* Recebe uma Lista de todos os nomes que existem no Banco de Dados e adiciona todas as pessoas 
@@ -134,12 +134,18 @@ conectar(Vertice1, Vertice2):-
 
 /* Lista todas as clausulas e grava o grafo no arquivo 'Trabalho2/grafo.pl' e limpa a memória.
  * */
-gravarAlteracoes :-
+gravarGrafo :-
 	    
     tell('Trabalho2/grafo.pl'), 
     listing(aresta), 
     listing(vertice),
     told,
+    limparMemoria.
+
+
+/* Limpa a memória removendo o grafo dela.
+ * */
+limparMemoria :-
     retractall( aresta(_,_) ),
     retractall( vertice(_) ).
 
