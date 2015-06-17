@@ -22,7 +22,7 @@ construirGrafo :-
 	
     privado_CarregaListaNomes(Lista),
     privado_ConstruirGrafo_Recursao(Lista),
-    privado_GravarAlteracoes,
+    gravarAlteracoes,
     !.
 
 	/* Recebe uma Lista de todos os nomes que existem no Banco de Dados e adiciona todas as pessoas 
@@ -67,7 +67,7 @@ adicionarVertice( Vertice ) :-
     
         write('O vertice: '), write(Vertice), write(' ja existe!')
 	;  
-	    privado_CarregarGrafo, 
+	    carregarGrafo, 
         write('Escrevendo o vertice: '), write( Vertice ), write(' no arquivo.'),
         assert( vertice(Vertice) )
     ).
@@ -86,7 +86,7 @@ existeVertice( Vertice ) :-
 	% evita que o vértice seja inicializado
 	nonvar(Vertice), 
 	
-	privado_CarregarGrafo, 
+	carregarGrafo, 
 	vertice( Vertice ),
 	!.
 
@@ -99,7 +99,7 @@ existeAresta( Vertice1, Vertice2 ) :-
     nonvar(Vertice1), 
     nonvar(Vertice2), 
     
-    privado_CarregarGrafo, 
+    carregarGrafo, 
     aresta( Vertice1, Vertice2 ),
     !.
 
@@ -109,7 +109,7 @@ existeAresta( Vertice1, Vertice2 ) :-
 	    nonvar(Vertice1), 
 	    nonvar(Vertice2), 
 	    
-	    privado_CarregarGrafo, 
+	    carregarGrafo, 
 	    aresta( Vertice2, Vertice1 ),
 	    !.
 
@@ -122,7 +122,7 @@ conectar(Vertice1, Vertice2):-
 	    
 	        ( existeVertice( Vertice2 ) -> 
 		    
-		        privado_CarregarGrafo, 
+		        carregarGrafo, 
 	            write('Conectando os vertices: '), write( Vertice1 ), write(', '), 
 	            write( Vertice2 ), write(' no arquivo.'),
 	            assert( aresta(Vertice1, Vertice2) )
@@ -139,7 +139,7 @@ conectar(Vertice1, Vertice2):-
 
 /* Lista todas as clausulas e grava o grafo no arquivo 'Trabalho2/grafo.pl' e limpa a memória.
  * */
-privado_GravarAlteracoes :-
+gravarAlteracoes :-
 	    
     tell('Trabalho2/grafo.pl'), 
     listing(aresta), 
@@ -151,7 +151,7 @@ privado_GravarAlteracoes :-
 
 /* Carrega o grafo salvo no arquivo 'Trabalho2/grafo.pl' em memória.
  * */
-privado_CarregarGrafo :-
+carregarGrafo :-
 	consult('Trabalho2/grafo.pl').
 
 
