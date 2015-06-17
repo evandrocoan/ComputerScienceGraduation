@@ -40,13 +40,17 @@ incluirInformacoesProfissionais(Nome) :-
     write('Quais os Colegas de Profissao? (Insira seus nomes entre ' ), 
     write('aspas simples e separados por virgula) '),
     write('Seguido por um ponto.'),
-    read(ColegasDeProfissao),
-
+    read(ColegasConjunto),
+    converterConjutoParaLista(ColegasConjunto, ColegasLista),
+    
+    Informacoes =  [ Nome, NomeDaEmpresa, NomeDoCargo, 
+                                  AnoDeIngresso, AnoDeTermino, ColegasLista ],
+    flatten(Informacoes, NovasInformacoes), 
+    
     consult('Trabalho1/bancoDeDados.pl'), 
-    Predicado =.. [informacoesProfissionais, [ Nome, NomeDaEmpresa, NomeDoCargo, 
-    AnoDeIngresso, AnoDeTermino, ColegasDeProfissao ] ],
+    Predicado =.. [informacoesProfissionais, NovasInformacoes ],
     assert(Predicado),
-     
+    
     /* Lista todas as clausulas e grava no arquivo */
     tell('Trabalho1/bancoDeDados.pl'),
     listing(informacoesAcademicas),
@@ -85,20 +89,24 @@ incluirInformacoesAcademicas(Nome) :-
     
     write('Quais os Colegas de Curso ou Professores? (Insira seus nomes ' ), 
     write('entre aspas simples e separados por virgula) '),
-    read(ColegasDeReferencia),
-
-    consult('Trabalho1/bancoDeDados.pl'), 
-    Predicado =.. [informacoesAcademicas, [Nome, NomeDoCurso,  
+    read(ColegasConjunto),
+    converterConjutoParaLista(ColegasConjunto, ColegasLista),
+    
+    Informacoes =  [Nome, NomeDoCurso,  
     NomeDaInstituicao, NomeDoOrientador, AnoDeIngresso, AnoDeTermino, 
-    ColegasDeReferencia] ],
-    assert(Predicado),
-     
+                                                                ColegasLista],
+    flatten(Informacoes, NovasInformacoes), 
+    
+    consult('Trabalho1/bancoDeDados.pl'), 
+    Predicado =.. [informacoesAcademicas, NovasInformacoes ], 
+    assert(Predicado), 
+    
     /* Lista todas as clausulas e grava no arquivo */
     tell('Trabalho1/bancoDeDados.pl'),
     listing(informacoesAcademicas),
     listing(informacoesPessoais), 
     listing(informacoesProfissionais), 
-    told. 
+    told.
 
 
 /* Incluir novo dado para uma pessoa. Ao chamar este predicado se passa o 

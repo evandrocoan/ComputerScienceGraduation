@@ -78,5 +78,28 @@ incluirDadosPara(Nome) :-
     told.
 
 
+/* Modelo de um 'for' que passa em todos os elementos da Lista e retorna o resultado do 
+ *   processamento em Resultado.
+ * */
+privado__Recursao(Lista, Resultado) :-
+    privado__RecursaoInterno(Lista, [], Resultado).
+
+privado__RecursaoInterno([], Temporario, Resultado) :-
+    copy_term(Temporario, Resultado).
+    
+privado__RecursaoInterno(Lista, AcumuladorEntrada, Resultado) :-
+    dividirLista(Lista, 1, ElementoTemporario, RestoLista),
+    primeiro(ElementoTemporario, ElementoAtual),
+    
+    % Fazer as operações sobre o ElementoAtual da lista.
+    
+
+    privado__RecursaoInterno(RestoLista, AcumuladorEntrada, Resultado).
+
+
+
+
+
+
 
 
