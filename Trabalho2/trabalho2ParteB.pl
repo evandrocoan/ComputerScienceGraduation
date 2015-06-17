@@ -17,6 +17,12 @@ importarTrabalho2ParteA :- ['Trabalho2/trabalho2ParteA.pl'].
 /* Escreva uma regra para a criação apropriada de um grafo (escolha uma das formas vistas em 
  *   aula) de todas as pessoas (nós ou vértices) e suas respectivas referências (arestas). E 
  *   faça a persistência deste grafo em um arquivo '.pl'.
+ * 
+ * Realiza a construção do grafo. Primeiro, cria uma lista contendo o nome de todas as pessoas que 
+ *   possuem um currículo no banco de dados utilizado o predicado criado anteriormente na parte A 
+ *   do trabalho.
+ * Segundo, carrega o grafo que está salvo no arquivo, caso já haja algum grafo definido 
+ *   anteriormente.
  * */
 construirGrafo :-
 	
@@ -67,7 +73,7 @@ adicionarVertice( Vertice ) :-
     
         write('O vertice: '), write(Vertice), write(' ja existe!'), nl
 	;  
-        write('Escrevendo o vertice: '), write( Vertice ), write(' no arquivo.'), nl, 
+        write('Escrevendo o vertice: '), write( Vertice ), write('.'), nl, 
         assert( vertice(Vertice) )
     ).
 
@@ -119,7 +125,7 @@ conectar(Vertice1, Vertice2):-
 	        ( existeVertice( Vertice2 ) -> 
 		    
 	            write('Conectando os vertices: '), write( Vertice1 ), write(', '), 
-	            write( Vertice2 ), write(' no arquivo.'), nl, 
+	            write( Vertice2 ), write('.'), nl, 
 	            assert( aresta(Vertice1, Vertice2) )
 		    ;  
 	            write('O vertice2 nao existe!'), nl
@@ -132,7 +138,7 @@ conectar(Vertice1, Vertice2):-
     ).
 
 
-/* Lista todas as clausulas e grava o grafo no arquivo 'Trabalho2/grafo.pl' e limpa a memória.
+/* Lista todas as claúsulas e grava o grafo no arquivo 'Trabalho2/grafo.pl' e limpa a memória.
  * */
 gravarGrafo :-
 	    
