@@ -1,4 +1,4 @@
-/* Organização das informações acadêmicas. ###################################
+/* Organizacao das informacoes acadêmicas. ###################################
  * Nome, Curso de Formacao, Instituicao de formacao, Nome Completo do 
  * Orientador, Ano de Ingresso, Ano de Término, Referencias ... 
  * */
@@ -61,7 +61,7 @@ informacoesAcademicas( ['Lucas Troll', 'Sexologia',
 informacoesAcademicas( ['Lucas Troll', 'Medicina', 
 'ITA', 'Alisson Soner', 2011, 2013 , 'Avenged Sevenfold', 'Eminem' ] ). 
 
-/* Organização das informações pessoais. #####################################
+/* Organizacao das informacoes pessoais. #####################################
  * Nome, data de nascimento, cidade, telefone 
  * */
 
@@ -117,7 +117,7 @@ informacoesPessoais( ['Stiven Stronger', date( 1986, 6, 12 ),
 informacoesPessoais( ['Roger Rocker', date( 1976, 11, 20 ), 
 'Florianopolis', 4887347425 ] ).
 
-/* Organização das informações profissionais. ################################
+/* Organizacao das informacoes profissionais. ################################
  * Nome, Nome da Empresa, Nome do Cargo, Ano de Ingresso, Ano de Término, 
  * Nome Completo de Colegas como Referências...
  * */
@@ -146,7 +146,7 @@ informacoesProfissionais( ['Marcelo Cabrera', 'GTV',
 /* Julian Still
  * */
 informacoesProfissionais( ['Julian Still', 'Google', 
-'Programador', 1989, 2013, 'Alexandre Gonçalves Silva', 'Ruan Ramon' ] ).
+'Programador', 1989, 2013, 'Alexandre Goncalves Silva', 'Ruan Ramon' ] ).
 
 /* Luiz Courier
  * */
