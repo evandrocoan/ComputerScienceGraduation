@@ -262,8 +262,20 @@ ehMemboDaCabeca(P, L) :-
  * Dado um Lista retorna o Maior elemento dela.
  * */
 maiorElemento([X],X).
-maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
-maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
+	maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
+	maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
+
+
+/* maiorElemento( Lista, Minimo )
+ * Dado um Lista retorna o Maior elemento dela.
+ * */
+menorElemento([Lista|Listas], Minimo) :- 
+    menorElemento(Listas, Lista, Minimo).
+
+	menorElemento([], Minimo, Minimo).
+	menorElemento([Lista|Listas], Minimo0, Minimo) :-
+	    Minimo1 is min(Lista, Minimo0),
+	    menorElemento(Listas, Minimo1, Minimo).
 
 
 /* 
