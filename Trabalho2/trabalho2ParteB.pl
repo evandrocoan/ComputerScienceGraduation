@@ -22,6 +22,7 @@ construirGrafo :-
 	
     privado_CarregaListaNomes(Lista),
     privado_ConstruirGrafo_Recursao(Lista),
+    privado_GravarAlteracoes,
     !.
 
 	/* Recebe uma Lista de todos os nomes que existem no Banco de Dados e adiciona todas as pessoas 
@@ -30,6 +31,7 @@ construirGrafo :-
 	privado_ConstruirGrafo_Recursao([]).
 	    
 	privado_ConstruirGrafo_Recursao(Lista) :-
+		
 	    dividirLista(Lista, 1, ElementoTemporario, RestoLista),
 	    primeiro(ElementoTemporario, PessoaAtual),
 	    
@@ -37,14 +39,15 @@ construirGrafo :-
 	    quaisColegasDe(PessoaAtual, Referencias), 
 	    adicionarVertice(PessoaAtual), 
 	    privado_AdicionarReferencias_Recursao(PessoaAtual, Referencias), 
-	
+
 	    privado_ConstruirGrafo_Recursao(RestoLista).
 
 	/* Para uma dada Pessoa, adiciona todas as suas Referencias ao Grafo.
 	 * */
-	privado_AdicionarReferencias_Recursao(_, []).
+	privado_AdicionarReferencias_Recursao(_, []) :- !.
 	
 	privado_AdicionarReferencias_Recursao(Pessoa, Lista) :-
+		
 	    dividirLista(Lista, 1, ElementoTemporario, RestoLista),
 	    primeiro(ElementoTemporario, ReferenciaAtual),
 	    
@@ -60,20 +63,13 @@ construirGrafo :-
  * */
 adicionarVertice( Vertice ) :-
     
-    ( existeVertice( Vertice ) -> 
+    ( existeVertice( Vertice ) ->  
     
         write('O vertice: '), write(Vertice), write(' ja existe!')
 	;  
-	    consult('Trabalho2/grafo.pl'), 
+	    privado_CarregarGrafo, 
         write('Escrevendo o vertice: '), write( Vertice ), write(' no arquivo.'),
-        Predicado =.. [vertice, Vertice ],
-        assert(Predicado),
-    
-        /* Lista todas as clausulas e grava no arquivo */
-        tell('Trabalho2/grafo.pl'), 
-        listing(aresta),
-        listing(vertice),
-        told
+        assert( vertice(Vertice) )
     ).
 
 
@@ -90,7 +86,7 @@ existeVertice( Vertice ) :-
 	% evita que o vértice seja inicializado
 	nonvar(Vertice), 
 	
-	consult('Trabalho2/grafo.pl'), 
+	privado_CarregarGrafo, 
 	vertice( Vertice ),
 	!.
 
@@ -103,19 +99,19 @@ existeAresta( Vertice1, Vertice2 ) :-
     nonvar(Vertice1), 
     nonvar(Vertice2), 
     
-    consult('Trabalho2/grafo.pl'), 
+    privado_CarregarGrafo, 
     aresta( Vertice1, Vertice2 ),
     !.
 
-existeAresta( Vertice1, Vertice2 ) :-
-    
-    % evita que o vértice seja inicializado
-    nonvar(Vertice1), 
-    nonvar(Vertice2), 
-    
-    consult('Trabalho2/grafo.pl'), 
-    aresta( Vertice2, Vertice1 ),
-    !.
+	existeAresta( Vertice1, Vertice2 ) :-
+	    
+	    % evita que o vértice seja inicializado
+	    nonvar(Vertice1), 
+	    nonvar(Vertice2), 
+	    
+	    privado_CarregarGrafo, 
+	    aresta( Vertice2, Vertice1 ),
+	    !.
 
 
 conectar(Vertice1, Vertice2):-
@@ -126,17 +122,10 @@ conectar(Vertice1, Vertice2):-
 	    
 	        ( existeVertice( Vertice2 ) -> 
 		    
-		        consult('Trabalho2/grafo.pl'), 
+		        privado_CarregarGrafo, 
 	            write('Conectando os vertices: '), write( Vertice1 ), write(', '), 
 	            write( Vertice2 ), write(' no arquivo.'),
-	            Predicado =.. [aresta, Vertice1, Vertice2 ], 
-	            assert(Predicado),
-	        
-	            /* Lista todas as clausulas e grava no arquivo */
-	            tell('Trabalho2/grafo.pl'), 
-	            listing(aresta), 
-	            listing(vertice),
-	            told
+	            assert( aresta(Vertice1, Vertice2) )
 		    ;  
 	            write('O vertice2 nao existe!')
 		    ) 
@@ -148,10 +137,22 @@ conectar(Vertice1, Vertice2):-
     ).
 
 
+/* Lista todas as clausulas e grava o grafo no arquivo 'Trabalho2/grafo.pl' e limpa a memória.
+ * */
+privado_GravarAlteracoes :-
+	    
+    tell('Trabalho2/grafo.pl'), 
+    listing(aresta), 
+    listing(vertice),
+    told,
+    retractall( aresta(_,_) ),
+    retractall( vertice(_) ).
 
 
-
-
+/* Carrega o grafo salvo no arquivo 'Trabalho2/grafo.pl' em memória.
+ * */
+privado_CarregarGrafo :-
+	consult('Trabalho2/grafo.pl').
 
 
 
