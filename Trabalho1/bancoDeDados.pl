@@ -2,8 +2,8 @@
 
 informacoesAcademicas(['Roger Rocker', 'Ciencias da Computacao', 'ITA', 'Cashis Ferrari', 2010, 2015]).
 informacoesAcademicas(['Stiven Stronger', 'Ciencias da Computacao', 'ITA', 'Loyd Banks', 2003, 2007, 'Avril Lavigne', 'Demi Lovato']).
-informacoesAcademicas(['Stiven Stronger', 'Sexologia', 'ITA', 'Caio Inteiro', 2007, 2012, 'Madonna']).
-informacoesAcademicas(['Robson Troller', 'Engenharia Mecanica', 'UFSC', 'Bob Null', 2008, 2011, 'Marshall Mathers']).
+informacoesAcademicas(['Stiven Stronger', 'Sexologia', 'ITA', 'Caio Inteiro', 2007, 2012, 'Madonna', 'Robson Troller']).
+informacoesAcademicas(['Robson Troller', 'Engenharia Mecanica', 'UFSC', 'Bob Null', 2008, 2011, 'Marshall Mathers', 'Juca Juquinha']).
 informacoesAcademicas(['Juca Juquinha', 'Ciencias da Computacao', 'UFSC', 'Rui Normal', 2007, 2012, 'Bruno Mars', 'Rock Star']).
 informacoesAcademicas(['Storn Front', 'Ciencias da Automacao', 'UFMG', 'Elton Xavier', 2005, 2010]).
 informacoesAcademicas(['Marcelo Cabrera', 'Engenharia da Computacao', 'USP', 'John Crazy', 2009, 2015, 'Silvio Santos']).

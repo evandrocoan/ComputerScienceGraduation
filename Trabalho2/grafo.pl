@@ -34,6 +34,8 @@ aresta('Storn Front', 'Britney Spears').
 aresta('Wagner Nascimento', 'Eminem').
 aresta('Wagner Nascimento', 'Demi Lovato').
 aresta('Wagner Nascimento', 'Lily Allen').
+aresta('Stiven Stronger', 'Robson Troller').
+aresta('Robson Troller', 'Juca Juquinha').
 
 :- dynamic vertice/1.
 
@@ -72,4 +74,5 @@ vertice('Michael Jackson').
 vertice('Britney Spears').
 vertice('Wagner Nascimento').
 vertice('Lily Allen').
+vertice('Cashis Ferrari').
 

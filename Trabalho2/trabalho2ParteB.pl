@@ -191,7 +191,7 @@ conexoes(P1, P2, Lista) :-
  *   para chegar a 'Don Stephens'.
  * 
  * Primeiro, pega a lista de caminhos consultando 'conexoes(P1, P2, Lista)'.
- * Segundo, dentre a lista de listas, deternima qual a menor e retorna o valor do menor número de
+ * Segundo, dentre a lista de listas, determima qual a menor e retorna o valor do menor número de
  *   passos em Passos.
  * */
 menorCaminho(P1, P2, Passos) :-
