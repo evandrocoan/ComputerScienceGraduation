@@ -73,7 +73,7 @@ adicionarVertice( Vertice ) :-
     
         write('O vertice: '), write(Vertice), write(' ja existe!'), nl
 	;  
-        write('Escrevendo o vertice: '), write( Vertice ), write('.'), nl, 
+        write('Adicionando o vertice: '), write( Vertice ), write('.'), nl, 
         assert( vertice(Vertice) )
     ).
 
@@ -160,6 +160,67 @@ limparMemoria :-
  * */
 carregarGrafo :-
 	consult('Trabalho2/grafo.pl').
+
+
+/* Dadas duas pessoas P1 e P2, escreva uma regra que devolva uma lista de um conjunto de outras 
+ *   pessoas (uma ligada a outra) que possam conectá-las. Ou seja, apresente caminhos possíveis 
+ *   no grafo de P1 a P2 (pode não haver caminho possível ou as duas pessoas serem ligadas 
+ *   diretamente).
+ * 
+ * Primeiro carrega o grafo em memória. Segundo calcula a lista de caminhos utilizando findall.
+ * */
+conexoes(P1, P2, Lista) :-
+	carregarGrafo,
+    findall( ListaSaida, privado_viajarPeloGrafo( P1, P2, ListaSaida ), Lista ).
+
+    privado_viajarPeloGrafo( P1, P2, ListaSaida ) :-
+	    viajarPeloGrafo( P1, P2, [P1], Q ),
+	    reverse( Q, ListaSaida ).
+
+	viajarPeloGrafo( P1, P2, P, [P2|P] ) :-
+	    estaoConectados(P1,P2).
+
+	viajarPeloGrafo( P1, P2, Visitado, Lista ) :-
+	   estaoConectados( P1, C ),
+	   C \== P2,
+	   \+member( C, Visitado ),
+	   viajarPeloGrafo( C, P2, [C|Visitado], Lista).
+
+
+/* Mostre o menor número de passos em um caminho entre P1 e P2. Por exemplo: preciso de passos 
+ *   para chegar a 'Don Stephens'.
+ * 
+ * Primeiro, pega a lista de caminhos consultando 'conexoes(P1, P2, Lista)'.
+ * Segundo, dentre a lista de listas, deternima qual a menor e retorna o valor do menor número de
+ *   passos em Passos.
+ * */
+menorCaminho(P1, P2, Passos) :-
+	
+	conexoes(P1, P2, Lista),
+	privado_Caminho_Recursao(Lista, Resultado),
+	menorElemento(Resultado, Passos),
+	!.
+	
+
+/* Passa em todos os elementos da Lista de listas e retorna uma lista contendo os tamanhos de 
+ *   cada uma das listas que a Lista contém.
+ * */
+privado_Caminho_Recursao(Lista, Resultado) :- privado_Caminho_RecursaoInterno(Lista, [], Resultado).
+
+privado_Caminho_RecursaoInterno([], Temporario, Resultado) :- copy_term(Temporario, Resultado).
+
+privado_Caminho_RecursaoInterno(Lista, AcumuladorEntrada, Resultado) :-
+	
+    dividirLista(Lista, 1, ElementoTemporario, RestoLista),
+    primeiro(ElementoTemporario, ListaAtual),
+    
+    % Fazer as operações sobre o ElementoAtual da lista.
+    length(ListaAtual, Tamanho),
+    TamanhoReal is Tamanho - 1,
+    inseridoNoFinal( TamanhoReal, AcumuladorEntrada, AcumuladorSaida ),
+
+    privado_Caminho_RecursaoInterno(RestoLista, AcumuladorSaida, Resultado).
+
 
 
 

@@ -94,7 +94,7 @@ privado__RecursaoInterno(Lista, AcumuladorEntrada, Resultado) :-
     % Fazer as operações sobre o ElementoAtual da lista.
     
 
-    privado__RecursaoInterno(RestoLista, AcumuladorEntrada, Resultado).
+    privado__RecursaoInterno(RestoLista, AcumuladorSaida, Resultado).
 
 
 
