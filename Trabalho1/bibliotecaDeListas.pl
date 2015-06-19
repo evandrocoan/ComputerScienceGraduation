@@ -213,20 +213,20 @@ comprimentoDaLista([_|L],N) :-
  *   retorna um elemento em uma dada posição na lista definida no predicado 
  *   informacoesPessoais([...]) 
  * */
-dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
-    informacoesPessoais(L), 
-    dadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
+dadoDeInfoNaPosicao( Posicao, DadoDeRetorno ) :- 
+    informacoesPessoais( L ), 
+    dadoNaPosicao( DadoDeRetorno, [_|L], Posicao ).
 
 
 /* dadoNaPosicao(Dado, Lista, Posicao).
  * Dada uma posição Posicao retorna um elemento Dado em uma dada posição na 
  *   lista Lista.
  * */
-dadoNaPosicao(X, [X|_], 0).
-dadoNaPosicao(X,[_|L],K) :- 
-	K > 0, 
-	K1 is K - 1, 
-	dadoNaPosicao(X,L,K1).
+dadoNaPosicao( Dado, [Dado|_], 0 ).
+dadoNaPosicao( Dado, [_|Lista], Posicao ) :- 
+	Posicao > 0, 
+	Posicao1 is Posicao - 1, 
+	dadoNaPosicao( Dado, Lista, Posicao1 ).
 
 
 /* Dado uma lista numérica, retora a soma de seus elementos na variável Soma. 
@@ -340,6 +340,8 @@ converterConjutoParaLista((A,B), [A|Bs]) :-
     !.
 
 converterConjutoParaLista(T, [T]).
+
+
 
 
 

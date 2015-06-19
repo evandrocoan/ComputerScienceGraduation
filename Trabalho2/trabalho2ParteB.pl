@@ -152,7 +152,7 @@ gravarGrafo :-
 /* Limpa a memória removendo o grafo dela.
  * */
 limparMemoria :-
-    retractall( aresta(_,_) ),
+    abolish( aresta/2 ),
     retractall( vertice(_) ).
 
 
