@@ -17,6 +17,7 @@ importarTrabalho2ParteB :- [ 'Trabalho2/trabalho2ParteB.pl' ].
 :-importarTrabalho2ParteB.
 
 
+%##################################### limiarizacao #############################################
 /* Limiarização (thresholding): dado um valor T como argumento, para cada intensidade I < T na 
  *   imagem de entrada, o pixel correspondente na imagem resultante se torna zero; para I > T, 
  *   a saída se torna um (produz-se uma imagem binária).
@@ -37,7 +38,7 @@ limiarizacao( IntensidadeT, Matriz, NovaMatriz ) :-
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( intensidadeT, IntensidadeT), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, 0 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
     
     privado_Limiarizacao_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -79,7 +80,7 @@ privado_Limiarizacao_ComputarLinhas( LinhaAtual ) :-
     
     nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     write( Coordenada_LinhaAtual ), write(','),
-    write( Coordenada_ColunaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
     write( ElementoAtual ), write('- '),
     
     privado_Limiarizacao_ComputarElementos( 
@@ -118,6 +119,7 @@ privado_Limiarizacao_AlterarElemento( X, Y, NovoElemento ) :-
     nb_setval( matrix, NovaMatriz ).
 
 
+%##################################### negativo #################################################
 /* Negativo: para cada intensidade I na imagem de entrada, produz-se 255 - I na imagem de saída 
  *   se a entrada for binária, a subtração passa a ser 1 - I.
  * 
@@ -149,10 +151,10 @@ privado_Negativo_ComputarMatriz( Matriz ) :-
     
     nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     NovaCoordenada_LinhaAtual is Coordenada_LinhaAtual + 1, 
-    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ),
+    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ), 
     nl, nl, 
     
-    privado_Negativo_ComputarLinhas( LinhaAtual ),
+    privado_Negativo_ComputarLinhas( LinhaAtual ), 
     fail.
 
 
@@ -195,14 +197,26 @@ privado_Negativo_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
     
     nb_getval( ehUmaImagemBinaria, EhUmaImagemBinaria ), 
     
-    ( ehUmaImagemBinaria ->
+    ( EhUmaImagemBinaria =:= 1 ->
     
-        privado_Limiarizacao_AlterarElemento( LinhaAtual, ColunaAtual, 0 )
+        privado_Negativo_AlterarElemento( LinhaAtual, ColunaAtual, 0 )
     ;
-        privado_Limiarizacao_AlterarElemento( LinhaAtual, ColunaAtual, 1 )
+        privado_Negativo_AlterarElemento( LinhaAtual, ColunaAtual, 1 )
     ).
 
 
+/* Dada as coordenadas 'X, Y' da Matriz, substitui o elemento atual pelo NovoElemento.
+ * */
+privado_Negativo_AlterarElemento( X, Y, NovoElemento ) :-
+    
+    nb_getval( matrix, Matriz ),
+    dadoNaPosicao( LinhaAtual, Matriz, X ),
+    substituidoDaPos( NovoElemento, Y, LinhaAtual, NovaLinhaAtual ), 
+    substituidoDaPos( NovaLinhaAtual, X, Matriz, NovaMatriz ),
+    nb_setval( matrix, NovaMatriz ).
+
+
+%###################################### ehUmaImagemBinaria ######################################
 /* Recebe uma Matriz e retorna o parâmetro Binaria em 1 se a matriz passada como argumento é uma 
  *   matriz binária, e retorna 0 caso a Matriz não seja binária.
  * */
@@ -275,8 +289,8 @@ privado_ehImagemBinaria_ComputarLinhas( LinhaAtual ) :-
      * */
     privado_ehImagemBinaria_ComputarLinhas( _ ).
 
-	
 
+%#################################################################################################
 
 
 
