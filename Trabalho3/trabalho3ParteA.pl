@@ -23,9 +23,8 @@ importarTrabalho2ParteB :- [ 'Trabalho2/trabalho2ParteB.pl' ].
  *
  * Recebe uma IntensidadeT, e uma Matriz como parâmetro, e retorna uma NovaMatriz contendo a 
  *   limiarização.
- * Primeiro, calcula as dimensões da matriz e salva como variáveis globais e inicializa contadores
- *   que marcam a posição atual do elemento que se está processando na matriz.
- * Segundo,  
+ * Primeiro, calcula as dimensões da matriz, inicializa contadores que marcam a posição atual do 
+ *   elemento que se está processando na matriz e salva tudo como variáveis globais.
  * */
 limiarizacao( IntensidadeT, Matriz, NovaMatriz ) :-
 	
