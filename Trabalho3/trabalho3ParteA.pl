@@ -38,7 +38,7 @@ limiarizacao( IntensidadeT, Matriz, NovaMatriz ) :-
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( intensidadeT, IntensidadeT), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, -1 ), 
+    nb_setval( coordenada_ColunaAtual, 0 ), 
     
     privado_Limiarizacao_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -73,12 +73,12 @@ privado_Limiarizacao_ComputarLinhas( LinhaAtual ) :-
     
     member( ElementoAtual, LinhaAtual ), 
     
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
     nb_getval( larguraDaMatriz, LarguraDaMatriz ),
     NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
     nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
     
-    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     write( Coordenada_LinhaAtual ), write(','),
     write( NovaCoordenada_ColunaAtual ), write(','),
     write( ElementoAtual ), write('- '),
@@ -123,7 +123,10 @@ privado_Limiarizacao_AlterarElemento( X, Y, NovoElemento ) :-
 /* Negativo: para cada intensidade I na imagem de entrada, produz-se 255 - I na imagem de saída 
  *   se a entrada for binária, a subtração passa a ser 1 - I.
  * 
- * 
+ * Recebe uma Matriz como parâmetro, e retorna uma NovaMatriz contendo a matriz de imagem negativa.
+ * Primeiro, calcula se a matriz da imagem é binária e as dimensões da matriz, inicializa 
+ *   contadores que marcam a posição atual do elemento que se está processando na matriz e salva 
+ *   tudo como variáveis globais.
  * */
 negativo( Matriz, NovaMatriz ) :-
     
@@ -131,6 +134,9 @@ negativo( Matriz, NovaMatriz ) :-
     length( PrimeiroElemento, LarguraDaMatriz ), 
     length( Matriz, AlturaDaMatriz ), 
     
+    ehUmaImagemBinaria( Matriz, Binaria ),
+    
+    nb_setval( ehUmaImagemBinaria, Binaria ),
     nb_setval( matrix, Matriz ),
     nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
@@ -170,14 +176,14 @@ privado_Negativo_ComputarLinhas( LinhaAtual ) :-
     
     member( ElementoAtual, LinhaAtual ), 
     
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
     nb_getval( larguraDaMatriz, LarguraDaMatriz ),
     NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
     nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
     
-    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
     write( Coordenada_LinhaAtual ), write(','),
-    write( Coordenada_ColunaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
     write( ElementoAtual ), write('- '),
     
     privado_Negativo_ComputarElementos( 
@@ -191,18 +197,19 @@ privado_Negativo_ComputarLinhas( LinhaAtual ) :-
     privado_Negativo_ComputarLinhas( _ ).
 
 
-/* Executa o altoritmo do negativo na LinhaAtual da ColunaAtual do ElementoAtual.
+/* Executa o algoritmo do negativo na LinhaAtual da ColunaAtual do ElementoAtual.
  * */
 privado_Negativo_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
     
     nb_getval( ehUmaImagemBinaria, EhUmaImagemBinaria ), 
     
     ( EhUmaImagemBinaria =:= 1 ->
-    
-        privado_Negativo_AlterarElemento( LinhaAtual, ColunaAtual, 0 )
+        
+        NovoElemento is 1 - ElementoAtual
     ;
-        privado_Negativo_AlterarElemento( LinhaAtual, ColunaAtual, 1 )
-    ).
+        NovoElemento is 255 - ElementoAtual
+    ),
+    privado_Negativo_AlterarElemento( LinhaAtual, ColunaAtual, NovoElemento ).
 
 
 /* Dada as coordenadas 'X, Y' da Matriz, substitui o elemento atual pelo NovoElemento.
