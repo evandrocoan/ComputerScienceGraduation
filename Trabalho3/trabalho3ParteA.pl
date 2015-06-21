@@ -375,24 +375,20 @@ privado_somaDeConstante_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtua
     
     nb_getval( k, K ),
     
-    ( ElementoAtual < 0 ; ElementoAtual > 255 -> 
-    
-        true
-    ;
-        Atual is ElementoAtual + K,
-        nb_setval( novo_Elemento, Atual )
-    ),
+    Atual is ElementoAtual + K,
+    nb_setval( novo_Elemento, Atual ), 
+        
     ( Atual < 0 ->
         
-        AtualCorrigido1 is 0,
-        nb_setval( novo_Elemento , AtualCorrigido1)
+        AtualCorrigido is 0,
+        nb_setval( novo_Elemento , AtualCorrigido)
     ;
         true
     ), 
     ( Atual >= 256 ->
 
-        AtualCorrigido1 is 255, 
-        nb_setval( novo_Elemento , AtualCorrigido1)
+        AtualCorrigido is 255, 
+        nb_setval( novo_Elemento , AtualCorrigido)
     ;
         true
     ),
@@ -411,7 +407,124 @@ privado_somaDeConstante_AlterarElemento( X, Y ) :-
     nb_setval( matrix, NovaMatriz ).
 
 
+%###################################### somaEntreImagens ########################################
+/* Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
+ *   I + k na imagem resultante; no entanto, se (I + k) > 255, o valor da soma deve se tornar 
+ *   255; k < 0 e ( I + k) < 0, então o valor da soma deve se tornar 0.
+ * */
+somaEntreImagens( Matriz, OutraMatriz, NovaMatriz ) :-
+    
+    dadoNaPosicao( PrimeiroElemento, Matriz, 0 ), 
+    length( PrimeiroElemento, LarguraDaMatriz ), 
+    length( Matriz, AlturaDaMatriz ), 
+    
+    nb_setval( outraMatriz, OutraMatriz ),
+    nb_setval( matrix, Matriz ),
+    nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
+    nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
+    nb_setval( coordenada_LinhaAtual, -1 ), 
+    nb_setval( coordenada_ColunaAtual, 0 ), 
+    
+    privado_somaEntreImagens_ComputarMatriz( Matriz ),
+    nb_getval( matrix, NovaMatriz ), nl, nl, 
+    write( NovaMatriz ),
+    !.
 
+
+/* A failure-driven loop para passar em todas as linhas da Matriz.
+ * */
+privado_somaEntreImagens_ComputarMatriz( Matriz ) :- 
+
+    member( LinhaAtual, Matriz ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    NovaCoordenada_LinhaAtual is Coordenada_LinhaAtual + 1, 
+    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ), 
+    nl, nl, 
+    
+    privado_somaEntreImagens_ComputarLinhas( LinhaAtual ), 
+    fail.
+
+
+    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarMatriz' retornar true ao invés de 
+     *   falhar.
+     * */
+    privado_somaEntreImagens_ComputarMatriz( _ ).
+
+
+/* A failure-driven loop para passar em todos os elementos da linha da Matriz.
+ * */
+privado_somaEntreImagens_ComputarLinhas( LinhaAtual ) :- 
+    
+    member( ElementoAtual, LinhaAtual ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ),
+    NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
+    nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
+    
+    write( Coordenada_LinhaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
+    write( ElementoAtual ), write('- '),
+    
+    privado_somaEntreImagens_ComputarElementos( 
+                               Coordenada_LinhaAtual, Coordenada_ColunaAtual, ElementoAtual ),
+    fail.
+    
+    
+    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarLinhas' retornar true ao invés de 
+     *   falhar.
+     * */
+    privado_somaEntreImagens_ComputarLinhas( _ ).
+
+
+/* Executa o algoritmo de somaEntreImagens na LinhaAtual da ColunaAtual do ElementoAtual.
+ * */
+privado_somaEntreImagens_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
+    
+    nb_getval( outraMatriz, OutraMatriz ),
+    privado_somaEntreImagens_ObterElemento( 
+                                      ColunaAtual, LinhaAtual, OutraMatriz, OutroElementoAtual ), 
+    Atual is ElementoAtual + OutroElementoAtual, 
+    nb_setval( novo_Elemento, Atual ), 
+
+    ( Atual < 0 ->
+        
+        AtualCorrigido is 0,
+        nb_setval( novo_Elemento , AtualCorrigido)
+    ;
+        true
+    ), 
+    ( Atual >= 256 ->
+
+        AtualCorrigido is 255, 
+        nb_setval( novo_Elemento , AtualCorrigido)
+    ;
+        true
+    ),
+    privado_somaEntreImagens_AlterarElemento( LinhaAtual, ColunaAtual ).
+
+
+/* Dada as coordenadas 'X, Y' da Matriz, substitui o elemento atual pelo NovoElemento.
+ * */
+privado_somaEntreImagens_AlterarElemento( X, Y ) :-
+    
+    nb_getval( novo_Elemento, Novo_Elemento ), 
+    nb_getval( matrix, Matriz ), 
+    dadoNaPosicao( LinhaAtual, Matriz, X ), 
+    substituidoDaPos( Novo_Elemento, Y, LinhaAtual, NovaLinhaAtual ), 
+    substituidoDaPos( NovaLinhaAtual, X, Matriz, NovaMatriz ), 
+    nb_setval( matrix, NovaMatriz ).
+
+
+/* Dada as coordenadas 'X, Y' da OutraMatriz, retorna o elemento ElementoObtido que se encontra 
+ *   nesta posição.
+ * */
+privado_somaEntreImagens_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+    dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
 
 
 
