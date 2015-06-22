@@ -38,7 +38,7 @@ limiarizacao( IntensidadeT, Matriz, NovaMatriz ) :-
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( intensidadeT, IntensidadeT), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, 0 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
     
     privado_Limiarizacao_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -84,7 +84,7 @@ privado_Limiarizacao_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_Limiarizacao_ComputarElementos( 
-                               Coordenada_LinhaAtual, Coordenada_ColunaAtual, ElementoAtual ),
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
     fail.
     
     
@@ -141,7 +141,7 @@ negativo( Matriz, NovaMatriz ) :-
     nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, 0 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
     
     privado_Negativo_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -187,7 +187,7 @@ privado_Negativo_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_Negativo_ComputarElementos( 
-                               Coordenada_LinhaAtual, Coordenada_ColunaAtual, ElementoAtual ),
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
     fail.
     
     
@@ -237,7 +237,7 @@ ehUmaImagemBinaria( Matriz, Binaria ) :-
     nb_setval( larguraDaMatriz_Temporaria, LarguraDaMatriz ), 
     nb_setval( alturaDaMatriz_Temporaria, AlturaDaMatriz ), 
     nb_setval( coordenada_LinhaAtual_Temporaria, -1 ), 
-    nb_setval( coordenada_ColunaAtual_Temporaria, 0 ), 
+    nb_setval( coordenada_ColunaAtual_Temporaria, -1 ), 
     
     privado_ehImagemBinaria_ComputarMatriz( Matriz ),
     nb_getval( ehMatrixBooleana, Booleano ),
@@ -265,8 +265,8 @@ privado_ehImagemBinaria_ComputarMatriz( Matriz ) :-
     fail.
 
 
-    /* Faz a failure-driven loop 'privado_ehImagemBinaria_ComputarMatriz' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_ehImagemBinaria_ComputarMatriz' retornar true ao invés  
+     *   de falhar.
      * */
     privado_ehImagemBinaria_ComputarMatriz( _ ).
 
@@ -291,8 +291,8 @@ privado_ehImagemBinaria_ComputarLinhas( LinhaAtual ) :-
     fail.
     
     
-    /* Faz a failure-driven loop 'privado_ehImagemBinaria_ComputarLinhas' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_ehImagemBinaria_ComputarLinhas' retornar true ao invés  
+     *   de falhar.
      * */
     privado_ehImagemBinaria_ComputarLinhas( _ ).
 
@@ -301,6 +301,8 @@ privado_ehImagemBinaria_ComputarLinhas( LinhaAtual ) :-
 /* Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
  *   I + k na imagem resultante; no entanto, se (I + k) > 255, o valor da soma deve se tornar 
  *   255; k < 0 e ( I + k) < 0, então o valor da soma deve se tornar 0.
+ * 
+ * Dada uma contante K e uma Matriz, retorna uma NovaMatriz contendo a constante adicionada.
  * */
 somaDeConstante( K, Matriz, NovaMatriz ) :-
     
@@ -313,7 +315,7 @@ somaDeConstante( K, Matriz, NovaMatriz ) :-
     nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, 0 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
     
     privado_somaDeConstante_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -336,8 +338,8 @@ privado_somaDeConstante_ComputarMatriz( Matriz ) :-
     fail.
 
 
-    /* Faz a failure-driven loop 'privado_somaDeConstante_ComputarMatriz' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_somaDeConstante_ComputarMatriz' retornar true ao invés  
+     *   de falhar.
      * */
     privado_somaDeConstante_ComputarMatriz( _ ).
 
@@ -359,12 +361,12 @@ privado_somaDeConstante_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_somaDeConstante_ComputarElementos( 
-                               Coordenada_LinhaAtual, Coordenada_ColunaAtual, ElementoAtual ),
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
     fail.
     
     
-    /* Faz a failure-driven loop 'privado_somaDeConstante_ComputarLinhas' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_somaDeConstante_ComputarLinhas' retornar true ao invés  
+     *   de falhar.
      * */
     privado_somaDeConstante_ComputarLinhas( _ ).
 
@@ -411,6 +413,8 @@ privado_somaDeConstante_AlterarElemento( X, Y ) :-
 /* Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
  *   I + k na imagem resultante; no entanto, se (I + k) > 255, o valor da soma deve se tornar 
  *   255; k < 0 e ( I + k) < 0, então o valor da soma deve se tornar 0.
+ * 
+ * Dada uma Matriz e uma OutraMatriz, retorna uma NovaMatriz contendo a soma das matrizes.
  * */
 somaEntreImagens( Matriz, OutraMatriz, NovaMatriz ) :-
     
@@ -423,7 +427,7 @@ somaEntreImagens( Matriz, OutraMatriz, NovaMatriz ) :-
     nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
     nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
     nb_setval( coordenada_LinhaAtual, -1 ), 
-    nb_setval( coordenada_ColunaAtual, 0 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
     
     privado_somaEntreImagens_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
@@ -446,8 +450,8 @@ privado_somaEntreImagens_ComputarMatriz( Matriz ) :-
     fail.
 
 
-    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarMatriz' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarMatriz' retornar true ao invés  
+     *   de falhar.
      * */
     privado_somaEntreImagens_ComputarMatriz( _ ).
 
@@ -469,12 +473,12 @@ privado_somaEntreImagens_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_somaEntreImagens_ComputarElementos( 
-                               Coordenada_LinhaAtual, Coordenada_ColunaAtual, ElementoAtual ),
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
     fail.
     
     
-    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarLinhas' retornar true ao invés de 
-     *   falhar.
+    /* Faz a failure-driven loop 'privado_somaEntreImagens_ComputarLinhas' retornar true ao invés  
+     *   de falhar.
      * */
     privado_somaEntreImagens_ComputarLinhas( _ ).
 
@@ -525,6 +529,244 @@ privado_somaEntreImagens_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
     
     dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
     dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
+
+
+%###################################### pixelsIsolados ########################################
+/* Detecção de pixels isolados: um pixel de intensidade I é isolado se seus quatro vizinhos 
+ *   (de de baixo, da esquerda e da direita) têm intensidades menores que I.
+ * 
+ * Dada uma Matriz, retorna uma Lista de listas de três elementos contendo a posição e valor 
+ *   do pixel isolado.
+ * */
+pixelsIsolados( Matriz, Lista ) :-
+    
+    dadoNaPosicao( PrimeiroElemento, Matriz, 0 ), 
+    length( PrimeiroElemento, LarguraDaMatriz ), 
+    length( Matriz, AlturaDaMatriz ), 
+    
+    nb_setval( lista, [] ),
+    nb_setval( matriz, Matriz ),
+    nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
+    nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
+    nb_setval( coordenada_LinhaAtual, -1 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
+    
+    privado_pixelsIsolados_ComputarMatriz( Matriz ),
+    nb_getval( lista, Lista ), nl, nl, 
+    write( Lista ),
+    !.
+
+
+/* A failure-driven loop para passar em todas as linhas da Matriz.
+ * */
+privado_pixelsIsolados_ComputarMatriz( Matriz ) :- 
+
+    member( LinhaAtual, Matriz ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    NovaCoordenada_LinhaAtual is Coordenada_LinhaAtual + 1, 
+    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ), 
+    nl, nl, 
+    
+    privado_pixelsIsolados_ComputarLinhas( LinhaAtual ), 
+    fail.
+
+
+    /* Faz a failure-driven loop 'privado_pixelsIsolados_ComputarMatriz' retornar true ao invés de 
+     *   falhar.
+     * */
+    privado_pixelsIsolados_ComputarMatriz( _ ).
+
+
+/* A failure-driven loop para passar em todos os elementos da linha da Matriz.
+ * */
+privado_pixelsIsolados_ComputarLinhas( LinhaAtual ) :- 
+    
+    member( ElementoAtual, LinhaAtual ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ),
+    NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
+    nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
+    
+    write( Coordenada_LinhaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
+    write( ElementoAtual ), write('- '),
+    
+    privado_pixelsIsolados_ComputarElementos( 
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+    fail.
+    
+    
+    /* Faz a failure-driven loop 'privado_pixelsIsolados_ComputarLinhas' retornar true ao invés de 
+     *   falhar.
+     * */
+    privado_pixelsIsolados_ComputarLinhas( _ ).
+
+
+/* Executa o algoritmo de pixelsIsolados na LinhaAtual da ColunaAtual do ElementoAtual.
+ * */
+privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
+    
+    nb_getval( matriz, Matriz ),
+
+    nb_setval( isoladoEsquerda, 0 ),
+    nb_setval( isoladoDireita, 0 ), 
+    nb_setval( isoladoAcima, 0 ), 
+    nb_setval( isoladoAbaixo, 0 ), 
+    
+    privado_pixelsIsolados_ObterElementoEsquerda( Coluna, Linha, Matriz, Esquerda ), 
+    
+    ( nonvar( Esquerda ) -> 
+        
+        ( ElementoAtual > Esquerda ->
+            
+            nb_setval( isoladoEsquerda, 1 )
+        ;
+            true
+        )
+    ;
+        nb_setval( isoladoEsquerda, 1 )
+    ),
+    
+    privado_pixelsIsolados_ObterElementoDireita( Coluna, Linha, Matriz, Direita ),
+    
+    ( nonvar( Direita ) -> 
+        
+        ( ElementoAtual > Direita ->
+            
+            nb_setval( isoladoDireita, 1 )
+        ;
+            true
+        )
+    ;
+        nb_setval( isoladoDireita, 1 )
+    ),
+    
+    privado_pixelsIsolados_ObterElementoAcima( Coluna, Linha, Matriz, Acima ),
+    
+	( nonvar( Acima ) -> 
+	   
+        ( ElementoAtual > Acima ->
+            
+            nb_setval( isoladoAcima, 1 )
+        ;
+            true
+        )
+	;
+        nb_setval( isoladoAcima, 1 )
+	),
+	
+	privado_pixelsIsolados_ObterElementoAbaixo( Coluna, Linha, Matriz, Abaixo ), 
+    
+    ( nonvar( Abaixo ) -> 
+
+        ( ElementoAtual > Abaixo ->
+            
+            nb_setval( isoladoAbaixo, 1 )
+        ;
+            true
+        )
+    ;
+        nb_setval( isoladoAbaixo, 1 )
+    ),
+    
+    nb_getval( isoladoEsquerda, IsoladoEsquerda ),
+    nb_getval( isoladoDireita, IsoladoDireita ), 
+    nb_getval( isoladoAcima, IsoladoAcima ), 
+    nb_getval( isoladoAbaixo, IsoladoAbaixo ), 
+    
+    /*write( ' ' ),
+    write( 'Es:' ), write( Esquerda ), write( ' ' ),
+    write( 'Di:' ), write( Direita ), write( ' ' ),
+    write( 'Ac:' ), write( Acima ), write( ' ' ),
+    write( 'Ab:' ), write( Abaixo ), write( ' ' ),*/
+    
+    /*write( ' ' ),
+    write( 'Es:' ), write( IsoladoEsquerda ), write( ' ' ),
+    write( 'Di:' ), write( IsoladoDireita ), write( ' ' ),
+    write( 'Ac:' ), write( IsoladoAcima ), write( ' ' ),
+    write( 'Ab:' ), write( IsoladoAbaixo ), write( ' ' ),*/
+    
+    ( IsoladoEsquerda =:= 1, IsoladoDireita =:= 1, IsoladoAcima =:= 1, IsoladoAbaixo =:= 1 ->
+        
+        nb_getval( lista, Lista ),
+        inseridoNoFinal([Coluna, Linha, ElementoAtual], Lista, NovaLista),
+        nb_setval( lista, NovaLista )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   na esquerda dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_pixelsIsolados_ObterElementoEsquerda( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    Novo_X is X - 1,
+    
+    ( Novo_X > -1 -> 
+    
+	    dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+	    dadoNaPosicao( ElementoObtido, LinhaAtual, Novo_X )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   na direita dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_pixelsIsolados_ObterElementoDireita( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ), 
+    
+    Novo_X is X + 1,
+    
+    ( Novo_X < LarguraDaMatriz -> 
+    
+        dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, Novo_X )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   a cima dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_pixelsIsolados_ObterElementoAcima( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    Novo_Y is Y - 1,
+    
+    ( Novo_Y > -1 -> 
+    
+        dadoNaPosicao( LinhaAtual, OutraMatriz, Novo_Y ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, X )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   a baixo dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_pixelsIsolados_ObterElementoAbaixo( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    nb_getval( alturaDaMatriz, AlturaDaMatriz ), 
+    
+    Novo_Y is Y + 1,
+    
+    ( Novo_Y < AlturaDaMatriz -> 
+    
+        dadoNaPosicao( LinhaAtual, OutraMatriz, Novo_Y ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, X )
+    ;
+        true
+    ).
+
+
 
 
 

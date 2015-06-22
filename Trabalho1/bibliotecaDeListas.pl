@@ -342,7 +342,16 @@ converterConjutoParaLista((A,B), [A|Bs]) :-
 converterConjutoParaLista(T, [T]).
 
 
-
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   nesta posição.
+ * A matriz deve considerar que sua construção acontece de cima para baixo e da esquerda para 
+ *   direita. Ou seja, o primeiro elemento da posição (0,0), se encontra no topo da matriz 
+ *   em sua esquerda.
+ * */
+privado_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+    dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
 
 
 
