@@ -595,7 +595,7 @@ privado_pixelsIsolados_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_pixelsIsolados_ComputarElementos( 
-                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+                               NovaCoordenada_ColunaAtual, Coordenada_LinhaAtual, ElementoAtual ),
     fail.
     
     
@@ -607,7 +607,7 @@ privado_pixelsIsolados_ComputarLinhas( LinhaAtual ) :-
 
 /* Executa o algoritmo de pixelsIsolados na LinhaAtual da ColunaAtual do ElementoAtual.
  * */
-privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
+privado_pixelsIsolados_ComputarElementos( Coluna, Linha, ElementoAtual ) :-
     
     nb_getval( matriz, Matriz ),
 
