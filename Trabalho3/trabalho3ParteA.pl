@@ -17,7 +17,7 @@ importarTrabalho2ParteB :- [ 'Trabalho2/trabalho2ParteB.pl' ].
 :-importarTrabalho2ParteB.
 
 
-%##################################### limiarizacao #############################################
+%################################## 1) limiarizacao #############################################
 /* Limiarização (thresholding): dado um valor T como argumento, para cada intensidade I < T na 
  *   imagem de entrada, o pixel correspondente na imagem resultante se torna zero; para I > T, 
  *   a saída se torna um (produz-se uma imagem binária).
@@ -119,8 +119,8 @@ privado_Limiarizacao_AlterarElemento( X, Y, NovoElemento ) :-
     nb_setval( matrix, NovaMatriz ).
 
 
-%##################################### negativo #################################################
-/* Negativo: para cada intensidade I na imagem de entrada, produz-se 255 - I na imagem de saída 
+%################################## 2) negativo #################################################
+/* 2) Negativo: para cada intensidade I na imagem de entrada, produz-se 255 - I na imagem de saída 
  *   se a entrada for binária, a subtração passa a ser 1 - I.
  * 
  * Recebe uma Matriz como parâmetro, e retorna uma NovaMatriz contendo a matriz de imagem negativa.
@@ -297,8 +297,8 @@ privado_ehImagemBinaria_ComputarLinhas( LinhaAtual ) :-
     privado_ehImagemBinaria_ComputarLinhas( _ ).
 
 
-%###################################### somaDeConstante ########################################
-/* Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
+%#################################### 3) somaDeConstante ########################################
+/* 3) Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
  *   I + k na imagem resultante; no entanto, se (I + k) > 255, o valor da soma deve se tornar 
  *   255; k < 0 e ( I + k) < 0, então o valor da soma deve se tornar 0.
  * 
@@ -409,8 +409,8 @@ privado_somaDeConstante_AlterarElemento( X, Y ) :-
     nb_setval( matrix, NovaMatriz ).
 
 
-%###################################### somaEntreImagens ########################################
-/* Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
+%################################### 4) somaEntreImagens ########################################
+/* 4) Soma de constante: dado um valor k, para cada intensidade I na imagem de entrada, produz-se 
  *   I + k na imagem resultante; no entanto, se (I + k) > 255, o valor da soma deve se tornar 
  *   255; k < 0 e ( I + k) < 0, então o valor da soma deve se tornar 0.
  * 
@@ -531,8 +531,8 @@ privado_somaEntreImagens_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
     dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
 
 
-%###################################### pixelsIsolados ########################################
-/* Detecção de pixels isolados: um pixel de intensidade I é isolado se seus quatro vizinhos 
+%#################################### 5) pixelsIsolados ########################################
+/* 5) Detecção de pixels isolados: um pixel de intensidade I é isolado se seus quatro vizinhos 
  *   (de de baixo, da esquerda e da direita) têm intensidades menores que I.
  * 
  * Dada uma Matriz, retorna uma Lista de listas de três elementos contendo a posição e valor 
@@ -751,8 +751,8 @@ privado_pixelsIsolados_ObterElementoAbaixo( X, Y, Matriz, ElementoObtido ) :-
     ).
 
 
-%###################################### caminhoEntrePixels ########################################
-/* Verificação de caminho entre dois pixels: há um caminho entre dois pixels, se há um conjunto 
+%################################## 6) caminhoEntrePixels ########################################
+/* 6) Verificação de caminho entre dois pixels: há um caminho entre dois pixels, se há um conjunto 
  *   de pixels adjacentes subsequentes (considerando os quatro vizinhos), todos com intensidades 
  *   maiores do que zero, ligando estes dois pixels.
  * 
@@ -1006,16 +1006,128 @@ privado_caminhoEntrePixels_ObterElementoAbaixo( Coluna, Linha, Matriz, ElementoO
     ).
 
 
+%########################### 7) multiplicacaoEntreImagens ########################################
+/* 7) Implemente, em Prolog, uma nova operação de processamento de imagens ou reconhecimento de 
+ *   padrões a sua escolha.
+ * 
+ * Multiplicação entre imagens: cada pixel da imagem resultante é obtido pela multiplicação dos  
+ *   pixels correspondentes de duas imagens de entrada com as mesmas dimensões (observar a 
+ *   saturação em 255).
+ *
+ * Dada uma Matriz e uma OutraMatriz, retorna uma NovaMatriz contendo a multiplicação das matrizes.
+ * */
+multiplicacaoEntreImagens( Matriz, OutraMatriz, NovaMatriz ) :-
+    
+    dadoNaPosicao( PrimeiroElemento, Matriz, 0 ), 
+    length( PrimeiroElemento, LarguraDaMatriz ), 
+    length( Matriz, AlturaDaMatriz ), 
+    
+    nb_setval( outraMatriz, OutraMatriz ),
+    nb_setval( matrix, Matriz ),
+    nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
+    nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
+    nb_setval( coordenada_LinhaAtual, -1 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
+    
+    privado_multiplicacaoEntreImagens_ComputarMatriz( Matriz ),
+    nb_getval( matrix, NovaMatriz ), nl, nl, 
+    write( NovaMatriz ), nl, nl,
+    !.
 
 
+/* A failure-driven loop para passar em todas as linhas da Matriz.
+ * */
+privado_multiplicacaoEntreImagens_ComputarMatriz( Matriz ) :- 
+
+    member( LinhaAtual, Matriz ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    NovaCoordenada_LinhaAtual is Coordenada_LinhaAtual + 1, 
+    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ), 
+    nl, nl, 
+    
+    privado_multiplicacaoEntreImagens_ComputarLinhas( LinhaAtual ), 
+    fail.
 
 
+    /* Faz a failure-driven loop 'privado_multiplicacaoEntreImagens_ComputarMatriz' retornar 
+     *   true ao invésde falhar.
+     * */
+    privado_multiplicacaoEntreImagens_ComputarMatriz( _ ).
 
 
+/* A failure-driven loop para passar em todos os elementos da linha da Matriz.
+ * */
+privado_multiplicacaoEntreImagens_ComputarLinhas( LinhaAtual ) :- 
+    
+    member( ElementoAtual, LinhaAtual ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ),
+    NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
+    nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
+    
+    write( Coordenada_LinhaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
+    write( ElementoAtual ), write('- '),
+    
+    privado_multiplicacaoEntreImagens_ComputarElementos( 
+                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+    fail.
+    
+    
+    /* Faz a failure-driven loop 'privado_multiplicacaoEntreImagens_ComputarLinhas' retornar  
+     *   true ao invés de falhar.
+     * */
+    privado_multiplicacaoEntreImagens_ComputarLinhas( _ ).
 
 
+/* Executa o algoritmo de multiplicacaoEntreImagens na LinhaAtual da ColunaAtual do ElementoAtual.
+ * */
+privado_multiplicacaoEntreImagens_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
+    
+    nb_getval( outraMatriz, OutraMatriz ),
+    privado_multiplicacaoEntreImagens_ObterElemento( 
+                                      ColunaAtual, LinhaAtual, OutraMatriz, OutroElementoAtual ), 
+    Atual is ElementoAtual * OutroElementoAtual, 
+    nb_setval( novo_Elemento, Atual ), 
+
+    ( Atual < 0 ->
+        
+        AtualCorrigido is 0,
+        nb_setval( novo_Elemento , AtualCorrigido)
+    ;
+        true
+    ), 
+    ( Atual >= 256 ->
+
+        AtualCorrigido is 255, 
+        nb_setval( novo_Elemento , AtualCorrigido)
+    ;
+        true
+    ),
+    privado_multiplicacaoEntreImagens_AlterarElemento( LinhaAtual, ColunaAtual ).
 
 
+/* Dada as coordenadas 'X, Y' da Matriz, substitui o elemento atual pelo NovoElemento.
+ * */
+privado_multiplicacaoEntreImagens_AlterarElemento( X, Y ) :-
+    
+    nb_getval( novo_Elemento, Novo_Elemento ), 
+    nb_getval( matrix, Matriz ), 
+    dadoNaPosicao( LinhaAtual, Matriz, X ), 
+    substituidoDaPos( Novo_Elemento, Y, LinhaAtual, NovaLinhaAtual ), 
+    substituidoDaPos( NovaLinhaAtual, X, Matriz, NovaMatriz ), 
+    nb_setval( matrix, NovaMatriz ).
 
+
+/* Dada as coordenadas 'X, Y' da OutraMatriz, retorna o elemento ElementoObtido que se encontra 
+ *   nesta posição.
+ * */
+privado_multiplicacaoEntreImagens_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+    dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
 
 
