@@ -751,6 +751,258 @@ privado_pixelsIsolados_ObterElementoAbaixo( X, Y, Matriz, ElementoObtido ) :-
     ).
 
 
+%###################################### caminhoEntrePixels ########################################
+/* Verificação de caminho entre dois pixels: há um caminho entre dois pixels, se há um conjunto 
+ *   de pixels adjacentes subsequentes (considerando os quatro vizinhos), todos com intensidades 
+ *   maiores do que zero, ligando estes dois pixels.
+ * 
+ * Dadas as posições de pixels X1, Y1, e X2 e Y2 dessa matriz, retorna uma lista Caminho
+ *   contendo um lista de listas de pares de pixels que fazem parte do caminho entre os pixels 
+ *   X e Y.
+ * Para resolução, carrega-se em memória o grafo 'Trabalho3/grafo.pl' criado a partir da Matriz,  
+ *   e se executa-se o algoritmo de caminhos em grafos, e obtem-se o caminho entre os pixels. 
+ * */
+caminhoEntrePixels( X1, Y1, X2, Y2, Caminho ) :-
+    
+    limparMemoria, 
+    carregarGrafo( 'Trabalho3/grafo.pl' ), 
+    
+    privado_ObterElemento( X1, Y1, Matriz, X ), 
+    privado_ObterElemento( X2, Y2, Matriz, Y ), 
+    privado_viajarPeloGrafo([X1, Y1, X], [X2, Y2, Y], Caminho ), 
+    
+    nl, nl, 
+    write('Caminho entre: '), write( X1 ), write( Y1 ), 
+    write(' e '), write( X2 ), write( Y2 ), nl, nl, 
+    write( Caminho ), nl, nl,
+    !.
+
+
+/* Dada uma Matriz constrói um grafo de conexões dos pixels e salva no arquivo 
+ *   'Trabalho3/grafo.pl'.
+ * */
+caminhoEntrePixels_ConstruirGrafo( Matriz ):-
+    
+    dadoNaPosicao( PrimeiroElemento, Matriz, 0 ), 
+    length( PrimeiroElemento, LarguraDaMatriz ), 
+    length( Matriz, AlturaDaMatriz ), 
+    
+    nb_setval( matriz, Matriz ),
+    nb_setval( larguraDaMatriz, LarguraDaMatriz ), 
+    nb_setval( alturaDaMatriz, AlturaDaMatriz ), 
+    nb_setval( coordenada_LinhaAtual, -1 ), 
+    nb_setval( coordenada_ColunaAtual, -1 ), 
+    
+    limparMemoria, 
+    carregarGrafo( 'Trabalho3/grafo.pl' ), 
+    
+    privado_caminhoEntrePixels_ComputarMatriz( Matriz ),
+
+    gravarGrafo( 'Trabalho3/grafo.pl' ),
+    !.
+
+
+/* Lista todas as claúsulas e grava o grafo no Arquivo e limpa a memória.
+ * */
+gravarGrafo( Arquivo ) :-
+        
+    tell( Arquivo ), 
+    listing(aresta), 
+    listing(vertice),
+    told,
+    limparMemoria.
+
+
+/* Carrega o grafo salvo no Arquivo em memória.
+ * */
+carregarGrafo( Arquivo ) :-
+    consult( Arquivo ).
+
+
+/* A failure-driven loop para passar em todas as linhas da Matriz.
+ * */
+privado_caminhoEntrePixels_ComputarMatriz( Matriz ) :- 
+
+    member( LinhaAtual, Matriz ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    NovaCoordenada_LinhaAtual is Coordenada_LinhaAtual + 1, 
+    nb_setval( coordenada_LinhaAtual, NovaCoordenada_LinhaAtual ), 
+    nl, nl, 
+    
+    privado_caminhoEntrePixels_ComputarLinhas( LinhaAtual ), 
+    fail.
+
+
+    /* Faz a failure-driven loop 'privado_caminhoEntrePixels_ComputarMatriz' retornar true ao  
+     *   invés de falhar.
+     * */
+    privado_caminhoEntrePixels_ComputarMatriz( _ ).
+
+
+/* A failure-driven loop para passar em todos os elementos da linha da Matriz.
+ * */
+privado_caminhoEntrePixels_ComputarLinhas( LinhaAtual ) :- 
+    
+    member( ElementoAtual, LinhaAtual ), 
+    
+    nb_getval( coordenada_LinhaAtual, Coordenada_LinhaAtual ), 
+    nb_getval( coordenada_ColunaAtual, Coordenada_ColunaAtual ), 
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ),
+    NovaCoordenada_ColunaAtual is ( Coordenada_ColunaAtual + 1 ) mod LarguraDaMatriz, 
+    nb_setval( coordenada_ColunaAtual, NovaCoordenada_ColunaAtual ),
+    
+    write( Coordenada_LinhaAtual ), write(','),
+    write( NovaCoordenada_ColunaAtual ), write(','),
+    write( ElementoAtual ), write('- '),
+    
+    privado_caminhoEntrePixels_ComputarElementos( 
+                               NovaCoordenada_ColunaAtual, Coordenada_LinhaAtual, ElementoAtual ),
+    fail.
+    
+    
+    /* Faz a failure-driven loop 'privado_caminhoEntrePixels_ComputarLinhas' retornar true ao  
+     *   invés de falhar.
+     * */
+    privado_caminhoEntrePixels_ComputarLinhas( _ ).
+
+
+/* Executa o algoritmo de caminhoEntrePixels na LinhaAtual da ColunaAtual do ElementoAtual.
+ * */
+privado_caminhoEntrePixels_ComputarElementos( Coluna, Linha, ElementoAtual ) :-
+    
+    adicionarVertice( [Coluna, Linha, ElementoAtual] ), 
+    nb_getval( matriz, Matriz ),
+    
+    privado_caminhoEntrePixels_ObterElementoEsquerda( Coluna, Linha, Matriz, Esquerda ), 
+    
+    ( nonvar( Esquerda ) -> 
+        
+        ( Esquerda > 0 ->
+            
+            Nova_Coluna1 is Coluna - 1, 
+            adicionarVertice( [Nova_Coluna1, Linha, Esquerda] ),
+            conectar( [Coluna, Linha, ElementoAtual], [Nova_Coluna1, Linha, Esquerda] )
+        ;
+            true
+        )
+    ;
+        true
+    ),
+    privado_caminhoEntrePixels_ObterElementoDireita( Coluna, Linha, Matriz, Direita ),
+    
+    ( nonvar( Direita ) -> 
+        
+        ( Direita > 0 ->
+            
+            Nova_Coluna2 is Coluna + 1, 
+            adicionarVertice( [Nova_Coluna2, Linha, Direita] ),
+            conectar( [Coluna, Linha, ElementoAtual], [Nova_Coluna2, Linha, Direita] )
+        ;
+            true
+        )
+    ;
+        true
+    ),
+    privado_caminhoEntrePixels_ObterElementoAcima( Coluna, Linha, Matriz, Acima ),
+    
+    ( nonvar( Acima ) -> 
+       
+        ( Acima > 0 ->
+            
+            Nova_Linha1 is Linha - 1,
+            adicionarVertice( [Coluna, Nova_Linha1, Acima] ),
+            conectar( [Coluna, Linha, ElementoAtual], [Coluna, Nova_Linha1, Acima] )
+        ;
+            true
+        )
+    ;
+        true
+    ),
+    privado_caminhoEntrePixels_ObterElementoAbaixo( Coluna, Linha, Matriz, Abaixo ), 
+    
+    ( nonvar( Abaixo ) -> 
+
+        ( ElementoAtual > Abaixo ->
+            
+            Nova_Linha2 is Linha + 1,
+            adicionarVertice( [Coluna, Nova_Linha2, Abaixo] ),
+            conectar( [Coluna, Linha, ElementoAtual], [Coluna, Nova_Linha2, Abaixo] )
+        ;
+            true
+        )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'Coluna, Linha' de uma Matriz, retorna o elemento ElementoObtido que se  
+ *   encontra na esquerda dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_caminhoEntrePixels_ObterElementoEsquerda( Coluna, Linha, OutraMatriz, ElementoObtido ) :-
+    
+    Novo_Coluna is Coluna - 1,
+    
+    ( Novo_Coluna > -1 -> 
+    
+        dadoNaPosicao( LinhaAtual, OutraMatriz, Linha ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, Novo_Coluna )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'Coluna, Linha' de uma Matriz, retorna o elemento ElementoObtido que se  
+ *   encontra na direita dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_caminhoEntrePixels_ObterElementoDireita( Coluna, Linha, Matriz, ElementoObtido ) :-
+    
+    nb_getval( larguraDaMatriz, LarguraDaMatriz ), 
+    
+    Novo_Coluna is Coluna + 1,
+    
+    ( Novo_Coluna < LarguraDaMatriz -> 
+    
+        dadoNaPosicao( LinhaAtual, Matriz, Linha ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, Novo_Coluna )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'Coluna, Linha' de uma Matriz, retorna o elemento ElementoObtido que se  
+ *   encontra a cima dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_caminhoEntrePixels_ObterElementoAcima( Coluna, Linha, Matriz, ElementoObtido ) :-
+    
+    Novo_Linha is Linha - 1,
+    
+    ( Novo_Linha > -1 -> 
+    
+        dadoNaPosicao( LinhaAtual, Matriz, Novo_Linha ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, Coluna )
+    ;
+        true
+    ).
+
+
+/* Dada as coordenadas 'Coluna, Linha' de uma Matriz, retorna o elemento ElementoObtido que se  
+ *   encontra a baixo dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
+ * */
+privado_caminhoEntrePixels_ObterElementoAbaixo( Coluna, Linha, Matriz, ElementoObtido ) :-
+    
+    nb_getval( alturaDaMatriz, AlturaDaMatriz ), 
+    
+    Novo_Linha is Linha + 1,
+    
+    ( Novo_Linha < AlturaDaMatriz -> 
+    
+        dadoNaPosicao( LinhaAtual, Matriz, Novo_Linha ), 
+        dadoNaPosicao( ElementoObtido, LinhaAtual, Coluna )
+    ;
+        true
+    ).
+
 
 
 

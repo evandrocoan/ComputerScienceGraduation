@@ -78,10 +78,9 @@ adicionarVertice( Vertice ) :-
     ).
 
 
-/* Informa se os vértices carregados em memória estão conectados e torna o grafo não-orientado.
+/* Informa se os vértices carregados em memória estão conectados.
  * */
-estaoConectados(Vertice1, Vertice2) :- aresta(Vertice1, Vertice2), !.
-estaoConectados(Vertice1, Vertice2) :- aresta(Vertice2, Vertice1), !.
+estaoConectados(Vertice1, Vertice2) :- aresta(Vertice1, Vertice2).
 
 
 /* Verifica se um dado Vértice já existe carregado em memória.
@@ -116,6 +115,8 @@ existeAresta( Vertice1, Vertice2 ) :-
 	    !.
 
 
+/* Conecta o Vertice1 com o Vertice2 no grafo. 
+ * */
 conectar(Vertice1, Vertice2):-
     
     ( not( existeAresta( Vertice1, Vertice2 ) ) ->
@@ -126,7 +127,8 @@ conectar(Vertice1, Vertice2):-
 		    
 	            write('Conectando os vertices: '), write( Vertice1 ), write(', '), 
 	            write( Vertice2 ), write('.'), nl, 
-	            assert( aresta(Vertice1, Vertice2) )
+	            assert( aresta(Vertice1, Vertice2) ),
+	            assert( aresta(Vertice2, Vertice1) )
 		    ;  
 	            write('O vertice2 nao existe!'), nl
 		    ) 
@@ -170,7 +172,6 @@ carregarGrafo :-
  * Primeiro carrega o grafo em memória. Segundo calcula a lista de caminhos utilizando findall.
  * */
 conexoes(P1, P2, Lista) :-
-	carregarGrafo,
     findall( ListaSaida, privado_viajarPeloGrafo( P1, P2, ListaSaida ), Lista ).
 
     privado_viajarPeloGrafo( P1, P2, ListaSaida ) :-
