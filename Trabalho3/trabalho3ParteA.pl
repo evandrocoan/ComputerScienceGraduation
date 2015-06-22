@@ -759,8 +759,10 @@ privado_pixelsIsolados_ObterElementoAbaixo( X, Y, Matriz, ElementoObtido ) :-
  * Dadas as posições de pixels X1, Y1, e X2 e Y2 dessa matriz, retorna uma lista Caminho
  *   contendo um lista de listas de pares de pixels que fazem parte do caminho entre os pixels 
  *   X e Y.
- * Para resolução, carrega-se em memória o grafo 'Trabalho3/grafo.pl' criado a partir da Matriz,  
- *   e se executa-se o algoritmo de caminhos em grafos, e obtem-se o caminho entre os pixels. 
+ * Para resolução, carrega-se em memória o grafo 'Trabalho3/grafo.pl', que é criado utilizando 
+ *   o predicado ‘caminhoEntrePixels_ConstruirGrafo( Matriz )’, que cria o grafo a partir da 
+ *   Matriz, e se executa-se o algoritmo de caminhos em grafos 
+ *   ‘viajarPeloGrafo( P1, P2, ListaSaida )’, e obtém um dos caminho entre os pixels.
  * */
 caminhoEntrePixels( X1, Y1, X2, Y2, Caminho ) :-
     
@@ -769,7 +771,7 @@ caminhoEntrePixels( X1, Y1, X2, Y2, Caminho ) :-
     
     privado_ObterElemento( X1, Y1, Matriz, X ), 
     privado_ObterElemento( X2, Y2, Matriz, Y ), 
-    privado_viajarPeloGrafo([X1, Y1, X], [X2, Y2, Y], Caminho ), 
+    viajarPeloGrafo([X1, Y1, X], [X2, Y2, Y], Caminho ), 
     
     nl, nl, 
     write('Caminho entre: '), write( X1 ), write( Y1 ), 

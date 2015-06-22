@@ -169,30 +169,31 @@ carregarGrafo :-
  *   no grafo de P1 a P2 (pode não haver caminho possível ou as duas pessoas serem ligadas 
  *   diretamente).
  * 
- * Primeiro carrega o grafo em memória. Segundo calcula a lista de caminhos utilizando findall.
+ * Primeiro carrega o grafo em memória. Segundo calcula toda a Lista de caminhos utilizando 
+ *   findall.
  * */
 conexoes(P1, P2, Lista) :-
-    findall( ListaSaida, privado_viajarPeloGrafo( P1, P2, ListaSaida ), Lista ).
+    findall( ListaSaida, viajarPeloGrafo( P1, P2, ListaSaida ), Lista ).
 
-    privado_viajarPeloGrafo( P1, P2, ListaSaida ) :-
-	    viajarPeloGrafo( P1, P2, [P1], Q ),
+    viajarPeloGrafo( P1, P2, ListaSaida ) :-
+	    privado_ViajarPeloGrafo( P1, P2, [P1], Q ),
 	    reverse( Q, ListaSaida ).
 
-	viajarPeloGrafo( P1, P2, P, [P2|P] ) :-
+	privado_ViajarPeloGrafo( P1, P2, P, [P2|P] ) :-
 	    estaoConectados(P1,P2).
 
-	viajarPeloGrafo( P1, P2, Visitado, Lista ) :-
+	privado_ViajarPeloGrafo( P1, P2, Visitado, Lista ) :-
 	   estaoConectados( P1, C ),
 	   C \== P2,
 	   \+member( C, Visitado ),
-	   viajarPeloGrafo( C, P2, [C|Visitado], Lista).
+	   privado_ViajarPeloGrafo( C, P2, [C|Visitado], Lista).
 
 
 /* Mostre o menor número de passos em um caminho entre P1 e P2. Por exemplo: preciso de passos 
  *   para chegar a 'Don Stephens'.
  * 
  * Primeiro, pega a lista de caminhos consultando 'conexoes(P1, P2, Lista)'.
- * Segundo, dentre a lista de listas, determima qual a menor e retorna o valor do menor número de
+ * Segundo, dentre as listas de listas, determima qual a menor e retorna o valor do menor número de
  *   passos em Passos.
  * */
 menorCaminho(P1, P2, Passos) :-
