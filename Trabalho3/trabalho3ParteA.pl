@@ -42,7 +42,7 @@ limiarizacao( IntensidadeT, Matriz, NovaMatriz ) :-
     
     privado_Limiarizacao_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
-    write( NovaMatriz ),
+    write( NovaMatriz ), nl, nl,
     !.
 
 
@@ -145,7 +145,7 @@ negativo( Matriz, NovaMatriz ) :-
     
     privado_Negativo_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
-    write( NovaMatriz ),
+    write( NovaMatriz ), nl, nl,
     !.
 
 
@@ -319,7 +319,7 @@ somaDeConstante( K, Matriz, NovaMatriz ) :-
     
     privado_somaDeConstante_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
-    write( NovaMatriz ),
+    write( NovaMatriz ), nl, nl,
     !.
 
 
@@ -431,7 +431,7 @@ somaEntreImagens( Matriz, OutraMatriz, NovaMatriz ) :-
     
     privado_somaEntreImagens_ComputarMatriz( Matriz ),
     nb_getval( matrix, NovaMatriz ), nl, nl, 
-    write( NovaMatriz ),
+    write( NovaMatriz ), nl, nl,
     !.
 
 
@@ -553,7 +553,7 @@ pixelsIsolados( Matriz, Lista ) :-
     
     privado_pixelsIsolados_ComputarMatriz( Matriz ),
     nb_getval( lista, Lista ), nl, nl, 
-    write( Lista ),
+    write( Lista ), nl, nl,
     !.
 
 
@@ -629,7 +629,6 @@ privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
     ;
         nb_setval( isoladoEsquerda, 1 )
     ),
-    
     privado_pixelsIsolados_ObterElementoDireita( Coluna, Linha, Matriz, Direita ),
     
     ( nonvar( Direita ) -> 
@@ -643,7 +642,6 @@ privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
     ;
         nb_setval( isoladoDireita, 1 )
     ),
-    
     privado_pixelsIsolados_ObterElementoAcima( Coluna, Linha, Matriz, Acima ),
     
 	( nonvar( Acima ) -> 
@@ -657,7 +655,6 @@ privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
 	;
         nb_setval( isoladoAcima, 1 )
 	),
-	
 	privado_pixelsIsolados_ObterElementoAbaixo( Coluna, Linha, Matriz, Abaixo ), 
     
     ( nonvar( Abaixo ) -> 
@@ -671,23 +668,10 @@ privado_pixelsIsolados_ComputarElementos( Linha, Coluna, ElementoAtual ) :-
     ;
         nb_setval( isoladoAbaixo, 1 )
     ),
-    
     nb_getval( isoladoEsquerda, IsoladoEsquerda ),
     nb_getval( isoladoDireita, IsoladoDireita ), 
     nb_getval( isoladoAcima, IsoladoAcima ), 
     nb_getval( isoladoAbaixo, IsoladoAbaixo ), 
-    
-    /*write( ' ' ),
-    write( 'Es:' ), write( Esquerda ), write( ' ' ),
-    write( 'Di:' ), write( Direita ), write( ' ' ),
-    write( 'Ac:' ), write( Acima ), write( ' ' ),
-    write( 'Ab:' ), write( Abaixo ), write( ' ' ),*/
-    
-    /*write( ' ' ),
-    write( 'Es:' ), write( IsoladoEsquerda ), write( ' ' ),
-    write( 'Di:' ), write( IsoladoDireita ), write( ' ' ),
-    write( 'Ac:' ), write( IsoladoAcima ), write( ' ' ),
-    write( 'Ab:' ), write( IsoladoAbaixo ), write( ' ' ),*/
     
     ( IsoladoEsquerda =:= 1, IsoladoDireita =:= 1, IsoladoAcima =:= 1, IsoladoAbaixo =:= 1 ->
         
@@ -718,7 +702,7 @@ privado_pixelsIsolados_ObterElementoEsquerda( X, Y, OutraMatriz, ElementoObtido 
 /* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
  *   na direita dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
  * */
-privado_pixelsIsolados_ObterElementoDireita( X, Y, OutraMatriz, ElementoObtido ) :-
+privado_pixelsIsolados_ObterElementoDireita( X, Y, Matriz, ElementoObtido ) :-
     
     nb_getval( larguraDaMatriz, LarguraDaMatriz ), 
     
@@ -726,7 +710,7 @@ privado_pixelsIsolados_ObterElementoDireita( X, Y, OutraMatriz, ElementoObtido )
     
     ( Novo_X < LarguraDaMatriz -> 
     
-        dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+        dadoNaPosicao( LinhaAtual, Matriz, Y ), 
         dadoNaPosicao( ElementoObtido, LinhaAtual, Novo_X )
     ;
         true
@@ -736,13 +720,13 @@ privado_pixelsIsolados_ObterElementoDireita( X, Y, OutraMatriz, ElementoObtido )
 /* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
  *   a cima dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
  * */
-privado_pixelsIsolados_ObterElementoAcima( X, Y, OutraMatriz, ElementoObtido ) :-
+privado_pixelsIsolados_ObterElementoAcima( X, Y, Matriz, ElementoObtido ) :-
     
     Novo_Y is Y - 1,
     
     ( Novo_Y > -1 -> 
     
-        dadoNaPosicao( LinhaAtual, OutraMatriz, Novo_Y ), 
+        dadoNaPosicao( LinhaAtual, Matriz, Novo_Y ), 
         dadoNaPosicao( ElementoObtido, LinhaAtual, X )
     ;
         true
@@ -752,7 +736,7 @@ privado_pixelsIsolados_ObterElementoAcima( X, Y, OutraMatriz, ElementoObtido ) :
 /* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
  *   a baixo dessa posição. Caso não seja possível, não inicializa o ElementoObtido.
  * */
-privado_pixelsIsolados_ObterElementoAbaixo( X, Y, OutraMatriz, ElementoObtido ) :-
+privado_pixelsIsolados_ObterElementoAbaixo( X, Y, Matriz, ElementoObtido ) :-
     
     nb_getval( alturaDaMatriz, AlturaDaMatriz ), 
     
@@ -760,7 +744,7 @@ privado_pixelsIsolados_ObterElementoAbaixo( X, Y, OutraMatriz, ElementoObtido ) 
     
     ( Novo_Y < AlturaDaMatriz -> 
     
-        dadoNaPosicao( LinhaAtual, OutraMatriz, Novo_Y ), 
+        dadoNaPosicao( LinhaAtual, Matriz, Novo_Y ), 
         dadoNaPosicao( ElementoObtido, LinhaAtual, X )
     ;
         true
