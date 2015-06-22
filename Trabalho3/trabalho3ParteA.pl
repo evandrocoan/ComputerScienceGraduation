@@ -84,7 +84,7 @@ privado_Limiarizacao_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_Limiarizacao_ComputarElementos( 
-                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+                               NovaCoordenada_ColunaAtual, Coordenada_LinhaAtual, ElementoAtual ),
     fail.
     
     
@@ -96,7 +96,7 @@ privado_Limiarizacao_ComputarLinhas( LinhaAtual ) :-
 
 /* Executa o altoritmo de limiarizacao na LinhaAtual da ColunaAtual do ElementoAtual.
  * */
-privado_Limiarizacao_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
+privado_Limiarizacao_ComputarElementos( ColunaAtual, LinhaAtual, ElementoAtual ) :-
 	
     nb_getval( intensidadeT, IntensidadeT ), 
 	
@@ -187,7 +187,7 @@ privado_Negativo_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_Negativo_ComputarElementos( 
-                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+                               NovaCoordenada_ColunaAtual, Coordenada_LinhaAtual, ElementoAtual ),
     fail.
     
     
@@ -199,7 +199,7 @@ privado_Negativo_ComputarLinhas( LinhaAtual ) :-
 
 /* Executa o algoritmo do negativo na LinhaAtual da ColunaAtual do ElementoAtual.
  * */
-privado_Negativo_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
+privado_Negativo_ComputarElementos( ColunaAtual, LinhaAtual, ElementoAtual ) :-
     
     nb_getval( ehUmaImagemBinaria, EhUmaImagemBinaria ), 
     
@@ -361,7 +361,7 @@ privado_somaDeConstante_ComputarLinhas( LinhaAtual ) :-
     write( ElementoAtual ), write('- '),
     
     privado_somaDeConstante_ComputarElementos( 
-                               Coordenada_LinhaAtual, NovaCoordenada_ColunaAtual, ElementoAtual ),
+                               NovaCoordenada_ColunaAtual, Coordenada_LinhaAtual, ElementoAtual ),
     fail.
     
     
@@ -373,7 +373,7 @@ privado_somaDeConstante_ComputarLinhas( LinhaAtual ) :-
 
 /* Executa o algoritmo do negativo na LinhaAtual da ColunaAtual do ElementoAtual.
  * */
-privado_somaDeConstante_ComputarElementos( LinhaAtual, ColunaAtual, ElementoAtual ) :-
+privado_somaDeConstante_ComputarElementos( ColunaAtual, LinhaAtual, ElementoAtual ) :-
     
     nb_getval( k, K ),
     
