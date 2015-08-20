@@ -213,20 +213,20 @@ comprimentoDaLista([_|L],N) :-
  *   retorna um elemento em uma dada posição na lista definida no predicado 
  *   informacoesPessoais([...]) 
  * */
-dadoDeInfoNaPosicao(Posicao, DadoDeRetorno) :- 
-    informacoesPessoais(L), 
-    dadoNaPosicao(DadoDeRetorno, [_|L], Posicao).
+dadoDeInfoNaPosicao( Posicao, DadoDeRetorno ) :- 
+    informacoesPessoais( L ), 
+    dadoNaPosicao( DadoDeRetorno, [_|L], Posicao ).
 
 
 /* dadoNaPosicao(Dado, Lista, Posicao).
  * Dada uma posição Posicao retorna um elemento Dado em uma dada posição na 
  *   lista Lista.
  * */
-dadoNaPosicao(X, [X|_], 0).
-dadoNaPosicao(X,[_|L],K) :- 
-	K > 0, 
-	K1 is K - 1, 
-	dadoNaPosicao(X,L,K1).
+dadoNaPosicao( Dado, [Dado|_], 0 ).
+dadoNaPosicao( Dado, [_|Lista], Posicao ) :- 
+	Posicao > 0, 
+	Posicao1 is Posicao - 1, 
+	dadoNaPosicao( Dado, Lista, Posicao1 ).
 
 
 /* Dado uma lista numérica, retora a soma de seus elementos na variável Soma. 
@@ -262,8 +262,20 @@ ehMemboDaCabeca(P, L) :-
  * Dado um Lista retorna o Maior elemento dela.
  * */
 maiorElemento([X],X).
-maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
-maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
+	maiorElemento([X|Xs],X) :- ehMaior(Xs,Y), X >= Y.
+	maiorElemento([X|Xs],N) :- ehMaior(Xs,N), N > X.
+
+
+/* maiorElemento( Lista, Minimo )
+ * Dado um Lista retorna o Maior elemento dela.
+ * */
+menorElemento([Lista|Listas], Minimo) :- 
+    privado_MenorElemento(Listas, Lista, Minimo).
+
+	privado_MenorElemento([], Minimo, Minimo).
+	privado_MenorElemento([Lista|Listas], Minimo0, Minimo) :-
+	    Minimo1 is min(Lista, Minimo0),
+	    privado_MenorElemento(Listas, Minimo1, Minimo).
 
 
 /* 
@@ -319,4 +331,32 @@ indiceDoElemento([_|Cauda], Elemento, Indice):-
  * */
 comprimentoDeListasComoLista(L,X):-
     maplist(length,L,X).
-	
+
+
+/* Converte um conjunto (a,b,c,...) para um lista [a,b,c,...]
+ * */
+converterConjutoParaLista((A,B), [A|Bs]) :- 
+    converterConjutoParaLista(B, Bs), 
+    !.
+
+converterConjutoParaLista(T, [T]).
+
+
+/* Dada as coordenadas 'X, Y' de uma Matriz, retorna o elemento ElementoObtido que se encontra 
+ *   nesta posição.
+ * A matriz deve considerar que sua construção acontece de cima para baixo e da esquerda para 
+ *   direita. Ou seja, o primeiro elemento da posição (0,0), se encontra no topo da matriz 
+ *   em sua esquerda.
+ * */
+privado_ObterElemento( X, Y, OutraMatriz, ElementoObtido ) :-
+    
+    dadoNaPosicao( LinhaAtual, OutraMatriz, Y ), 
+    dadoNaPosicao( ElementoObtido, LinhaAtual, X ).
+
+
+
+
+
+
+
+

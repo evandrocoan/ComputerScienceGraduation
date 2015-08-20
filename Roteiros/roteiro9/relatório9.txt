@@ -1,0 +1,15 @@
+mapeiaListaPA 7  7 -- out => [7, 14, 21, 28, 35, 42, 49]
+calculaSomaPA 7  7 -- out => 196
+calculaProdPA 7  7 -- out => 4150656720
+
+mapeiaListaPA 4  7 -- out => [7, 14, 21, 28]
+calculaSomaPA 4  7 -- out => 70
+calculaProdPA 4  7 -- out => 57624
+
+mapeiaListaPA 3  6 -- out => [6, 12, 18]
+calculaSomaPA 3  6 -- out => 36
+calculaProdPA 3  6 -- out => 1296
+
+mapeiaListaPA 3 12 -- out => [12, 24, 36]
+calculaSomaPA 3 12 -- out => 72
+calculaProdPA 3 12 -- out => 10368

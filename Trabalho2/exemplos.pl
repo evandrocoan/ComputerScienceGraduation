@@ -78,5 +78,50 @@ incluirDadosPara(Nome) :-
     told.
 
 
+/* Modelo de um 'for' que passa em todos os elementos da Lista e retorna o resultado do 
+ *   processamento em Resultado.
+ * */
+privado__Recursao(Lista, Resultado) :-
+    privado__RecursaoInterno(Lista, [], Resultado).
+
+privado__RecursaoInterno([], Temporario, Resultado) :-
+    copy_term(Temporario, Resultado).
+    
+privado__RecursaoInterno(Lista, AcumuladorEntrada, Resultado) :-
+    dividirLista(Lista, 1, ElementoTemporario, RestoLista),
+    primeiro(ElementoTemporario, ElementoAtual),
+    
+    % Fazer as operações sobre o ElementoAtual da lista.
+    
+
+    privado__RecursaoInterno(RestoLista, AcumuladorSaida, Resultado).
+
+
+/*
+ * Modelo de uso de variáveis globais.
+ * */
+recursao(100).
+recursao(X) :- 
+    adicionar, 
+    Y is X + 1, 
+    recursao(Y).
+
+adicionar :- 
+    nb_getval(contador, C), 
+    NovoC is C + 1, 
+    nb_setval(contador, NovoC).
+
+testarRecursao :-
+    % Ajusta o contador para 10
+    nb_setval(contador, 10),
+
+    % Executa algumas somas
+    recursao(50), !,
+
+    % Imprime os resultados
+    nb_getval(contador, ContadorValor),
+    write('Recurcoes: '), 
+    writeln(ContadorValor).
+
 
 
