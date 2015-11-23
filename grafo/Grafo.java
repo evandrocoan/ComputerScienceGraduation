@@ -43,7 +43,7 @@ public class Grafo
    /**
     * Serve para armazenar os vértices antecessores dos vértices do grafo e suas arestas.
     */
-   private final HashMap< Object, HashSet< Object > > vértices_Antecessores;
+   private final HashMap< Object, HashSet< Object > > vértices_antecessores;
    
    /**
     * Serve para armazenar os pesos das arestas do grafo.
@@ -68,7 +68,7 @@ public class Grafo
    {
       Grafo.LOG.setLevel( Level.OFF );
       this.vértices = new HashMap< >();
-      this.vértices_Antecessores = new HashMap< >();
+      this.vértices_antecessores = new HashMap< >();
       this.pesosDaAresta = new HashMap< >();
       this.pesosDoVértice = new HashMap< >();
       this.éOrientado = false;
@@ -154,8 +154,12 @@ public class Grafo
       {
          throw new ExeçãoVérticeJáExistente( vértice, this );
       }
+      if( this.vértices_antecessores.containsKey( vértice ) )
+      {
+         throw new ExeçãoVérticeJáExistente( vértice, this );
+      }
       this.vértices.put( vértice, new HashSet< >() );
-      this.vértices_Antecessores.put( vértice, new HashSet< >() );
+      this.vértices_antecessores.put( vértice, new HashSet< >() );
    }
    
    /**
@@ -291,38 +295,6 @@ public class Grafo
    }
    
    /**
-    * Retorna os vértices antecessores de um dado vértice, caso este grafo seja orientado.
-    *
-    * @param vértice um vértice pertencente a este Grafo.
-    * @return os vértices como um conjunto da interface Set<>().
-    *         
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
-    */
-   public Set< Object > adjacentes_Antecessores( final Object vértice )
-      throws ExeçãoVérticeNãoExistente
-   {
-      if( !this.vértices.containsKey( vértice ) )
-      {
-         throw new ExeçãoVérticeNãoExistente( vértice, this );
-      }
-      return this.vértices_Antecessores.get( vértice );
-   }
-   
-   /**
-    * Retorna os vértices sucessores de um dado vértice, caso este grafo seja orientado.
-    *
-    * @param vértice um vértice pertencente a este Grafo.
-    * @return os vértices como um conjunto da interface Set<>().
-    *         
-    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
-    */
-   public Set< Object > adjacentes_Sucessores( final Object vértice )
-      throws ExeçãoVérticeNãoExistente
-   {
-      return this.adjacentes( vértice );
-   }
-   
-   /**
     * Retorna os vértices adjacentes de um dado vértice.
     *
     * @param vértice um vértice pertencente a este Grafo.
@@ -390,8 +362,8 @@ public class Grafo
          {
             exeption.printStackTrace();
          }
-         final Integer atrasoMáximo = new Integer(
-            tempoMaisCedo_inteiro.intValue() - tempoMaisTarde_inteiro.intValue() );
+         final Integer atrasoMáximo = new Integer( tempoMaisCedo_inteiro.intValue()
+            - tempoMaisTarde_inteiro.intValue() );
             
          try
          {
@@ -411,19 +383,22 @@ public class Grafo
     * 
     * @param vérticeFonte o vértice fonte deste grafo.
     *           
-    * @return um grafo valorado orientado contento os tempos mais cedo de cada vértice.
-    *         
-    * @throws ExeçãoVérticeNãoExistente caso o vérticeInicial não exista.
+    * @throws Exception "Este grafo não representa uma rede de fluxo."
     */
-   public Grafo calcularOsTemposMaisCedo( final Object vérticeFonte )
-      throws ExeçãoVérticeNãoExistente
+   public void calcularOsTemposMaisCedo( final Object vérticeFonte ) throws Exception
    {
-      /* if( this.éConexo() && !this.háCiclos() && !( this.adjacentes_Antecessores( vérticeInicial
-       * ).isEmpty() ) ) { */
-      this.ajustarPesosDetodosOsVértices( new Integer( 0 ) );
-      this.calculoDoTempoMaisCedo( vérticeFonte, 0 );
-      // }
-      return this;
+      System.out.println( this.háCiclos() );
+      
+      if( ( /*this.éConexo() &&*/ !this.háCiclos() )
+         && ( this.vértices_antecessores( vérticeFonte ).isEmpty() ) )
+      {
+         this.ajustarPesosDetodosOsVértices( new Integer( 0 ) );
+         this.calculoDoTempoMaisCedo( vérticeFonte, 0 );
+      }
+      else
+      {
+         throw new Exception( "Este grafo não representa uma rede de fluxo." );
+      }
    }
    
    /**
@@ -432,23 +407,25 @@ public class Grafo
     * @param vérticeSumidouro o vértice sumidouro deste grafo.
     * @param vérticeFonte o vértice fonte deste grafo.
     *           
-    * @return um grafo valorado orientado contento os tempos mais cedo de cada vértice.
-    *         
-    * @throws ExeçãoVérticeNãoExistente caso o vérticeInicial não exista.
+    * @throws Exception "Este grafo não representa uma rede de fluxo."
     */
-   public Grafo calcularOsTemposMaisTarde( final Object vérticeFonte,
-      final Object vérticeSumidouro ) throws ExeçãoVérticeNãoExistente
+   public void calcularOsTemposMaisTarde( final Object vérticeFonte, final Object vérticeSumidouro )
+      throws Exception
    {
-      /* if( this.éConexo() && !this.háCiclos() && !( this.adjacentes_Antecessores( vérticeInicial
-       * ).isEmpty() ) ) { */
-      this.calcularOsTemposMaisCedo( vérticeFonte );
-      
-      final Integer maiorPeso = (Integer) this.pesoDoMaiorVértice();
-      
-      this.ajustarPesosDetodosOsVértices( maiorPeso );
-      this.calculoDoTempoMaisTarde( vérticeSumidouro, maiorPeso.intValue() );
-      // }
-      return this;
+      if( /*this.éConexo() &&*/ !this.háCiclos()
+         && ( this.vértices_sucessores( vérticeSumidouro ).isEmpty() ) )
+      {
+         this.calcularOsTemposMaisCedo( vérticeFonte );
+         
+         final Integer maiorPeso = (Integer) this.pesoDoMaiorVértice();
+         
+         this.ajustarPesosDetodosOsVértices( maiorPeso );
+         this.calculoDoTempoMaisTarde( vérticeSumidouro, maiorPeso.intValue() );
+      }
+      else
+      {
+         throw new Exception( "Este grafo não representa uma rede de fluxo." );
+      }
    }
    
    /**
@@ -465,7 +442,7 @@ public class Grafo
    {
       this.adicionarPesoAoVértice( vérticeAtual, new Integer( pesoInicial ) );
       
-      final Iterator< ? > sucessores = this.adjacentes_Sucessores( vérticeAtual ).iterator();
+      final Iterator< ? > sucessores = this.vértices_sucessores( vérticeAtual ).iterator();
       
       while( sucessores.hasNext() )
       {
@@ -473,9 +450,8 @@ public class Grafo
          final Object pesoDoVérticeSucessor_Integer = this.pesoDoVértice( sucessor );
          
          final int pesoDoVérticeSucessor = ( (Integer) pesoDoVérticeSucessor_Integer ).intValue();
-         final int pesoDaArestaDeOrigem = ( (Integer) this.pesoDaAresta( vérticeAtual, sucessor ) )
-            .intValue();
-            
+         final int pesoDaArestaDeOrigem = ( (Integer) this.pesoDaAresta( vérticeAtual, sucessor ) ).intValue();
+         
          final int pesoNovoDoVérticeSucessor = pesoDaArestaDeOrigem + pesoInicial;
          
          if( pesoDoVérticeSucessor < pesoNovoDoVérticeSucessor )
@@ -505,18 +481,16 @@ public class Grafo
    {
       this.adicionarPesoAoVértice( vérticeAtual, new Integer( pesoInicial ) );
       
-      final Iterator< ? > antecessores = this.adjacentes_Antecessores( vérticeAtual ).iterator();
+      final Iterator< ? > antecessores = this.vértices_antecessores( vérticeAtual ).iterator();
       
       while( antecessores.hasNext() )
       {
          final Object antecessor = antecessores.next();
          final Object pesoDoVérticeAntecessor_Integer = this.pesoDoVértice( antecessor );
          
-         final int pesoDoVérticeAntecessor = ( (Integer) pesoDoVérticeAntecessor_Integer )
-            .intValue();
-         final int pesoDaArestaOrigem = ( (Integer) this.pesoDaAresta( antecessor, vérticeAtual ) )
-            .intValue();
-            
+         final int pesoDoVérticeAntecessor = ( (Integer) pesoDoVérticeAntecessor_Integer ).intValue();
+         final int pesoDaArestaOrigem = ( (Integer) this.pesoDaAresta( antecessor, vérticeAtual ) ).intValue();
+         
          final int pesoNovoDoVérticeAntecessor = pesoInicial - pesoDaArestaOrigem;
          
          if( pesoDoVérticeAntecessor > pesoNovoDoVérticeAntecessor )
@@ -576,7 +550,7 @@ public class Grafo
       
       if( this.éOrientado )
       {
-         final HashSet< Object > vértices_Antecessores = this.vértices_Antecessores.get( vértice2 );
+         final HashSet< Object > vértices_Antecessores = this.vértices_antecessores.get( vértice2 );
          vértices_Antecessores.add( vértice1 );
       }
       else
@@ -674,12 +648,45 @@ public class Grafo
          throw new ExeçãoVérticeNãoExistente( vértice2, this );
       }
       // pega a HashMap de arestas do vértice
-      final HashSet< Object > arestasDoVértice1 = this.vértices.get( vértice1 );
-      final HashSet< Object > arestasDoVértice2 = this.vértices.get( vértice2 );
+      final HashSet< Object > arestas_sucessoras_1 = this.vértices.get( vértice1 );
+      final HashSet< Object > arestas_sucessoras_2 = this.vértices.get( vértice2 );
       
-      // desconecta o vértice1 do vértice2
-      arestasDoVértice1.remove( vértice2 );
-      arestasDoVértice2.remove( vértice1 );
+      // desconecta o vértice1 com o vértice2
+      if( this.éOrientado )
+      {
+         final HashSet< Object > arestas_antecessores = this.vértices_antecessores.get( vértice2 );
+         
+         arestas_sucessoras_1.remove( vértice2 );
+         arestas_antecessores.remove( vértice1 );
+      }
+      else
+      {
+         arestas_sucessoras_1.remove( vértice2 );
+         arestas_sucessoras_2.remove( vértice1 );
+      }
+      
+      // calcula o hash code da aresta
+      final String aresta = new Integer( vértice1.hashCode() ).toString() + " conecta "
+         + new Integer( vértice2.hashCode() ).toString();
+         
+      final String aresta2 = new Integer( vértice2.hashCode() ).toString() + " conecta "
+         + new Integer( vértice1.hashCode() ).toString();
+         
+      this.pesosDaAresta.remove( aresta );
+      this.pesosDaAresta.remove( aresta2 );
+   }
+   
+   private void desconecta_iterator( final Object vértice1, final Object vértice2 )
+   {
+      // calcula o hash code da aresta
+      final String aresta = new Integer( vértice1.hashCode() ).toString() + " conecta "
+         + new Integer( vértice2.hashCode() ).toString();
+         
+      final String aresta2 = new Integer( vértice2.hashCode() ).toString() + " conecta "
+         + new Integer( vértice1.hashCode() ).toString();
+         
+      this.pesosDaAresta.remove( aresta );
+      this.pesosDaAresta.remove( aresta2 );
    }
    
    /**
@@ -781,10 +788,10 @@ public class Grafo
       {
          throw new ExeçãoVérticeNãoExistente( vértice2, this );
       }
-      // os adjacentes dele
-      final HashSet< Object > adjacentes = this.vértices.get( vértice1 );
       
-      return adjacentes.contains( vértice2 );
+      final HashSet< Object > vértices_suce_de_1 = this.vértices.get( vértice1 );
+      
+      return vértices_suce_de_1.contains( vértice2 );
    }
    
    /**
@@ -878,12 +885,23 @@ public class Grafo
       {
          final Object vérticeAtual = iterador.next();
          
-         if( !vérticesJáVisitados.contains( vérticeAtual ) )
+         if( this.éOrientado )
          {
-            if( this.háCiclosBusca( vérticeAtual, vérticeAtual, vérticesJáVisitados,
-               vérticesDoGrafo ) )
+            vérticesJáVisitados.clear();
+            
+            if( this.háCiclosBuscaOrientado( vérticeAtual, vérticeAtual, vérticesJáVisitados ) )
             {
                return true;
+            }
+         }
+         else
+         {
+            if( !vérticesJáVisitados.contains( vérticeAtual ) )
+            {
+               if( this.háCiclosBusca( vérticeAtual, vérticeAtual, vérticesJáVisitados ) )
+               {
+                  return true;
+               }
             }
          }
       }
@@ -891,7 +909,7 @@ public class Grafo
    }
    
    private boolean háCiclosBusca( final Object vérticeAtual, final Object vérticeAnterior,
-      final Set< Object > vérticesJáVisitados, final Set< Object > vérticesDoGrafo )
+      final Set< Object > vérticesJáVisitados )
    {
       // Marca o vértice atual como já visitado
       vérticesJáVisitados.add( vérticeAtual );
@@ -901,35 +919,80 @@ public class Grafo
       try
       {
          adjacentes = this.adjacentes( vérticeAtual );
-         
       }
       catch( final ExeçãoVérticeNãoExistente e )
       {
          e.printStackTrace();
       }
+      
       final Iterator< Object > iterador = adjacentes.iterator();
       
       while( iterador.hasNext() )
       {
          final Object próximoVértice = iterador.next();
          
-         // Se um adjacente não é visitado, em seguida, recorre para estes
+         // Se um adjacente é não-visitado, em seguida, recorre para estes
          // adjacentes
          if( !vérticesJáVisitados.contains( próximoVértice ) )
          {
-            if( this.háCiclosBusca( próximoVértice, vérticeAtual, vérticesJáVisitados,
-               vérticesDoGrafo ) )
+            if( this.háCiclosBusca( próximoVértice, vérticeAtual, vérticesJáVisitados ) )
             {
                return true;
             }
          }
          else
+         {
             // Se um adjacente é visitado e não é o vértice anterior ao vértice
             // atual, então está ocorrendo um ciclo.
             if( !próximoVértice.equals( vérticeAnterior ) )
             {
                return true;
             }
+         }
+      }
+      return false;
+   }
+   
+   private boolean háCiclosBuscaOrientado( final Object vérticeAtual, final Object vérticeAnteiror,
+      final Set< Object > vérticesJáVisitados )
+   {
+      if( vérticesJáVisitados.contains( vérticeAtual ) )
+      {
+         return true;
+      }
+      
+      // Marca o vértice atual como já visitado
+      vérticesJáVisitados.add( vérticeAtual );
+      
+      // Recorre para todos os vértices adjacentes a esse vértice.
+      Set< Object > adjacentes = new HashSet< >();
+      Iterator< Object > adjacentes_iterador = null;
+      
+      try
+      {
+         adjacentes = this.vértices_sucessores( vérticeAtual );
+      }
+      catch( final ExeçãoVérticeNãoExistente e )
+      {
+         e.printStackTrace();
+         System.out.println( e.obterGrafo() );
+         System.out.println( e.obterVértice() );
+      }
+      
+      adjacentes_iterador = adjacentes.iterator();
+      
+      while( adjacentes_iterador.hasNext() )
+      {
+         final Object próximoVértice = adjacentes_iterador.next();
+         
+         if( this.háCiclosBuscaOrientado( próximoVértice, vérticeAtual, vérticesJáVisitados ) )
+         {
+            return true;
+         }
+         else
+         {
+            vérticesJáVisitados.remove( próximoVértice );
+         }
       }
       return false;
    }
@@ -1042,24 +1105,55 @@ public class Grafo
    /**
     * Remove um vértice deste Grafo, juntamente com todas suas as conexões.
     *
-    * @param vértice um vértice deste Grafo.
+    * @param vértice_para_removerção um vértice deste Grafo.
     *           
     * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
     */
-   public void removerVértice( final Object vértice ) throws ExeçãoVérticeNãoExistente
+   public void removerVértice( final Object vértice_para_removerção )
+      throws ExeçãoVérticeNãoExistente
    {
-      if( !this.vértices.containsKey( vértice ) )
+      if( !this.vértices.containsKey( vértice_para_removerção )
+         && !this.vértices_antecessores.containsKey( vértice_para_removerção ) )
       {
-         throw new ExeçãoVérticeNãoExistente( vértice, this );
+         throw new ExeçãoVérticeNãoExistente( vértice_para_removerção, this );
       }
-      final Collection< Object > adjacentes = this.adjacentes( vértice );
-      final Iterator< Object > iterador = adjacentes.iterator();
       
-      while( iterador.hasNext() )
+      final Collection< Object > vértices_sucessores = this.vértices_sucessores( vértice_para_removerção );
+      final Collection< Object > vértices_antecessores = this.vértices_antecessores( vértice_para_removerção );
+      
+      final Iterator< Object > vértices_sucessores_iterador = vértices_sucessores.iterator();
+      final Iterator< Object > vértices_antecessores_iterador = vértices_antecessores.iterator();
+      
+      while( vértices_sucessores_iterador.hasNext() )
       {
-         this.desconecta( vértice, iterador.next() );
+         final Object vértice_sucessor = vértices_sucessores_iterador.next();
+         
+         final HashSet< Object > arestas_do_vertice_sucessor = this.vértices.get( vértice_sucessor );
+         final HashSet< Object > arestas_do_vértice_antecessor = this.vértices_antecessores.get( vértice_sucessor );
+         
+         arestas_do_vertice_sucessor.remove( vértice_para_removerção );
+         arestas_do_vértice_antecessor.remove( vértice_para_removerção );
+         
+         this.desconecta_iterator( vértice_para_removerção, vértice_sucessor );
       }
-      this.vértices.remove( vértice );
+      
+      while( vértices_antecessores_iterador.hasNext() )
+      {
+         final Object vértice_antecessor = vértices_antecessores_iterador.next();
+         
+         final HashSet< Object > arestas_do_vértice_sucessor = this.vértices_antecessores.get( vértice_antecessor );
+         final HashSet< Object > arestas_do_vértice_antecessor = this.vértices.get( vértice_antecessor );
+         
+         arestas_do_vértice_sucessor.remove( vértice_para_removerção );
+         arestas_do_vértice_antecessor.remove( vértice_para_removerção );
+         
+         this.desconecta_iterator( vértice_antecessor, vértice_para_removerção );
+      }
+      
+      this.vértices.remove( vértice_para_removerção );
+      this.vértices_antecessores.remove( vértice_para_removerção );
+      this.pesosDoVértice.remove( vértice_para_removerção );
+      
    }
    
    /**
@@ -1198,5 +1292,40 @@ public class Grafo
    public Set< Object > vértices()
    {
       return this.vértices.keySet();
+   }
+   
+   /**
+    * Retorna os vértices antecessores de um dado vértice, caso este grafo seja orientado.
+    *
+    * @param vértice um vértice pertencente a este Grafo.
+    * @return os vértices como um conjunto da interface Set<>().
+    *         
+    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    */
+   public Set< Object > vértices_antecessores( final Object vértice )
+      throws ExeçãoVérticeNãoExistente
+   {
+      if( !this.vértices.containsKey( vértice ) )
+      {
+         throw new ExeçãoVérticeNãoExistente( vértice, this );
+      }
+      if( this.éOrientado )
+      {
+         return this.vértices_antecessores.get( vértice );
+      }
+      return this.vértices.get( vértice );
+   }
+   
+   /**
+    * Retorna os vértices sucessores de um dado vértice, caso este grafo seja orientado.
+    *
+    * @param vértice um vértice pertencente a este Grafo.
+    * @return os vértices como um conjunto da interface Set<>().
+    *         
+    * @throws ExeçãoVérticeNãoExistente caso o vértice não seja encontrado.
+    */
+   public Set< Object > vértices_sucessores( final Object vértice ) throws ExeçãoVérticeNãoExistente
+   {
+      return this.adjacentes( vértice );
    }
 }

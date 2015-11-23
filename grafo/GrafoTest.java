@@ -1,5 +1,6 @@
 package grafo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -140,7 +141,317 @@ public class GrafoTest
    }
    
    @Test
-   public void testConectarArestasComPeso()
+   public void testCalculoDoTempoDeAtrazoMaximo() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final Grafo temposMaisCedo = new Grafo( true );
+      final Grafo temposMaisTarde = new Grafo( true );
+      
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+         temposMaisCedo.adicionaVértice( temp );
+         temposMaisTarde.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisCedo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisTarde.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisCedo.calcularOsTemposMaisCedo( vértices.get( 1 ) );
+      temposMaisTarde.calcularOsTemposMaisTarde( vértices.get( 1 ), vértices.get( 5 ) );
+      
+      grafo.calcularOsTemposDeAtrazoMáximo( temposMaisCedo, temposMaisTarde );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 6 ) ).equals( new Integer( 1 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoDeAtrazoMaximo2() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      final Grafo temposMaisCedo = new Grafo( true );
+      final Grafo temposMaisTarde = new Grafo( true );
+      
+      temposMaisCedo.adicionaVértice( vértices.get( 1 ) );
+      temposMaisCedo.adicionaVértice( vértices.get( 2 ) );
+      temposMaisCedo.adicionaVértice( vértices.get( 3 ) );
+      temposMaisCedo.adicionaVértice( vértices.get( 4 ) );
+      temposMaisCedo.adicionaVértice( vértices.get( 5 ) );
+      temposMaisCedo.adicionaVértice( vértices.get( 6 ) );
+      
+      temposMaisTarde.adicionaVértice( vértices.get( 1 ) );
+      temposMaisTarde.adicionaVértice( vértices.get( 2 ) );
+      temposMaisTarde.adicionaVértice( vértices.get( 3 ) );
+      temposMaisTarde.adicionaVértice( vértices.get( 4 ) );
+      temposMaisTarde.adicionaVértice( vértices.get( 5 ) );
+      temposMaisTarde.adicionaVértice( vértices.get( 6 ) );
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisCedo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 2 ) );
+      temposMaisCedo.conecta( vértices.get( 2 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisCedo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisTarde.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 2 ) );
+      temposMaisTarde.conecta( vértices.get( 2 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      temposMaisTarde.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      temposMaisCedo.calcularOsTemposMaisCedo( vértices.get( 1 ) );
+      temposMaisTarde.calcularOsTemposMaisTarde( vértices.get( 1 ), vértices.get( 5 ) );
+      
+      grafo.calcularOsTemposDeAtrazoMáximo( temposMaisCedo, temposMaisTarde );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 6 ) ).equals( new Integer( 0 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisCedo() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisCedo( vértices.get( 1 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisCedo2() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisCedo( vértices.get( 1 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 4 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisCedo3() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisCedo( vértices.get( 1 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 4 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 6 ) ).equals( new Integer( 2 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisTarde() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisTarde( vértices.get( 1 ), vértices.get( 2 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisTarde2() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisTarde( vértices.get( 1 ), vértices.get( 5 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 4 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 6 ) ).equals( new Integer( 3 ) ) );
+   }
+   
+   @Test
+   public void testCalculoDoTempoMaisTarde3() throws Exception
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 7; i++ )
+      {
+         final String temp = String.format( "Vértice%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 3 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 5 ), new Integer( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 6 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 2 ), new Integer( 1 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 5 ), new Integer( 1 ) );
+      
+      grafo.calcularOsTemposMaisTarde( vértices.get( 1 ), vértices.get( 5 ) );
+      
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 1 ) ).equals( new Integer( 0 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 2 ) ).equals( new Integer( 3 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 3 ) ).equals( new Integer( 1 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 4 ) ).equals( new Integer( 2 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 5 ) ).equals( new Integer( 5 ) ) );
+      Assert.assertTrue( grafo.pesoDoVértice( vértices.get( 6 ) ).equals( new Integer( 4 ) ) );
+   }
+   
+   @Test
+   public void testConectarArestasComPesoNaoOrientado()
       throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
    {
       final String vértice1 = "Vertice1";
@@ -154,15 +465,63 @@ public class GrafoTest
       GrafoTest.grafo.adicionaVértice( vértice3 );
       
       Assert.assertTrue( GrafoTest.grafo.pesoDaAresta( vértice1, vértice2 ) == null );
+      Assert.assertTrue( GrafoTest.grafo.pesoDaAresta( vértice2, vértice3 ) == null );
+      Assert.assertTrue( GrafoTest.grafo.pesoDaAresta( vértice1, vértice3 ) == null );
+      
       Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice1, vértice2 ) );
+      Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice2, vértice3 ) );
+      Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice3, vértice1 ) );
       
       GrafoTest.grafo.conecta( vértice1, vértice2, peso1 );
+      GrafoTest.grafo.conecta( vértice3, vértice1, peso2 );
       
       Assert.assertTrue( GrafoTest.grafo.estãoConectados( vértice1, vértice2 ) );
-      Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice1, vértice3 ) );
+      Assert.assertTrue( GrafoTest.grafo.estãoConectados( vértice2, vértice1 ) );
+      Assert.assertTrue( GrafoTest.grafo.estãoConectados( vértice1, vértice3 ) );
+      
+      Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice2, vértice3 ) );
+      Assert.assertFalse( GrafoTest.grafo.estãoConectados( vértice3, vértice2 ) );
       
       Assert.assertTrue( GrafoTest.grafo.pesoDaAresta( vértice1, vértice2 ).equals( peso1 ) );
       Assert.assertFalse( GrafoTest.grafo.pesoDaAresta( vértice1, vértice2 ).equals( peso2 ) );
+   }
+   
+   @Test
+   public void testConectarArestasComPesoOrientado()
+      throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      
+      final String vértice1 = "Vertice1";
+      final String vértice2 = "Vertice2";
+      final String vértice3 = "Vertice3";
+      final String peso1 = "Peso1";
+      final String peso2 = "Peso2";
+      
+      grafo.adicionaVértice( vértice1 );
+      grafo.adicionaVértice( vértice2 );
+      grafo.adicionaVértice( vértice3 );
+      
+      Assert.assertTrue( grafo.pesoDaAresta( vértice1, vértice2 ) == null );
+      Assert.assertTrue( grafo.pesoDaAresta( vértice2, vértice3 ) == null );
+      Assert.assertTrue( grafo.pesoDaAresta( vértice1, vértice3 ) == null );
+      
+      Assert.assertFalse( grafo.estãoConectados( vértice1, vértice2 ) );
+      Assert.assertFalse( grafo.estãoConectados( vértice2, vértice3 ) );
+      Assert.assertFalse( grafo.estãoConectados( vértice3, vértice1 ) );
+      
+      grafo.conecta( vértice1, vértice2, peso1 );
+      grafo.conecta( vértice3, vértice1, peso2 );
+      
+      Assert.assertTrue( grafo.estãoConectados( vértice1, vértice2 ) );
+      
+      Assert.assertFalse( grafo.estãoConectados( vértice2, vértice1 ) );
+      Assert.assertFalse( grafo.estãoConectados( vértice2, vértice3 ) );
+      Assert.assertFalse( grafo.estãoConectados( vértice3, vértice2 ) );
+      Assert.assertFalse( grafo.estãoConectados( vértice1, vértice3 ) );
+      
+      Assert.assertTrue( grafo.pesoDaAresta( vértice1, vértice2 ).equals( peso1 ) );
+      Assert.assertFalse( grafo.pesoDaAresta( vértice1, vértice2 ).equals( peso2 ) );
    }
    
    @Test
@@ -187,6 +546,62 @@ public class GrafoTest
       GrafoTest.grafo.desconecta( "Tcheca", "França" );
       Assert.assertEquals( 2, GrafoTest.grafo.grau( "França" ) );
       Assert.assertEquals( 0, GrafoTest.grafo.grau( "Tcheca" ) );
+   }
+   
+   @Test
+   public void testDesconectarVérticesObjectObject2()
+      throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 25; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 3 ), vértices.get( 4 ) );
+      grafo.conecta( vértices.get( 4 ), vértices.get( 5 ) );
+      grafo.conecta( vértices.get( 5 ), vértices.get( 6 ) );
+      grafo.conecta( vértices.get( 6 ), vértices.get( 7 ) );
+      grafo.conecta( vértices.get( 7 ), vértices.get( 3 ) );
+      grafo.conecta( vértices.get( 7 ), vértices.get( 8 ) );
+      grafo.conecta( vértices.get( 8 ), vértices.get( 9 ) );
+      grafo.conecta( vértices.get( 9 ), vértices.get( 10 ) );
+      grafo.conecta( vértices.get( 10 ), vértices.get( 11 ) );
+      grafo.conecta( vértices.get( 11 ), vértices.get( 12 ) );
+      grafo.conecta( vértices.get( 12 ), vértices.get( 13 ) );
+      grafo.conecta( vértices.get( 13 ), vértices.get( 7 ) );
+      
+      grafo.removerVértice( vértices.get( 7 ) );
+      
+      Assert.assertFalse( grafo.contémVertice( vértices.get( 7 ) ) );
+   }
+   
+   @Test
+   public void testDesconectarVérticesObjectObject3()
+      throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 2; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      
+      Assert.assertEquals( vértices.get( 1 ), grafo.vértices_antecessores( vértices.get( 2 ) ).iterator().next() );
+      
+      grafo.desconecta( vértices.get( 1 ), vértices.get( 2 ) );
+      
+      Assert.assertNotEquals( vértices.get( 1 ), grafo.vértices_antecessores( vértices.get( 2 ) ) );
    }
    
    @Test
@@ -751,312 +1166,9 @@ public class GrafoTest
    }
    
    @Test
-   public void testGrafoTempoMaisCedo() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisCedo( "Vértice1" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTempoMaisCedo2() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisCedo( "Vértice1" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 4 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTempoMaisCedo3() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      grafo.adicionaVértice( "Vértice6" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisCedo( "Vértice1" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 4 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice6" ).equals( new Integer( 2 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTempoMaisTarde() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisTarde( "Vértice1", "Vértice2" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTempoMaisTarde2() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      grafo.adicionaVértice( "Vértice6" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisTarde( "Vértice1", "Vértice5" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 4 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice6" ).equals( new Integer( 3 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTempoMaisTarde3() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      grafo.adicionaVértice( "Vértice6" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 2 ) );
-      grafo.conecta( "Vértice2", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      grafo.calcularOsTemposMaisTarde( "Vértice1", "Vértice5" );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 3 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 1 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 2 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 5 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice6" ).equals( new Integer( 4 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTemposDeAtrazoMaximo()
-      throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      final Grafo temposMaisCedo = new Grafo( true );
-      final Grafo temposMaisTarde = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      grafo.adicionaVértice( "Vértice6" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisCedo.adicionaVértice( "Vértice1" );
-      temposMaisCedo.adicionaVértice( "Vértice2" );
-      temposMaisCedo.adicionaVértice( "Vértice3" );
-      temposMaisCedo.adicionaVértice( "Vértice4" );
-      temposMaisCedo.adicionaVértice( "Vértice5" );
-      temposMaisCedo.adicionaVértice( "Vértice6" );
-      
-      temposMaisCedo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisTarde.adicionaVértice( "Vértice1" );
-      temposMaisTarde.adicionaVértice( "Vértice2" );
-      temposMaisTarde.adicionaVértice( "Vértice3" );
-      temposMaisTarde.adicionaVértice( "Vértice4" );
-      temposMaisTarde.adicionaVértice( "Vértice5" );
-      temposMaisTarde.adicionaVértice( "Vértice6" );
-      
-      temposMaisTarde.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice2", "Vértice5", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisCedo.calcularOsTemposMaisCedo( "Vértice1" );
-      temposMaisTarde.calcularOsTemposMaisTarde( "Vértice1", "Vértice5" );
-      
-      grafo.calcularOsTemposDeAtrazoMáximo( temposMaisCedo, temposMaisTarde );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice6" ).equals( new Integer( 1 ) ) );
-   }
-   
-   @Test
-   public void testGrafoTemposDeAtrazoMaximo2()
-      throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
-   {
-      final Grafo grafo = new Grafo( true );
-      
-      final Grafo temposMaisCedo = new Grafo( true );
-      final Grafo temposMaisTarde = new Grafo( true );
-      
-      grafo.adicionaVértice( "Vértice1" );
-      grafo.adicionaVértice( "Vértice2" );
-      grafo.adicionaVértice( "Vértice3" );
-      grafo.adicionaVértice( "Vértice4" );
-      grafo.adicionaVértice( "Vértice5" );
-      grafo.adicionaVértice( "Vértice6" );
-      
-      grafo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      grafo.conecta( "Vértice2", "Vértice5", new Integer( 2 ) );
-      grafo.conecta( "Vértice2", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      grafo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      grafo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      grafo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisCedo.adicionaVértice( "Vértice1" );
-      temposMaisCedo.adicionaVértice( "Vértice2" );
-      temposMaisCedo.adicionaVértice( "Vértice3" );
-      temposMaisCedo.adicionaVértice( "Vértice4" );
-      temposMaisCedo.adicionaVértice( "Vértice5" );
-      temposMaisCedo.adicionaVértice( "Vértice6" );
-      
-      temposMaisCedo.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice2", "Vértice5", new Integer( 2 ) );
-      temposMaisCedo.conecta( "Vértice2", "Vértice6", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      temposMaisCedo.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisTarde.adicionaVértice( "Vértice1" );
-      temposMaisTarde.adicionaVértice( "Vértice2" );
-      temposMaisTarde.adicionaVértice( "Vértice3" );
-      temposMaisTarde.adicionaVértice( "Vértice4" );
-      temposMaisTarde.adicionaVértice( "Vértice5" );
-      temposMaisTarde.adicionaVértice( "Vértice6" );
-      
-      temposMaisTarde.conecta( "Vértice1", "Vértice2", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice1", "Vértice3", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice2", "Vértice5", new Integer( 2 ) );
-      temposMaisTarde.conecta( "Vértice2", "Vértice6", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice3", "Vértice6", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice3", "Vértice4", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice4", "Vértice2", new Integer( 1 ) );
-      temposMaisTarde.conecta( "Vértice6", "Vértice5", new Integer( 1 ) );
-      
-      temposMaisCedo.calcularOsTemposMaisCedo( "Vértice1" );
-      temposMaisTarde.calcularOsTemposMaisTarde( "Vértice1", "Vértice5" );
-      
-      grafo.calcularOsTemposDeAtrazoMáximo( temposMaisCedo, temposMaisTarde );
-      
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice1" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice2" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice3" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice4" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice5" ).equals( new Integer( 0 ) ) );
-      Assert.assertTrue( grafo.pesoDoVértice( "Vértice6" ).equals( new Integer( 0 ) ) );
-   }
-   
-   @Test
    public void testHáCiclos() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
    {
-      for( int i = 0; i < 25; i++ )
+      for( int i = 0; i <= 25; i++ )
       {
          GrafoTest.grafo.adicionaVértice( Integer.valueOf( i ) );
       }
@@ -1073,10 +1185,176 @@ public class GrafoTest
       GrafoTest.grafo.conecta( Integer.valueOf( 17 ), Integer.valueOf( 9 ) );
       GrafoTest.grafo.conecta( Integer.valueOf( 16 ), Integer.valueOf( 17 ) );
       GrafoTest.grafo.conecta( Integer.valueOf( 17 ), Integer.valueOf( 19 ) );
+      
       Assert.assertTrue( GrafoTest.grafo.háCiclos() );
       
       GrafoTest.grafo.desconecta( Integer.valueOf( 5 ), Integer.valueOf( 11 ) );
       Assert.assertFalse( GrafoTest.grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclos2() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo();
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 4; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 0 ), vértices.get( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 3 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 0 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+      
+      grafo.removerVértice( vértices.get( 0 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclos3() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo();
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 25; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 3 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 5 ), vértices.get( 11 ) );
+      grafo.conecta( vértices.get( 5 ), vértices.get( 20 ) );
+      grafo.conecta( vértices.get( 13 ), vértices.get( 8 ) );
+      grafo.conecta( vértices.get( 14 ), vértices.get( 4 ) );
+      grafo.conecta( vértices.get( 15 ), vértices.get( 14 ) );
+      grafo.conecta( vértices.get( 16 ), vértices.get( 17 ) );
+      grafo.conecta( vértices.get( 17 ), vértices.get( 9 ) );
+      grafo.conecta( vértices.get( 17 ), vértices.get( 19 ) );
+      grafo.conecta( vértices.get( 19 ), vértices.get( 24 ) );
+      grafo.conecta( vértices.get( 20 ), vértices.get( 11 ) );
+      grafo.conecta( vértices.get( 21 ), vértices.get( 24 ) );
+      grafo.conecta( vértices.get( 22 ), vértices.get( 18 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+      
+      grafo.desconecta( vértices.get( 5 ), vértices.get( 11 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclos4() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo();
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 2; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 0 ), vértices.get( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 0 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 0 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclosOrientado() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 4; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 0 ), vértices.get( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 3 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 0 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+      
+      grafo.removerVértice( vértices.get( 0 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclosOrientado2() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 2; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 0 ), vértices.get( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 0 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+      
+      grafo.desconecta( vértices.get( 0 ), vértices.get( 1 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
+   }
+   
+   @Test
+   public void testHáCiclosOrientado3() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 25; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 3 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 5 ), vértices.get( 20 ) );
+      grafo.conecta( vértices.get( 11 ), vértices.get( 5 ) );
+      grafo.conecta( vértices.get( 13 ), vértices.get( 8 ) );
+      grafo.conecta( vértices.get( 14 ), vértices.get( 4 ) );
+      grafo.conecta( vértices.get( 15 ), vértices.get( 14 ) );
+      grafo.conecta( vértices.get( 16 ), vértices.get( 17 ) );
+      grafo.conecta( vértices.get( 17 ), vértices.get( 9 ) );
+      grafo.conecta( vértices.get( 17 ), vértices.get( 19 ) );
+      grafo.conecta( vértices.get( 19 ), vértices.get( 24 ) );
+      grafo.conecta( vértices.get( 20 ), vértices.get( 11 ) );
+      grafo.conecta( vértices.get( 21 ), vértices.get( 24 ) );
+      grafo.conecta( vértices.get( 22 ), vértices.get( 18 ) );
+      
+      Assert.assertTrue( grafo.háCiclos() );
+      
+      grafo.desconecta( vértices.get( 11 ), vértices.get( 5 ) );
+      
+      Assert.assertFalse( grafo.háCiclos() );
    }
    
    @Test
@@ -1112,8 +1390,7 @@ public class GrafoTest
       
       for( int i = 0; i < 5; i++ )
       {
-         Assert
-            .assertFalse( GrafoTest.grafo.estãoConectados( vérticesObjeto[i], vérticesObjeto[i] ) );
+         Assert.assertFalse( GrafoTest.grafo.estãoConectados( vérticesObjeto[i], vérticesObjeto[i] ) );
       }
       Assert.assertEquals( 5, vértices.size() );
    }
@@ -1130,6 +1407,76 @@ public class GrafoTest
       
       GrafoTest.grafo.removerVértice( nomes[1] );
       Assert.assertEquals( 4, GrafoTest.grafo.grau( nomes[0] ) );
+   }
+   
+   @Test
+   public void testRemoverVértice2() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 2; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      
+      Assert.assertEquals( vértices.get( 1 ), grafo.vértices_antecessores( vértices.get( 2 ) ).iterator().next() );
+      
+      grafo.removerVértice( vértices.get( 1 ) );
+      
+      Assert.assertNotEquals( vértices.get( 1 ), grafo.vértices_antecessores( vértices.get( 2 ) ) );
+   }
+   
+   @Test
+   public void testRemoverVértice3() throws ExeçãoVérticeNãoExistente, ExeçãoVérticeJáExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i <= 2; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      
+      Assert.assertEquals( vértices.get( 1 ), grafo.vértices_antecessores( vértices.get( 2 ) ).iterator().next() );
+      
+      grafo.removerVértice( vértices.get( 2 ) );
+      
+      Assert.assertNotEquals( vértices.get( 2 ), grafo.vértices_sucessores( vértices.get( 1 ) ) );
+   }
+   
+   @Test
+   public void testRemoverVértice4() throws ExeçãoVérticeJáExistente, ExeçãoVérticeNãoExistente
+   {
+      final Grafo grafo = new Grafo( true );
+      final ArrayList< String > vértices = new ArrayList< >();
+      
+      for( int i = 0; i < 4; i++ )
+      {
+         final String temp = String.format( "%d", Integer.valueOf( i ) );
+         
+         vértices.add( temp );
+         grafo.adicionaVértice( temp );
+      }
+      grafo.conecta( vértices.get( 0 ), vértices.get( 1 ) );
+      grafo.conecta( vértices.get( 1 ), vértices.get( 2 ) );
+      grafo.conecta( vértices.get( 2 ), vértices.get( 3 ) );
+      grafo.conecta( vértices.get( 3 ), vértices.get( 0 ) );
+      
+      grafo.removerVértice( vértices.get( 0 ) );
+      
+      Assert.assertEquals( 0, grafo.vértices_antecessores( vértices.get( 1 ) ).size() );
+      Assert.assertEquals( 0, grafo.vértices_sucessores( vértices.get( 3 ) ).size() );
    }
    
    @Test
