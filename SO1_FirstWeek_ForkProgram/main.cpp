@@ -10,6 +10,8 @@
 
 #define MAX_CHILD_PROCESS_TO_CREATE 5
 
+static pid_t *childProcessPids = new pid_t[ MAX_CHILD_PROCESS_TO_CREATE ];
+
 using namespace std;
 
 int main ()
@@ -22,6 +24,48 @@ int main ()
     int count              = 0;
     int sum                = 0;
     pid_t parentProcessPid = getpid();
+    
+    // 'NULL'
+    //  indicates to the kernel chooses the address at which to create the mapping.
+    //
+    // 'sizeof childProcessPids * MAX_CHILD_PROCESS_TO_CREATE'
+    //  specifies the length of the mapping.
+    //
+    // 'PROT_READ | PROT_WRITE'
+    //  describes the desired writing and reading memory protection of the mapping to avoid race
+    //  condition problems.
+    //
+    // 'MAP_SHARED | MAP_ANONYMOUS'
+    //  MAP_SHARED, determine that the updates to the mapping are visible to other processes
+    //  mapping the same region. MAP_ANONYMOUS, the mapping is not backed by any file, then its
+    //  contents are initialized to zero. Also, the use of MAP_ANONYMOUS in conjunction with 
+    //  MAP_SHARED is supported on Linux only since kernel v2.4.
+    //
+    // '-1'
+    //  This and next arguments are ignored when using 'MAP_ANONYMOUS', however, some
+    //  implementations require this to be '-1' if MAP_ANONYMOUS is specified, hence portable
+    //  applications should ensure this. This is the file descriptor used to initialize the 
+    //  contents of the file mapping using the length bytes of the mapping and offset specified
+    //  at the next parameter bellow.
+    //
+    // '0'
+    //  This is a must be a multiple of the page size as returned by sysconf(_SC_PAGE_SIZE).
+    //  However here, it is unused due the 'MAP_ANONYMOUS' being specified.
+    //
+    void *sharedMemory = mmap( NULL, sizeof childProcessPids * MAX_CHILD_PROCESS_TO_CREATE,
+            PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0 );
+    
+    // verifies whether the shared memory was created of not
+    if( sharedMemory == MAP_FAILED )
+    {
+        // Print to the standard output stream 
+        cout << "\nERROR! The shared memory could not to be created.\n" << endl;
+        
+        // Exits the program with failure status
+        return EXIT_FAILURE;
+    }
+    
+    //childProcessPids = (pid_t *) sharedMemory;
     
     // Put a empty line to clear console view.
     cout << endl;
@@ -50,6 +94,7 @@ int main ()
             
             // Save the current child pid process to wait for it later
             currentProcessPid                                = getpid();
+            childProcessPids[ current_child_process_number ] = currentProcessPid;
             
             // Print to the standard output stream /* PID of child-process */ 
             cout << "Child process " << currentProcessPid << ": Running..." << endl;
@@ -77,13 +122,17 @@ int main ()
     for( int current_child_process_number = 0;
           current_child_process_number < MAX_CHILD_PROCESS_TO_CREATE; ++current_child_process_number )
     {
+        // Caches the current array position process pid
+        currentProcessPid = childProcessPids[ current_child_process_number ];
+        
         // If this is the parent-process then /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Waiting children to exit.\n" << endl;
+        cout << "Parent process " << parentProcessPid << ": Waiting children ";
+        cout << currentProcessPid << " to exit.\n" << endl;
         
         // Waits the children to exits.
         //
-        // '-1'
-        //  This catches a child we are waiting to exit and catch its return value.
+        // 'currentProcessPid'
+        //  This is child we are waiting to exit and catch its return value.
         //
         // 'returnStatus'
         //  This is the address to the return value by the child using exit( status )
@@ -96,7 +145,7 @@ int main ()
         //  must be checked over an failure exit status checked by
         //  'waitpid( currentProcessPid, &returnStatus, 0 ) < 0'.
         //
-        if( waitpid( -1, &returnStatus, 0 ) < 0
+        if( waitpid( currentProcessPid, &returnStatus, 0 ) < 0
             && errno == ECHILD )
         {
             // Print to the standard output stream
@@ -115,7 +164,7 @@ int main ()
         else
         {
             // Print to the standard output stream
-            cout << "\nThe child process terminated abnormally! Exit code: \n" << returnStatus << endl;
+            cout << "The child process terminated abnormally! Exit code: " << returnStatus << endl;
             
             // Go to the another child process, if there is any
             continue;
@@ -128,11 +177,14 @@ int main ()
         
         // Parent-process waits for all children to exit, adding each status to the sum variable
         /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Accumulated sum " << sum << endl;
+        cout << "Parent process " << parentProcessPid << ": Exiting with sum " << sum << endl;
     }
     
     // Print to the standard output stream
     cout << "Exiting the father process with sum: " << sum << endl;
+    
+    // Free the dynamic allocated memory to avoid memory leak
+    delete childProcessPids;
     
     // Return the required value by the teacher
     return sum;
