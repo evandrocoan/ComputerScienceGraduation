@@ -8,9 +8,10 @@
 #include <sys/mman.h>
 #include <cstdlib>
 
-#define MAX_CHILD_PROCESS_TO_CREATE 5
+#define MAX_CHILD_PROCESS_TO_CREATE                       5
+#define REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER 1
 
-static pid_t *childProcessPids = new pid_t[ MAX_CHILD_PROCESS_TO_CREATE ];
+static pid_t *childProcessPids;
 
 using namespace std;
 
@@ -23,6 +24,7 @@ int main ()
     
     int count              = 0;
     int sum                = 0;
+    int tries              = 0;
     pid_t parentProcessPid = getpid();
     
     // 'NULL'
@@ -52,6 +54,8 @@ int main ()
     //  This is a must be a multiple of the page size as returned by sysconf(_SC_PAGE_SIZE).
     //  However here, it is unused due the 'MAP_ANONYMOUS' being specified.
     //
+    // It returns a void pointer to the shared memory and here it is saved on the variable sharedMemory.
+    //
     void *sharedMemory = mmap( NULL, sizeof childProcessPids * MAX_CHILD_PROCESS_TO_CREATE,
             PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0 );
     
@@ -65,7 +69,8 @@ int main ()
         return EXIT_FAILURE;
     }
     
-    //childProcessPids = (pid_t *) sharedMemory;
+    // Gets the child's pid shared memory array from the void pointer sharedMemory.
+    childProcessPids = (pid_t *) sharedMemory;
     
     // Put a empty line to clear console view.
     cout << endl;
@@ -83,9 +88,11 @@ int main ()
         // If there was an error on duplication then
         if( currentProcessPid < 0 )
         {
-          cout << "\nError on fork()\n" << endl;
-          
-          return -1;
+            // Print to the standard output stream
+            cout << "\nError on fork()\n" << endl;
+            
+            // Exits the program with portable error state
+            return EXIT_FAILURE;
         }
         else if( currentProcessPid == 0 ) // If child-process is running then
         {
@@ -102,8 +109,8 @@ int main ()
             // Increment the conter required by the teacher
             count++;
             
-            // Sleep for 1 second
-            sleep( 1 );
+            // Sleep for the REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER second(s)
+            sleep( REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER );
             
             // Print to the standard output stream /* PID of child-process */
             cout << "Child process " << currentProcessPid << ": Exiting with status " << count << endl;
@@ -118,12 +125,40 @@ int main ()
         }
     }
     
-    // Wait all created threads to exit
+    // Wait all created threads to exit. Here is not treated the cases where there are threads
+    // slower than others. It is just checked sequentially for the threads to run and return its
+    // answer, i.e., if a thread 2 take 4 seconds but the thread 1 takes 10 seconds, the thread 2
+    // will wait 10 seconds before being validated because it is after the thread 1 on this queue.
     for( int current_child_process_number = 0;
           current_child_process_number < MAX_CHILD_PROCESS_TO_CREATE; ++current_child_process_number )
     {
         // Caches the current array position process pid
         currentProcessPid = childProcessPids[ current_child_process_number ];
+        
+        // If the pid is null, wait until it is initialized by its thread.
+        if( currentProcessPid == 0 )
+        {
+            // If the maximum tries exceed 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER,
+            // there is a bug.
+            if( tries++ > 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER )
+            {
+                // Print to the standard output stream
+                cout << "Error! The maximum tries exceed ";
+                cout << 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER << "!";
+                cout << " The current child process number is: " << current_child_process_number << endl;
+                
+                // Exits the program with portable error state
+                return EXIT_FAILURE;
+            }
+            
+            // Gives 0.1 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER seconds to wait for
+            // the current process child.
+            usleep( 100000 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER );
+            
+            // Return to the current child to try to process its pid again.
+            --current_child_process_number;
+            continue;
+        }
         
         // If this is the parent-process then /* PID of parent-process */
         cout << "Parent process " << parentProcessPid << ": Waiting children ";
@@ -149,7 +184,8 @@ int main ()
             && errno == ECHILD )
         {
             // Print to the standard output stream
-            cout << "The calling process does not have any unwaited-for children." << endl;
+            cout << "The calling process " << currentProcessPid;
+            cout << " does not have any unwaited-for children." << endl;
             
             // Go to the another child process, if there is any
             continue;
@@ -164,27 +200,26 @@ int main ()
         else
         {
             // Print to the standard output stream
-            cout << "The child process terminated abnormally! Exit code: " << returnStatus << endl;
+            cout << "The child process " << currentProcessPid;
+            cout << " terminated abnormally! Exit code: " << returnStatus << endl;
             
             // Go to the another child process, if there is any
             continue;
         }
         
-        cout << "Current child process return status: " << returnStatusCached << endl;
+        cout << "Current child process " << currentProcessPid;
+        cout << " return status: " << returnStatusCached << endl;
         
         // Accumulates the return status value
         sum += returnStatusCached;
         
         // Parent-process waits for all children to exit, adding each status to the sum variable
         /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Exiting with sum " << sum << endl;
+        cout << "Parent process " << parentProcessPid << ": Accumulated sum " << sum << endl;
     }
     
     // Print to the standard output stream
     cout << "Exiting the father process with sum: " << sum << endl;
-    
-    // Free the dynamic allocated memory to avoid memory leak
-    delete childProcessPids;
     
     // Return the required value by the teacher
     return sum;
