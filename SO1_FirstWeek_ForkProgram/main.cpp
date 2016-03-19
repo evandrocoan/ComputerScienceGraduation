@@ -3,17 +3,30 @@
 #include <iostream>
 #include <unistd.h>
 #include <errno.h>
+#include <stdarg.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/mman.h>
 #include <cstdlib>
+#include <mutex>
 
 #define MAX_CHILD_PROCESS_TO_CREATE                       5
 #define REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER 1
 
-static pid_t *childProcessPids;
-
 using namespace std;
+
+static pid_t *childProcessPids;
+static mutex fprintf_mutex;
+
+/** Print like function for logging putting a new line at the end of string.
+ */
+#define FPRINTFLN( stream, ... ) \
+{ \
+    fprintf_mutex.lock(); \
+    fprintf( stream, __VA_ARGS__ ); \
+    fprintf( stream, "\n" ); \
+    fprintf_mutex.unlock(); \
+} while( 0 )
 
 int main ()
 {
@@ -63,7 +76,7 @@ int main ()
     if( sharedMemory == MAP_FAILED )
     {
         // Print to the standard output stream 
-        cout << "\nERROR! The shared memory could not to be created.\n" << endl;
+        fprintf( stderr, "\nERROR! The shared memory could not to be created.\n" );
         
         // Exits the program with failure status
         return EXIT_FAILURE;
@@ -73,14 +86,14 @@ int main ()
     childProcessPids = (pid_t *) sharedMemory;
     
     // Put a empty line to clear console view.
-    cout << endl;
+    fprintf( stdout, "\n" );
     
     // Repeat 5 times and to create 5 concurrent threads
     for( int current_child_process_number = 0; 
           current_child_process_number < MAX_CHILD_PROCESS_TO_CREATE; current_child_process_number++ )
     {
         // Print to the standard output stream /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Creating child..." << endl;
+        FPRINTFLN( stdout, "Parent process %i: Creating child...\n", parentProcessPid );
         
         // Duplicate this process and saves the current process pid
         currentProcessPid = fork();
@@ -89,7 +102,7 @@ int main ()
         if( currentProcessPid < 0 )
         {
             // Print to the standard output stream
-            cout << "\nError on fork()\n" << endl;
+            fprintf( stderr, "\nError on fork()\n" );
             
             // Exits the program with portable error state
             return EXIT_FAILURE;
@@ -97,14 +110,14 @@ int main ()
         else if( currentProcessPid == 0 ) // If child-process is running then
         {
             // Put a empty line to clear console view
-            cout << endl;
+            fprintf( stdout, "\n" );
             
             // Save the current child pid process to wait for it later
             currentProcessPid                                = getpid();
             childProcessPids[ current_child_process_number ] = currentProcessPid;
             
             // Print to the standard output stream /* PID of child-process */ 
-            cout << "Child process " << currentProcessPid << ": Running..." << endl;
+            fprintf( stdout, "Child process %i : Running...\n", currentProcessPid );
             
             // Increment the conter required by the teacher
             count++;
@@ -113,7 +126,7 @@ int main ()
             sleep( REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER );
             
             // Print to the standard output stream /* PID of child-process */
-            cout << "Child process " << currentProcessPid << ": Exiting with status " << count << endl;
+            fprintf( stdout, "Child process %i: Exiting with status %i\n", currentProcessPid, count );
             
             // Exits the fork to stop the children creating grandchildren using the required value
             // by the teacher.
@@ -143,9 +156,10 @@ int main ()
             if( tries++ > 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER )
             {
                 // Print to the standard output stream
-                cout << "Error! The maximum tries exceed ";
-                cout << 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER << "!";
-                cout << " The current child process number is: " << current_child_process_number << endl;
+                fprintf( stderr, "Error! The maximum tries exceed %i! \
+                        The current child process number is: %i\n",
+                        50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER,
+                        current_child_process_number );
                 
                 // Exits the program with portable error state
                 return EXIT_FAILURE;
@@ -161,8 +175,8 @@ int main ()
         }
         
         // If this is the parent-process then /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Waiting children ";
-        cout << currentProcessPid << " to exit.\n" << endl;
+        fprintf( stdout, "Parent process %i: Waiting children %i to exit.\n", parentProcessPid,
+                currentProcessPid );
         
         // Waits the children to exits.
         //
@@ -184,8 +198,8 @@ int main ()
             && errno == ECHILD )
         {
             // Print to the standard output stream
-            cout << "The calling process " << currentProcessPid;
-            cout << " does not have any unwaited-for children." << endl;
+            fprintf( stderr, "The calling process %i does not have any unwaited-for children.\n",
+                    currentProcessPid );
             
             // Go to the another child process, if there is any
             continue;
@@ -200,26 +214,26 @@ int main ()
         else
         {
             // Print to the standard output stream
-            cout << "The child process " << currentProcessPid;
-            cout << " terminated abnormally! Exit code: " << returnStatus << endl;
+            fprintf( stderr, "ERROR! The child process %i terminated abnormally! Exit code: %i\n",
+                currentProcessPid, returnStatus );
             
             // Go to the another child process, if there is any
             continue;
         }
         
-        cout << "Current child process " << currentProcessPid;
-        cout << " return status: " << returnStatusCached << endl;
+        fprintf( stdout, "Current child process %i return status: %i\n", currentProcessPid,
+                returnStatusCached );
         
         // Accumulates the return status value
         sum += returnStatusCached;
         
         // Parent-process waits for all children to exit, adding each status to the sum variable
         /* PID of parent-process */
-        cout << "Parent process " << parentProcessPid << ": Accumulated sum " << sum << endl;
+        fprintf( stdout, "Parent process %i: Accumulated sum %i\n", parentProcessPid, sum );
     }
     
     // Print to the standard output stream
-    cout << "Exiting the father process with sum: " << sum << endl;
+    fprintf( stdout, "Exiting the father process with sum: %i\n", sum );
     
     // Return the required value by the teacher
     return sum;
