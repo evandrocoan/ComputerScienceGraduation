@@ -16,16 +16,16 @@
 using namespace std;
 
 static pid_t *childProcessPids;
-static mutex fprintf_mutex;
+static mutex *fprintf_mutex;
 
 /** Print like function for logging putting a new line at the end of string.
  */
 #define FPRINTFLN( stream, ... ) \
 { \
-    fprintf_mutex.lock(); \
+    fprintf_mutex->lock(); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
-    fprintf_mutex.unlock(); \
+    fprintf_mutex->unlock(); \
 } while( 0 )
 
 int main ()
@@ -69,31 +69,36 @@ int main ()
     //
     // It returns a void pointer to the shared memory and here it is saved on the variable sharedMemory.
     //
-    void *sharedMemory = mmap( NULL, sizeof childProcessPids * MAX_CHILD_PROCESS_TO_CREATE,
-            PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0 );
+    int protection          = PROT_READ | PROT_WRITE;
+    int memory_pid_size     = sizeof *childProcessPids * MAX_CHILD_PROCESS_TO_CREATE;
+    int visibility          = MAP_SHARED | MAP_ANONYMOUS;
+    void *sharedMemoryPids  = mmap( NULL, memory_pid_size, protection, visibility, -1, 0 );
+    void *sharedMemoryMutex = mmap( NULL, sizeof *fprintf_mutex, protection, visibility, -1, 0 );
     
     // verifies whether the shared memory was created of not
-    if( sharedMemory == MAP_FAILED )
+    if( sharedMemoryPids == MAP_FAILED
+        || sharedMemoryMutex == MAP_FAILED )
     {
         // Print to the standard output stream 
-        fprintf( stderr, "\nERROR! The shared memory could not to be created.\n" );
+        FPRINTFLN( stderr, "\nERROR! The shared memory could not to be created.\n" );
         
         // Exits the program with failure status
         return EXIT_FAILURE;
     }
     
-    // Gets the child's pid shared memory array from the void pointer sharedMemory.
-    childProcessPids = (pid_t *) sharedMemory;
+    // Gets the child's pid shared memory array from the void pointer sharedMemoryPids.
+    childProcessPids = (pid_t *) sharedMemoryPids;
+    fprintf_mutex    = (mutex *) sharedMemoryMutex;
     
     // Put a empty line to clear console view.
-    fprintf( stdout, "\n" );
+    FPRINTFLN( stdout, "\n" );
     
     // Repeat 5 times and to create 5 concurrent threads
     for( int current_child_process_number = 0; 
           current_child_process_number < MAX_CHILD_PROCESS_TO_CREATE; current_child_process_number++ )
     {
         // Print to the standard output stream /* PID of parent-process */
-        FPRINTFLN( stdout, "Parent process %i: Creating child...\n", parentProcessPid );
+        FPRINTFLN( stdout, "Parent process %i: Creating child...", parentProcessPid );
         
         // Duplicate this process and saves the current process pid
         currentProcessPid = fork();
@@ -102,7 +107,7 @@ int main ()
         if( currentProcessPid < 0 )
         {
             // Print to the standard output stream
-            fprintf( stderr, "\nError on fork()\n" );
+            FPRINTFLN( stderr, "\nError on fork()\n" );
             
             // Exits the program with portable error state
             return EXIT_FAILURE;
@@ -110,14 +115,14 @@ int main ()
         else if( currentProcessPid == 0 ) // If child-process is running then
         {
             // Put a empty line to clear console view
-            fprintf( stdout, "\n" );
+            FPRINTFLN( stdout, "\n" );
             
             // Save the current child pid process to wait for it later
             currentProcessPid                                = getpid();
             childProcessPids[ current_child_process_number ] = currentProcessPid;
             
             // Print to the standard output stream /* PID of child-process */ 
-            fprintf( stdout, "Child process %i : Running...\n", currentProcessPid );
+            FPRINTFLN( stdout, "Child process %i : Running...", currentProcessPid );
             
             // Increment the conter required by the teacher
             count++;
@@ -126,7 +131,7 @@ int main ()
             sleep( REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER );
             
             // Print to the standard output stream /* PID of child-process */
-            fprintf( stdout, "Child process %i: Exiting with status %i\n", currentProcessPid, count );
+            FPRINTFLN( stdout, "Child process %i: Exiting with status %i", currentProcessPid, count );
             
             // Exits the fork to stop the children creating grandchildren using the required value
             // by the teacher.
@@ -156,7 +161,7 @@ int main ()
             if( tries++ > 50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER )
             {
                 // Print to the standard output stream
-                fprintf( stderr, "Error! The maximum tries exceed %i! \
+                FPRINTFLN( stderr, "\nError! The maximum tries exceed %i! \
                         The current child process number is: %i\n",
                         50 * REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER,
                         current_child_process_number );
@@ -175,7 +180,7 @@ int main ()
         }
         
         // If this is the parent-process then /* PID of parent-process */
-        fprintf( stdout, "Parent process %i: Waiting children %i to exit.\n", parentProcessPid,
+        FPRINTFLN( stdout, "Parent process %i: Waiting children %i to exit.", parentProcessPid,
                 currentProcessPid );
         
         // Waits the children to exits.
@@ -198,7 +203,7 @@ int main ()
             && errno == ECHILD )
         {
             // Print to the standard output stream
-            fprintf( stderr, "The calling process %i does not have any unwaited-for children.\n",
+            FPRINTFLN( stderr, "\nThe calling process %i does not have any unwaited-for children.\n",
                     currentProcessPid );
             
             // Go to the another child process, if there is any
@@ -214,14 +219,15 @@ int main ()
         else
         {
             // Print to the standard output stream
-            fprintf( stderr, "ERROR! The child process %i terminated abnormally! Exit code: %i\n",
+            FPRINTFLN( stderr, "\nERROR! The child process %i terminated abnormally! Exit code: %i\n",
                 currentProcessPid, returnStatus );
             
             // Go to the another child process, if there is any
             continue;
         }
         
-        fprintf( stdout, "Current child process %i return status: %i\n", currentProcessPid,
+         // Print to the standard output stream
+        FPRINTFLN( stdout, "Current child process %i return status: %i", currentProcessPid,
                 returnStatusCached );
         
         // Accumulates the return status value
@@ -229,11 +235,19 @@ int main ()
         
         // Parent-process waits for all children to exit, adding each status to the sum variable
         /* PID of parent-process */
-        fprintf( stdout, "Parent process %i: Accumulated sum %i\n", parentProcessPid, sum );
+        FPRINTFLN( stdout, "Parent process %i: Accumulated sum %i", parentProcessPid, sum );
     }
     
     // Print to the standard output stream
-    fprintf( stdout, "Exiting the father process with sum: %i\n", sum );
+    FPRINTFLN( stdout, "Exiting the father process with sum: %i", sum );
+    
+    // free memory, childProcessPids is the address to free and memory_pid_size is the address size.
+    if( munmap( childProcessPids, memory_pid_size ) < 0
+        || munmap( sharedMemoryMutex, sizeof *fprintf_mutex ) < 0 )
+    {
+        // Print to the standard output stream
+        FPRINTFLN( stderr, "\nERROR! Could not free the shared memory!\n" );
+    }
     
     // Return the required value by the teacher
     return sum;
