@@ -18,16 +18,43 @@ using namespace std;
 static pid_t *childProcessPids;
 static mutex *fprintf_mutex;
 
-/** Print like function for logging putting a new line at the end of string.
+/** Print like function for logging putting a new line at the end of string. It does uses mutex
+ * due the my doubt to know whether 'fprintf' is thread safe of not over every platforms, since
+ * I could not find anything concrete. Following explanations:
+ * 
+ * fprintf_mutex->lock();           Lock the mutex.
+ * fprintf( stream, __VA_ARGS__ );  Print to the specified output stream the formatting args.
+ * fprintf( stream, "\n" );         Print a new line.
+ * fflush( stream );                Flushes the output stream to avoid double output over '>'.
+ *                                    Example: './main > results.txt' would get doubled/triple/...
+ *                                    print.
+ * fprintf_mutex->unlock();         Unlock the shared memory mutex.
+ * } while( 0 )                     To allow to use ';' semicolon over the macro statement use and
+ *                                    still to be able to use it within an unbraced if statement.
  */
 #define FPRINTFLN( stream, ... ) \
 { \
     fprintf_mutex->lock(); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
+    fflush( stream ); \
     fprintf_mutex->unlock(); \
 } while( 0 )
 
+
+/**
+ * Para pensar: Há uma variável global count acessível a todos os processos e que é inicializada 
+ * com 0. Cinco processos são criados e cada um incrementa o valor atual dessa variável, 
+ * retornando o valor incrementado. Se somarmos todos os valores retornados, quanto você acha 
+ * que será apresentado? Existe possibilidade de condição de corrida?
+ * 
+ * Não por que o fork duplica os endereços de memória de processo pai e filho, portando ambos
+ * executam em locais diferentes da memória com suas próprias cópias de variáveis. Exceto quando
+ * se é utilizado uma memória compartilhada em um local diferente da memória definido pelo sistema
+ * operational como nosso caso e feito nesse projeto:
+ * 1) Para o pai e ambos os filhos terem acesso ao mutex utilizado.
+ * 2) Para o pai poder ter acesso ao pid dos filhos.
+ */
 int main ()
 {
     int errno;
