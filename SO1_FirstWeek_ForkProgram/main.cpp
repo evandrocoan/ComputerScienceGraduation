@@ -8,37 +8,37 @@
 #include <sys/wait.h>
 #include <sys/mman.h>
 #include <cstdlib>
-#include <mutex>
+#include <pthread.h>
 
 #define MAX_CHILD_PROCESS_TO_CREATE                       5
 #define REQUIRED_THREAD_SLEEP_TIME_SECONDS_BY_THE_TEACHER 1
 
 using namespace std;
 
-static pid_t *childProcessPids;
-static mutex *fprintf_mutex;
+static pid_t           *childProcessPids;
+static pthread_mutex_t *fprintf_mutex;
 
 /** Print like function for logging putting a new line at the end of string. It does uses mutex
- * due the my doubt to know whether 'fprintf' is thread safe of not over every platforms, since
+ * due the my doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
  * I could not find anything concrete. Following explanations:
  * 
- * fprintf_mutex->lock();           Lock the mutex.
- * fprintf( stream, __VA_ARGS__ );  Print to the specified output stream the formatting args.
- * fprintf( stream, "\n" );         Print a new line.
- * fflush( stream );                Flushes the output stream to avoid double output over '>'.
- *                                    Example: './main > results.txt' would get doubled/triple/...
- *                                    print.
- * fprintf_mutex->unlock();         Unlock the shared memory mutex.
- * } while( 0 )                     To allow to use ';' semicolon over the macro statement use and
- *                                    still to be able to use it within an unbraced if statement.
+ * pthread_mutex_lock( fprintf_mutex );   Lock the mutex.
+ * fprintf( stream, __VA_ARGS__ );        Print to the specified output stream the formatting args.
+ * fprintf( stream, "\n" );               Print a new line.
+ * fflush( stream );                      Flushes the output stream to avoid double output over '>'.
+ *                                          Example: './main > results.txt' would get doubled/triple/...
+ *                                          print.
+ * pthread_mutex_unlock( fprintf_mutex ); Unlock the shared memory mutex.
+ * } while( 0 )                           To allow to use ';' semicolon over the macro statement use and
+ *                                          still to be able to use it within an unbraced if statement.
  */
 #define FPRINTFLN( stream, ... ) \
 { \
-    fprintf_mutex->lock(); \
+    pthread_mutex_lock( fprintf_mutex ); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
-    fprintf_mutex->unlock(); \
+    pthread_mutex_unlock( fprintf_mutex ); \
 } while( 0 )
 
 
@@ -57,14 +57,14 @@ static mutex *fprintf_mutex;
  */
 int main ()
 {
-    int errno;
-    int returnStatusCached;
-    int returnStatus;
+    int   errno;
+    int   returnStatusCached;
+    int   returnStatus;
     pid_t currentProcessPid;
     
-    int count              = 0;
-    int sum                = 0;
-    int tries              = 0;
+    int   count            = 0;
+    int   sum              = 0;
+    int   tries            = 0;
     pid_t parentProcessPid = getpid();
     
     // 'NULL'
@@ -114,8 +114,17 @@ int main ()
     }
     
     // Gets the child's pid shared memory array from the void pointer sharedMemoryPids.
-    childProcessPids = (pid_t *) sharedMemoryPids;
-    fprintf_mutex    = (mutex *) sharedMemoryMutex;
+    childProcessPids = ( pid_t * ) sharedMemoryPids;
+    
+    // Converts the void pointer sharedMemoryMutex to a pthread_mutex_t pointer.
+    fprintf_mutex    = ( pthread_mutex_t * ) sharedMemoryMutex;
+    
+    // Initializes the mutex for use. Specifies NULL to use the default mutex attributes.
+    if( errno = pthread_mutex_init( fprintf_mutex, NULL ) )
+    {
+        // Print to the standard output stream
+        FPRINTFLN( stderr, "\nERROR! Could initialize the mutex! Erro code: %d\n", errno );
+    }
     
     // Put a empty line to clear console view.
     FPRINTFLN( stdout, "\n" );
@@ -174,6 +183,13 @@ int main ()
     // slower than others. It is just checked sequentially for the threads to run and return its
     // answer, i.e., if a thread 2 take 4 seconds but the thread 1 takes 10 seconds, the thread 2
     // will wait 10 seconds before being validated because it is after the thread 1 on this queue.
+    //
+    // 'waitpid( -1, &returnStatus, 0 ) < 0 && errno == ECHILD )'
+    //  Was not used here to determine when there are not any more thread waiting to exit, as we
+    //  keep a list of all child threads over the childProcessPids' array. However, it is used to
+    //  to determinate if the current child process is does not waiting, then just proceed to the
+    //  next thread, if there is any.
+    //
     for( int current_child_process_number = 0;
           current_child_process_number < MAX_CHILD_PROCESS_TO_CREATE; ++current_child_process_number )
     {
@@ -273,7 +289,14 @@ int main ()
         || munmap( sharedMemoryMutex, sizeof *fprintf_mutex ) < 0 )
     {
         // Print to the standard output stream
-        FPRINTFLN( stderr, "\nERROR! Could not free the shared memory!\n" );
+        FPRINTFLN( stderr, "\nERROR! Could not free the shared memory! Error code: %d\n", errno );
+    }
+    
+    // Destroy the mutex
+    if( errno = pthread_mutex_destroy( fprintf_mutex ) )
+    {
+        // Print to the standard output stream
+        FPRINTFLN( stderr, "\nERROR! Could destroy the mutex!\n Error code: %d", errno );
     }
     
     // Return the required value by the teacher
