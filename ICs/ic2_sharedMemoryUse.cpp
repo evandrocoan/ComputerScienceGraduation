@@ -55,14 +55,30 @@ struct structMessage
 using namespace std;
 
 /**
- * Para pensar: As funções usadas criam um segmento de memória de tamanho especificado (truncado) e
- * depois há proteção de páginas. Qual é o modelo de gerenciamento de memória usado? Esse mecanismo
- * pode ser usado para implementar sincronização de processos, como uma alternativa aos semáforos?
+ * Para pensar:
+ * 
+ * As funções usadas criam um segmento de memória de tamanho especificado (truncado) e depois há
+ * proteção de páginas. Qual é o modelo de gerenciamento de memória usado?
+ * 
+ * 
+ * Esse mecanismo pode ser usado para implementar sincronização de processos, como uma alternativa
+ * aos semáforos?
+ * 
+ * 
  * Os processos que se comunicam via memória compartilhada precisam estar no mesmo arquivo executável
- * como nesse exemplo ou eles podem estar em arquivos separados? Eles precisam estar executando no
- * mesmo processador ou podem estar executando em processadores diferentes? Eles precisam estar
- * executando no mesmo computador ou podem estar executando em computadores diferentes? Por fim,
- * se o objetivo é comunicar dois processos no mesmo computador, tente fazer o mesmo usando pipes.
+ * como nesse exemplo ou eles podem estar em arquivos separados?
+ * 
+ * 
+ * Eles precisam estar executando no mesmo processador ou podem estar executando em processadores
+ * diferentes?
+ * 
+ * 
+ * Eles precisam estar executando no mesmo computador ou podem estar executando em computadores
+ * diferentes?
+ * 
+ * 
+ * Por fim, se o objetivo é comunicar dois processos no mesmo computador, tente fazer o mesmo
+ * usando pipes.
  * 
  * 
  */
@@ -73,6 +89,7 @@ int main()
     
     int sharedMemorySegmentSize = sizeof struct structMessage;
     
+    // Print to the standard output stream
     cout << "Parent process " << getpid() /* Process ID */ << " is creating a child process" << endl;
     
     // Duplicate process
@@ -85,6 +102,7 @@ int main()
     
     // if child-process running then
     {
+        // Print to the standard output stream
         cout << "Child process " << getpid(); // Process ID
         cout << " is creating a shared memory object to write a message in" << endl;
         
@@ -92,6 +110,7 @@ int main()
         
         if( sharedMemoryObject < 0 )
         {
+            // Print to the standard output stream
             cout << "Error "<< sharedMemoryObject << " creating shared object" << endl;
             
             // Exits the program using a platform portable failure exit status.
@@ -104,6 +123,7 @@ int main()
         
         if( sharedMemoryMessage == NULL )
         {
+            // Print to the standard output stream
             cout << "Error in memory map" << endl;
             
             // Exits the program using a platform portable failure exit status.
@@ -116,6 +136,7 @@ int main()
         
 	    strcpy( sharedMemoryMessage->content, /* Message to be sent */ );
         
+        // Print to the standard output stream
         cout << "Child process " << getpid() /* Process ID */ << " wrote message '";
         cout << sharedMemoryMessage->content << "' in memory" << endl;
         
@@ -124,6 +145,7 @@ int main()
       
     // If parent-process running then
     {
+        // Print to the standard output stream
         cout << "Parent process " << /* process ID */ << " is waiting for child to exit" << endl;
         
         // Wait for child process to exit and get its status
@@ -131,6 +153,7 @@ int main()
         
 	    // If status is not success
         {
+            // Print to the standard output stream
 	        cout << "Parent process " << /* Process ID */;
             cout << " is exiting since child could not write message in memory" << endl;
             
@@ -138,6 +161,7 @@ int main()
 	        return EXIT_FAILURE;
         }
         
+        // Print to the standard output stream
         cout << "Parent process " << /* Process ID */ << " will read message from process ";
         cout << /* Child process ID */ << " finished with status ";
         cout << /* Status of finished child process */ << endl;
@@ -146,6 +170,7 @@ int main()
         
         if( sharedMemoryObject < 0 )
         {
+            // Print to the standard output stream
             cout << "Error in shm_open()" << endl;
             
             // Exits the program using a platform portable failure exit status.
@@ -156,12 +181,14 @@ int main()
         
         if( sharedMemoryMessage == NULL )
         {
+            // Print to the standard output stream
             cout << "Error in memory map" << endl;
             
             // Exits the program using a platform portable failure exit status.
             return EXIT_FAILURE;
         }
         
+        // Print to the standard output stream
         cout << "Parent process " << getpid() /* process ID */ << " read the message '";
         cout << sharedMemoryMessage->content << "' from sender ";
         cout << sharedMemoryMessage->sender << " in memory " << endl;
@@ -170,6 +197,7 @@ int main()
         
         if( removed != 0 )
         {
+            // Print to the standard output stream
             cout << "Error removing the shared object" << endl;
             
             // Exits the program using a platform portable failure exit status.
