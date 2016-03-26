@@ -1,12 +1,4 @@
 
-/** This is to view internal program data while execution. Default value: 0
- *
- * 0   - Disables this feature.
- * 1   - Normal debug.
- */
-#define DEBUG_LEVEL 1
-
-
 #include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
@@ -20,12 +12,12 @@
 #include <sys/wait.h>
 
 
-/**
- * For portable use, a shared memory object should be identified by a name of the form /somename;
- * that is, a null-terminated string of up to NAME_MAX (i.e., 255) characters consisting of an 
- * initial slash, followed by one or more characters, none of which are slashes.
+/** This is to view internal program data while execution. Default value: 0
+ *
+ * 0   - Disables this feature.
+ * 1   - Normal debug.
  */
-const char *sharedMemoryObjectFileDescriptorName = "/oioioi1234";
+#define DEBUG_LEVEL 1
 
 
 #if DEBUG_LEVEL > 0
@@ -53,7 +45,14 @@ const char *sharedMemoryObjectFileDescriptorName = "/oioioi1234";
 #endif
 
 
-#define MAX_MESSAGE_LENGTH 255
+/**
+ * For portable use, a shared memory object should be identified by a name of the form /somename;
+ * that is, a null-terminated string of up to NAME_MAX (i.e., 255) characters consisting of an 
+ * initial slash, followed by one or more characters, none of which are slashes.
+ */
+const char *sharedMemoryObjectFileDescriptorName = "/oioioi1234";
+#define MAX_MESSAGE_LENGTH 100
+
 
 struct structMessage
 {
@@ -100,6 +99,7 @@ int main()
     int                  errno;
     int                  sharedMemoryObjectFileDescriptor;
     int                  returnStatus;
+    int                  returnStatusCached;
     struct structMessage *sharedMemoryMessage;
     
     int sharedMemorySegmentSize = sizeof( struct structMessage );
@@ -109,13 +109,13 @@ int main()
     cout << "Parent process " << parentProcessPid << " is creating a child process" << endl;
     
     // Duplicate process
-    currentProcessPid = fork()
+    currentProcessPid = fork();
     
     // if error in duplicating
     if( currentProcessPid < 0 )
     {
         // Print to the standard output stream
-        DEBUGGER( stderr, "\nError on fork()\n" );
+        DEBUGGER( stderr, "Error on fork()" );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -129,7 +129,7 @@ int main()
         cout << " is creating a shared memory object to write a message in" << endl;
         
         /**
-         * Creates and opens a new, or opens an existing, POSIX shared memory object. A POSIX
+         * Creates a new, or opens an existing, POSIX shared memory object. A POSIX
          * shared memory object is in effect a handle which can be used by unrelated processes to
          * mmap(2) the same region of shared memory.
          * 
@@ -159,6 +159,8 @@ int main()
             return EXIT_FAILURE;
         }
         
+        DEBUGGER( stdout, "Child process created a new, or opened an existing, POSIX shared memory with shm_open()." );
+        
         /**
          * Make room for the shared object to fit a message. On ftruncate success, zero is returned.
          * On error, -1 is returned, and errno is set appropriately.
@@ -176,7 +178,12 @@ int main()
             return EXIT_FAILURE;
         }
         
-        /** 'NULL'
+        DEBUGGER( stdout, "Child process make a room for the shared object to fit a message." );
+        
+        /** 
+         * Creates a shared memory.
+         * 
+         * 'NULL'
          *  indicates to the kernel chooses the address at which to create the mapping.
          *
          * 'sharedMemorySegmentSize'
@@ -208,17 +215,19 @@ int main()
         int protection            = PROT_READ | PROT_WRITE;
         int visibility            = MAP_SHARED;
         void *sharedMemoryMapping = mmap( NULL, sharedMemorySegmentSize, protection, visibility,
-                sharedMemoryObjectFileDescriptor, sysconf(_SC_PAGE_SIZE) );
+                sharedMemoryObjectFileDescriptor, 0 );
         
         // verifies whether the shared memory was created of not
         if( sharedMemoryMapping == MAP_FAILED )
         {
             // Print to the standard output stream 
-            DEBUGGER( stderr, "\nERROR! The shared memory could not to be created.\n" );
+            DEBUGGER( stderr, "ERROR! The shared memory could not to be created." );
             
             // Exits the program with failure status
             return EXIT_FAILURE;
         }
+        
+        DEBUGGER( stdout, "Child process created a shared memory with mmap()." );
         
         // Map the shared object to memory. Now we can refer to mapped region using fields of
         // sharedMemoryMessage. For example, sharedMemoryMessage->len
@@ -234,6 +243,8 @@ int main()
             return EXIT_FAILURE;
         }
         
+        DEBUGGER( stdout, "Child process mapped the shared object to memory. Usage example, sharedMemoryMessage->len." );
+        
         // Producing a message on the shared segment
         sharedMemoryMessage->type   = 1;
 	    sharedMemoryMessage->sender = currentProcessPid; // Process ID
@@ -244,8 +255,10 @@ int main()
         cout << "Child process " << currentProcessPid << " wrote message '";
         cout << sharedMemoryMessage->content << "' in memory" << endl;
         
+        DEBUGGER( stdout, "Child process exits using a platform portable successful exit status." );
+        
         // Exits the child process returning to the parent the shared memory pointer.
-        exit( *( ( int* ) ( &sharedMemoryMessage ) ) );
+        exit( EXIT_SUCCESS );
     }
     else // Pid is greater than 0, so we are the parent process
     {
@@ -254,7 +267,7 @@ int main()
         
         // Wait for child process to exit and get its status
         //
-        // 'parentProcessPid'
+        // 'currentProcessPid'
         //  This is child we are waiting to exit and catch its return value.
         //
         // 'returnStatus'
@@ -268,32 +281,31 @@ int main()
         //  must be checked over an failure exit status checked by
         //  'waitpid( -1, &returnStatus, 0 ) < 0'.
         //
-        if( waitpid( -1, &returnStatus, 0 ) < 0
+        if( waitpid( currentProcessPid, &returnStatus, 0 ) < 0
             && errno == ECHILD )
         {
             // Print to the standard output stream
-            DEBUGGER( stderr, "\nThe calling process %i does not have any unwaited-for children.\n",
+            DEBUGGER( stderr, "The calling process %i does not have any unwaited-for children.",
                     parentProcessPid );
         }
-        
-	    // If status is not success
-        if( !WIFEXITED( returnStatus ) )
+	    
+        if( WIFEXITED( returnStatus ) )
+        {
+            // caches the return status value
+            returnStatusCached = WEXITSTATUS( returnStatus );
+        }
+        else // status is not success
         {
             // Print to the standard output stream /* Process ID */
 	        cout << "Parent process " << parentProcessPid;
             cout << " is exiting since child could not write message in memory" << endl;
             
             // Print to the standard output stream
-            DEBUGGER( stderr, "\nERROR! The child process %i terminated abnormally! Exit code: %i\n",
-                parentProcessPid, returnStatus );
+            DEBUGGER( stderr, "ERROR! The child process %i terminated abnormally! Exit code: %i",
+                    currentProcessPid, returnStatus );
             
             // Exits the program using a platform portable failure exit status.
 	        return EXIT_FAILURE;
-        }
-        else
-        {
-            // caches the return status value
-            sharedMemoryMessage = (struct structMessage *) WEXITSTATUS( returnStatus );
         }
         
         // Print to the standard output stream /* Process ID */
@@ -335,6 +347,8 @@ int main()
             return EXIT_FAILURE;
         }
         
+        DEBUGGER( stdout, "Parent process created a new, or opened an existing, POSIX shared memory with shm_open()." );
+        
         /**
          * Make room for the shared object to fit a message. On ftruncate success, zero is returned.
          * On error, -1 is returned, and errno is set appropriately.
@@ -351,6 +365,8 @@ int main()
             // Exits the program using a platform portable failure exit status.
             return EXIT_FAILURE;
         }
+        
+        DEBUGGER( stdout, "Parent process make a room for the shared object to fit a message." );
         
         /** 'NULL'
          *  indicates to the kernel chooses the address at which to create the mapping.
@@ -384,7 +400,7 @@ int main()
         int protection            = PROT_READ | PROT_WRITE;
         int visibility            = MAP_SHARED;
         void *sharedMemoryMapping = mmap( NULL, sharedMemorySegmentSize, protection, visibility,
-                sharedMemoryObjectFileDescriptor, sysconf(_SC_PAGE_SIZE) );
+                sharedMemoryObjectFileDescriptor, 0 );
         
         // verifies whether the shared memory was created of not
         if( sharedMemoryMapping == MAP_FAILED )
@@ -395,6 +411,8 @@ int main()
             // Exits the program with failure status
             return EXIT_FAILURE;
         }
+        
+        DEBUGGER( stdout, "Parent process created a shared memory with mmap()." );
         
         // Map the shared object to memory. Now we can refer to mapped region using fields of
         // sharedMemoryMessage. For example, sharedMemoryMessage->len
@@ -409,6 +427,8 @@ int main()
             // Exits the program using a platform portable failure exit status.
             return EXIT_FAILURE;
         }
+        
+        DEBUGGER( stdout, "Parent process mapped the shared object to memory. Usage example, sharedMemoryMessage->len." );
         
         // Print to the standard output stream/* process ID */
         cout << "Parent process " << parentProcessPid << " read the message '";
@@ -432,6 +452,8 @@ int main()
             return EXIT_FAILURE;
         }
     }
+    
+    DEBUGGER( stdout, "Parent process exits using a platform portable successful exit status." );
     
     // Exits the program using a platform portable successful exit status.
     return EXIT_SUCCESS;
