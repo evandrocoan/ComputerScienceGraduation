@@ -6,6 +6,7 @@
  */
 #define DEBUG_LEVEL 1
 
+
 #include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
@@ -15,8 +16,13 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-#define MAX_MESSAGE_LENGTH            /* max length */
-#define SHARED_MEMORY_OBJECT_NAME     "/oioioi1234"
+
+/**
+ * For portable use, a shared memory object should be identified by a name of the form /somename;
+ * that is, a null-terminated string of up to NAME_MAX (i.e., 255) characters consisting of an 
+ * initial slash, followed by one or more characters, none of which are slashes.
+ */
+const char *sharedMemoryObjectFileDescriptorName = "/oioioi1234";
 
 
 #if DEBUG_LEVEL > 0
@@ -44,6 +50,8 @@
 #endif
 
 
+#define MAX_MESSAGE_LENGTH 255
+
 struct structMessage
 {
     pid_t sender;
@@ -53,6 +61,7 @@ struct structMessage
 };
 
 using namespace std;
+
 
 /**
  * Para pensar:
@@ -84,43 +93,133 @@ using namespace std;
  */
 int main() 
 {
-    int                   sharedMemoryObject;
+    pid_t                currentProcessPid;
+    int                  sharedMemoryObjectFileDescriptor;
+    int                  returnStatus;
     struct structMessage *sharedMemoryMessage;
     
     int sharedMemorySegmentSize = sizeof struct structMessage;
     
-    // Print to the standard output stream
-    cout << "Parent process " << getpid() /* Process ID */ << " is creating a child process" << endl;
+    // Print to the standard output stream /* Process ID */
+    cout << "Parent process " << getpid() << " is creating a child process" << endl;
     
     // Duplicate process
+    currentProcessPid = fork();
     
     // if error in duplicating
+    if( currentProcessPid < 0 )
     {
+        // Print to the standard output stream
+        DEBUGGER( stderr, "\nError on fork()\n" );
+        
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
     }
-    
-    // if child-process running then
+    else if( currentProcessPid == 0 ) // if child-process running then
     {
-        // Print to the standard output stream
-        cout << "Child process " << getpid(); // Process ID
+        currentProcessPid = getpid();
+        
+        // Print to the standard output stream /* Process ID */
+        cout << "Child process " << currentProcessPid;
         cout << " is creating a shared memory object to write a message in" << endl;
         
-        sharedMemoryObject = ; // Create shared object
+        /**
+         * Creates and opens a new, or opens an existing, POSIX shared memory object. A POSIX
+         * shared memory object is in effect a handle which can be used by unrelated processes to
+         * mmap(2) the same region of shared memory.
+         * 
+         * 'const char *sharedMemoryObjectFileDescriptorName'
+         * specifies the shared memory object name to be created or opened.
+         * 
+         * 'int O_RDWR | O_CREAT'
+         * 'O_RDWR' is a bit mask created to open the object for read-write access.
+         * 'O_CREAT' create the shared memory object if it does not exist.
+         * 
+         * 'mode_t S_IRWXU'
+         * 00700 user (file owner) has read, write, and execute permission.
+         * 
+         * @return on success, returns a nonnegative file descriptor. On failure, returns -1.
+         */
+        int    creation_flags            = O_RDWR | O_CREAT;
+        mode_t creation_mode             = S_IRWXU;
+        sharedMemoryObjectFileDescriptor = shm_open( sharedMemoryObjectFileDescriptorName, creation_flags, creation_mode );
         
-        if( sharedMemoryObject < 0 )
+        // If error creating shared object
+        if( sharedMemoryObjectFileDescriptor < 0 )
         {
             // Print to the standard output stream
-            cout << "Error "<< sharedMemoryObject << " creating shared object" << endl;
+            cout << "Error "<< sharedMemoryObjectFileDescriptor << " creating shared object" << endl;
             
             // Exits the program using a platform portable failure exit status.
             return EXIT_FAILURE;
         }
         
-        // Make room for the shared object to fit a message
-        //...
-        sharedMemoryMessage = (struct structMessage *) // Map the shared object to memory
+        /**
+         * Make room for the shared object to fit a message. On ftruncate success, zero is returned.
+         * On error, -1 is returned, and errno is set appropriately.
+         * 
+         * 'sharedMemoryObjectFileDescriptor'
+         * reference to be truncated to a size of precisely length bytes 'sizeof struct structMessage'.
+         */
+        if( ftruncate( sharedMemoryObjectFileDescriptor, sharedMemorySegmentSize ) < 0 )
+        {
+            // Print to the standard output stream
+            DEBUGGER( stderr, "ERROR! Could not cause the regular file named by path or referenced \
+                    to be truncated to a size of precisely length of %i bytes.", sharedMemorySegmentSize );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
         
+        /** 'NULL'
+         *  indicates to the kernel chooses the address at which to create the mapping.
+         *
+         * 'sharedMemorySegmentSize'
+         *  specifies the length of the mapping.
+         *
+         * 'PROT_READ | PROT_WRITE'
+         *  describes the desired writing and reading memory protection of the mapping to avoid race
+         *  condition problems.
+         *
+         * 'MAP_SHARED | MAP_ANONYMOUS'
+         *  MAP_SHARED, determine that the updates to the mapping are visible to other processes
+         *  mapping the same region. MAP_ANONYMOUS, the mapping is not backed by any file, then its
+         *  contents are initialized to zero. Also, the use of MAP_ANONYMOUS in conjunction with 
+         *  MAP_SHARED is supported on Linux only since kernel v2.4.
+         *
+         * '-1'
+         *  This and next arguments are ignored when using 'MAP_ANONYMOUS', however, some
+         *  implementations require this to be '-1' if MAP_ANONYMOUS is specified, hence portable
+         *  applications should ensure this. This is the file descriptor used to initialize the 
+         *  contents of the file mapping using the length bytes of the mapping and offset specified
+         *  at the next parameter bellow.
+         *
+         * '0'
+         *  This is a must be a multiple of the page size as returned by sysconf(_SC_PAGE_SIZE).
+         *  However here, it is unused due the 'MAP_ANONYMOUS' being specified.
+         *
+         * It returns a void pointer to the shared memory and here it is saved on the variable sharedMemory.
+         */
+        int protection            = PROT_READ | PROT_WRITE;
+        int visibility            = MAP_SHARED;
+        void *sharedMemoryMapping = mmap( NULL, sharedMemorySegmentSize, protection, visibility,
+                sharedMemoryObjectFileDescriptor, sysconf(_SC_PAGE_SIZE) );
+        
+        // verifies whether the shared memory was created of not
+        if( sharedMemoryMapping == MAP_FAILED )
+        {
+            // Print to the standard output stream 
+            FPRINTFLN( stderr, "\nERROR! The shared memory could not to be created.\n" );
+            
+            // Exits the program with failure status
+            return EXIT_FAILURE;
+        }
+        
+        // Map the shared object to memory. Now we can refer to mapped region using fields of
+        // sharedMemoryMessage. For example, sharedMemoryMessage->len
+        sharedMemoryMessage = (struct structMessage *) sharedMemoryMapping;
+        
+        // If error in memory map
         if( sharedMemoryMessage == NULL )
         {
             // Print to the standard output stream
@@ -132,43 +231,79 @@ int main()
         
         // Producing a message on the shared segment
         sharedMemoryMessage->type   = 1;
-	    sharedMemoryMessage->sender = ; // Process ID
+	    sharedMemoryMessage->sender = currentProcessPid; // Process ID
         
-	    strcpy( sharedMemoryMessage->content, /* Message to be sent */ );
+	    strcpy( sharedMemoryMessage->content, "Message to be sent" );
         
-        // Print to the standard output stream
-        cout << "Child process " << getpid() /* Process ID */ << " wrote message '";
+        // Print to the standard output stream /* Process ID */
+        cout << "Child process " << currentProcessPid << " wrote message '";
         cout << sharedMemoryMessage->content << "' in memory" << endl;
         
-        return 0;
+        // Exits the child process returning to the parent the shared memory pointer.
+        exit( sharedMemoryMessage );
     }
-      
-    // If parent-process running then
+    else // Pid is greater than 0, so we are the parent process
     {
-        // Print to the standard output stream
-        cout << "Parent process " << /* process ID */ << " is waiting for child to exit" << endl;
+        // Print to the standard output stream /* process ID */ 
+        cout << "Parent process " << currentProcessPid << " is waiting for child to exit" << endl;
         
         // Wait for child process to exit and get its status
-        
-        
-	    // If status is not success
+        //
+        // 'currentProcessPid'
+        //  This is child we are waiting to exit and catch its return value.
+        //
+        // 'returnStatus'
+        //  This is the address to the return value by the child using exit( status )
+        //
+        // '0'
+        //  This is to wait to any children to exit before to go on.
+        //
+        // 'errno'
+        //  This implementation is provided <errno.h> and indicates the failure error code, it only
+        //  must be checked over an failure exit status checked by
+        //  'waitpid( currentProcessPid, &returnStatus, 0 ) < 0'.
+        //
+        if( waitpid( currentProcessPid, &returnStatus, 0 ) < 0
+            && errno == ECHILD )
         {
             // Print to the standard output stream
-	        cout << "Parent process " << /* Process ID */;
+            DEBUGGER( stderr, "\nThe calling process %i does not have any unwaited-for children.\n",
+                    currentProcessPid );
+        }
+        
+	    // If status is not success
+        if( !WIFEXITED( returnStatus ) )
+        {
+            // Print to the standard output stream /* Process ID */
+	        cout << "Parent process " << currentProcessPid;
             cout << " is exiting since child could not write message in memory" << endl;
+            
+            // Print to the standard output stream
+            DEBUGGER( stderr, "\nERROR! The child process %i terminated abnormally! Exit code: %i\n",
+                currentProcessPid, returnStatus );
             
             // Exits the program using a platform portable failure exit status.
 	        return EXIT_FAILURE;
         }
+        else
+        {
+            // caches the return status value
+            sharedMemoryMessage = WEXITSTATUS( returnStatus );
+        }
         
-        // Print to the standard output stream
-        cout << "Parent process " << /* Process ID */ << " will read message from process ";
-        cout << /* Child process ID */ << " finished with status ";
-        cout << /* Status of finished child process */ << endl;
+        // Print to the standard output stream /* Process ID */
+        cout << "Parent process " << currentProcessPid << " will read message from process ";
         
-        sharedMemoryObject = // Create the shared object to read from
+        // Print to the standard output stream /* Child process ID */
+        cout << sharedMemoryMessage->sender << " finished with status ";
         
-        if( sharedMemoryObject < 0 )
+        // Print to the standard output stream /* Status of finished child process */
+        cout << returnStatus << endl;
+        
+        // Create the shared object to read from
+        sharedMemoryObjectFileDescriptor = sharedMemoryMessage; 
+        
+        if( sharedMemoryObjectFileDescriptor < 0 )
         {
             // Print to the standard output stream
             cout << "Error in shm_open()" << endl;
@@ -177,8 +312,10 @@ int main()
             return EXIT_FAILURE;
         }
         
-        sharedMemoryMessage = (struct structMessage *) // Map the shared object to memory
+        // Map the shared object to memory
+        sharedMemoryMessage = (struct structMessage *) ;
         
+        // If error in memory map
         if( sharedMemoryMessage == NULL )
         {
             // Print to the standard output stream
@@ -189,11 +326,11 @@ int main()
         }
         
         // Print to the standard output stream
-        cout << "Parent process " << getpid() /* process ID */ << " read the message '";
+        cout << "Parent process " << currentProcessPid /* process ID */ << " read the message '";
         cout << sharedMemoryMessage->content << "' from sender ";
         cout << sharedMemoryMessage->sender << " in memory " << endl;
         
-        int removed = ;// Remove the shared object
+        int removed = ; // Remove the shared object
         
         if( removed != 0 )
         {
@@ -203,6 +340,17 @@ int main()
             // Exits the program using a platform portable failure exit status.
             return EXIT_FAILURE;
         }
+    }
+    
+    /**
+     * Remove the object previously created by shm_open().
+     * 
+     * @param name   specifies the shared memory object to be created or opened.
+     * @return       returns 0 on success, or -1 on error.
+     */
+    if( shm_unlink( sharedMemoryObjectFileDescriptorName ) < 0 )
+    {
+        DEBUGGER( "ERROR! Could not remove the object previously created by shm_open()" );
     }
     
     // Exits the program using a platform portable successful exit status.
