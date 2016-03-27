@@ -17,7 +17,7 @@
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 
 #if DEBUG_LEVEL > 0
@@ -129,9 +129,9 @@ int main()
         cout << " is creating a shared memory object to write a message in" << endl;
         
         /**
-         * Creates a new, or opens an existing, POSIX shared memory object. A POSIX
-         * shared memory object is in effect a handle which can be used by unrelated processes to
-         * mmap(2) the same region of shared memory.
+         * Creates a new, or opens an existing POSIX shared memory object. A POSIX shared memory
+         * object is in effect a handle which can be used by unrelated processes to mmap(2) the
+         * same region of shared memory.
          * 
          * 'const char *sharedMemoryObjectFileDescriptorName'
          * specifies the shared memory object name to be created or opened.
@@ -159,6 +159,7 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Child process created a new, or opened an existing, POSIX shared memory with shm_open()." );
         
         /**
@@ -178,6 +179,7 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Child process make a room for the shared object to fit a message." );
         
         /** 
@@ -227,6 +229,7 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Child process created a shared memory with mmap()." );
         
         // Map the shared object to memory. Now we can refer to mapped region using fields of
@@ -243,6 +246,7 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Child process mapped the shared object to memory. Usage example, sharedMemoryMessage->len." );
         
         // Producing a message on the shared segment
@@ -255,13 +259,18 @@ int main()
         cout << "Child process " << currentProcessPid << " wrote message '";
         cout << sharedMemoryMessage->content << "' in memory" << endl;
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Child process exits using a platform portable successful exit status." );
         
         // Exits the child process returning to the parent the shared memory pointer.
         exit( EXIT_SUCCESS );
     }
-    else // Pid is greater than 0, so we are the parent process
+    else
     {
+        /** Pid is greater than 0, so we are the parent process, the the fork() retuned the pid
+         * currentProcessPid, here that pid is the child process pid.
+         */
+        
         // Print to the standard output stream /* process ID */ 
         cout << "Parent process " << parentProcessPid << " is waiting for child to exit" << endl;
         
@@ -287,8 +296,12 @@ int main()
             // Print to the standard output stream
             DEBUGGER( stderr, "The calling process %i does not have any unwaited-for children.",
                     parentProcessPid );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
         }
 	    
+        // Verifies whether the child terminated normally, that is, by calling 'exit'.
         if( WIFEXITED( returnStatus ) )
         {
             // caches the return status value
@@ -312,15 +325,15 @@ int main()
         cout << "Parent process " << parentProcessPid << " will read message from process ";
         
         // Print to the standard output stream /* Child process ID */
-        cout << sharedMemoryMessage->sender << " finished with status ";
+        cout << currentProcessPid << " finished with status ";
         
         // Print to the standard output stream /* Status of finished child process */
-        cout << returnStatus << endl;
+        cout << returnStatusCached << endl;
         
         /**
-         * Creates and opens a new, or opens an existing, POSIX shared memory object. A POSIX
-         * shared memory object is in effect a handle which can be used by unrelated processes to
-         * mmap(2) the same region of shared memory.
+         * Creates a new, or opens an existing POSIX shared memory object. A POSIX shared memory
+         * object is in effect a handle which can be used by unrelated processes to mmap(2) the
+         * same region of shared memory.
          * 
          * 'const char *sharedMemoryObjectFileDescriptorName'
          * specifies the shared memory object name to be created or opened.
@@ -347,6 +360,7 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Parent process created a new, or opened an existing, POSIX shared memory with shm_open()." );
         
         /**
@@ -366,9 +380,13 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Parent process make a room for the shared object to fit a message." );
         
-        /** 'NULL'
+        /** 
+         * Creates a shared memory.
+         * 
+         * 'NULL'
          *  indicates to the kernel chooses the address at which to create the mapping.
          *
          * 'sharedMemorySegmentSize'
@@ -406,12 +424,13 @@ int main()
         if( sharedMemoryMapping == MAP_FAILED )
         {
             // Print to the standard output stream 
-            DEBUGGER( stderr, "\nERROR! The shared memory could not to be created.\n" );
+            DEBUGGER( stderr, "ERROR! The shared memory could not to be created." );
             
             // Exits the program with failure status
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Parent process created a shared memory with mmap()." );
         
         // Map the shared object to memory. Now we can refer to mapped region using fields of
@@ -428,12 +447,23 @@ int main()
             return EXIT_FAILURE;
         }
         
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "Parent process mapped the shared object to memory. Usage example, sharedMemoryMessage->len." );
         
         // Print to the standard output stream/* process ID */
         cout << "Parent process " << parentProcessPid << " read the message '";
         cout << sharedMemoryMessage->content << "' from sender ";
         cout << sharedMemoryMessage->sender << " in memory " << endl;
+        
+        // free memory, childProcessPids is the address to free and memory_pid_size is the address size.
+        if( munmap( sharedMemoryMessage, sharedMemorySegmentSize ) < 0 )
+        {
+            // Print to the standard output stream
+            DEBUGGER( stderr, "ERROR! Could not free the shared memory! Error code: %d", errno );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
         
         /**
          * Remove the object previously created by shm_open().
@@ -443,6 +473,7 @@ int main()
          */
         int removed = shm_unlink( sharedMemoryObjectFileDescriptorName );
         
+        // If there is a error removing the object.
         if( removed != 0 )
         {
             // Print to the standard output stream
@@ -453,6 +484,7 @@ int main()
         }
     }
     
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "Parent process exits using a platform portable successful exit status." );
     
     // Exits the program using a platform portable successful exit status.
