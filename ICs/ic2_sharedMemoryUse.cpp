@@ -65,34 +65,46 @@ struct structMessage
 using namespace std;
 
 
-/**
- * Para pensar:
- * 
- * As funções usadas criam um segmento de memória de tamanho especificado (truncado) e depois há
- * proteção de páginas. Qual é o modelo de gerenciamento de memória usado?
- * 
- * 
- * Esse mecanismo pode ser usado para implementar sincronização de processos, como uma alternativa
- * aos semáforos?
- * 
- * 
- * Os processos que se comunicam via memória compartilhada precisam estar no mesmo arquivo executável
- * como nesse exemplo ou eles podem estar em arquivos separados?
- * 
- * 
- * Eles precisam estar executando no mesmo processador ou podem estar executando em processadores
- * diferentes?
- * 
- * 
- * Eles precisam estar executando no mesmo computador ou podem estar executando em computadores
- * diferentes?
- * 
- * 
- * Por fim, se o objetivo é comunicar dois processos no mesmo computador, tente fazer o mesmo
- * usando pipes.
- * 
- * 
- */
+/// 
+/// Para pensar:
+/// 
+/// As funções usadas criam um segmento de memória de tamanho especificado (truncado) e depois há
+/// proteção de páginas. Qual é o modelo de gerenciamento de memória usado?
+///     Mapeamento por páginas de memória virtual por POSIX shared memory objects.
+/// 
+/// Esse mecanismo pode ser usado para implementar sincronização de processos, como uma alternativa
+/// aos semáforos?
+///     Não, semáforos são implementados utilizando instruções de máquina o que fazem eles terem
+///     eficiência pelo suporte de hardware. Também, as instruções de alto/baixo nível podem ser
+///     interrompidas a qualquer momento pelo escalonador, diferente da implementação utilizada para
+///     os semáforos com estruturas próprias do processador.
+/// 
+/// Os processos que se comunicam via memória compartilhada precisam estar no mesmo arquivo executável
+/// como nesse exemplo ou eles podem estar em arquivos separados?
+///     Eles podem estar em arquivos executáveis diferentes. Este é o objetivo ao utilizar a função
+///     'shm_open()', para ela para criar um descritor de arquivo utilizando um nome tal como '/meuNome'
+///     e então utilizar a função 'mmap()' fornecendo o descritor de arquivo retorando pela chamada a
+///     função 'shm_open()'.
+/// 
+/// Eles precisam estar executando no mesmo processador ou podem estar executando em processadores
+/// diferentes?
+///     Do mesmo que a pergunta anterior, o processador ao qual executam é irrelevante para seu
+///     funcionamento, portanto, ambos podem estar em processadores diferentes. O mesmo que o modelo
+///     OpenMP de programação para um sistema que usa recursos de processamento locais. Isto é, usamos
+///     OpenMP para trabalhar em dentro de um nó específico de processamento.
+/// 
+/// Eles precisam estar executando no mesmo computador ou podem estar executando em computadores
+/// diferentes?
+///    Ambos precisam estar no mesmo computador. Para utilizar computadores diferentes precisa-se
+///    utilizar outros mecanismos próprios para comunicação de processos entre diferentes computadores,
+///    tais como OPEN MPI (Message Passing Interface). O OpenMPI é um modelo de programação para
+///    sistemas distribuídos como clusters. Assim usamos o OpenMPI para processamento utilizando
+///    vários nós de processamento.
+///
+/// Por fim, se o objetivo é comunicar dois processos no mesmo computador, tente fazer o mesmo
+/// usando pipes.
+///    Isso o já se faz todo dia. echo f:\Evandro | sed "s*\\\*/*g"
+///
 int main() 
 {
     pid_t                currentProcessPid;
@@ -322,6 +334,7 @@ int main()
         }
         
         // Print to the standard output stream /* Process ID */
+        // The currentProcessPid, here is the child process pid.
         cout << "Parent process " << parentProcessPid << " will read message from process ";
         
         // Print to the standard output stream /* Child process ID */
