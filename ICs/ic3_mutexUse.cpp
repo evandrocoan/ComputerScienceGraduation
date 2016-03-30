@@ -5,7 +5,48 @@
 
 using namespace std;
 
-/* declare a mutex */ mymutex;
+/* Declare a mutex pointer */
+pthread_mutex_t *xGlobalVariableMutexLocker;
+
+/** Increment the xGlobalVariable to 100.
+ * 
+ * @param xGlobalVariableVoidPointer      the variable to increment until 100.
+ * @return 
+ */
+void *inc_(void *xGlobalVariableVoidPointer)
+{
+	int *xGlobalVariableIntegerPointer = (int *) xGlobalVariableVoidPointer;
+    
+	for( int currentForIndex = 0; currentForIndex<100; currentForIndex++) 
+	{
+		// Enter critical region
+        pthread_mutex_lock( xGlobalVariableMutexLocker );
+        
+		++( *xGlobalVariableIntegerPointer );
+        
+        // Leave critical region
+        pthread_mutex_unlock( xGlobalVariableMutexLocker );
+	}
+    
+	cout << "increment finished" << endl;
+    
+	return NULL;
+}
+
+void *dec_(void *xGlobalVariableVoidPointer)
+{
+    /* decrement x to 100 */
+    int *xGlobalVariableIntegerPointer = (int *)xGlobalVariableVoidPointer;
+    
+	for( int currentForIndex = 0; currentForIndex<100; currentForIndex++ )
+	{
+		/* enter critical region */
+		--(*ptr);
+		/* leave critical region */
+	}        
+    cout << "decrement finished" << endl;
+    return NULL;
+}
 
 /// Para pensar: Na implementação computacional 1 (IC 1) o que acontecia com a variável global 
 /// count quando ela era incrementada pelos diferentes processos?
@@ -23,37 +64,6 @@ using namespace std;
 /// 
 /// 
 /// 
-void *inc_(void *void_ptr)
-{
-	/* increment x to 100 */
-	int *ptr = (int *)void_ptr;
-	int i=0;
-	for (; i<100; i++) 
-	{
-		/* enter critical region */
-		++(*ptr);
-		/* leave critical region */
-	}
-	cout << "increment finished" << endl;
-	return NULL;
-}
-
-void *dec_(void *void_ptr)
-{
-    /* decrement x to 100 */
-    int *ptr = (int *)void_ptr;
-	int i=0;
-	for (; i<100; i++)
-	{
-		/* enter critical region */
-		--(*ptr);
-		/* leave critical region */
-	}        
-    cout << "decrement finished" << endl;
-    return NULL;
-}
-
-
 int main()
 {
 	int x = 0;
