@@ -58,7 +58,7 @@ using namespace std;
  * @param xGlobalVariableVoidPointer      a void pointer to the variable to increment until
  *                                        MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE.
  * 
- * @return a void pointer to the zero value.
+ * @return a void pointer to a zero int value.
  */
 void *incrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 {
@@ -70,7 +70,9 @@ void *incrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 		// Enter critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_lock( &xGlobalVariableMutex );
         
-		++( *xGlobalVariableIntegerPointer );
+        ++( *xGlobalVariableIntegerPointer );
+        
+		DEBUGGER( stdout, "Incrementing: %d", *xGlobalVariableIntegerPointer );
         
         // Leave critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_unlock( &xGlobalVariableMutex );
@@ -86,7 +88,7 @@ void *incrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
  * @param xGlobalVariableVoidPointer      a void pointer to the variable to increment until
  *                                        MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE.
  * 
- * @return a void pointer to the zero value.
+ * @return a void pointer to a zero int value.
  */
 void *decrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 {
@@ -99,7 +101,9 @@ void *decrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 		// Enter critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_lock( &xGlobalVariableMutex );
         
-		--( *xGlobalVariableIntegerPointer );
+        --( *xGlobalVariableIntegerPointer );
+        
+		DEBUGGER( stdout, "Decrementing: %d", *xGlobalVariableIntegerPointer );
         
         // Leave critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_unlock( &xGlobalVariableMutex );
