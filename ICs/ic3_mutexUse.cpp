@@ -120,6 +120,9 @@ int main()
     pthread_t *imcremmentTheGlobalVariableThread;
     pthread_t *decremmentTheGlobalVariableThread;
     
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to initialize the mutex." );
+    
     // Init mutex. This function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
     //
@@ -138,6 +141,9 @@ int main()
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
     }
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to create a first thread which executes 'toIncrementTheGlobalVariable'." );
     
     // Create a first thread which executes 'toIncrementTheGlobalVariable'. On success, returns 0; 
     // on error, it returns an error number, and the contents of 'imcremmentTheGlobalVariableThread'
@@ -168,6 +174,9 @@ int main()
         return EXIT_FAILURE;
     }
     
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to create a second thread which executes 'toIncrementTheGlobalVariable'." );
+    
     // Create a second thread which executes 'toDecrementTheGlobalVariable'. On success, returns 0; 
     // on error, it returns an error number, and the contents of 'decremmentTheGlobalVariableThread'
     // are undefined.
@@ -197,9 +206,55 @@ int main()
         return EXIT_FAILURE;
     }
     
-    /* wait for the first thread to finish */
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to wait for the first thread to finish." );
     
-	/* wait for the second thread to finish */
+    // Wait for the first thread to finish. The this function waits for the thread specified by
+    // thread to terminate. If that thread has already terminated, then pthread_join() returns
+    // immediately. On success, pthread_join() returns 0; on error, it returns an error number.
+    // 
+    // '*imcremmentTheGlobalVariableThread'
+    // This is the thread id to wait.
+    // 
+    // 'NULL'
+    // If is not NULL, then pthread_join() copies the exit status of the target thread
+    // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
+    // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
+    // 
+    if( errno = pthread_join( *imcremmentTheGlobalVariableThread, NULL ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "ERROR! Could not wait the thread %d to exit! Error code: %d",
+                *imcremmentTheGlobalVariableThread, errno );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to wait for the second thread to finish." );
+    
+    // Wait for the second thread to finish. The this function waits for the thread specified by
+    // thread to terminate. If that thread has already terminated, then pthread_join() returns
+    // immediately. On success, pthread_join() returns 0; on error, it returns an error number.
+    // 
+    // '*decremmentTheGlobalVariableThread'
+    // This is the thread id to wait.
+    // 
+    // 'NULL'
+    // If is not NULL, then pthread_join() copies the exit status of the target thread
+    // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
+    // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
+    // 
+    if( errno = pthread_join( *decremmentTheGlobalVariableThread, NULL ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "ERROR! Could not wait the thread %d to exit! Error code: %d",
+                *decremmentTheGlobalVariableThread, errno );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
     
 	// Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
