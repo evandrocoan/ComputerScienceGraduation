@@ -6,6 +6,7 @@
 #include <iostream>
 #include <pthread.h>
 #include <cstdlib>
+#include <stdio.h>
 
 
 /** This is to view internal program data while execution. Default value: 0
@@ -13,8 +14,11 @@
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
+
+#if DEBUG_LEVEL > 0
+    #define DEBUG
 
 /** Print like function for logging putting a new line at the end of string. Following explanations:
  * 
@@ -90,6 +94,7 @@ void *toDecrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 	}
     
     cout << "decrement finished" << endl;
+    
     return NULL;
 }
 
@@ -114,10 +119,10 @@ int main()
     int errno;
     
     // Print to the standard output stream
-	cout << "x: " << x << endl;
+	cout << "x: " << xGlobalVariableMutex << endl;
     
 	// Declare threads
-    pthread_t *imcremmentTheGlobalVariableThread;
+    pthread_t *imcrementTheGlobalVariableThread;
     pthread_t *decremmentTheGlobalVariableThread;
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
@@ -133,10 +138,10 @@ int main()
     // To use the default mutex attributes where upon successful initialization, the state of the 
     // mutex becomes initialized and unlocked.
     // 
-    if( errno = pthread_mutex_init( xGlobalVariableMutex, NULL ) != 0 )
+    if( ( errno = pthread_mutex_init( xGlobalVariableMutex, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "ERROR! Could not initialize the mutex! Error code: %d", errno );
+        DEBUGGER( stderr, "ERROR! Could not initialize the mutex! Error code: %d", errno );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -146,10 +151,10 @@ int main()
     DEBUGGER( stdout, "We are about to create a first thread which executes 'toIncrementTheGlobalVariable'." );
     
     // Create a first thread which executes 'toIncrementTheGlobalVariable'. On success, returns 0; 
-    // on error, it returns an error number, and the contents of 'imcremmentTheGlobalVariableThread'
+    // on error, it returns an error number, and the contents of 'imcrementTheGlobalVariableThread'
     // are undefined.
     // 
-    // 'imcremmentTheGlobalVariableThread'
+    // 'imcrementTheGlobalVariableThread'
     // The pointer to the ID of the new thread created. This identifier is used to refer to the
     // thread in subsequent calls to other pthreads functions.
     // 
@@ -162,13 +167,13 @@ int main()
     // 'toIncrementTheGlobalVariable'
     // This is a pointer to the function to call when the thread starts running.
     // 
-    // 'xGlobalVariableVoidPointer'
+    // 'xGlobalVariable'
     // This is the pointer to argument to be passed to the function to call.
     // 
-    if( errno = pthread_create( imcremmentTheGlobalVariableThread, NULL, toIncrementTheGlobalVariable, xGlobalVariableVoidPointer ) )
+    if( errno = pthread_create( imcrementTheGlobalVariableThread, NULL, toIncrementTheGlobalVariable, &xGlobalVariable ) )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "ERROR! Could not to create the thread! Error code: %d", errno );
+        DEBUGGER( stderr, "ERROR! Could not to create the thread! Error code: %d", errno );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -194,13 +199,13 @@ int main()
     // 'toDecrementTheGlobalVariable'
     // This is a pointer to the function to call when the thread starts running.
     // 
-    // 'xGlobalVariableVoidPointer'
+    // 'xGlobalVariable'
     // This is the pointer to argument to be passed to the function to call.
     // 
-    if( errno = pthread_create( decremmentTheGlobalVariableThread, NULL, toDecrementTheGlobalVariable, xGlobalVariableVoidPointer ) )
+    if( errno = pthread_create( decremmentTheGlobalVariableThread, NULL, toDecrementTheGlobalVariable, &xGlobalVariable ) )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "ERROR! Could not to create the thread! Error code: %d", errno );
+        DEBUGGER( stderr, "ERROR! Could not to create the thread! Error code: %d", errno );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -213,7 +218,7 @@ int main()
     // thread to terminate. If that thread has already terminated, then pthread_join() returns
     // immediately. On success, pthread_join() returns 0; on error, it returns an error number.
     // 
-    // '*imcremmentTheGlobalVariableThread'
+    // '*imcrementTheGlobalVariableThread'
     // This is the thread id to wait.
     // 
     // 'NULL'
@@ -221,11 +226,11 @@ int main()
     // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
     // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
     // 
-    if( errno = pthread_join( *imcremmentTheGlobalVariableThread, NULL ) != 0 )
+    if( ( errno = pthread_join( *imcrementTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "ERROR! Could not wait the thread %d to exit! Error code: %d",
-                *imcremmentTheGlobalVariableThread, errno );
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! Error code: %d",
+                *imcrementTheGlobalVariableThread, errno );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -246,10 +251,10 @@ int main()
     // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
     // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
     // 
-    if( errno = pthread_join( *decremmentTheGlobalVariableThread, NULL ) != 0 )
+    if( ( errno = pthread_join( *decremmentTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "ERROR! Could not wait the thread %d to exit! Error code: %d",
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! Error code: %d",
                 *decremmentTheGlobalVariableThread, errno );
         
         // Exits the program using a platform portable failure exit status.
@@ -262,14 +267,17 @@ int main()
     // 'xGlobalVariableMutex'
     // It Is the mutex address to destroy.
     // 
-    if( pthread_mutex_destroy( xGlobalVariableMutex ) != 0 )
+    if( ( errno =  pthread_mutex_destroy( xGlobalVariableMutex ) ) != 0 )
     {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! Error code: %d", errno );
+        
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
     }
     
     // Print to the standard output stream
-	cout << "x: " << x << endl;
+	cout << "x: " << xGlobalVariableMutex << endl;
     
     // Exits the program using a platform portable successful exit status.
 	return EXIT_SUCCESS;
