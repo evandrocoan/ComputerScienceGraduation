@@ -58,22 +58,25 @@ void *decrementTheGlobalVariable(void *);
 using namespace std;
 
 
-/// Para pensar: Na implementação computacional 1 (IC 1) o que acontecia com a variável global 
-/// count quando ela era incrementada pelos diferentes processos?
-/// 
-/// 
-/// O mesmo vai acontecer agora quando a variável global x for incrementada e decrementada pelos
-/// diferentes threads?
-/// 
-/// 
-/// Qual é o valor esperado para a variável x após o término do aplicativo?
-/// 
-/// 
-/// Se não houver mutex, qual será o valor final da variável global x (ou sua distribuição de
-/// probabilidade)?
-/// 
-/// 
-/// 
+/** 
+ * Para pensar:
+ * 
+ * Na implementação computacional 1 (IC 1) o que acontecia com a variável global 
+ * count quando ela era incrementada pelos diferentes processos?
+ * 
+ * 
+ * O mesmo vai acontecer agora quando a variável global x for incrementada e decrementada pelos
+ * diferentes threads?
+ * 
+ * 
+ * Qual é o valor esperado para a variável x após o término do aplicativo?
+ * 
+ * 
+ * Se não houver mutex, qual será o valor final da variável global x (ou sua distribuição de
+ * probabilidade)?
+ * 
+ * 
+ */
 int main()
 {
     int errno;
@@ -101,7 +104,7 @@ int main()
     if( ( errno = pthread_mutex_init( &xGlobalVariableMutex, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not initialize the mutex! Error %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not initialize the mutex! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -135,7 +138,7 @@ int main()
             &xGlobalVariableInteger ) )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to create the thread! Error code %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -169,7 +172,7 @@ int main()
             &xGlobalVariableInteger ) )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to create the thread! Error %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -193,7 +196,7 @@ int main()
     if( ( errno = pthread_join( imcrementTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! Error %s",
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! %s",
                 *imcrementTheGlobalVariableThread, strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
@@ -218,7 +221,7 @@ int main()
     if( ( errno = pthread_join( decremmentTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! Error %s",
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! %s",
                 *decremmentTheGlobalVariableThread, strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
@@ -234,7 +237,7 @@ int main()
     if( ( errno =  pthread_mutex_destroy( &xGlobalVariableMutex ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! Error %s", strerror );
+        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -242,6 +245,9 @@ int main()
     
     // Print to the standard output stream
 	cout << "x: " << xGlobalVariableInteger << endl;
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "Exits the program using a platform portable successful exit status." );
     
     // Exits the program using a platform portable successful exit status.
 	return EXIT_SUCCESS;
