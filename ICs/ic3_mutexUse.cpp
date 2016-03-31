@@ -6,7 +6,6 @@
 #include <iostream>
 #include <pthread.h>
 #include <cstdlib>
-#include <errno.h>
 
 
 /** This is to view internal program data while execution. Default value: 0
@@ -40,7 +39,7 @@
 
 
 // Declare a mutex pointer.
-pthread_mutex_t *xGlobalVariableMutexLocker;
+pthread_mutex_t *xGlobalVariableMutex;
 
 // The x global variable requested by the teacher.
 int xGlobalVariable = 0;
@@ -50,8 +49,9 @@ using namespace std;
 
 /** Increment the xGlobalVariable to 100.
  * 
- * @param xGlobalVariableVoidPointer      the variable to increment until 100.
- * @return 
+ * @param xGlobalVariableVoidPointer      a void pointer to the variable to increment until 100.
+ * 
+ * @return a void pointer
  */
 void *toIncrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 {
@@ -59,13 +59,13 @@ void *toIncrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
     
 	for( int currentForIndex = 0; currentForIndex<100; currentForIndex++) 
 	{
-		// Enter critical region
-        pthread_mutex_lock( xGlobalVariableMutexLocker );
+		// Enter critical region. xGlobalVariableMutex is the pointer to the mutex.
+        pthread_mutex_lock( xGlobalVariableMutex );
         
 		++( *xGlobalVariableIntegerPointer );
         
-        // Leave critical region
-        pthread_mutex_unlock( xGlobalVariableMutexLocker );
+        // Leave critical region. xGlobalVariableMutex is the pointer to the mutex.
+        pthread_mutex_unlock( xGlobalVariableMutex );
 	}
     
 	cout << "increment finished" << endl;
@@ -76,13 +76,17 @@ void *toIncrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 void *toDecrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
 {
     /* decrement x to 100 */
-    int *xGlobalVariableIntegerPointer = (int *)xGlobalVariableVoidPointer;
+    int *xGlobalVariableIntegerPointer = (int *) xGlobalVariableVoidPointer;
     
 	for( int currentForIndex = 0; currentForIndex<100; currentForIndex++ )
 	{
-		/* enter critical region */
-		--(*ptr);
-		/* leave critical region */
+		// Enter critical region. xGlobalVariableMutex is the pointer to the mutex.
+        pthread_mutex_lock( xGlobalVariableMutex );
+        
+		--( *xGlobalVariableIntegerPointer );
+        
+        // Leave critical region. xGlobalVariableMutex is the pointer to the mutex.
+        pthread_mutex_unlock( xGlobalVariableMutex );
 	}
     
     cout << "decrement finished" << endl;
@@ -113,20 +117,20 @@ int main()
 	cout << "x: " << x << endl;
     
 	// Declare threads
-    pthread_t *threadToImcremmentTheGlobalVariable;
-    pthread_t *threadToDecremmentTheGlobalVariable;
+    pthread_t *imcremmentTheGlobalVariableThread;
+    pthread_t *decremmentTheGlobalVariableThread;
     
     // Init mutex. This function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
     //
-    // 'xGlobalVariableMutexLocker'
+    // 'xGlobalVariableMutex'
     // It is the mutex address to initialize.
     // 
     // 'NULL'
     // To use the default mutex attributes where upon successful initialization, the state of the 
     // mutex becomes initialized and unlocked.
     // 
-    if( errno = pthread_mutex_init( xGlobalVariableMutexLocker, NULL ) != 0 )
+    if( errno = pthread_mutex_init( xGlobalVariableMutex, NULL ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "ERROR! Could not initialize the mutex! Error code: %d", errno );
@@ -136,19 +140,26 @@ int main()
     }
     
     // Create a first thread which executes 'toIncrementTheGlobalVariable'. On success, returns 0; 
-    // on error, it returns an error number, and the contents of 'threadToImcremmentTheGlobalVariable'
+    // on error, it returns an error number, and the contents of 'imcremmentTheGlobalVariableThread'
     // are undefined.
     // 
-    // 'threadToImcremmentTheGlobalVariable'
+    // 'imcremmentTheGlobalVariableThread'
     // The pointer to the ID of the new thread created. This identifier is used to refer to the
     // thread in subsequent calls to other pthreads functions.
     // 
     // 'NULL'
-    // The thread is created with default attributes. 
+    // The thread is created with default attributes. Attributes are specified only at thread 
+    // creation time; they cannot be altered while the thread is being used. Where the attibute 
+    // initialisation -- pthread_attr_init() create a default 'pthread_attr_t' attr. Example:
+    // PTHREAD_CREATE_JOINABLE, Exit status and thread are preserved after the thread terminates.
     // 
+    // 'toIncrementTheGlobalVariable'
+    // This is a pointer to the function to call when the thread starts running.
     // 
+    // 'xGlobalVariableVoidPointer'
+    // This is the pointer to argument to be passed to the function to call.
     // 
-    if( errno = pthread_create( threadToImcremmentTheGlobalVariable, NULL, toIncrementTheGlobalVariable, NULL ) )
+    if( errno = pthread_create( imcremmentTheGlobalVariableThread, NULL, toIncrementTheGlobalVariable, xGlobalVariableVoidPointer ) )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "ERROR! Could not to create the thread! Error code: %d", errno );
@@ -157,7 +168,34 @@ int main()
         return EXIT_FAILURE;
     }
     
-	/* create a second thread which executes dec_(&x) */
+    // Create a second thread which executes 'toDecrementTheGlobalVariable'. On success, returns 0; 
+    // on error, it returns an error number, and the contents of 'decremmentTheGlobalVariableThread'
+    // are undefined.
+    // 
+    // 'decremmentTheGlobalVariableThread'
+    // The pointer to the ID of the new thread created. This identifier is used to refer to the
+    // thread in subsequent calls to other pthreads functions.
+    // 
+    // 'NULL'
+    // The thread is created with default attributes. Attributes are specified only at thread 
+    // creation time; they cannot be altered while the thread is being used. Where the attribute 
+    // initialisation -- pthread_attr_init() create a default 'pthread_attr_t' attr. Example:
+    // PTHREAD_CREATE_JOINABLE, Exit status and thread are preserved after the thread terminates.
+    // 
+    // 'toDecrementTheGlobalVariable'
+    // This is a pointer to the function to call when the thread starts running.
+    // 
+    // 'xGlobalVariableVoidPointer'
+    // This is the pointer to argument to be passed to the function to call.
+    // 
+    if( errno = pthread_create( decremmentTheGlobalVariableThread, NULL, toDecrementTheGlobalVariable, xGlobalVariableVoidPointer ) )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "ERROR! Could not to create the thread! Error code: %d", errno );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
     
     /* wait for the first thread to finish */
     
@@ -166,10 +204,10 @@ int main()
 	// Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
     // 
-    // 'xGlobalVariableMutexLocker'
+    // 'xGlobalVariableMutex'
     // It Is the mutex address to destroy.
     // 
-    if( pthread_mutex_destroy( xGlobalVariableMutexLocker ) != 0 )
+    if( pthread_mutex_destroy( xGlobalVariableMutex ) != 0 )
     {
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
