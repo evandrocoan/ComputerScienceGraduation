@@ -17,6 +17,8 @@
  */
 #define DEBUG_LEVEL 0
 
+#define MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE 100
+
 
 #if DEBUG_LEVEL > 0
     #define DEBUG
@@ -48,8 +50,6 @@ pthread_mutex_t xGlobalVariableMutex;
 
 // The x global variable requested by the teacher.
 int xGlobalVariableInteger = 0;
-
-#define MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE 100
 
 // Functions prototypes
 void *incrementTheGlobalVariable(void *);
@@ -210,8 +210,8 @@ int main()
     if( ( errno = pthread_join( imcrementTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! %s",
-                *imcrementTheGlobalVariableThread, strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
+                imcrementTheGlobalVariableThread, strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -235,8 +235,8 @@ int main()
     if( ( errno = pthread_join( decremmentTheGlobalVariableThread, NULL ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not wait the thread %d to exit! %s",
-                *decremmentTheGlobalVariableThread, strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
+                decremmentTheGlobalVariableThread, strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -251,7 +251,7 @@ int main()
     if( ( errno =  pthread_mutex_destroy( &xGlobalVariableMutex ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror );
+        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
