@@ -63,19 +63,33 @@ using namespace std;
  * 
  * Na implementação computacional 1 (IC 1) o que acontecia com a variável global 
  * count quando ela era incrementada pelos diferentes processos?
- * 
+ *     Bem, com qual delas? Cada processo tinha sua própria variável 'count' copiada a partir da
+ *     original no momento do fork. Cada um incrementava sua própria cópia da variable count, o que
+ *     não afeta a variável original do processo pai.
  * 
  * O mesmo vai acontecer agora quando a variável global x for incrementada e decrementada pelos
  * diferentes threads?
- * 
+ *     Ela vai incrementada e decrementada como se tudo fosse um único programa, desde que sejam
+ *     evitados as condições de corrida.
  * 
  * Qual é o valor esperado para a variável x após o término do aplicativo?
- * 
+ *     É esperado que ela seja 0.
  * 
  * Se não houver mutex, qual será o valor final da variável global x (ou sua distribuição de
  * probabilidade)?
- * 
- * 
+ *     Ela pode estar entre -100 e +100, dependendo da operação do escalonador de processos do sistema
+ *     operacional.
+ *     Por exemplo, se toda vez que thread que decrementa ler 0, for escrever -1, mas
+ *     no meio do processo ser colocada em espera, e a thread the incrementa, for colocada para
+ *     executar e ler 0, e escreve 1, e então é colocada em espera, e a thread que decrementa voltar
+ *     e continuar a operação de onde parou, e então escreve -1, lê ele novamente, e é mais uma
+ *     vez colocar em espera pelo escalonador, e a thread que incrementa é colocada para executar
+ *     mais uma vez, e agora lê -1, e escreve 0 e então é colocada em espera, e a thread que
+ *     decrementa volta a executar mais uma vez e continua de onde parou, isto é, a escrever o
+ *     valor de -2.
+ *     Continuando assim sem exclusão mútua, podemos chegar a ter -100 ou +100 ou qualquer valor
+ *     entre essa faixa. Claro, que tal chance real de acontecer algo assim na vida real é muito
+ *     pequena. E mais precisamente, precisaria-se de um escalonador muito sacana.
  */
 int main()
 {
