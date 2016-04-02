@@ -11,7 +11,7 @@
 
 
 /** This is to view internal program data while execution. Default value: 0
- *
+ * 
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
@@ -96,9 +96,9 @@ int main()
     int errno;
     
     // Print to the standard output stream
-	cout << "x: " << xGlobalVariableInteger << endl;
+    cout << "x: " << xGlobalVariableInteger << endl;
     
-	// Declare threads
+    // Declare threads
     pthread_t imcrementTheGlobalVariableThread;
     pthread_t decremmentTheGlobalVariableThread;
     
@@ -242,7 +242,7 @@ int main()
         return EXIT_FAILURE;
     }
     
-	// Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
+    // Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
     // 
     // '&xGlobalVariableMutex'
@@ -258,13 +258,13 @@ int main()
     }
     
     // Print to the standard output stream
-	cout << "x: " << xGlobalVariableInteger << endl;
+    cout << "x: " << xGlobalVariableInteger << endl;
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "Exits the program using a platform portable successful exit status." );
     
     // Exits the program using a platform portable successful exit status.
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 /** Increment the xGlobalVariableInteger to MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE.
@@ -274,25 +274,25 @@ int main()
  * 
  * @return a void pointer to a zero int value.
  */
-void *incrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
+void *incrementTheGlobalVariable( void *xGlobalVariableVoidPointer )
 {
-	int *xGlobalVariableIntegerPointer = (int *) xGlobalVariableVoidPointer;
+    int *xGlobalVariableIntegerPointer = (int *) xGlobalVariableVoidPointer;
     
-	for( int currentForIndex = 0; 
+    for( int currentForIndex = 0; 
          currentForIndex < MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE; ++currentForIndex )
-	{
-		// Enter critical region. xGlobalVariableMutex is the mutex.
+    {
+        // Enter critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_lock( &xGlobalVariableMutex );
         
         ++( *xGlobalVariableIntegerPointer );
         
-		DEBUGGER( stdout, "Incrementing: %d", *xGlobalVariableIntegerPointer );
+        DEBUGGER( stdout, "Incrementing: %d", *xGlobalVariableIntegerPointer );
         
         // Leave critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_unlock( &xGlobalVariableMutex );
-	}
+    }
     
-	cout << "increment finished" << endl;
+    cout << "increment finished" << endl;
     
     return NULL;
 }
@@ -304,24 +304,24 @@ void *incrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
  * 
  * @return a void pointer to a zero int value.
  */
-void *decrementTheGlobalVariable(void *xGlobalVariableVoidPointer)
+void *decrementTheGlobalVariable( void *xGlobalVariableVoidPointer )
 {
     /* decrement x to MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE */
     int *xGlobalVariableIntegerPointer = (int *) xGlobalVariableVoidPointer;
     
-	for( int currentForIndex = 0;
+    for( int currentForIndex = 0;
          currentForIndex < MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE; ++currentForIndex )
-	{
-		// Enter critical region. xGlobalVariableMutex is the mutex.
+    {
+        // Enter critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_lock( &xGlobalVariableMutex );
         
         --( *xGlobalVariableIntegerPointer );
         
-		DEBUGGER( stdout, "Decrementing: %d", *xGlobalVariableIntegerPointer );
+        DEBUGGER( stdout, "Decrementing: %d", *xGlobalVariableIntegerPointer );
         
         // Leave critical region. xGlobalVariableMutex is the mutex.
         pthread_mutex_unlock( &xGlobalVariableMutex );
-	}
+    }
     
     cout << "decrement finished" << endl;
     
