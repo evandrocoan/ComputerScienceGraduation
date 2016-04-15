@@ -19,7 +19,7 @@
 */
 
 /**
- * Nome do aluno. Compile and link with -pthread.
+ * Compile and link with -pthread. Nome do aluno:
  * 
  * @author Evandro  Coan
  * 
@@ -74,7 +74,7 @@
 
 
 // Functions prototypes
-void *child(void *)
+void *child(void *);
 
 
 using namespace std;
