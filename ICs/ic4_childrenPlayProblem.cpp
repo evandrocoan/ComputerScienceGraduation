@@ -40,7 +40,7 @@
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 #define MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE 100
 
@@ -71,10 +71,15 @@
 
 
 /* declare whenever global variables you need to synchronize pthreads using posix semaphores */
+#define MAX_BALLS_TO_PLAY                                    3
+#define MAX_CHILD_THREADS_TO_PLAY                            7
+#define MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL 5
+
+sem_t ballSemaphoresToWait[ MAX_BALLS_TO_PLAY ]
 
 
 // Functions prototypes
-void *child(void *);
+void *childSimulatorFunction(void *);
 
 
 using namespace std;
@@ -105,21 +110,138 @@ int main()
 {
     cout << "The kindengarten is open" << endl;
     
-    /* declare local variable, such as threads */
+    // declare local variable, such as threads
+    int       errno;
+    pthread_t childSimulatorThreads[ MAX_CHILD_THREADS_TO_PLAY ];
     
+    // initialize the errno a successful state
+    errno = 0;
     
-    /* init semaphores to synchronize the threads */
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
     
+    // init semaphores to synchronize the threads
+    for( currentBallSemaphore = 0; currentBallSemaphore < sizeof ballSemaphoresToWait; ++currentBallSemaphore ) 
+    {
+        // 'ballSemaphoresToWait[ currentBallSemaphore ]'
+        // The semaphore to initialize.
+        //
+        // int '0'
+        // Indicates whether this semaphore is to be shared between the threads of a process, or
+        // between processes. If 0, then the semaphore is shared between the threads of a process,
+        // and should be located at some address that is visible to all threads (e.g., a global
+        // variable, or a variable allocated dynamically on the heap).
+        //
+        // 'initialSemaphoreValue'
+        // The value argument specifies the initial value for the semaphore. It is 1 because the
+        // the balls are initially taken by some children, but if there are more ball than children
+        // initializes with 0.
+        //
+        unsigned int initialSemaphoreValue = currentBallSemaphore < sizeof childSimulatorThreads ? 1 : 0 ;
+        
+        if( sem_init( &ballSemaphoresToWait[ currentBallSemaphore ], 0, initialSemaphoreValue ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
+    }
     
-    /* create 7 threads for the children, passing to each one a different number (child 0 to 6) */
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to create the threads to execute." );
     
+    // create 7 threads for the children, passing to each one a different number (child 0 to 6)
+    for( int currentChild = 0; currentChild < sizeof childSimulatorThreads; ++currentChild )
+    {
+        // Create a second thread which executes 'childSimulatorFunction'. On success, returns 0; 
+        // on error, it returns an error number, and the contents of 'childSimulatorThreads[ currentChild ]'
+        // are undefined.
+        // 
+        // 'childSimulatorThreads[ currentChild ]'
+        // The pointer to the ID of the new thread created. This identifier is used to refer to the
+        // thread in subsequent calls to other pthreads functions.
+        // 
+        // 'NULL'
+        // The thread is created with default attributes. Attributes are specified only at thread 
+        // creation time; they cannot be altered while the thread is being used. Where the attribute 
+        // initialisation -- pthread_attr_init() create a default 'pthread_attr_t' attr. Example:
+        // PTHREAD_CREATE_JOINABLE, Exit status and thread are preserved after the thread terminates.
+        // 
+        // 'childSimulatorFunction'
+        // This is a pointer to the function to call when the thread starts running.
+        // 
+        // 'currentChild'
+        // This is the pointer to argument to be passed to the function to call.
+        // 
+        if( errno = pthread_create( &childSimulatorThreads[ currentChild ], NULL, childSimulatorFunction, &currentChild ) )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
+        
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "We just created the thread %lu to execute.", childSimulatorThreads[ currentChild ] );
+    }
     
-    /* wait for all children to finish */
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to wait for the threads to finish." );
     
+    // wait for all children to finish
+    for( int currentChild = 0; currentChild < sizeof childSimulatorThreads; ++currentChild )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "We are about to wait for the thread %lu to finish.", childSimulatorThreads[ currentChild ] );
+        
+        // The this function waits for the thread specified to terminate. If that thread has
+        // already terminated, then pthread_join() returns immediately. On success, pthread_join()
+        // returns 0; on error, it returns an error number.
+        // 
+        // 'childSimulatorThreads[ currentChild ]'
+        // This is the thread id to wait.
+        // 
+        // 'NULL'
+        // If is not NULL, then pthread_join() copies the exit status of the target thread
+        // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
+        // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
+        // 
+        if( ( errno = pthread_join( childSimulatorThreads[ currentChild ], NULL ) ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
+                    childSimulatorThreads[ currentChild ], strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
+    }
     
     cout << "The kindengarten is closed" << endl;
     
-    return 0;
+    // Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
+    // indicate the error.
+    // 
+    // '&xGlobalVariableMutex'
+    // It Is the mutex address to destroy.
+    // 
+    if( ( errno =  pthread_mutex_destroy( &xGlobalVariableMutex ) ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror( errno ) );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "Exits the program using a platform portable successful exit status." );
+    
+    // Exits the program using a platform portable successful exit status.
+    return EXIT_SUCCESS;
     
     /** Respostas das perguntas "para pensar":
      *
@@ -128,33 +250,71 @@ int main()
 }
 
 /**
+ * This simulates a child playing/trying to play MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL
+ * times, with only one of MAX_BALLS_TO_PLAY ball(s) available to play with.
  * 
+ * @param void_ptr     an unsigned short to indicates the current child which will be playing/trying to play.
+ * 
+ * @return             
  */
-void *child(void *void_ptr)
+void *childSimulatorFunction(void *void_ptr)
 {
     unsigned short *childNum = (unsigned short *)void_ptr;
     
-    for (unsigned short i=1; i<=5; i++) 
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to put the children to play with the ball." );
+    
+    for( unsigned short currentPlayTime = 1;
+         currentPlayTime <= MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL; ++currentPlayTime )
     {
-        cout << "Child " << *childNum << " wants to play with the ball for the " << i << "th time" << endl;
+        cout << "Child " << *childNum << " wants to play with the ball for the " << currentPlayTime << "th time" << endl;
         
         /* if the child has no ball, need to take one from the basket if there is one, or will wait until there is a ball in the basket */
             cout << " Child " << *childNum << " wants to take a ball from the basket" << endl;
         
         /* once the child has a ball, he/she starts to play */
         cout << "  Child " << *childNum << " is playing with the ball" << endl;
-        /* play with the ball for 1 second */
         
+        /* play with the ball for 1 second */
+        sleep( 1 );
         
         cout << "  Child " << *childNum << " wants to leave the ball in the basket" << endl;
         
-        /* when the child is tired of playing, he/she has to drop the ball into the basket, if there is room for it (basket holds only 3 balls), or will wait until another hild to take a ball */
+        /* when the child is tired of playing, he/she has to drop the ball into the basket, if there is room for it (basket holds only 3 balls), or will wait until another child to take a ball */
         cout << " Child " << *childNum << " has droped the ball in the basket" << endl;
         
     }
     
     cout << "Child " << *childNum << " will no longer play" << endl;  
     
-    /* exit the thread*/
+    // exit the thread
+    // Terminates the calling thread and returns a value via retval that (if the thread is joinable)
+    // is available to another thread in the same process that calls pthread_join(3).
+    pthread_exit(void *retval);
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
