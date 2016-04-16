@@ -51,29 +51,29 @@
 #if DEBUG_LEVEL > 0
     #define DEBUG
 
-pthread_mutex_t fprintf_mutex;
+pthread_mutex_t g_fprintf_mutex;
 
 
 /** Print like function for logging putting a new line at the end of string. It does uses mutex
  * due the my doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
  * I could not find anything concrete. Following explanations:
  * 
- * pthread_mutex_lock( fprintf_mutex );   Lock the mutex.
+ * pthread_mutex_lock( g_fprintf_mutex );   Lock the mutex.
  * fprintf( stream, __VA_ARGS__ );        Print to the specified output stream the formatting args.
  * fprintf( stream, "\n" );               Print a new line.
  * fflush( stream );                      Flushes the output stream to avoid double output over '>'.
  *                                          Example: './main > results.txt' would get doubled/... print.
- * pthread_mutex_unlock( fprintf_mutex ); Unlock the shared memory mutex.
+ * pthread_mutex_unlock( g_fprintf_mutex ); Unlock the shared memory mutex.
  * } while( 0 )                           To allow to use ';' semicolon over the macro statement use and
  *                                          still to be able to use it within an unbraced if statement.
  */
 #define DEBUGGER( stream, ... ) \
 { \
-    pthread_mutex_lock( &fprintf_mutex ); \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
-    pthread_mutex_unlock( &fprintf_mutex ); \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
 } while( 0 )
 
 #else
@@ -164,7 +164,7 @@ void initializeTheSemaphores()
 #if defined DEBUG
     
     // Initializes the printf mutex for use. Specifies NULL to use the default mutex attributes.
-    if( errno = pthread_mutex_init( &fprintf_mutex, NULL ) )
+    if( errno = pthread_mutex_init( &g_fprintf_mutex, NULL ) )
     {
         // Print to the standard output stream
         DEBUGGER( stderr, "\nERROR! Could initialize the mutex! %s", strerror( errno ) );
@@ -330,10 +330,10 @@ void closesTheChildsGargen()
     // Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
     // indicate the error.
     // 
-    // '&fprintf_mutex'
+    // '&g_fprintf_mutex'
     // It Is the mutex address to destroy.
     // 
-    if( ( errno =  pthread_mutex_destroy( &fprintf_mutex ) ) != 0 )
+    if( ( errno =  pthread_mutex_destroy( &g_fprintf_mutex ) ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror( errno ) );
