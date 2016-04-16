@@ -384,21 +384,6 @@ void *childSimulatorFunction(void *void_ptr)
                 pthread_detach( pthread_self() );
             }
             
-            // Increments (unlocks) the semaphore pointed to by 'remainingBallsSemaphore'. 
-            // If the semaphore's value consequently becomes greater than zero, then another 
-            // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
-            // to lock the semaphore.
-            // 
-            if( sem_post( &remainingBallsSemaphore ) != 0 )
-            {
-                // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-                DEBUGGER( stderr, "ERROR! Could not to free the semaphore remainingBallsSemaphore! %s",
-                        strerror( errno ) );
-                
-                // Exits the program using a platform portable failure exit status.
-                pthread_detach( pthread_self() );
-            }
-            
             // Each child only access its own array position, hence there are no race conditions.
             howManyBallsEachChildHas[ *childNum ]++;
         }
@@ -416,7 +401,7 @@ void *childSimulatorFunction(void *void_ptr)
         
         DEBUGGER( stdout, "Child %d is playing with the ball", *childNum );
     #else
-            
+        
         // once the child has a ball, he/she starts to play
         cout << "  Child " << *childNum << " is playing with the ball" << endl;
     #endif
@@ -448,6 +433,23 @@ void *childSimulatorFunction(void *void_ptr)
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
             DEBUGGER( stderr, "ERROR! Could not to wait the semaphore usedBallsSemaphore! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            pthread_detach( pthread_self() );
+        }
+        
+        howManyBallsEachChildHas[ *childNum ]--;
+        
+        // Increments (unlocks) the semaphore pointed to by 'remainingBallsSemaphore'. 
+        // If the semaphore's value consequently becomes greater than zero, then another 
+        // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
+        // to lock the semaphore.
+        // 
+        if( sem_post( &remainingBallsSemaphore ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore remainingBallsSemaphore! %s",
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
