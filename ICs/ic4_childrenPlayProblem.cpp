@@ -152,137 +152,6 @@ int main()
      */
 }
 
-void closesTheChildsGargen()
-{
-#if defined DEBUG
-    
-    DEBUGGER( stdout, "The kindengarten is closed" );
-#else
-    
-    cout << "The kindengarten is closed" << endl;
-#endif
-    
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to destroy the semaphores." );
-    
-    // Destroy semaphore 'g_remainingBallsSemaphore' used to synchronize the threads.
-    //
-    if( sem_destroy( &g_remainingBallsSemaphore ) != 0 )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_remainingBallsSemaphore! %s",
-                strerror( errno ) );
-        
-        // Exits the program using a platform portable failure exit status.
-        exit( EXIT_FAILURE );
-    }
-    
-    // Destroy semaphore 'g_usedBallsSemaphore' used to synchronize the threads.
-    //
-    if( sem_destroy( &g_usedBallsSemaphore ) != 0 )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_usedBallsSemaphore! %s",
-                strerror( errno ) );
-        
-        // Exits the program using a platform portable failure exit status.
-        exit( EXIT_FAILURE );
-    }
-}
-
-void waitTheThreadToExecute( pthread_t *childSimulatorThreads )
-{
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to wait for the threads to finish." );
-    
-    // wait for all children to finish
-    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "We are about to wait for the thread %lu (child %d) to finish.",
-                childSimulatorThreads[ currentChild ], g_childNumbers[ currentChild ] );
-        
-        // The this function waits for the thread specified to terminate. If that thread has
-        // already terminated, then pthread_join() returns immediately. On success, pthread_join()
-        // returns 0; on error, it returns an error number.
-        // 
-        // 'childSimulatorThreads[ currentChild ]'
-        // This is the thread id to wait.
-        // 
-        // 'NULL'
-        // If is not NULL, then pthread_join() copies the exit status of the target thread
-        // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
-        // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
-        // 
-        if( ( errno = pthread_join( childSimulatorThreads[ currentChild ], NULL ) ) != 0 )
-        {
-            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
-                    childSimulatorThreads[ currentChild ], strerror( errno ) );
-            
-            // Exits the program using a platform portable failure exit status.
-            exit( EXIT_FAILURE );
-        }
-    }
-}
-
-void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
-{
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %d",
-            sizeof childSimulatorThreads );
-    
-    // create 7 threads for the children, passing to each one a different number (child 0 to 6)
-    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
-    {
-        // These are the children ids to be used as identifiers to them while they are running.
-        g_childNumbers[ currentChild ] = currentChild;
-        
-        // Give initially some balls to some children.
-        if( currentChild < MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN )
-        {
-            g_howManyBallsEachChildHas[ currentChild ] = 1;
-        }
-        else
-        {
-            g_howManyBallsEachChildHas[ currentChild ] = 0;
-        }
-        
-        // Create a second thread which executes 'childSimulatorFunction'. On success, returns 0; 
-        // on error, it returns an error number, and the contents of 'childSimulatorThreads[ currentChild ]'
-        // are undefined.
-        // 
-        // 'childSimulatorThreads[ currentChild ]'
-        // The pointer to the ID of the new thread created. This identifier is used to refer to the
-        // thread in subsequent calls to other pthreads functions.
-        // 
-        // 'NULL'
-        // The thread is created with default attributes. Attributes are specified only at thread 
-        // creation time; they cannot be altered while the thread is being used. Where the attribute 
-        // initialisation -- pthread_attr_init() create a default 'pthread_attr_t' attr. Example:
-        // PTHREAD_CREATE_JOINABLE, Exit status and thread are preserved after the thread terminates.
-        // 
-        // 'childSimulatorFunction'
-        // This is a pointer to the function to call when the thread starts running.
-        // 
-        // 'currentChild'
-        // This is the pointer to argument to be passed to the function to call.
-        // 
-        if( errno = pthread_create( &childSimulatorThreads[ currentChild ], NULL, childSimulatorFunction, &g_childNumbers[ currentChild ] ) )
-        {
-            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
-            
-            // Exits the program using a platform portable failure exit status.
-            exit( EXIT_FAILURE );
-        }
-        
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "We just created the thread %lu (child %d) to execute.",
-                childSimulatorThreads[ currentChild ], g_childNumbers[ currentChild ] );
-    }
-}
-
 /**
  * Initializes the semaphores 'g_remainingBallsSemaphore' and 'g_usedBallsSemaphore' to be used over
  * the child's ball problem.
@@ -343,6 +212,146 @@ void initializeTheSemaphores()
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
+        
+        // Exits the program using a platform portable failure exit status.
+        exit( EXIT_FAILURE );
+    }
+}
+
+/**
+ * 
+ */
+void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
+{
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %d",
+            sizeof childSimulatorThreads );
+    
+    // create 7 threads for the children, passing to each one a different number (child 0 to 6)
+    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
+    {
+        // These are the children ids to be used as identifiers to them while they are running.
+        g_childNumbers[ currentChild ] = currentChild;
+        
+        // Give initially some balls to some children.
+        if( currentChild < MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN )
+        {
+            g_howManyBallsEachChildHas[ currentChild ] = 1;
+        }
+        else
+        {
+            g_howManyBallsEachChildHas[ currentChild ] = 0;
+        }
+        
+        // Create a second thread which executes 'childSimulatorFunction'. On success, returns 0; 
+        // on error, it returns an error number, and the contents of 'childSimulatorThreads[ currentChild ]'
+        // are undefined.
+        // 
+        // 'childSimulatorThreads[ currentChild ]'
+        // The pointer to the ID of the new thread created. This identifier is used to refer to the
+        // thread in subsequent calls to other pthreads functions.
+        // 
+        // 'NULL'
+        // The thread is created with default attributes. Attributes are specified only at thread 
+        // creation time; they cannot be altered while the thread is being used. Where the attribute 
+        // initialisation -- pthread_attr_init() create a default 'pthread_attr_t' attr. Example:
+        // PTHREAD_CREATE_JOINABLE, Exit status and thread are preserved after the thread terminates.
+        // 
+        // 'childSimulatorFunction'
+        // This is a pointer to the function to call when the thread starts running.
+        // 
+        // 'currentChild'
+        // This is the pointer to argument to be passed to the function to call.
+        // 
+        if( errno = pthread_create( &childSimulatorThreads[ currentChild ], NULL, childSimulatorFunction, &g_childNumbers[ currentChild ] ) )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
+        }
+        
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "We just created the thread %lu (child %d) to execute.",
+                childSimulatorThreads[ currentChild ], g_childNumbers[ currentChild ] );
+    }
+}
+
+/**
+ * 
+ */
+void waitTheThreadToExecute( pthread_t *childSimulatorThreads )
+{
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to wait for the threads to finish." );
+    
+    // wait for all children to finish
+    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "We are about to wait for the thread %lu (child %d) to finish.",
+                childSimulatorThreads[ currentChild ], g_childNumbers[ currentChild ] );
+        
+        // The this function waits for the thread specified to terminate. If that thread has
+        // already terminated, then pthread_join() returns immediately. On success, pthread_join()
+        // returns 0; on error, it returns an error number.
+        // 
+        // 'childSimulatorThreads[ currentChild ]'
+        // This is the thread id to wait.
+        // 
+        // 'NULL'
+        // If is not NULL, then pthread_join() copies the exit status of the target thread
+        // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
+        // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
+        // 
+        if( ( errno = pthread_join( childSimulatorThreads[ currentChild ], NULL ) ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
+                    childSimulatorThreads[ currentChild ], strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
+        }
+    }
+}
+
+/**
+ * 
+ */
+void closesTheChildsGargen()
+{
+#if defined DEBUG
+    
+    DEBUGGER( stdout, "The kindengarten is closed" );
+#else
+    
+    cout << "The kindengarten is closed" << endl;
+#endif
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to destroy the semaphores." );
+    
+    // Destroy semaphore 'g_remainingBallsSemaphore' used to synchronize the threads.
+    //
+    if( sem_destroy( &g_remainingBallsSemaphore ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_remainingBallsSemaphore! %s",
+                strerror( errno ) );
+        
+        // Exits the program using a platform portable failure exit status.
+        exit( EXIT_FAILURE );
+    }
+    
+    // Destroy semaphore 'g_usedBallsSemaphore' used to synchronize the threads.
+    //
+    if( sem_destroy( &g_usedBallsSemaphore ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_usedBallsSemaphore! %s",
+                strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         exit( EXIT_FAILURE );
