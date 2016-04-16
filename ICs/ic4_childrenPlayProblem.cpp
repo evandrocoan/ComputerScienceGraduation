@@ -71,12 +71,17 @@
 
 
 /* declare whenever global variables you need to synchronize pthreads using posix semaphores */
-#define MAX_BALLS_TO_PLAY                                    3
+#define MAX_BALLS_PER_CHILD                                  1
+#define MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT             3
+#define MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN          3
 #define MAX_CHILD_THREADS_TO_PLAY                            7
 #define MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL 5
 
-sem_t ballSemaphoresToWait[ MAX_BALLS_TO_PLAY ]
+sem_t remainingBallsSemaphore;
+sem_t usedBallsSemaphore;
 
+int   childNumbers            [ MAX_CHILD_THREADS_TO_PLAY ]
+int   howManyBallsEachChildHas[ MAX_CHILD_THREADS_TO_PLAY ];
 
 // Functions prototypes
 void *childSimulatorFunction(void *);
@@ -121,32 +126,47 @@ int main()
     DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
     
     // init semaphores to synchronize the threads
-    for( currentBallSemaphore = 0; currentBallSemaphore < sizeof ballSemaphoresToWait; ++currentBallSemaphore ) 
+    //
+    // 'remainingBallsSemaphore'
+    // The semaphore to initialize.
+    //
+    // int '0'
+    // Indicates whether this semaphore is to be shared between the threads of a process, or
+    // between processes. If 0, then the semaphore is shared between the threads of a process,
+    // and should be located at some address that is visible to all threads (e.g., a global
+    // variable, or a variable allocated dynamically on the heap).
+    //
+    // 'initialSemaphoreValue'
+    // The value argument specifies the initial value for the semaphore. The balls are initially
+    // taken by some children, but if there are more ball than children initializes with how
+    // many balls there are available.
+    //
+    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - sizeof childSimulatorThreads;
+    bool         areThereRemainningBalls = remainingBalls > 0;
+    unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
+    
+    if( sem_init( &remainingBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
-        // 'ballSemaphoresToWait[ currentBallSemaphore ]'
-        // The semaphore to initialize.
-        //
-        // int '0'
-        // Indicates whether this semaphore is to be shared between the threads of a process, or
-        // between processes. If 0, then the semaphore is shared between the threads of a process,
-        // and should be located at some address that is visible to all threads (e.g., a global
-        // variable, or a variable allocated dynamically on the heap).
-        //
-        // 'initialSemaphoreValue'
-        // The value argument specifies the initial value for the semaphore. It is 1 because the
-        // the balls are initially taken by some children, but if there are more ball than children
-        // initializes with 0.
-        //
-        unsigned int initialSemaphoreValue = currentBallSemaphore < sizeof childSimulatorThreads ? 1 : 0 ;
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
         
-        if( sem_init( &ballSemaphoresToWait[ currentBallSemaphore ], 0, initialSemaphoreValue ) != 0 )
-        {
-            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
-            
-            // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
-        }
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
+    
+    //
+    // This specifies how many ball there are missing from the basket. When there are more balls
+    // than children, we need to set the used balls to sizeof childSimulatorThreads.
+    // 
+    initialSemaphoreValue = ( areThereRemainningBalls ? sizeof childSimulatorThreads : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT )
+    
+    if( sem_init( &usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
     }
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
@@ -155,6 +175,19 @@ int main()
     // create 7 threads for the children, passing to each one a different number (child 0 to 6)
     for( int currentChild = 0; currentChild < sizeof childSimulatorThreads; ++currentChild )
     {
+        // These are the children ids to be used as identifiers to them while they are running.
+        childNumbers[ currentChild ] = currentChild;
+        
+        // Give initially some balls to some children.
+        if( currentChild < MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN )
+        {
+            howManyBallsEachChildHas[ currentChild ] = 1;
+        }
+        else
+        {
+            howManyBallsEachChildHas[ currentChild ] = 0;
+        }
+        
         // Create a second thread which executes 'childSimulatorFunction'. On success, returns 0; 
         // on error, it returns an error number, and the contents of 'childSimulatorThreads[ currentChild ]'
         // are undefined.
@@ -175,7 +208,7 @@ int main()
         // 'currentChild'
         // This is the pointer to argument to be passed to the function to call.
         // 
-        if( errno = pthread_create( &childSimulatorThreads[ currentChild ], NULL, childSimulatorFunction, &currentChild ) )
+        if( errno = pthread_create( &childSimulatorThreads[ currentChild ], NULL, childSimulatorFunction, &childNumbers[ currentChild ] ) )
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
             DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
@@ -222,16 +255,28 @@ int main()
     
     cout << "The kindengarten is closed" << endl;
     
-    // Destroy mutex. Function shall return zero; otherwise, an error number shall be returned to
-    // indicate the error.
-    // 
-    // '&xGlobalVariableMutex'
-    // It Is the mutex address to destroy.
-    // 
-    if( ( errno =  pthread_mutex_destroy( &xGlobalVariableMutex ) ) != 0 )
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to destroy the semaphores." );
+    
+    // Destroy semaphore 'remainingBallsSemaphore' used to synchronize the threads.
+    //
+    if( sem_destroy( &remainingBallsSemaphore ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the mutex! %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore remainingBallsSemaphore! %s",
+                strerror( errno ) );
+        
+        // Exits the program using a platform portable failure exit status.
+        return EXIT_FAILURE;
+    }
+    
+    // Destroy semaphore 'usedBallsSemaphore' used to synchronize the threads.
+    //
+    if( sem_destroy( &usedBallsSemaphore ) != 0 )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore usedBallsSemaphore! %s",
+                strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         return EXIT_FAILURE;
@@ -251,7 +296,7 @@ int main()
 
 /**
  * This simulates a child playing/trying to play MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL
- * times, with only one of MAX_BALLS_TO_PLAY ball(s) available to play with.
+ * times, with only one of MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT ball(s) available to play with.
  * 
  * @param void_ptr     an unsigned short to indicates the current child which will be playing/trying to play.
  * 
@@ -259,7 +304,9 @@ int main()
  */
 void *childSimulatorFunction(void *void_ptr)
 {
-    unsigned short *childNum = (unsigned short *)void_ptr;
+    int            errno                    = 0;
+    unsigned short *childNum                = (unsigned short *)void_ptr;
+    int            howManyBallsThisChildHas = 0;
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to put the children to play with the ball." );
@@ -269,29 +316,115 @@ void *childSimulatorFunction(void *void_ptr)
     {
         cout << "Child " << *childNum << " wants to play with the ball for the " << currentPlayTime << "th time" << endl;
         
-        /* if the child has no ball, need to take one from the basket if there is one, or will wait until there is a ball in the basket */
-            cout << " Child " << *childNum << " wants to take a ball from the basket" << endl;
+        // if the child has no ball, need to take one from the basket if there is one, or will wait until there is a ball in the basket
+        howManyBallsThisChildHas = howManyBallsEachChildHas[ *childNum ];
         
-        /* once the child has a ball, he/she starts to play */
+        if( howManyBallsThisChildHas < MAX_BALLS_PER_CHILD )
+        {
+            cout << " Child " << *childNum << " wants to take a ball from the basket" << endl;
+            
+            // Decrements (locks) the semaphore pointed to by remainingBallsSemaphore. If the 
+            // semaphore's value is greater than zero, then the decrement proceeds, and the
+            // function returns, immediately.  If the semaphore currently has the value zero,
+            // then the call blocks until either it becomes possible to perform the decrement
+            // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
+            // call.
+            // 
+            if( sem_wait( &remainingBallsSemaphore ) != 0 )
+            {
+                // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+                DEBUGGER( stderr, "ERROR! Could not to wait the semaphore remainingBallsSemaphore! %s",
+                        strerror( errno ) );
+                
+                // Exits the program using a platform portable failure exit status.
+                return EXIT_FAILURE;
+            }
+            
+            // Increments (unlocks) the semaphore pointed to by 'remainingBallsSemaphore'. 
+            // If the semaphore's value consequently becomes greater than zero, then another 
+            // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
+            // to lock the semaphore.
+            // 
+            if( sem_post( &remainingBallsSemaphore ) != 0 )
+            {
+                // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+                DEBUGGER( stderr, "ERROR! Could not to free the semaphore remainingBallsSemaphore! %s",
+                        strerror( errno ) );
+                
+                // Exits the program using a platform portable failure exit status.
+                return EXIT_FAILURE;
+            }
+            
+            // Each child only access its own array position, hence there are no race conditions.
+            howManyBallsEachChildHas[ *childNum ]++;
+        }
+        else if( howManyBallsThisChildHas > MAX_BALLS_PER_CHILD )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! This child has %d balls! It is more balls than %d balls"
+                    " allowed! %s", howManyBallsThisChildHas, MAX_BALLS_PER_CHILD );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
+        
+        // once the child has a ball, he/she starts to play
         cout << "  Child " << *childNum << " is playing with the ball" << endl;
         
-        /* play with the ball for 1 second */
+        // play with the ball for 1 second */
         sleep( 1 );
         
         cout << "  Child " << *childNum << " wants to leave the ball in the basket" << endl;
         
-        /* when the child is tired of playing, he/she has to drop the ball into the basket, if there is room for it (basket holds only 3 balls), or will wait until another child to take a ball */
-        cout << " Child " << *childNum << " has droped the ball in the basket" << endl;
+        // when the child is tired of playing, he/she has to drop the ball into the basket, if
+        // there is room for it (basket holds only 3 balls), or will wait until another child to
+        // take a ball.
+        //
+        // Decrements (locks) the semaphore pointed to by usedBallsSemaphore. If the 
+        // semaphore's value is greater than zero, then the decrement proceeds, and the
+        // function returns, immediately.  If the semaphore currently has the value zero,
+        // then the call blocks until either it becomes possible to perform the decrement
+        // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
+        // call.
+        // 
+        if( sem_wait( &usedBallsSemaphore ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore usedBallsSemaphore! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
         
+        // Increments (unlocks) the semaphore pointed to by 'usedBallsSemaphore'. 
+        // If the semaphore's value consequently becomes greater than zero, then another 
+        // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
+        // to lock the semaphore.
+        // 
+        if( sem_post( &usedBallsSemaphore ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore usedBallsSemaphore! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            return EXIT_FAILURE;
+        }
+        
+        cout << " Child " << *childNum << " has droped the ball in the basket" << endl;
     }
     
     cout << "Child " << *childNum << " will no longer play" << endl;  
     
     // exit the thread
-    // Terminates the calling thread and returns a value via retval that (if the thread is joinable)
+    // Terminates the calling thread and returns a value via parameter that (if the thread is joinable)
     // is available to another thread in the same process that calls pthread_join(3).
-    pthread_exit(void *retval);
-    
+    //
+    // 'NULL'
+    // Pass a pointer to the zero value.
+    //
+    pthread_exit( NULL );
 }
 
 
