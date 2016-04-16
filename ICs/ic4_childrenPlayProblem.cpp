@@ -89,6 +89,7 @@ pthread_mutex_t fprintf_mutex;
 #define MAX_CHILD_THREADS_TO_PLAY                            7
 #define MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL 5
 
+int   errno;
 sem_t remainingBallsSemaphore;
 sem_t usedBallsSemaphore;
 
@@ -97,6 +98,10 @@ int   howManyBallsEachChildHas[ MAX_CHILD_THREADS_TO_PLAY ];
 
 // Functions prototypes
 void *childSimulatorFunction(void *);
+void initializeTheSemaphores();
+void toCreateTheThreadsToExecute( pthread_t *);
+void waitTheThreadToExecute( pthread_t *);
+void closesTheChildsGargen();
 
 
 using namespace std;
@@ -128,8 +133,8 @@ int main()
     cout << "The kindengarten is open" << endl;
     
     // declare local variable, such as threads
-    int       errno;
     pthread_t childSimulatorThreads[ MAX_CHILD_THREADS_TO_PLAY ];
+    
     
 #if defined DEBUG
     
@@ -138,59 +143,104 @@ int main()
     {
         // Print to the standard output stream
         DEBUGGER( stderr, "\nERROR! Could initialize the mutex! %s", strerror( errno ) );
+        
+        return EXIT_FAILURE;
     }
 #endif
     
-    // initialize the errno a successful state
-    errno = 0;
+    initializeTheSemaphores();
+    toCreateTheThreadsToExecute( childSimulatorThreads );
+    waitTheThreadToExecute( childSimulatorThreads );
+    closesTheChildsGargen();
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
+    DEBUGGER( stdout, "Exits the program using a platform portable successful exit status." );
+    
+    // Exits the program using a platform portable successful exit status.
+    return EXIT_SUCCESS;
+    
+    /** Respostas das perguntas "para pensar":
+     *
+     * @see function main() documentation.
+     */
+}
 
-    // init semaphores to synchronize the threads
-    //
-    // 'remainingBallsSemaphore'
-    // The semaphore to initialize.
-    //
-    // int '0'
-    // Indicates whether this semaphore is to be shared between the threads of a process, or
-    // between processes. If 0, then the semaphore is shared between the threads of a process,
-    // and should be located at some address that is visible to all threads (e.g., a global
-    // variable, or a variable allocated dynamically on the heap).
-    //
-    // 'initialSemaphoreValue'
-    // The value argument specifies the initial value for the semaphore. The balls are initially
-    // taken by some children, but if there are more ball than children initializes with how
-    // many balls there are available.
-    //
-    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - MAX_CHILD_THREADS_TO_PLAY;
-    bool         areThereRemainningBalls = remainingBalls > 0;
-    unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
+void closesTheChildsGargen()
+{
+#if defined DEBUG
     
-    if( sem_init( &remainingBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
+    DEBUGGER( stdout, "The kindengarten is closed" );
+#else
+    
+    cout << "The kindengarten is closed" << endl;
+#endif
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to destroy the semaphores." );
+    
+    // Destroy semaphore 'remainingBallsSemaphore' used to synchronize the threads.
+    //
+    if( sem_destroy( &remainingBallsSemaphore ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore remainingBallsSemaphore! %s",
+                strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
-        return EXIT_FAILURE;
+        exit( EXIT_FAILURE );
     }
     
+    // Destroy semaphore 'usedBallsSemaphore' used to synchronize the threads.
     //
-    // This specifies how many ball there are missing from the basket. When there are more balls
-    // than children, we need to set the used balls to MAX_CHILD_THREADS_TO_PLAY.
-    // 
-    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
-    
-    if( sem_init( &usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
+    if( sem_destroy( &usedBallsSemaphore ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore usedBallsSemaphore! %s",
+                strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
-        return EXIT_FAILURE;
+        exit( EXIT_FAILURE );
     }
+}
+
+void waitTheThreadToExecute( pthread_t *childSimulatorThreads )
+{
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to wait for the threads to finish." );
     
+    // wait for all children to finish
+    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "We are about to wait for the thread %lu (child %d) to finish.",
+                childSimulatorThreads[ currentChild ], childNumbers[ currentChild ] );
+        
+        // The this function waits for the thread specified to terminate. If that thread has
+        // already terminated, then pthread_join() returns immediately. On success, pthread_join()
+        // returns 0; on error, it returns an error number.
+        // 
+        // 'childSimulatorThreads[ currentChild ]'
+        // This is the thread id to wait.
+        // 
+        // 'NULL'
+        // If is not NULL, then pthread_join() copies the exit status of the target thread
+        // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
+        // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
+        // 
+        if( ( errno = pthread_join( childSimulatorThreads[ currentChild ], NULL ) ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
+                    childSimulatorThreads[ currentChild ], strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
+        }
+    }
+}
+
+void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
+{
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %d",
             sizeof childSimulatorThreads );
@@ -237,92 +287,67 @@ int main()
             DEBUGGER( stderr, "ERROR! Could not to create the thread! %s", strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
+            exit( EXIT_FAILURE );
         }
         
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stdout, "We just created the thread %lu (child %d) to execute.",
                 childSimulatorThreads[ currentChild ], childNumbers[ currentChild ] );
     }
-    
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to wait for the threads to finish." );
-    
-    // wait for all children to finish
-    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "We are about to wait for the thread %lu (child %d) to finish.",
-                childSimulatorThreads[ currentChild ], childNumbers[ currentChild ] );
-        
-        // The this function waits for the thread specified to terminate. If that thread has
-        // already terminated, then pthread_join() returns immediately. On success, pthread_join()
-        // returns 0; on error, it returns an error number.
-        // 
-        // 'childSimulatorThreads[ currentChild ]'
-        // This is the thread id to wait.
-        // 
-        // 'NULL'
-        // If is not NULL, then pthread_join() copies the exit status of the target thread
-        // (i.e., the value that the target thread supplied to pthread_exit(3)) into the location
-        // pointed to by. If the target thread was canceled, then PTHREAD_CANCELED is placed in.
-        // 
-        if( ( errno = pthread_join( childSimulatorThreads[ currentChild ], NULL ) ) != 0 )
-        {
-            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not wait the thread %lu to exit! %s",
-                    childSimulatorThreads[ currentChild ], strerror( errno ) );
-            
-            // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
-        }
-    }
+}
 
-#if defined DEBUG
-    
-    DEBUGGER( stdout, "The kindengarten is closed" );
-#else
-    
-    cout << "The kindengarten is closed" << endl;
-#endif
-    
+/**
+ * Initializes the semaphores 'remainingBallsSemaphore' and 'usedBallsSemaphore' to be used over
+ * the child's ball problem.
+ */
+void initializeTheSemaphores()
+{
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to destroy the semaphores." );
-    
-    // Destroy semaphore 'remainingBallsSemaphore' used to synchronize the threads.
+    DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
+
+    // init semaphores to synchronize the threads
     //
-    if( sem_destroy( &remainingBallsSemaphore ) != 0 )
+    // 'remainingBallsSemaphore'
+    // The semaphore to initialize.
+    //
+    // int '0'
+    // Indicates whether this semaphore is to be shared between the threads of a process, or
+    // between processes. If 0, then the semaphore is shared between the threads of a process,
+    // and should be located at some address that is visible to all threads (e.g., a global
+    // variable, or a variable allocated dynamically on the heap).
+    //
+    // 'initialSemaphoreValue'
+    // The value argument specifies the initial value for the semaphore. The balls are initially
+    // taken by some children, but if there are more ball than children initializes with how
+    // many balls there are available.
+    //
+    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - MAX_CHILD_THREADS_TO_PLAY;
+    bool         areThereRemainningBalls = remainingBalls > 0;
+    unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
+    
+    if( sem_init( &remainingBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore remainingBallsSemaphore! %s",
-                strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
-        return EXIT_FAILURE;
+        exit( EXIT_FAILURE );
     }
     
-    // Destroy semaphore 'usedBallsSemaphore' used to synchronize the threads.
     //
-    if( sem_destroy( &usedBallsSemaphore ) != 0 )
+    // This specifies how many ball there are missing from the basket. When there are more balls
+    // than children, we need to set the used balls to MAX_CHILD_THREADS_TO_PLAY.
+    // 
+    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
+    
+    if( sem_init( &usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore usedBallsSemaphore! %s",
-                strerror( errno ) );
+        DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
-        return EXIT_FAILURE;
+        exit( EXIT_FAILURE );
     }
-    
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "Exits the program using a platform portable successful exit status." );
-    
-    // Exits the program using a platform portable successful exit status.
-    return EXIT_SUCCESS;
-    
-    /** Respostas das perguntas "para pensar":
-     *
-     * @see function main() documentation.
-     */
 }
 
 /**
@@ -335,7 +360,8 @@ int main()
  */
 void *childSimulatorFunction(void *void_ptr)
 {
-    int            errno                    = 0;
+    int            errno;
+    
     unsigned short *childNum                = (unsigned short *)void_ptr;
     int            howManyBallsThisChildHas = 0;
     
