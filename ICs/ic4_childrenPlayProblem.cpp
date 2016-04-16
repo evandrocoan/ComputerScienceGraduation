@@ -30,9 +30,12 @@
 #include <pthread.h>
 #include <cstdlib>
 #include <stdio.h>
+
+/* ... other includes ... */
 #include <string.h>
 #include <stdlib.h>
-/* ... other includes ... */
+#include <semaphore.h>
+#include <unistd.h>
 
 
 /** This is to view internal program data while execution. Default value: 0
@@ -80,7 +83,7 @@
 sem_t remainingBallsSemaphore;
 sem_t usedBallsSemaphore;
 
-int   childNumbers            [ MAX_CHILD_THREADS_TO_PLAY ]
+int   childNumbers            [ MAX_CHILD_THREADS_TO_PLAY ];
 int   howManyBallsEachChildHas[ MAX_CHILD_THREADS_TO_PLAY ];
 
 // Functions prototypes
@@ -158,7 +161,7 @@ int main()
     // This specifies how many ball there are missing from the basket. When there are more balls
     // than children, we need to set the used balls to sizeof childSimulatorThreads.
     // 
-    initialSemaphoreValue = ( areThereRemainningBalls ? sizeof childSimulatorThreads : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT )
+    initialSemaphoreValue = ( areThereRemainningBalls ? sizeof childSimulatorThreads : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
     
     if( sem_init( &usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
@@ -337,7 +340,7 @@ void *childSimulatorFunction(void *void_ptr)
                         strerror( errno ) );
                 
                 // Exits the program using a platform portable failure exit status.
-                return EXIT_FAILURE;
+                pthread_detach( pthread_self() );
             }
             
             // Increments (unlocks) the semaphore pointed to by 'remainingBallsSemaphore'. 
@@ -352,7 +355,7 @@ void *childSimulatorFunction(void *void_ptr)
                         strerror( errno ) );
                 
                 // Exits the program using a platform portable failure exit status.
-                return EXIT_FAILURE;
+                pthread_detach( pthread_self() );
             }
             
             // Each child only access its own array position, hence there are no race conditions.
@@ -362,10 +365,10 @@ void *childSimulatorFunction(void *void_ptr)
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
             DEBUGGER( stderr, "ERROR! This child has %d balls! It is more balls than %d balls"
-                    " allowed! %s", howManyBallsThisChildHas, MAX_BALLS_PER_CHILD );
+                    " allowed!", howManyBallsThisChildHas, MAX_BALLS_PER_CHILD );
             
             // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
+            pthread_detach( pthread_self() );
         }
         
         // once the child has a ball, he/she starts to play
@@ -394,7 +397,7 @@ void *childSimulatorFunction(void *void_ptr)
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
+            pthread_detach( pthread_self() );
         }
         
         // Increments (unlocks) the semaphore pointed to by 'usedBallsSemaphore'. 
@@ -409,7 +412,7 @@ void *childSimulatorFunction(void *void_ptr)
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
-            return EXIT_FAILURE;
+            pthread_detach( pthread_self() );
         }
         
         cout << " Child " << *childNum << " has droped the ball in the basket" << endl;
