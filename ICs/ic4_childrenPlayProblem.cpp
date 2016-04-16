@@ -50,21 +50,30 @@
 
 #if DEBUG_LEVEL > 0
     #define DEBUG
-
-/** Print like function for logging putting a new line at the end of string. Following explanations:
+    
+    pthread_mutex_t *fprintf_mutex;
+    
+    
+/** Print like function for logging putting a new line at the end of string. It does uses mutex
+ * due the my doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
+ * I could not find anything concrete. Following explanations:
  * 
- * fprintf( stream, __VA_ARGS__ ); Print to the specified output stream the formatting args.
- * fprintf( stream, "\n" );        Print a new line.
- * fflush( stream );               Flushes the output stream to avoid double output over '>'.
- *                                   Example: './main > results.txt' would get doubled/... print.
- * } while( 0 )                    To allow to use ';' semicolon over the macro statement use and
- *                                   still to be able to use it within an unbraced if statement.
+ * pthread_mutex_lock( fprintf_mutex );   Lock the mutex.
+ * fprintf( stream, __VA_ARGS__ );        Print to the specified output stream the formatting args.
+ * fprintf( stream, "\n" );               Print a new line.
+ * fflush( stream );                      Flushes the output stream to avoid double output over '>'.
+ *                                          Example: './main > results.txt' would get doubled/... print.
+ * pthread_mutex_unlock( fprintf_mutex ); Unlock the shared memory mutex.
+ * } while( 0 )                           To allow to use ';' semicolon over the macro statement use and
+ *                                          still to be able to use it within an unbraced if statement.
  */
 #define DEBUGGER( stream, ... ) \
 { \
+    pthread_mutex_lock( fprintf_mutex ); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
+    pthread_mutex_unlock( fprintf_mutex ); \
 } while( 0 )
 
 #else
@@ -127,6 +136,16 @@ int main()
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
+
+#if defined DEBUG
+    
+    // Initializes the mutex for use. Specifies NULL to use the default mutex attributes.
+    if( errno = pthread_mutex_init( fprintf_mutex, NULL ) )
+    {
+        // Print to the standard output stream
+        DEBUGGER( stderr, "\nERROR! Could initialize the mutex! %s", strerror( errno ) );
+    }
+#endif
     
     // init semaphores to synchronize the threads
     //
@@ -258,8 +277,14 @@ int main()
             return EXIT_FAILURE;
         }
     }
+
+#if defined DEBUG
+    
+    DEBUGGER( stdout, "The kindengarten is closed" );
+#else
     
     cout << "The kindengarten is closed" << endl;
+#endif
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to destroy the semaphores." );
@@ -321,14 +346,26 @@ void *childSimulatorFunction(void *void_ptr)
     for( unsigned short currentPlayTime = 1;
          currentPlayTime <= MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL; ++currentPlayTime )
     {
+    #if defined DEBUG
+        
+        DEBUGGER( stdout, "Child %d wants to play with the ball for the %dth time", *childNum, currentPlayTime );
+    #else
+        
         cout << "Child " << *childNum << " wants to play with the ball for the " << currentPlayTime << "th time" << endl;
+    #endif
         
         // if the child has no ball, need to take one from the basket if there is one, or will wait until there is a ball in the basket
         howManyBallsThisChildHas = howManyBallsEachChildHas[ *childNum ];
         
         if( howManyBallsThisChildHas < MAX_BALLS_PER_CHILD )
         {
+        #if defined DEBUG
+            
+            DEBUGGER( stdout, "Child %d wants to take a ball from the basket", *childNum );
+        #else
+            
             cout << " Child " << *childNum << " wants to take a ball from the basket" << endl;
+        #endif
             
             // Decrements (locks) the semaphore pointed to by remainingBallsSemaphore. If the 
             // semaphore's value is greater than zero, then the decrement proceeds, and the
@@ -375,13 +412,26 @@ void *childSimulatorFunction(void *void_ptr)
             pthread_detach( pthread_self() );
         }
         
+    #if defined DEBUG
+        
+        DEBUGGER( stdout, "Child %d is playing with the ball", *childNum );
+    #else
+            
         // once the child has a ball, he/she starts to play
         cout << "  Child " << *childNum << " is playing with the ball" << endl;
+    #endif
         
         // play with the ball for 1 second */
         sleep( 1 );
         
+        
+    #if defined DEBUG
+        
+        DEBUGGER( stdout, "Child %d wants to leave the ball in the basket", *childNum );
+    #else
+        
         cout << "  Child " << *childNum << " wants to leave the ball in the basket" << endl;
+    #endif
         
         // when the child is tired of playing, he/she has to drop the ball into the basket, if
         // there is room for it (basket holds only 3 balls), or will wait until another child to
@@ -419,10 +469,23 @@ void *childSimulatorFunction(void *void_ptr)
             pthread_detach( pthread_self() );
         }
         
+    #if defined DEBUG
+        
+        DEBUGGER( stdout, "Child %d has dropped the ball in the basket", *childNum );
+    #else
+            
         cout << " Child " << *childNum << " has droped the ball in the basket" << endl;
+    #endif
     }
     
+    
+#if defined DEBUG
+    
+    DEBUGGER( stdout, "Child %d will no longer play", *childNum );
+#else
+        
     cout << "Child " << *childNum << " will no longer play" << endl;  
+#endif
     
     // exit the thread
     // Terminates the calling thread and returns a value via parameter that (if the thread is joinable)
