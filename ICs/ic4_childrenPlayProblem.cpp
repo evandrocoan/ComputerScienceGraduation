@@ -50,10 +50,10 @@
 
 #if DEBUG_LEVEL > 0
     #define DEBUG
-    
-    pthread_mutex_t *fprintf_mutex;
-    
-    
+
+pthread_mutex_t fprintf_mutex;
+
+
 /** Print like function for logging putting a new line at the end of string. It does uses mutex
  * due the my doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
  * I could not find anything concrete. Following explanations:
@@ -69,11 +69,11 @@
  */
 #define DEBUGGER( stream, ... ) \
 { \
-    pthread_mutex_lock( fprintf_mutex ); \
+    pthread_mutex_lock( &fprintf_mutex ); \
     fprintf( stream, __VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
-    pthread_mutex_unlock( fprintf_mutex ); \
+    pthread_mutex_unlock( &fprintf_mutex ); \
 } while( 0 )
 
 #else
@@ -82,7 +82,7 @@
 #endif
 
 
-/* declare whenever global variables you need to synchronize pthreads using posix semaphores */
+// declare whenever global variables you need to synchronize pthreads using posix semaphores
 #define MAX_BALLS_PER_CHILD                                  1
 #define MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT             3
 #define MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN          3
@@ -131,22 +131,22 @@ int main()
     int       errno;
     pthread_t childSimulatorThreads[ MAX_CHILD_THREADS_TO_PLAY ];
     
-    // initialize the errno a successful state
-    errno = 0;
-    
-    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
-
 #if defined DEBUG
     
-    // Initializes the mutex for use. Specifies NULL to use the default mutex attributes.
-    if( errno = pthread_mutex_init( fprintf_mutex, NULL ) )
+    // Initializes the printf mutex for use. Specifies NULL to use the default mutex attributes.
+    if( errno = pthread_mutex_init( &fprintf_mutex, NULL ) )
     {
         // Print to the standard output stream
         DEBUGGER( stderr, "\nERROR! Could initialize the mutex! %s", strerror( errno ) );
     }
 #endif
     
+    // initialize the errno a successful state
+    errno = 0;
+    
+    // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+    DEBUGGER( stdout, "We are about to initialize the semaphores to synchronization." );
+
     // init semaphores to synchronize the threads
     //
     // 'remainingBallsSemaphore'
