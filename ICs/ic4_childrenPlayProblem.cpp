@@ -144,7 +144,7 @@ int main()
     // taken by some children, but if there are more ball than children initializes with how
     // many balls there are available.
     //
-    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - sizeof childSimulatorThreads;
+    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - MAX_CHILD_THREADS_TO_PLAY;
     bool         areThereRemainningBalls = remainingBalls > 0;
     unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
     
@@ -159,9 +159,9 @@ int main()
     
     //
     // This specifies how many ball there are missing from the basket. When there are more balls
-    // than children, we need to set the used balls to sizeof childSimulatorThreads.
+    // than children, we need to set the used balls to MAX_CHILD_THREADS_TO_PLAY.
     // 
-    initialSemaphoreValue = ( areThereRemainningBalls ? sizeof childSimulatorThreads : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
+    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
     
     if( sem_init( &usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
@@ -173,10 +173,11 @@ int main()
     }
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to create the threads to execute." );
+    DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %d",
+            sizeof childSimulatorThreads );
     
     // create 7 threads for the children, passing to each one a different number (child 0 to 6)
-    for( int currentChild = 0; currentChild < sizeof childSimulatorThreads; ++currentChild )
+    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
     {
         // These are the children ids to be used as identifiers to them while they are running.
         childNumbers[ currentChild ] = currentChild;
@@ -221,17 +222,19 @@ int main()
         }
         
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "We just created the thread %lu to execute.", childSimulatorThreads[ currentChild ] );
+        DEBUGGER( stdout, "We just created the thread %lu (child %d) to execute.",
+                childSimulatorThreads[ currentChild ], childNumbers[ currentChild ] );
     }
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to wait for the threads to finish." );
     
     // wait for all children to finish
-    for( int currentChild = 0; currentChild < sizeof childSimulatorThreads; ++currentChild )
+    for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "We are about to wait for the thread %lu to finish.", childSimulatorThreads[ currentChild ] );
+        DEBUGGER( stdout, "We are about to wait for the thread %lu (child %d) to finish.",
+                childSimulatorThreads[ currentChild ], childNumbers[ currentChild ] );
         
         // The this function waits for the thread specified to terminate. If that thread has
         // already terminated, then pthread_join() returns immediately. On success, pthread_join()
@@ -312,7 +315,8 @@ void *childSimulatorFunction(void *void_ptr)
     int            howManyBallsThisChildHas = 0;
     
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to put the children to play with the ball." );
+    DEBUGGER( stdout, "We are about to put the child %d (thread %lu) to play with the ball.",
+            *childNum, pthread_self() );
     
     for( unsigned short currentPlayTime = 1;
          currentPlayTime <= MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL; ++currentPlayTime )
