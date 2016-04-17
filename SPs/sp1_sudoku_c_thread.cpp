@@ -69,14 +69,13 @@ int main( int argc, char* argv[] )
     
     for( int i = 0; i < n; i++ )
     {
-        std::cout << "creating thread " << i << std::endl;
+        cout << "creating thread " << i << endl;
         
-        //  t[i] = thread(verify,i); tchau thread boa, ola gambis
         a[ i ] = i;
         
         if( pthread_create( &t[ i ], NULL, verify, &a[ i ] ) != 0 )
         {
-            std::cout << "failed to create thread " << i << std::endl;
+            cout << "failed to create thread " << i << endl;
         }
     }
     
@@ -85,18 +84,18 @@ int main( int argc, char* argv[] )
         // t[i].join();
         pthread_join( t[ i ], NULL );
         
-        std::cout << "thread " << i << "has joined" << std::endl;
+        cout << "thread " << i << "has joined" << endl;
     }
     
-    std::cout << "" << std::endl;
+    cout << "" << endl;
     
     if( works )
     {
-        std::cout << "solucao valida" << std::endl;
+        cout << "solucao valida" << endl;
     }
     else
     {
-        std::cout << "solucao invalida" << std::endl;
+        cout << "solucao invalida" << endl;
     }
     
     return 0;
@@ -104,7 +103,7 @@ int main( int argc, char* argv[] )
 
 void* verify( void* nm )
 {
-    int n   = ( *( int * ) nm );
+    int n   = *( ( int* ) nm );
     int sum = 0;
     
     // verificar linha n;
