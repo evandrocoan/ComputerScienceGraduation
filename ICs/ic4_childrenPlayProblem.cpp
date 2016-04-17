@@ -43,9 +43,7 @@
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#define DEBUG_LEVEL 1
-
-#define MAX_FOR_LOOPS_TO_INCREMENT_THE_GLOBAL_VARIABLE 100
+#define DEBUG_LEVEL 0
 
 
 #if DEBUG_LEVEL > 0
@@ -84,7 +82,7 @@ pthread_mutex_t g_fprintf_mutex;
 
 // declare whenever global variables you need to synchronize pthreads using posix semaphores
 #define MAX_BALLS_PER_CHILD                                  1
-#define MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT             3
+#define MAX_BALLS_THE_BASKET_SUPPORT                         3
 #define MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN          3
 #define MAX_CHILD_THREADS_TO_PLAY                            7
 #define MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL 5
@@ -157,7 +155,8 @@ int main()
 
 /**
  * Initializes the semaphores 'g_remainingBallsSemaphore' and 'g_usedBallsSemaphore' to be used over
- * the child's ball problem.
+ * the child's ball problem, accordingly with 'MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN' and
+ * 'MAX_CHILD_THREADS_TO_PLAY'.
  */
 void initializeTheSemaphores()
 {
@@ -192,7 +191,7 @@ void initializeTheSemaphores()
     // taken by some children, but if there are more ball than children initializes with how
     // many balls there are available.
     //
-    int          remainingBalls          = MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT - MAX_CHILD_THREADS_TO_PLAY;
+    int          remainingBalls          = MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN - MAX_CHILD_THREADS_TO_PLAY;
     bool         areThereRemainningBalls = remainingBalls > 0;
     unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
     
@@ -209,7 +208,7 @@ void initializeTheSemaphores()
     // This specifies how many ball there are missing from the basket. When there are more balls
     // than children, we need to set the used balls to MAX_CHILD_THREADS_TO_PLAY.
     // 
-    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT );
+    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN );
     
     if( sem_init( &g_usedBallsSemaphore, 0, initialSemaphoreValue ) != 0 )
     {
@@ -222,7 +221,8 @@ void initializeTheSemaphores()
 }
 
 /**
- * 
+ * To create this program child's play simulator thread, accordingly with
+ * 'MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN' and 'MAX_CHILD_THREADS_TO_PLAY'.
  */
 void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
 {
@@ -282,7 +282,7 @@ void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
 }
 
 /**
- * 
+ * Waits all this program's threads to finish before exit.
  */
 void waitTheThreadToExecute( pthread_t *childSimulatorThreads )
 {
@@ -378,7 +378,7 @@ void closesTheChildsGargen()
 
 /**
  * This simulates a child playing/trying to play MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL
- * times, with only one of MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT ball(s) available to play with.
+ * times, with only one of MAX_BALLS_THE_BASKET_SUPPORT ball(s) available to play with.
  * 
  * @param void_ptr     an unsigned short to indicates the current child which will be playing/trying to play.
  * 
@@ -499,7 +499,7 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
 
 /**
  * Places a ball to the basket ball, if the child 'childNum' has an ball, and if the basket is
- * not already full (more than MAX_BALLS_TO_PLAY_AND_THE_BASKET_SUPPORT). If the basket is full
+ * not already full (more than MAX_BALLS_THE_BASKET_SUPPORT). If the basket is full
  * wait until it has a free space, and then and only then, let the child to place its ball in the
  * basket.
  * 
