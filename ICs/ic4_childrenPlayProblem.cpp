@@ -473,6 +473,21 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
         
         // Each child only access its own array position, hence there are no race conditions.
         g_howManyBallsEachChildHas[ childNum ]++;
+        
+        // Increments (unlocks) the semaphore pointed to by 'g_usedBallsSemaphore'. 
+        // If the semaphore's value consequently becomes greater than zero, then another 
+        // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
+        // to lock the semaphore.
+        // 
+        if( sem_post( &g_usedBallsSemaphore ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_usedBallsSemaphore! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            pthread_detach( pthread_self() );
+        }
     }
     else if( howManyBallsThisChildHas > MAX_BALLS_PER_CHILD )
     {
@@ -552,21 +567,6 @@ void unlockTheBasketBall( unsigned short childNum )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_remainingBallsSemaphore! %s",
-                strerror( errno ) );
-        
-        // Exits the program using a platform portable failure exit status.
-        pthread_detach( pthread_self() );
-    }
-    
-    // Increments (unlocks) the semaphore pointed to by 'g_usedBallsSemaphore'. 
-    // If the semaphore's value consequently becomes greater than zero, then another 
-    // process or thread blocked in a sem_wait(3) call will be woken up and proceed 
-    // to lock the semaphore.
-    // 
-    if( sem_post( &g_usedBallsSemaphore ) != 0 )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_usedBallsSemaphore! %s",
                 strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
