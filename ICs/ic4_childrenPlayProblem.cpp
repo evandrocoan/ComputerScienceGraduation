@@ -1,22 +1,3 @@
-/*********************** Licensing *******************************************************
-*
-*  Copyright 2016 @ Evandro  Coan
-*
-*  This program is free software; you can redistribute it and/or modify it
-*  under the terms of the GNU General Public License as published by the
-*  Free Software Foundation; either version 3 of the License, or ( at
-*  your option ) any later version.
-*
-*  This program is distributed in the hope that it will be useful, but
-*  WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-*  General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
-*****************************************************************************************
-*/
 
 /**
  * Compile and link with -pthread. Nome do aluno:
@@ -31,7 +12,7 @@
 #include <cstdlib>
 #include <stdio.h>
 
-/* ... other includes ... */
+// ... other includes ...
 #include <string.h>
 #include <stdlib.h>
 #include <semaphore.h>
@@ -52,18 +33,19 @@
 pthread_mutex_t g_fprintf_mutex;
 
 
-/** Print like function for logging putting a new line at the end of string. It does uses mutex
+/**
+ * Print like function for logging putting a new line at the end of string. It does uses mutex
  * due the my doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
  * I could not find anything concrete. Following explanations:
  *
  * pthread_mutex_lock( g_fprintf_mutex );   Lock the mutex.
- * fprintf( stream, __VA_ARGS__ );        Print to the specified output stream the formatting args.
- * fprintf( stream, "\n" );               Print a new line.
- * fflush( stream );                      Flushes the output stream to avoid double output over '>'.
- *                                          Example: './main > results.txt' would get doubled/... print.
+ * fprintf( stream, __VA_ARGS__ );          Print to the specified output stream the formatting args.
+ * fprintf( stream, "\n" );                 Print a new line.
+ * fflush( stream );                        Flushes the output stream to avoid double output over '>'.
+ *                                           Example: './main > results.txt' would get doubled/... print.
  * pthread_mutex_unlock( g_fprintf_mutex ); Unlock the shared memory mutex.
- * } while( 0 )                           To allow to use ';' semicolon over the macro statement use and
- *                                          still to be able to use it within an unbraced if statement.
+ * } while( 0 )                             To allow to use ';' semicolon over the macro statement use and
+ *                                           still to be able to use it within an unbraced if statement.
  */
 #define DEBUGGER( stream, ... ) \
 { \
@@ -102,31 +84,31 @@ void toCreateTheThreadsToExecute( pthread_t * );
 void waitTheThreadToExecute( pthread_t * );
 void closesTheChildsGargen();
 
-void lockTheBasketBall( unsigned short, unsigned short );
-void unlockTheBasketBall( unsigned short );
+void takeABallFromTheBasketBall( unsigned short, unsigned short );
+void dropABallInTheBasketBall( unsigned short );
 
 using namespace std;
 
 
 /**
- * Para pensar e para responder no código
+ * Para pensar e para responder no codigo
+ *     
  *
- *
- * Os semáforos podem ser variáveis locais?
- *
+ * Os semaforos podem ser variaveis locais?
+ *     
  *
  * Todas as threads "child" terminam? Justifique.
+ *     
  *
+ * E se no cesto couber uma unica bola, como na versao original do problema?
+ *     
  *
- * E se no cesto couber uma única bola, como na versão original do problema?
+ * Ha algum erro de programacao para que as threads nao terminem?
+ *     
  *
- *
- * Há algum erro de programação para que as threads não terminem?
- *
- *
- * O que poderia ser feito para detectar que um evento nunca ocorrerá e fazer com que o programa
+ * O que poderia ser feito para detectar que um evento nunca ocorrera e fazer com que o programa
  * finalize com sucesso, encerrando todas suas threads?
- *
+ *     
  *
  */
 int main()
@@ -223,11 +205,13 @@ void initializeTheSemaphores()
 /**
  * To create this program child's play simulator thread, accordingly with
  * 'MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN' and 'MAX_CHILD_THREADS_TO_PLAY'.
+ * 
+ * @param childSimulatorThreads       an thread array pointer to the threads to initialize.
  */
 void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
 {
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-    DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %d",
+    DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %lu",
             sizeof childSimulatorThreads );
     
     // create 7 threads for the children, passing to each one a different number (child 0 to 6)
@@ -283,6 +267,8 @@ void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
 
 /**
  * Waits all this program's threads to finish before exit.
+ * 
+ * @param childSimulatorThreads       an thread array pointer to the threads to initialize.
  */
 void waitTheThreadToExecute( pthread_t *childSimulatorThreads )
 {
@@ -395,8 +381,8 @@ void *childSimulatorFunction( void *void_ptr )
     for( unsigned short currentPlayTime = 1;
          currentPlayTime <= MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL; ++currentPlayTime )
     {
-        lockTheBasketBall( *childNum, currentPlayTime );
-        unlockTheBasketBall( *childNum );
+        takeABallFromTheBasketBall( *childNum, currentPlayTime );
+        dropABallInTheBasketBall( *childNum );
     }
 
 
@@ -428,7 +414,7 @@ void *childSimulatorFunction( void *void_ptr )
  * @note This detach this thread if the child has more than MAX_BALLS_PER_CHILD, or the
  *       'g_howManyBallsToCompletyEmptyTheBasket' semaphore is not properly initialized.
  */
-void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime )
+void takeABallFromTheBasketBall( unsigned short childNum, unsigned short currentPlayTime )
 {
     int errno;
     int howManyBallsThisChildHas;
@@ -468,7 +454,7 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
-            pthread_detach( pthread_self() );
+            exit( EXIT_FAILURE );
         }
         
         // Each child only access its own array position, hence there are no race conditions.
@@ -486,17 +472,17 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
-            pthread_detach( pthread_self() );
+            exit( EXIT_FAILURE );
         }
     }
     else if( howManyBallsThisChildHas > MAX_BALLS_PER_CHILD )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! This child has %d balls! It is more balls than %d balls"
-                          " allowed!", howManyBallsThisChildHas, MAX_BALLS_PER_CHILD );
+                " allowed!", howManyBallsThisChildHas, MAX_BALLS_PER_CHILD );
         
         // Exits the program using a platform portable failure exit status.
-        pthread_detach( pthread_self() );
+        exit( EXIT_FAILURE );
     }
 
 #if defined DEBUG
@@ -508,12 +494,12 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
     cout << "  Child " << childNum << " is playing with the ball" << endl;
 #endif
     
-    // play with the ball for 1 second */
+    // play with the ball for 1 second
     sleep( 1 );
 }
 
 /**
- * Places a ball to the basket ball, if the child 'childNum' has an ball, and if the basket is
+ * Drops a ball to the basket ball, if the child 'childNum' has an ball, and if the basket is
  * not already full (more than MAX_BALLS_THE_BASKET_SUPPORT). If the basket is full
  * wait until it has a free space, and then and only then, let the child to place its ball in the
  * basket.
@@ -523,10 +509,11 @@ void lockTheBasketBall( unsigned short childNum, unsigned short currentPlayTime 
  * @note This detach this thread if the child has more than MAX_BALLS_PER_CHILD, or the
  *       'g_howManyBallsToCompletyEmptyTheBasket' semaphore is not properly initialized.
  */
-void unlockTheBasketBall( unsigned short childNum )
+void dropABallInTheBasketBall( unsigned short childNum )
 {
     int errno;
-
+    int howManyBallsThisChildHas;
+    
 #if defined DEBUG
     
     DEBUGGER( stdout, "Child %d wants to leave the ball in the basket", childNum );
@@ -535,51 +522,65 @@ void unlockTheBasketBall( unsigned short childNum )
     cout << "  Child " << childNum << " wants to leave the ball in the basket" << endl;
 #endif
     
-    // when the child is tired of playing, he/she has to drop the ball into the basket, if
-    // there is room for it (basket holds only 3 balls), or will wait until another child to
-    // take a ball.
-    //
-    // Decrements (locks) the semaphore pointed to by g_howManyBallsToCompletyFillTheBasket. If the
-    // semaphore's value is greater than zero, then the decrement proceeds, and the
-    // function returns, immediately.  If the semaphore currently has the value zero,
-    // then the call blocks until either it becomes possible to perform the decrement
-    // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
-    // call.
-    //
-    if( sem_wait( &g_howManyBallsToCompletyFillTheBasket ) != 0 )
-    {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_howManyBallsToCompletyFillTheBasket! %s",
-                strerror( errno ) );
-        
-        // Exits the program using a platform portable failure exit status.
-        pthread_detach( pthread_self() );
-    }
+    howManyBallsThisChildHas = g_howManyBallsEachChildHas[ childNum ];
     
-    g_howManyBallsEachChildHas[ childNum ]--;
-    
-    // Increments (unlocks) the semaphore pointed to by 'g_howManyBallsToCompletyEmptyTheBasket'.
-    // If the semaphore's value consequently becomes greater than zero, then another
-    // process or thread blocked in a sem_wait(3) call will be woken up and proceed
-    // to lock the semaphore.
-    //
-    if( sem_post( &g_howManyBallsToCompletyEmptyTheBasket ) != 0 )
+    if( howManyBallsThisChildHas > 0 )
     {
-        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_howManyBallsToCompletyEmptyTheBasket! %s",
-                strerror( errno ) );
+        // when the child is tired of playing, he/she has to drop the ball into the basket, if
+        // there is room for it (basket holds only 3 balls), or will wait until another child to
+        // take a ball.
+        //
+        // Decrements (locks) the semaphore pointed to by g_howManyBallsToCompletyFillTheBasket. If the
+        // semaphore's value is greater than zero, then the decrement proceeds, and the
+        // function returns, immediately.  If the semaphore currently has the value zero,
+        // then the call blocks until either it becomes possible to perform the decrement
+        // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
+        // call.
+        //
+        if( sem_wait( &g_howManyBallsToCompletyFillTheBasket ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_howManyBallsToCompletyFillTheBasket! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
+        }
         
-        // Exits the program using a platform portable failure exit status.
-        pthread_detach( pthread_self() );
-    }
+        g_howManyBallsEachChildHas[ childNum ]--;
+        
+        // Increments (unlocks) the semaphore pointed to by 'g_howManyBallsToCompletyEmptyTheBasket'.
+        // If the semaphore's value consequently becomes greater than zero, then another
+        // process or thread blocked in a sem_wait(3) call will be woken up and proceed
+        // to lock the semaphore.
+        //
+        if( sem_post( &g_howManyBallsToCompletyEmptyTheBasket ) != 0 )
+        {
+            // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_howManyBallsToCompletyEmptyTheBasket! %s",
+                    strerror( errno ) );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
+        }
 
-#if defined DEBUG
-    
-    DEBUGGER( stdout, "Child %d has dropped the ball in the basket", childNum );
-#else
-    
-    cout << " Child " << childNum << " has droped the ball in the basket" << endl;
-#endif
+    #if defined DEBUG
+        
+        DEBUGGER( stdout, "Child %d has dropped the ball in the basket", childNum );
+    #else
+        
+        cout << " Child " << childNum << " has droped the ball in the basket" << endl;
+    #endif
+    }
+    else
+    {
+        // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
+        DEBUGGER( stdout, "Warning! This child has %d balls! He cannot drop ball in the basket.",
+                howManyBallsThisChildHas );
+        
+        // Exits the program using a platform portable failure exit status.
+        exit( EXIT_FAILURE );
+    }
 }
 
 
