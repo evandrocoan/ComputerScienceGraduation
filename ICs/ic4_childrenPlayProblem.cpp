@@ -70,18 +70,18 @@ pthread_mutex_t g_fprintf_mutex;
 #define MAX_TIMES_THE_CHILD_IS_ALLOWED_TO_PLAY_WITH_THE_BALL 5
 
 int   errno;
-sem_t g_howManyBallsToCompletyFillTheBasket;
-sem_t g_howManyBallsToCompletyEmptyTheBasket;
+sem_t g_emptyBasketBallPlaces;
+sem_t g_filledBasketBallPlaces;
 
 int g_childNumbers            [ MAX_CHILD_THREADS_TO_PLAY ];
 int g_howManyBallsEachChildHas[ MAX_CHILD_THREADS_TO_PLAY ];
 
 
 // Functions prototypes
-void * childSimulatorFunction( void * );
+void *childSimulatorFunction( void* );
 void initializeTheSemaphores();
-void toCreateTheThreadsToExecute( pthread_t * );
-void waitTheThreadToExecute( pthread_t * );
+void toCreateTheThreadsToExecute( pthread_t* );
+void waitTheThreadToExecute( pthread_t* );
 void closesTheChildsGargen();
 
 void takeABallFromTheBasketBall( unsigned short, unsigned short );
@@ -92,23 +92,62 @@ using namespace std;
 
 /**
  * Para pensar e para responder no codigo
- *     
+ *
  *
  * Os semaforos podem ser variaveis locais?
- *     
+ *         Variaveis locais de quem?
+ *         1) Caso fossem do metodo main, poderia-se passar elas como parametro para as threads 
+ *     (um ponteiro, obviamente), se e somente se o metodo main terminar depois que todas as
+ *     threads terminarem tambem. Para passar esse parametro extra seria necessario emcapsular
+ *     esse semafore junto do numero da crianca a executar, como em uma struct, e passar o /
+ *     ponteiro dessa struct, que deve permanecer nao-destruida ate todas as thread terminarem
+ *     suas execucoes.
+ *         2) Caso fossem variabeis locacais de cada uma dessas threads, eles seriam completamente
+ *     inuteis. Agora cada thread teria uma propria copia do semaforo, pois estao em enderecos
+ *     de memoria diferentes e assim uma thread jamis poderia saber sobre a outra.
  *
  * Todas as threads "child" terminam? Justifique.
- *     
+ *         Depende. Da forma que o problema esta apresentado sim. Por que as criancas (threads) tem 
+ *     3 bolas e para terminarem precisam se livrar destas bolas colocando do cesto, que
+ *     comporta 3 bolas.
+ *         Agora, se voce dar mais bolas para as criancas do que o cesto comporta estas thread nao
+ *     terminarao por que quando todas terminarem de brincar e forem guardar as bolas no cesto,
+ *     nao havera vagas disponiveis, e estas criancas (thread) vao ficar esperando eternamente
+ *     por uma vaga o cesto para terminarem.
  *
  * E se no cesto couber uma unica bola, como na versao original do problema?
- *     
+ *         Caso caiba somente uma bola, as criancas somente podem ganhar uma bola, ou o programa
+ *     nunca ira terminar por que no final da brincadeira, nao havera vagas para guardar as
+ *     bolas e as criancas (threads) ficaram eternamente esperando para guardar o bola,
+ *     quando todas elas terminarem de brincar.
+ *         Mas caso elas tambem ganharem somente uma bola, as criancas (o programa e suas threads)
+ *     irao demorar mais para terminar a execucao, por que agora somente uma crianca (de 7 crincas)
+ *     brinca por vez, 5 vezes. 75 = 35 segundos com cada crianca brincando 1 segundo com a
+ *     bola e desprezando o tempo de troca de bolas (colocar no cesto e pegar), o compartilhamento
+ *     de tempo entre os outros processos do computador, e o overhead gasto com a sincrinizacao
+ *     entre as diferentes threads (criancas).
  *
  * Ha algum erro de programacao para que as threads nao terminem?
- *     
+ *         Nao, este codigo esta bem descrito para o caso descrito no problema apresentado, com a
+ *     configuracao apresentada. Mas caso se abuse das contantes MAX_BALLS_THE_BASKET_SUPPORT e
+ *     MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN vai dar problema. O que se pode esperar ao colocar-se
+ *     MAX_BALLS_THE_BASKET_SUPPORT = 1 e MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN = 2?
+ *     Que o programa execute e chegue a finalizar? Depende, atualmente nao faz-se o tratamento de tal
+ *     caso, mas um simples linha de codigo com a seguir resolve esse problema:
+ *         initialSemaphoreValue = (
+ *                  initialSemaphoreValue + MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN > MAX_BALLS_THE_BASKET_SUPPORT 
+ *                  ? MAX_BALLS_THE_BASKET_SUPPORT : initialSemaphoreValue );
+ *         Pois caso o valor calculado para ser o valor inicial do semaforo ultrapasse o numero de
+ *     de bolas que o sistema pode desfazer-se no fim, limitamos ele ao numero maximo de bolas
+ *     da cesta. Isso nao esta implementado por que nao foi pedido nenhum controle, e com isso,
+ *     nao poderiamos ver o sistema travar colocando valores absurdos como explicados acima.
  *
  * O que poderia ser feito para detectar que um evento nunca ocorrera e fazer com que o programa
  * finalize com sucesso, encerrando todas suas threads?
- *     
+ *         De um timeout razoavel/suficiente para cada thread esperar enquanto ela aguarda a 
+ *     liberacao do semaforo, e caso ultrapasse esse tempo limite, ela finaliza.
+ *         Esse sistema de controle nao possui implementado por que nao foi pedido para esta
+ *     solucao de problema.
  *
  */
 int main()
@@ -136,8 +175,8 @@ int main()
 }
 
 /**
- * Initializes the semaphores 'g_howManyBallsToCompletyEmptyTheBasket' and
- * 'g_howManyBallsToCompletyFillTheBasket' to be used over the child's ball problem, accordingly
+ * Initializes the semaphores 'g_emptyBasketBallPlaces' and
+ * 'g_filledBasketBallPlaces' to be used over the child's ball problem, accordingly
  * with 'MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN' and 'MAX_CHILD_THREADS_TO_PLAY'.
  */
 void initializeTheSemaphores()
@@ -159,7 +198,7 @@ void initializeTheSemaphores()
     
     // init semaphores to synchronize the threads
     //
-    // 'g_howManyBallsToCompletyEmptyTheBasket'
+    // 'g_emptyBasketBallPlaces'
     // The semaphore to initialize.
     //
     // int '0'
@@ -173,11 +212,16 @@ void initializeTheSemaphores()
     // taken by some children, but if there are more balls than children initializes with how
     // many balls there are available.
     //
-    int          remainingBalls          = MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN - MAX_CHILD_THREADS_TO_PLAY;
-    bool         areThereRemainningBalls = remainingBalls > 0;
-    unsigned int initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
+    bool         areThereEmptyPlaces;
+    bool         areThereRemainningBalls;
+    int          remainingBalls;
+    unsigned int initialSemaphoreValue;
     
-    if( sem_init( &g_howManyBallsToCompletyEmptyTheBasket, 0, initialSemaphoreValue ) != 0 )
+    remainingBalls          = MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN - MAX_CHILD_THREADS_TO_PLAY;
+    areThereRemainningBalls = remainingBalls > 0;
+    initialSemaphoreValue   = ( areThereRemainningBalls ? remainingBalls : 0 );
+    
+    if( sem_init( &g_emptyBasketBallPlaces, 0, initialSemaphoreValue ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
@@ -188,11 +232,13 @@ void initializeTheSemaphores()
     
     //
     // This specifies how many ball there are missing from the basket. When there are more balls
-    // than children, we need to set the used balls to MAX_CHILD_THREADS_TO_PLAY.
+    // than children, we need to set the used balls to accordingly.
     //
-    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_CHILD_THREADS_TO_PLAY : MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN );
+    initialSemaphoreValue = ( areThereRemainningBalls ? MAX_BALLS_THE_BASKET_SUPPORT - remainingBalls : MAX_BALLS_THE_BASKET_SUPPORT );
+    areThereEmptyPlaces   = initialSemaphoreValue > 0;
+    initialSemaphoreValue = ( areThereEmptyPlaces ? initialSemaphoreValue : 0 );
     
-    if( sem_init( &g_howManyBallsToCompletyFillTheBasket, 0, initialSemaphoreValue ) != 0 )
+    if( sem_init( &g_filledBasketBallPlaces, 0, initialSemaphoreValue ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
         DEBUGGER( stderr, "ERROR! Could not to initialize the semaphore! %s", strerror( errno ) );
@@ -212,7 +258,7 @@ void toCreateTheThreadsToExecute( pthread_t *childSimulatorThreads )
 {
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to create the threads to execute. sizeof childSimulatorThreads %lu",
-            sizeof childSimulatorThreads );
+            ( (long unsigned int) sizeof childSimulatorThreads ) );
     
     // create 7 threads for the children, passing to each one a different number (child 0 to 6)
     for( int currentChild = 0; currentChild < MAX_CHILD_THREADS_TO_PLAY; ++currentChild )
@@ -337,24 +383,24 @@ void closesTheChildsGargen()
     // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
     DEBUGGER( stdout, "We are about to destroy the semaphores." );
     
-    // Destroy semaphore 'g_howManyBallsToCompletyEmptyTheBasket' used to synchronize the threads.
+    // Destroy semaphore 'g_emptyBasketBallPlaces' used to synchronize the threads.
     //
-    if( sem_destroy( &g_howManyBallsToCompletyEmptyTheBasket ) != 0 )
+    if( sem_destroy( &g_emptyBasketBallPlaces ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_howManyBallsToCompletyEmptyTheBasket! %s",
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_emptyBasketBallPlaces! %s",
                 strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
         exit( EXIT_FAILURE );
     }
     
-    // Destroy semaphore 'g_howManyBallsToCompletyFillTheBasket' used to synchronize the threads.
+    // Destroy semaphore 'g_filledBasketBallPlaces' used to synchronize the threads.
     //
-    if( sem_destroy( &g_howManyBallsToCompletyFillTheBasket ) != 0 )
+    if( sem_destroy( &g_filledBasketBallPlaces ) != 0 )
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_howManyBallsToCompletyFillTheBasket! %s",
+        DEBUGGER( stderr, "ERROR! Could not destroy the semaphore g_filledBasketBallPlaces! %s",
                 strerror( errno ) );
         
         // Exits the program using a platform portable failure exit status.
@@ -412,7 +458,7 @@ void *childSimulatorFunction( void *void_ptr )
  * @param currentPlayTime    the current time where this child is playing.
  *
  * @note This detach this thread if the child has more than MAX_BALLS_PER_CHILD, or the
- *       'g_howManyBallsToCompletyEmptyTheBasket' semaphore is not properly initialized.
+ *       'g_emptyBasketBallPlaces' semaphore is not properly initialized.
  */
 void takeABallFromTheBasketBall( unsigned short childNum, unsigned short currentPlayTime )
 {
@@ -440,17 +486,17 @@ void takeABallFromTheBasketBall( unsigned short childNum, unsigned short current
         cout << " Child " << childNum << " wants to take a ball from the basket" << endl;
     #endif
         
-        // Decrements (locks) the semaphore pointed to by g_howManyBallsToCompletyEmptyTheBasket. If the
+        // Decrements (locks) the semaphore pointed to by g_emptyBasketBallPlaces. If the
         // semaphore's value is greater than zero, then the decrement proceeds, and the
         // function returns, immediately.  If the semaphore currently has the value zero,
         // then the call blocks until either it becomes possible to perform the decrement
         // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
         // call.
         //
-        if( sem_wait( &g_howManyBallsToCompletyEmptyTheBasket ) != 0 )
+        if( sem_wait( &g_emptyBasketBallPlaces ) != 0 )
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_howManyBallsToCompletyEmptyTheBasket! %s",
+            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_emptyBasketBallPlaces! %s",
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
@@ -460,15 +506,15 @@ void takeABallFromTheBasketBall( unsigned short childNum, unsigned short current
         // Each child only access its own array position, hence there are no race conditions.
         g_howManyBallsEachChildHas[ childNum ]++;
         
-        // Increments (unlocks) the semaphore pointed to by 'g_howManyBallsToCompletyFillTheBasket'.
+        // Increments (unlocks) the semaphore pointed to by 'g_filledBasketBallPlaces'.
         // If the semaphore's value consequently becomes greater than zero, then another
         // process or thread blocked in a sem_wait(3) call will be woken up and proceed
         // to lock the semaphore.
         //
-        if( sem_post( &g_howManyBallsToCompletyFillTheBasket ) != 0 )
+        if( sem_post( &g_filledBasketBallPlaces ) != 0 )
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_howManyBallsToCompletyFillTheBasket! %s",
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_filledBasketBallPlaces! %s",
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
@@ -507,7 +553,7 @@ void takeABallFromTheBasketBall( unsigned short childNum, unsigned short current
  * @param childNum           the current running child number.
  *
  * @note This detach this thread if the child has more than MAX_BALLS_PER_CHILD, or the
- *       'g_howManyBallsToCompletyEmptyTheBasket' semaphore is not properly initialized.
+ *       'g_emptyBasketBallPlaces' semaphore is not properly initialized.
  */
 void dropABallInTheBasketBall( unsigned short childNum )
 {
@@ -530,17 +576,17 @@ void dropABallInTheBasketBall( unsigned short childNum )
         // there is room for it (basket holds only 3 balls), or will wait until another child to
         // take a ball.
         //
-        // Decrements (locks) the semaphore pointed to by g_howManyBallsToCompletyFillTheBasket. If the
+        // Decrements (locks) the semaphore pointed to by g_filledBasketBallPlaces. If the
         // semaphore's value is greater than zero, then the decrement proceeds, and the
         // function returns, immediately.  If the semaphore currently has the value zero,
         // then the call blocks until either it becomes possible to perform the decrement
         // (i.e., the semaphore value rises above zero), or a signal handler interrupts the
         // call.
         //
-        if( sem_wait( &g_howManyBallsToCompletyFillTheBasket ) != 0 )
+        if( sem_wait( &g_filledBasketBallPlaces ) != 0 )
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_howManyBallsToCompletyFillTheBasket! %s",
+            DEBUGGER( stderr, "ERROR! Could not to wait the semaphore g_filledBasketBallPlaces! %s",
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
@@ -549,15 +595,15 @@ void dropABallInTheBasketBall( unsigned short childNum )
         
         g_howManyBallsEachChildHas[ childNum ]--;
         
-        // Increments (unlocks) the semaphore pointed to by 'g_howManyBallsToCompletyEmptyTheBasket'.
+        // Increments (unlocks) the semaphore pointed to by 'g_emptyBasketBallPlaces'.
         // If the semaphore's value consequently becomes greater than zero, then another
         // process or thread blocked in a sem_wait(3) call will be woken up and proceed
         // to lock the semaphore.
         //
-        if( sem_post( &g_howManyBallsToCompletyEmptyTheBasket ) != 0 )
+        if( sem_post( &g_emptyBasketBallPlaces ) != 0 )
         {
             // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_howManyBallsToCompletyEmptyTheBasket! %s",
+            DEBUGGER( stderr, "ERROR! Could not to free the semaphore g_emptyBasketBallPlaces! %s",
                     strerror( errno ) );
             
             // Exits the program using a platform portable failure exit status.
@@ -575,7 +621,7 @@ void dropABallInTheBasketBall( unsigned short childNum )
     else
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stdout, "Warning! This child has %d balls! He cannot drop ball in the basket.",
+        DEBUGGER( stderr, "Warning! This child has %d balls! He cannot drop ball in the basket.",
                 howManyBallsThisChildHas );
         
         // Exits the program using a platform portable failure exit status.
