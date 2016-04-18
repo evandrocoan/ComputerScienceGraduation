@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <fstream>
+#include <string>
+#include <sstream>
 
 
 using namespace std;
@@ -32,33 +34,98 @@ Campo solved();
 void* verify( void* );
 
 
-int main( int argc, char* argv[] )
+/**
+ * Start the program execution and read the program argument list passed to it. This program
+ * accept none or one command line argument. If passed, it must be an sudoku file path. This
+ * file must to follow this structure:
+ * 
+ * @param argumentsCount         one plus the argument counting passed to the program command line.
+ * @param argumentsStringList    an argument list passed the program command line, where its first
+ *                               string is current program execution path.
+ * 
+ * @return the <cstdlib> EXIT_SUCCESS on success, or EXIT_FAILURE on fail.
+ */
+int main( int argumentsCount, char* argumentsStringList[] )
 {
-    if( argc == 1 )
+    if( argumentsCount == 1 )
     {
         campo = solved();
     }
     else
     {
-        ifstream file( argv[ 1 ] );
+        std::ifstream file( argumentsStringList[ 1 ] );
         
         if( file.is_open() )
         {
+            char currentChar   = '\n';
+            int  currentLine   = -1;
+            int  currentCollun = 0;
+            
             campo.resize( 9 );
             
-            for( int i = 0; i < 9; i++ )
+            while( file.good() )
             {
-                campo[ i ].resize( 9 );
-                
-                for( int j = 0; j < 9; j++ )
+                if( currentChar == '\n' )
                 {
-                    file >> campo[ i ][ j ];
+                    ++currentLine;
+                    
+                    currentCollun = 0;
+                    
+                    campo[ currentLine ].resize( 9 );
+                    
+                    {
+                        cout << endl;
+                    }
+                    while( file.good()
+                            && ( currentChar = file.get() ) == '\n' );
+                }
+                
+                if( file.good() 
+                    && currentChar == ' ' )
+                {
+                    {
+                        cout << " ";
+                    }
+                    while( file.good()
+                           && ( currentChar = file.get() ) == ' ' );
+                    
+                    continue;
+                }
+                
+                campo[ currentLine ][ currentCollun ] = currentChar - '0';
+                
+                cout << "currentChar: " << currentChar - '0' << " ";
+                cout << "currentLine: " << currentLine << " ";
+                cout << "currentCollun: " << currentCollun << " ";
+                cout << "campo[ currentLine ][ currentCollun ]: " << campo[ currentLine ][ currentCollun ] << endl;
+                
+                ++currentCollun;
+                
+                if( file.good() )
+                {
+                    currentChar = file.get();
                 }
             }
+            
+            cout << endl;
+            
+            // campo.resize( 9 );
+            
+            // for( int i = 0; i < 9; i++ )
+            // {
+                // campo[ i ].resize( 9 );
+                
+                // for( int j = 0; j < 9; j++ )
+                // {
+                    // file >> campo[ i ][ j ];
+                    // cout << campo[ i ][ j ];
+                // }
+                // cout << endl;
+            // }
         }
         else
         {
-            cout << "unable to open argv[1]";
+            cout << "unable to open argumentsStringList[1]";
         }
     }
     
@@ -98,7 +165,7 @@ int main( int argc, char* argv[] )
         cout << "solucao invalida" << endl;
     }
     
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void* verify( void* nm )
