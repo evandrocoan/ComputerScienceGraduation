@@ -65,80 +65,79 @@ int main( int argumentsCount, char* argumentsStringList[] )
             
             while( file.good() )
             {
-                // handle any CR/LF zoo
-                if( currentChar == '\n'
-                    || currentChar == '\r' )
+                if( isdigit( currentChar ) )
                 {
-                    campo[ currentLine + 1 ].resize( 9 );
+                    campo[ currentLine ][ currentColumn ] = currentChar - '0';
                     
-                    do
+                    printf( "[%i,%i]%i", currentLine, currentColumn, campo[ currentLine ][ currentColumn ] );
+                    
+                    if( file.good() )
                     {
-                        cout << endl;
+                        currentChar = file.get();
                     }
-                    while( file.good()
-                           && ( ( currentChar = file.get() ) == '\n'
-                                 || currentChar == '\r' ) );
                     
-                    if( isdigit( currentChar ) )
+                    ++currentColumn;
+                }
+                else
+                {
+                    // handle any CR/LF zoo
+                    if( currentChar == '\n'
+                        || currentChar == '\r' )
                     {
-                        currentColumn = 0;
+                        do
+                        {
+                            cout << endl;
+                        }
+                        while( file.good()
+                               && ( ( currentChar = file.get() ) == '\n'
+                                     || currentChar == '\r' ) );
                         
-                        ++currentLine;
-                        
-                        continue;
+                        if( isdigit( currentChar ) )
+                        {
+                            ++currentLine;
+                            
+                            currentColumn = 0;
+                            
+                            campo[ currentLine ].resize( 9 );
+                        }
                     }
-                }
-                
-                if( file.good()
-                    && currentChar == ' ' )
-                {
-                    do
-                    {
-                        cout << " ";
-                    }
-                    while( file.good()
-                           && ( currentChar = file.get() ) == ' ' );
                     
-                    continue;
-                }
-                
-                if( file.good() 
-                    && currentChar == '.' )
-                {
-                    do
+                    if( file.good()
+                        && currentChar == ' ' )
                     {
-                        cout << ".";
+                        do
+                        {
+                            cout << " ";
+                        }
+                        while( file.good()
+                               && ( currentChar = file.get() ) == ' ' );
                     }
-                    while( file.good()
-                           && ( currentChar = file.get() ) == '.' );
                     
-                    continue;
-                }
-                
-                if( file.good() 
-                    && currentChar == ',' )
-                {
-                    do
+                    if( file.good() 
+                        && currentChar == '.' )
                     {
-                        cout << ",";
+                        do
+                        {
+                            cout << ".";
+                        }
+                        while( file.good()
+                               && ( currentChar = file.get() ) == '.' );
                     }
-                    while( file.good()
-                           && ( currentChar = file.get() ) == ',' );
                     
-                    continue;
+                    if( file.good() 
+                        && currentChar == ',' )
+                    {
+                        do
+                        {
+                            cout << ",";
+                        }
+                        while( file.good()
+                               && ( currentChar = file.get() ) == ',' );
+                    }
                 }
-                
-                campo[ currentLine ][ currentColumn ] = currentChar - '0';
-                
-                printf( "[%i,%i]%i", currentLine, currentColumn, campo[ currentLine ][ currentColumn ] );
-                
-                if( file.good() )
-                {
-                    currentChar = file.get();
-                }
-                
-                ++currentColumn;
             }
+            
+            file.close();
             
             cout << '\n' << endl;
             
