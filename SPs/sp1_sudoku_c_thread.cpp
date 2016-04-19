@@ -100,40 +100,13 @@ int main( int argumentsCount, char* argumentsStringList[] )
                             
                             campo[ currentLine ].resize( 9 );
                         }
+                        
+                        continue;
                     }
                     
-                    if( file.good()
-                        && currentChar == ' ' )
-                    {
-                        do
-                        {
-                            cout << " ";
-                        }
-                        while( file.good()
-                               && ( currentChar = file.get() ) == ' ' );
-                    }
-                    
-                    if( file.good() 
-                        && currentChar == '.' )
-                    {
-                        do
-                        {
-                            cout << ".";
-                        }
-                        while( file.good()
-                               && ( currentChar = file.get() ) == '.' );
-                    }
-                    
-                    if( file.good() 
-                        && currentChar == ',' )
-                    {
-                        do
-                        {
-                            cout << ",";
-                        }
-                        while( file.good()
-                               && ( currentChar = file.get() ) == ',' );
-                    }
+                    // ignore unrecognized character
+                    cout << currentChar;
+                    currentChar = file.get();
                 }
             }
             

@@ -135,7 +135,7 @@ using namespace std;
  *     Que o programa execute e chegue a finalizar? Depende, atualmente nao faz-se o tratamento de tal
  *     caso, mas um simples linha de codigo com a seguir resolve esse problema:
  *         initialSemaphoreValue = (
- *                  initialSemaphoreValue + MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN > MAX_BALLS_THE_BASKET_SUPPORT 
+ *                  MAX_BALLS_TO_INITIALLY_GIVE_TO_THE_CHILDREN > MAX_BALLS_THE_BASKET_SUPPORT 
  *                  ? MAX_BALLS_THE_BASKET_SUPPORT : initialSemaphoreValue );
  *         Pois caso o valor calculado para ser o valor inicial do semaforo ultrapasse o numero de
  *     de bolas que o sistema pode desfazer-se no fim, limitamos ele ao numero maximo de bolas
@@ -552,8 +552,8 @@ void takeABallFromTheBasketBall( unsigned short childNum, unsigned short current
  *
  * @param childNum           the current running child number.
  *
- * @note This detach this thread if the child has more than MAX_BALLS_PER_CHILD, or the
- *       'g_emptyBasketBallPlaces' semaphore is not properly initialized.
+ * @note This exits the program if the child has lass ball than 0, or the 'g_emptyBasketBallPlaces'
+ *       semaphore is not properly initialized.
  */
 void dropABallInTheBasketBall( unsigned short childNum )
 {
@@ -621,7 +621,7 @@ void dropABallInTheBasketBall( unsigned short childNum )
     else
     {
         // Print like function for logging used when the DEBUG_LEVEL is set to greater than 0.
-        DEBUGGER( stderr, "Warning! This child has %d balls! He cannot drop ball in the basket.",
+        DEBUGGER( stderr, "Error! This child has %d balls! He cannot drop ball in the basket.",
                 howManyBallsThisChildHas );
         
         // Exits the program using a platform portable failure exit status.
