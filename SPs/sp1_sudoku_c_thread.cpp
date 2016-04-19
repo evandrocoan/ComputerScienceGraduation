@@ -65,7 +65,7 @@ int main( int argumentsCount, char* argumentsStringList[] )
             
             while( file.good() )
             {
-                if( isdigit( currentChar ) )
+                if( isdigit( currentChar ) && currentColumn < 9 )
                 {
                     campo[ currentLine ][ currentColumn ] = currentChar - '0';
                     
