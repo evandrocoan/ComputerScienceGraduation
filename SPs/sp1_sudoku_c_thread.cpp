@@ -17,11 +17,8 @@
 #include <sstream>
 
 
-using namespace std;
-
-
 // Global variables
-vector< vector< int > > g_sudokuVectorMatrix
+std::vector< std::vector< int > > g_sudokuVectorMatrix
 {
     { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
     { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
@@ -40,16 +37,15 @@ bool works = true;
 
 
 // Functions prototypes
-vector< vector< int > > solved();
-void*                   verify( void* );
-void                    ini();
-void                    toCreateASolvedSudoku();
-void                    processInputSudoku( char *sudokuFileAddress );
+void* verify( void* );
+void  createRandomSudoku();
+void  toCreateASolvedSudoku();
+void  processInputSudoku( char *sudokuFileAddress );
 
 
 /**
  * Start the program execution and read the program argument list passed to it. This program
- * accept none or one command line argument. If passed, it must be an sudoku file path. This
+ * accept none or one command line argument. If passed, it must be an sudoku file path. The
  * file must to follow this structure:
  * 
  * @param argumentsCount         one plus the argument counting passed to the program command line.
@@ -64,8 +60,6 @@ int main( int argumentsCount, char* argumentsStringList[] )
     {
         processInputSudoku( argumentsStringList[ 1 ] );
         
-        cout << '\n' << endl;
-        
         // g_sudokuVectorMatrix.resize( 9 );
         
         // for( int i = 0; i < 9; i++ )
@@ -75,26 +69,30 @@ int main( int argumentsCount, char* argumentsStringList[] )
             // for( int j = 0; j < 9; j++ )
             // {
                 // sudokuFileInput >> g_sudokuVectorMatrix[ i ][ j ];
-                // cout << g_sudokuVectorMatrix[ i ][ j ];
+                // std::cout << g_sudokuVectorMatrix[ i ][ j ];
             // }
-            // cout << endl;
+            // std::cout << std::endl;
         // }
     }
+    else
+    {
+        std::cout << '\n' << std::endl;
+    }
     
-    // g_sudokuVectorMatrix= ini();
+    // g_sudokuVectorMatrix= createRandomSudoku();
     int       n = 9;
     pthread_t t[ n ];
     int       a[ n ];
     
     for( int i = 0; i < n; i++ )
     {
-        cout << "creating thread " << i << endl;
+        std::cout << "creating thread " << i << std::endl;
         
         a[ i ] = i;
         
         if( pthread_create( &t[ i ], NULL, verify, &a[ i ] ) != 0 )
         {
-            cout << "failed to create thread " << i << endl;
+            std::cout << "failed to create thread " << i << std::endl;
         }
     }
     
@@ -103,18 +101,18 @@ int main( int argumentsCount, char* argumentsStringList[] )
         // t[i].join();
         pthread_join( t[ i ], NULL );
         
-        cout << "thread " << i << "has joined" << endl;
+        std::cout << "thread " << i << "has joined" << std::endl;
     }
     
-    cout << "" << endl;
+    std::cout << "" << std::endl;
     
     if( works )
     {
-        cout << "solucao valida" << endl;
+        std::cout << "solucao valida" << std::endl;
     }
     else
     {
-        cout << "solucao invalida" << endl;
+        std::cout << "solucao invalida" << std::endl;
     }
     
     return EXIT_SUCCESS;
@@ -159,7 +157,7 @@ void processInputSudoku( char *sudokuFileAddress )
                 {
                     do
                     {
-                        cout << endl;
+                        std::cout << std::endl;
                     }
                     while( sudokuFileInput.good()
                            && ( ( currentChar = sudokuFileInput.get() ) == '\n'
@@ -176,7 +174,8 @@ void processInputSudoku( char *sudokuFileAddress )
                 }
                 
                 // ignore unrecognized character
-                cout << currentChar;
+                std::cout << currentChar;
+                
                 currentChar = sudokuFileInput.get();
             }
         }
@@ -185,7 +184,7 @@ void processInputSudoku( char *sudokuFileAddress )
     }
     else
     {
-        cout << "unable to open argumentsStringList[1]";
+        std::cout << "unable to open argumentsStringList[1]";
     }
 }
 
@@ -259,7 +258,7 @@ void* verify( void* nm )
 /**
  * 
  */
-void ini()
+void createRandomSudoku()
 {
     g_sudokuVectorMatrix.resize( 9 );
     
