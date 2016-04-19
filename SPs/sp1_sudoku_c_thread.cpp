@@ -19,21 +19,33 @@
 
 using namespace std;
 
-typedef vector< vector< int > > Campo;
-
 
 // Global variables
-Campo g_sudokuVectorMatrix;
+vector< vector< int > > g_sudokuVectorMatrix
+{
+    { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
+    { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
+    { 3, 4, 1,     6, 8, 9,     7, 5, 2 },
+    
+    { 5, 9, 3,     4, 6, 8,     2, 7, 1 },
+    { 4, 7, 2,     5, 1, 3,     6, 8, 9 },
+    { 6, 1, 8,     9, 7, 2,     4, 3, 5 },
+    
+    { 7, 8, 6,     2, 3, 5,     9, 1, 4 },
+    { 1, 5, 4,     7, 9, 6,     8, 2, 3 },
+    { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
+};
 
 bool works = true;
 
 
 // Functions prototypes
-Campo ini();
-Campo solved();
-void* verify( void* );
-void toCreateASolvedSudoku();
-void processInputSudoku( char *sudokuFileAddress );
+vector< vector< int > > solved();
+void*                   verify( void* );
+void                    ini();
+void                    toCreateASolvedSudoku();
+void                    processInputSudoku( char *sudokuFileAddress );
+
 
 /**
  * Start the program execution and read the program argument list passed to it. This program
@@ -48,11 +60,7 @@ void processInputSudoku( char *sudokuFileAddress );
  */
 int main( int argumentsCount, char* argumentsStringList[] )
 {
-    if( argumentsCount == 1 )
-    {
-        toCreateASolvedSudoku();
-    }
-    else
+    if( argumentsCount == 2 )
     {
         processInputSudoku( argumentsStringList[ 1 ] );
         
@@ -126,11 +134,11 @@ void processInputSudoku( char *sudokuFileAddress )
         int  currentLine   = -1;
         int  currentColumn = 0;
         
-        g_sudokuVectorMatrix.resize( 9 );
-        
         while( sudokuFileInput.good() )
         {
-            if( isdigit( currentChar ) && currentColumn < 9 )
+            if( isdigit( currentChar )
+                && currentLine < 9
+                && currentColumn < 9 )
             {
                 g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
                 
@@ -162,8 +170,6 @@ void processInputSudoku( char *sudokuFileAddress )
                         ++currentLine;
                         
                         currentColumn = 0;
-                        
-                        g_sudokuVectorMatrix[ currentLine ].resize( 9 );
                     }
                     
                     continue;
@@ -250,32 +256,11 @@ void* verify( void* nm )
     }
 }
 
-
-void toCreateASolvedSudoku()
+/**
+ * 
+ */
+void ini()
 {
-    Campo g_sudokuVectorMatrix
-    {
-        { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
-        { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
-        { 3, 4, 1,     6, 8, 9,     7, 5, 2 },
-        
-        { 5, 9, 3,     4, 6, 8,     2, 7, 1 },
-        { 4, 7, 2,     5, 1, 3,     6, 8, 9 },
-        { 6, 1, 8,     9, 7, 2,     4, 3, 5 },
-        
-        { 7, 8, 6,     2, 3, 5,     9, 1, 4 },
-        { 1, 5, 4,     7, 9, 6,     8, 2, 3 },
-        { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
-    };
-    
-    ::g_sudokuVectorMatrix = g_sudokuVectorMatrix;
-}
-
-
-Campo ini()
-{
-    Campo g_sudokuVectorMatrix;
-    
     g_sudokuVectorMatrix.resize( 9 );
     
     for( int i = 0; i < 9; i++ )
@@ -288,8 +273,6 @@ Campo ini()
         }
     
     }
-    
-    return g_sudokuVectorMatrix;
 }
 
 
