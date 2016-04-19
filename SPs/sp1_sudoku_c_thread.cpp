@@ -23,7 +23,7 @@ typedef vector< vector< int > > Campo;
 
 
 // Global variables
-Campo campo;
+Campo g_sudokuVectorMatrix;
 
 bool works = true;
 
@@ -32,7 +32,8 @@ bool works = true;
 Campo ini();
 Campo solved();
 void* verify( void* );
-
+void toCreateASolvedSudoku();
+void processInputSudoku( char *sudokuFileAddress );
 
 /**
  * Start the program execution and read the program argument list passed to it. This program
@@ -49,92 +50,30 @@ int main( int argumentsCount, char* argumentsStringList[] )
 {
     if( argumentsCount == 1 )
     {
-        campo = solved();
+        toCreateASolvedSudoku();
     }
     else
     {
-        std::ifstream file( argumentsStringList[ 1 ] );
+        processInputSudoku( argumentsStringList[ 1 ] );
         
-        if( file.is_open() )
-        {
-            char currentChar   = '\n';
-            int  currentLine   = -1;
-            int  currentColumn = 0;
+        cout << '\n' << endl;
+        
+        // g_sudokuVectorMatrix.resize( 9 );
+        
+        // for( int i = 0; i < 9; i++ )
+        // {
+            // g_sudokuVectorMatrix[ i ].resize( 9 );
             
-            campo.resize( 9 );
-            
-            while( file.good() )
-            {
-                if( isdigit( currentChar ) && currentColumn < 9 )
-                {
-                    campo[ currentLine ][ currentColumn ] = currentChar - '0';
-                    
-                    printf( "[%i,%i]%i", currentLine, currentColumn, campo[ currentLine ][ currentColumn ] );
-                    
-                    if( file.good() )
-                    {
-                        currentChar = file.get();
-                    }
-                    
-                    ++currentColumn;
-                }
-                else
-                {
-                    // handle any CR/LF zoo
-                    if( currentChar == '\n'
-                        || currentChar == '\r' )
-                    {
-                        do
-                        {
-                            cout << endl;
-                        }
-                        while( file.good()
-                               && ( ( currentChar = file.get() ) == '\n'
-                                     || currentChar == '\r' ) );
-                        
-                        if( isdigit( currentChar ) )
-                        {
-                            ++currentLine;
-                            
-                            currentColumn = 0;
-                            
-                            campo[ currentLine ].resize( 9 );
-                        }
-                        
-                        continue;
-                    }
-                    
-                    // ignore unrecognized character
-                    cout << currentChar;
-                    currentChar = file.get();
-                }
-            }
-            
-            file.close();
-            
-            cout << '\n' << endl;
-            
-            // campo.resize( 9 );
-            
-            // for( int i = 0; i < 9; i++ )
+            // for( int j = 0; j < 9; j++ )
             // {
-                // campo[ i ].resize( 9 );
-                
-                // for( int j = 0; j < 9; j++ )
-                // {
-                    // file >> campo[ i ][ j ];
-                    // cout << campo[ i ][ j ];
-                // }
-                // cout << endl;
+                // sudokuFileInput >> g_sudokuVectorMatrix[ i ][ j ];
+                // cout << g_sudokuVectorMatrix[ i ][ j ];
             // }
-        }
-        else
-        {
-            cout << "unable to open argumentsStringList[1]";
-        }
+            // cout << endl;
+        // }
     }
     
-    // campo= ini();
+    // g_sudokuVectorMatrix= ini();
     int       n = 9;
     pthread_t t[ n ];
     int       a[ n ];
@@ -173,6 +112,77 @@ int main( int argumentsCount, char* argumentsStringList[] )
     return EXIT_SUCCESS;
 }
 
+/**
+ * 
+ * @param *sudokuFileAddress    an char pointer to the 
+ */
+void processInputSudoku( char *sudokuFileAddress )
+{
+    std::ifstream sudokuFileInput( sudokuFileAddress );
+    
+    if( sudokuFileInput.is_open() )
+    {
+        char currentChar   = '\n';
+        int  currentLine   = -1;
+        int  currentColumn = 0;
+        
+        g_sudokuVectorMatrix.resize( 9 );
+        
+        while( sudokuFileInput.good() )
+        {
+            if( isdigit( currentChar ) && currentColumn < 9 )
+            {
+                g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
+                
+                printf( "[%i,%i]%i", currentLine, currentColumn, g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
+                
+                if( sudokuFileInput.good() )
+                {
+                    currentChar = sudokuFileInput.get();
+                }
+                
+                ++currentColumn;
+            }
+            else
+            {
+                // handle any CR/LF zoo
+                if( currentChar == '\n'
+                    || currentChar == '\r' )
+                {
+                    do
+                    {
+                        cout << endl;
+                    }
+                    while( sudokuFileInput.good()
+                           && ( ( currentChar = sudokuFileInput.get() ) == '\n'
+                                 || currentChar == '\r' ) );
+                    
+                    if( isdigit( currentChar ) )
+                    {
+                        ++currentLine;
+                        
+                        currentColumn = 0;
+                        
+                        g_sudokuVectorMatrix[ currentLine ].resize( 9 );
+                    }
+                    
+                    continue;
+                }
+                
+                // ignore unrecognized character
+                cout << currentChar;
+                currentChar = sudokuFileInput.get();
+            }
+        }
+        
+        sudokuFileInput.close();
+    }
+    else
+    {
+        cout << "unable to open argumentsStringList[1]";
+    }
+}
+
 void* verify( void* nm )
 {
     int n   = *( ( int* ) nm );
@@ -181,13 +191,13 @@ void* verify( void* nm )
     // verificar linha n;
     for( int i = 0; i < 9; i++ )
     {
-        //alguem ja falhou o campo
+        //alguem ja falhou o g_sudokuVectorMatrix
         if( !works )
         {
             return 0;
         }
         
-        sum += campo[ n ][ i ];
+        sum += g_sudokuVectorMatrix[ n ][ i ];
     }
     
     if( sum != 45 )
@@ -200,13 +210,13 @@ void* verify( void* nm )
     
     for( int i = 0; i < 9; i++ )
     {
-        //alguem ja falhou o campo
+        //alguem ja falhou o g_sudokuVectorMatrix
         if( !works )
         {
             return 0;
         }
         
-        sum += campo[ i ][ n ];
+        sum += g_sudokuVectorMatrix[ i ][ n ];
     }
     
     if( sum != 45 )
@@ -224,13 +234,13 @@ void* verify( void* nm )
     {
         for( int j = 0; j < 3; j++ )
         {
-            //alguem ja falhou o campo
+            //alguem ja falhou o g_sudokuVectorMatrix
             if( !works )
             {
                 return 0;
             }
             
-            sum += campo[ x * 3 + i ][ y * 3 + j ];
+            sum += g_sudokuVectorMatrix[ x * 3 + i ][ y * 3 + j ];
         }
     }
     
@@ -241,9 +251,9 @@ void* verify( void* nm )
 }
 
 
-Campo solved()
+void toCreateASolvedSudoku()
 {
-    Campo campo
+    Campo g_sudokuVectorMatrix
     {
         { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
         { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
@@ -258,27 +268,28 @@ Campo solved()
         { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
     };
     
-    return campo;
+    ::g_sudokuVectorMatrix = g_sudokuVectorMatrix;
 }
 
 
 Campo ini()
 {
-    Campo campo;
-    campo.resize( 9 );
+    Campo g_sudokuVectorMatrix;
+    
+    g_sudokuVectorMatrix.resize( 9 );
     
     for( int i = 0; i < 9; i++ )
     {
-        campo[ i ].resize( 9 );
+        g_sudokuVectorMatrix[ i ].resize( 9 );
         
         for( int j = 0; j < 9; j++ )
         {
-            campo[ i ][ j ] = rand() % 9 + 1;
+            g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
         }
     
     }
     
-    return campo;
+    return g_sudokuVectorMatrix;
 }
 
 
