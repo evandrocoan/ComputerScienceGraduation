@@ -22,17 +22,41 @@ class Sudoku
 public:
     
     /**
-     * 
+     * To creates a default sudoku, which is an valid (solved) soduku.
      */
     Sudoku();
     
     /**
+     * To creates an sudoku accordantly by the input file passed. The Sudoku's text file must 
+     * to follow this structure:
      * 
+     * Any text without numbers, on any line. The next line has the sudoku numbers:
+     * 8 2 7,  some space  1 5 4,    3 9 6 after all nine sudoku's digits, you can place other
+     * numbers.
+     * You can also skip lines and put any other non-digit characters between the sudoku's numbers.
+     * 
+     * 9 6 5,         3 2 7,         1 4 8 Huehuehue
+     * 3 4 1,         6 8 9,         7 5 2  Huehuehue
+     * 
+     * 5 9 3, ||||||  4 6 8, ||||||  2 7 11337
+     * 4 7 2, ||||||  5 1 3, ||||||  6 8 9 1337
+     * 6 1 8, ||||||  9 7 2, ||||||  4 3 5  1337
+     * 
+     * 7 8 6, %%%%%%% 2 3 5, &&&&&&& 9 1 4 |
+     * 1 5 4, %%%%%%% 7 9 6, &&&&&&& 8 2 3 |
+     * 2 3 9, %%%%%%% 8 4 1, &&&&&&& 5 6 7 |
+     * 
+     * This example is also an valid sudoku input!
+     * Just remember, once you to start putting numbers on a line they will be the sudoku's
+     * numbers, and must be at least nine numbers.
+     * 
+     * 
+     * @param sudokuFileAddress       an char pointer to the sudoku's file path.
      */
     Sudoku( char *sudokuFileAddress );
     
     /**
-     * 
+     * Verifies the current loaded sudoku solution using the Wagner's method.
      */
     bool computeSudoku();
 
@@ -40,7 +64,7 @@ public:
 private:
     
     /**
-     * 
+     * An boolean value used by the Wagner's method to verifies the sudoku's solution.
      */
     bool works = true;
     
@@ -56,7 +80,7 @@ private:
     };
     
     /**
-     * 
+     * An matrix to store the inputed sudoku values.
      */
     std::vector< std::vector< int > > g_sudokuVectorMatrix
     {
@@ -88,7 +112,8 @@ private:
     void verify( int n );
     
     /**
-     * 
+     * To erases the current loaded sudoku and to creates a new random sudoku using random valid
+     * values.
      */
     void createRandomSudoku();
 };
@@ -96,25 +121,8 @@ private:
 
 /**
  * Start the program execution and read the program argument list passed to it. This program
- * accept none or one command line argument. If passed, it must be an sudoku file path. The
- * file must to follow this structure:
- * 
- * Any text without numbers, on any line. The next line has the sudoku numbers:
- * 8 2 7,  some space  1 5 4,    3 9 6 after all nine sudoku digits, you can place numbers. 1 2...
- * You can also skip lines.
- * 
- * 9 6 5,         3 2 7,         1 4 8 Huehuehue
- * 3 4 1,         6 8 9,         7 5 2  Huehuehue
- * 
- * 5 9 3, ||||||  4 6 8, ||||||  2 7 11337
- * 4 7 2, ||||||  5 1 3, ||||||  6 8 9 1337
- * 6 1 8, ||||||  9 7 2, ||||||  4 3 5  1337
- * 
- * 7 8 6, %%%%%%% 2 3 5, &&&&&&& 9 1 4 |
- * 1 5 4, %%%%%%% 7 9 6, &&&&&&& 8 2 3 |
- * 2 3 9, %%%%%%% 8 4 1, &&&&&&& 5 6 7 |
- * This example is an valid sudoku input! Just remember, once you to start putting numbers on a
- * line they will the the sudoku's numbers, and must be at least nine numbers.
+ * accept none or one command line argument. If passed, it must be an sudoku file path. See the
+ * Sudoku's class documentation for the sudoku's text file structure.
  * 
  * @param argumentsCount         one plus the argument counting passed to the program command line.
  * @param argumentsStringList    an argument list passed the program command line, where its first
@@ -146,6 +154,7 @@ int main( int argumentsCount, char* argumentsStringList[] )
     }
     else
     {
+        sudoku = new Sudoku();
         std::cout << "" << std::endl;
     }
     
