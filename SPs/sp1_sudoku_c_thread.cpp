@@ -21,55 +21,27 @@ class Sudoku
 {
 public:
     
-    Sudoku()
-    {
-    }
+    /**
+     * 
+     */
+    Sudoku();
     
-    Sudoku( char *sudokuFileAddress )
-    {
-        processInputSudoku( sudokuFileAddress );
-    }
+    /**
+     * 
+     */
+    Sudoku( char *sudokuFileAddress );
     
-    bool computeSudoku()
-    {
-        parameters *data = (parameters *) malloc(sizeof(parameters));
-        data->row = 1;
-        data->column = 1;
-        data->a[0]   = 0;
-        data->sudoku = this;
-        /* Now create the thread passing it data as a parameter */
-        
-        // g_sudokuVectorMatrix= createRandomSudoku();
-        int       n = 9;
-        pthread_t t[ n ];
-        
-        for( int i = 0; i < n; i++ )
-        {
-            std::cout << "creating thread " << i << std::endl;
-            
-            //a[ i ] = i;
-            data->a[ i ] = i;
-            
-            if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
-            {
-                std::cout << "failed to create thread " << i << std::endl;
-            }
-        }
-        
-        for( int i = 0; i < n; i++ )
-        {
-            // t[i].join();
-            pthread_join( t[ i ], NULL );
-            
-            std::cout << "thread " << i << "has joined" << std::endl;
-        }
-        
-        return this->works;
-    }
+    /**
+     * 
+     */
+    bool computeSudoku();
 
 
 private:
     
+    /**
+     * 
+     */
     bool works = true;
     
     /**
@@ -83,6 +55,9 @@ private:
         Sudoku *sudoku;
     };
     
+    /**
+     * 
+     */
     std::vector< std::vector< int > > g_sudokuVectorMatrix
     {
         { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
@@ -98,170 +73,24 @@ private:
         { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
     };
     
-    static void* startThread( void* arg )
-    {
-        parameters* data = static_cast< parameters* >( arg );
-        
-        data->sudoku->verify( *( data->a ) );
-        
-        return 0;
-    }
+    /**
+     * 
+     */
+    static void* startThread( void* arg );
     
     /**
      * 
      * 
      * @param *sudokuFileAddress    an char pointer to the 
      */
-    void processInputSudoku( char *sudokuFileAddress )
-    {
-        std::ifstream sudokuFileInput( sudokuFileAddress );
-        
-        if( sudokuFileInput.is_open() )
-        {
-            char currentChar   = '\n';
-            int  currentLine   = -1;
-            int  currentColumn = 0;
-            
-            while( sudokuFileInput.good() )
-            {
-                if( isdigit( currentChar )
-                    && currentLine < 9
-                    && currentColumn < 9 )
-                {
-                    g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
-                    
-                    printf( "[%i,%i]%i", currentLine, currentColumn, g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
-                    
-                    if( sudokuFileInput.good() )
-                    {
-                        currentChar = sudokuFileInput.get();
-                    }
-                    
-                    ++currentColumn;
-                }
-                else
-                {
-                    // handle any CR/LF zoo
-                    if( currentChar == '\n'
-                        || currentChar == '\r' )
-                    {
-                        do
-                        {
-                            std::cout << std::endl;
-                        }
-                        while( sudokuFileInput.good()
-                               && ( ( currentChar = sudokuFileInput.get() ) == '\n'
-                                     || currentChar == '\r' ) );
-                        
-                        if( isdigit( currentChar ) )
-                        {
-                            ++currentLine;
-                            
-                            currentColumn = 0;
-                        }
-                        
-                        continue;
-                    }
-                    
-                    // ignore unrecognized character
-                    std::cout << currentChar;
-                    
-                    currentChar = sudokuFileInput.get();
-                }
-            }
-            
-            sudokuFileInput.close();
-        }
-        else
-        {
-            std::cout << "unable to open argumentsStringList[1]";
-        }
-    }
+    void processInputSudoku( char *sudokuFileAddress );
     
-    void verify( int n )
-    {
-        int sum = 0;
-        
-        // verificar linha n;
-        for( int i = 0; i < 9; i++ )
-        {
-            //alguem ja falhou o g_sudokuVectorMatrix
-            if( !works )
-            {
-                return;
-            }
-            
-            sum += g_sudokuVectorMatrix[ n ][ i ];
-        }
-        
-        if( sum != 45 )
-        {
-            works = false;
-        }
-        
-        // verificar coluna n
-        sum = 0;
-        
-        for( int i = 0; i < 9; i++ )
-        {
-            //alguem ja falhou o g_sudokuVectorMatrix
-            if( !works )
-            {
-                return;
-            }
-            
-            sum += g_sudokuVectorMatrix[ i ][ n ];
-        }
-        
-        if( sum != 45 )
-        {
-            works = false;
-        }
-        
-        // verificar quadrante n
-        sum = 0;
-        
-        int x = n / 3;
-        int y = n % 3;
-        
-        for( int i = 0; i < 3; i++ )
-        {
-            for( int j = 0; j < 3; j++ )
-            {
-                //alguem ja falhou o g_sudokuVectorMatrix
-                if( !works )
-                {
-                    return;
-                }
-                
-                sum += g_sudokuVectorMatrix[ x * 3 + i ][ y * 3 + j ];
-            }
-        }
-        
-        if( sum != 45 )
-        {
-            works = false;
-        }
-    }
+    void verify( int n );
     
     /**
      * 
      */
-    void createRandomSudoku()
-    {
-        g_sudokuVectorMatrix.resize( 9 );
-        
-        for( int i = 0; i < 9; i++ )
-        {
-            g_sudokuVectorMatrix[ i ].resize( 9 );
-            
-            for( int j = 0; j < 9; j++ )
-            {
-                g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
-            }
-        
-        }
-    }
+    void createRandomSudoku();
 };
 
 
@@ -269,6 +98,23 @@ private:
  * Start the program execution and read the program argument list passed to it. This program
  * accept none or one command line argument. If passed, it must be an sudoku file path. The
  * file must to follow this structure:
+ * 
+ * Any text without numbers, on any line. The next line has the sudoku numbers:
+ * 8 2 7,  some space  1 5 4,    3 9 6 after all nine sudoku digits, you can place numbers. 1 2...
+ * You can also skip lines.
+ * 
+ * 9 6 5,         3 2 7,         1 4 8 Huehuehue
+ * 3 4 1,         6 8 9,         7 5 2  Huehuehue
+ * 
+ * 5 9 3, ||||||  4 6 8, ||||||  2 7 11337
+ * 4 7 2, ||||||  5 1 3, ||||||  6 8 9 1337
+ * 6 1 8, ||||||  9 7 2, ||||||  4 3 5  1337
+ * 
+ * 7 8 6, %%%%%%% 2 3 5, &&&&&&& 9 1 4 |
+ * 1 5 4, %%%%%%% 7 9 6, &&&&&&& 8 2 3 |
+ * 2 3 9, %%%%%%% 8 4 1, &&&&&&& 5 6 7 |
+ * This example is an valid sudoku input! Just remember, once you to start putting numbers on a
+ * line they will the the sudoku's numbers, and must be at least nine numbers.
  * 
  * @param argumentsCount         one plus the argument counting passed to the program command line.
  * @param argumentsStringList    an argument list passed the program command line, where its first
@@ -314,6 +160,214 @@ int main( int argumentsCount, char* argumentsStringList[] )
     
     return EXIT_SUCCESS;
 }
+
+
+Sudoku::Sudoku()
+{
+}
+
+Sudoku::Sudoku( char *sudokuFileAddress )
+{
+    processInputSudoku( sudokuFileAddress );
+}
+
+bool Sudoku::computeSudoku()
+{
+    parameters *data = (parameters *) malloc(sizeof(parameters));
+    data->row = 1;
+    data->column = 1;
+    data->a[0]   = 0;
+    data->sudoku = this;
+    /* Now create the thread passing it data as a parameter */
+    
+    // g_sudokuVectorMatrix= createRandomSudoku();
+    int       n = 9;
+    pthread_t t[ n ];
+    
+    for( int i = 0; i < n; i++ )
+    {
+        std::cout << "creating thread " << i << std::endl;
+        
+        //a[ i ] = i;
+        data->a[ i ] = i;
+        
+        if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
+        {
+            std::cout << "failed to create thread " << i << std::endl;
+        }
+    }
+    
+    for( int i = 0; i < n; i++ )
+    {
+        // t[i].join();
+        pthread_join( t[ i ], NULL );
+        
+        std::cout << "thread " << i << "has joined" << std::endl;
+    }
+    
+    return this->works;
+}
+
+
+void* Sudoku::startThread( void* arg )
+{
+    parameters* data = static_cast< parameters* >( arg );
+    
+    data->sudoku->verify( *( data->a ) );
+    
+    return 0;
+}
+
+void Sudoku::processInputSudoku( char *sudokuFileAddress )
+{
+    std::ifstream sudokuFileInput( sudokuFileAddress );
+    
+    if( sudokuFileInput.is_open() )
+    {
+        char currentChar   = '\n';
+        int  currentLine   = -1;
+        int  currentColumn = 0;
+        
+        while( sudokuFileInput.good() )
+        {
+            if( isdigit( currentChar )
+                && currentLine < 9
+                && currentColumn < 9 )
+            {
+                g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
+                
+                printf( "[%i,%i]%i", currentLine, currentColumn, g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
+                
+                if( sudokuFileInput.good() )
+                {
+                    currentChar = sudokuFileInput.get();
+                }
+                
+                ++currentColumn;
+            }
+            else
+            {
+                // handle any CR/LF zoo
+                if( currentChar == '\n'
+                    || currentChar == '\r' )
+                {
+                    do
+                    {
+                        std::cout << std::endl;
+                    }
+                    while( sudokuFileInput.good()
+                           && ( ( currentChar = sudokuFileInput.get() ) == '\n'
+                                 || currentChar == '\r' ) );
+                    
+                    if( isdigit( currentChar ) )
+                    {
+                        ++currentLine;
+                        
+                        currentColumn = 0;
+                    }
+                    
+                    continue;
+                }
+                
+                // ignore unrecognized character
+                std::cout << currentChar;
+                
+                currentChar = sudokuFileInput.get();
+            }
+        }
+        
+        sudokuFileInput.close();
+    }
+    else
+    {
+        std::cout << "unable to open argumentsStringList[1]";
+    }
+}
+
+void Sudoku::verify( int n )
+{
+    int sum = 0;
+    
+    // verificar linha n;
+    for( int i = 0; i < 9; i++ )
+    {
+        //alguem ja falhou o g_sudokuVectorMatrix
+        if( !works )
+        {
+            return;
+        }
+        
+        sum += g_sudokuVectorMatrix[ n ][ i ];
+    }
+    
+    if( sum != 45 )
+    {
+        works = false;
+    }
+    
+    // verificar coluna n
+    sum = 0;
+    
+    for( int i = 0; i < 9; i++ )
+    {
+        //alguem ja falhou o g_sudokuVectorMatrix
+        if( !works )
+        {
+            return;
+        }
+        
+        sum += g_sudokuVectorMatrix[ i ][ n ];
+    }
+    
+    if( sum != 45 )
+    {
+        works = false;
+    }
+    
+    // verificar quadrante n
+    sum = 0;
+    
+    int x = n / 3;
+    int y = n % 3;
+    
+    for( int i = 0; i < 3; i++ )
+    {
+        for( int j = 0; j < 3; j++ )
+        {
+            //alguem ja falhou o g_sudokuVectorMatrix
+            if( !works )
+            {
+                return;
+            }
+            
+            sum += g_sudokuVectorMatrix[ x * 3 + i ][ y * 3 + j ];
+        }
+    }
+    
+    if( sum != 45 )
+    {
+        works = false;
+    }
+}
+
+void Sudoku::createRandomSudoku()
+{
+    g_sudokuVectorMatrix.resize( 9 );
+    
+    for( int i = 0; i < 9; i++ )
+    {
+        g_sudokuVectorMatrix[ i ].resize( 9 );
+        
+        for( int j = 0; j < 9; j++ )
+        {
+            g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
+        }
+    
+    }
+}
+
+
+
 
 
 
