@@ -25,7 +25,7 @@ class Sudoku
 public:
     
     /**
-     * To creates a default sudoku, which is an valid (solved) soduku.
+     * To creates a default sudoku, which is a valid (solved) soduku.
      */
     Sudoku();
     
@@ -133,58 +133,6 @@ private:
 
 
 /**
- * Start the program execution and read the program argument list passed to it. This program
- * accept none or one command line argument. If passed, it must be an sudoku file path. See the
- * Sudoku's class documentation for the sudoku's text file structure.
- * 
- * @param argumentsCount         one plus the argument counting passed to the program command line.
- * @param argumentsStringList    an argument list passed the program command line, where its first
- *                               string is current program execution path.
- * @return the <cstdlib> EXIT_SUCCESS on success, or EXIT_FAILURE on fail.
- */
-int main( int argumentsCount, char* argumentsStringList[] )
-{
-    Sudoku *sudoku;
-    
-    if( argumentsCount == 2 )
-    {
-        sudoku = new Sudoku( argumentsStringList[ 1 ] );
-        
-        // g_sudokuVectorMatrix.resize( 9 );
-        
-        // for( int i = 0; i < 9; i++ )
-        // {
-            // g_sudokuVectorMatrix[ i ].resize( 9 );
-            
-            // for( int j = 0; j < 9; j++ )
-            // {
-                // sudokuFileInput >> g_sudokuVectorMatrix[ i ][ j ];
-                // std::cout << g_sudokuVectorMatrix[ i ][ j ];
-            // }
-            // std::cout << std::endl;
-        // }
-    }
-    else
-    {
-        sudoku = new Sudoku();
-        
-        std::cout << "" << std::endl;
-    }
-    
-    if( sudoku->computeSudoku() )
-    {
-        std::cout << "solucao valida" << std::endl;
-    }
-    else
-    {
-        std::cout << "solucao invalida" << std::endl;
-    }
-    
-    return EXIT_SUCCESS;
-}
-
-
-/**
  * @see Sudoku::Sudoku() member class declaration.
  */
 Sudoku::Sudoku()
@@ -250,10 +198,10 @@ bool Sudoku::computeSudoku()
  */
 void* Sudoku::startThread( void* voidArgumentPointer )
 {
-    parameters* parametersDataStruct = static_cast< parameters* >( voidArgumentPointer );
-    int         wagnersNumber        = *( parametersDataStruct->indexesArray );
+    parameters* data          = static_cast< parameters* >( voidArgumentPointer );
+    int         wagnersNumber = data->indexesArray[ data->currentElement ];
     
-    parametersDataStruct->currentSudoku->verify( wagnersNumber );
+    data->currentSudoku->verify( wagnersNumber );
     
     return NULL;
 }
@@ -416,6 +364,56 @@ void Sudoku::createRandomSudoku()
 }
 
 
+/**
+ * Start the program execution and read the program argument list passed to it. This program
+ * accept none or one command line argument. If passed, it must be an sudoku file path. See the
+ * Sudoku's class documentation for the sudoku's text file structure.
+ * 
+ * @param argumentsCount         one plus the argument counting passed to the program command line.
+ * @param argumentsStringList    an argument list passed the program command line, where its first
+ *                               string is current program execution path.
+ * @return the <cstdlib> EXIT_SUCCESS on success, or EXIT_FAILURE on fail.
+ */
+int main( int argumentsCount, char* argumentsStringList[] )
+{
+    Sudoku *sudoku;
+    
+    if( argumentsCount == 2 )
+    {
+        sudoku = new Sudoku( argumentsStringList[ 1 ] );
+        
+        // g_sudokuVectorMatrix.resize( 9 );
+        
+        // for( int i = 0; i < 9; i++ )
+        // {
+            // g_sudokuVectorMatrix[ i ].resize( 9 );
+            
+            // for( int j = 0; j < 9; j++ )
+            // {
+                // sudokuFileInput >> g_sudokuVectorMatrix[ i ][ j ];
+                // std::cout << g_sudokuVectorMatrix[ i ][ j ];
+            // }
+            // std::cout << std::endl;
+        // }
+    }
+    else
+    {
+        sudoku = new Sudoku();
+        
+        std::cout << "" << std::endl;
+    }
+    
+    if( sudoku->computeSudoku() )
+    {
+        std::cout << "solucao valida" << std::endl;
+    }
+    else
+    {
+        std::cout << "solucao invalida" << std::endl;
+    }
+    
+    return EXIT_SUCCESS;
+}
 
 
 
