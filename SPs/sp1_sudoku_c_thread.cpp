@@ -17,6 +17,9 @@
 #include <sstream>
 
 
+/**
+ * This classes represents a complete sudoku input and offer to verify whether it is a valid one.
+ */
 class Sudoku
 {
 public:
@@ -25,6 +28,70 @@ public:
      * To creates a default sudoku, which is an valid (solved) soduku.
      */
     Sudoku();
+    
+    /**
+     * To creates a sudoku object given an input sudoku text file properly formatted.
+     * 
+     * @param sudokuFileAddress                an char pointer to the sudoku's file path.
+     * 
+     * @see Sudoku::processInputSudoku( char* ) member function declaration for the input text file
+     *      format.
+     */
+    Sudoku( char *sudokuFileAddress );
+    
+    ~Sudoku();
+    
+    /**
+     * Verifies the current loaded sudoku solution using the Wagner's method.
+     */
+    bool computeSudoku();
+
+
+private:
+    
+    /**
+     * An boolean value used by the Wagner's method to verifies the sudoku's solution.
+     */
+    bool works = true;
+    
+    /**
+     * Structure for passing data to threads.
+     */
+    struct parameters
+    {
+        int     currentElement;
+        int     indexesArray[9];
+        Sudoku* currentSudoku;
+    };
+    
+    /**
+     * An matrix to store the inputed sudoku values.
+     */
+    std::vector< std::vector< int > > g_sudokuVectorMatrix
+    {
+        { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
+        { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
+        { 3, 4, 1,     6, 8, 9,     7, 5, 2 },
+        
+        { 5, 9, 3,     4, 6, 8,     2, 7, 1 },
+        { 4, 7, 2,     5, 1, 3,     6, 8, 9 },
+        { 6, 1, 8,     9, 7, 2,     4, 3, 5 },
+        
+        { 7, 8, 6,     2, 3, 5,     9, 1, 4 },
+        { 1, 5, 4,     7, 9, 6,     8, 2, 3 },
+        { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
+    };
+    
+    /**
+     * This is a bridge for the C POSIX thread to run from an C++ member class function. The POSIX
+     * thread cannot run properly an C++ member function due all C++ member's function to receive
+     * an additional hidden object parameter this, to reference the current object within its
+     * functions. And the POSIX thread requires the forwarding calling function to receive only
+     * a void pointer parameter.
+     * 
+     * @param voidArgumentPointer      a parameter's data struct void pointer.
+     */
+    static void* startThread( void* voidArgumentPointer );
     
     /**
      * To creates an sudoku accordantly by the input file passed. The Sudoku's text file must 
@@ -51,63 +118,9 @@ public:
      * numbers, and must be at least nine numbers.
      * 
      * 
-     * @param sudokuFileAddress       an char pointer to the sudoku's file path.
-     */
-    Sudoku( char *sudokuFileAddress );
-    
-    /**
-     * Verifies the current loaded sudoku solution using the Wagner's method.
-     */
-    bool computeSudoku();
-
-
-private:
-    
-    /**
-     * An boolean value used by the Wagner's method to verifies the sudoku's solution.
-     */
-    bool works = true;
-    
-    /**
-     * Structure for passing data to threads.
-     */
-    struct parameters
-    {
-        int    row;
-        int    column;
-        int    a[9];
-        Sudoku *sudoku;
-    };
-    
-    /**
-     * An matrix to store the inputed sudoku values.
-     */
-    std::vector< std::vector< int > > g_sudokuVectorMatrix
-    {
-        { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
-        { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
-        { 3, 4, 1,     6, 8, 9,     7, 5, 2 },
-        
-        { 5, 9, 3,     4, 6, 8,     2, 7, 1 },
-        { 4, 7, 2,     5, 1, 3,     6, 8, 9 },
-        { 6, 1, 8,     9, 7, 2,     4, 3, 5 },
-        
-        { 7, 8, 6,     2, 3, 5,     9, 1, 4 },
-        { 1, 5, 4,     7, 9, 6,     8, 2, 3 },
-        { 2, 3, 9,     8, 4, 1,     5, 6, 7 },
-    };
-    
-    /**
-     * 
-     */
-    static void* startThread( void* arg );
-    
-    /**
-     * 
-     * 
      * @param *sudokuFileAddress    an char pointer to the 
      */
-    void processInputSudoku( char *sudokuFileAddress );
+    void processInputSudoku( char* sudokuFileAddress );
     
     void verify( int n );
     
@@ -127,7 +140,6 @@ private:
  * @param argumentsCount         one plus the argument counting passed to the program command line.
  * @param argumentsStringList    an argument list passed the program command line, where its first
  *                               string is current program execution path.
- * 
  * @return the <cstdlib> EXIT_SUCCESS on success, or EXIT_FAILURE on fail.
  */
 int main( int argumentsCount, char* argumentsStringList[] )
@@ -155,6 +167,7 @@ int main( int argumentsCount, char* argumentsStringList[] )
     else
     {
         sudoku = new Sudoku();
+        
         std::cout << "" << std::endl;
     }
     
@@ -171,34 +184,50 @@ int main( int argumentsCount, char* argumentsStringList[] )
 }
 
 
+/**
+ * @see Sudoku::Sudoku() member class declaration.
+ */
 Sudoku::Sudoku()
 {
 }
 
-Sudoku::Sudoku( char *sudokuFileAddress )
+/**
+ * @see Sudoku::Sudoku( char* ) member class declaration.
+ */
+Sudoku::Sudoku( char* sudokuFileAddress )
 {
     processInputSudoku( sudokuFileAddress );
 }
 
+/**
+ * @see Sudoku::~Sudoku() member class declaration.
+ */
+Sudoku::~Sudoku()
+{
+}
+
+/**
+ * @see Sudoku::computeSudoku() member class declaration.
+ */
 bool Sudoku::computeSudoku()
 {
-    parameters *data = (parameters *) malloc(sizeof(parameters));
-    data->row = 1;
-    data->column = 1;
-    data->a[0]   = 0;
-    data->sudoku = this;
-    /* Now create the thread passing it data as a parameter */
+    parameters *data = (parameters *) malloc( sizeof( parameters ) );
     
-    // g_sudokuVectorMatrix= createRandomSudoku();
-    int       n = 9;
+    // Now create the thread passing it data as a parameter
+    data->currentElement  = 0;
+    data->indexesArray[0] = 0;
+    data->currentSudoku   = this;
+    
+    int n = 9;
+    
     pthread_t t[ n ];
     
     for( int i = 0; i < n; i++ )
     {
         std::cout << "creating thread " << i << std::endl;
         
-        //a[ i ] = i;
-        data->a[ i ] = i;
+        data->currentElement    = i;
+        data->indexesArray[ i ] = i;
         
         if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
         {
@@ -208,25 +237,30 @@ bool Sudoku::computeSudoku()
     
     for( int i = 0; i < n; i++ )
     {
-        // t[i].join();
         pthread_join( t[ i ], NULL );
         
-        std::cout << "thread " << i << "has joined" << std::endl;
+        std::cout << "thread " << i << " has joined" << std::endl;
     }
     
     return this->works;
 }
 
-
-void* Sudoku::startThread( void* arg )
+/**
+ * @see Sudoku::startThread( void* ) member class declaration.
+ */
+void* Sudoku::startThread( void* voidArgumentPointer )
 {
-    parameters* data = static_cast< parameters* >( arg );
+    parameters* parametersDataStruct = static_cast< parameters* >( voidArgumentPointer );
+    int         wagnersNumber        = *( parametersDataStruct->indexesArray );
     
-    data->sudoku->verify( *( data->a ) );
+    parametersDataStruct->currentSudoku->verify( wagnersNumber );
     
-    return 0;
+    return NULL;
 }
 
+/**
+ * @see Sudoku::processInputSudoku() member class declaration.
+ */
 void Sudoku::processInputSudoku( char *sudokuFileAddress )
 {
     std::ifstream sudokuFileInput( sudokuFileAddress );
@@ -293,6 +327,9 @@ void Sudoku::processInputSudoku( char *sudokuFileAddress )
     }
 }
 
+/**
+ * @see Sudoku::verify() member class declaration.
+ */
 void Sudoku::verify( int n )
 {
     int sum = 0;
@@ -359,6 +396,9 @@ void Sudoku::verify( int n )
     }
 }
 
+/**
+ * @see Sudoku::createRandomSudoku() member class declaration.
+ */
 void Sudoku::createRandomSudoku()
 {
     g_sudokuVectorMatrix.resize( 9 );
