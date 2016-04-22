@@ -13,9 +13,10 @@
 #include <stdlib.h>
 #include <vector>
 #include <fstream>
-#include <string>
+#include <string.h>
 #include <sstream>
 #include <unistd.h>
+#include <errno.h>
 
 
 /** This is to view internal program data while execution. Default value: 0
@@ -30,7 +31,14 @@
 #if DEBUG_LEVEL > 0
     #define DEBUG
 
+
 pthread_mutex_t g_fprintf_mutex;
+
+
+/**
+ * To convert a macro argument into a string constant.
+ */
+#define STRINGIFY( a ) #a
 
 
 /**
@@ -38,28 +46,55 @@ pthread_mutex_t g_fprintf_mutex;
  * due the doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
  * could not be found anything concrete. Following its explanations:
  *
- * pthread_mutex_lock( g_fprintf_mutex );   Lock the mutex.
- * fprintf( stream, __VA_ARGS__ );          Print to the specified output stream the formatting args.
- * fprintf( stream, "\n" );                 Print a new line.
- * fflush( stream );                        Flushes the output stream to avoid double output over '>'.
- *                                           Example: './main > results.txt' would get doubled/... print.
- * pthread_mutex_unlock( g_fprintf_mutex ); Unlock the shared memory mutex.
- * } while( 0 )                             To allow to use ';' semicolon over the macro statement use and
- *                                           still to be able to use it within an unbraced if statement.
+ * // Lock the mutex.
+ * pthread_mutex_lock( g_fprintf_mutex );
+ * 
+ * // Disables the warning "-Wformat-zero-length", to allow print empty lines using this macro.
+ * _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
+ * 
+ * // Print to the specified output stream the formatting args. If the variable argument is left
+ * // out when the DEBUGGER macro is used, then the comma before the ‘##’ will be deleted.
+ * fprintf( stream, ##__VA_ARGS__ ); 
+ * 
+ * // Print a new line.
+ * fprintf( stream, "\n" );
+ * 
+ * // Flushes the output stream to avoid double output over '>'. Example: './main > results.txt'
+ * // would get doubled/... print.
+ * fflush( stream );
+ * 
+ * // Re-enables the warning "-Wformat-zero-length" just disabled.
+ * _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
+ * 
+ * // Unlock the shared memory mutex.
+ * pthread_mutex_unlock( g_fprintf_mutex );  
+ * 
+ * // To allow to use ';' semicolon over the macro statement use and still to be able to use it
+ * // within an unbraced if statement.
+ * while( 0 )
  */
 #define DEBUGGER( stream, ... ) \
+do \
 { \
     pthread_mutex_lock( &g_fprintf_mutex ); \
-    fprintf( stream, __VA_ARGS__ ); \
+    _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
+    \
+    fprintf( stream, ##__VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
+    \
+    _Pragma( STRINGIFY( GCC diagnostic warning "-Wformat-zero-length" ) ) \
     pthread_mutex_unlock( &g_fprintf_mutex ); \
-} while( 0 )
+} \
+while( 0 )
+
 
 #else
     #define DEBUGGER( stream, ... )
 
+
 #endif
+
 
 #endif
 
@@ -205,7 +240,8 @@ void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
             {
                 g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
                 
-                printf( "[%i,%i]%i", currentLine, currentColumn, g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
+                DEBUGGER( stdout, "[%i,%i]%i", currentLine, currentColumn,
+                        g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
                 
                 if( sudokuFileInput.good() )
                 {
@@ -220,13 +256,12 @@ void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
                 if( currentChar == '\n'
                     || currentChar == '\r' )
                 {
-                    do
+                    if( sudokuFileInput.good() )
                     {
-                        std::cout << std::endl;
+                        currentChar = sudokuFileInput.get();
+                        
+                        DEBUGGER( stdout, "" );
                     }
-                    while( sudokuFileInput.good()
-                           && ( ( currentChar = sudokuFileInput.get() ) == '\n'
-                                 || currentChar == '\r' ) );
                     
                     if( isdigit( currentChar ) )
                     {
@@ -239,7 +274,7 @@ void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
                 }
                 
                 // ignore unrecognized character
-                std::cout << currentChar;
+                DEBUGGER( stdout, "%c", currentChar );
                 
                 currentChar = sudokuFileInput.get();
             }
@@ -249,7 +284,7 @@ void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
     }
     else
     {
-        std::cout << "unable to open argumentsStringList[1]";
+        DEBUGGER( stderr, "ERROR: %s! While opening the file: %s", strerror( errno ), sudokuFileAddress );
     }
 }
 
