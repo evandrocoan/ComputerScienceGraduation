@@ -18,6 +18,53 @@
 #include <unistd.h>
 
 
+/** This is to view internal program data while execution. Default value: 0
+ *
+ * 0   - Disables this feature.
+ * 1   - Normal debug.
+ */
+#if !defined DEBUG_LEVEL
+    #define DEBUG_LEVEL 1
+
+
+#if DEBUG_LEVEL > 0
+    #define DEBUG
+
+pthread_mutex_t g_fprintf_mutex;
+
+
+/**
+ * Print like function for logging putting a new line at the end of string. It does uses mutex
+ * due the doubt to know whether 'fprintf' is thread safe of not over every/any platforms, since
+ * could not be found anything concrete. Following its explanations:
+ *
+ * pthread_mutex_lock( g_fprintf_mutex );   Lock the mutex.
+ * fprintf( stream, __VA_ARGS__ );          Print to the specified output stream the formatting args.
+ * fprintf( stream, "\n" );                 Print a new line.
+ * fflush( stream );                        Flushes the output stream to avoid double output over '>'.
+ *                                           Example: './main > results.txt' would get doubled/... print.
+ * pthread_mutex_unlock( g_fprintf_mutex ); Unlock the shared memory mutex.
+ * } while( 0 )                             To allow to use ';' semicolon over the macro statement use and
+ *                                           still to be able to use it within an unbraced if statement.
+ */
+#define DEBUGGER( stream, ... ) \
+{ \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
+    fprintf( stream, __VA_ARGS__ ); \
+    fprintf( stream, "\n" ); \
+    fflush( stream ); \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
+} while( 0 )
+
+#else
+    #define DEBUGGER( stream, ... )
+
+#endif
+
+#endif
+
+
+
 /**
  * This is an abstract class to represent a complete sudoku input and offer an basic structure
  * to offer how to verify whether it is a valid sudoku. It is processed any way to input a complete
@@ -482,6 +529,8 @@ int main( int argumentsCount, char* argumentsStringList[] )
     
     for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
     {
+        DEBUGGER( stdout, "Deleting currentPointer: %d", currentPointer );
+        
         delete sudokus[ currentPointer ];
     }
     
