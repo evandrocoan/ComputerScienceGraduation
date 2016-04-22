@@ -516,11 +516,11 @@ int main( int argumentsCount, char* argumentsStringList[] )
     
     std::stringstream inputedPipeLineSudoku;
     
-    // If is passed input throw the terminal pipe line, get it.
+    // If it is passed input throw the terminal pipe line, get it.
     if( !isatty( fileno( stdin ) ) )
     {
-        // converts the ifstream "std::cin" to "std::stringstream" which supports convertion
-        // to string.
+        // converts the ifstream "std::cin" to "std::stringstream" which natively supports
+        // conversion to string.
         inputedPipeLineSudoku << std::cin.rdbuf();
         
         std::cout << inputedPipeLineSudoku.str();
@@ -551,15 +551,20 @@ int main( int argumentsCount, char* argumentsStringList[] )
         std::cout << std::endl;
     }
     
-    sudokus[ 1 ] = NULL;
-    
-    if( sudokus[ 0 ]->computeSudoku() )
+    for( int currentSudoku = 0; currentSudoku < STATIC_ARRAY_SIZE( sudokus ); ++currentSudoku )
     {
-        std::cout << "solucao valida" << std::endl;
-    }
-    else
-    {
-        std::cout << "solucao invalida" << std::endl;
+        if( sudokus[ currentSudoku ]->computeSudoku() )
+        {
+            std::cout << std::endl;
+            std::cout << "The sudoku " << currentSudoku << " is a valid solution!";
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << "The sudoku " << currentSudoku << " is NOT a valid solution!";
+        }
+        
+        std::cout << std::endl;
     }
     
     for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
