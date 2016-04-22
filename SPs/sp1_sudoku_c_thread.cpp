@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <unistd.h>
 
 
 /**
@@ -406,6 +407,15 @@ void SudokuStrategyWith9Threads::verify( int n )
 
 
 /**
+ * Calculates a static array size.
+ */
+#if !defined STATIC_ARRAY_SIZE
+    #define STATIC_ARRAY_SIZE( array ) ( sizeof( ( array ) ) / sizeof( ( array )[0] ) )
+    
+#endif
+
+
+/**
  * Start the program execution and read the program argument list passed to it. This program
  * accept none or one command line argument. If passed, it must be an sudoku file path. See the
  * SudokuStrategy class documentation for the sudoku's text file structure.
@@ -418,11 +428,25 @@ void SudokuStrategyWith9Threads::verify( int n )
  */
 int main( int argumentsCount, char* argumentsStringList[] )
 {
-    SudokuStrategy *sudoku;
+    // Uninitialized pointers cannot be deleted, but NULL pointers can. Then initializes it to be
+    // safely deleted latter.
+    SudokuStrategy* sudokus[ 2 ] = { NULL };
+    
+    std::stringstream inputedPipeLineSudoku;
+    
+    // If is passed input throw the terminal pipe line, get it.
+    if( !isatty( fileno( stdin ) ) )
+    {
+        // converts the ifstream "std::cin" to "std::stringstream" which supports convertion
+        // to string.
+        inputedPipeLineSudoku << std::cin.rdbuf();
+        
+        std::cout << inputedPipeLineSudoku.str();
+    }
     
     if( argumentsCount == 2 )
     {
-        sudoku = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
+        sudokus[ 0 ] = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
         
         // g_sudokuVectorMatrix.resize( 9 );
         
@@ -440,12 +464,14 @@ int main( int argumentsCount, char* argumentsStringList[] )
     }
     else
     {
-        sudoku = new SudokuStrategyWith9Threads();
+        sudokus[ 0 ] = new SudokuStrategyWith9Threads();
         
-        std::cout << "" << std::endl;
+        std::cout << std::endl;
     }
     
-    if( sudoku->computeSudoku() )
+    sudokus[ 1 ] = NULL;
+    
+    if( sudokus[ 0 ]->computeSudoku() )
     {
         std::cout << "solucao valida" << std::endl;
     }
@@ -454,7 +480,10 @@ int main( int argumentsCount, char* argumentsStringList[] )
         std::cout << "solucao invalida" << std::endl;
     }
     
-    delete sudoku;
+    for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
+    {
+        delete sudokus[ currentPointer ];
+    }
     
     return EXIT_SUCCESS;
 }
