@@ -263,6 +263,43 @@ SudokuStrategy::~SudokuStrategy()
 }
 
 /**
+ * @see SudokuStrategy::createRandomSudoku() member class declaration.
+ */
+void SudokuStrategy::createRandomSudoku()
+{
+    // To give a different seed for rand().
+    srand ( time(NULL) );
+    
+    for( int i = 0; i < 9; i++ )
+    {
+        for( int j = 0; j < 9; j++ )
+        {
+            g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
+        }
+    }
+}
+
+/**
+ * @see SudokuStrategy::toString() member class declaration.
+ */
+std::string SudokuStrategy::toString()
+{
+    std::stringstream sudokuText;
+    
+    for( int i = 0; i < 9; i++ )
+    {
+        for( int j = 0; j < 9; j++ )
+        {
+            sudokuText << std::to_string( g_sudokuVectorMatrix[i][j] ) << ' ';
+        }
+        
+        sudokuText << '\n';
+    }
+    
+    return sudokuText.str();
+}
+
+/**
  * @see SudokuStrategy::processInputSudoku() member class declaration.
  */
 void SudokuStrategy::processInputSudoku( std::string sudokuText )
@@ -294,43 +331,6 @@ void SudokuStrategy::processInputSudoku( std::string sudokuText )
         {
             // ignore unrecognized character
             DEBUGGERN( stdout, "%c", currentChar );
-        }
-    }
-}
-
-/**
- * @see SudokuStrategy::toString() member class declaration.
- */
-std::string SudokuStrategy::toString()
-{
-    std::stringstream sudokuText;
-    
-    for( int i = 0; i < 9; i++ )
-    {
-        for( int j = 0; j < 9; j++ )
-        {
-            sudokuText << std::to_string( g_sudokuVectorMatrix[i][j] ) << ' ';
-        }
-        
-        sudokuText << '\n';
-    }
-    
-    return sudokuText.str();
-}
-
-/**
- * @see SudokuStrategy::createRandomSudoku() member class declaration.
- */
-void SudokuStrategy::createRandomSudoku()
-{
-    // To give a different seed for rand().
-    srand ( time(NULL) );
-    
-    for( int i = 0; i < 9; i++ )
-    {
-        for( int j = 0; j < 9; j++ )
-        {
-            g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
         }
     }
 }
