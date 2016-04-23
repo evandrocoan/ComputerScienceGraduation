@@ -32,14 +32,33 @@
     #define DEBUG
 
 
+/**
+ * 0   - disabled all debug.
+ * 1   - displays basic debug messages.
+ * 2   - displays thread creation messages.
+ */
+const int g_debugLevel = 1;
+
 pthread_mutex_t g_fprintf_mutex;
 
 
 /**
- * To convert a macro argument into a string constant.
+ * The same as DEBUGGERLN(...) just below, but do not put automatically a new line.
  */
-#define STRINGIFY( a ) #a
-
+#define DEBUGGER( level, ... ) \
+do \
+{ \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
+    \
+    if( level & g_debugLevel ) \
+    { \
+        fprintf( stdout, ##__VA_ARGS__ ); \
+        fflush( stdout ); \
+    } \
+    \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
+} \
+while( 0 )
 
 /**
  * Print like function for logging putting a new line at the end of string. It does uses mutex
@@ -67,7 +86,41 @@ pthread_mutex_t g_fprintf_mutex;
  * // within an unbraced if statement.
  * while( 0 )
  */
-#define DEBUGGER( stream, ... ) \
+#define DEBUGGERLN( level, ... ) \
+do \
+{ \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
+    \
+    if( level & g_debugLevel ) \
+    { \
+        fprintf( stdout, ##__VA_ARGS__ ); \
+        fprintf( stdout, "\n" ); \
+        fflush( stdout ); \
+    } \
+    \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGER(...), but it is for standard program output.
+ */
+#define FPRINT( stream, ... ) \
+do \
+{ \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
+    \
+    fprintf( stream, ##__VA_ARGS__ ); \
+    fflush( stream ); \
+    \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGERLN(...), but it is for standard program output.
+ */
+#define FPRINTLN( stream, ... ) \
 do \
 { \
     pthread_mutex_lock( &g_fprintf_mutex ); \
@@ -80,22 +133,33 @@ do \
 } \
 while( 0 )
 
-#define DEBUGGERN( stream, ... ) \
-do \
-{ \
-    pthread_mutex_lock( &g_fprintf_mutex ); \
-    \
-    fprintf( stream, ##__VA_ARGS__ ); \
-    fflush( stream ); \
-    \
-    pthread_mutex_unlock( &g_fprintf_mutex ); \
-} \
-while( 0 )
-
 
 #else
     #define DEBUGGER( stream, ... )
-    #define DEBUGGERN( stream, ... )
+    #define DEBUGGERLN( stream, ... )
+
+/**
+ * The same as DEBUGGER(...), but it is for standard program output and is not multi-thread safe.
+ */
+#define FPRINT( stream, ... ) \
+do \
+{ \
+    fprintf( stream, ##__VA_ARGS__ ); \
+    fflush( stream ); \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGERLN(...), but it is for standard program output and is not multi-thread safe.
+ */
+#define FPRINTLN( stream, ... ) \
+do \
+{ \
+    fprintf( stream, ##__VA_ARGS__ ); \
+    fprintf( stdout, "\n" ); \
+    fflush( stream ); \
+} \
+while( 0 )
 
 
 #endif
@@ -254,7 +318,7 @@ SudokuStrategy::SudokuStrategy( char* sudokuFileAddress )
     }
     else
     {
-        DEBUGGER( stderr, "ERROR: %s! While opening the file: %s", strerror( errno ), sudokuFileAddress );
+        FPRINTLN( stderr, "ERROR: %s! While opening the file: %s", strerror( errno ), sudokuFileAddress );
     }
 }
 
@@ -318,7 +382,7 @@ void SudokuStrategy::processInputSudoku( std::string sudokuText )
         {
             g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
             
-            DEBUGGERN( stdout, "[%i,%i]%i", currentLine, currentColumn,
+            DEBUGGER( 1, "[%i,%i]%i", currentLine, currentColumn,
                     g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
             
             ++currentColumn;
@@ -333,7 +397,7 @@ void SudokuStrategy::processInputSudoku( std::string sudokuText )
         else
         {
             // ignore unrecognized character
-            DEBUGGERN( stdout, "%c", currentChar );
+            DEBUGGER( 1, "%c", currentChar );
         }
     }
 }
@@ -414,14 +478,14 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     
     for( int i = 0; i < n; i++ )
     {
-        DEBUGGER( stdout, "Creating thread %d...", i );
+        DEBUGGERLN( 2, "Creating thread %d...", i );
         
         data->currentElement    = i;
         data->indexesArray[ i ] = i;
         
         if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
         {
-            DEBUGGER( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
+            FPRINTLN( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
         }
     }
     
@@ -429,7 +493,7 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     {
         pthread_join( t[ i ], NULL );
         
-        DEBUGGER( stdout, "Thread %d has joined.", i );
+        DEBUGGERLN( 2, "Thread %d has joined.", i );
     }
     
     return this->works;
@@ -569,7 +633,7 @@ int main( int argumentsCount, char* argumentsStringList[] )
     {
         sudokus[ 1 ] = new SudokuStrategyWith9Threads();
         
-        std::cout << std::endl;
+        FPRINT( stdout, "\n" );
     }
     
     sudokus[ 2 ] = new SudokuStrategyWith9Threads();
@@ -580,21 +644,19 @@ int main( int argumentsCount, char* argumentsStringList[] )
     {
         if( sudoku->computeSudoku() )
         {
-            std::cout << std::endl << sudoku->toString();
-            std::cout << "This sudoku is a valid solution!" << std::endl;
+            FPRINTLN( stdout, "\n%s\nThis sudoku is a valid solution!", sudoku->toString().c_str() );
         }
         else
         {
-            std::cout << std::endl << sudoku->toString();
-            std::cout << "This sudoku is NOT a valid solution!" << std::endl;
+            FPRINTLN( stdout, "\n%s\nThis sudoku is NOT a valid solution!", sudoku->toString().c_str() );
         }
         
-        std::cout << std::endl;
+        FPRINT( stdout, "\n" );
     }
     
     for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
     {
-        DEBUGGER( stdout, "Deleting currentPointer: %d", currentPointer );
+        DEBUGGERLN( 1, "Deleting currentPointer: %d", currentPointer );
         
         delete sudokus[ currentPointer ];
     }
