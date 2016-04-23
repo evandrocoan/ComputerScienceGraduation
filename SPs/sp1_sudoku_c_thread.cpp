@@ -236,6 +236,11 @@ public:
     void createRandomSudoku();
     
     /**
+     * To erases the current loaded sudoku and to creates a new zeroed sudoku.
+     */
+    void emptyTheSudoku();
+    
+    /**
      * Creates a string representation of the current loaded sudoku.
      * 
      * @return an std::string object.
@@ -316,7 +321,7 @@ SudokuStrategy::SudokuStrategy( std::string sudokuText )
     DEBUGGERLN( 3, "Calling the SudokuStrategy( std::string sudokuText ) constructor." );
     
     // Clear the default sudoku and process the new one.
-    this->createRandomSudoku();
+    this->emptyTheSudoku();
     this->processInputSudoku( sudokuText );
 }
 
@@ -338,7 +343,7 @@ SudokuStrategy::SudokuStrategy( char* sudokuFileAddress )
         inputedPipeLineSudoku << sudokuFileInput.rdbuf();
         
         // Clear the default sudoku and process the new one.
-        this->createRandomSudoku();
+        this->emptyTheSudoku();
         this->processInputSudoku( inputedPipeLineSudoku.str() );
         
         sudokuFileInput.close();
@@ -369,6 +374,20 @@ void SudokuStrategy::createRandomSudoku()
         for( int j = 0; j < 9; j++ )
         {
             g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
+        }
+    }
+}
+
+/**
+ * @see SudokuStrategy::createRandomSudoku() member class declaration.
+ */
+void SudokuStrategy::emptyTheSudoku()
+{
+    for( int i = 0; i < 9; i++ )
+    {
+        for( int j = 0; j < 9; j++ )
+        {
+            g_sudokuVectorMatrix[ i ][ j ] = 0;
         }
     }
 }
