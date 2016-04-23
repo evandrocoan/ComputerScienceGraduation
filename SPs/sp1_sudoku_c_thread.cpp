@@ -19,13 +19,22 @@
 #include <errno.h>
 
 
+
+/**
+ * Preprocessor directive designed to cause the current source file to be included only once in a
+ * single compilation. Thus, serves the same purpose as #include guards, but with several
+ * advantages, including: less code, avoidance of name clashes, and sometimes improvement in
+ * compilation speed. In main file this is enabled by default.
+ */
+// #pragma once
+
+
 /** This is to view internal program data while execution. Default value: 0
  *
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#if !defined DEBUG_LEVEL
-    #define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 1
 
 
 #if DEBUG_LEVEL > 0
@@ -165,8 +174,14 @@ while( 0 )
 #endif
 
 
-#endif
 
+/**
+ * Preprocessor directive designed to cause the current source file to be included only once in a
+ * single compilation. Thus, serves the same purpose as #include guards, but with several
+ * advantages, including: less code, avoidance of name clashes, and sometimes improvement in
+ * compilation speed. In main file this is enabled by default.
+ */
+// #pragma once
 
 
 /**
@@ -403,6 +418,14 @@ void SudokuStrategy::processInputSudoku( std::string sudokuText )
 }
 
 
+
+/**
+ * Preprocessor directive designed to cause the current source file to be included only once in a
+ * single compilation. Thus, serves the same purpose as #include guards, but with several
+ * advantages, including: less code, avoidance of name clashes, and sometimes improvement in
+ * compilation speed. In main file this is enabled by default.
+ */
+// #pragma once
 
 /**
  * Implements the abstract class SudokuStrategy sudoku solution algorithm using POSIX 9 threads.
