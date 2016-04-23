@@ -95,6 +95,7 @@ while( 0 )
 
 #else
     #define DEBUGGER( stream, ... )
+    #define DEBUGGERN( stream, ... )
 
 
 #endif
@@ -242,6 +243,8 @@ SudokuStrategy::SudokuStrategy( char* sudokuFileAddress )
     {
         std::stringstream inputedPipeLineSudoku;
         
+        // converts the ifstream "std::cin" to "std::stringstream" which natively supports
+        // conversion to string.
         inputedPipeLineSudoku << inputedPipeLineSudoku.rdbuf();
         
         this->createRandomSudoku();
@@ -411,14 +414,14 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     
     for( int i = 0; i < n; i++ )
     {
-        std::cout << "creating thread " << i << std::endl;
+        DEBUGGER( stdout, "Creating thread %d...", i );
         
         data->currentElement    = i;
         data->indexesArray[ i ] = i;
         
         if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
         {
-            std::cout << "failed to create thread " << i << std::endl;
+            DEBUGGER( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
         }
     }
     
@@ -426,7 +429,7 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     {
         pthread_join( t[ i ], NULL );
         
-        std::cout << "thread " << i << " has joined" << std::endl;
+        DEBUGGER( stdout, "Thread %d has joined.", i );
     }
     
     return this->works;
