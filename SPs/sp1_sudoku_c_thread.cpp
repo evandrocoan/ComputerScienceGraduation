@@ -49,9 +49,6 @@ pthread_mutex_t g_fprintf_mutex;
  * // Lock the mutex.
  * pthread_mutex_lock( g_fprintf_mutex );
  * 
- * // Disables the warning "-Wformat-zero-length", to allow print empty lines using this macro.
- * _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
- * 
  * // Print to the specified output stream the formatting args. If the variable argument is left
  * // out when the DEBUGGER macro is used, then the comma before the ‘##’ will be deleted.
  * fprintf( stream, ##__VA_ARGS__ ); 
@@ -62,9 +59,6 @@ pthread_mutex_t g_fprintf_mutex;
  * // Flushes the output stream to avoid double output over '>'. Example: './main > results.txt'
  * // would get doubled/... print.
  * fflush( stream );
- * 
- * // Re-enables the warning "-Wformat-zero-length" just disabled.
- * _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
  * 
  * // Unlock the shared memory mutex.
  * pthread_mutex_unlock( g_fprintf_mutex );  
@@ -77,13 +71,23 @@ pthread_mutex_t g_fprintf_mutex;
 do \
 { \
     pthread_mutex_lock( &g_fprintf_mutex ); \
-    _Pragma( STRINGIFY( GCC diagnostic ignored "-Wformat-zero-length" ) ) \
     \
     fprintf( stream, ##__VA_ARGS__ ); \
     fprintf( stream, "\n" ); \
     fflush( stream ); \
     \
-    _Pragma( STRINGIFY( GCC diagnostic warning "-Wformat-zero-length" ) ) \
+    pthread_mutex_unlock( &g_fprintf_mutex ); \
+} \
+while( 0 )
+
+#define DEBUGGERN( stream, ... ) \
+do \
+{ \
+    pthread_mutex_lock( &g_fprintf_mutex ); \
+    \
+    fprintf( stream, ##__VA_ARGS__ ); \
+    fflush( stream ); \
+    \
     pthread_mutex_unlock( &g_fprintf_mutex ); \
 } \
 while( 0 )
@@ -116,14 +120,24 @@ public:
     SudokuStrategy();
     
     /**
+     * To creates a sudoku object given an text input sudoku text file properly formatted.
+     * 
+     * @param sudokuFileAddress                an std::string properly formatted.
+     * 
+     * @see SudokuStrategy::processInputSudoku( processInputSudoku ) member function declaration
+     *      for the input text file format.
+     */
+    SudokuStrategy( std::string );
+    
+    /**
      * To creates a sudoku object given an input sudoku text file properly formatted.
      * 
      * @param sudokuFileAddress                an char pointer to the sudoku's file path.
      * 
-     * @see SudokuStrategy::processInputSudoku( char* ) member function declaration for the input text file
-     *      format.
+     * @see SudokuStrategy::processInputSudoku( std::string ) member function declaration for the
+     *      input text file format.
      */
-    SudokuStrategy( char *sudokuFileAddress );
+    SudokuStrategy( char* );
     
     /**
      * Free the heap dynamic allocated memory on object destruction.
@@ -137,6 +151,13 @@ public:
     void createRandomSudoku();
     
     /**
+     * Creates a string representation of the current loaded sudoku.
+     * 
+     * @return an std::string object.
+     */
+    std::string toString();
+    
+    /**
      * Verifies the current loaded sudoku solution the desired strategy.
      */
     virtual bool computeSudoku() = 0;
@@ -147,7 +168,7 @@ protected:
     /**
      * An matrix to store the inputed sudoku values.
      */
-    std::vector< std::vector< int > > g_sudokuVectorMatrix
+    int g_sudokuVectorMatrix[9][9] =
     {
         { 8, 2, 7,     1, 5, 4,     3, 9, 6 },
         { 9, 6, 5,     3, 2, 7,     1, 4, 8 },
@@ -170,29 +191,26 @@ private:
      * to follow this structure:
      * 
      * Any text without numbers, on any line. The next line has the sudoku numbers:
-     * 8 2 7,  some space  1 5 4,    3 9 6 after all nine sudoku's digits, you can place other
-     * numbers.
+     * 8 2 7 ,  some space  1 5 4,    3 9 6
      * You can also skip lines and put any other non-digit characters between the sudoku's numbers.
      * 
      * 9 6 5,         3 2 7,         1 4 8 Huehuehue
      * 3 4 1,         6 8 9,         7 5 2  Huehuehue
-     * 
-     * 5 9 3, ||||||  4 6 8, ||||||  2 7 11337
-     * 4 7 2, ||||||  5 1 3, ||||||  6 8 9 1337
-     * 6 1 8, ||||||  9 7 2, ||||||  4 3 5  1337
-     * 
-     * 7 8 6, %%%%%%% 2 3 5, &&&&&&& 9 1 4 |
-     * 1 5 4, %%%%%%% 7 9 6, &&&&&&& 8 2 3 |
+     * more non-digit characters
+     * 5 9 3, ||||||  4 6 8, ||||||  2 7 1
+     * 4 7 2, ||||||  5 1 3, ||||||  6 8 9
+     * 6 1 8, ||||||  9 7 2, ||||||  4 3 5
+     * You can also put all or any of the number on just one line. 7 8 6, 2 3 5, 9 1 4    1 5 4, 
+     * 7 9 6, &&&&&&& 8 2 3 |
      * 2 3 9, %%%%%%% 8 4 1, &&&&&&& 5 6 7 |
      * 
      * This example is also an valid sudoku input!
-     * Just remember, once you to start putting numbers on a line they will be the sudoku's
-     * numbers, and must be at least nine numbers.
+     * 
      * 
      * 
      * @param *sudokuFileAddress    an char pointer to the 
      */
-    void processInputSudoku( char* sudokuFileAddress );
+    void processInputSudoku( std::string sudokuFileAddress );
     
 };
 
@@ -207,9 +225,34 @@ SudokuStrategy::SudokuStrategy()
 /**
  * @see SudokuStrategy::SudokuStrategy( char* ) member class declaration.
  */
+SudokuStrategy::SudokuStrategy( std::string sudokuText )
+{
+    this->createRandomSudoku();
+    this->processInputSudoku( sudokuText );
+}
+
+/**
+ * @see SudokuStrategy::SudokuStrategy( char* ) member class declaration.
+ */
 SudokuStrategy::SudokuStrategy( char* sudokuFileAddress )
 {
-    processInputSudoku( sudokuFileAddress );
+    std::ifstream sudokuFileInput( sudokuFileAddress );
+    
+    if( sudokuFileInput.is_open() )
+    {
+        std::stringstream inputedPipeLineSudoku;
+        
+        inputedPipeLineSudoku << inputedPipeLineSudoku.rdbuf();
+        
+        this->createRandomSudoku();
+        this->processInputSudoku( inputedPipeLineSudoku.str() );
+        
+        sudokuFileInput.close();
+    }
+    else
+    {
+        DEBUGGER( stderr, "ERROR: %s! While opening the file: %s", strerror( errno ), sudokuFileAddress );
+    }
 }
 
 /**
@@ -222,70 +265,57 @@ SudokuStrategy::~SudokuStrategy()
 /**
  * @see SudokuStrategy::processInputSudoku() member class declaration.
  */
-void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
+void SudokuStrategy::processInputSudoku( std::string sudokuText )
 {
-    std::ifstream sudokuFileInput( sudokuFileAddress );
+    int currentLine    = 0;
+    int currentColumn  = 0;
     
-    if( sudokuFileInput.is_open() )
+    for( char currentChar : sudokuText )
     {
-        char currentChar   = '\n';
-        int  currentLine   = -1;
-        int  currentColumn = 0;
-        
-        while( sudokuFileInput.good() )
+        if( isdigit( currentChar )
+            && currentLine < 9
+            && currentColumn < 9 )
         {
-            if( isdigit( currentChar )
-                && currentLine < 9
-                && currentColumn < 9 )
+            g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
+            
+            DEBUGGERN( stdout, "[%i,%i]%i", currentLine, currentColumn,
+                    g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
+            
+            ++currentColumn;
+            
+            if( currentColumn > 8 )
             {
-                g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
+                ++currentLine;
                 
-                DEBUGGER( stdout, "[%i,%i]%i", currentLine, currentColumn,
-                        g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
-                
-                if( sudokuFileInput.good() )
-                {
-                    currentChar = sudokuFileInput.get();
-                }
-                
-                ++currentColumn;
-            }
-            else
-            {
-                // handle any CR/LF zoo
-                if( currentChar == '\n'
-                    || currentChar == '\r' )
-                {
-                    if( sudokuFileInput.good() )
-                    {
-                        currentChar = sudokuFileInput.get();
-                        
-                        DEBUGGER( stdout, "" );
-                    }
-                    
-                    if( isdigit( currentChar ) )
-                    {
-                        ++currentLine;
-                        
-                        currentColumn = 0;
-                    }
-                    
-                    continue;
-                }
-                
-                // ignore unrecognized character
-                DEBUGGER( stdout, "%c", currentChar );
-                
-                currentChar = sudokuFileInput.get();
+                currentColumn = 0;
             }
         }
-        
-        sudokuFileInput.close();
+        else
+        {
+            // ignore unrecognized character
+            DEBUGGERN( stdout, "%c", currentChar );
+        }
     }
-    else
+}
+
+/**
+ * @see SudokuStrategy::toString() member class declaration.
+ */
+std::string SudokuStrategy::toString()
+{
+    std::stringstream sudokuText;
+    
+    for( int i = 0; i < 9; i++ )
     {
-        DEBUGGER( stderr, "ERROR: %s! While opening the file: %s", strerror( errno ), sudokuFileAddress );
+        for( int j = 0; j < 9; j++ )
+        {
+            sudokuText << std::to_string( g_sudokuVectorMatrix[i][j] ) << ' ';
+        }
+        
+        sudokuText << '\n';
     }
+    
+    return sudokuText.str();
 }
 
 /**
@@ -293,17 +323,15 @@ void SudokuStrategy::processInputSudoku( char *sudokuFileAddress )
  */
 void SudokuStrategy::createRandomSudoku()
 {
-    g_sudokuVectorMatrix.resize( 9 );
+    // To give a different seed for rand().
+    srand ( time(NULL) );
     
     for( int i = 0; i < 9; i++ )
     {
-        g_sudokuVectorMatrix[ i ].resize( 9 );
-        
         for( int j = 0; j < 9; j++ )
         {
             g_sudokuVectorMatrix[ i ][ j ] = rand() % 9 + 1;
         }
-    
     }
 }
 
@@ -326,7 +354,7 @@ public:
      * 
      * @see SudokuStrategy::computeSudoku()
      */
-    bool computeSudoku();
+    bool computeSudoku() override;
     
     
 private:
@@ -478,7 +506,7 @@ void SudokuStrategyWith9Threads::verify( int n )
             
             sum += g_sudokuVectorMatrix[ x * 3 + i ][ y * 3 + j ];
         }
-    }
+    } 
     
     if( sum != 45 )
     {
@@ -512,56 +540,50 @@ int main( int argumentsCount, char* argumentsStringList[] )
 {
     // Uninitialized pointers cannot be deleted, but NULL pointers can. Then initializes it to be
     // safely deleted latter.
-    SudokuStrategy* sudokus[ 2 ] = { NULL };
-    
-    std::stringstream inputedPipeLineSudoku;
+    SudokuStrategy* sudokus[ 3 ] = { NULL };
     
     // If it is passed input throw the terminal pipe line, get it.
     if( !isatty( fileno( stdin ) ) )
     {
+        std::stringstream inputedPipeLineSudoku;
+        
         // converts the ifstream "std::cin" to "std::stringstream" which natively supports
         // conversion to string.
         inputedPipeLineSudoku << std::cin.rdbuf();
         
-        std::cout << inputedPipeLineSudoku.str();
-    }
-    
-    if( argumentsCount == 2 )
-    {
-        sudokus[ 0 ] = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
-        
-        // g_sudokuVectorMatrix.resize( 9 );
-        
-        // for( int i = 0; i < 9; i++ )
-        // {
-            // g_sudokuVectorMatrix[ i ].resize( 9 );
-            
-            // for( int j = 0; j < 9; j++ )
-            // {
-                // sudokuFileInput >> g_sudokuVectorMatrix[ i ][ j ];
-                // std::cout << g_sudokuVectorMatrix[ i ][ j ];
-            // }
-            // std::cout << std::endl;
-        // }
+        sudokus[ 0 ] = new SudokuStrategyWith9Threads( inputedPipeLineSudoku.str() );
     }
     else
     {
         sudokus[ 0 ] = new SudokuStrategyWith9Threads();
+    }
+    
+    if( argumentsCount == 2 )
+    {
+        sudokus[ 1 ] = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
+    }
+    else
+    {
+        sudokus[ 1 ] = new SudokuStrategyWith9Threads();
         
         std::cout << std::endl;
     }
     
-    for( int currentSudoku = 0; currentSudoku < STATIC_ARRAY_SIZE( sudokus ); ++currentSudoku )
+    sudokus[ 2 ] = new SudokuStrategyWith9Threads();
+    
+    sudokus[ 2 ]->createRandomSudoku();
+    
+    for( auto sudoku : sudokus )
     {
-        if( sudokus[ currentSudoku ]->computeSudoku() )
+        if( sudoku->computeSudoku() )
         {
-            std::cout << std::endl;
-            std::cout << "The sudoku " << currentSudoku << " is a valid solution!";
+            std::cout << std::endl << sudoku->toString();
+            std::cout << "This sudoku is a valid solution!" << std::endl;
         }
         else
         {
-            std::cout << std::endl;
-            std::cout << "The sudoku " << currentSudoku << " is NOT a valid solution!";
+            std::cout << std::endl << sudoku->toString();
+            std::cout << "This sudoku is NOT a valid solution!" << std::endl;
         }
         
         std::cout << std::endl;
