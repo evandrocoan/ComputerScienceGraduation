@@ -1,9 +1,10 @@
+
     /**
      * To creates an sudoku accordantly by the input file passed. The Sudoku's text file must 
      * to follow this structure:
      * 
      * Any text without numbers, on any line. The next line has the sudoku numbers:
-     * 8 2 7 ,  some space  1 5 4,    3 9 0
+     * 8 2 7 ,  some space  1 5 4,    3 9 (this sudoku is solved, if you change this 0 by six).
      * You can also skip lines and put any other non-digit characters between the sudoku's numbers.
      * 
      * 9 6 5,         3 2 7,         1 4 8 Huehuehue
@@ -22,3 +23,4 @@
      * 
      * @param *sudokuFileAddress    an char pointer to the 
      */
+

@@ -42,12 +42,18 @@
 
 
 /**
- * 0   - disabled all debug.
- * 1   - displays basic debug messages.
- * 2   - displays thread creation messages.
+ * 0   - Disabled all debug.
+ * 1   - Basic debug messages.
+ * 2   - Thread creation messages.
+ * 4   - Functions entrances.
+ * 
+ * 7   - Enables all debugging levels (111).
  */
-const int g_debugLevel = 1;
+const int g_debugLevel = 1 + 4;
 
+/**
+ * Mutex used by the DEBUGGER print function for synchronized print from multi-threading.
+ */
 pthread_mutex_t g_fprintf_mutex;
 
 
@@ -186,9 +192,8 @@ while( 0 )
 
 /**
  * This is an abstract class to represent a complete sudoku input and offer an basic structure
- * to offer how to verify whether it is a valid sudoku. It is processed any way to input a complete
- * sudoku and let to the concrete class which implements this to handle the sudoku solution
- * verification.
+ * to verify whether it is a valid sudoku. It is processed any way to input a complete sudoku and
+ * let to the concrete class which implements this to handle the sudoku solution verification.
  */
 class SudokuStrategy
 {
@@ -271,7 +276,7 @@ private:
      * to follow this structure:
      * 
      * Any text without numbers, on any line. The next line has the sudoku numbers:
-     * 8 2 7 ,  some space  1 5 4,    3 9 6
+     * 8 2 7 ,  some space  1 5 4,    3 9 (this sudoku is solved, if you change this 0 by six).
      * You can also skip lines and put any other non-digit characters between the sudoku's numbers.
      * 
      * 9 6 5,         3 2 7,         1 4 8 Huehuehue
@@ -300,6 +305,7 @@ private:
  */
 SudokuStrategy::SudokuStrategy()
 {
+    DEBUGGERLN( 3, "Calling the SudokuStrategy() constructor." );
 }
 
 /**
@@ -307,6 +313,9 @@ SudokuStrategy::SudokuStrategy()
  */
 SudokuStrategy::SudokuStrategy( std::string sudokuText )
 {
+    DEBUGGERLN( 3, "Calling the SudokuStrategy( std::string sudokuText ) constructor." );
+    
+    // Clear the default sudoku and process the new one.
     this->createRandomSudoku();
     this->processInputSudoku( sudokuText );
 }
@@ -316,16 +325,19 @@ SudokuStrategy::SudokuStrategy( std::string sudokuText )
  */
 SudokuStrategy::SudokuStrategy( char* sudokuFileAddress )
 {
+    DEBUGGERLN( 3, "Calling the SudokuStrategy( char* sudokuFileAddress ) constructor." );
+    
     std::ifstream sudokuFileInput( sudokuFileAddress );
     
     if( sudokuFileInput.is_open() )
     {
         std::stringstream inputedPipeLineSudoku;
         
-        // converts the ifstream "std::cin" to "std::stringstream" which natively supports
+        // Converts the std::fstream "std::cin" to std::stringstream which natively supports
         // conversion to string.
-        inputedPipeLineSudoku << inputedPipeLineSudoku.rdbuf();
+        inputedPipeLineSudoku << sudokuFileInput.rdbuf();
         
+        // Clear the default sudoku and process the new one.
         this->createRandomSudoku();
         this->processInputSudoku( inputedPipeLineSudoku.str() );
         
@@ -618,7 +630,9 @@ void SudokuStrategyWith9Threads::verify( int n )
 /**
  * Start the program execution and read the program argument list passed to it. This program
  * accept none or one command line argument. If passed, it must be an sudoku file path. See the
- * SudokuStrategy class documentation for the sudoku's text file structure.
+ * SudokuStrategy class documentation for the sudoku's text file structure. An example call to
+ * this program could be:
+ * cat sudoku_unsolved.txt | ./main.o sudoku_solved.txt
  * 
  * @param argumentsCount         one plus the argument counting passed to the program command line.
  * @param argumentsStringList    an argument list passed the program command line, where its first
@@ -633,30 +647,28 @@ int main( int argumentsCount, char* argumentsStringList[] )
     SudokuStrategy* sudokus[ 3 ] = { NULL };
     
     // If it is passed input throw the terminal pipe line, get it.
-    if( !isatty( fileno( stdin ) ) )
+    if( isatty( fileno( stdin ) ) )
+    {
+        sudokus[ 0 ] = new SudokuStrategyWith9Threads();
+    }
+    else
     {
         std::stringstream inputedPipeLineSudoku;
         
-        // converts the ifstream "std::cin" to "std::stringstream" which natively supports
+        // Converts the std::fstream "std::cin" to std::stringstream which natively supports
         // conversion to string.
         inputedPipeLineSudoku << std::cin.rdbuf();
         
         sudokus[ 0 ] = new SudokuStrategyWith9Threads( inputedPipeLineSudoku.str() );
     }
-    else
-    {
-        sudokus[ 0 ] = new SudokuStrategyWith9Threads();
-    }
     
-    if( argumentsCount == 2 )
+    if( argumentsCount >= 2 )
     {
         sudokus[ 1 ] = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
     }
     else
     {
         sudokus[ 1 ] = new SudokuStrategyWith9Threads();
-        
-        FPRINT( stdout, "\n" );
     }
     
     sudokus[ 2 ] = new SudokuStrategyWith9Threads();
@@ -667,15 +679,15 @@ int main( int argumentsCount, char* argumentsStringList[] )
     {
         if( sudoku->computeSudoku() )
         {
-            FPRINTLN( stdout, "\n%s\nThis sudoku is a valid solution!", sudoku->toString().c_str() );
+            FPRINTLN( stdout, "\n%s" "This sudoku is a valid solution!", sudoku->toString().c_str() );
         }
         else
         {
-            FPRINTLN( stdout, "\n%s\nThis sudoku is NOT a valid solution!", sudoku->toString().c_str() );
+            FPRINTLN( stdout, "\n%s" "This sudoku is NOT a valid solution!", sudoku->toString().c_str() );
         }
-        
-        FPRINT( stdout, "\n" );
     }
+    
+    FPRINT( stdout, "\n" );
     
     for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
     {
