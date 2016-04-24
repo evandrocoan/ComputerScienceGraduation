@@ -187,7 +187,7 @@ do \
 while( 0 )
 
 
-#endif
+#endif // #if DEBUG_LEVEL > 0
 
 
 
@@ -543,13 +543,24 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     {
         DEBUGGERLN( 2, "Creating thread %d...", i );
         
-        datas[ i ]              = (parameters *) malloc( sizeof( parameters ) );
-        datas[ i ]->thisSudoku  = this;
-        datas[ i ]->threadIndex = i;
+        datas[ i ] = (parameters *) malloc( sizeof( parameters ) );
         
-        if( pthread_create( &t[ i ], NULL, startThread, datas[ i ] ) != 0 )
+        if( datas[ i ] )
         {
-            FPRINTLN( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
+            datas[ i ]->thisSudoku  = this;
+            datas[ i ]->threadIndex = i;
+            
+            if( pthread_create( &t[ i ], NULL, startThread, datas[ i ] ) != 0 )
+            {
+                FPRINTLN( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
+            }
+        }
+        else
+        {
+            FPRINTLN( stderr, "Failed to allocate system memory with malloc(1) to the thread %d!", i );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
         }
     }
     
@@ -562,7 +573,7 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     
     for( int i = 0; i < n; i++ )
     {
-        delete datas[ i ];
+        free( datas[ i ] );
         
         DEBUGGERLN( 2, "Deleting pointerIndex: %d", i );
     }
@@ -742,13 +753,24 @@ bool SudokuStrategyWith27Threads::computeSudoku()
     {
         DEBUGGERLN( 2, "Creating thread %d...", threadIndex );
         
-        datas[ threadIndex ]              = (parameters *) malloc( sizeof( parameters ) );
-        datas[ threadIndex ]->thisSudoku  = this;
-        datas[ threadIndex ]->threadIndex = threadIndex;
+        datas[ threadIndex ] = (parameters *) malloc( sizeof( parameters ) );
         
-        if( pthread_create( &workersThreads[ threadIndex ], NULL, startThread, datas[ threadIndex ] ) != 0 )
+        if( datas[ threadIndex ] )
         {
-            FPRINTLN( stderr, "Failed to create thread %d! %s", threadIndex, strerror( errno ) );
+            datas[ threadIndex ]->thisSudoku  = this;
+            datas[ threadIndex ]->threadIndex = threadIndex;
+            
+            if( pthread_create( &workersThreads[ threadIndex ], NULL, startThread, datas[ threadIndex ] ) != 0 )
+            {
+                FPRINTLN( stderr, "Failed to create thread %d! %s", threadIndex, strerror( errno ) );
+            }
+        }
+        else
+        {
+            FPRINTLN( stderr, "Failed to allocate system memory with malloc(1) to the thread %d!", threadIndex );
+            
+            // Exits the program using a platform portable failure exit status.
+            exit( EXIT_FAILURE );
         }
     }
     
@@ -775,7 +797,7 @@ bool SudokuStrategyWith27Threads::computeSudoku()
     
     for( int pointerIndex = 0; pointerIndex < NUMBER_OF_THRHEADS; ++pointerIndex )
     {
-        delete datas[ pointerIndex ];
+        free( datas[ pointerIndex ] );
         
         DEBUGGERLN( 2, "Deleting pointerIndex: %d", pointerIndex );
     }
@@ -888,7 +910,7 @@ do \
     else \
     { \
         /* Converts the std::fstream "std::cin" to std::stringstream which natively supports \
-         * conversion to string.
+         * conversion to string. \
          */ \
         inputedPipeLineSudoku << std::cin.rdbuf(); \
         \
@@ -914,20 +936,27 @@ while( 0 )
  * To print the basic sudoku testing result to the standard output stream.
  * 
  * @param sudokus          a array of SudokuStrategy pointers.
+ * @param notes            array of chars with notes about the sudoku being displayed.
  */
-#define printBasicSudokuTestResults( sudokus ) \
+#define printBasicSudokuTestResults( sudokus, notes ) \
 do \
 { \
+    int noteIndex = 0; \
+    \
     for( auto sudoku : sudokus ) \
     { \
+        FPRINTLN( stdout, "\n%s", notes[ noteIndex ] ); \
+        \
         if( sudoku->computeSudoku() ) \
         { \
-            FPRINTLN( stdout, "\n%s" "This sudoku is a valid solution!", sudoku->toString().c_str() ); \
+            FPRINTLN( stdout, "%s" "This sudoku is a valid solution!", sudoku->toString().c_str() ); \
         } \
         else \
         { \
-            FPRINTLN( stdout, "\n%s" "This sudoku is NOT a valid solution!", sudoku->toString().c_str() ); \
+            FPRINTLN( stdout, "%s" "This sudoku is NOT a valid solution!", sudoku->toString().c_str() ); \
         } \
+        \
+        ++noteIndex; \
     } \
     \
     FPRINT( stdout, "\n" ); \
@@ -957,8 +986,6 @@ while( 0 )
  */
 int main( int argumentsCount, char* argumentsStringList[] )
 {
-    FPRINTLN( stdout, "Starting the SudokuStrategyWith9Threads tests!" );
-    
     // Uninitialized pointers cannot be deleted, but NULL pointers can. Then initializes it to be
     // safely deleted latter.
     SudokuStrategy* sudokus[ 3 ] = { NULL };
@@ -967,16 +994,26 @@ int main( int argumentsCount, char* argumentsStringList[] )
     // so it can be re-used latter.
     std::stringstream inputedPipeLineSudoku;
     
+    // To allocated a c char array on the heap
+    const char* notes[] =
+    {
+        "This is Sudoku below comes from the terminal pipe line, if provided. Otherwise, it is an default one.",
+        "This is Sudoku below comes from an read file, if provided. Otherwise, it is an default one.",
+        "This is Sudoku below is surely an random sudoku just created based on the current time with seconds."
+    };
+    
+    FPRINTLN( stdout, "Starting the SudokuStrategyWith9Threads tests!" );
+    
     // Use the SudokuStrategy with 9 threads to test.
     createBasicSodukusTest( sudokus, SudokuStrategyWith9Threads );
-    printBasicSudokuTestResults( sudokus );
+    printBasicSudokuTestResults( sudokus, notes );
     
     // To add some spacing between the tests
     FPRINTLN( stdout, "\n\n\n\n\n\n\nStarting the SudokuStrategyWith27Threads tests!" );
     
     // Use the SudokuStrategy with 27 threads to test.
     createBasicSodukusTest( sudokus, SudokuStrategyWith27Threads );
-    printBasicSudokuTestResults( sudokus );
+    printBasicSudokuTestResults( sudokus, notes );
     
     return EXIT_SUCCESS;
 }
