@@ -43,7 +43,7 @@
  * 0   - Disables this feature.
  * 1   - Normal debug.
  */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 
 #if DEBUG_LEVEL > 0
@@ -753,6 +753,8 @@ bool SudokuStrategyWith27Threads::computeSudoku()
         DEBUGGERLN( 2, "Thread %d has joined.", threadIndex );
     }
     
+    DEBUGGER( 1, "\n" );
+    
     // Compute the workers threads result.
     for( int resultIndex = 0; resultIndex < STATIC_ARRAY_SIZE( g_isValid ); ++resultIndex )
     {
@@ -871,8 +873,6 @@ do \
     } \
     else \
     { \
-        std::stringstream inputedPipeLineSudoku; \
-        \
         /* Converts the std::fstream "std::cin" to std::stringstream which natively supports \
          * conversion to string.
          */ \
@@ -943,16 +943,22 @@ while( 0 )
  */
 int main( int argumentsCount, char* argumentsStringList[] )
 {
+    FPRINTLN( stdout, "Starting the SudokuStrategyWith9Threads tests!" );
+    
     // Uninitialized pointers cannot be deleted, but NULL pointers can. Then initializes it to be
     // safely deleted latter.
     SudokuStrategy* sudokus[ 3 ] = { NULL };
+    
+    // As we only can catch from the terminal pipe to the std::cin its first time, declare it here
+    // so it can be re-used latter.
+    std::stringstream inputedPipeLineSudoku;
     
     // Use the SudokuStrategy with 9 threads to test.
     createBasicSodukusTest( sudokus, SudokuStrategyWith9Threads );
     printBasicSudokuTestResults( sudokus );
     
     // To add some spacing between the tests
-    FPRINTLN( stdout, "\n\n\n\n\n\n\n" );
+    FPRINTLN( stdout, "\n\n\n\n\n\n\nStarting the SudokuStrategyWith27Threads tests!" );
     
     // Use the SudokuStrategy with 27 threads to test.
     createBasicSodukusTest( sudokus, SudokuStrategyWith27Threads );
