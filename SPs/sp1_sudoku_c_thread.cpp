@@ -29,6 +29,15 @@
 // #pragma once
 
 
+/**
+ * Calculates a static array size.
+ */
+#if !defined STATIC_ARRAY_SIZE
+    #define STATIC_ARRAY_SIZE( array ) ( sizeof( ( array ) ) / sizeof( ( array )[0] ) )
+    
+#endif
+
+
 /** This is to view internal program data while execution. Default value: 0
  *
  * 0   - Disables this feature.
@@ -46,10 +55,11 @@
  * 1   - Basic debug messages.
  * 2   - Thread creation messages.
  * 4   - Functions entrances.
+ * 8   - Thread internal processing.
  * 
- * 7   - Enables all debugging levels (111).
+ * 15  - Enables all debugging levels (1111).
  */
-const int g_debugLevel = 1 + 4;
+const int g_debugLevel = 1 + 2 + 4;
 
 /**
  * Mutex used by the DEBUGGER print function for synchronized print from multi-threading.
@@ -171,7 +181,7 @@ while( 0 )
 do \
 { \
     fprintf( stream, ##__VA_ARGS__ ); \
-    fprintf( stdout, "\n" ); \
+    fprintf( stream, "\n" ); \
     fflush( stream ); \
 } \
 while( 0 )
@@ -249,6 +259,8 @@ public:
     
     /**
      * Verifies the current loaded sudoku solution the desired strategy.
+     * 
+     * @return true if the current loaded sudoku is a valid solution, false otherwise.
      */
     virtual bool computeSudoku() = 0;
     
@@ -458,6 +470,7 @@ void SudokuStrategy::processInputSudoku( std::string sudokuText )
  */
 // #pragma once
 
+
 /**
  * Implements the abstract class SudokuStrategy sudoku solution algorithm using POSIX 9 threads.
  */
@@ -638,12 +651,285 @@ void SudokuStrategyWith9Threads::verify( int n )
 
 
 /**
- * Calculates a static array size.
+ * Preprocessor directive designed to cause the current source file to be included only once in a
+ * single compilation. Thus, serves the same purpose as #include guards, but with several
+ * advantages, including: less code, avoidance of name clashes, and sometimes improvement in
+ * compilation speed. In main file this is enabled by default.
  */
-#if !defined STATIC_ARRAY_SIZE
-    #define STATIC_ARRAY_SIZE( array ) ( sizeof( ( array ) ) / sizeof( ( array )[0] ) )
+// #pragma once
+
+/**
+ * Constants used.
+ */
+#define NUMBER_OF_THRHEADS 27
+
+
+/**
+ * Implements the abstract class SudokuStrategy sudoku solution algorithm using POSIX 9 threads.
+ */
+class SudokuStrategyWith27Threads : public SudokuStrategy
+{
+public:
+    /**
+     * Inherits the superclass constructor.
+     */
+    using SudokuStrategy::SudokuStrategy;
     
-#endif
+    /**
+     * Implements the abstract class SudokuStrategy method. It verifies the current loaded sudoku
+     * solution using the Wagner's method.
+     * 
+     * @see SudokuStrategy::computeSudoku()
+     */
+    bool computeSudoku() override;
+    
+    
+private:
+    
+    /**
+     * An boolean value used by the Wagner's method to verifies the sudoku's solution.
+     */
+    bool g_isValid[ NUMBER_OF_THRHEADS ] = { false };
+    
+    /**
+     * Structure for passing data to threads.
+     */
+    struct parameters
+    {
+        int                          currentElement;
+        SudokuStrategyWith27Threads* currentSudoku;
+    };
+    
+    /**
+     * This is a bridge for the C POSIX thread to run from an C++ member class function. The POSIX
+     * thread cannot run properly an C++ member function due all C++ member's function to receive
+     * an additional hidden object parameter this, to reference the current object within its
+     * functions. And the POSIX thread requires the forwarding calling function to receive only
+     * a void pointer parameter.
+     * 
+     * @param voidArgumentPointer      a parameter's data struct void pointer.
+     */
+    static void* startThread( void* );
+    
+    /**
+     * Performs the current sodoku solutions check
+     * 
+     * @param threadIndex              the current thread index on the boolean array g_isValid.
+     */
+    void verify( int );
+    
+};
+
+
+/**
+ * @see SudokuStrategyWith27Threads::computeSudoku()
+ */
+bool SudokuStrategyWith27Threads::computeSudoku()
+{
+    bool        isValidSudoku               = true;
+    parameters* datas[ NUMBER_OF_THRHEADS ] = { NULL };
+    
+    int       indexesArray  [ NUMBER_OF_THRHEADS ];
+    pthread_t workersThreads[ NUMBER_OF_THRHEADS ];
+    
+    DEBUGGERLN( 2, " " );
+    
+    // To create the workers threads.
+    for( int threadIndex = 0; threadIndex < NUMBER_OF_THRHEADS; threadIndex++ )
+    {
+        DEBUGGERLN( 2, "Creating thread %d...", threadIndex );
+        
+        datas[ threadIndex ]                 = (parameters *) malloc( sizeof( parameters ) );
+        datas[ threadIndex ]->currentSudoku  = this;
+        datas[ threadIndex ]->currentElement = threadIndex;
+        
+        if( pthread_create( &workersThreads[ threadIndex ], NULL, startThread, datas[ threadIndex ] ) != 0 )
+        {
+            FPRINTLN( stderr, "Failed to create thread %d! %s", threadIndex, strerror( errno ) );
+        }
+    }
+    
+    // Wait for all thread to finish.
+    for( int threadIndex = 0; threadIndex < NUMBER_OF_THRHEADS; threadIndex++ )
+    {
+        pthread_join( workersThreads[ threadIndex ], NULL );
+        
+        DEBUGGERLN( 2, "Thread %d has joined.", threadIndex );
+    }
+    
+    // Compute the workers threads result.
+    for( int resultIndex = 0; resultIndex < STATIC_ARRAY_SIZE( g_isValid ); ++resultIndex )
+    {
+        DEBUGGER( 1, "%d", g_isValid[ resultIndex ] );
+        
+        if( !g_isValid[ resultIndex ] )
+        {
+            isValidSudoku = false;
+        }
+    }
+    
+    return isValidSudoku;
+}
+
+/**
+ * @see SudokuStrategyWith27Threads::startThread( void* ) member class declaration.
+ */
+void* SudokuStrategyWith27Threads::startThread( void* voidArgumentPointer )
+{
+    parameters* data = static_cast< parameters* >( voidArgumentPointer );
+    
+    data->currentSudoku->verify( data->currentElement );
+    
+    return NULL;
+}
+
+/**
+ * @see SudokuStrategyWith27Threads::verify() member class declaration.
+ */
+void SudokuStrategyWith27Threads::verify( int threadIndex )
+{
+    int sum = 0;
+    
+    DEBUGGERLN( 8, "Calling SudokuStrategyWith27Threads::verify, threadIndex: %d", threadIndex );
+    
+    /**
+     * Threads to check each line.
+     */
+    if( threadIndex < 9 )
+    {
+        int lineIndex = threadIndex % 9;
+        
+        for( int columnIndex = 0; columnIndex < 9; columnIndex++ )
+        {
+            sum += g_sudokuVectorMatrix[ lineIndex ][ columnIndex ];
+        }
+        
+        DEBUGGERLN( 8, "threadIndex: %d, lineIndex: %d, sum: %d ", threadIndex, lineIndex, sum );
+        
+        if( sum == 45 )
+        {
+            g_isValid[ threadIndex ] = true;
+        }
+    }
+    /**
+     * Threads to check each column.
+     */
+    else if( 8 < threadIndex < 18 )
+    {
+        int columnIndex = threadIndex % 9;
+        
+        for( int lineIndex = 0; lineIndex < 9; lineIndex++ )
+        {
+            sum += g_sudokuVectorMatrix[ lineIndex ][ columnIndex ];
+        }
+        
+        DEBUGGERLN( 8, "threadIndex: %d, columnIndex: %d, sum: %d ", threadIndex, columnIndex, sum );
+        
+        if( sum == 45 )
+        {
+            g_isValid[ threadIndex ] = true;
+        }
+    }
+    /**
+     * Threads to check each quadrant.
+     */
+    else if( 17 < threadIndex < 27 )
+    {
+        int quadrantIndex      = threadIndex % 9;
+        int horizontalQuadrant = quadrantIndex / 3;
+        int verticalQuadrant   = quadrantIndex % 3;
+        
+        for( int quadrantLine = 0; quadrantLine < 3; quadrantLine++ )
+        {
+            for( int quadrantColumn = 0; quadrantColumn < 3; quadrantColumn++ )
+            {
+                sum += g_sudokuVectorMatrix[ horizontalQuadrant * 3 + quadrantLine ][ verticalQuadrant * 3 + quadrantColumn ];
+            }
+        }
+        
+        DEBUGGERLN( 8, "threadIndex: %d, quadrantIndex: %d, sum: %d ", threadIndex, quadrantIndex, sum );
+        
+        if( sum == 45 )
+        {
+            g_isValid[ threadIndex ] = true;
+        }
+    }
+}
+
+
+
+/**
+ * To create a basic testing for different sudoku solution checker. This accept reading from the
+ * terminal pipe line and form an argument line passed sudoku file name.
+ * 
+ * @param sodokus             a sudoku class "SudokuStrategy" pointer.
+ * @param constructorName     the desired sudokus strategy constructor. Ex: SudokuStrategyWith27Threads
+ */
+#define createBasicSodukusTest( sudokus, constructorName ) \
+do \
+{ \
+    /* If it is passed input throw the terminal pipe line, get it.*/ \
+    if( isatty( fileno( stdin ) ) ) \
+    { \
+        sudokus[ 0 ] = new constructorName(); \
+    } \
+    else \
+    { \
+        std::stringstream inputedPipeLineSudoku; \
+        \
+        /* Converts the std::fstream "std::cin" to std::stringstream which natively supports \
+         * conversion to string.
+         */ \
+        inputedPipeLineSudoku << std::cin.rdbuf(); \
+        \
+        sudokus[ 0 ] = new constructorName( inputedPipeLineSudoku.str() ); \
+    } \
+    \
+    if( argumentsCount >= 2 ) \
+    { \
+        sudokus[ 1 ] = new constructorName( argumentsStringList[ 1 ] ); \
+    } \
+    else \
+    { \
+        sudokus[ 1 ] = new constructorName(); \
+    } \
+    \
+    sudokus[ 2 ] = new constructorName(); \
+    \
+    sudokus[ 2 ]->createRandomSudoku(); \
+} \
+while( 0 )
+
+/**
+ * To print the basic sudoku testing result to the standard output stream.
+ * 
+ * @param sudokus          a array of SudokuStrategy pointers.
+ */
+#define printBasicSudokuTestResults( sudokus ) \
+do \
+{ \
+    for( auto sudoku : sudokus ) \
+    { \
+        if( sudoku->computeSudoku() ) \
+        { \
+            FPRINTLN( stdout, "\n%s" "This sudoku is a valid solution!", sudoku->toString().c_str() ); \
+        } \
+        else \
+        { \
+            FPRINTLN( stdout, "\n%s" "This sudoku is NOT a valid solution!", sudoku->toString().c_str() ); \
+        } \
+    } \
+    \
+    FPRINT( stdout, "\n" ); \
+    \
+    for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer ) \
+    { \
+        DEBUGGERLN( 1, "Deleting currentPointer: %d", currentPointer ); \
+        \
+        delete sudokus[ currentPointer ]; \
+    } \
+} \
+while( 0 )
 
 
 /**
@@ -665,58 +951,20 @@ int main( int argumentsCount, char* argumentsStringList[] )
     // safely deleted latter.
     SudokuStrategy* sudokus[ 3 ] = { NULL };
     
-    // If it is passed input throw the terminal pipe line, get it.
-    if( isatty( fileno( stdin ) ) )
-    {
-        sudokus[ 0 ] = new SudokuStrategyWith9Threads();
-    }
-    else
-    {
-        std::stringstream inputedPipeLineSudoku;
-        
-        // Converts the std::fstream "std::cin" to std::stringstream which natively supports
-        // conversion to string.
-        inputedPipeLineSudoku << std::cin.rdbuf();
-        
-        sudokus[ 0 ] = new SudokuStrategyWith9Threads( inputedPipeLineSudoku.str() );
-    }
+    // Use the SudokuStrategy with 9 threads to test.
+    createBasicSodukusTest( sudokus, SudokuStrategyWith9Threads );
+    printBasicSudokuTestResults( sudokus );
     
-    if( argumentsCount >= 2 )
-    {
-        sudokus[ 1 ] = new SudokuStrategyWith9Threads( argumentsStringList[ 1 ] );
-    }
-    else
-    {
-        sudokus[ 1 ] = new SudokuStrategyWith9Threads();
-    }
+    // To add some spacing between the tests
+    FPRINTLN( stdout, "\n\n\n\n\n\n\n" );
     
-    sudokus[ 2 ] = new SudokuStrategyWith9Threads();
-    
-    sudokus[ 2 ]->createRandomSudoku();
-    
-    for( auto sudoku : sudokus )
-    {
-        if( sudoku->computeSudoku() )
-        {
-            FPRINTLN( stdout, "\n%s" "This sudoku is a valid solution!", sudoku->toString().c_str() );
-        }
-        else
-        {
-            FPRINTLN( stdout, "\n%s" "This sudoku is NOT a valid solution!", sudoku->toString().c_str() );
-        }
-    }
-    
-    FPRINT( stdout, "\n" );
-    
-    for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer )
-    {
-        DEBUGGERLN( 1, "Deleting currentPointer: %d", currentPointer );
-        
-        delete sudokus[ currentPointer ];
-    }
+    // Use the SudokuStrategy with 27 threads to test.
+    createBasicSodukusTest( sudokus, SudokuStrategyWith27Threads );
+    printBasicSudokuTestResults( sudokus );
     
     return EXIT_SUCCESS;
 }
+
 
 
 
