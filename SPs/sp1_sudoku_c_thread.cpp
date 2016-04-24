@@ -59,7 +59,7 @@
  * 
  * 15  - Enables all debugging levels (1111).
  */
-const int g_debugLevel = 1 + 2 + 4;
+const int g_debugLevel = 1 + 4;
 
 /**
  * Mutex used by the DEBUGGER print function for synchronized print from multi-threading.
@@ -504,7 +504,6 @@ private:
     struct parameters
     {
         int                         currentElement;
-        int                         indexesArray[9];
         SudokuStrategyWith9Threads* currentSudoku;
     };
     
@@ -532,25 +531,23 @@ private:
  */
 bool SudokuStrategyWith9Threads::computeSudoku()
 {
-    parameters *data = (parameters *) malloc( sizeof( parameters ) );
-    
     // Now create the thread passing it data as a parameter
-    data->currentElement  = 0;
-    data->indexesArray[0] = 0;
-    data->currentSudoku   = this;
-    
-    int n = 9;
+    const int   n          = 9;
+    parameters* datas[ n ] = { NULL };
     
     pthread_t t[ n ];
+    
+    DEBUGGER( 2, "\n" );
     
     for( int i = 0; i < n; i++ )
     {
         DEBUGGERLN( 2, "Creating thread %d...", i );
         
-        data->currentElement    = i;
-        data->indexesArray[ i ] = i;
+        datas[ i ]                 = (parameters *) malloc( sizeof( parameters ) );
+        datas[ i ]->currentSudoku  = this;
+        datas[ i ]->currentElement = i;
         
-        if( pthread_create( &t[ i ], NULL, startThread, data ) != 0 )
+        if( pthread_create( &t[ i ], NULL, startThread, datas[ i ] ) != 0 )
         {
             FPRINTLN( stderr, "Failed to create thread %d! %s", i, strerror( errno ) );
         }
@@ -571,10 +568,9 @@ bool SudokuStrategyWith9Threads::computeSudoku()
  */
 void* SudokuStrategyWith9Threads::startThread( void* voidArgumentPointer )
 {
-    parameters* data          = static_cast< parameters* >( voidArgumentPointer );
-    int         wagnersNumber = data->indexesArray[ data->currentElement ];
+    parameters* data = static_cast< parameters* >( voidArgumentPointer );
     
-    data->currentSudoku->verify( wagnersNumber );
+    data->currentSudoku->verify( data->currentElement );
     
     return NULL;
 }
@@ -640,7 +636,7 @@ void SudokuStrategyWith9Threads::verify( int n )
             
             sum += g_sudokuVectorMatrix[ x * 3 + i ][ y * 3 + j ];
         }
-    } 
+    }
     
     if( sum != 45 )
     {
@@ -726,13 +722,13 @@ private:
  */
 bool SudokuStrategyWith27Threads::computeSudoku()
 {
+    pthread_t workersThreads[ NUMBER_OF_THRHEADS ];
+    
+    // Now create the thread passing it data as a parameter
     bool        isValidSudoku               = true;
     parameters* datas[ NUMBER_OF_THRHEADS ] = { NULL };
     
-    int       indexesArray  [ NUMBER_OF_THRHEADS ];
-    pthread_t workersThreads[ NUMBER_OF_THRHEADS ];
-    
-    DEBUGGERLN( 2, " " );
+    DEBUGGER( 2, "\n" );
     
     // To create the workers threads.
     for( int threadIndex = 0; threadIndex < NUMBER_OF_THRHEADS; threadIndex++ )
