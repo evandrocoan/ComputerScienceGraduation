@@ -560,6 +560,13 @@ bool SudokuStrategyWith9Threads::computeSudoku()
         DEBUGGERLN( 2, "Thread %d has joined.", i );
     }
     
+    for( int i = 0; i < n; i++ )
+    {
+        delete datas[ i ];
+        
+        DEBUGGERLN( 2, "Deleting pointerIndex: %d", i );
+    }
+    
     return this->works;
 }
 
@@ -764,6 +771,13 @@ bool SudokuStrategyWith27Threads::computeSudoku()
         {
             isValidSudoku = false;
         }
+    }
+    
+    for( int pointerIndex = 0; pointerIndex < NUMBER_OF_THRHEADS; ++pointerIndex )
+    {
+        delete datas[ pointerIndex ];
+        
+        DEBUGGERLN( 2, "Deleting pointerIndex: %d", pointerIndex );
     }
     
     return isValidSudoku;
