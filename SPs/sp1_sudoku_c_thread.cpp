@@ -429,27 +429,27 @@ std::string SudokuStrategy::toString()
  */
 void SudokuStrategy::processInputSudoku( std::string sudokuText )
 {
-    int currentLine    = 0;
-    int currentColumn  = 0;
+    int lineIndex    = 0;
+    int columnIndex  = 0;
     
     for( char currentChar : sudokuText )
     {
         if( isdigit( currentChar )
-            && currentLine < 9
-            && currentColumn < 9 )
+            && lineIndex < 9
+            && columnIndex < 9 )
         {
-            g_sudokuVectorMatrix[ currentLine ][ currentColumn ] = currentChar - '0';
+            g_sudokuVectorMatrix[ lineIndex ][ columnIndex ] = currentChar - '0';
             
-            DEBUGGER( 1, "[%i,%i]%i", currentLine, currentColumn,
-                    g_sudokuVectorMatrix[ currentLine ][ currentColumn ] );
+            DEBUGGER( 1, "[%i,%i]%i", lineIndex, columnIndex,
+                    g_sudokuVectorMatrix[ lineIndex ][ columnIndex ] );
             
-            ++currentColumn;
+            ++columnIndex;
             
-            if( currentColumn > 8 )
+            if( columnIndex > 8 )
             {
-                ++currentLine;
+                ++lineIndex;
                 
-                currentColumn = 0;
+                columnIndex = 0;
             }
         }
         else
@@ -503,8 +503,8 @@ private:
      */
     struct parameters
     {
-        int                         currentElement;
-        SudokuStrategyWith9Threads* currentSudoku;
+        int                         threadIndex;
+        SudokuStrategyWith9Threads* thisSudoku;
     };
     
     /**
@@ -543,9 +543,9 @@ bool SudokuStrategyWith9Threads::computeSudoku()
     {
         DEBUGGERLN( 2, "Creating thread %d...", i );
         
-        datas[ i ]                 = (parameters *) malloc( sizeof( parameters ) );
-        datas[ i ]->currentSudoku  = this;
-        datas[ i ]->currentElement = i;
+        datas[ i ]              = (parameters *) malloc( sizeof( parameters ) );
+        datas[ i ]->thisSudoku  = this;
+        datas[ i ]->threadIndex = i;
         
         if( pthread_create( &t[ i ], NULL, startThread, datas[ i ] ) != 0 )
         {
@@ -570,7 +570,7 @@ void* SudokuStrategyWith9Threads::startThread( void* voidArgumentPointer )
 {
     parameters* data = static_cast< parameters* >( voidArgumentPointer );
     
-    data->currentSudoku->verify( data->currentElement );
+    data->thisSudoku->verify( data->threadIndex );
     
     return NULL;
 }
@@ -692,8 +692,8 @@ private:
      */
     struct parameters
     {
-        int                          currentElement;
-        SudokuStrategyWith27Threads* currentSudoku;
+        int                          threadIndex;
+        SudokuStrategyWith27Threads* thisSudoku;
     };
     
     /**
@@ -735,9 +735,9 @@ bool SudokuStrategyWith27Threads::computeSudoku()
     {
         DEBUGGERLN( 2, "Creating thread %d...", threadIndex );
         
-        datas[ threadIndex ]                 = (parameters *) malloc( sizeof( parameters ) );
-        datas[ threadIndex ]->currentSudoku  = this;
-        datas[ threadIndex ]->currentElement = threadIndex;
+        datas[ threadIndex ]              = (parameters *) malloc( sizeof( parameters ) );
+        datas[ threadIndex ]->thisSudoku  = this;
+        datas[ threadIndex ]->threadIndex = threadIndex;
         
         if( pthread_create( &workersThreads[ threadIndex ], NULL, startThread, datas[ threadIndex ] ) != 0 )
         {
@@ -776,7 +776,7 @@ void* SudokuStrategyWith27Threads::startThread( void* voidArgumentPointer )
 {
     parameters* data = static_cast< parameters* >( voidArgumentPointer );
     
-    data->currentSudoku->verify( data->currentElement );
+    data->thisSudoku->verify( data->threadIndex );
     
     return NULL;
 }
@@ -918,11 +918,11 @@ do \
     \
     FPRINT( stdout, "\n" ); \
     \
-    for( int currentPointer = 0; currentPointer < STATIC_ARRAY_SIZE( sudokus ); ++currentPointer ) \
+    for( int pointerIndex = 0; pointerIndex < STATIC_ARRAY_SIZE( sudokus ); ++pointerIndex ) \
     { \
-        DEBUGGERLN( 1, "Deleting currentPointer: %d", currentPointer ); \
+        DEBUGGERLN( 1, "Deleting pointerIndex: %d", pointerIndex ); \
         \
-        delete sudokus[ currentPointer ]; \
+        delete sudokus[ pointerIndex ]; \
     } \
 } \
 while( 0 )
