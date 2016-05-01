@@ -29,7 +29,7 @@ public:
      * @param 
      * @param
      */
-    Partition(unsigned int beginAddress, unsigned int endAddress, bool isFree);
+    Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree );
     
     
 public: // do not change
@@ -84,7 +84,7 @@ public:
 /**
  * 
  */
-typedef std::set<Partition*, bool (*)(Partition*,Partition*)> PartitionList;
+typedef std::set<Partition*, bool ( * )( Partition*,Partition* )> PartitionList;
 
 /**
  * 
@@ -110,13 +110,13 @@ public: // do not change
      * 
      * @param 
      */
-    MemoryManager(MemoryAllocationAlgorithm algorithm);
+    MemoryManager( MemoryAllocationAlgorithm algorithm );
     
     /**
      * 
      * @param 
      */
-    MemoryManager(const MemoryManager& orig);
+    MemoryManager( const MemoryManager& orig );
     
     /**
      * 
@@ -130,13 +130,13 @@ public: // do not change
      * 
      * @param 
      */
-    Partition* allocateMemory(unsigned int size);
+    Partition* allocateMemory( unsigned int size );
     
     /**
      * 
      * @param 
      */
-    void deallocateMemory(Partition* partition);
+    void deallocateMemory( Partition* partition );
     
     /**
      * 
@@ -152,7 +152,7 @@ public: // do not change
      * 
      * @param 
      */
-    Partition* getPartition(unsigned int index);
+    Partition* getPartition( unsigned int index );
     
     ///extensão de classe na marra
     
@@ -204,7 +204,7 @@ struct Algorithm
      * 
      * @param memoryManager    an MemoryManager class object
      */
-    Algorithm(MemoryManager* memoryManager);
+    Algorithm( MemoryManager* memoryManager );
     
     /**
      * Safely destroy clean the allocated memory by this class.
@@ -248,7 +248,7 @@ struct _FirstFit: public Algorithm
      * 
      * @param 
      */
-    virtual Partition* allocateMemory(unsigned int size);
+    virtual Partition* allocateMemory( unsigned int size );
 
 };
 
@@ -268,7 +268,7 @@ struct _NextFit: public Algorithm
      * 
      * @param 
      */
-    virtual Partition* allocateMemory(unsigned int size);
+    virtual Partition* allocateMemory( unsigned int size );
     
 private:
     
@@ -295,7 +295,7 @@ struct _WorstFit: public Algorithm
      * 
      * @param 
      */
-    virtual Partition* allocateMemory(unsigned int size);
+    virtual Partition* allocateMemory( unsigned int size );
      
      
 };
@@ -316,7 +316,7 @@ struct _BestFit: public Algorithm
      * 
      * @param 
      */
-    virtual Partition* allocateMemory(unsigned int size);
+    virtual Partition* allocateMemory( unsigned int size );
     
     
 };

@@ -42,11 +42,12 @@
  * 4   - I AM IN HERER MESSAGE.
  * 8   - Partitioning creation.
  * 16  - Show the teacher required output.
+ * 32  - _BestFit::allocateMemory( 1 ) debugging.
  * 
- *
- * 31  - Enables all debugging levels (11111).
+ * 
+ * 63  - Enables all debugging levels (111111).
  */
-const int g_debugLevel = 1 + 8 + 16;
+const int g_debugLevel = 2 + 32;
 
 #endif
 

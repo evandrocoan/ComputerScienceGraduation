@@ -126,7 +126,6 @@ void MemoryManager::deallocateMemory( Partition* partition )
    auto ind = partitions.find( partition );
    
    partitions.erase( ind );
-   
 }
 
 /**

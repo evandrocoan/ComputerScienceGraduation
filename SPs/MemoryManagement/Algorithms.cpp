@@ -20,7 +20,7 @@ Algorithm::Algorithm( MemoryManager* memoryManager )
  */
 Algorithm::~Algorithm() 
 {
-    delete memoryManager;
+    delete this->memoryManager;
 }
 
 /**
@@ -332,23 +332,33 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     
     auto part = getPartitions();
     
-    if( part->size() ==0 ) 
+    DEBUGGERLN( 32, "( allocateMemory ) size: %d", size );
+    DEBUGGERLN( 32, "( allocateMemory ) part->size(): %d", part->size() );
+    
+    if( part->size() == 0 ) 
     {
-        novo = new Partition( 0,size -1,false );
+        novo = new Partition( 0, size - 1, false );
+        
         part->insert( novo );
+        
         return novo;
     }
     
-    auto index = part->begin();
+    int  pos      = -1;
+    auto index    = part->begin();
+    int  partSize = 0 + ( *index )->getBeginAddress();
     
-    int partSize = 0 + ( *index )->getBeginAddress();
-    int pos = -1;
+    if( partSize >= size )
+    {
+        pos =0;
+    }
     
-    if( partSize >= size ) pos =0;
+    int holeSize;
+    int end;
     
-    int holeSize,end,beg =0;
+    int beg = 0;
     
-    for( int i=0; i< part->size() -1;i++ ) 
+    for( int i = 0; i< part->size() -1; ++i ) 
     {
         end = ( *index )->getEndAddress();
         
@@ -368,23 +378,26 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         }
     }
     
-    end = ( *index )->getBeginAddress();
-    beg = memoryManager->maxAddress;
-    
+    beg      = memoryManager->maxAddress;
+    end      = ( *index )->getBeginAddress();
     holeSize = ( beg- end ) +1;
     
     if( holeSize >= size ) 
     {
         if( holeSize < partSize ) 
         {
-            pos = beg;
+            pos      = beg;
             partSize = holeSize;
         }
     }
     
-    if ( pos==-1 ) return 0;
+    if( pos==-1 )
+    {
+        return 0;
+    }
     
     novo = new Partition( pos,size -1,false );
+    
     part->insert( novo );
     
     return novo;
