@@ -4,11 +4,14 @@
 #include "MemoryManager.h"
 
 
+
 /**
  * @see Algorithm::Algorithm( MemoryManager* ) member class declaration.
  */
 Algorithm::Algorithm( MemoryManager* memoryManager ) 
 {
+    DEBUGGERLN( 2, "I AM ENTERING IN Algorithm::Algorithm(0) THE CONSTRUTOR!" );
+    
     this->memoryManager = memoryManager;
 }
 
@@ -28,12 +31,16 @@ PartitionList* Algorithm::getPartitions()
     return &( memoryManager->partitions );
 }
 
+
+
 /**
  * @see _FirstFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _FirstFit::allocateMemory( unsigned int size ) 
 {
     Partition* novo;
+    
+    DEBUGGERLN( 2, "I AM ENTERING IN _FirstFit::allocateMemory(1)" );
     
     auto part = getPartitions();
     
@@ -61,7 +68,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
         return novo;
     }
     
-    int holeSize,end,beg =0;
+    int holeSize, end, beg =0;
     
     for( int i=0; i< part->size() -1;i++ ) 
     {
@@ -71,7 +78,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
         
         beg = ( *index )->getBeginAddress();
         
-         holeSize = ( beg- end ) +1;
+        holeSize = ( beg- end ) +1;
         
         if( holeSize >= size ) 
         {
@@ -109,12 +116,16 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
     return novo;
 }
 
+
+
 /**
  * @see _NextFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _NextFit::allocateMemory( unsigned int size ) 
 {
     Partition* novo;
+    
+    DEBUGGERLN( 2, "I AM ENTERING IN _NextFit::allocateMemory(1)" );
     
     auto part = getPartitions();
     
@@ -166,7 +177,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
         
         beg = ( *index )->getBeginAddress();
         
-         holeSize = ( beg- end ) +1;
+        holeSize = ( beg- end ) +1;
         
         if( holeSize >= size ) 
         {
@@ -234,12 +245,16 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     return novo;
 }
 
+
+
 /**
  * @see _WorstFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _WorstFit::allocateMemory( unsigned int size ) 
 {
     Partition* novo;
+    
+    DEBUGGERLN( 2, "I AM ENTERING IN _WorstFit::allocateMemory(1)" );
     
     auto part = getPartitions();
     
@@ -304,12 +319,17 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
     return novo;
 }
 
+
+
 /**
  * @see _BestFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _BestFit::allocateMemory( unsigned int size ) 
 {
     Partition* novo;
+    
+    DEBUGGERLN( 2, "I AM ENTERING IN _BestFit::allocateMemory(1)" );
+    
     auto part = getPartitions();
     
     if( part->size() ==0 ) 

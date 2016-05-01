@@ -6,12 +6,6 @@
  */
 
 
-/*
- * File:   Traits.h
- * Author: cancian
- *
- * Created on September 27, 2015, 4:16 PM
- */
 
 #ifndef TRAITS_H
 #define	TRAITS_H
@@ -23,8 +17,10 @@
 #include "Scheduler.h"
 #include "Process.h"
 
+#include <iostream>
 #include <string>
 #include <cstdarg>
+
 
 
 /**
@@ -44,11 +40,13 @@
  * 1   - Basic debug messages.
  * 2   - Functions entrances.
  * 4   - I AM IN HERER MESSAGE.
+ * 8   - Partitioning creation.
+ * 16  - Show the teacher required output.
  * 
  *
- * 3  - Enables all debugging levels (11).
+ * 31  - Enables all debugging levels (11111).
  */
-const int g_debugLevel = 1 + 2 + 4;
+const int g_debugLevel = 1 + 8 + 16;
 
 #endif
 
@@ -61,6 +59,7 @@ const int g_debugLevel = 1 + 2 + 4;
  * @param ...     a variable length number of formating characters.
  * 
  * @see http://stackoverflow.com/a/10150393/4934640
+ * @see http://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf/10150393#10150393
  */
 inline std::string format(const char* fmt, ...)
 {
@@ -96,28 +95,6 @@ inline std::string format(const char* fmt, ...)
 
 
 
-/**
-The same as DEBUGGER(...), but it is for standard program output.
-*/
-#define FPRINT( ... ) \
-do \
-{ \
-    Debug::cout(Debug::Level::warning, format( __VA_ARGS__ ) ); \
-} \
-while( 0 )
-
-/**
-* The same as DEBUGGERLN(...), but it is for standard program output.
-* */
-#define FPRINTLN( ... ) \
-do \
-{ \
-    Debug::cout(Debug::Level::warning, format( __VA_ARGS__ ) + "\n" ); \
-} \
-while( 0 )
-
-
-
 #if DEBUG_LEVEL > 0
     #define DEBUG
 
@@ -145,7 +122,7 @@ do \
 { \
     if( level & g_debugLevel ) \
     { \
-        FPRINTLN( __VA_ARGS__ ); \
+        std::cout << format( __VA_ARGS__ ) << std::endl; \
     } \
 } \
 while( 0 )
@@ -159,7 +136,35 @@ do \
 { \
     if( level & g_debugLevel ) \
     { \
-        FPRINT( __VA_ARGS__ ); \
+            std::cout << format( __VA_ARGS__ ); \
+    } \
+} \
+while( 0 )
+
+
+/**
+The same as DEBUGGER(...), but it is for standard program output.
+*/
+#define FPRINT( level, ... ) \
+do \
+{ \
+    if( level & g_debugLevel ) \
+    { \
+        std::cout << format( __VA_ARGS__ ); \
+    } \
+} \
+while( 0 )
+
+
+/**
+* The same as DEBUGGERLN(...), but it is for standard program output.
+* */
+#define FPRINTLN( level, ... ) \
+do \
+{ \
+    if( level & g_debugLevel ) \
+    { \
+        std::cout << format( __VA_ARGS__ ) << std::endl; \
     } \
 } \
 while( 0 )
@@ -170,26 +175,51 @@ while( 0 )
     #define DEBUGGERLN( stream, ... )
 
 
+/**
+The same as DEBUGGER(...), but it is for standard program output when the debugging is disabled.
+*/
+#define FPRINT( level, ... ) \
+do \
+{ \
+    std::cout << format( __VA_ARGS__ ); \
+} \
+while( 0 )
+
+
+/**
+The same as DEBUGGERLN(...), but it is for standard program output when the debugging is disabled.
+* */
+#define FPRINTLN( level, ... ) \
+do \
+{ \
+    std::cout << format( __VA_ARGS__ ) << std::endl; \
+} \
+while( 0 )
+
+
 #endif // #if DEBUG_LEVEL > 0
 
 
 
 template<typename T>
-struct Traits {
+struct Traits 
+{
     static const bool enabled = true;
     static const bool debugged = true;
 };
 
-template<> struct Traits<Process> {
+template<> struct Traits<Process> 
+{
     static constexpr double timeBetweenCreations = 50.0; // time units
     static constexpr unsigned int minAddressSpace = 10e3; // bytes
     static constexpr unsigned int maxAddressSpace = 200e3; // bytes
 };
 
-template<> struct Traits<Debug> { // CHANGE THE DEBUG LEVEL HERE SETTING THE LEVELS YOU WANT TO SHOW
+template<> struct Traits<Debug> 
+{ // CHANGE THE DEBUG LEVEL HERE SETTING THE LEVELS YOU WANT TO SHOW
     // debug levels
     static const bool error = 0;
-    static const bool warning =1;
+    static const bool warning = 0;
     static const bool trace = 0; //false;
     static const bool info = 0; //true;
     static const bool fine = 0; //true;
@@ -199,12 +229,14 @@ template<> struct Traits<Debug> { // CHANGE THE DEBUG LEVEL HERE SETTING THE LEV
     static const bool pauseOnEveryEvent = 0; //true;
 };
 
-template<> struct Traits<CPU> {
+template<> struct Traits<CPU> 
+{
     static constexpr double context_switch_overhead = 1.0; // time units
     static constexpr double timer_interrupt_period = 100.0; // time units
 };
 
-template<> struct Traits<Thread> {
+template<> struct Traits<Thread> 
+{
     static constexpr double minCpuBurst = 200.0;   // time units
     static constexpr double maxCpuBurst = 500.0;   // time units
     static constexpr int maxBursts = 5;            // CPUBurst
@@ -212,16 +244,19 @@ template<> struct Traits<Thread> {
     static constexpr int maxThreadsPerProcess = 1; // threads
 };
 
-template<> struct Traits<Model> {
+template<> struct Traits<Model> 
+{
     static constexpr double simulationLength = 5000.0; // time units
     static constexpr double firstCreation = 0.0;       // time units
 };
 
-template<> struct Traits<MemoryManager> {
+template<> struct Traits<MemoryManager> 
+{
     static constexpr unsigned int physicalMemorySize = 1e6; // bytes
 };
 
-template<> struct Traits<Scheduler> {
+template<> struct Traits<Scheduler> 
+{
     static constexpr double timeSlice = 300.0; // time units
 };
 
