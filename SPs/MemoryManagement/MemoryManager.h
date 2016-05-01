@@ -8,8 +8,11 @@
 
 #ifndef MEMORYMANAGER_H
 #define	MEMORYMANAGER_H
+#include <set>
 
-class Partition {
+
+class Partition
+{
 public:
 
     Partition(unsigned int beginAddress, unsigned int endAddress, bool isFree) {
@@ -37,25 +40,111 @@ private: // do not change
 private:
     // INSERT YOUR CODE HERE
     // ...
+public:
+    bool operator<(const Partition& p)const{
+        return this->_beginAddress < p._beginAddress;
+    }
 };
 
+
+
+typedef std::set<Partition*, bool (*)(Partition*,Partition*)> PartitionList;
+
+
 enum MemoryAllocationAlgorithm {FirstFit, NextFit, BestFit, WorstFit};
+
+class Algorithm;
+
+
 
 class MemoryManager {
 public: // do not change
     MemoryManager(MemoryAllocationAlgorithm algorithm);
     MemoryManager(const MemoryManager& orig);
     virtual ~MemoryManager();
+    
 public: // do not change
     Partition* allocateMemory(unsigned int size);
     void deallocateMemory(Partition* partition);
     void showMemory();
     unsigned int getNumPartitions();
     Partition* getPartition(unsigned int index);
-private: // private attributes and methods
-    // INSERT YOUR CODE HERE
-    // ...
+    
+    
+    
+    ///extensão de classe na marra
+    
+protected: // private attributes and methods
+    PartitionList partitions;
+    Algorithm* functions;
+    MemoryAllocationAlgorithm algorithm;
+    
+    friend Algorithm;
+public:
+  const unsigned int maxAddress=0;
+    
 };
+
+
+
+struct Algorithm
+{
+    /**
+     * Creates the memory allocation algorithm cumbersome high tight strategy
+     * object.
+     * 
+     * @param memoryManager    an MemoryManager class object
+     */
+    Algorithm(MemoryManager* memoryManager);
+    
+    ~Algorithm();
+    PartitionList* getPartitions();
+    virtual Partition* allocateMemory( unsigned int size ) = 0;
+    
+    
+protected:
+    
+    MemoryManager* memoryManager;
+    
+};
+
+
+
+struct _FirstFit: public Algorithm
+{
+    using::Algorithm::Algorithm;
+    
+    virtual Partition* allocateMemory(unsigned int size);
+
+};
+
+struct _NextFit: public Algorithm
+{
+    using::Algorithm::Algorithm;
+    
+    virtual Partition* allocateMemory(unsigned int size);
+    private:
+    int lastIndex=0;
+ 
+};
+
+struct _WorstFit: public Algorithm
+{
+    using::Algorithm::Algorithm;
+    
+    virtual Partition* allocateMemory(unsigned int size);
+     
+};
+
+struct _BestFit: public Algorithm
+{
+    using::Algorithm::Algorithm;
+    
+    virtual Partition* allocateMemory(unsigned int size);
+
+};
+
+
 
 #endif	/* MEMORYMANAGER_H */
 
