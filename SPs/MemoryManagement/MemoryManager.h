@@ -24,10 +24,13 @@ class Partition
 public:
     
     /**
+     * To creates an partition object, which can be initially allocated or free to be used.
+     * The partition system uses "unsigned int" (starting at 0) values to allocate/create
+     * partitions.
      * 
-     * @param 
-     * @param 
-     * @param
+     * @param beginAddress          the partition beginning address.
+     * @param endAddress            the partition ending address.
+     * @param isFree                whether this partition is free (true) or filled (false).
      */
     Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree );
     
@@ -49,6 +52,11 @@ public: // do not change
      */
     unsigned int getLength() const; // The implicit "this" pointer is const-qualified
     
+    /**
+     * Implements the < "less than" operator to this new Partition type.
+     */
+    bool operator<( const Partition& p ) const; // The implicit "this" pointer is const-qualified
+    
     
 private: // do not change
     
@@ -68,16 +76,6 @@ private: // do not change
     bool _isFree;
     
     
-private:
-    // INSERT YOUR CODE HERE
-    // ...
-    
-public:
-    
-    /**
-     * 
-     */
-    bool operator<( const Partition& p ) const; // The implicit "this" pointer is const-qualified
 };
 
 

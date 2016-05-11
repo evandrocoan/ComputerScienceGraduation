@@ -47,7 +47,7 @@
  * 
  * 63  - Enables all debugging levels (111111).
  */
-const int g_debugLevel = 2 + 32;
+const int g_debugLevel = 32;
 
 #endif
 

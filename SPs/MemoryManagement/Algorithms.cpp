@@ -328,7 +328,7 @@ Partition* _BestFit::allocateMemory( unsigned int size )
 {
     Partition* novo;
     
-    DEBUGGERLN( 2, "I AM ENTERING IN _BestFit::allocateMemory(1)" );
+    DEBUGGERLN( 2 + 32, "I AM ENTERING IN _BestFit::allocateMemory(1)" );
     
     auto part = getPartitions();
     
