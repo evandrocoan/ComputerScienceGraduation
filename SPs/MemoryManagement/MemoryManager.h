@@ -79,21 +79,21 @@ private: // do not change
 };
 
 
-/**
- * 
- */
-typedef std::set<Partition*, bool ( * )( Partition*,Partition* )> PartitionList;
-
-/**
- * 
- */
-enum MemoryAllocationAlgorithm {FirstFit, NextFit, BestFit, WorstFit};
-
 
 /**
  * 
  */
 class Algorithm;
+
+/**
+ * 
+ */
+typedef std::set< Partition*, bool ( * )( Partition*, Partition* ) > PartitionList;
+
+/**
+ * 
+ */
+enum MemoryAllocationAlgorithm {FirstFit, NextFit, BestFit, WorstFit};
 
 
 
@@ -152,8 +152,6 @@ public: // do not change
      */
     Partition* getPartition( unsigned int index );
     
-    ///extensão de classe na marra
-    
     
 protected: // private attributes and methods
     
@@ -183,7 +181,7 @@ public:
     /**
      * 
      */
-    const unsigned int maxAddress=0;
+    const unsigned int maxAddress = 0;
     
     
 };

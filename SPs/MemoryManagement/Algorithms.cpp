@@ -26,9 +26,9 @@ Algorithm::~Algorithm()
 /**
  * @see Algorithm::getPartitions() member class declaration.
  */
-PartitionList* Algorithm::getPartitions() 
+PartitionList* Algorithm::getPartitions()
 {
-    return &( memoryManager->partitions );
+    return &( this->memoryManager->partitions );
 }
 
 
@@ -42,7 +42,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _FirstFit::allocateMemory(1)" );
     
-    auto part = getPartitions();
+    auto part = this->getPartitions();
     
     if( part->size() ==0 ) 
     {
@@ -127,7 +127,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _NextFit::allocateMemory(1)" );
     
-    auto part = getPartitions();
+    auto part = this->getPartitions();
     
     /*
      * Verificamos se não ha particoes, pra inserirmos no começo
@@ -256,7 +256,7 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _WorstFit::allocateMemory(1)" );
     
-    auto part = getPartitions();
+    auto part = this->getPartitions();
     
     if( part->size() ==0 ) 
     {
@@ -326,19 +326,16 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
  */
 Partition* _BestFit::allocateMemory( unsigned int size ) 
 {
-    Partition* novo;
-    
     DEBUGGERLN( 2 + 32, "I AM ENTERING IN _BestFit::allocateMemory(1)" );
     
-    auto part = getPartitions();
+    Partition* novo;
+    auto part = this->getPartitions();
     
-    DEBUGGERLN( 32, "( allocateMemory ) size: %d", size );
-    DEBUGGERLN( 32, "( allocateMemory ) part->size(): %d", part->size() );
+    DEBUGGERLN( 32, "( allocateMemory ) size: %d, part->size(): %d,", size, part->size() );
     
-    if( part->size() == 0 ) 
+    if( part->size() == 0 )
     {
         novo = new Partition( 0, size - 1, false );
-        
         part->insert( novo );
         
         return novo;
@@ -348,6 +345,8 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     auto index    = part->begin();
     int  partSize = 0 + ( *index )->getBeginAddress();
     
+    DEBUGGERLN( 32, "( allocateMemory ) partSize: %d, index: %d, pos: %d,", partSize, index, pos );
+    
     if( partSize >= size )
     {
         pos =0;
@@ -356,17 +355,18 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     int holeSize;
     int end;
     
-    int beg = 0;
+    int beg              = 0;
+    int forPartitionSize = part->size() - 1;
     
-    for( int i = 0; i< part->size() -1; ++i ) 
+    for( int i = 0; i < forPartitionSize; ++i )
     {
         end = ( *index )->getEndAddress();
-        
         index++;
         
-        beg = ( *index )->getBeginAddress();
+        beg      = ( *index )->getBeginAddress();
+        holeSize = ( beg - end ) + 1;
         
-        holeSize = ( beg- end ) +1;
+        DEBUGGERLN( 32, "( allocateMemory|for ) end: %d, index: %d, beg: %d, holeSize: %d,", end, index, beg, holeSize );
         
         if( holeSize >= size ) 
         {
@@ -378,9 +378,13 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         }
     }
     
+    DEBUGGERLN( 32, "( allocateMemory ) end: %d, index: %d, beg: %d, holeSize: %d,", end, index, beg, holeSize );
+    
     beg      = memoryManager->maxAddress;
     end      = ( *index )->getBeginAddress();
     holeSize = ( beg- end ) +1;
+    
+    DEBUGGERLN( 32, "( allocateMemory ) end: %d, index: %d, beg: %d, holeSize: %d,", end, index, beg, holeSize );
     
     if( holeSize >= size ) 
     {
@@ -391,14 +395,17 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         }
     }
     
+    DEBUGGERLN( 32, "( allocateMemory ) end: %d, index: %d, beg: %d, holeSize: %d,", end, index, beg, holeSize );
+    
     if( pos==-1 )
     {
         return 0;
     }
     
-    novo = new Partition( pos,size -1,false );
-    
+    novo = new Partition( pos, size - 1, false );
     part->insert( novo );
+    
+    DEBUGGERLN( 32, "( allocateMemory ) size: %d, part->size(): %d,", size, part->size() );
     
     return novo;
 }

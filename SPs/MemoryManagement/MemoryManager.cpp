@@ -22,7 +22,15 @@
 
 using namespace std;
 
-static auto comp=[]( Partition* p, Partition* q ){return *p < *q ;};
+
+
+/**
+ * 
+ */
+static auto comp = [] ( Partition* p, Partition* q )
+{
+    return *p < *q ;
+};
 
 
 
@@ -160,8 +168,6 @@ void MemoryManager::showMemory()
 {
     // INSERT YOUR CODE TO SHOW THE MEMORY MAP, IN THE FOLLOWING FORMAT
     // <beginAddress>-<endAddress>: <FREE|ALLOCATED> <size>
-    
-    
     // Exemplo:
     /*
       0-1499:FREE 1500
