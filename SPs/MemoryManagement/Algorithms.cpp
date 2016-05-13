@@ -41,20 +41,20 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     DEBUGGERLN( 2 + 32, "I AM ENTERING IN _BestFit::allocateMemory(1)" );
     
     Partition* novo;
-    auto part = this->getPartitions();
+    auto partitionsObject = this->getPartitions();
     
-    DEBUGGERLN( 32, "( allocateMemory ) size: %d, part->size(): %d,", size, part->size() );
+    DEBUGGERLN( 32, "( allocateMemory ) size: %d, partitionsObject->size(): %d,", size, partitionsObject->size() );
     
-    if( part->size() == 0 )
+    if( partitionsObject->size() == 0 )
     {
         novo = new Partition( 0, size - 1, false );
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         return novo;
     }
     
     int  pos      = -1;
-    auto index    = part->begin();
+    auto index    = partitionsObject->begin();
     int  partSize = 0 + ( *index )->getBeginAddress();
     
     DEBUGGERLN( 32, "( allocateMemory ) partSize: %d, index: %d, pos: %d,", partSize, index, pos );
@@ -68,7 +68,7 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     int end;
     
     int beg              = 0;
-    int forPartitionSize = part->size() - 1;
+    int forPartitionSize = partitionsObject->size() - 1;
     
     for( int i = 0; i < forPartitionSize; ++i )
     {
@@ -115,9 +115,9 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     }
     
     novo = new Partition( pos, size - 1, false );
-    part->insert( novo );
+    partitionsObject->insert( novo );
     
-    DEBUGGERLN( 32, "( allocateMemory ) size: %d, part->size(): %d,", size, part->size() );
+    DEBUGGERLN( 32, "( allocateMemory ) size: %d, partitionsObject->size(): %d,", size, partitionsObject->size() );
     
     return novo;
 }
@@ -133,18 +133,18 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _FirstFit::allocateMemory(1)" );
     
-    auto part = this->getPartitions();
+    auto partitionsObject = this->getPartitions();
     
-    if( part->size() ==0 ) 
+    if( partitionsObject->size() ==0 ) 
     {
         novo = new Partition( 0,size,false );
         
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         return novo;
     }
     
-    auto index = part->begin();
+    auto index = partitionsObject->begin();
     
     int partSize = 0 + ( *index )->getBeginAddress();
     int pos      = -1;
@@ -154,14 +154,14 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
         pos  = 0;
         novo = new Partition( pos,size,false );
         
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         return novo;
     }
     
     int holeSize, end, beg =0;
     
-    for( int i=0; i< part->size() -1;i++ ) 
+    for( int i=0; i< partitionsObject->size() -1;i++ ) 
     {
         end = ( *index )->getEndAddress();
         
@@ -176,7 +176,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
             pos  = beg;
             novo = new Partition( pos,size,false );
             
-            part->insert( novo );
+            partitionsObject->insert( novo );
             
             return novo;
         }
@@ -192,7 +192,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
         pos  = beg;
         novo = new Partition( pos,size,false );
         
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         return novo;
         
@@ -202,7 +202,7 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
     
     novo = new Partition( pos,size,false );
     
-    part->insert( novo );
+    partitionsObject->insert( novo );
     
     return novo;
 }
@@ -218,24 +218,24 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _NextFit::allocateMemory(1)" );
     
-    auto part = this->getPartitions();
+    auto partitionsObject = this->getPartitions();
     
     /*
      * Verificamos se não ha particoes, pra inserirmos no começo
      */
-    if( part->size() == 0 ) 
+    if( partitionsObject->size() == 0 ) 
     {
         novo = new Partition( 0,size,false );
-        part->insert( novo );
+        partitionsObject->insert( novo );
         return novo;
     }
     
     /*
      * Movemos o interator até o ultimo lugar que encontramos lugar vazio
      */
-    auto index = part->begin();
+    auto index = partitionsObject->begin();
     
-    for( int i=0; i<lastIndex &&i < part->size();i++ );
+    for( int i=0; i<lastIndex &&i < partitionsObject->size();i++ );
     
     /* 
      * Aqui Verificamos se achamos um espaço vazio entre o inicio da memoria até 
@@ -248,7 +248,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     {
         pos  = 0;
         novo = new Partition( pos,size,false );
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         lastIndex= 0;
         
@@ -260,7 +260,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     /*
      * Aqui procuramos um espaço vazio entre as particoes, varrendo nossa lista
      */
-    for( int i=lastIndex; i< part->size() -1;i++ ) 
+    for( int i=lastIndex; i< partitionsObject->size() -1;i++ ) 
     {
         end = ( *index )->getEndAddress();
         
@@ -274,7 +274,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
         {
             pos =beg;
             novo = new Partition( pos,size,false );
-             part->insert( novo );
+             partitionsObject->insert( novo );
                lastIndex= i;
             return novo;
         }
@@ -292,7 +292,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
         pos  = beg;
         novo = new Partition( pos,size,false );
         
-        part->insert( novo );
+        partitionsObject->insert( novo );
          
         return novo;
         
@@ -301,7 +301,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     /*
      * No caso do next fit, não procuramos ainda nas particoes antes do lastIndex, então vamos procurar agora
      */
-     index = part->begin();
+     index = partitionsObject->begin();
      
      for( int i=0; i< lastIndex;i++ ) 
      {
@@ -319,7 +319,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
             pos  = beg;
             novo = new Partition( pos,size,false );
             
-            part->insert( novo );
+            partitionsObject->insert( novo );
             
             lastIndex= i;
             
@@ -331,7 +331,7 @@ Partition* _NextFit::allocateMemory( unsigned int size )
     
     novo = new Partition( pos,size,false );
     
-    part->insert( novo );
+    partitionsObject->insert( novo );
     
     return novo;
 }
@@ -347,18 +347,18 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( 2, "I AM ENTERING IN _WorstFit::allocateMemory(1)" );
     
-    auto part = this->getPartitions();
+    auto partitionsObject = this->getPartitions();
     
-    if( part->size() ==0 ) 
+    if( partitionsObject->size() ==0 ) 
     {
         novo = new Partition( 0, size-1 ,false );
         
-        part->insert( novo );
+        partitionsObject->insert( novo );
         
         return novo;
     }
     
-    auto index = part->begin();
+    auto index = partitionsObject->begin();
     
     int partSize = 0 + ( *index )->getBeginAddress();
     int pos = -1;
@@ -367,7 +367,7 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
     
     int holeSize,end,beg =0;
     
-    for( int i=0; i< part->size() -1;i++ ) 
+    for( int i=0; i< partitionsObject->size() -1;i++ ) 
     {
         end = ( *index )->getEndAddress();
         
@@ -405,7 +405,7 @@ Partition* _WorstFit::allocateMemory( unsigned int size )
     
     novo = new Partition( pos,size-1,false );
     
-    part->insert( novo );
+    partitionsObject->insert( novo );
     
     return novo;
 }
