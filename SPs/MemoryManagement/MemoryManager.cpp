@@ -12,6 +12,7 @@
 
 
 #include <iostream>
+#include <algorithm>
 
 #include "Debug.h"
 #include "MemoryManager.h"
@@ -19,19 +20,7 @@
 #include "Traits.h"
 
 
-
 using namespace std;
-
-
-
-/**
- * 
- */
-static auto comp = [] ( Partition* p, Partition* q )
-{
-    return *p < *q ;
-};
-
 
 
 /**
@@ -78,14 +67,24 @@ bool Partition::operator<( const Partition& p ) const
     return this->_beginAddress < p._beginAddress;
 }
 
+/**
+ * @see Partition::operator==( const Partition& ) member class declaration.
+ */
+bool Partition::operator==( const Partition& p ) const
+{
+    return this->_beginAddress == p._beginAddress;
+}
+
 
 
 /**
  * @see MemoryManager::MemoryManager( MemoryAllocationAlgorithm ) member class declaration.
  */
-MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm ):
-algorithm( algorithm ), partitions( comp ), maxAddress( Traits<MemoryManager>::physicalMemorySize )
+MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm ) : 
+maxAddress( Traits<MemoryManager>::physicalMemorySize )
 {
+    this->algorithm  = algorithm;
+    
     switch( algorithm )
     {
        case FirstFit:{functions= new _FirstFit( this );   break;}
@@ -129,11 +128,10 @@ Partition* MemoryManager::allocateMemory( unsigned int size )
  */
 void MemoryManager::deallocateMemory( Partition* partition )
 {
-   Debug::cout( Debug::Level::trace, "MemoryManager::deallocateMemory( " + std::to_string( reinterpret_cast<unsigned long> ( partition ) ) + " )" );
-   
-   auto ind = partitions.find( partition );
-   
-   partitions.erase( ind );
+    Debug::cout( Debug::Level::trace, "MemoryManager::deallocateMemory( " + std::to_string( reinterpret_cast<unsigned long> ( partition ) ) + " )" );
+    
+    auto foundElementIterator = std::find( this->partitions.begin(), this->partitions.end(), *partition );
+    partitions.erase( foundElementIterator );
 }
 
 /**
@@ -149,16 +147,14 @@ unsigned int MemoryManager::getNumPartitions()
  */
 Partition* MemoryManager::getPartition( unsigned int index )
 {
-    int i = 0;
+    Partition* returnPartition;
     
-    for( auto x: partitions )
+    if( index > this->partitions.size() )
     {
-        if( i == index ) return x;
-        
-        i++;
+        return NULL;
     }
     
-    return 0;
+    return &( *( std::next( this->partitions.begin(), index ) ) );
 }
 
 /**
@@ -189,7 +185,7 @@ void MemoryManager::showMemory()
     
     auto index = partitions.begin();
     
-    int start= ( *index )->getBeginAddress();
+    int start= ( *index ).getBeginAddress();
     
     if( start > 1 )
     {
@@ -201,14 +197,14 @@ void MemoryManager::showMemory()
     
     for( int i = 0; i< partitions.size() - 1; i++ )
     {
-        end = ( *index )->getEndAddress();
+        end = ( *index ).getEndAddress();
         
         // cout<< ( *index )->getBeginAddress() <<"-"<<end<<":ALLOCATED "<<( *index )->getLength()<<endl;
-        FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index )->getBeginAddress(), end, ( *index )->getLength() );
+        FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index ).getBeginAddress(), end, ( *index ).getLength() );
         
         index++;
         
-        beg      = ( *index )->getBeginAddress();
+        beg      = ( *index ).getBeginAddress();
         holeSize = ( beg- end ) + 1;
         
         if( holeSize <= 1 )
@@ -217,10 +213,10 @@ void MemoryManager::showMemory()
         }
     }
     
-    end = ( *index )->getBeginAddress();
+    end = ( *index ).getBeginAddress();
     
     // cout<< ( *index )->getBeginAddress() <<"-"<<end<<":ALLOCATED "<<( *index )->getLength()<<endl;
-    FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index )->getBeginAddress(), end, ( *index )->getLength() );
+    FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index ).getBeginAddress(), end, ( *index ).getLength() );
     
     beg      = maxAddress;
     holeSize = ( beg - end )+1;

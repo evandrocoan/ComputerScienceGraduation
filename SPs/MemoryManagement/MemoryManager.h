@@ -12,7 +12,9 @@
 #ifndef MEMORYMANAGER_H
 #define	MEMORYMANAGER_H
 
-#include <set>
+
+#include <list>
+#include <limits.h>
 
 
 
@@ -34,9 +36,6 @@ public:
      */
     Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree );
     
-    
-public: // do not change
-    
     /**
      * 
      */
@@ -57,8 +56,13 @@ public: // do not change
      */
     bool operator<( const Partition& p ) const; // The implicit "this" pointer is const-qualified
     
+    /**
+     * Implements the == "equal" operator to this new Partition type.
+     */
+    bool operator==( const Partition& p ) const; // The implicit "this" pointer is const-qualified
     
-private: // do not change
+    
+private:
     
     /**
      * 
@@ -88,7 +92,7 @@ class Algorithm;
 /**
  * 
  */
-typedef std::set< Partition*, bool ( * )( Partition*, Partition* ) > PartitionList;
+typedef std::list< Partition > PartitionList;
 
 /**
  * 
@@ -102,7 +106,22 @@ enum MemoryAllocationAlgorithm {FirstFit, NextFit, BestFit, WorstFit};
  */
 class MemoryManager
 {
-public: // do not change
+public:
+    
+    /**
+     * 
+     */
+    friend Algorithm;
+    
+    /**
+     * 
+     */
+    PartitionList partitions;
+    
+    /**
+     * 
+     */
+    const unsigned int maxAddress = UINT_MAX;
     
     /**
      * 
@@ -120,9 +139,6 @@ public: // do not change
      * 
      */
     virtual ~MemoryManager();
-    
-    
-public: // do not change
     
     /**
      * 
@@ -153,12 +169,7 @@ public: // do not change
     Partition* getPartition( unsigned int index );
     
     
-protected: // private attributes and methods
-    
-    /**
-     * 
-     */
-    PartitionList partitions;
+private:
     
     /**
      * 
@@ -169,20 +180,6 @@ protected: // private attributes and methods
      * 
      */
     MemoryAllocationAlgorithm algorithm;
-    
-    /**
-     * 
-     */
-    friend Algorithm;
-    
-    
-public:
-    
-    /**
-     * 
-     */
-    const unsigned int maxAddress = 0;
-    
     
 };
 
@@ -206,11 +203,6 @@ struct Algorithm
      * Safely destroy clean the allocated memory by this class.
      */
     ~Algorithm();
-    
-    /**
-     * 
-     */
-    PartitionList* getPartitions();
     
     /**
      * 
