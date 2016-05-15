@@ -11,9 +11,6 @@
 
 
 
-#include <iostream>
-#include <algorithm>
-
 #include "Debug.h"
 #include "MemoryManager.h"
 #include "Simulator.h"
@@ -70,7 +67,7 @@ bool Partition::operator<( const Partition& p ) const
 /**
  * @see Partition::operator==( const Partition& ) member class declaration.
  */
-bool Partition::operator==( const Partition& p ) const
+bool Partition::operator==( const Partition& p ) const // note the implicit "this" pointer is const-qualified
 {
     return this->_beginAddress == p._beginAddress;
 }
@@ -80,17 +77,30 @@ bool Partition::operator==( const Partition& p ) const
 /**
  * @see MemoryManager::MemoryManager( MemoryAllocationAlgorithm ) member class declaration.
  */
-MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm ) : 
-maxAddress( Traits<MemoryManager>::physicalMemorySize )
+MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm )
 {
-    this->algorithm  = algorithm;
-    
     switch( algorithm )
     {
-       case FirstFit:{functions= new _FirstFit( this );   break;}
-       case NextFit:{functions= new _NextFit( this );   break;}
-       case BestFit:{functions= new _BestFit( this );   break;}
-       case WorstFit:{functions= new _WorstFit( this );   break;}
+        case FirstFit:
+        {
+            currentStrategy = new _FirstFit();
+            break;
+        }
+        case NextFit:
+        {
+            currentStrategy = new _NextFit();
+            break;
+        }
+        case BestFit:
+        {
+            currentStrategy = new _BestFit();
+            break;
+        }
+        case WorstFit:
+        {
+            currentStrategy = new _WorstFit();
+            break;
+        }
     }
     
     DEBUGGERLN( 4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER" );
@@ -101,6 +111,7 @@ maxAddress( Traits<MemoryManager>::physicalMemorySize )
  */
 MemoryManager::MemoryManager( const MemoryManager& orig )
 {
+    this->currentStrategy = orig.currentStrategy;
 }
 
 /**
@@ -108,9 +119,9 @@ MemoryManager::MemoryManager( const MemoryManager& orig )
  */
 MemoryManager::~MemoryManager()
 {
-      delete( functions );
-      
-      DEBUGGERLN( 4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER \n\nDESTRUCTING\n\n\n" );
+    delete currentStrategy;
+    
+    DEBUGGERLN( 4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER \n\nDESTRUCTING\n\n\n" );
 }
 
 /**
@@ -120,7 +131,7 @@ Partition* MemoryManager::allocateMemory( unsigned int size )
 {
     Debug::cout( Debug::Level::trace, "MemoryManager::allocateMemory( " + std::to_string( size ) + " )" );
     
-    return functions->allocateMemory( size );
+    return currentStrategy->allocateMemory( size );
 }
 
 /**
@@ -130,8 +141,7 @@ void MemoryManager::deallocateMemory( Partition* partition )
 {
     Debug::cout( Debug::Level::trace, "MemoryManager::deallocateMemory( " + std::to_string( reinterpret_cast<unsigned long> ( partition ) ) + " )" );
     
-    auto foundElementIterator = std::find( this->partitions.begin(), this->partitions.end(), *partition );
-    partitions.erase( foundElementIterator );
+    this->currentStrategy->deletePartition( partition );
 }
 
 /**
@@ -139,7 +149,7 @@ void MemoryManager::deallocateMemory( Partition* partition )
  */
 unsigned int MemoryManager::getNumPartitions()
 {
-    return partitions.size();
+    return this->currentStrategy->partitionListSize();
 }
 
 /**
@@ -147,14 +157,12 @@ unsigned int MemoryManager::getNumPartitions()
  */
 Partition* MemoryManager::getPartition( unsigned int index )
 {
-    Partition* returnPartition;
-    
-    if( index > this->partitions.size() )
+    if( index > this->getNumPartitions() )
     {
         return NULL;
     }
     
-    return &( *( std::next( this->partitions.begin(), index ) ) );
+    return this->currentStrategy->getPartition( index );
 }
 
 /**
@@ -162,50 +170,33 @@ Partition* MemoryManager::getPartition( unsigned int index )
  */
 void MemoryManager::showMemory()
 {
-    // INSERT YOUR CODE TO SHOW THE MEMORY MAP, IN THE FOLLOWING FORMAT
-    // <beginAddress>-<endAddress>: <FREE|ALLOCATED> <size>
-    // Exemplo:
-    /*
-      0-1499:FREE 1500
-      1500-1999:ALLOCATED 500
-      2000-2999:ALLOCATED 1000
-      3000-9999:FREE 7000
-      10000-19999:ALLOCATED 10000
-      20000-1000000:FREE 800000
-    */
-    
-    
-    if( partitions.size() == 0 )
+    if( this->currentStrategy->partitionListSize() == 0 )
     {
-        // cout<<"0-"<<( maxAddress-1 )<<":FREE "<<maxAddress<<endl;
         FPRINTLN( 16, "0-%d:FREE %d", ( maxAddress - 1 ), maxAddress );
-        
         return;
     }
     
-    auto index = partitions.begin();
+    int end;
+    int holeSize;
     
-    int start= ( *index ).getBeginAddress();
+    int  beg                    = 0;
+    auto currentElementIterator = this->currentStrategy->getPartitionsListIterator();
+    int  start                  = ( *currentElementIterator ).getBeginAddress();
     
     if( start > 1 )
     {
-        // cout<<"0-"<<start-1<<":FREE "<<start<<endl;
         FPRINTLN( 16, "0-%d:FREE %d", start-1, start );
     }
     
-    int holeSize, end, beg =0;
-    
-    for( int i = 0; i< partitions.size() - 1; i++ )
+    for( int i = 0; i < this->currentStrategy->partitionListSize() - 1; i++ )
     {
-        end = ( *index ).getEndAddress();
+        end = ( *currentElementIterator ).getEndAddress();
+        FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *currentElementIterator ).getBeginAddress(), end, ( *currentElementIterator ).getLength() );
         
-        // cout<< ( *index )->getBeginAddress() <<"-"<<end<<":ALLOCATED "<<( *index )->getLength()<<endl;
-        FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index ).getBeginAddress(), end, ( *index ).getLength() );
+        currentElementIterator++;
         
-        index++;
-        
-        beg      = ( *index ).getBeginAddress();
-        holeSize = ( beg- end ) + 1;
+        beg      = ( *currentElementIterator ).getBeginAddress();
+        holeSize = ( beg - end ) + 1;
         
         if( holeSize <= 1 )
         {
@@ -213,17 +204,14 @@ void MemoryManager::showMemory()
         }
     }
     
-    end = ( *index ).getBeginAddress();
-    
-    // cout<< ( *index )->getBeginAddress() <<"-"<<end<<":ALLOCATED "<<( *index )->getLength()<<endl;
-    FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *index ).getBeginAddress(), end, ( *index ).getLength() );
+    end = ( *currentElementIterator ).getBeginAddress();
+    FPRINTLN( 16, "%d-%d:ALLOCATED %d", ( *currentElementIterator ).getBeginAddress(), end, ( *currentElementIterator ).getLength() );
     
     beg      = maxAddress;
     holeSize = ( beg - end )+1;
         
     if( holeSize <= 1 )
     {
-        // cout<< ( end+1 ) <<"-"<<( beg )<<":FREE "<<holeSize<<endl;
         FPRINTLN( 16, "%d-%d:FREE %d", end + 1, beg, holeSize );
     }
 }
