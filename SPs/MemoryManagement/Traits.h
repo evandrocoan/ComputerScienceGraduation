@@ -29,7 +29,7 @@
  *  0   - Disables this feature.
  *  1   - Normal debug.
  */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 
 
@@ -42,10 +42,11 @@
  * 4   - I AM IN HERER MESSAGE.
  * 8   - Partitioning creation.
  * 16  - Show the teacher required output.
- * 32  - _BestFit::allocateMemory( 1 ) debugging.
+ * 32  - _BestFit::allocateMemory(1) debugging.
+ * 64  - MemoryManager::showMemory(0) debugging.
  * 
  * 
- * 63  - Enables all debugging levels (111111).
+ * 127  - Enables all debugging levels (111111).
  */
 const int g_debugLevel = 32;
 
@@ -102,7 +103,7 @@ template<> struct Traits<Model>
     static constexpr double firstCreation = 0.0;       // time units
 };
 
-template<> struct Traits<MemoryManager> 
+template<> struct Traits<MemoryManager>
 {
     static constexpr unsigned int physicalMemorySize = 1e6; // bytes
 };

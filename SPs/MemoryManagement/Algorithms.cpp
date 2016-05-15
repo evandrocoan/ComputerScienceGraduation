@@ -97,9 +97,10 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     for( partitionIndex = 1; partitionIndex < partitionsListSize; ++partitionIndex )
     {
         DEBUGGERLN( 32, "( allocateMemory|for ) partitionIndex: %d,", partitionIndex );
-        currentPartition = &( *partitionsListIterator );
         
+        currentPartition = &( *partitionsListIterator );
         ++partitionsListIterator;
+        
         DEBUGGERLN( 32, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
                                                 currentPartition->getBeginAddress(),       currentPartition->getEndAddress() );
         

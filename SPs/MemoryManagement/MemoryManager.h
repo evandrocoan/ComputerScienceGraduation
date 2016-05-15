@@ -14,7 +14,6 @@
 
 
 #include <list>
-#include <limits.h>
 #include <iostream>
 #include <algorithm>
 
@@ -118,13 +117,12 @@ enum MemoryAllocationAlgorithm {FirstFit, NextFit, BestFit, WorstFit};
 
 
 /**
- * Controls the memory allocations to this system. This used the delegation design pattern which uses
- * the 'Algorithm' strategy class to switch the allocation algorithm strategy during run time.
- * 
+ * Controls the memory allocations to this system. This used the delegation design pattern which
+ * uses the 'Algorithm' strategy class to switch the allocation algorithm strategy during run time.
  * The MemoryManager class is used as a controller to switch the proper algorithm to be used as the
  * allocation strategy.
  * 
- * @see ::MemoryAllocationAlgorithm enum for the allocations strategies.
+ * @see ::MemoryAllocationAlgorithm enum for the allocations strategies availables.
  */
 class MemoryManager
 {
@@ -133,7 +131,7 @@ public:
     /**
      * Specifies the maximum allocable address suported as the maximum unsigned integer value.
      */
-    static const unsigned int maxAddress = UINT_MAX;
+    static const unsigned int maxAddress;
     
     /**
      * Creates a new and clean memory schema given an allocation strategy.
@@ -144,11 +142,12 @@ public:
     MemoryManager( MemoryAllocationAlgorithm algorithm );
     
     /**
+     * To create a new MemoryManager object based on an existing MemoryManager Object. This new
+     * object created, keep all allocations as the existent given MemoryManager Object.
      * 
-     * 
-     * @param 
+     * @param source          an existing and properly initialized MemoryManager object.
      */
-    MemoryManager( const MemoryManager& orig );
+    MemoryManager( const MemoryManager& source );
     
     /**
      * Free the heap dynamic allocated memory on object destruction.
