@@ -251,7 +251,9 @@ struct Algorithm
     unsigned int partitionListSize();
     
     /**
-     * Obtains an partition from the partition list.
+     * Obtains an partition from the partition list. This caches the last returned partition, then
+     * it provide fast access to the partition before, last accessed and next partition to the index
+     * provided during the last access to this function.
      * 
      * @param index         the ith element on the partition list.
      * @return a pointer to the zero value when the allocation fails, otherwise the allocated Partition
@@ -285,7 +287,7 @@ protected:
     /**
      * 
      */
-    std::list< Partition >::const_iterator lastIteratorAccess;
+    std::list< Partition >::iterator lastIteratorAccess;
     
     /**
      * Add a new partition to the partitition list.

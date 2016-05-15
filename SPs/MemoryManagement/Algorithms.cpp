@@ -33,26 +33,21 @@ Partition* Algorithm::getPartition( unsigned int index )
 {
     if( -1 < index < this->partitionListSize() )
     {
-        switch( index )
+        if( index == this->lastIndexAccess + 1 )
         {
-            case this->lastIndexAccess - 1:
-            {
-                this->lastIteratorAccess = --( this->lastIteratorAccess );
-                break;
-            }
-            case this->lastIndexAccess:
-            {
-                break;
-            }
-            case this->lastIndexAccess + 1:
-            {
-                this->lastIteratorAccess = ++( this->lastIteratorAccess );
-                break;
-            }
-            default:
-            {
-                this->lastIteratorAccess = std::next( this->partitionList.begin(), index );
-            }
+            this->lastIteratorAccess = ++( this->lastIteratorAccess );
+        }
+        else if( index == this->lastIndexAccess )
+        {
+            goto exit;
+        }
+        else if( index == this->lastIndexAccess - 1 )
+        {
+            this->lastIteratorAccess = --( this->lastIteratorAccess );
+        }
+        else
+        {
+            this->lastIteratorAccess = std::next( this->partitionList.begin(), index );
         }
         
         this->lastIndexAccess = index;
@@ -62,6 +57,7 @@ Partition* Algorithm::getPartition( unsigned int index )
         return NULL;
     }
     
+    exit:
     return &( *( this->lastIteratorAccess ) );
 }
 
