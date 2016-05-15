@@ -136,16 +136,16 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     partitionEndAddress = currentPartition->getEndAddress() + size;
     DEBUGGERLN( 32, "( allocateMemory|after for 3 )" );
     
-    if( partitionEndAddress < MemoryManager::maxAddress )
+    if( partitionEndAddress < MemoryManager::maxAddress + 1 )
     {
         DEBUGGERLN( 32, "( allocateMemory|after for 4 ) currentPartition->getEndAddress(): %d, \npartitionEndAddress: %d", currentPartition->getEndAddress(), partitionEndAddress );
+        
         novo = new Partition( currentPartition->getEndAddress() + 1, partitionEndAddress, false );
+        this->partitionList.push_back( *novo );
+        
+        DEBUGGERLN( 32, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
+                                            novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
     }
-    
-    this->partitionList.push_back( *novo );
-    
-    DEBUGGERLN( 32, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
-                                        novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
     
 #if defined DEBUG
     partitionIndex = 0;
