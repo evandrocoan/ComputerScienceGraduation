@@ -278,6 +278,16 @@ protected:
     PartitionList partitionList;
     
     /**
+     * 
+     */
+    unsigned int lastIndexAccess;
+    
+    /**
+     * 
+     */
+    std::list< Partition >::const_iterator lastIteratorAccess;
+    
+    /**
      * Add a new partition to the partitition list.
      * 
      * @param newPartition        a pointer to the Partition type.

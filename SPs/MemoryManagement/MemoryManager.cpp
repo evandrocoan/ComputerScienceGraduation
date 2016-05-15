@@ -175,6 +175,7 @@ Partition* MemoryManager::getPartition( unsigned int index )
  */
 void MemoryManager::showMemory()
 {
+    FPRINT( 16, "\n" );
     DEBUGGERLN( 2 + 64, "\nI AM ENTERING IN MemoryManager::showMemory(0)" );
     
     if( this->currentStrategy->partitionListSize() == 0 )
