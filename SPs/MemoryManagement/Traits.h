@@ -30,7 +30,7 @@
  *  1   - MemoryManager debugging.
  *  2   - Algorithm Strategy debugging.
  */
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 
 /**
@@ -39,8 +39,9 @@
 #if DEBUG_LEVEL > 0
 
 /**
- * A value like a127 (111111) for 'g_debugLevel' enables all debugging levels. Use 'g_debugMask'
- * as "a b c" to enable multiple masks simultaneously.
+ * A value like a127 (111111) for 'g_debugLevel' enables all 'a' mask debugging levels. To enable all
+ * debugging levels at once, use "a127 b127 c127" etc, supposing the level 64 is the highest to each
+ * mask 'a', 'b', 'c', etc.
  * 
  * MemoryManager debugging:
  * a0   - Disabled all debug.
@@ -56,8 +57,7 @@
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
  */
-const char* const g_debugMask  = "b";
-const int         g_debugLevel = 2;
+const char* const g_debugLevel = "a2 b2";
 
 
 #endif
@@ -89,7 +89,7 @@ template<> struct Traits<Debug>
     //
     static const bool showEntityAttributes = 0;
     static const bool showListOfEvents = 0;
-    static const bool pauseOnEveryEvent = 0; //true;
+    static const bool pauseOnEveryEvent = 1; //true;
 };
 
 template<> struct Traits<CPU> 
@@ -145,89 +145,97 @@ template<> struct Traits<Scheduler>
  */
 inline bool __computeDeggingLevel( const char* debugLevel )
 {
-#define COMPUTE_DEBUGGING_LEVEL_DEBUG 0
+#define COMPUTE_DEBUGGING_LEVEL_DEBUG      0
+#define COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE 32
     
-    char* token;
-    char  inputLevelChar[32];
-    
-    int charIndex;
-    int readIndex;
-    int charCopyIndex;
-    int charTokenSize;
+    int inputLevel;
+    int builtInLevel;
     
     int inputLevelSize;
     int builtInLevelSize;
-    int inputLevel;
+    
+    int inputLevelTokenSize;
+    int builtInLevelTokenSize;
+    
+    char* inputLevelToken;
+    char* builtInLevelToken;
+    
+    char inputLevelChar  [ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
+    char builtInLevelChar[ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
     
     const char separator[2] = " ";
     
     inputLevelSize   = strlen( debugLevel );
-    builtInLevelSize = strlen( g_debugMask );
+    builtInLevelSize = strlen( g_debugLevel );
     
-    if( inputLevelSize < 2 )
+    if( 2 > inputLevelSize > COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE
+        || 2 > builtInLevelSize > COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE )
     {
-        std::cout << "ERROR while processing the DEBUG LEVEL: " << debugLevel << "! The mask is missing." << std::endl;
+        std::cout << "ERROR while processing the DEBUG LEVEL: " << debugLevel << std::endl;
+        std::cout << "! The masks sizes are " << inputLevelSize << " and " << builtInLevelSize;
+        std::cout << ", but they must to be between 1 and 32." << std::endl;
+        
         __printBacktrace();
+        exit( EXIT_FAILURE );
     }
     
     strcpy( inputLevelChar, debugLevel );
-    token = strtok( inputLevelChar, separator );
+    strcpy( builtInLevelChar, g_debugLevel );
     
     // So, how do we debug the debugger?
-    //
 #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
-    std::cout << "\ng_debugMask: " << g_debugMask << ", debugLevel: " << debugLevel << ", inputLevelSize: ";
-    std::cout << inputLevelSize << ", builtInLevelSize: " << builtInLevelSize << std::endl;
+    std::cout << "\ng_debugLevel: " << g_debugLevel << ", builtInLevelSize: " << builtInLevelSize ;
+    std::cout << ", debugLevel: " << debugLevel << ", inputLevelSize: " << inputLevelSize  << std::endl;
     
 #endif
     
-    for( charIndex = 0; charIndex < inputLevelSize; ++charIndex )
+    inputLevelToken = strtok( inputLevelChar, separator );
+    
+    do
     {
-        for( readIndex = 0; readIndex < builtInLevelSize; ++readIndex )
+        builtInLevelToken   = strtok( builtInLevelChar, separator );
+        inputLevelTokenSize = strlen( inputLevelToken );
+        
+        do
         {
+            builtInLevelTokenSize = strlen( builtInLevelToken );
+            
         #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
-            std::cout << "charIndex: " << charIndex << std::endl;
-            std::cout << "readIndex: " << readIndex << std::endl;
-            std::cout << "g_debugMask[ readIndex ]: " << g_debugMask[ readIndex ] << std::endl;
-            std::cout << "debugLevel[ charIndex ]: " << debugLevel[ charIndex ] << std::endl;
-            std::cout << "debugLevel[ charIndex - 1 ]: " << debugLevel[ charIndex - 1 ] << std::endl;
-            std::cout << "g_debugLevel: " << g_debugLevel << std::endl;
-            std::cout << "token: " << token << std::endl;
+            std::cout << "builtInLevelToken: " << builtInLevelToken << std::endl;
+            std::cout << "builtInLevelTokenSize: " << builtInLevelTokenSize << std::endl;
+            std::cout << "inputLevelToken: " << inputLevelToken << std::endl;
+            std::cout << "inputLevelTokenSize: " << inputLevelTokenSize << std::endl;
             
         #endif
-        
-            if( ( charTokenSize = strlen( token ) - 1 ) > 0
-                && isdigit( token[ 1 ] ) )
+            
+            if( inputLevelTokenSize > 1
+                && builtInLevelTokenSize > 1 )
             {
-                if( g_debugMask[ readIndex ] == token[ 0 ] )
+                if( isdigit( inputLevelToken[ 1 ] )
+                    && isdigit( builtInLevelToken[ 1 ] ) )
                 {
-                    for( charCopyIndex = 0; charCopyIndex < charTokenSize; ++charCopyIndex )
+                    if( builtInLevelToken[ 0 ] == inputLevelToken[ 0 ] )
                     {
-                        inputLevelChar[ charCopyIndex ] = token[ charCopyIndex + 1 ];
-                    }
-                    
-                    inputLevelChar[ charTokenSize ] = '\0';
-                    sscanf( inputLevelChar, "%d", &inputLevel );
-                    
-                #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
-                    std::cout << "inputLevelChar: " << inputLevelChar << ", charTokenSize: " << charTokenSize << std::endl;
-                    std::cout << "inputLevel: " << inputLevel << ", g_debugLevel: " << g_debugLevel << std::endl;
-                    
-                #endif
-                    
-                    if( ( inputLevel & g_debugLevel ) > 0 )
-                    {
-                        return true;
+                        sscanf( &inputLevelToken[ 1 ], "%d", &inputLevel );
+                        sscanf( &builtInLevelToken[ 1 ], "%d", &builtInLevel );
+                        
+                    #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
+                        std::cout << "inputLevel: " << inputLevel << std::endl;
+                        std::cout << "builtInLevel: " << builtInLevel << std::endl;
+                        
+                    #endif
+                        
+                        if( ( inputLevel & builtInLevel ) > 0 )
+                        {
+                            return true;
+                        }
                     }
                 }
             }
-        }
+            
+        } while( ( builtInLevelToken = strtok( NULL, separator ) ) != NULL );
         
-        if( ( token = strtok( NULL, separator ) ) == NULL )
-        {
-            break;
-        }
-    }
+    } while( ( inputLevelToken = strtok( NULL, separator ) ) != NULL );
     
     return false;
 }
@@ -237,7 +245,7 @@ inline bool __computeDeggingLevel( const char* debugLevel )
  */
 inline void __printBacktrace()
 {
-    #define BACKTRACE_SIZE 100
+#define BACKTRACE_SIZE 100
     
     int traceIndex;
     int traceLevels;
@@ -252,7 +260,8 @@ inline void __printBacktrace()
     
     if( strings == NULL )
     {
-        std::cout << "ERROR there are none backtrace_symbols!" << std::endl;
+        std::cout << "ERROR! We failure at failing!" << std::endl;
+        std::cout << "There are none backtrace_symbols!" << std::endl;
         exit( EXIT_FAILURE );
     }
     else
