@@ -84,6 +84,8 @@ const unsigned int MemoryManager::maxAddress = Traits<MemoryManager>::physicalMe
  */
 MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm )
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN MemoryManager::MemoryManager(1), MemoryAllocationAlgorithm: %d!", algorithm );
+    
     switch( algorithm )
     {
         case FirstFit:
@@ -106,9 +108,14 @@ MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm )
             currentStrategy = new _WorstFit();
             break;
         }
+        default:
+        {
+            FPRINT( a16, "\nERROR! Invalid MemoryAllocationAlgorithm num: %d", algorithm );
+            exit( EXIT_FAILURE );
+        }
     }
     
-    DEBUGGERLN( a4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER" );
+    DEBUGGERLN( a4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER Constructing..." );
 }
 
 /**
@@ -116,7 +123,8 @@ MemoryManager::MemoryManager( MemoryAllocationAlgorithm algorithm )
  */
 MemoryManager::MemoryManager( const MemoryManager& source )
 {
-    this->currentStrategy = source.currentStrategy;
+    DEBUGGERLN( a2, "I AM ENTERING IN MemoryManager::MemoryManager(1), THE COPY CONSTRUCTOR!" );
+    *( this->currentStrategy ) = *( source.currentStrategy );
 }
 
 /**
@@ -124,6 +132,7 @@ MemoryManager::MemoryManager( const MemoryManager& source )
  */
 MemoryManager::~MemoryManager()
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN MemoryManager::~MemoryManager(0)" );
     delete currentStrategy;
     
     DEBUGGERLN( a4, "\n\n\n\n\n\n\nI AM IN HERE %s \n\n\n\n\n\n\n", "In HERER \n\nDESTRUCTING\n\n\n" );
@@ -162,11 +171,6 @@ unsigned int MemoryManager::getNumPartitions()
  */
 Partition* MemoryManager::getPartition( unsigned int index )
 {
-    if( index > this->getNumPartitions() )
-    {
-        return NULL;
-    }
-    
     return this->currentStrategy->getPartition( index );
 }
 
@@ -187,23 +191,25 @@ void MemoryManager::showMemory()
     int64_t      holeSize;
     unsigned int nextStartAddress;
     
-    unsigned int partitionListSize      = this->currentStrategy->partitionListSize() - 1;
-    auto         currentElementIterator = this->currentStrategy->getPartitionsListIterator();
+    Partition*   currentPartition  = this->currentStrategy->getPartition( 0 );
+    unsigned int partitionListSize = this->currentStrategy->partitionListSize() - 1;
     
-    unsigned int currentStartAddress = ( *currentElementIterator ).getBeginAddress();
-    unsigned int currentEndAddress   = ( *currentElementIterator ).getEndAddress();
+    DEBUGGERLN( a32, "( showMemory ) before currentStartAddress = currentPartition->getBeginAddress();" );
+    
+    unsigned int currentStartAddress = currentPartition->getBeginAddress();
+    unsigned int currentEndAddress   = currentPartition->getEndAddress();
     
     if( currentStartAddress > 0 )
     {
         FPRINTLN( a16, "0-%u:FREE %u", currentStartAddress - 1, currentStartAddress );
     }
     
-    for( unsigned int partitionIndex = 0; partitionIndex < partitionListSize; partitionIndex++ )
+    for( unsigned int partitionIndex = 1; partitionIndex < partitionListSize; partitionIndex++ )
     {
-        FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, ( *currentElementIterator ).getLength() );
-        ++currentElementIterator;
+        FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
         
-        nextStartAddress = ( *currentElementIterator ).getBeginAddress();
+        currentPartition = this->currentStrategy->getPartition( partitionIndex );
+        nextStartAddress = currentPartition->getBeginAddress();
         holeSize         = nextStartAddress - currentEndAddress - 1;
         
         if( holeSize > 0 )
@@ -211,19 +217,19 @@ void MemoryManager::showMemory()
             FPRINTLN( a16, "%u-%u:FREE %i", currentEndAddress + 1, nextStartAddress - 1, holeSize );
         }
         
-        currentStartAddress = ( *currentElementIterator ).getBeginAddress();
-        currentEndAddress   = ( *currentElementIterator ).getEndAddress();
+        currentStartAddress = currentPartition->getBeginAddress();
+        currentEndAddress   = currentPartition->getEndAddress();
     }
     
-    FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, ( *currentElementIterator ).getLength() );
-    holeSize = MemoryManager::maxAddress - ( *currentElementIterator ).getEndAddress();
+    FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
+    holeSize = MemoryManager::maxAddress - currentPartition->getEndAddress();
     
-    DEBUGGERLN( a32, "( showMemory ) holeSize: %lld, \n( *currentElementIterator ).getEndAddress():%u, \nMemoryManager::maxAddress: %u,",
-                                    holeSize,         ( *currentElementIterator ).getEndAddress(),      MemoryManager::maxAddress );
+    DEBUGGERLN( a32, "( showMemory ) holeSize: %lld, \ncurrentPartition->getEndAddress():%u, \nMemoryManager::maxAddress: %u,",
+                                    holeSize,          currentPartition->getEndAddress(),      MemoryManager::maxAddress );
     
     if( holeSize > 0 )
     {
-        FPRINTLN( a16, "%u-%lld:FREE %lld", ( *currentElementIterator ).getEndAddress() + 1, MemoryManager::maxAddress, holeSize );
+        FPRINTLN( a16, "%u-%lld:FREE %lld", currentPartition->getEndAddress() + 1, MemoryManager::maxAddress, holeSize );
     }
 }
 

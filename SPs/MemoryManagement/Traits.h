@@ -50,14 +50,14 @@
  * a4   - I AM IN HERER MESSAGE.
  * a8   - Partitioning creation.
  * a16  - Show the teacher required output.
- * a32  - MemoryManager::showMemory(0) debugging.
+ * a32  - MemoryManager::showMemory(0) and Algorithm::getPartition(1) debugging.
  * 
  * Algorithm Strategy debugging:
  * b0   - Disabled all debug.
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 b2";
+const char* const g_debugLevel = "a2 b 1 a16";
 
 
 #endif
@@ -89,7 +89,7 @@ template<> struct Traits<Debug>
     //
     static const bool showEntityAttributes = 0;
     static const bool showListOfEvents = 0;
-    static const bool pauseOnEveryEvent = 1; //true;
+    static const bool pauseOnEveryEvent = 0; //true;
 };
 
 template<> struct Traits<CPU> 

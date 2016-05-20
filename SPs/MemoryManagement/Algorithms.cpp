@@ -6,9 +6,10 @@
 /**
  * @see Algorithm::Algorithm( MemoryManager* ) member class declaration.
  */
-Algorithm::Algorithm() 
+Algorithm::Algorithm() : partitionList(), lastIteratorAccess()
 {
-    DEBUGGERLN( b2, "I AM ENTERING IN Algorithm::Algorithm(0) THE CONSTRUTOR!" );
+    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::Algorithm(0) THE CONSTRUCTOR!" );
+    lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
 }
 
 /**
@@ -16,6 +17,7 @@ Algorithm::Algorithm()
  */
 Algorithm::~Algorithm() 
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::~Algorithm(0) THE DESTRUCTOR!" );
 }
 
 /**
@@ -23,6 +25,9 @@ Algorithm::~Algorithm()
  */
 void Algorithm::addPartition( Partition* newPartition )
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::addPartition(1)" );
+    
+    this->lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
     this->partitionList.push_back( *newPartition );
 }
 
@@ -31,22 +36,33 @@ void Algorithm::addPartition( Partition* newPartition )
  */
 Partition* Algorithm::getPartition( unsigned int index )
 {
+    DEBUGGERLN( a2 a32, "I AM ENTERING IN Algorithm::getPartition(1) | index: %d.", index );
+    DEBUGGERLN( a32, "I AM ENTERING IN Algorithm::getPartition(1) | this->partitionListSize(): %d, \nthis->lastIndexAccess: %d,",
+                                                                    this->partitionListSize(),       this->lastIndexAccess );
+    
     if( -1 < index < this->partitionListSize() )
     {
         if( index == this->lastIndexAccess + 1 )
         {
+            DEBUGGERLN( a32, "( getPartition ) exiting by index == + 1" );
+            DEBUGGERLN( a32, "( getPartition ) what is '( *this->lastIteratorAccess ).getEndAddress()'? %d,",
+                                                        ( *this->lastIteratorAccess ).getEndAddress() );
             this->lastIteratorAccess = ++( this->lastIteratorAccess );
         }
         else if( index == this->lastIndexAccess )
         {
+            DEBUGGERLN( a32, "( getPartition ) exiting by index ==" );
             goto exit;
         }
         else if( index == this->lastIndexAccess - 1 )
         {
+            DEBUGGERLN( a32, "( getPartition ) exiting by index == -1" );
+            DEBUGGERLN( a32, "( getPartition ) could I increment 'this->lastIteratorAccess'? %d,", ( *this->lastIteratorAccess ).getEndAddress() );
             this->lastIteratorAccess = --( this->lastIteratorAccess );
         }
         else
         {
+            DEBUGGERLN( a32, "( getPartition ) exiting by index == none" );
             this->lastIteratorAccess = std::next( this->partitionList.begin(), index );
         }
         
@@ -54,10 +70,16 @@ Partition* Algorithm::getPartition( unsigned int index )
     }
     else
     {
+        DEBUGGERLN( a32, "( getPartition ) returned NULL;" );
         return NULL;
     }
     
     exit:
+    DEBUGGERLN( a32, "( getPartition ) this->lastIteratorAccess: %d", this->lastIteratorAccess );
+    DEBUGGERLN( a32, "( getPartition ) this->lastIteratorAccess == this->partitionList.end(): %d",
+                                      this->lastIteratorAccess == this->partitionList.end() );
+    
+    DEBUGGERLN( a32, "( getPartition ) exiting by return &( *( this->lastIteratorAccess ) );" );
     return &( *( this->lastIteratorAccess ) );
 }
 
@@ -66,6 +88,9 @@ Partition* Algorithm::getPartition( unsigned int index )
  */
 void Algorithm::deletePartition( Partition* partition )
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::deletePartition(1)" );
+    
+    this->lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
     this->partitionList.erase( std::find( this->partitionList.begin(), this->partitionList.end(), *partition ) );
 }
 
@@ -74,15 +99,8 @@ void Algorithm::deletePartition( Partition* partition )
  */
 unsigned int Algorithm::partitionListSize()
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::partitionListSize(0)" );
     return this->partitionList.size();
-}
-
-/**
- * @see Algorithm::getPartitionsListIterator() member class declaration.
- */
-std::list< Partition >::const_iterator Algorithm::getPartitionsListIterator()
-{
-    return this->partitionList.cbegin();
 }
 
 
@@ -93,109 +111,6 @@ std::list< Partition >::const_iterator Algorithm::getPartitionsListIterator()
 Partition* _BestFit::allocateMemory( unsigned int size ) 
 {
     DEBUGGERLN( b2 + a2, "\nI AM ENTERING IN _NextFit::allocateMemory(1)" );
-    
-    Partition* novo = NULL;
-    DEBUGGERLN( b2, "( allocateMemory ) size: %d, this->partitionList.size(): %d,", size, this->partitionList.size() );
-    
-    if( this->partitionList.size() == 0 )
-    {
-        novo = new Partition( 0, size - 1, false );
-        this->addPartition( novo );
-        
-        DEBUGGERLN( b2, "( allocateMemory|size 0 ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d,",
-                                                novo->getBeginAddress(),       novo->getEndAddress() );
-        
-        return novo;
-    }
-    
-    unsigned int holeSize;
-    unsigned int partitionIndex;
-    unsigned int partitionEndAddress;
-    
-    Partition* currentPartition = NULL;
-    Partition* nextPartition    = NULL;
-    
-    auto          partitionsListIteratorEnd = this->partitionList.end();
-    auto          partitionsListIterator    = this->partitionList.begin();
-    unsigned int  partitionsListSize        = this->partitionList.size();
-    
-    DEBUGGERLN( b2, "( allocateMemory ) partitionsListSize: %d,", partitionsListSize );
-    
-    for( partitionIndex = 1; partitionIndex < partitionsListSize; ++partitionIndex )
-    {
-        DEBUGGERLN( b2, "( allocateMemory|for ) partitionIndex: %d,", partitionIndex );
-        
-        currentPartition = &( *partitionsListIterator );
-        ++partitionsListIterator;
-        
-        DEBUGGERLN( b2, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
-                                                currentPartition->getBeginAddress(),       currentPartition->getEndAddress() );
-        
-        nextPartition = &( *partitionsListIterator );
-        holeSize      = nextPartition->getBeginAddress() - currentPartition->getEndAddress() - 1;
-        
-        DEBUGGERLN( b2, "( allocateMemory|for ) nextPartition->getBeginAddress(): %d, \nnextPartition->getEndAddress(): %d, \nholeSize: %d,",
-                                                nextPartition->getBeginAddress(),       nextPartition->getEndAddress(),       holeSize );
-        
-        if( holeSize >= size )
-        {
-            DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE!" );
-            break;
-        }
-        
-        currentPartition = nextPartition;
-        
-        if( partitionsListIterator == partitionsListIteratorEnd )
-        {
-            DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY REACHING THE ITERATOR'S END!" );
-            break;
-        }
-    }
-    
-    DEBUGGERLN( b2, "( allocateMemory|after for 1 )" );
-    
-    if( currentPartition == NULL )
-    {
-        currentPartition = &( *partitionsListIterator );
-    }
-    
-    DEBUGGERLN( b2, "( allocateMemory|after for 2 )" );
-    
-    partitionEndAddress = currentPartition->getEndAddress() + size;
-    DEBUGGERLN( b2, "( allocateMemory|after for 3 )" );
-    
-    if( partitionEndAddress < MemoryManager::maxAddress + 1 )
-    {
-        DEBUGGERLN( b2, "( allocateMemory|after for 4 ) currentPartition->getEndAddress(): %d, \npartitionEndAddress: %d", currentPartition->getEndAddress(), partitionEndAddress );
-        
-        novo = new Partition( currentPartition->getEndAddress() + 1, partitionEndAddress, false );
-        this->partitionList.push_back( *novo );
-        
-        DEBUGGERLN( b2, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
-                                            novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
-    }
-    
-#if defined DEBUG
-    partitionIndex = 0;
-    
-    for( auto partition : this->partitionList )
-    {
-        DEBUGGERLN( b2, "( allocateMemory|DEBUG ) partitionIndex: %d, \npartition.getBeginAddress(): %d, \npartition.getEndAddress(): %d, \npartition.getLength(): %d",
-                                                  partitionIndex++,     partition.getBeginAddress(),       partition.getEndAddress(),       partition.getLength() );
-    }
-    
-#endif
-    
-    return novo;
-}
-
-
-
-/**
- * @see _FirstFit::allocateMemory( unsigned int ) member class declaration.
- */
-Partition* _FirstFit::allocateMemory( unsigned int size ) 
-{
     DEBUGGERLN( a2 b1, "\nI AM ENTERING IN _FirstFit::allocateMemory(1)" );
     
     Partition* novo = NULL;
@@ -219,23 +134,18 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
     Partition* currentPartition = NULL;
     Partition* nextPartition    = NULL;
     
-    auto          partitionsListIteratorEnd = this->partitionList.end();
-    auto          partitionsListIterator    = this->partitionList.begin();
-    unsigned int  partitionsListSize        = this->partitionList.size();
-    
+    unsigned int  partitionsListSize  = this->partitionList.size();
     DEBUGGERLN( b1, "( allocateMemory ) partitionsListSize: %d,", partitionsListSize );
+    
+    currentPartition = this->getPartition( 0 );
     
     for( partitionIndex = 1; partitionIndex < partitionsListSize; ++partitionIndex )
     {
         DEBUGGERLN( b1, "( allocateMemory|for ) partitionIndex: %d,", partitionIndex );
-        
-        currentPartition = &( *partitionsListIterator );
-        ++partitionsListIterator;
-        
         DEBUGGERLN( b1, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
                                                 currentPartition->getBeginAddress(),       currentPartition->getEndAddress() );
         
-        nextPartition = &( *partitionsListIterator );
+        nextPartition = this->getPartition( partitionIndex );
         holeSize      = nextPartition->getBeginAddress() - currentPartition->getEndAddress() - 1;
         
         DEBUGGERLN( b1, "( allocateMemory|for ) nextPartition->getBeginAddress(): %d, \nnextPartition->getEndAddress(): %d, \nholeSize: %d,",
@@ -248,29 +158,15 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
         }
         
         currentPartition = nextPartition;
-        
-        if( partitionsListIterator == partitionsListIteratorEnd )
-        {
-            DEBUGGERLN( b1, "( allocateMemory|for ) EXITING BY REACHING THE ITERATOR'S END!" );
-            break;
-        }
     }
     
     DEBUGGERLN( b1, "( allocateMemory|after for 1 )" );
-    
-    if( currentPartition == NULL )
-    {
-        currentPartition = &( *partitionsListIterator );
-    }
-    
-    DEBUGGERLN( b1, "( allocateMemory|after for 2 )" );
-    
     partitionEndAddress = currentPartition->getEndAddress() + size;
-    DEBUGGERLN( b1, "( allocateMemory|after for 3 )" );
+    DEBUGGERLN( b1, "( allocateMemory|after for 2 )" );
     
     if( partitionEndAddress < MemoryManager::maxAddress + 1 )
     {
-        DEBUGGERLN( b1, "( allocateMemory|after for 4 ) currentPartition->getEndAddress(): %d, \npartitionEndAddress: %d", currentPartition->getEndAddress(), partitionEndAddress );
+        DEBUGGERLN( b1, "( allocateMemory|after for 3 ) currentPartition->getEndAddress(): %d, \npartitionEndAddress: %d", currentPartition->getEndAddress(), partitionEndAddress );
         
         novo = new Partition( currentPartition->getEndAddress() + 1, partitionEndAddress, false );
         this->partitionList.push_back( *novo );
@@ -291,6 +187,16 @@ Partition* _FirstFit::allocateMemory( unsigned int size )
 #endif
     
     return novo;
+}
+
+
+
+/**
+ * @see _FirstFit::allocateMemory( unsigned int ) member class declaration.
+ */
+Partition* _FirstFit::allocateMemory( unsigned int size ) 
+{
+
 }
 
 

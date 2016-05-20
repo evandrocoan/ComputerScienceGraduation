@@ -18,6 +18,16 @@
 #include <algorithm>
 
 
+/**
+ * This is the value used when the the Algorithm Strategy Class need to initialize/reset the
+ * last partition access index. Such approach is needed because when the partition list is
+ * altered as adding or removing entries. If such reset is not performed, the last partition
+ * index would point to and nonupdated value, then lead to segmentation fault when dereferencing
+ * the iterator it is points to.
+ */
+#define DISABLED_LAST_PARTITION_INDEX -10
+
+
 
 /**
  * Represents a dynamic continue allocation partition. Such allocation does not require great
@@ -261,13 +271,6 @@ struct Algorithm
      */
     Partition* getPartition( unsigned int index );
     
-    /**
-     * Obtains an constant iterator the the partitions list.
-     * 
-     * @return an const iterator to the partition's list beginning.
-     */
-    std::list< Partition >::const_iterator getPartitionsListIterator();
-    
     
 protected:
     
@@ -280,12 +283,14 @@ protected:
     PartitionList partitionList;
     
     /**
-     * 
+     * Used to save the last 'getPartition(1)' access, to know where the 'lastIteratorAccess' is pointing to.
      */
     unsigned int lastIndexAccess;
     
     /**
-     * 
+     * Its purpose is to speed up sequencial acess to the partitions using the 'getPartition(1)' funciton call.
+     * Used to save the last 'getPartition(1)' access, to cache its value and void to walk throw the linked list
+     * from the begging.
      */
     std::list< Partition >::iterator lastIteratorAccess;
     
@@ -301,18 +306,21 @@ protected:
 
 
 /**
- * 
+ * Implements the abstract class (struct) Algorithm to allocate memory using the First Fit memory allocation
+ * strategy.
  */
 struct _FirstFit: public Algorithm
 {
     /**
-     * 
+     * Inherrits the superclass constructor.
      */
     using::Algorithm::Algorithm;
     
     /**
+     * To creates/allocates a new partition by the First Fit allocation strategy.
      * 
-     * @param 
+     * @param size        the new partition size to create.
+     * @return NULL when the allocation fails, otherwise a pointer to the new partition just created.
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
 
@@ -321,28 +329,25 @@ struct _FirstFit: public Algorithm
 
 
 /**
- * 
+ * Implements the abstract class (struct) Algorithm to allocate memory using the Next Fit memory allocation
+ * strategy.
  */
 struct _NextFit: public Algorithm
 {
     /**
-     * 
+     * Inherrits the superclass constructor.
      */
     using::Algorithm::Algorithm;
     
     /**
+     * To creates/allocates a new partition by the Next Fit allocation strategy.
      * 
-     * @param 
+     * @param size        the new partition size to create.
+     * @return NULL when the allocation fails, otherwise a pointer to the new partition just created.
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
     
-private:
-    
-    /**
-     * 
-     */
-    int lastIndex=0;
- 
+
 };
 
 
@@ -383,6 +388,15 @@ struct _BestFit: public Algorithm
      * @param 
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
+    
+    
+private:
+    
+    /**
+     * Used to save the last access, i.e., to know where the 'lastAllocationIterator' is pointing to.
+     */
+    int lastAllocationIndex = DISABLED_LAST_PARTITION_INDEX;
+    
     
 };
 
