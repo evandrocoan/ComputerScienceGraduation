@@ -48,7 +48,7 @@
  * a1   - Basic debug messages.
  * a2   - Functions entrances.
  * a4   - I AM IN HERER MESSAGE.
- * a8   - Partitioning creation.
+ * a8   - Partitions handling as in deletePartition(1) and addPartition(1).
  * a16  - Show the teacher required output.
  * a32  - MemoryManager::showMemory(0) and Algorithm::getPartition(1) debugging.
  * 
@@ -57,7 +57,7 @@
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 b 1 a16";
+const char* const g_debugLevel = "a2 a16 b 1";
 
 
 #endif
@@ -81,15 +81,15 @@ template<> struct Traits<Process>
 template<> struct Traits<Debug> 
 { // CHANGE THE DEBUG LEVEL HERE SETTING THE LEVELS YOU WANT TO SHOW
     // debug levels
-    static const bool error = 0;
-    static const bool warning = 0;
-    static const bool trace = 0; //false;
-    static const bool info = 0; //true;
-    static const bool fine = 0; //true;
+    static const bool error = 1;
+    static const bool warning = 1;
+    static const bool trace = 1; //false;
+    static const bool info = 1; //true;
+    static const bool fine = 1; //true;
     //
-    static const bool showEntityAttributes = 0;
-    static const bool showListOfEvents = 0;
-    static const bool pauseOnEveryEvent = 0; //true;
+    static const bool showEntityAttributes = 1;
+    static const bool showListOfEvents = 1;
+    static const bool pauseOnEveryEvent = 1; //true;
 };
 
 template<> struct Traits<CPU> 
@@ -160,9 +160,11 @@ inline bool __computeDeggingLevel( const char* debugLevel )
     char* inputLevelToken;
     char* builtInLevelToken;
     
-    char inputLevelChar  [ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
     char builtInLevelChar[ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
+    char inputLevelChar  [ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
+    char inputLevelChars [ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ][ COMPUTE_DEBUGGING_DEBUG_INPUT_SIZE ];
     
+    int        inputLevels  = 0;
     const char separator[2] = " ";
     
     inputLevelSize   = strlen( debugLevel );
@@ -184,45 +186,59 @@ inline bool __computeDeggingLevel( const char* debugLevel )
     
     // So, how do we debug the debugger?
 #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
+    int currentExternLoop = 0;
+    int currentInternLoop = 0;
+
     std::cout << "\ng_debugLevel: " << g_debugLevel << ", builtInLevelSize: " << builtInLevelSize ;
     std::cout << ", debugLevel: " << debugLevel << ", inputLevelSize: " << inputLevelSize  << std::endl;
-    
 #endif
     
     inputLevelToken = strtok( inputLevelChar, separator );
     
     do
     {
+        strcpy( inputLevelChars[ inputLevels++ ], inputLevelToken );
+    } while( ( inputLevelToken = strtok( NULL, separator ) ) != NULL );
+    
+    while( inputLevels-- > 0 )
+    {
+    #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
+        currentInternLoop = 0;
+        std::cout << "CURRENT_ExternLoop: " << currentExternLoop++ << std::endl;
+    #endif
+        
         builtInLevelToken   = strtok( builtInLevelChar, separator );
-        inputLevelTokenSize = strlen( inputLevelToken );
+        inputLevelTokenSize = strlen( inputLevelChars[ inputLevels ] );
         
         do
         {
             builtInLevelTokenSize = strlen( builtInLevelToken );
             
         #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
+            std::cout << "space" << std::endl;
+            std::cout << "CURRENT_InternLoop: " << currentInternLoop++ << std::endl;
+            
             std::cout << "builtInLevelToken: " << builtInLevelToken << std::endl;
             std::cout << "builtInLevelTokenSize: " << builtInLevelTokenSize << std::endl;
-            std::cout << "inputLevelToken: " << inputLevelToken << std::endl;
+            std::cout << "inputLevelChars[" << inputLevels << "]: " << inputLevelChars[ inputLevels ] << std::endl;
             std::cout << "inputLevelTokenSize: " << inputLevelTokenSize << std::endl;
-            
         #endif
             
-            if( inputLevelTokenSize > 1
-                && builtInLevelTokenSize > 1 )
+            if( inputLevelTokenSize > 0
+                && builtInLevelTokenSize > 0 )
             {
-                if( isdigit( inputLevelToken[ 1 ] )
+                if( isdigit( inputLevelChars[ inputLevels ][ 1 ] )
                     && isdigit( builtInLevelToken[ 1 ] ) )
                 {
-                    if( builtInLevelToken[ 0 ] == inputLevelToken[ 0 ] )
+                    if( builtInLevelToken[ 0 ] == inputLevelChars[ inputLevels ][ 0 ] )
                     {
-                        sscanf( &inputLevelToken[ 1 ], "%d", &inputLevel );
+                        sscanf( &inputLevelChars[ inputLevels ][ 1 ], "%d", &inputLevel );
                         sscanf( &builtInLevelToken[ 1 ], "%d", &builtInLevel );
                         
                     #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
-                        std::cout << "inputLevel: " << inputLevel << std::endl;
                         std::cout << "builtInLevel: " << builtInLevel << std::endl;
-                        
+                        std::cout << "inputLevel: " << inputLevel << std::endl;
+                        std::cout << "Is activeated? " << ( ( inputLevel & builtInLevel ) > 0 ) << std::endl;
                     #endif
                         
                         if( ( inputLevel & builtInLevel ) > 0 )
@@ -235,7 +251,10 @@ inline bool __computeDeggingLevel( const char* debugLevel )
             
         } while( ( builtInLevelToken = strtok( NULL, separator ) ) != NULL );
         
-    } while( ( inputLevelToken = strtok( NULL, separator ) ) != NULL );
+    #if COMPUTE_DEBUGGING_LEVEL_DEBUG > 0
+        std::cout << "space" << std::endl;
+    #endif
+    }
     
     return false;
 }

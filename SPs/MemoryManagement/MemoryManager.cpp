@@ -23,13 +23,13 @@ using namespace std;
 /**
  * @see Partition::Partition( unsigned int , unsigned int, bool ) member class declaration.
  */
-Partition::Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree ) 
+Partition::Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree )
 {
+    DEBUGGERLN( a2, "I AM ENTERING IN Partition::Partition(3)" );
+    
     _beginAddress = beginAddress;
     _endAddress = endAddress;
     _isFree = isFree;
-    
-    DEBUGGERLN( a8, "Creating a partitition!" );
 }
 
 /**
@@ -154,7 +154,6 @@ Partition* MemoryManager::allocateMemory( unsigned int size )
 void MemoryManager::deallocateMemory( Partition* partition )
 {
     Debug::cout( Debug::Level::trace, "MemoryManager::deallocateMemory( " + std::to_string( reinterpret_cast<unsigned long> ( partition ) ) + " )" );
-    
     this->currentStrategy->deletePartition( partition );
 }
 
@@ -192,7 +191,7 @@ void MemoryManager::showMemory()
     unsigned int nextStartAddress;
     
     Partition*   currentPartition  = this->currentStrategy->getPartition( 0 );
-    unsigned int partitionListSize = this->currentStrategy->partitionListSize() - 1;
+    unsigned int partitionListSize = this->currentStrategy->partitionListSize();
     
     DEBUGGERLN( a32, "( showMemory ) before currentStartAddress = currentPartition->getBeginAddress();" );
     

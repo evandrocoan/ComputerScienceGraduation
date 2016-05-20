@@ -25,7 +25,7 @@ Algorithm::~Algorithm()
  */
 void Algorithm::addPartition( Partition* newPartition )
 {
-    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::addPartition(1)" );
+    DEBUGGERLN( a2 a8, "I AM ENTERING IN Algorithm::addPartition(1) | Begin: %u", newPartition->getBeginAddress() );
     
     this->lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
     this->partitionList.push_back( *newPartition );
@@ -88,7 +88,7 @@ Partition* Algorithm::getPartition( unsigned int index )
  */
 void Algorithm::deletePartition( Partition* partition )
 {
-    DEBUGGERLN( a2, "I AM ENTERING IN Algorithm::deletePartition(1)" );
+    DEBUGGERLN( a2 a8, "I AM ENTERING IN Algorithm::deletePartition(1) | Begin: %u", partition->getBeginAddress() );
     
     this->lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
     this->partitionList.erase( std::find( this->partitionList.begin(), this->partitionList.end(), *partition ) );
@@ -110,7 +110,7 @@ unsigned int Algorithm::partitionListSize()
  */
 Partition* _BestFit::allocateMemory( unsigned int size ) 
 {
-    DEBUGGERLN( b2 + a2, "\nI AM ENTERING IN _NextFit::allocateMemory(1)" );
+    //DEBUGGERLN( b2 + a2, "\nI AM ENTERING IN _NextFit::allocateMemory(1)" );
     DEBUGGERLN( a2 b1, "\nI AM ENTERING IN _FirstFit::allocateMemory(1)" );
     
     Partition* novo = NULL;
