@@ -395,7 +395,7 @@ private:
     /**
      * Used to save the last access, i.e., to know where the 'lastAllocationIterator' is pointing to.
      */
-    int lastAllocationIndex = DISABLED_LAST_PARTITION_INDEX;
+    int g_lastAllocationIndex = DISABLED_LAST_PARTITION_INDEX;
     
     
 };
