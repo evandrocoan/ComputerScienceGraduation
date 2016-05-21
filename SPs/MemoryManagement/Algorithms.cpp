@@ -191,14 +191,13 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         return novo;
     }
     
+    unsigned int holeSize;
     unsigned int partitionEndAddress;
     unsigned int partitionStartAddress;
-    bool         insertBeforeIterator;
     
-    Partition* currentPartition = NULL;
-    Partition* nextPartition    = NULL;
-    
-    unsigned int holeSize             = 0;
+    bool         insertBeforeIterator = false;;
+    Partition*   currentPartition     = NULL;
+    Partition*   nextPartition        = NULL;
     unsigned int lastAllocationIndex  = g_lastAllocationIndex;
     
     currentPartition = this->getPartition( g_lastAllocationIndex );
@@ -207,9 +206,10 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     {
         if( ++g_lastAllocationIndex >= partitionsListSize )
         {
-            // maxAddress: 1, getEndAddress: 1 =: holeSize: 0 OK
+            // checks after the last partition
             holeSize = MemoryManager::maxAddress - currentPartition->getEndAddress();
             
+            // maxAddress: 1, getEndAddress: 1 =: holeSize: 0 OK
             if( holeSize >= size )
             {
                 DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE AT THE MEMORY END POSITION!" );
@@ -218,6 +218,7 @@ Partition* _BestFit::allocateMemory( unsigned int size )
                 break;
             }
             
+            // checks before the first partition
             g_lastAllocationIndex = 0;
             currentPartition      = this->getPartition( 0 );
             holeSize              = currentPartition->getBeginAddress();
@@ -248,6 +249,9 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         {
             DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE!" );
             
+            // This must to be true, because the this->getPartition(1) function call above, incremented the last
+            // accessed position, then are not pointing to currentPartition, we are pointing to the nextPartition,
+            // then we must to put this partition between the currentPartition and nextPartition, to keep is ordered.
             insertBeforeIterator = true;
             break;
         }
@@ -257,22 +261,22 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     
     DEBUGGERLN( b2, "( allocateMemory|after for 1 )" );
     
-    if( g_lastAllocationIndex )
-    {
-        partitionEndAddress   = currentPartition->getEndAddress() + size;
-        partitionStartAddress = currentPartition->getEndAddress() + 1;
-    }
-    else
-    {
-        partitionEndAddress   = size - 1;
-        partitionStartAddress = 0;
-    }
-    
-    DEBUGGERLN( b2, "( allocateMemory|after for 2 )" );
-    
     if( holeSize >= size )
     {
-        DEBUGGERLN( b2, "( allocateMemory|after for 3 ) partitionStartAddress: %d, \npartitionEndAddress: %d", currentPartition->getEndAddress(), partitionEndAddress );
+        if( g_lastAllocationIndex
+            || !insertBeforeIterator )
+        {
+            partitionEndAddress   = currentPartition->getEndAddress() + size;
+            partitionStartAddress = currentPartition->getEndAddress() + 1;
+        }
+        else
+        {
+            partitionEndAddress   = size - 1;
+            partitionStartAddress = 0;
+        }
+        
+        DEBUGGERLN( b2, "( allocateMemory|after for 2 ) partitionStartAddress: %d, \npartitionEndAddress: %d,",
+                                                        partitionStartAddress,       partitionEndAddress );
         
         novo = new Partition( partitionStartAddress, partitionEndAddress, false );
         this->addPartition( novo, insertBeforeIterator );
