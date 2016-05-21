@@ -251,7 +251,7 @@ struct Algorithm
      * 
      * @param partition        a pointer to the Partition type.
      */
-    void deletePartition( Partition* partition );
+    virtual void deletePartition( Partition* partition );
     
     /**
      * Gets the current partition list size.
@@ -280,27 +280,30 @@ protected:
      * 
      * @see ::std::list< Partition > PartitionList type definition.
      */
-    PartitionList partitionList;
+    PartitionList g_partitionList;
     
     /**
-     * Used to save the last 'getPartition(1)' access, to know where the 'lastIteratorAccess' is pointing to.
+     * Used to save the last 'getPartition(1)' access, to know where the 'g_lastIteratorAccess' is pointing to.
      */
-    unsigned int lastIndexAccess;
+    int64_t g_lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
     
     /**
      * Its purpose is to speed up sequencial acess to the partitions using the 'getPartition(1)' funciton call.
      * Used to save the last 'getPartition(1)' access, to cache its value and void to walk throw the linked list
      * from the begging.
+     * It is also used to keep the partition list ordered by allocations address.
      */
-    std::list< Partition >::iterator lastIteratorAccess;
+    std::list< Partition >::iterator g_lastIteratorAccess;
     
     /**
-     * Add a new partition to the partitition list.
+     * Add a new partition to the partitition list, and keep the partitions list ordered by allocations address.
      * 
-     * @param newPartition        a pointer to the Partition type.
-     * @see Algorithm::partitionList attribute for the partition list.
+     * @param newPartition           a pointer to the Partition type.
+     * @param insertBeforeIterator   where to insert the partition. If false, inserts it after the current
+     *                               'g_lastIteratorAccess' iterator. If true, inserts it before.
+     * @see Algorithm::g_partitionList attribute for the partition list.
      */
-    void addPartition( Partition* newPartition );
+    virtual void addPartition( Partition* newPartition, bool insertBeforeIterator );
 };
 
 
@@ -387,7 +390,7 @@ struct _BestFit: public Algorithm
      * 
      * @param 
      */
-    virtual Partition* allocateMemory( unsigned int size ) override;
+    Partition* allocateMemory( unsigned int size ) override;
     
     
 private:
@@ -395,8 +398,29 @@ private:
     /**
      * Used to save the last access, i.e., to know where the 'lastAllocationIterator' is pointing to.
      */
-    int g_lastAllocationIndex = DISABLED_LAST_PARTITION_INDEX;
+    unsigned int g_lastAllocationIndex = 0;
     
+    /**
+     * Used to save the last access begin address to know how to shift properly the 'g_lastAllocationIndex'
+     * should be pointing to.
+     */
+    unsigned int g_lastAllocationBeginAddress = 0;
+    
+    /**
+     * This overrides the superclass addPartition to properly update the 'g_lastAllocationIndex' accordinly
+     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
+     * 
+     * @see _BestFit::addPartition( Partition* newPartition ) member class declaration.
+     */
+    void addPartition( Partition* newPartition, bool insertBeforeIterator ) override;
+    
+    /**
+     * This overrides the superclass deletePartition to properly update the 'g_lastAllocationIndex' accordinly
+     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
+     * 
+     * @see _BestFit::deletePartition( Partition* newPartition ) member class declaration.
+     */
+    void deletePartition( Partition* newPartition ) override;
     
 };
 

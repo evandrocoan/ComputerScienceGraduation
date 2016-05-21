@@ -31,7 +31,7 @@
  *  2   = Enable the Traits<Debug> pauseOnEveryEvent.
  *  4   = Enable all Traits<Debug> levels.
  */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 
 #define DEBUG_LEVEL_DISABLED_DEBUG       0
@@ -43,7 +43,7 @@
 /**
  * MemoryManager debugging.
  */
-#if DEBUG_LEVEL > 0
+#if DEBUG_LEVEL > DEBUG_LEVEL_DISABLED_DEBUG
 
 /**
  * A value like a127 (111111) for 'g_debugLevel' enables all 'a' mask debugging levels. To enable all
@@ -64,7 +64,7 @@
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a16 b2";
+const char* const g_debugLevel = "a2 a8 a16 b2";
 
 
 #endif

@@ -25,7 +25,11 @@ using namespace std;
  */
 Partition::Partition( unsigned int beginAddress, unsigned int endAddress, bool isFree )
 {
-    DEBUGGERLN( a2, "I AM ENTERING IN Partition::Partition(3)" );
+#if defined DEBUG
+    static int openedCount = 0;
+#endif
+    
+    DEBUGGERLN( a2, "I AM ENTERING IN Partition::Partition(3) | openedCount: %d", ++openedCount );
     
     _beginAddress = beginAddress;
     _endAddress = endAddress;
@@ -178,10 +182,16 @@ Partition* MemoryManager::getPartition( unsigned int index )
  */
 void MemoryManager::showMemory()
 {
-    FPRINT( a16, "\n" );
-    DEBUGGERLN( a2 a32, "I AM ENTERING IN MemoryManager::showMemory(0)" );
+#if defined DEBUG
+    static int openedCount = 0;
+#endif
     
-    if( this->currentStrategy->partitionListSize() == 0 )
+    FPRINT( a16, "\n" );
+    DEBUGGERLN( a2 a32, "I AM ENTERING IN MemoryManager::showMemory(0) | openedCount: %d", ++openedCount );
+    
+    unsigned int partitionListSize = this->currentStrategy->partitionListSize();
+    
+    if( partitionListSize == 0 )
     {
         FPRINTLN( a16, "0-%u:FREE %u", MemoryManager::maxAddress, MemoryManager::maxAddress + 1 );
         return;
@@ -191,8 +201,6 @@ void MemoryManager::showMemory()
     unsigned int nextStartAddress;
     
     Partition*   currentPartition  = this->currentStrategy->getPartition( 0 );
-    unsigned int partitionListSize = this->currentStrategy->partitionListSize();
-    
     DEBUGGERLN( a32, "( showMemory ) before currentStartAddress = currentPartition->getBeginAddress();" );
     
     unsigned int currentStartAddress = currentPartition->getBeginAddress();
