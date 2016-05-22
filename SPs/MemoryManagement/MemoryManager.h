@@ -350,7 +350,36 @@ struct _NextFit: public Algorithm
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
     
-
+    
+private:
+    
+    /**
+     * Used to save the last access, i.e., to know where the 'lastAllocationIterator' is pointing to.
+     */
+    unsigned int g_lastAllocationIndex = 0;
+    
+    /**
+     * Used to save the last access begin address to know how to shift properly the 'g_lastAllocationIndex'
+     * should be pointing to.
+     */
+    unsigned int g_lastAllocationBeginAddress = 0;
+    
+    /**
+     * This overrides the superclass addPartition to properly update the 'g_lastAllocationIndex' accordinly
+     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
+     * 
+     * @see _BestFit::addPartition( Partition* newPartition ) member class declaration.
+     */
+    void addPartition( Partition* newPartition, bool insertBeforeIterator ) override;
+    
+    /**
+     * This overrides the superclass deletePartition to properly update the 'g_lastAllocationIndex' accordinly
+     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
+     * 
+     * @see _BestFit::deletePartition( Partition* newPartition ) member class declaration.
+     */
+    void deletePartition( Partition* newPartition ) override;
+    
 };
 
 
@@ -392,35 +421,6 @@ struct _BestFit: public Algorithm
      */
     Partition* allocateMemory( unsigned int size ) override;
     
-    
-private:
-    
-    /**
-     * Used to save the last access, i.e., to know where the 'lastAllocationIterator' is pointing to.
-     */
-    unsigned int g_lastAllocationIndex = 0;
-    
-    /**
-     * Used to save the last access begin address to know how to shift properly the 'g_lastAllocationIndex'
-     * should be pointing to.
-     */
-    unsigned int g_lastAllocationBeginAddress = 0;
-    
-    /**
-     * This overrides the superclass addPartition to properly update the 'g_lastAllocationIndex' accordinly
-     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
-     * 
-     * @see _BestFit::addPartition( Partition* newPartition ) member class declaration.
-     */
-    void addPartition( Partition* newPartition, bool insertBeforeIterator ) override;
-    
-    /**
-     * This overrides the superclass deletePartition to properly update the 'g_lastAllocationIndex' accordinly
-     * with 'g_lastAllocationBeginAddress', to keep the First Fit Allocatin Strategy 100% accurate.
-     * 
-     * @see _BestFit::deletePartition( Partition* newPartition ) member class declaration.
-     */
-    void deletePartition( Partition* newPartition ) override;
     
 };
 

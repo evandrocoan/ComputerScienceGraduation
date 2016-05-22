@@ -64,7 +64,7 @@
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b2";
+const char* const g_debugLevel = "a2 a8 a16 b1";
 
 
 #endif
