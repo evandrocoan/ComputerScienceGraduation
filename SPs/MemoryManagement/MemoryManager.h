@@ -312,13 +312,14 @@ protected:
 /**
  * Implements the abstract class (struct) Algorithm to allocate memory using the First Fit memory allocation
  * strategy. When there are no partitions, a partition is created at the begging of the list starting at
- * address 0.
+ * address 0. When the search did not found any hole big enougth to allocates the allocating function call
+ * to get an NULL pointer instead of the allocated partition.
  * 
  * This algorithm always start searching the partitions list at the beggning of the memory at the address 0.
- * After it, if a hole big enougth is not found, it get the first partition end address and the second
+ * After it, if a hole big enougth is not found, it gets the first partition end address and the second
  * partition begin address and calculates the hole size. It keeps doing such until it finds a hole big
  * enough or get until to reach the memory's end. When it is at the last partitition, it calculates the
- * hole using the last partition end address and the max memory address allowed to allocate to calculates
+ * hole using the last partition end address and the max memory address allowed to be allocated to calculate
  * the last hole, when the search did not found any hole big enougth to allocates.
  */
 struct _FirstFit: public Algorithm
@@ -343,7 +344,8 @@ struct _FirstFit: public Algorithm
 /**
  * Implements the abstract class (struct) Algorithm to allocate memory using the Next Fit memory allocation
  * strategy. When there are no partitions, a partition is created at the begging of the list starting at
- * address 0.
+ * address 0. When the search did not found any hole big enougth to allocates the allocating function call
+ * to get an NULL pointer instead of the allocated partition.
  * 
  * This algorithm always start searching the partitions list at the last allocated address.
  * After it, it gets the next partition end begin and the current partition end address and calculates
@@ -352,7 +354,7 @@ struct _FirstFit: public Algorithm
  * and the max memory address allowed to allocate to calculates the last hole, when the search did not
  * found any hole big enougth to allocates. If after get the memory's end, it does not found a hole big
  * enough, it go to the memory's begin address 0, and start to search until it reaches the last allocated
- * addres again.
+ * address again.
  */
 struct _NextFit: public Algorithm
 {
@@ -404,18 +406,30 @@ private:
 
 
 /**
+ * Implements the abstract class (struct) Algorithm to allocate memory using the Worst Fit memory allocation
+ * strategy. When there are no partitions, a partition is created at the begging of the list starting at
+ * address 0. When the search did not found any hole big enougth to allocates the allocating function call
+ * to get an NULL pointer instead of the allocated partition.
  * 
+ * This algorithm always start searching the partitions list at the beggning of the memory at the address 0.
+ * After it, it saves that first hole as the biggest hole, then it gets the first partition end address and
+ * the second partition begin address and calculates the hole size and updates the biggest hole, accordingly.
+ * It keeps doing such search until it to reach the memory's end. When it is at the last partitition, it
+ * calculates the hole using the last partition end address and the max memory address allowed to be allocated
+ * to calculates the last hole. 
  */
 struct _WorstFit: public Algorithm
 {
     /**
-     * 
+     * Inherrits the superclass constructor.
      */
     using::Algorithm::Algorithm;
     
     /**
+     * To creates/allocates a new partition by the Worst Fit allocation strategy.
      * 
-     * @param 
+     * @param size        the new partition size to create.
+     * @return NULL when the allocation fails, otherwise a pointer to the new partition just created.
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
     
@@ -424,18 +438,30 @@ struct _WorstFit: public Algorithm
 
 
 /**
- *
+ * Implements the abstract class (struct) Algorithm to allocate memory using the Best Fit memory allocation
+ * strategy. When there are no partitions, a partition is created at the begging of the list starting at
+ * address 0. When the search did not found any hole big enougth to allocates the allocating function call
+ * to get an NULL pointer instead of the allocated partition.
+ * 
+ * This algorithm always start searching the partitions list at the beggning of the memory at the address 0.
+ * After it, it saves that first hole as the smallest hole, if and only if it has enougth size to comport the
+ * memory allocation request. Then it gets the first partition end address and the second partition begin
+ * address and calculates the hole size and updates the smallest hole, accordingly. It keeps doing such search
+ * until it to reach the memory's end. When it is at the last partitition, it calculates the hole using the
+ * last partition end address and the max memory address allowed to be allocated to calculates the last hole.
  */
 struct _BestFit: public Algorithm
 {
     /**
-     * 
+     * Inherrits the superclass constructor.
      */
     using::Algorithm::Algorithm;
     
     /**
+     * To creates/allocates a new partition by the Best Fit allocation strategy.
      * 
-     * @param 
+     * @param size        the new partition size to create.
+     * @return NULL when the allocation fails, otherwise a pointer to the new partition just created.
      */
     Partition* allocateMemory( unsigned int size ) override;
     
