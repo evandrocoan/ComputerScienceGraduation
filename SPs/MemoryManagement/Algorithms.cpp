@@ -77,8 +77,16 @@ Partition* Algorithm::getPartition( unsigned int index )
     DEBUGGERLN( a2 a32, "I AM ENTERING IN Algorithm::getPartition(1) | index: %d, openedCount: %d", index, ++openedCount );
     DEBUGGERLN( a32, "( getPartition ) | this->partitionListSize(): %d, \nthis->g_lastIndexAccess: %d,",
                                          this->partitionListSize(),       this->g_lastIndexAccess );
+    DEBUGGERLN( a32, "( getPartition|what? ) "
+            "-1 <= %u? %d, "
+            "%u < %u? %d, "
+            "\n-1 < index && index < this->partitionListSize(): %d",
+            index, -1 < index,
+            index, this->partitionListSize(), index < this->partitionListSize(),
+            -1 < index && index < this->partitionListSize() );
     
-    if( -1 < index < this->partitionListSize() )
+    if( 0 <= index
+        && index < this->partitionListSize() )
     {
         if( index == this->g_lastIndexAccess + 1 )
         {
