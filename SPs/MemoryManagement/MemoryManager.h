@@ -304,13 +304,22 @@ protected:
      * @see Algorithm::g_partitionList attribute for the partition list.
      */
     virtual void addPartition( Partition* newPartition, bool insertBeforeIterator );
+    
 };
 
 
 
 /**
  * Implements the abstract class (struct) Algorithm to allocate memory using the First Fit memory allocation
- * strategy.
+ * strategy. When there are no partitions, a partition is created at the begging of the list starting at
+ * address 0.
+ * 
+ * This algorithm always start searching the partitions list at the beggning of the memory at the address 0.
+ * After it, if a hole big enougth is not found, it get the first partition end address and the second
+ * partition begin address and calculates the hole size. It keeps doing such until it finds a hole big
+ * enough or get until to reach the memory's end. When it is at the last partitition, it calculates the
+ * hole using the last partition end address and the max memory address allowed to allocate to calculates
+ * the last hole, when the search did not found any hole big enougth to allocates.
  */
 struct _FirstFit: public Algorithm
 {
@@ -326,14 +335,24 @@ struct _FirstFit: public Algorithm
      * @return NULL when the allocation fails, otherwise a pointer to the new partition just created.
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
-
+    
 };
 
 
 
 /**
  * Implements the abstract class (struct) Algorithm to allocate memory using the Next Fit memory allocation
- * strategy.
+ * strategy. When there are no partitions, a partition is created at the begging of the list starting at
+ * address 0.
+ * 
+ * This algorithm always start searching the partitions list at the last allocated address.
+ * After it, it gets the next partition end begin and the current partition end address and calculates
+ * the hole size. It keeps doing such until it finds a hole big enough or get until to reach the memory's
+ * end. When it is at the last partitition, it calculates the hole using the last partition end address
+ * and the max memory address allowed to allocate to calculates the last hole, when the search did not
+ * found any hole big enougth to allocates. If after get the memory's end, it does not found a hole big
+ * enough, it go to the memory's begin address 0, and start to search until it reaches the last allocated
+ * addres again.
  */
 struct _NextFit: public Algorithm
 {
@@ -399,8 +418,7 @@ struct _WorstFit: public Algorithm
      * @param 
      */
     virtual Partition* allocateMemory( unsigned int size ) override;
-     
-     
+    
 };
 
 
@@ -420,7 +438,6 @@ struct _BestFit: public Algorithm
      * @param 
      */
     Partition* allocateMemory( unsigned int size ) override;
-    
     
 };
 

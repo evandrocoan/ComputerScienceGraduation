@@ -1,3 +1,5 @@
+
+#include <limits.h>
 #include "Traits.h"
 #include "MemoryManager.h"
 
@@ -154,12 +156,12 @@ unsigned int Algorithm::partitionListSize()
  */
 Partition* _BestFit::allocateMemory( unsigned int size ) 
 {
-    DEBUGGERLN( a2 b3, "\nI AM ENTERING IN _BestFit::allocateMemory(1) | size: %u", size );
+    DEBUGGERLN( a2 b4, "\nI AM ENTERING IN _BestFit::allocateMemory(1) | size: %u", size );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
     
-    DEBUGGERLN( b3, "( allocateMemory ) size: %d, partitionsListSize: %d,", size, partitionsListSize );
+    DEBUGGERLN( b4, "( allocateMemory ) size: %d, partitionsListSize: %d,", size, partitionsListSize );
     
     // maxAddress: 1, size: 2 =: 0 < 1 OK
     if( partitionsListSize == 0 )
@@ -170,7 +172,7 @@ Partition* _BestFit::allocateMemory( unsigned int size )
             novo = new Partition( 0, size - 1, false );
             this->addPartition( novo, false );
             
-            DEBUGGERLN( b3, "( allocateMemory|size 0 ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d,",
+            DEBUGGERLN( b4, "( allocateMemory|size 0 ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d,",
                                                        novo->getBeginAddress(),       novo->getEndAddress() );
         }
         
@@ -185,9 +187,10 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     unsigned int partitionEndAddress;
     unsigned int partitionStartAddress;
     
-    unsigned int biggestHoleSize      = 0;
-    unsigned int biggestHoleSizeIndex = 0;
+    unsigned int smallestHoleSize      = UINT_MAX;
+    unsigned int smallestHoleSizeIndex = 0;
     
+    bool         isReadyToCreate  = false;
     unsigned int partitionIndex   = 0;
     Partition*   currentPartition = NULL;
     Partition*   nextPartition    = NULL;
@@ -198,66 +201,77 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     currentPartition          = this->getPartition( 0 );
     currentHoleSize           = currentPartition->getBeginAddress();
     
-    // currentHoleSize: 1, biggestHoleSize: 1 =: 1 = 1 OK
-    if( currentHoleSize > biggestHoleSize )
+    DEBUGGERLN( b4, "( allocateMemory|what? ) %u <= %u? %d, %lld < %u? %d, \nsize <= currentHoleSize < smallestHoleSize: %d",
+            size, currentHoleSize, size <= currentHoleSize,
+            currentHoleSize, smallestHoleSize, currentHoleSize < smallestHoleSize,
+            size <= currentHoleSize < smallestHoleSize );
+    
+    // size: 1, currentHoleSize: 2, smallestHoleSize: 10 =: 1 < 2 < 10 OK
+    if( size <= currentHoleSize
+        && currentHoleSize < smallestHoleSize )
     {
-        biggestHoleSize = currentHoleSize;
-        DEBUGGERLN( b3, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE FIRST POSITION!\nbiggestHoleSize: %u", biggestHoleSize );
+        isReadyToCreate  = true;
+        smallestHoleSize = currentHoleSize;
+        DEBUGGERLN( b4, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE FIRST POSITION!\nsmallestHoleSize: %u", smallestHoleSize );
         
         // Setting this true put it before the current iterator instead of to put it after the interator.
-        insertBeforeIterator = true;
-        biggestHoleSizeIndex = 0;
+        insertBeforeIterator  = true;
+        smallestHoleSizeIndex = 0;
     }
     
     for( partitionIndex = 1; partitionIndex < partitionsListSize; ++partitionIndex )
     {
-        DEBUGGERLN( b3, "( allocateMemory|for ) partitionIndex: %d,", partitionIndex );
-        DEBUGGERLN( b3, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
+        DEBUGGERLN( b4, "( allocateMemory|for ) partitionIndex: %d,", partitionIndex );
+        DEBUGGERLN( b4, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
                                                 currentPartition->getBeginAddress(),       currentPartition->getEndAddress() );
         
         nextPartition   = this->getPartition( partitionIndex );
         currentHoleSize = nextPartition->getBeginAddress() - currentPartition->getEndAddress() - 1;
         
-        DEBUGGERLN( b3, "( allocateMemory|for ) nextPartition->getBeginAddress(): %d, \nnextPartition->getEndAddress(): %d, \ncurrentHoleSize: %d,",
+        DEBUGGERLN( b4, "( allocateMemory|for ) nextPartition->getBeginAddress(): %d, \nnextPartition->getEndAddress(): %d, \ncurrentHoleSize: %d,",
                                                 nextPartition->getBeginAddress(),       nextPartition->getEndAddress(),       currentHoleSize );
         
-        if( currentHoleSize > biggestHoleSize )
+        if( size <= currentHoleSize
+            && currentHoleSize < smallestHoleSize )
         {
-            biggestHoleSize = currentHoleSize;
-            DEBUGGERLN( b3, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE INDEX %d POSITION!\nbiggestHoleSize: %u",
-                                                                                              partitionIndex, biggestHoleSize );
+            isReadyToCreate  = true;
+            smallestHoleSize = currentHoleSize;
+            DEBUGGERLN( b4, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE INDEX %d POSITION!\nsmallestHoleSize: %u",
+                                                                                              partitionIndex, smallestHoleSize );
             
             // Specifies that we must to place this new allocated memory between the currentPartition and before the nextPartition.
-            insertBeforeIterator = false;
-            biggestHoleSizeIndex = partitionIndex;
+            insertBeforeIterator  = false;
+            smallestHoleSizeIndex = partitionIndex;
         }
         
         currentPartition = nextPartition;
     }
     
-    DEBUGGERLN( b3, "( allocateMemory|after for 1 )" );
+    DEBUGGERLN( b4, "( allocateMemory|after for 1 )" );
     
     // maxAddress: 1, getEndAddress: 1 =: currentHoleSize: 0 OK
     currentHoleSize = MemoryManager::maxAddress - currentPartition->getEndAddress();
     
-    if( currentHoleSize > biggestHoleSize )
+    if( size <= currentHoleSize
+        && currentHoleSize < smallestHoleSize )
     {
-        biggestHoleSize = currentHoleSize;
-        DEBUGGERLN( b3, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE END OF THE MEMORY!\nbiggestHoleSize: %u", biggestHoleSize );
+        isReadyToCreate  = true;
+        smallestHoleSize = currentHoleSize;
+        DEBUGGERLN( b4, "( allocateMemory|for ) UPDATING THE BIGGEST HOLE SIZE TO THE END OF THE MEMORY!\nsmallestHoleSize: %u", smallestHoleSize );
         
         // Specifies that we must to place this new allocated memory between the currentPartition and before the nextPartition.
-        insertBeforeIterator = false;
-        biggestHoleSizeIndex = ( partitionsListSize < 2 ? 0 : partitionIndex - 1 );
+        insertBeforeIterator  = false;
+        smallestHoleSizeIndex = ( partitionsListSize < 2 ? 0 : partitionIndex - 1 );
     }
     
-    DEBUGGERLN( b3, "( allocateMemory|after for 2 )" );
+    DEBUGGERLN( b4, "( allocateMemory|after for 2 )" );
     
-    // When 'biggestHoleSizeIndex' is 0 and 'insertBeforeIterator' true, it is time to insert this partition as the first on the list.
-    if( !biggestHoleSizeIndex
+    // When 'smallestHoleSizeIndex' is 0 and 'insertBeforeIterator' true, it is time to insert this partition as the first on the list.
+    if( !smallestHoleSizeIndex
         && insertBeforeIterator )
     {
         // This is need to re-update the 'g_lastIndexAccess' used to add the partition at the begging
-        currentPartition      = this->getPartition( biggestHoleSizeIndex );
+        currentPartition      = this->getPartition( smallestHoleSizeIndex );
         partitionEndAddress   = size - 1;
         partitionStartAddress = 0;
     }
@@ -268,19 +282,22 @@ Partition* _BestFit::allocateMemory( unsigned int size )
         partitionStartAddress = currentPartition->getEndAddress() + 1;
     }
     
-    DEBUGGERLN( b3, "( allocateMemory|after for 3 )" );
+    DEBUGGERLN( b4, "( allocateMemory|after for 3 )" );
     
-    // partitionEndAddress: 1, maxAddress: 1, =: 1 < 2 OK
-    if( partitionEndAddress < MemoryManager::maxAddress + 1 )
+    if( isReadyToCreate )
     {
-        DEBUGGERLN( b3, "( allocateMemory|after for 4 ) partitionStartAddress: %d, \npartitionEndAddress: %d",
-                                                        partitionStartAddress,       partitionEndAddress );
-        
-        novo = new Partition( partitionStartAddress, partitionEndAddress, false );
-        this->addPartition( novo, insertBeforeIterator );
-        
-        DEBUGGERLN( b3, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
-                                            novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
+        // partitionEndAddress: 1, maxAddress: 1, =: 1 < 2 OK
+        if( partitionEndAddress < MemoryManager::maxAddress + 1 )
+        {
+            DEBUGGERLN( b4, "( allocateMemory|after for 4 ) partitionStartAddress: %d, \npartitionEndAddress: %d",
+                                                            partitionStartAddress,       partitionEndAddress );
+            
+            novo = new Partition( partitionStartAddress, partitionEndAddress, false );
+            this->addPartition( novo, insertBeforeIterator );
+            
+            DEBUGGERLN( b4, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
+                                                novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
+        }
     }
     
 #if defined DEBUG
@@ -288,7 +305,7 @@ Partition* _BestFit::allocateMemory( unsigned int size )
     
     for( auto partition : this->g_partitionList )
     {
-        DEBUGGERLN( b3, "( allocateMemory|DEBUG ) partitionIndex: %d, \npartition.getBeginAddress(): %d, \npartition.getEndAddress(): %d, \npartition.getLength(): %d",
+        DEBUGGERLN( b4, "( allocateMemory|DEBUG ) partitionIndex: %d, \npartition.getBeginAddress(): %d, \npartition.getEndAddress(): %d, \npartition.getLength(): %d",
                                                   partitionIndex++,     partition.getBeginAddress(),       partition.getEndAddress(),       partition.getLength() );
     }
     
