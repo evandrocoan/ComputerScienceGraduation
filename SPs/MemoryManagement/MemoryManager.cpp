@@ -217,11 +217,11 @@ void MemoryManager::showMemory()
         
         currentPartition = this->currentStrategy->getPartition( partitionIndex );
         nextStartAddress = currentPartition->getBeginAddress();
-        holeSize         = nextStartAddress - currentEndAddress - 1;
+        holeSize         = ( (int64_t) nextStartAddress ) - currentEndAddress - 1;
         
         if( holeSize > 0 )
         {
-            FPRINTLN( a16, "%u-%u:FREE %i", currentEndAddress + 1, nextStartAddress - 1, holeSize );
+            FPRINTLN( a16, "%u-%u:FREE %lld", currentEndAddress + 1, nextStartAddress - 1, holeSize );
         }
         
         currentStartAddress = currentPartition->getBeginAddress();

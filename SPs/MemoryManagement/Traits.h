@@ -63,8 +63,9 @@
  * b0   - Disabled all debug.
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
+ * b3   - _WorstFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b1";
+const char* const g_debugLevel = "a2 a8 a16 b3";
 
 
 #endif
