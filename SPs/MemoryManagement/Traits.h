@@ -66,7 +66,7 @@
  * b3   - _WorstFit::allocateMemory(1) debugging.
  * b4   - _BestFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b4 a32";
+const char* const g_debugLevel = "a2 a8 a16 b 4";
 
 
 #endif
@@ -159,16 +159,107 @@ template<> struct Traits<Scheduler>
 
 
 #if DEBUG_LEVEL > 0
-    #define DEBUG
-    
-    #include <execinfo.h>
-    #include <stdlib.h>
-    #include <unistd.h>
-    #include <stdio.h>
-    #include <cstring>
-    
-    inline void __printBacktrace();
+#define DEBUG
 
+#include <execinfo.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <cstring>
+
+
+/**
+ * Print like function for logging putting a new line at the end of string. See the variables
+ * 'g_debugLevel', 'g_debugMask', for the avalibles levels.
+ * 
+ * @param level     the debugging desired level to be printed.
+ * @param ...       variable number os formating arguments parameters.
+ */
+#define DEBUGGERLN( level, ... ) \
+do \
+{ \
+    if( __computeDeggingLevel( #level ) ) \
+    { \
+        std::cout << format( __VA_ARGS__ ) << std::endl; \
+    } \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGERLN(...) just below, but do not put automatically a new line.
+ */
+#define DEBUGGER( level, ... ) \
+do \
+{ \
+    if( __computeDeggingLevel( #level ) ) \
+    { \
+            std::cout << format( __VA_ARGS__ ); \
+    } \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGER(...), but it is for standard program output.
+ */
+#define FPRINT( level, ... ) \
+do \
+{ \
+    if( __computeDeggingLevel( #level ) ) \
+    { \
+        std::cout << format( __VA_ARGS__ ); \
+    } \
+} \
+while( 0 )
+
+/**
+ * The same as DEBUGGERLN(...), but it is for standard program output.
+ */
+#define FPRINTLN( level, ... ) \
+do \
+{ \
+    if( __computeDeggingLevel( #level ) ) \
+    { \
+        std::cout << format( __VA_ARGS__ ) << std::endl; \
+    } \
+} \
+while( 0 )
+
+
+
+/**
+ * Print to the standard out stream the stack trace until this call.
+ */
+inline void __printBacktrace()
+{
+#define BACKTRACE_SIZE 100
+    
+    int traceIndex;
+    int traceLevels;
+    
+    void *buffer[ BACKTRACE_SIZE ];
+    char **strings;
+    
+    traceLevels = backtrace( buffer, BACKTRACE_SIZE );
+    std::cout << "backtrace() returned " << traceLevels << " addresses" << std::endl;
+    
+    strings = backtrace_symbols( buffer, traceLevels );
+    
+    if( strings == NULL )
+    {
+        std::cout << "ERROR! We failure at failing!" << std::endl;
+        std::cout << "There are none backtrace_symbols!" << std::endl;
+        exit( EXIT_FAILURE );
+    }
+    else
+    {
+        for( traceIndex = 0; traceIndex < traceLevels; traceIndex++ )
+        {
+            std::cout << strings[traceIndex] << std::endl;
+        }
+    }
+    
+    free( strings );
+}
 
 /**
  * Determines whether the given debug level is enabled.
@@ -292,99 +383,6 @@ inline bool __computeDeggingLevel( const char* debugLevel )
     return false;
 }
 
-/**
- * Print to the standard out stream the stack trace until this call.
- */
-inline void __printBacktrace()
-{
-#define BACKTRACE_SIZE 100
-    
-    int traceIndex;
-    int traceLevels;
-    
-    void *buffer[ BACKTRACE_SIZE ];
-    char **strings;
-    
-    traceLevels = backtrace( buffer, BACKTRACE_SIZE );
-    std::cout << "backtrace() returned " << traceLevels << " addresses" << std::endl;
-    
-    strings = backtrace_symbols( buffer, traceLevels );
-    
-    if( strings == NULL )
-    {
-        std::cout << "ERROR! We failure at failing!" << std::endl;
-        std::cout << "There are none backtrace_symbols!" << std::endl;
-        exit( EXIT_FAILURE );
-    }
-    else
-    {
-        for( traceIndex = 0; traceIndex < traceLevels; traceIndex++ )
-        {
-            std::cout << strings[traceIndex] << std::endl;
-        }
-    }
-    
-    free( strings );
-}
-
-/**
- * Print like function for logging putting a new line at the end of string. See the variables
- * 'g_debugLevel', 'g_debugMask', for the avalibles levels.
- * 
- * @param level     the debugging desired level to be printed.
- * @param ...       variable number os formating arguments parameters.
- */
-#define DEBUGGERLN( level, ... ) \
-do \
-{ \
-    if( __computeDeggingLevel( #level ) ) \
-    { \
-        std::cout << format( __VA_ARGS__ ) << std::endl; \
-    } \
-} \
-while( 0 )
-
-
-/**
- * The same as DEBUGGERLN(...) just below, but do not put automatically a new line.
- */
-#define DEBUGGER( level, ... ) \
-do \
-{ \
-    if( __computeDeggingLevel( #level ) ) \
-    { \
-            std::cout << format( __VA_ARGS__ ); \
-    } \
-} \
-while( 0 )
-
-
-/**
- * The same as DEBUGGER(...), but it is for standard program output.
- */
-#define FPRINT( level, ... ) \
-do \
-{ \
-    if( __computeDeggingLevel( #level ) ) \
-    { \
-        std::cout << format( __VA_ARGS__ ); \
-    } \
-} \
-while( 0 )
-
-
-/**
- * The same as DEBUGGERLN(...), but it is for standard program output.
- */
-#define FPRINTLN( level, ... ) \
-do \
-{ \
-    if( __computeDeggingLevel( #level ) ) \
-    { \
-        std::cout << format( __VA_ARGS__ ) << std::endl; \
-    } \
-} \
-while( 0 )
 
 
 #else
