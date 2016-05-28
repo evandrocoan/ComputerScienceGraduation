@@ -186,14 +186,14 @@ void MemoryManager::showMemory()
     static int openedCount = 0;
 #endif
     
-    FPRINT( a16, "\n" );
+    //FPRINT( a16, "\n" );
     DEBUGGERLN( a2 a32, "I AM ENTERING IN MemoryManager::showMemory(0) | openedCount: %d", ++openedCount );
     
     unsigned int partitionListSize = this->currentStrategy->partitionListSize();
     
     if( partitionListSize == 0 )
     {
-        FPRINTLN( a16, "0-%u:FREE %u", MemoryManager::maxAddress, MemoryManager::maxAddress + 1 );
+        FPRINTLN( a16, "0-%u: FREE %u", MemoryManager::maxAddress, MemoryManager::maxAddress + 1 );
         return;
     }
     
@@ -208,12 +208,12 @@ void MemoryManager::showMemory()
     
     if( currentStartAddress > 0 )
     {
-        FPRINTLN( a16, "0-%u:FREE %u", currentStartAddress - 1, currentStartAddress );
+        FPRINTLN( a16, "0-%u: FREE %u", currentStartAddress - 1, currentStartAddress );
     }
     
     for( unsigned int partitionIndex = 1; partitionIndex < partitionListSize; partitionIndex++ )
     {
-        FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
+        FPRINTLN( a16, "%u-%u: ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
         
         currentPartition = this->currentStrategy->getPartition( partitionIndex );
         nextStartAddress = currentPartition->getBeginAddress();
@@ -221,14 +221,14 @@ void MemoryManager::showMemory()
         
         if( holeSize > 0 )
         {
-            FPRINTLN( a16, "%u-%u:FREE %lld", currentEndAddress + 1, nextStartAddress - 1, holeSize );
+            FPRINTLN( a16, "%u-%u: FREE %lld", currentEndAddress + 1, nextStartAddress - 1, holeSize );
         }
         
         currentStartAddress = currentPartition->getBeginAddress();
         currentEndAddress   = currentPartition->getEndAddress();
     }
     
-    FPRINTLN( a16, "%u-%u:ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
+    FPRINTLN( a16, "%u-%u: ALLOCATED %u", currentStartAddress, currentEndAddress, currentPartition->getLength() );
     holeSize = MemoryManager::maxAddress - currentPartition->getEndAddress();
     
     DEBUGGERLN( a32, "( showMemory ) holeSize: %lld, \ncurrentPartition->getEndAddress():%u, \nMemoryManager::maxAddress: %u,",
@@ -236,7 +236,7 @@ void MemoryManager::showMemory()
     
     if( holeSize > 0 )
     {
-        FPRINTLN( a16, "%u-%lld:FREE %lld", currentPartition->getEndAddress() + 1, MemoryManager::maxAddress, holeSize );
+        FPRINTLN( a16, "%u-%lld: FREE %lld", currentPartition->getEndAddress() + 1, MemoryManager::maxAddress, holeSize );
     }
 }
 
