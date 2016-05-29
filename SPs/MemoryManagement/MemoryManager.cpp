@@ -28,7 +28,9 @@ Partition::Partition( unsigned int beginAddress, unsigned int endAddress, bool i
 #if defined DEBUG
     static int openedCount = 0;
 #endif
-    
+#if defined DEBUG
+    if( openedCount > 28 )
+#endif
     DEBUGGERLN( a2, "I AM ENTERING IN Partition::Partition(3) | openedCount: %d", ++openedCount );
     
     _beginAddress = beginAddress;

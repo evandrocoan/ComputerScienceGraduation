@@ -31,7 +31,7 @@
  *  2   = Enable the Traits<Debug> pauseOnEveryEvent.
  *  4   = Enable all Traits<Debug> levels.
  */
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 
 #define DEBUG_LEVEL_DISABLED_DEBUG       0
@@ -66,7 +66,7 @@
  * b4   - _BestFit::allocateMemory(1) debugging.
  * b8  - _WorstFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b8";
+const char* const g_debugLevel = "a2 a8 a16 b1";
 
 
 #endif
