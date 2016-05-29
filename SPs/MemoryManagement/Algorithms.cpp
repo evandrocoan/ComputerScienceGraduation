@@ -148,12 +148,16 @@ void Algorithm::deletePartition( Partition* partition )
     static int openedCount = 0;
 #endif
 #if defined DEBUG
-    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+    if( openedCount > -1 )
 #endif
     DEBUGGERLN( a2 a8, "I AM ENTERING IN Algorithm::deletePartition(1) | Begin: %u, openedCount: %d", partition->getBeginAddress(), ++openedCount );
     
     this->g_lastIndexAccess = DISABLED_LAST_PARTITION_INDEX;
-    this->g_partitionList.erase( std::find( this->g_partitionList.begin(), this->g_partitionList.end(), *partition ) );
+    
+    if( this->partitionListSize() )
+    {
+        this->g_partitionList.erase( std::find( this->g_partitionList.begin(), this->g_partitionList.end(), *partition ) );
+    }
 }
 
 /**
@@ -604,20 +608,22 @@ void _NextFit::deletePartition( Partition* partition )
  */
 Partition* _NextFit::allocateMemory( unsigned int size ) 
 {
-const int SHOW_DEBUG_AFTER_X_TIMES = 40;
+const int SHOW_DEBUG_AFTER_X_TIMES = 0;
     
 #if defined DEBUG
     static int openedCount = 0;
     ++openedCount;
 #endif
 #if defined DEBUG
-    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+    if( openedCount > -1 )
 #endif
     DEBUGGERLN( b2 + a2, "\nI AM ENTERING IN _NextFit::allocateMemory(1) | size: %u, openedCount: %d", size, openedCount );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
-    
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
     DEBUGGERLN( b2, "( allocateMemory ) size: %d, partitionsListSize: %u,", size, partitionsListSize );
     
     if( partitionsListSize == 0 )
@@ -629,7 +635,9 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
         {
             novo = new Partition( 0, size - 1, false );
             this->addPartition( novo, false );
-            
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
             DEBUGGERLN( b2, "( allocateMemory|size 0 ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d,",
                                                        novo->getBeginAddress(),       novo->getEndAddress() );
         }
@@ -658,6 +666,9 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
             // maxAddress: 1, getEndAddress: 1 =: holeSize: 0 OK
             if( holeSize >= size )
             {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
                 DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE AT THE MEMORY END POSITION!" );
                 
                 insertBeforeIterator = false;
@@ -672,6 +683,9 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
             // holeSize: 1, size: 1 =: 1 = 1 OK
             if( holeSize >= size )
             {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
                 DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE AT FIRST POSITION!" );
                 
                 insertBeforeIterator = true;
@@ -680,19 +694,30 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
             
             continue;
         }
-        
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory|for ) partitionIndex: %d,", g_lastAllocationIndex );
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory|for ) currentPartition->getBeginAddress(): %d, \ncurrentPartition->getEndAddress(): %d,",
                                                 currentPartition->getBeginAddress(),       currentPartition->getEndAddress() );
         
         nextPartition = this->getPartition( g_lastAllocationIndex );
         holeSize      = nextPartition->getBeginAddress() - currentPartition->getEndAddress() - 1;
         
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory|for ) nextPartition->getBeginAddress(): %d, \nnextPartition->getEndAddress(): %d, \nholeSize: %d,",
                                                 nextPartition->getBeginAddress(),       nextPartition->getEndAddress(),       holeSize );
         
         if( holeSize >= size )
         {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
             DEBUGGERLN( b2, "( allocateMemory|for ) EXITING BY HOLE SIZE COMPATIBLE!" );
             
             // This must to be true, because the this->getPartition(1) function call above, incremented the last
@@ -705,6 +730,9 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
         currentPartition = nextPartition;
     } while( g_lastAllocationIndex != lastAllocationIndex );
     
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
     DEBUGGERLN( b2, "( allocateMemory|after for 1 )" );
     
     if( holeSize >= size )
@@ -712,30 +740,55 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 40;
         if( g_lastAllocationIndex
             || !insertBeforeIterator )
         {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
+            DEBUGGERLN( b2, "( allocateMemory ) !insertBeforeIterator" );
+            
             partitionEndAddress   = currentPartition->getEndAddress() + size;
             partitionStartAddress = currentPartition->getEndAddress() + 1;
         }
         else
         {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
+            DEBUGGERLN( b2, "( allocateMemory ) !insertBeforeIterator" );
+            
             partitionEndAddress   = size - 1;
             partitionStartAddress = 0;
         }
         
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
+        DEBUGGERLN( b2, "( allocateMemory|after for 2 ) partitionStartAddress: %d, \npartitionEndAddress: %d,",
+                                                    partitionStartAddress,       partitionEndAddress );
+        
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory|after for 2 ) partitionStartAddress: %d, \npartitionEndAddress: %d,",
                                                         partitionStartAddress,       partitionEndAddress );
         
         novo = new Partition( partitionStartAddress, partitionEndAddress, false );
         this->addPartition( novo, insertBeforeIterator );
         
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory ) novo->getBeginAddress(): %d, \nnovo->getEndAddress(): %d, \nnovo->getLength(): %d",
                                             novo->getBeginAddress(),       novo->getEndAddress(),       novo->getLength() );
     }
     
-#if defined DEBUG
+#if defined DEBUGG
     int partitionIndex = 0;
     
     for( auto partition : this->g_partitionList )
     {
+#if defined DEBUG
+    if( openedCount > SHOW_DEBUG_AFTER_X_TIMES )
+#endif
         DEBUGGERLN( b2, "( allocateMemory|DEBUG ) partitionIndex: %d, \npartition.getBeginAddress(): %d, \npartition.getEndAddress(): %d, \npartition.getLength(): %d",
                                                   partitionIndex++,     partition.getBeginAddress(),       partition.getEndAddress(),       partition.getLength() );
     }

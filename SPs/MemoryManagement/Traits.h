@@ -66,7 +66,7 @@
  * b4   - _BestFit::allocateMemory(1) debugging.
  * b8  - _WorstFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b1";
+const char* const g_debugLevel = "a2 a8 a16 b2 b 4";
 
 
 #endif
