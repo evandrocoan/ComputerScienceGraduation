@@ -149,7 +149,7 @@ template<> struct Traits<Model>
 template<> struct Traits<MemoryManager>
 {
     static constexpr unsigned int physicalMemorySize = 1e6; // bytes
-    static constexpr MemoryAllocationAlgorithm allocationAlgorithm = MemoryAllocationAlgorithm::FirstFit;
+    static constexpr MemoryAllocationAlgorithm allocationAlgorithm = MemoryAllocationAlgorithm::NextFit;
 };
 
 template<> struct Traits<Scheduler> 
