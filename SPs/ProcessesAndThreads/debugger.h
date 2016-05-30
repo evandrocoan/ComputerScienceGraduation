@@ -1,21 +1,7 @@
-/*
- * File:   Traits.h
- * Author: cancian
- *
- * Created on September 27, 2015, 4:16 PM
+/**
+ * 
  */
 
-
-
-#ifndef TRAITS_H
-#define	TRAITS_H
-
-#include "Debug.h"
-#include "CPU.h"
-#include "Thread.h"
-#include "Model.h"
-#include "Scheduler.h"
-#include "Process.h"
 
 #include <iostream>
 #include <string>
@@ -28,20 +14,16 @@
  * 
  *  0   = Disables this feature.
  *  1  >= MemoryManager debugging.
- *  2   = Enable the Traits<Debug> pauseOnEveryEvent.
- *  4   = Enable all Traits<Debug> levels.
  */
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 
-#define DEBUG_LEVEL_DISABLED_DEBUG       0
-#define DEBUG_LEVEL_BASIC_DEBUG          1
-#define DEBUG_LEVEL_PAUSE_ON_EVERY_EVENT 2
-#define DEBUG_LEVEL_ALL_TRAITS_LEVELS    4
+#define DEBUG_LEVEL_DISABLED_DEBUG 0
+#define DEBUG_LEVEL_BASIC_DEBUG    1
 
 
 /**
- * MemoryManager debugging.
+ * Debugging definitions.
  */
 #if DEBUG_LEVEL > DEBUG_LEVEL_DISABLED_DEBUG
 
@@ -63,111 +45,20 @@
  * b0   - Disabled all debug.
  * b1   - _FirstFit::allocateMemory(1) debugging.
  * b2   - _NextFit::allocateMemory(1) debugging.
+ * b3   - _WorstFit::allocateMemory(1) debugging.
  * b4   - _BestFit::allocateMemory(1) debugging.
- * b8  - _WorstFit::allocateMemory(1) debugging.
  */
-const char* const g_debugLevel = "a2 a8 a16 b2 b 4";
+const char* const g_debugLevel = "a2 a8 a16 b4 a32";
 
 
 #endif
 
 
-
-template<typename T>
-struct Traits 
-{
-    static const bool enabled = true;
-    static const bool debugged = true;
-};
-
-template<> struct Traits<Process> 
-{
-    static constexpr double timeBetweenCreations = 50.0; // time units
-    static constexpr unsigned int minAddressSpace = 10e3; // bytes
-    static constexpr unsigned int maxAddressSpace = 200e3; // bytes
-};
-
-template<> struct Traits<Debug> 
-{ // CHANGE THE DEBUG LEVEL HERE SETTING THE LEVELS YOU WANT TO SHOW
-    // debug levels
-
-#if DEBUG_LEVEL == DEBUG_LEVEL_PAUSE_ON_EVERY_EVENT
-    static const bool error = 0;
-    static const bool warning = 0;
-    static const bool trace = 0; //false;
-    static const bool info = 0; //true;
-    static const bool fine = 0; //true;
-    //
-    static const bool showEntityAttributes = 0;
-    static const bool showListOfEvents = 0;
-    static const bool pauseOnEveryEvent = 1; //true;
-
-#elif DEBUG_LEVEL == DEBUG_LEVEL_ALL_TRAITS_LEVELS
-    static const bool error = 1;
-    static const bool warning = 1;
-    static const bool trace = 1; //false;
-    static const bool info = 1; //true;
-    static const bool fine = 1; //true;
-    //
-    static const bool showEntityAttributes = 1;
-    static const bool showListOfEvents = 1;
-    static const bool pauseOnEveryEvent = 1; //true;
-#else
-    static const bool error = 0;
-    static const bool warning = 0;
-    static const bool trace = 0; //false;
-    static const bool info = 0; //true;
-    static const bool fine = 0; //true;
-    //
-    static const bool showEntityAttributes = 0;
-    static const bool showListOfEvents = 0;
-    static const bool pauseOnEveryEvent = 0; //true;
-#endif
-};
-
-template<> struct Traits<CPU> 
-{
-    static constexpr double context_switch_overhead = 1.0; // time units
-    static constexpr double timer_interrupt_period = 100.0; // time units
-};
-
-template<> struct Traits<Thread> 
-{
-    static constexpr double minCpuBurst = 200.0;   // time units
-    static constexpr double maxCpuBurst = 500.0;   // time units
-    static constexpr int maxBursts = 5;            // CPUBurst
-    static constexpr int minThreadsPerProcess = 1; // threads
-    static constexpr int maxThreadsPerProcess = 1; // threads
-};
-
-template<> struct Traits<Model> 
-{
-    static constexpr double simulationLength = 5000.0; // time units
-    static constexpr double firstCreation = 0.0;       // time units
-};
-
-template<> struct Traits<MemoryManager>
-{
-    static constexpr unsigned int physicalMemorySize = 1e6; // bytes
-    static constexpr MemoryAllocationAlgorithm allocationAlgorithm = MemoryAllocationAlgorithm::NextFit;
-};
-
-template<> struct Traits<Scheduler> 
-{
-    static constexpr double timeSlice = 300.0; // time units
-};
-
-
-
-#if DEBUG_LEVEL > 0
+/**
+ * Debugging definitions.
+ */
+#if DEBUG_LEVEL > DEBUG_LEVEL_DISABLED_DEBUG
 #define DEBUG
-
-#include <execinfo.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <cstring>
-
 
 /**
  * Print like function for logging putting a new line at the end of string. See the variables
@@ -186,6 +77,7 @@ do \
 } \
 while( 0 )
 
+
 /**
  * The same as DEBUGGERLN(...) just below, but do not put automatically a new line.
  */
@@ -199,6 +91,7 @@ do \
 } \
 while( 0 )
 
+
 /**
  * The same as DEBUGGER(...), but it is for standard program output.
  */
@@ -211,6 +104,7 @@ do \
     } \
 } \
 while( 0 )
+
 
 /**
  * The same as DEBUGGERLN(...), but it is for standard program output.
@@ -226,6 +120,11 @@ do \
 while( 0 )
 
 
+#include <execinfo.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <cstring>
 
 /**
  * Print to the standard out stream the stack trace until this call.
@@ -385,7 +284,6 @@ inline bool __computeDeggingLevel( const char* debugLevel )
 }
 
 
-
 #else
     #define DEBUGGER( stream, ... )
     #define DEBUGGERLN( stream, ... )
@@ -467,6 +365,3 @@ inline std::string format(const char* fmt, ...)
     
     return ret;
 }
-
-
-#endif	/* TRAITS_H */
