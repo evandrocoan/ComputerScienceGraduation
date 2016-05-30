@@ -31,7 +31,7 @@
  *  2   = Enable the Traits<Debug> pauseOnEveryEvent.
  *  4   = Enable all Traits<Debug> levels.
  */
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 
 #define DEBUG_LEVEL_DISABLED_DEBUG       0
@@ -149,6 +149,7 @@ template<> struct Traits<Model>
 template<> struct Traits<MemoryManager>
 {
     static constexpr unsigned int physicalMemorySize = 1e6; // bytes
+    static constexpr MemoryAllocationAlgorithm allocationAlgorithm = MemoryAllocationAlgorithm::FirstFit;
 };
 
 template<> struct Traits<Scheduler> 

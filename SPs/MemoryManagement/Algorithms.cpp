@@ -179,14 +179,14 @@ unsigned int Algorithm::partitionListSize()
  * @see _BestFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _BestFit::allocateMemory( unsigned int size ) 
-{/*
+{
 const int SHOW_DEBUG_AFTER_X_TIMES = 28;
 
 #if defined DEBUG
     static int openedCount = 0;
 #endif
     
-    DEBUGGERLN( a2 b4, "\nI AM ENTERING IN _BestFit::allocateMemory(1) | size: %u, openedCount: %d", size, ++openedCount );
+    DEBUGGERLN( a2 b4, "I AM ENTERING IN _BestFit::allocateMemory(1) | size: %u, openedCount: %d", size, ++openedCount );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
@@ -396,7 +396,7 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 28;
     
 #endif
     
-    return novo;*/
+    return novo;
 }
 
 
@@ -415,7 +415,7 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 33;
 #if defined DEBUG
     if( openedCount > 27 )
 #endif
-    DEBUGGERLN( a2 b1, "\nI AM ENTERING IN _FirstFit::allocateMemory(1) | size: %u, openedCount: %d", size, openedCount );
+    DEBUGGERLN( a2 b1, "I AM ENTERING IN _FirstFit::allocateMemory(1) | size: %u, openedCount: %d", size, openedCount );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
@@ -608,7 +608,7 @@ void _NextFit::deletePartition( Partition* partition )
  */
 Partition* _NextFit::allocateMemory( unsigned int size ) 
 {
-const int SHOW_DEBUG_AFTER_X_TIMES = 0;
+const int SHOW_DEBUG_AFTER_X_TIMES = 40;
     
 #if defined DEBUG
     static int openedCount = 0;
@@ -617,7 +617,7 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 0;
 #if defined DEBUG
     if( openedCount > -1 )
 #endif
-    DEBUGGERLN( b2 + a2, "\nI AM ENTERING IN _NextFit::allocateMemory(1) | size: %u, openedCount: %d", size, openedCount );
+    DEBUGGERLN( b2 + a2, "I AM ENTERING IN _NextFit::allocateMemory(1) | size: %u, openedCount: %d", size, openedCount );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
@@ -804,14 +804,14 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 0;
  * @see _WorstFit::allocateMemory( unsigned int ) member class declaration.
  */
 Partition* _WorstFit::allocateMemory( unsigned int size ) 
-{/*
+{
 const int SHOW_DEBUG_AFTER_X_TIMES = 28;
 
 #if defined DEBUG
     static int openedCount = 0;
 #endif
     
-    DEBUGGERLN( a2 b8, "\nI AM ENTERING IN _WorstFit::allocateMemory(1) | size: %u, openedCount: %d", size, ++openedCount );
+    DEBUGGERLN( a2 b8, "I AM ENTERING IN _WorstFit::allocateMemory(1) | size: %u, openedCount: %d", size, ++openedCount );
     
     Partition*   novo               = NULL;
     unsigned int partitionsListSize = this->partitionListSize();
@@ -1003,7 +1003,7 @@ const int SHOW_DEBUG_AFTER_X_TIMES = 28;
     
 #endif
     
-    return novo;*/
+    return novo;
 }
 
 
