@@ -15,11 +15,6 @@
 */
 namespace BOOOS
 {
-    /**
-     * 
-     */
-    volatile Task* Task::__running;
-    
     class Task : public Queue::Element
     {
     public:
@@ -38,45 +33,78 @@ namespace BOOOS
         /**
          * 
          */
-    	Task(void (*entry_point)(void), int nargs, void * arg);
-    	
-    	/**
-    	 * 
-    	 */
-    	virtual ~Task();
-        
-        /**
-         * 
-         */
-    	int tid()
-    	
-    	/**
-    	 * 
-    	 */
-    	State state()
+    	Task( void ( *entry_point )( void* ), int nargs, void* arg )
     	{
-    	    return _state;
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::Task(3) | nargs: %d, ", nargs );
+    	}
+    	
+    	/**
+    	 * 
+    	 */
+    	virtual ~Task()
+    	{
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::~Task(0)" );
     	}
         
         /**
          * 
          */
-    	void pass_to(Task * t, State s = READY);
-        
-        /**
-         * 
-         */
-    	void exit(int code);
-        
-        /**
-         * 
-         */
-    	static Task * self();
-    	
+    	int tid()
+        {
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::~Task(0) | returning _tid: %d", this->_tid );
+            
+            return this->_tid;
+        }
+        	
     	/**
     	 * 
     	 */
-    	static void init();
+    	State state()
+    	{ 
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::state(0) | returning _state: %d", this->_state );
+    	    
+    	    return this->_state;
+    	}
+        
+        /**
+         * 
+         */
+    	void pass_to(Task* t, State s = READY)
+    	{
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::pass_to(2) | Task tid: %s, State: %d", t->_tid, s );
+    	}
+        
+        /**
+         * 
+         */
+    	void exit(int code)
+    	{
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::exit(1) | code: %d", code );
+    	}
+        
+        /**
+         * static Task* self()
+         * 
+         * Método de classe (static) que retorna a Task executando no momento.
+         */
+    	static Task* self()
+    	{
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::self(0) | returning __running->tid: %d", __running->_tid );
+    	    
+	        return (Task*) Task::__running;
+	    }
+	    
+    	/**
+    	 * static void init()
+    	 * 
+    	 * Método de classe que precisa ser chamando na inicialização do sistema e deve
+    	 * inicializar os atributos de classe (static). Atenção, o atributo __main, que é
+    	 * static, deve ser inicializado aqui!
+    	 */
+    	static void init()
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::init(0)" );
+        }
         
         
     private:
@@ -84,7 +112,10 @@ namespace BOOOS
         /**
          * 
          */
-    	Task();
+    	Task()
+    	{
+    	    DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Task::Task(0)" );
+    	}
         
         /**
          * 

@@ -13,20 +13,9 @@
 namespace BOOOS
 {
     /**
-    * @see BOOOS::Task::tid() member class declaration.
+    * @see BOOOS::Task::__running member class declaration.
     */
-    int BOOOS::Task::tid()
-    {
-        return _tid;
-    }
-    
-    /**
-    * @see BOOOS::Task::self() member class declaration.
-    */
-	static Task* self()
-	{
-	    return (Task*) __running;
-	}
+    volatile Task* BOOOS::Task::__running = 0;
     
 } // end namespace BOOOS
 

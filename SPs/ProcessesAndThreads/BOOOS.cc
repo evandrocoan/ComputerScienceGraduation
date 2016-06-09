@@ -19,9 +19,13 @@ namespace BOOOS
     */
     BOOOS::BOOOS( bool verbose ) : _verbose(verbose)
     {
-    	if(_verbose) std::cout << "Welcome to BOOOS - Basic Object Oriented Operating System!" << std::endl;
+    	if(_verbose) 
+    	{
+    	    std::cout << "Welcome to BOOOS - Basic Object Oriented Operating System!" << std::endl;
+    	}
         
     	// Call init routines of other components
+        
         
     	Task::init();
     }
@@ -33,7 +37,11 @@ namespace BOOOS
     {
     	// Call finish routines of other components (if any)
         
-    	if(_verbose) std::cout << "BOOOS ended... Bye!" << std::endl;
+        
+    	if( _verbose )
+    	{
+    	    std::cout << "BOOOS ended... Bye!" << std::endl;
+    	}
     }
     
     /**
