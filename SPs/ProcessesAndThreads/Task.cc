@@ -8,16 +8,35 @@
 
 
 /**
-* @see BOOOS namespace member class declaration at the main file 'BOOOS.cc'.
+* @see BOOOS namespace declaration at the main file 'BOOOS.h'.
 */
 namespace BOOOS
 {
     /**
-     * 
-     */
-    volatile Task * Task::__running;
-
-    //...
+    * @see BOOOS::Task::tid() member class declaration.
+    */
+    int BOOOS::Task::tid()
+    {
+        return _tid;
+    }
     
+    /**
+    * @see BOOOS::Task::self() member class declaration.
+    */
+	static Task* self()
+	{
+	    return (Task*) __running;
+	}
     
 } // end namespace BOOOS
+
+
+
+
+
+
+
+
+
+
+

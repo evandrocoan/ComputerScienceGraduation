@@ -11,10 +11,15 @@
 #include <ucontext.h>
 
 /**
-* @see BOOOS namespace member class declaration at the main file 'BOOOS.cc'.
+* @see BOOOS namespace declaration at the main file 'BOOOS.h'.
 */
 namespace BOOOS
 {
+    /**
+     * 
+     */
+    volatile Task* Task::__running;
+    
     class Task : public Queue::Element
     {
     public:
@@ -44,9 +49,6 @@ namespace BOOOS
          * 
          */
     	int tid()
-    	{
-    	    return _tid;
-    	}
     	
     	/**
     	 * 
@@ -69,10 +71,7 @@ namespace BOOOS
         /**
          * 
          */
-    	static Task * self()
-    	{
-    	    return (Task*) __running;
-    	}
+    	static Task * self();
     	
     	/**
     	 * 
@@ -90,7 +89,7 @@ namespace BOOOS
         /**
          * 
          */
-    	static volatile Task * __running;
+    	static volatile Task* __running;
         
         /**
          * 
@@ -110,3 +109,13 @@ namespace BOOOS
 } // end namespace BOOOS 
 
 #endif // TASK_H_
+
+
+
+
+
+
+
+
+
+

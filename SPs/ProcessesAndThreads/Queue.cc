@@ -8,7 +8,7 @@
 
 
 /**
-* @see BOOOS namespace member class declaration at the main file 'BOOOS.cc'.
+* @see BOOOS namespace declaration at the main file 'BOOOS.h'.
 */
 namespace BOOOS
 {
@@ -32,7 +32,7 @@ namespace BOOOS
      * @throw 1   an integer to represent an invalid Element (if elem == 0)
      * @throw 2   an integer to represent a duplicated Element (if elem already is on the queue)
      */
-    void Queue::insert(Queue::Element * elem)
+    void Queue::insert( Queue::Element * elem )
     {
         
     }
@@ -46,3 +46,17 @@ namespace BOOOS
     }
 
 } // end namespace BOOOS
+
+
+
+
+
+
+
+
+
+
+
+
+
+

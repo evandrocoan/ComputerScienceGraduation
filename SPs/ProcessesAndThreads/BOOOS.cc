@@ -10,7 +10,7 @@
 
 
 /**
-* @see BOOOS namespace member class declaration at the main file 'BOOOS.cc'.
+* @see BOOOS namespace declaration at the main file 'BOOOS.h'.
 */
 namespace BOOOS
 {
