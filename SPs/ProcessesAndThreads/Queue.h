@@ -14,7 +14,8 @@
 #include <iostream>
 #include <string>
 #include <cstdarg>
-
+#include <set>
+#include <list>
 
 
 /**
@@ -389,17 +390,6 @@ namespace BOOOS
     public:
         
         /**
-         * To create an empty Queue object ready to receive elements.
-         */
-        Queue();
-        
-        /**
-         * Free the memory used by this object.
-         */
-        virtual ~Queue();
-        
-        
-        /**
          * Implements a queue node which holds its information as its rank, next and previous
          * elements on the queue. This elementa data must to be explicitly updated every time
          * the queue is changed.
@@ -411,12 +401,25 @@ namespace BOOOS
             /**
              * Creates a new Element object.
              */
-            Element() { this->_prev = 0; this->_next = 0; this->_rank = 0; }
+            Element()
+            {
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::Element(0) | THE CONSTRUCTOR!" );
+                
+                this->_prev = 0;
+                this->_next = 0;
+                this->_rank = 0;
+            }
             
             /**
              * Free the memory used by this object.
              */
-            virtual ~Element() { delete ( this->_prev ); delete ( this->_next ); }
+            virtual ~Element()
+            {
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::~Element(0) | THE DESTRUCTOR!" );
+                
+                delete ( this->_prev );
+                delete ( this->_next );
+            }
             
             /**
              * Gets the previus element this double linked list is pointing to.
@@ -424,7 +427,11 @@ namespace BOOOS
              * @return null when there is not any next element, otherwise, an Element object
              *         pointer.
              */
-            Element* prev() { return this->_prev; }
+            Element* prev()
+            {
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::prev(0)" );
+                return this->_prev;
+            }
             
             /**
              * Gets the next element this double linked list is pointing to.
@@ -432,35 +439,55 @@ namespace BOOOS
              * @return null when there is not any next element, otherwise, an Element object
              *      pointer.
              */
-            Element* next() { return this->_next; }
+            Element* next()
+            { 
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::next(0)" );
+                return this->_next;
+            }
             
             /**
              * Gets this element rank on the double linked list.
              * 
              * @return this element rank.
              */
-            int rank() { return this->_rank; }
+            int rank()
+            {
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::rank(0)" );
+                return this->_rank; 
+            }
             
             /**
              * Sets the previous element to this on the double linked list.
              * 
              * @param p    the previous element to this on the linked list.
              */
-            void prev( Element* p ) { this->_prev = p; }
+            void prev( Element* p )
+            { 
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::prev(1)" );
+                this->_prev = p;
+            }
             
             /**
              * Sets the next element to this on the double linked list.
              * 
              * @param p    the next element to this on the double linked list.
              */
-            void next( Element* p ) { this->_next = p; }
+            void next( Element* p )
+            {
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::next(1)" );
+                this->_next = p;
+            }
             
             /**
              * Set this element rank on the linked list.
              * 
              * @param r    this element rank on the double linked list.
              */
-            void rank(int r) { this->_rank = r; }
+            void rank(int r)
+            { 
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::rank(1)" );
+                this->_rank = r;
+            }
             
             
         private:
@@ -484,37 +511,113 @@ namespace BOOOS
         
         
         /**
+         * Queue constructor: must initialize queue's attributes
+         * 
+         * To create an empty Queue object ready to receive elements.
+         */
+        Queue()
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Queue(0) | THE CONSTRUCTOR!" );
+            this->_length = 0;
+        }
+        
+        /**
+         * Queue destructor: must finalize queue's attributes
+         * 
+         * Free the memory used by this object.
+         */
+        virtual ~Queue()
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::~Queue(0) | THE DESTRUCTOR!" );
+        }
+        
+        
+        /**
          * Gets the current double linked list head element. Calling 'head()->next()' will point
          * to its head, and calling 'head()->prev()' will point to tail.
          * 
          * @return an Element pointer to the current double linked list head.
          */
-        Element* head() { return &( this->_head ); }
+        Element* head()
+        { 
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::head(0)" );
+            return &( this->_head ); 
+        }
         
         /**
          * 
          */
-        int length() { return this->_length; }
+        int length()
+        {
+            return this->_length;
+        }
+        
+        /** 
+         * Insert method: must insert the Element at the end of the queue.
+         * 
+         * @param 
+         * 
+         * @throw 1   an integer to represent an invalid Element (if elem == 0)
+         * @throw 2   an integer to represent a duplicated Element (if elem already is on the queue)
+         */
+        void insert( Element* elem )
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::insert(1)" );
+            
+            if( elem == NULL )
+            {
+                throw 1;
+            }
+            
+            if( mySet.find( elem ) == mySet.end() )
+            {
+                throw 2;
+            }
+            
+            myList.push_back( elem );
+            mySet.insert( elem );
+            
+            if( this->_length == 0 )
+            {
+                this->_head();
+                
+                this->_head.rank( 0 );
+                this->_head.prev( elem );
+                this->_head.next( elem );
+            }
+            else
+            {
+                
+            }
+            
+            ++( this->_length );
+        }
         
         /**
          * 
          */
-        void insert( Element* elem );
+        void insert_ordered( Element* elem )
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::insert_ordered(1)" );
+        }
+        
+        /**
+         * remove: must search and remove the element from the queue
+         * Error messages:
+         *   01: queue is empty.
+         */
+        Element* remove()
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::remove(0)" );
+        }
         
         /**
          * 
          */
-        void insert_ordered( Element* elem );
-        
-        /**
-         * 
-         */
-        Element* remove();
-        
-        /**
-         * 
-         */
-        void remove( Element* e );
+        void remove( Element* e )
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::remove(1)" );
+        }
         
         
     private:
@@ -531,13 +634,26 @@ namespace BOOOS
         Element _head;
         
         /**
+         * An Element's object list.
+         */
+        std::set< Element > myList;
+        
+        /**
+         * An Element's object set.
+         */
+        std::set< Element > mySet;
+        
+        /**
          * Search for an element on this double linked list.
          * 
          * @param elem       an element pointer to be found.
          * @return null the element is not found, otherwise an Element pointer to the found
          *         element.
          */
-        Element* search( Element* elem );
+        Element* search( Element* elem )
+        {
+            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::search(1)" );
+        }
         
     }; // end class Queue
     
