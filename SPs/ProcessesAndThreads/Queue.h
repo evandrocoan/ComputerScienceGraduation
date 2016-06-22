@@ -17,6 +17,7 @@
 #include <cstdarg>
 #include <set>
 #include <list>
+#include <sstream>
 
 inline int incrementFuckingCounter()
 {
@@ -66,7 +67,7 @@ inline int incrementFuckingCounter()
  * b3   - 
  * b4   - 
  */
-const char* const g_debugLevel = "a 127 b127";
+const char* const g_debugLevel = "a8 b 127";
 
 
 #endif
@@ -144,10 +145,12 @@ do \
     int minimum = G_DEBUG_MINIMUM_LINE_TO_PRINT; \
     int maximum = G_DEBUG_MAXIMUM_LINE_TO_PRINT; \
     int fucker = incrementFuckingCounter(); \
+    std::stringstream inputed; \
+    inputed << X; \
     if( fucker == minimum ) \
         std::cout << "\n\n\n\nTHIS IS THE MINIMUM! The shit text just started below your head.\n" << std::endl; \
     if( fucker >= minimum && fucker <= maximum ) \
-        std::cout << fucker << ": " << X; \
+        std::cout << format( "%3d: %s", fucker, inputed.str().c_str() ); \
     if( fucker == maximum ) \
         std::cout << "\n\n\n\nTHIS IS THE MAXIMUM! The shit text just ended above your head.\n" << std::endl; \
 } \
