@@ -67,7 +67,7 @@ inline int incrementFuckingCounter()
  * b3   - 
  * b4   - 
  */
-const char* const g_debugLevel = "a8 b 127";
+const char* const g_debugLevel = "a 8 b 127";
 
 
 #endif
@@ -705,7 +705,7 @@ namespace BOOOS
                 elem->prev( this->_head.prev() );
                 
                 DEBUGGERLN( a1, " ( insert ) | this->_length: %d", this->_length );
-                elem->rank( this->_length );
+              //  elem->rank( this->_length );
                 
                 DEBUGGERLN( a1, " ( insert ) | elem->rank(): %d", elem->rank() );
                 this->_head.prev( elem );
