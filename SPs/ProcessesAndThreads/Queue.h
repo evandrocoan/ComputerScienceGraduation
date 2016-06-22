@@ -4,6 +4,7 @@
  *  Created on: Aug 14, 2014
  */
 
+
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
@@ -17,6 +18,13 @@
 #include <set>
 #include <list>
 
+inline int incrementFuckingCounter()
+{
+    static int g_fuker_output_counter = 0;
+    return g_fuker_output_counter++;
+}
+
+
 
 /**
  * This is to view internal program data while execution. Default value: 0
@@ -26,9 +34,13 @@
  */
 #define DEBUG_LEVEL 1
 
+#define G_DEBUG_MINIMUM_LINE_TO_PRINT 0
+#define G_DEBUG_MAXIMUM_LINE_TO_PRINT 500
+
 
 #define DEBUG_LEVEL_DISABLED_DEBUG 0
 #define DEBUG_LEVEL_BASIC_DEBUG    1
+
 
 
 /**
@@ -41,23 +53,20 @@
  * debugging levels at once, use "a127 b127 c127" etc, supposing the level 64 is the highest to each
  * mask 'a', 'b', 'c', etc.
  * 
- * MemoryManager debugging:
+ * Queue debugging:
  * a0   - Disabled all debug.
  * a1   - Basic debug messages.
  * a2   - Functions entrances.
- * a4   - I AM IN HERER MESSAGE.
- * a8   - Partitions handling as in deletePartition(1) and addPartition(1).
- * a16  - Show the teacher required output.
- * a32  - MemoryManager::showMemory(0) and Algorithm::getPartition(1) debugging.
+ * a4   - Element debugging.
  * 
- * Algorithm Strategy debugging:
+ * Task debugging:
  * b0   - Disabled all debug.
- * b1   - _FirstFit::allocateMemory(1) debugging.
- * b2   - _NextFit::allocateMemory(1) debugging.
- * b3   - _WorstFit::allocateMemory(1) debugging.
- * b4   - _BestFit::allocateMemory(1) debugging.
+ * b1   - 
+ * b2   - 
+ * b3   - 
+ * b4   - 
  */
-const char* const g_debugLevel = "a2 a8 a16 b4 a32";
+const char* const g_debugLevel = "a 127 b127";
 
 
 #endif
@@ -81,7 +90,7 @@ do \
 { \
     if( __computeDeggingLevel( #level ) ) \
     { \
-        std::cout << format( __VA_ARGS__ ) << std::endl; \
+        PRINT_FUCKING_TEXT( format( __VA_ARGS__ ) << std::endl ); \
     } \
 } \
 while( 0 )
@@ -95,7 +104,7 @@ do \
 { \
     if( __computeDeggingLevel( #level ) ) \
     { \
-            std::cout << format( __VA_ARGS__ ); \
+            PRINT_FUCKING_TEXT( format( __VA_ARGS__ ) ); \
     } \
 } \
 while( 0 )
@@ -109,7 +118,7 @@ do \
 { \
     if( __computeDeggingLevel( #level ) ) \
     { \
-        std::cout << format( __VA_ARGS__ ); \
+        PRINT_FUCKING_TEXT( format( __VA_ARGS__ ) ); \
     } \
 } \
 while( 0 )
@@ -123,8 +132,24 @@ do \
 { \
     if( __computeDeggingLevel( #level ) ) \
     { \
-        std::cout << format( __VA_ARGS__ ) << std::endl; \
+        PRINT_FUCKING_TEXT( format( __VA_ARGS__ ) << std::endl ); \
     } \
+} \
+while( 0 )
+
+
+#define PRINT_FUCKING_TEXT( X ) \
+do \
+{ \
+    int minimum = G_DEBUG_MINIMUM_LINE_TO_PRINT; \
+    int maximum = G_DEBUG_MAXIMUM_LINE_TO_PRINT; \
+    int fucker = incrementFuckingCounter(); \
+    if( fucker == minimum ) \
+        std::cout << "\n\n\n\nTHIS IS THE MINIMUM! The shit text just started below your head.\n" << std::endl; \
+    if( fucker >= minimum && fucker <= maximum ) \
+        std::cout << fucker << ": " << X; \
+    if( fucker == maximum ) \
+        std::cout << "\n\n\n\nTHIS IS THE MAXIMUM! The shit text just ended above your head.\n" << std::endl; \
 } \
 while( 0 )
 
@@ -377,11 +402,16 @@ inline std::string format(const char* fmt, ...)
 
 
 
+
+
+
 /**
 * @see BOOOS namespace declaration at the main file 'BOOOS.h'.
 */
 namespace BOOOS
 {
+
+    
     /**
      * Implements a queue abtraction using a double linked list.
      */
@@ -415,10 +445,11 @@ namespace BOOOS
              */
             virtual ~Element()
             {
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::~Element(0) | THE DESTRUCTOR!" );
+                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::~Element(0) | THE DESTRUCTOR! this->_rank: %d", this->_rank );
                 
-                delete ( this->_prev );
-                delete ( this->_next );
+                // this->_prev = 0;
+                // this->_next = 0;
+                // this->_rank = 0;
             }
             
             /**
@@ -429,7 +460,7 @@ namespace BOOOS
              */
             Element* prev()
             {
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::prev(0)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::prev(0) | this->_rank: %d", this->_rank );
                 return this->_prev;
             }
             
@@ -441,7 +472,7 @@ namespace BOOOS
              */
             Element* next()
             { 
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::next(0)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::next(0) | this->_rank: %d", this->_rank );
                 return this->_next;
             }
             
@@ -452,7 +483,7 @@ namespace BOOOS
              */
             int rank()
             {
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::rank(0)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::rank(0) | this->_rank: %d", this->_rank );
                 return this->_rank; 
             }
             
@@ -463,7 +494,7 @@ namespace BOOOS
              */
             void prev( Element* p )
             { 
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::prev(1)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::prev(1) | this->_rank: %d", this->_rank );
                 this->_prev = p;
             }
             
@@ -474,7 +505,7 @@ namespace BOOOS
              */
             void next( Element* p )
             {
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::next(1)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::next(1) | this->_rank: %d", this->_rank );
                 this->_next = p;
             }
             
@@ -485,7 +516,7 @@ namespace BOOOS
              */
             void rank(int r)
             { 
-                DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Element::rank(1)" );
+                DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::Element::rank(1) | this->_rank: %d", this->_rank );
                 this->_rank = r;
             }
             
@@ -511,14 +542,16 @@ namespace BOOOS
         
         
         /**
-         * Queue constructor: must initialize queue's attributes
+         * Queue constructor: must initialize queue's attributes, to create an empty Queue object
+         * ready to receive elements.
          * 
-         * To create an empty Queue object ready to receive elements.
+         * @see BOOOS::Queue::_head member class atribute.
          */
-        Queue()
+        Queue() : _head()
         {
             DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::Queue(0) | THE CONSTRUCTOR!" );
             this->_length = 0;
+            this->_head.rank( -1 );
         }
         
         /**
@@ -528,19 +561,96 @@ namespace BOOOS
          */
         virtual ~Queue()
         {
-            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::~Queue(0) | THE DESTRUCTOR!" );
+            DEBUGGERLN( a2, "\n\n\nI AM ENTERING ON BOOOS::Queue::~Queue(0) | THE DESTRUCTOR!" );
+            
+//int n;
+//std::cin >> n;
+
+        #ifdef DEBUGg
+            DEBUGGERLN( a1, " ( ~Queue ) | before FOR!" );
+            
+            int  length         = this->_length + 10;
+            auto currentElement = this->_head.next();
+            // auto lastElement = _head.prev();
+            
+            for( int index = 0; index < length; ++index )
+            {
+                if( currentElement == NULL )
+                {
+                    DEBUGGERLN( a1, " ( ~Queue ) | BREAKING for NULL | index: %d, this->_length: %d", index, this->_length );
+                    break;
+                }
+                
+                DEBUGGERLN( a1, " ( ~Queue ) | inside for | index: %d, _rank: %d", index, currentElement->rank() );
+                currentElement = currentElement->next();
+            }
+        #endif
+            
+            DEBUGGERLN( a1, " ( ~Queue ) | POINT 1" );
+            Element* elem;
+            
+            do
+            {
+                DEBUGGERLN( a1, " ( ~Queue ) | POINT 2" );
+                
+                if( this->_length > 0 )
+                {
+                    DEBUGGERLN( a1, " ( ~Queue ) | CALLING Remove!" );
+                    elem = this->remove();
+                    
+                    DEBUGGERLN( a1, " ( ~Queue ) | POINT 3" );
+    	            delete elem;
+                }
+                else
+                {
+                    DEBUGGERLN( a1, " ( ~Queue ) | NOTHING TO REMOVE!" );
+                }
+                
+	            DEBUGGERLN( a1, " ( ~Queue ) | POINT 4" );
+            } while( ( this->_head.next() ) != 0 );
+            
+            DEBUGGERLN( a1, " ( ~Queue ) | POINT 5" );
+            elem = this->_head.next();
+            
+            //DEBUGGERLN( a1, " ( ~Queue ) | POINT 6" );
+            //this->_head.next( NULL );
+            //
+            //DEBUGGERLN( a1, " ( ~Queue ) | POINT 7" );
+            //this->_head.prev( NULL );
+            
+        #ifdef DEBUGg
+            DEBUGGERLN( a1, " ( ~Queue ) | before FOR!" );
+            
+            length         = this->_length + 10;
+            currentElement = this->_head.next();
+            // auto lastElement = _head.prev();
+            
+            for( int index = 0; index < length; ++index )
+            {
+                if( currentElement == NULL )
+                {
+                    DEBUGGERLN( a1, " ( ~Queue ) | BREAKING for NULL | index: %d, this->_length: %d", index, this->_length );
+                    break;
+                }
+                
+                DEBUGGERLN( a1, " ( ~Queue ) | inside for | index: %d, _rank: %d", index, currentElement->rank() );
+                currentElement = currentElement->next();
+            }
+        #endif
+            
+            this->_length = 0;
+            DEBUGGERLN( a1, " ( ~Queue ) | EXITING! this->_length: %d", this->_length );
         }
         
         
         /**
-         * Gets the current double linked list head element. Calling 'head()->next()' will point
-         * to its head, and calling 'head()->prev()' will point to tail.
+         * Gets the current double linked list head element.
          * 
          * @return an Element pointer to the current double linked list head.
          */
         Element* head()
         { 
-            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::head(0)" );
+            DEBUGGERLN( a 2 a4, "I AM ENTERING ON BOOOS::Queue::head(0)" );
             return &( this->_head ); 
         }
         
@@ -562,35 +672,68 @@ namespace BOOOS
          */
         void insert( Element* elem )
         {
-            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::insert(1)" );
+            DEBUGGERLN( a2, "\nI AM ENTERING ON BOOOS::Queue::insert(1)" );
             
             if( elem == NULL )
             {
+                DEBUGGERLN( a1, " ( insert ) | throwing 1!" );
                 throw 1;
             }
             
-            if( mySet.find( elem ) == mySet.end() )
+            if( this->search( elem ) != NULL )
             {
+                DEBUGGERLN( a1, " ( insert ) | throwing 2!" );
                 throw 2;
             }
             
-            myList.push_back( elem );
-            mySet.insert( elem );
-            
             if( this->_length == 0 )
             {
-                this->_head();
+                DEBUGGERLN( a1, " ( insert ) | inside '_LENGHT == 0'" );
                 
-                this->_head.rank( 0 );
                 this->_head.prev( elem );
                 this->_head.next( elem );
+                
+                elem->next( elem );
+                elem->prev( elem );
             }
             else
             {
+                this->_head.prev()->next( elem );
+                elem->prev( this->_head.prev() );
                 
+                DEBUGGERLN( a1, " ( insert ) | this->_length: %d", this->_length );
+                elem->rank( this->_length );
+                
+                DEBUGGERLN( a1, " ( insert ) | elem->rank(): %d", elem->rank() );
+                this->_head.prev( elem );
             }
             
+            // the first element must to point to the last element as it previous.
+            this->_head.next()->prev( this->_head.prev() );
+            
             ++( this->_length );
+            
+        #ifdef DEBUGg
+            DEBUGGERLN( a1, " ( insert ) | before FOR!" );
+            
+            int  length         = this->_length + 10;
+            auto currentElement = this->_head.next();
+            // auto lastElement = _head.prev();
+            
+            for( int index = 0; index < length; ++index )
+            {
+                if( currentElement == NULL )
+                {
+                    DEBUGGERLN( a1, " ( insert ) | BREAKING for NULL | index: %d, this->_length: %d", index, this->_length );
+                    break;
+                }
+                
+                DEBUGGERLN( a1, " ( insert ) | inside for | index: %d, _rank: %d", index, currentElement->rank() );
+                currentElement = currentElement->next();
+            }
+        #endif
+            
+            DEBUGGERLN( a1, " ( insert ) | EXITING! this->_length: %d", this->_length );
         }
         
         /**
@@ -602,13 +745,69 @@ namespace BOOOS
         }
         
         /**
-         * remove: must search and remove the element from the queue
+         * Remove: Must search and remove the first element from the queue.
+         * 
          * Error messages:
-         *   01: queue is empty.
+         *   1: queue is empty.
          */
         Element* remove()
         {
-            DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::remove(0)" );
+            DEBUGGERLN( a2, "\nI AM ENTERING ON BOOOS::Queue::remove(0) | this->_length: %d", this->_length );
+            Element* backup = this->_head.next();
+            
+            if( this->_length == 0 )
+            {
+                throw 1;
+            }
+            
+            if( this->_length > 1 )
+            {
+                DEBUGGERLN( a1, " ( remove ) | this->_length > 1!" );
+                
+                // the new first element points to NULL as prev
+                this->_head.next()->next()->prev( this->_head.prev() );
+                this->_head.next( this->_head.next()->next() );
+                
+                // the last element now points to the new first element.
+                this->_head.prev()->next( this->_head.next() );
+            }
+            else
+            {
+                DEBUGGERLN( a1, " ( remove ) | this->_length < 2!" );
+                
+                this->_head.next( NULL );
+                this->_head.prev( NULL );
+            }
+            
+            --( this->_length );
+            
+        #ifdef DEBUGg
+            DEBUGGERLN( a1, " ( remove ) | before FOR!" );
+            
+            int  length         = this->_length + 10;
+            auto currentElement = this->_head.next();
+            // auto lastElement = _head.prev();
+            
+            if( currentElement == NULL )
+            {
+                DEBUGGERLN( a1, " ( remove ) | BREAKING for NULL | currentElement == NULL" );
+            }
+            
+            for( int index = 0; index < length; ++index )
+            {
+                if( currentElement == NULL )
+                {
+                    DEBUGGERLN( a1, " ( remove ) | BREAKING for NULL | index: %d, this->_length: %d", index, this->_length );
+                    break;
+                }
+                
+                DEBUGGERLN( a1, " ( remove ) | inside for | index: %d, _rank: %d", index, currentElement->rank() );
+                currentElement = currentElement->next();
+            }
+        #endif
+            
+            DEBUGGERLN( a1, " ( remove ) | EXITING! this->_length: %d", this->_length );
+            return backup;
         }
         
         /**
@@ -630,18 +829,11 @@ namespace BOOOS
         
         /**
          * Holds the current double linked list head Element object.
+         * 
+         * 1) Calling '_head.next()' will point to its head.
+         * 2) calling '_head.prev()' will point to tail.
          */
         Element _head;
-        
-        /**
-         * An Element's object list.
-         */
-        std::set< Element > myList;
-        
-        /**
-         * An Element's object set.
-         */
-        std::set< Element > mySet;
         
         /**
          * Search for an element on this double linked list.
@@ -653,6 +845,37 @@ namespace BOOOS
         Element* search( Element* elem )
         {
             DEBUGGERLN( a2, "I AM ENTERING ON BOOOS::Queue::search(1)" );
+            
+            auto lastElement = _head.prev();
+            
+            if( this->_length > 0 )
+            {
+                DEBUGGERLN( a2, "RUNNING: auto currentElement = this->_head.next();" );
+                
+                int  maximum        = this->_length - 1;
+                auto currentElement = this->_head.next();
+                
+                do
+                {
+                    DEBUGGERLN( a2, "RUNNING: if( currentElement == elem )" );
+                    
+                    if( currentElement == elem )
+                    {
+                        DEBUGGERLN( a1, " ( search ) | Returnning currentElement!" );
+                        return currentElement;
+                    }
+                    
+                    DEBUGGERLN( a2, "RUNNING: currentElement = currentElement->next();" );
+                    
+                    if( ( currentElement = currentElement->next() ) == NULL )
+                    {
+                        break;
+                    }
+                } while( currentElement != lastElement );
+            }
+            
+            DEBUGGERLN( a1, " ( search ) | Returnning NULL!" );
+            return NULL;
         }
         
     }; // end class Queue
