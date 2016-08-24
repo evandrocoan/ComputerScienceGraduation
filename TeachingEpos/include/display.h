@@ -3,15 +3,7 @@
 #ifndef __display_h
 #define __display_h
 
-#include <system/config.h>
-
-#ifdef __UART_H
-#include __UART_H
-#endif
-
-#ifdef __USB_H
-#include __USB_H
-#endif
+#include <uart.h>
 
 __BEGIN_SYS
 
@@ -24,15 +16,12 @@ protected:
 class Serial_Display: public Display_Common
 {
     friend class PC_Setup;
-    friend class Serial_Keyboard;
     friend class First_Object;
 
 private:
     static const int LINES = Traits<Serial_Display>::LINES;
     static const int COLUMNS = Traits<Serial_Display>::COLUMNS;
     static const int TAB_SIZE = Traits<Serial_Display>::TAB_SIZE;
-
-    typedef IF<Traits<Serial_Display>::ENGINE == Traits<Serial_Display>::UART, UART, USB>::Result Engine;
 
     // Special characters
     enum {
@@ -96,7 +85,7 @@ public:
 
 private:
     static void put(char c) {
-        _engine.put(c);
+        _uart.put(c);
     }
 
     static void escape() {
@@ -131,14 +120,14 @@ private:
     static void init() {
         // Display must be on very early in the boot process, so it is
         // subject to memory remappings. Renewing it cares for it.
-        new (&_engine) Engine;
+        new (&_uart) UART;
 
         _line = 0;
         _column = 0;
     }
 
 private:
-    static Engine _engine;
+    static UART _uart;
     static int _line;
     static int _column;
 };

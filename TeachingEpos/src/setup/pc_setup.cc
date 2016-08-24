@@ -68,10 +68,10 @@ private:
     static const unsigned int SYS_INFO = Memory_Map<PC>::SYS_INFO;
     static const unsigned int MEM_BASE = Memory_Map<PC>::MEM_BASE;
     static const unsigned int MEM_TOP = Memory_Map<PC>::MEM_TOP;
+    static const unsigned int APIC_SIZE = 1;
     static const unsigned int APIC_PHY = APIC::LOCAL_APIC_PHY_ADDR;
-    static const unsigned int APIC_SIZE = APIC::LOCAL_APIC_SIZE;
-    static const unsigned int VGA_PHY = PC_Display::FB_PHY_ADDR;
-    static const unsigned int VGA_SIZE = PC_Display::FB_SIZE;
+    static const unsigned int VGA_PHY = Traits<PC_Display>::FRAME_BUFFER_ADDRESS;
+    static const unsigned int VGA_SIZE = Traits<PC_Display>::FRAME_BUFFER_SIZE;
 
     // Logical memory map
     static const unsigned int IDT = Memory_Map<PC>::IDT;
@@ -140,12 +140,8 @@ PC_Setup::PC_Setup(char * boot_image)
     // Get boot image loaded by the bootstrap
     bi = reinterpret_cast<char *>(boot_image);
     si = reinterpret_cast<System_Info<PC> *>(bi);
-    
-    Display::init();
-    PC_Display::init(VGA_PHY); // Display can be Serial_Display, so PC_Display here!
 
-    if(si->bm.n_cpus > Traits<PC>::CPUS)
- 	si->bm.n_cpus = Traits<PC>::CPUS;
+    Display::init();
 
     // Multicore conditional start up
     int cpu_id = Machine::cpu_id();
@@ -194,7 +190,7 @@ PC_Setup::PC_Setup(char * boot_image)
         // Adjust pointers that will still be used to their logical addresses
         bi = reinterpret_cast<char *>(unsigned(bi) | PHY_MEM);
         si = reinterpret_cast<System_Info<PC> *>(SYS_INFO);
-        PC_Display::init(Memory_Map<PC>::VGA); // Display can be Serial_Display, so PC_Display here!
+        PC_Display::remap(Memory_Map<PC>::VGA); // Display can be Serial_Display, so PC_Display here!
  	APIC::remap(Memory_Map<PC>::APIC);
 
         // Configure a TSS for system calls and inter-level interrupt handling
@@ -437,7 +433,7 @@ void PC_Setup::build_pmm()
     // NPTE_PT = number of page table entries per page table
     detect_pci(&si->pmm.io_base, &si->pmm.io_top);
     unsigned int io_size = MMU::pages(si->pmm.io_top - si->pmm.io_base);
-    io_size += APIC_SIZE / sizeof(Page); // Add room for APIC (4 kB, 1 page)
+    io_size += APIC_SIZE; // Add room for APIC (4 kB, 1 page)
     io_size += VGA_SIZE / sizeof(Page); // Add room for VGA (64 kB, 16 pages)
     top_page -= (io_size + MMU::PT_ENTRIES - 1) / MMU::PT_ENTRIES;
     si->pmm.io_pts = top_page * sizeof(Page);
@@ -736,23 +732,21 @@ void PC_Setup::setup_sys_pd()
 
     // Calculate the number of page tables needed to map the IO address space
     unsigned int io_size = MMU::pages(si->pmm.io_top - si->pmm.io_base);
-    io_size += APIC_SIZE / sizeof(Page); // Add room for APIC (4 kB, 1 page)
+    io_size += APIC_SIZE; // Add room for APIC (4 kB, 1 page)
     io_size += VGA_SIZE / sizeof(Page); // Add room for VGA (64 kB, 16 pages)
     n_pts = (io_size + MMU::PT_ENTRIES - 1) / MMU::PT_ENTRIES;
 
     // Map IO address space into the page tables pointed by io_pts
     pts = reinterpret_cast<PT_Entry *>((void *)si->pmm.io_pts);
-    unsigned int i = 0;
-    for(; i < (APIC_SIZE / sizeof(Page)); i++)
-        pts[i] = (APIC_PHY + i * sizeof(Page)) | Flags::APIC;
-    for(unsigned int j = 0; i < ((APIC_SIZE / sizeof(Page)) + (VGA_SIZE / sizeof(Page))); i++, j++)
-        pts[i] = (VGA_PHY + j * sizeof(Page)) | Flags::VGA;
-    for(unsigned int j = 0; i < io_size; i++, j++)
-        pts[i] = (si->pmm.io_base + j * sizeof(Page)) | Flags::PCI;
+    pts[0] = APIC_PHY | Flags::APIC;
+    for(unsigned int i = 1; i < (VGA_SIZE / sizeof(Page) + 1); i++)
+        pts[i] = (VGA_PHY + i * sizeof(Page)) | Flags::VGA;
+    for(unsigned int i = VGA_SIZE / sizeof(Page) + 1; i < io_size; i++)
+        pts[i] = (si->pmm.io_base + i * sizeof(Page)) | Flags::PCI;
 
-    // Attach devices' memory at Memory_Map<PC>::IO
+    // Attach PCI devices' memory at Memory_Map<PC>::PCI
     for(int i = 0; i < n_pts; i++)
-        sys_pd[MMU::directory(Memory_Map<PC>::IO) + i] = (si->pmm.io_pts + i * sizeof(Page)) | Flags::PCI;
+        sys_pd[MMU::directory(Memory_Map<PC>::PCI) + i] = (si->pmm.io_pts + i * sizeof(Page)) | Flags::PCI;
 
     // Map the system 4M logical address space at the top of the 4Gbytes
     sys_pd[MMU::directory(SYS_CODE)] = si->pmm.sys_pt | Flags::SYS;
@@ -976,7 +970,6 @@ void PC_Setup::calibrate_timers()
     // Read CPU clock counter again
     TSC::Time_Stamp t1 = TSC::time_stamp(); // ascending
 
-    // The measurement was for 50ms, scale it to 1s
     si->tm.cpu_clock = (t1 - t0) * 20;
     db<Setup>(INF) << "PC_Setup::calibrate_timers:CPU clock=" << si->tm.cpu_clock / 1000000 << " MHz" << endl;
 
@@ -1053,6 +1046,24 @@ void _start()
 
     // Multicore conditional start up
     if(APIC::id() == 0) { // Boot strap CPU (BSP)
+
+        // Initialize shared CPU counter
+        si->bm.n_cpus = 1;
+
+        // Broadcast INIT IPI to all APs excluding self
+        APIC::ipi_init(si->bm.cpu_status);
+        
+        // Broadcast STARTUP IPI to all APs excluding self
+        // Non-boot CPUs will run a simplified boot strap just to
+        // trampoline them into protected mode
+        // PC_BOOT arranged for this code and stored it at 0x3000
+        // ipi_start() waits for cpu_status to be incremented by the finc
+        // further down in this code
+ 	APIC::ipi_start(0x3000, si->bm.cpu_status);
+
+ 	if(si->bm.n_cpus > Traits<PC>::CPUS)
+ 	    si->bm.n_cpus = Traits<PC>::CPUS;
+
         // Check SETUP integrity and get information about its ELF structure
         ELF * elf = reinterpret_cast<ELF *>(&bi[si->bm.setup_offset]);
         if(!elf->valid())
@@ -1085,29 +1096,15 @@ void _start()
 
         // Passes a pointer to the just allocated stack pool to other CPUs
         Stacks = dst;
-        
-        // Initialize shared CPU counter
-        si->bm.n_cpus = 1;
-
-        // Broadcast INIT IPI to all APs excluding self
-        APIC::ipi_init(si->bm.cpu_status);
-        
-        // Broadcast STARTUP IPI to all APs excluding self
-        // Non-boot CPUs will run a simplified boot strap just to
-        // trampoline them into protected mode
-        // PC_BOOT arranged for this code and stored it at 0x3000
-        // ipi_start() waits for cpu_status to be incremented by the finc
-        // further down in this code
- 	APIC::ipi_start(0x3000, si->bm.cpu_status);
-        
         Stacks_Ready = true;
         
     } else { // Additional CPUs (APs)
-        // Each AP increments the CPU counter
-        CPU::finc(si->bm.n_cpus);
 
         // Inform BSP that this AP has been initialized
         CPU::finc(si->bm.cpu_status[APIC::id()]);
+
+        // Each AP increments the CPU counter
+        CPU::finc(si->bm.n_cpus);
 
         // Wait for BSP's ACK
         while(si->bm.cpu_status[APIC::id()] != 2);

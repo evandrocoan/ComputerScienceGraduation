@@ -46,8 +46,7 @@ DISK_SECT_SIZE =         512
 
 ; The size of ELF object's header in bytes (GCC dependent)
 ; Can be determined with objdump -p $(EPOS)/src/setup/pc_setup | sed -n -e 's/^ *LOAD off *\(0x.*\) vaddr.*$/\1/ p' | head -1
-; It is automatically adjusted by make (see makefile)
-ELF_HDR_SIZE =           XXX
+ELF_HDR_SIZE =           128
 
 ; DISK IMAGE LAYOUT 
 ; -+-----------------------+ DISK_IMAGE_SYS_INFO 

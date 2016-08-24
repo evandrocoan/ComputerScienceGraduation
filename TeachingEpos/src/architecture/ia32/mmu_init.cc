@@ -7,23 +7,21 @@ __BEGIN_SYS
 
 void IA32_MMU::init()
 {
-    db<Init, MMU>(TRC) << "MMU::init()" << endl;
-
     System_Info<PC> * si = System::info();
 
-    db<Init, MMU>(INF) << "MMU::memory={base="
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::memory={base=" 
         		    << reinterpret_cast<void *>(si->pmm.mem_base) << ",size="
         		    << (si->bm.mem_top - si->bm.mem_base) / 1024
         		    << "KB}" << endl;
-    db<Init, MMU>(INF) << "MMU::free1={base="
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::free1={base=" 
         		    << reinterpret_cast<void *>(si->pmm.free1_base) << ",size="
         		    << (si->pmm.free1_top - si->pmm.free1_base) / 1024
         		    << "KB}" << endl;
-    db<Init, MMU>(INF) << "MMU::free2={base="
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::free2={base=" 
         		    << reinterpret_cast<void *>(si->pmm.free2_base) << ",size="
         		    << (si->pmm.free2_top - si->pmm.free2_base) / 1024
         		    << "KB}" << endl;
-    db<Init, MMU>(INF) << "MMU::free3={base="
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::free3={base="
                             << reinterpret_cast<void *>(si->pmm.free3_base) << ",size="
                             << (si->pmm.free3_top - si->pmm.free3_base) / 1024
                             << "KB}" << endl;
@@ -41,7 +39,7 @@ void IA32_MMU::init()
     // Remeber the master page directory (created during SETUP)
     _master = reinterpret_cast<Page_Directory *>(CPU::pdp());
 
-    db<Init, MMU>(INF) << "MMU::master page directory=" << _master << endl;
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::master page directory=" << _master << endl;
 }
 
 __END_SYS

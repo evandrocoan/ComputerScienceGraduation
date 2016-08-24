@@ -1,41 +1,10 @@
 // EPOS OStream Implementation
 
 #include <utility/ostream.h>
-#include <machine.h>
-
-extern "C" { void _panic(); }
 
 __BEGIN_UTIL
 
 const char OStream::_digits[] = "0123456789abcdef";
-
-void OStream::preamble()
-{
-    static char tag[] = "<0>: ";
-
-    int me = Machine::cpu_id();
-    int last = CPU::cas(_lock, -1, me);
-    for(int i = 0, owner = last; (i < 10) && (owner != me); i++, owner = CPU::cas(_lock, -1, me));
-    if(last != me) {
-        tag[1] = '0' + Machine::cpu_id();
-        print(tag);
-    }
-}
-
-void OStream::trailler()
-{
-    static char tag[] = " :<0>";
-
-    if(_lock != -1) {
-        tag[3] = '0' + Machine::cpu_id();
-        print(tag);
-
-        _lock = -1;
-    }
-    if(_error)
-        _panic();
-}
-
 
 int OStream::itoa(int v, char * s)
 {

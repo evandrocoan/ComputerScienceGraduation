@@ -189,6 +189,7 @@ public:
         return _table[key % SIZE].remove_rank(key);
     }
 
+protected:
     List * operator[](const Key & key) {
         return &_table[key % SIZE];
     }

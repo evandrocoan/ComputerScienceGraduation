@@ -2,7 +2,6 @@
 
 #include <utility/ostream.h>
 #include <application.h>
-#include <network.h>
 
 __BEGIN_SYS
 
@@ -20,11 +19,3 @@ OStream cout;
 OStream cerr;
 
 __END_API
-
-__USING_SYS;
-extern "C" {
-    void __pre_main() {
-        if(Traits<Network>::enabled)
-            Network::init();
-    }
-}

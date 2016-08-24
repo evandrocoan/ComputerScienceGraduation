@@ -181,7 +181,6 @@ int main(int argc, char **argv)
 
     // Add LOADER (if multiple applications) or the single application otherwise
     si.bm.application_offset = image_size - boot_size;
-//    if((argc == 4) && strcmp(CONFIG.mode, "kernel")) { // Add Single APP
     if(argc == 4) { // Add Single APP
         printf("    Adding application \"%s\":", argv[3]);
         image_size += put_file(fd_img, argv[3]);
@@ -447,10 +446,8 @@ bool add_machine_secrets(int fd, unsigned int i_size, char * mach, char *mmod)
         put_buf(fd, key_string, (strlen(key_string)+1));		
     }
     else if (!strcmp(mmod, "emote3")) { // EPOSMoteIII
-        // Customer Configuration Area (CCA)
-        //char key_string[] = ":020000040027D3\r\n:0CFFD400FFFFFFF700000000000020000D\r\n:00000001FF\r\n"; // Bootloader Enabled, enter by setting pin PA7 to low
-        //char key_string[] = ":020000040027D3\r\n:0CFFD400FFFFFFFF000000000000200005\r\n:00000001FF\r\n"; // Bootloader Enabled, enter by setting pin PA7 to high
-        char key_string[] = ":020000040027D3\r\n:0CFFD400FFFFFFEF000000000000200015\r\n:00000001FF\r\n"; // Bootloader Disabled
+        //Customer Configuration Area (CCA)
+        char key_string[] = ":020000040027D3\r\n:0CFFD400FFFFFFEF000000000000200015\r\n:00000001FF\r\n";
         const int key_offset = -strlen(":00000001FF\r\n");
  
         // Write key string to unlock epos
@@ -552,7 +549,7 @@ template<typename T> int put_number(int fd, T num)
     if((CONFIG.endianess != lil_endian()) && (sizeof(T) > 1))
     	invert(num);
     if(write(fd, &num, sizeof(T)) < 0) {
-        fprintf(stderr, "Error: can't write to file!\n");
+        fprintf(stderr, "Error: can't wirte to file!\n");
         return 0;
     }
     return sizeof(T);

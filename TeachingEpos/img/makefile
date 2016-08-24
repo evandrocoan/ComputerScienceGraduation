@@ -9,9 +9,6 @@ OUTPUT := $(addsuffix .out,$(APPLICATION))
 
 all:		strip $(IMAGE)
 
-flash:		strip $(FLASH)
-		$(FLASHER) $(IMG)/$(FLASH)
-
 run:		strip $(IMAGE)
 ifeq ($(NODES),1)
 		$(EMULATOR) $(IMAGE) | $(TEE) $(OUTPUT)
@@ -29,6 +26,8 @@ endif
 debug:		$(IMAGE)
 		$(EMULATOR) $(IMAGE) | $(TEE) $(OUTPUT) &
 		$(DEBUGGER) $(APP)/$(APPLICATION)
+
+flash:		$(FLASH)
 
 strip:		$(SYSTEM) $(APPLICATION)
 		@for file in $^; do $(STRIP) "$${file}"; done;

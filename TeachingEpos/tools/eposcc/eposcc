@@ -47,39 +47,33 @@ C_LINK_LIBS=
 CPP_COMPILER="$TOOLS_PREFIX""g++"
 CPP_COMP_FLGS="--no-exceptions --no-rtti --no-use-cxa-atexit -std=c++0x"
 CPP_COMP_HDRS=
-CPP_LINK_FLGS="$MACH_LD_FLAGS"
+CPP_LINK_FLGS=
 CPP_LINK_OBJS=
 CPP_LINK_LIBS=
 
 F77_COMPILER="$TOOLS_PREFIX""g77"
 F77_COMP_FLGS=
 F77_COMP_HDRS=
-F77_LINK_FLGS="$MACH_LD_FLAGS"
+F77_LINK_FLGS=
 F77_LINK_OBJS=
 F77_LINK_LIBS="f2c"
 
 LINKER="$TOOLS_PREFIX""ld"
 
 LINKER_LIBRARY=$LINKER
-LINK_FLGS_LIBRARY="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
+LINK_FLGS_LIBRARY="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --nmagic --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
 LINK_OBJI_LIBRARY="$LIB/$ARCH""_crt0.o $LIB/$ARCH""_crtbegin.o $LIB/$MACH""_init_first.o $LIB/$MACH""_init_application.o $LIB/$MACH""_application.o"
 LINK_OBJN_LIBRARY="$LIB/$MACH""_init_system.o $LIB/$MACH""_system.o $LIB/$ARCH""_crtend.o"
 LINK_LIBS_LIBRARY="util_$ARCH init_$ARCH sys_$ARCH mach_$ARCH arch_$ARCH util_$ARCH gcc"
-if [ "$SETUP" = "" ] ; then
-LINK_OBJI_LIBRARY="$LIB/$MACH""_setup.o $LINK_OBJI_LIBRARY"
-fi
 
 LINKER_BUILTIN=$LINKER
-LINK_FLGS_BUILTIN="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
+LINK_FLGS_BUILTIN="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --nmagic --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
 LINK_OBJI_BUILTIN="$LIB/$ARCH""_crt0.o $LIB/$ARCH""_crtbegin.o $LIB/$MACH""_init_application.o  $LIB/$MACH""_application.o"
 LINK_OBJN_BUILTIN="$LIB/$ARCH""_crtend.o -R$SRC/system/$MACH""_system"
 LINK_LIBS_BUILTIN="util_$ARCH gcc"
-if [ "$SETUP" = "" ] ; then
-LINK_OBJN_BUILTIN="$LIB/$MACH""_setup.o $LINK_OBJN_BUILTIN"
-fi
 
 LINKER_KERNEL=$LINKER
-LINK_FLGS_KERNEL="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
+LINK_FLGS_KERNEL="-L$LIB -L`$C_COMPILER $C_COMP_FLGS -print-file-name=` -static --nmagic --section-start $MACH_CODE_NAME=$APP_CODE --section-start $MACH_DATA_NAME=$APP_DATA"
 LINK_OBJI_KERNEL="$LIB/$ARCH""_crt0.o $LIB/$ARCH""_crtbegin.o $LIB/$MACH""_init_application.o  $LIB/$MACH""_application.o"
 LINK_OBJN_KERNEL="$LIB/$ARCH""_crtend.o"
 LINK_LIBS_KERNEL="util_$ARCH arch_$ARCH gcc"

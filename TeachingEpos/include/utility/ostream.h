@@ -21,17 +21,13 @@ public:
     struct Err {};
 
 public:
-    OStream(): _base(10), _lock(-1), _error(false) {}
+    OStream(): _base(10), _error(false) {}
 
     OStream & operator<<(const Begl & begl) {
-        if(Traits<System>::multicore)
-            preamble();
         return *this;
     }
     
     OStream & operator<<(const Endl & endl) {
-        if(Traits<System>::multicore)
-            trailler();
         print("\n");
         _base = 10;
         return *this;
@@ -166,9 +162,6 @@ public:
     }
 
 private:
-    void preamble();
-    void trailler();
-
     void print(const char * s) { _print(s); }
 
     int itoa(int v, char * s);
@@ -179,7 +172,6 @@ private:
 
 private:
     int _base;
-    volatile int _lock;
     volatile bool _error;
 
     static const char _digits[];

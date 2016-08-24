@@ -20,11 +20,9 @@ void Semaphore::p()
 {
     db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ",value=" << _value << ")" << endl;
 
-    begin_atomic();
-    if(fdec(_value) < 1)
-        sleep(); // implicit end_atomic()
-    else
-        end_atomic();
+    fdec(_value);
+    while(_value < 0)
+        sleep();
 }
 
 
@@ -32,11 +30,9 @@ void Semaphore::v()
 {
     db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << _value << ")" << endl;
 
-    begin_atomic();
-    if(finc(_value) < 0)
-        wakeup();  // implicit end_atomic()
-    else
-        end_atomic();
+    finc(_value);
+    if(_value < 1)
+        wakeup();
 }
 
 __END_SYS

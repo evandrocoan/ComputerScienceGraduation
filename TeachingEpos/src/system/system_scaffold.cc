@@ -5,7 +5,7 @@
 #include <display.h>
 #include <machine.h>
 #include <system.h>
-#include <segment.h>
+#include <thread.h>
 
 __BEGIN_SYS
 
@@ -17,12 +17,6 @@ class First_Object
 public:
     First_Object() {
 	Display::init();
-
-	if(Traits<System>::multicore) {
-	    System_Info<Machine> * si = reinterpret_cast<System_Info<Machine> *>(Memory_Map<Machine>::SYS_INFO);
-
-	    Machine::smp_init(si->bm.n_cpus);
-	}
     }
 };
 
@@ -36,7 +30,20 @@ OStream kerr;
 // System class attributes
 System_Info<Machine> * System::_si = reinterpret_cast<System_Info<Machine> *>(Memory_Map<Machine>::SYS_INFO);
 char System::_preheap[];
-Segment * System::_heap_segment;
 Heap * System::_heap;
 
 __END_SYS
+
+// Bindings
+__USING_SYS;
+extern "C" {
+    void _panic() { Machine::panic(); }
+    void _exit(int s) { Thread::exit(s); }
+    void __exit() { Thread::exit(CPU::fr()); }
+    void _print(const char * s) { Display::puts(s); }
+
+    // LIBC Heritage
+    void __cxa_pure_virtual() {
+        db<void>(ERR) << "Pure Virtual method called!" << endl;
+    }
+}

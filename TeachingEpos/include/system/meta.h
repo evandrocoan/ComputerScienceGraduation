@@ -47,7 +47,8 @@ class SWITCH
         found = ( case_tag == tag || case_tag == DEFAULT  )
     };
 public:
-    typedef typename IF<found, typename Case::Type, typename SWITCH<tag, Next_Case>::Result>::Result Result;
+    typedef typename IF<found, typename Case::Type,
+        typename SWITCH<tag, Next_Case>::Result>::Result Result;
 };
 
 template<int tag>

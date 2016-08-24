@@ -16,11 +16,6 @@ __BEGIN_SYS
 class Alarm
 {
     friend class System;
-    friend class Alarm_Chronometer;
-    friend class Periodic_Thread;
-    friend class RT_Thread;
-    friend class Scheduling_Criteria::FCFS;
-    friend class Scheduling_Criteria::EDF;
 
 private:
     typedef TSC::Hertz Hertz;
@@ -38,9 +33,6 @@ public:
     Alarm(const Microsecond & time, Handler * handler, int times = 1);
     ~Alarm();
 
-    const Microsecond & period() const { return _time; }
-    void period(const Microsecond & p);
-
     static Hertz frequency() { return _timer->frequency(); }
 
     static void delay(const Microsecond & time);
@@ -48,12 +40,12 @@ public:
 private:
     static void init();
 
-    static Microsecond timer_period() {
+    static Microsecond period() {
         return 1000000 / frequency();
     }
 
     static Tick ticks(const Microsecond & time) {
-        return (time + timer_period() / 2) / timer_period();
+        return (time + period() / 2) / period();
     }
 
     static void lock() { Thread::lock(); }
@@ -62,10 +54,9 @@ private:
     static void handler(const IC::Interrupt_Id & i);
 
 private:
-    Microsecond _time;
+    Tick _ticks;
     Handler * _handler;
     int _times; 
-    Tick _ticks;
     Queue::Element _link;
 
     static Alarm_Timer * _timer;
@@ -84,19 +75,6 @@ public:
 
 private:
     Microsecond _time;
-};
-
-
-// The following Scheduling Criteria depend on Alarm, which is not yet available at scheduler.h
-namespace Scheduling_Criteria {
-    inline FCFS::FCFS(int p): Priority((p == IDLE) ? IDLE : Alarm::_elapsed) {}
-
-    inline EDF::EDF(const Microsecond & d, const Microsecond & p, const Microsecond & c, int): RT_Common(Alarm::ticks(d), Alarm::ticks(d), p, c) {}
-
-    inline void EDF::update() {
-        if((_priority > PERIODIC) && (_priority < APERIODIC))
-            _priority = Alarm::_elapsed + _deadline;
-    }
 };
 
 __END_SYS

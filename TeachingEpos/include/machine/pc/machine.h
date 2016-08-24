@@ -3,7 +3,6 @@
 #ifndef __pc_h
 #define __pc_h
 
-#include <utility/id.h>
 #include <utility/list.h>
 #include <cpu.h>
 #include <mmu.h>
@@ -41,9 +40,6 @@ public:
     static unsigned int n_cpus() { return smp ? _n_cpus : 1; }
     static unsigned int cpu_id() { return smp ? APIC::id() : 0; }
 
-    typedef _UTIL::ID<6> ID;
-    static ID id();
-
     static void smp_init(unsigned int n_cpus) {
         if(smp) {
             _n_cpus = n_cpus;
@@ -80,30 +76,9 @@ __END_SYS
 
 #include "pci.h"
 #include "timer.h"
-
-#ifdef __RTC_H
-#include __RTC_H
-#endif
-#ifdef __EEPROM_H
-#include __EEPROM_H
-#endif
-#ifdef __UART_H
-#include __UART_H
-#endif
-#ifdef __DISPLAY_H
-#include __DISPLAY_H
-#endif
-#ifdef __KEYBOARD_H
-#include __KEYBOARD_H
-#endif
-#ifdef __SCRATCHPAD_H
-#include __SCRATCHPAD_H
-#endif
-#ifdef __NIC_H
-#include __NIC_H
-#endif
-#ifdef __FPGA_H
-#include __FPGA_H
-#endif
+#include "rtc.h"
+#include "eeprom.h"
+#include "uart.h"
+#include "display.h"
 
 #endif

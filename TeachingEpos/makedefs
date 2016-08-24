@@ -15,8 +15,7 @@ BIN		:= $(TOP)/bin
 LIB		:= $(TOP)/lib
 IMG		:= $(TOP)/img
 ETC		:= $(TOP)/etc
-DOC             := $(TOP)/doc
-TOOLS           := $(TOP)/tools
+DOC		:= $(TOP)/doc
 LARCHNAME	:= arch
 LMACHNAME	:= mach
 LSYSNAME	:= sys
@@ -69,11 +68,7 @@ avr8_COMP_PREFIX        := /usr/local/avr/gcc-4.4.4/bin/avr-
 COMP_PREFIX		= $($(ARCH)_COMP_PREFIX)
 
 # Boot Memory Map
-ifeq ($(words $(call GETTK,MEM_BASE,$(TRAITS))),1)
-MACH_TRAITS	= $(TRAITS) 
-else
-MACH_TRAITS     = $(INCLUDE)/machine/$(MACH)/$(MMOD)_traits.h 
-endif
+MACH_TRAITS	= $(INCLUDE)/machine/$(MACH)/$(MMOD)_traits.h 
 MEM_BASE	= $(call GETTK,MEM_BASE,$(MACH_TRAITS))
 MEM_TOP		= $(call GETTK,MEM_TOP,$(MACH_TRAITS))
 MEM_SIZE	= $(shell echo "(`printf "%d" $(MEM_TOP)` + 1 - `printf "%d" $(MEM_BASE)`) / 1024"|bc)
@@ -92,28 +87,19 @@ pc_CC_FLAGS             := -Wa,--32
 pc_AS_FLAGS             := --32
 pc_LD_FLAGS             := 
 pc_EMULATOR             = qemu-system-i386 -smp $(CPUS) -m $(MEM_SIZE)k -nographic -no-reboot -fda
-pc_DEBUGGER             := gdb
-pc_FLASHER              :=
 
 cortex_m_CC_FLAGS       := -mcpu=cortex-m3 -mthumb -mno-thumb-interwork -mfpu=fpa #-Wa,-mimplicit-it=arm -marm 
 cortex_m_AS_FLAGS       := -mcpu=cortex-m3 -mthumb -mfpu=fpa
 cortex_m_LD_FLAGS       := 
-cortex_m_EMULATOR       = qemu-system-arm -cpu cortex-m3 -machine lm3s811evb -m $(MEM_SIZE)k -nographic -no-reboot -kernel
-cortex_m_DEBUGGER       := arm-none-eabi-gdb
-ifndef TTY
-TTY                     := ACM0      
-endif       
-cortex_m_FLASHER        = $(TOOLS)/eposflash/eposflash-$(MMOD) -d /dev/tty$(TTY) -f
+cortex_m_EMULATOR       = timeout --preserve-status --foreground 20s qemu-system-arm -cpu cortex-m3 -machine lm3s811evb -m $(MEM_SIZE)k -nographic -no-reboot -kernel
 
 atmega_CC_FLAGS         := -mmcu=atmega128 -Wno-inline
 atmega_AS_FLAGS         := -mmcu=atmega128
 atmega_LD_FLAGS         := -m avr5
 atmega_EMULATOR         = 
-atmega_DEBUGGER         =
-atmega_FLASHER          = $(TOOLS)/eposflash/eposflash-$(MMOD)
 
 $(MACH)_CODE_NAME       := .init
-$(MACH)_DATA_NAME       := .data
+$(MACH)_DATA_NAME       := .ctors
 ifeq ($(GDB),1)
 MACH_CC_FLAGS           := -g -feliminate-unused-debug-symbols $($(MACH)_CC_FLAGS)
 MACH_AS_FLAGS           := -g $($(MACH)_AS_FLAGS)
@@ -129,7 +115,7 @@ MACH_EMULATOR           = $(subst -m ,-s -S -m ,$($(MACH)_EMULATOR))
 else
 MACH_EMULATOR           = $($(MACH)_EMULATOR)
 endif
-MACH_DEBUGGER           = $(TERM) $($(MACH)_DEBUGGER) -ex "target remote:1234" -ex "set confirm off"
+MACH_DEBUGGER           = $(TERM) gdb -ex "target remote:1234" -ex "set confirm off"
 ifneq ($(wildcard $(IMG)/$(MACH)_setup),) 
 MACH_DEBUGGER           := $(MACH_DEBUGGER) -ex "add-symbol-file $(call DBSEC,$(SRC)/setup/$(MACH)_setup,.text)"
 endif
@@ -139,16 +125,11 @@ endif
 ifneq ($(wildcard $(IMG)/$(MACH)_system),) 
 MACH_DEBUGGER           := $(MACH_DEBUGGER) -ex "add-symbol-file $(call DBSEC,$(SRC)/system/$(MACH)_system,.text)"
 endif
-MACH_FLASHER            := $($(MACH)_FLASHER)
 
 # Architecture specifics
-ifeq ($(words $(call GETTK,ENDIANESS,$(TRAITS))),1)
-ARCH_TRAITS     = $(TRAITS) 
-else
-ARCH_TRAITS     = $(INCLUDE)/architecture/$(ARCH)/traits.h 
-endif
 ARCH_LITTLE	:= little
 ARCH_BIG	:= big
+ARCH_TRAITS	= $(INCLUDE)/architecture/$(ARCH)/traits.h 
 ARCH_ENDIANESS	= $(ARCH_$(call GETTK,ENDIANESS,$(ARCH_TRAITS)))
 ARCH_WORD_SIZE	= $(call GETTK,WORD_SIZE,$(ARCH_TRAITS))
 ARCH_CLOCK	= $(call GETTK,CLOCK,$(ARCH_TRAITS))
@@ -170,8 +151,8 @@ TLDFLAGS	:= -m32
 ACC		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
 ACXX		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
 AF77		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
-ALD		= $(BIN)/eposcc --$(MODE)
-ALDFLAGS	:= --gc-sections $(if $(MACH_FLASHER),--omagic,--nmagic)
+ALD		= $(BIN)/eposcc --$(MODE) $(MACH_LD_FLAGS)
+ALDFLAGS	:= --gc-sections 
 
 # Tools and flags to compile the system
 AR		= $(COMP_PREFIX)ar
@@ -198,8 +179,6 @@ DD		:= dd
 DEBUGGER	= $(MACH_DEBUGGER) 
 
 EMULATOR	= $(MACH_EMULATOR) 
-
-FLASHER 	= $(MACH_FLASHER) 
 
 INSTALL		:= install
 

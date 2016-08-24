@@ -32,7 +32,7 @@ int philosopher(int n, int l, int c)
 
         Delay thinking(2000000);
 
-        chopstick[first]->p();    // get first chopstick
+        chopstick[first]->p();   // get first chopstick
         chopstick[second]->p();   // get second chopstick
 
         table.lock();
@@ -42,7 +42,7 @@ int philosopher(int n, int l, int c)
 
         Delay eating(1000000);
 
-        chopstick[first]->v();    // release first chopstick
+        chopstick[first]->v();   // release first chopstick
         chopstick[second]->v();   // release second chopstick
     }
 

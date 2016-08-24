@@ -235,11 +235,18 @@ public:
 };
 
 
-// Tick timer used by the system
-class PC_Timer: private Timer_Common
+// PC_Timer
+class PC_Timer: public Timer_Common
 {
     friend class PC;
     friend class Init_System;
+
+public:
+    enum {
+        SCHEDULER,
+        ALARM,
+        USER
+    };
 
 protected:
     typedef IF<Traits<System>::multicore, APIC_Timer, i8253>::Result Engine;
@@ -250,21 +257,8 @@ protected:
     static const unsigned int FREQUENCY = Traits<PC_Timer>::FREQUENCY;
 
 public:
-    enum {
-        SCHEDULER,
-        ALARM,
-        USER
-    };
-
-    using Timer_Common::Hertz;
-    using Timer_Common::Tick;
-    using Timer_Common::Microsecond;
-    using Timer_Common::Handler;
-    using Timer_Common::Channel;
-
-protected:
-    PC_Timer(const Hertz & frequency, const Handler & handler, const Channel & channel, bool retrigger = true)
-    : _channel(channel), _initial(FREQUENCY / frequency), _retrigger(retrigger), _handler(handler) {
+    PC_Timer(const Hertz & frequency, const Handler & handler, const Channel & channel, bool retrigger = true):
+        _channel(channel), _initial(FREQUENCY / frequency), _retrigger(retrigger), _handler(handler) {
         db<Timer>(TRC) << "Timer(f=" << frequency << ",h=" << reinterpret_cast<void*>(handler)
                        << ",ch=" << channel << ") => {count=" << _initial << "}" << endl;
 
@@ -277,7 +271,6 @@ protected:
             _current[i] = _initial;
     }
 
-public:
     ~PC_Timer() {
         db<Timer>(TRC) << "~Timer(f=" << frequency() << ",h=" << reinterpret_cast<void*>(_handler)
         	       << ",ch=" << _channel << ") => {count=" << _initial << "}" << endl;
@@ -328,51 +321,35 @@ protected:
 // Timer used by Thread::Scheduler
 class Scheduler_Timer: public PC_Timer
 {
+private:
+    typedef RTC::Microsecond Microsecond;
+
 public:
     Scheduler_Timer(const Microsecond & quantum, const Handler & handler): PC_Timer(1000000 / quantum, handler, SCHEDULER) {}
 };
+
 
 // Timer used by Alarm
 class Alarm_Timer: public PC_Timer
 {
 public:
+    static const unsigned int FREQUENCY = Timer::FREQUENCY;
+
+public:
     Alarm_Timer(const Handler & handler): PC_Timer(FREQUENCY, handler, ALARM) {}
 };
+
 
 // Timer available for users
 class User_Timer: public PC_Timer
 {
-public:
-    User_Timer(const Microsecond & time, const Handler & handler, const Channel & channel, bool retrigger = false)
-    : PC_Timer(1000000 / time, handler, USER, retrigger) {}
-};
-
-// Timer wrapper used by TSTP
-class TSTP_Timer
-{
-    static const unsigned int FREQUENCY = 1;
+private:
+    typedef RTC::Microsecond Microsecond;
 
 public:
-    typedef long long Time_Stamp;
-    typedef Time_Stamp Microsecond;
-
-    static Time_Stamp frequency() { return FREQUENCY; }
-
-    static Time_Stamp now() { return RTC::seconds_since_epoch(); }
-    static Time_Stamp sfd() { return now(); }
-
-    void interrupt(const Time_Stamp & when, IC::Interrupt_Handler handler); // Not supported in PC
-    void cancel_interrupt(); // Not supported in PC
-
-    TSTP_Timer() { }
-
-    static void start() { }
-    static void stop() { }
-    static void adjust(const Time_Stamp & t) { } // Not supported in PC
-
-    static Time_Stamp us_to_ts(const Microsecond & us) { return us * frequency() / 1000000ll; }
-    static Microsecond ts_to_us(const Time_Stamp & ts) { return ts * 1000000ll / frequency(); }
+    User_Timer(const Microsecond & quantum, const Handler & handler): PC_Timer(1000000 / quantum, handler, USER, true) {}
 };
+
 __END_SYS
 
 #endif

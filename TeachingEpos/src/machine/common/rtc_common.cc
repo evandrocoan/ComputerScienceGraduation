@@ -23,7 +23,9 @@ RTC_Common::Date::Date(const Second & seconds, unsigned long epoch_days)
     days_per_month[1] = 28;
     if((!(_Y % 4) && (_Y % 100)) || !(_Y % 400))
         days_per_month[1] = 29;
-    for(_M = 1; tmp - days_per_month[_M] > 0; _M++, tmp -= days_per_month[_M]);
+    for(_M = 1; 
+        tmp - days_per_month[_M] > 0;
+        _M++, tmp -= days_per_month[_M]);
     _D = tmp;
 }
 
@@ -36,7 +38,9 @@ RTC_Common::Second RTC_Common::Date::to_offset(unsigned long epoch_days) const
         tmp._M += 12;  // puts Feb last since it may have leap day
         tmp._Y -= 1;
     }
-    return ((((tmp._Y/4 - tmp._Y/100 + tmp._Y/400 + 367 * tmp._M/12 + tmp._D) + tmp._Y * 365 - epoch_days) * 24 + tmp._h) * 60 + tmp._m) * 60 + tmp._s;
+    return ((((tmp._Y/4 - tmp._Y/100 + tmp._Y/400 + 367 * tmp._M/12 + tmp._D) 
+            + tmp._Y * 365 - epoch_days) * 24 + tmp._h) * 60 + tmp._m) * 60 
+            + tmp._s;
 }
 
 

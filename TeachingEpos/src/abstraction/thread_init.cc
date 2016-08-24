@@ -1,5 +1,6 @@
 // EPOS Thread Abstraction Initialization
 
+#include <system/kmalloc.h>
 #include <system.h>
 #include <thread.h>
 #include <alarm.h>
@@ -14,15 +15,8 @@ void Thread::init()
     // Letting reschedule() happen during thread creation is harmless, since
     // MAIN is created first and dispatch won't replace it nor by itself
     // neither by IDLE (which has a lower priority)
-    if(Criterion::timed && (Machine::cpu_id() == 0))
-        _timer = new (SYSTEM) Scheduler_Timer(QUANTUM, time_slicer);
-
-    // Install an interrupt handler to receive forced reschedules
-    if(smp) {
-        if(Machine::cpu_id() == 0)
-            IC::int_vector(IC::INT_RESCHEDULER, rescheduler);
-        IC::enable(IC::INT_RESCHEDULER);
-    }
+    if(preemptive)
+        _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
 }
 
 __END_SYS

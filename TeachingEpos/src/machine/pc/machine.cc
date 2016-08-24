@@ -1,9 +1,6 @@
 // EPOS PC Mediator Implementation
 
 #include <machine/pc/machine.h>
-#include <machine/pc/timer.h>
-#include <machine/pc/keyboard.h>
-#include <machine/pc/nic.h>
 
 __BEGIN_SYS
 
@@ -24,21 +21,15 @@ void PC::panic()
 
 void PC::reboot()
 {
-    for(int i = 0; (i < 300) && (i8042::status() & i8042::IN_BUF_FULL); i++)
+    for(int i = 0; (i < 300) && (CPU::in8(0x64) & 0x02); i++)
         i8255::ms_delay(1);
 
     // Sending 0xfe to the keyboard controller port causes it to pulse
     // the reset line
-    i8042::command(i8042::REBOOT);
+    CPU::out8(0x64, 0xfe);
 
-    for(int i = 0; (i < 300) && (i8042::status() & i8042::IN_BUF_FULL); i++)
+    for(int i = 0; (i < 300) && (CPU::in8(0x64) & 0x02); i++)
         i8255::ms_delay(1);
-}
-
-PC::ID PC::id()
-{
-    NIC nic;
-    return ID(reinterpret_cast<const unsigned char *>(&(nic.address()))); 
 }
 
 __END_SYS

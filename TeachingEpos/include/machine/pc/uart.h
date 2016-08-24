@@ -149,8 +149,9 @@ private:
     static const unsigned int STOP_BITS = Traits<PC_UART>::DEF_STOP_BITS;
 
 public:
-    PC_UART(unsigned int baud_rate = BAUD_RATE, unsigned int data_bits = DATA_BITS, unsigned int parity = PARITY, unsigned int stop_bits = STOP_BITS, unsigned int unit = 0)
-    : Engine(unit, baud_rate, data_bits, parity, stop_bits) {}
+    PC_UART(unsigned int baud_rate = BAUD_RATE, unsigned int data_bits = DATA_BITS,
+            unsigned int parity = PARITY, unsigned int stop_bits = STOP_BITS, unsigned int unit = 0):
+                    Engine(unit, baud_rate, data_bits, parity, stop_bits) {}
 
     void config(unsigned int baud_rate, unsigned int data_bits, unsigned int parity, unsigned int stop_bits) {
         Engine::config(baud_rate, data_bits, parity, stop_bits);
@@ -161,9 +162,6 @@ public:
 
     char get() { while(!rxd_ok()); return rxd(); }
     void put(char c) { while(!txd_ok()); txd(c); }
-
-    bool ready_to_get() { return rxd_ok(); }
-    bool ready_to_put() { return txd_ok(); }
 
     void int_enable(bool receive = true, bool send = true, bool line = true, bool modem = true) {
         Engine::int_enable(receive, send, line, modem);

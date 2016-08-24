@@ -48,7 +48,7 @@ public:
 
     // CPU Exceptions
     typedef Reg32 Exceptions;
-    enum {
+    enum  {
         EXC_BASE        = 0x00,
         EXC_DIV0	= 0x00,
         EXC_DEBUG	= 0x01,
@@ -250,7 +250,7 @@ public:
     class Context
     {
     public:
-        Context(const Log_Addr & usp, const Log_Addr & entry): _esp3(usp), _eip(entry), _cs(((Traits<Build>::MODE == Traits<Build>::KERNEL) && usp)? SEL_APP_CODE : SEL_SYS_CODE), _eflags(FLAG_DEFAULTS) {}
+        Context(const Log_Addr & entry): _eip(entry), _cs(SEL_SYS_CODE), _eflags(FLAG_DEFAULTS) {}
 
         void save() volatile;
         void load() const volatile;
@@ -267,7 +267,6 @@ public:
                << ",ebp=" << reinterpret_cast<void *>(c._ebp)
                << ",esp=" << &c
                << ",eip=" << reinterpret_cast<void *>(c._eip)
-               << ",esp3="<< c._esp3
                << ",cs="  << c._cs
                << ",ccs=" << cs()
                << ",cds=" << ds()
@@ -281,7 +280,6 @@ public:
         }
 
     private:
-        Reg32 _esp3; // only used in multitasking environments
         Reg32 _edi;
         Reg32 _esi;
         Reg32 _ebp;
@@ -319,9 +317,6 @@ public:
     static void halt() { ASM("hlt"); }
 
     static void switch_context(Context * volatile * o, Context * volatile n);
-
-    static void syscall(void * message);
-    static void syscalled();
 
     static Flags flags() { return eflags(); }
     static void flags(const Flags flags) { eflags(flags); }
@@ -370,31 +365,14 @@ public:
     static Reg16 ntohs(Reg16 v)	{ return htons(v); }
 
     template<typename ... Tn>
-    static Context * init_stack(const Log_Addr & usp, Log_Addr sp, void (* exit)(), int (* entry)(Tn ...), Tn ... an) {
+    static Context * init_stack(Log_Addr sp, void (* exit)(), int (* entry)(Tn ...), Tn ... an) {
         // IA32 first decrements the stack pointer and then writes into the stack
         sp -= SIZEOF<Tn ... >::Result;
         init_stack_helper(sp, an ...);
         sp -= sizeof(int *);
         *static_cast<int *>(sp) = Log_Addr(exit);
-        if(usp) {
-            sp -= sizeof(int *);
-            *static_cast<int *>(sp) = Log_Addr(SEL_APP_DATA);
-            sp -= sizeof(int *);
-            *static_cast<int *>(sp) = usp;
-        }
         sp -= sizeof(Context);
-        return new (sp) Context(usp, entry);
-    }
-    template<typename ... Tn>
-    static Log_Addr init_user_stack(Log_Addr sp, void (* exit)(), Tn ... an) {
-        // IA32 first decrements the stack pointer and then writes into the stack
-        sp -= SIZEOF<Tn ... >::Result;
-        init_stack_helper(sp, an ...);
-        if(exit) {
-            sp -= sizeof(int *);
-            *static_cast<int *>(sp) = Log_Addr(exit);
-        }
-        return sp;
+        return new (sp) Context(entry);
     }
 
 public:

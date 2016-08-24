@@ -162,7 +162,6 @@ public:
     enum {
         INT_FIRST_HARD  = i8259A::INT_FIRST_HARD,
         INT_TIMER	= i8259A::INT_TIMER,
-        INT_KEYBOARD    = i8259A::INT_KEYBOARD,
         INT_RESCHEDULER = i8259A::INT_RESCHEDULER, // in multicores, reschedule goes via IPI, which must be acknowledged just like hardware
         INT_SYSCALL     = i8259A::INT_SYSCALL,
         INT_LAST_HARD   = INT_RESCHEDULER
@@ -172,8 +171,8 @@ public:
     enum {
         LOCAL_APIC_PHY_ADDR	= 0xfee00000,
         LOCAL_APIC_LOG_ADDR	= Memory_Map<PC>::APIC,
-        LOCAL_APIC_SIZE         = Memory_Map<PC>::VGA - Memory_Map<PC>::APIC,
-        IO_APIC_PHY_ADDR	= 0xfec00000
+        IO_APIC_PHY_ADDR	= 0xfec00000,
+        IO_APIC_LOG_ADDR	= Memory_Map<PC>::APIC + (IO_APIC_PHY_ADDR - LOCAL_APIC_PHY_ADDR)
     };
 
     // Memory-mapped registers
@@ -453,10 +452,9 @@ private:
 public:
     using IC_Common::Interrupt_Id;
     using IC_Common::Interrupt_Handler;
+    using Engine::INT_TIMER;
     using Engine::INT_RESCHEDULER;
     using Engine::INT_SYSCALL;
-    using Engine::INT_TIMER;
-    using Engine::INT_KEYBOARD;
 
     using Engine::ipi_send;
 
@@ -464,14 +462,13 @@ public:
     PC_IC() {}
 
     static Interrupt_Handler int_vector(const Interrupt_Id & i) {
-        assert(i < INTS);
-        return _int_vector[i];
+        return (i < INTS) ? _int_vector[i] : 0;
     }
 
     static void int_vector(const Interrupt_Id & i, const Interrupt_Handler & h) {
         db<IC>(TRC) << "IC::int_vector(int=" << i << ",h=" << reinterpret_cast<void *>(h) <<")" << endl;
-        assert(i < INTS);
-        _int_vector[i] = h;
+        if(i < INTS)
+            _int_vector[i] = h;
     }
 
     static void enable() {
@@ -481,7 +478,6 @@ public:
 
     static void enable(int i) {
         db<IC>(TRC) << "IC::enable(int=" << i << ")" << endl;
-        assert(i < INTS);
         Engine::enable(i);
     }
 
@@ -492,7 +488,6 @@ public:
 
     static void disable(int i) {
         db<IC>(TRC) << "IC::disable(int=" << i << ")" << endl;
-        assert(i < INTS);
         Engine::disable(i);
     }
 

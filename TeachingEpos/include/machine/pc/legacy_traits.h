@@ -1,7 +1,7 @@
 // EPOS PC Machine Metainfo and Configuration
 
-#ifndef __machine_traits_h
-#define __machine_traits_h
+#ifndef __pc_traits_h
+#define __pc_traits_h
 
 #include <system/config.h>
 
@@ -103,59 +103,20 @@ template<> struct Traits<PC_UART>: public Traits<PC_Common>
 
 template<> struct Traits<PC_Display>: public Traits<PC_Common>
 {
-    static const bool enabled = !Traits<Serial_Display>::enabled;
     static const int COLUMNS = 80;
     static const int LINES = 25;
     static const int TAB_SIZE = 8;
-};
-
-template<> struct Traits<PC_Keyboard>: public Traits<PC_Common>
-{
-    static const bool enabled = !Traits<Serial_Keyboard>::enabled;
+    static const unsigned int FRAME_BUFFER_ADDRESS = 0xb8000;
+    static const unsigned int FRAME_BUFFER_SIZE = 64 * 1024; // 64 KB
 };
 
 template<> struct Traits<PC_Scratchpad>: public Traits<PC_Common>
 {
     static const bool enabled = false;
-    static const unsigned int ADDRESS = 0xa0000; // VGA Graphic mode frame buffer
-    static const unsigned int SIZE = 96 * 1024;
+    static const unsigned int ADDRESS = Traits<PC_Display>::FRAME_BUFFER_ADDRESS;
+    static const unsigned int SIZE = Traits<PC_Display>::FRAME_BUFFER_SIZE;
 };
 
-template<> struct Traits<PC_Ethernet>: public Traits<PC_Common>
-{
-    static const bool enabled = (Traits<Build>::NODES > 1);
-
-    typedef LIST<PCNet32> NICS;
-    static const unsigned int UNITS = NICS::Length;
-};
-
-template<> struct Traits<PCNet32>: public Traits<PC_Ethernet>
-{
-    static const unsigned int UNITS = NICS::Count<PCNet32>::Result;
-    static const unsigned int SEND_BUFFERS = 64; // per unit
-    static const unsigned int RECEIVE_BUFFERS = 256; // per unit
-};
-
-template<> struct Traits<E100>: public Traits<PC_Ethernet>
-{
-    static const unsigned int UNITS = NICS::Count<E100>::Result;
-    static const unsigned int SEND_BUFFERS = 64; // per unit
-    static const unsigned int RECEIVE_BUFFERS = 64; // per unit
-};
-
-template<> struct Traits<C905>: public Traits<PC_Ethernet>
-{
-    static const unsigned int UNITS = NICS::Count<C905>::Result;
-    static const unsigned int SEND_BUFFERS = 64; // per unit
-    static const unsigned int RECEIVE_BUFFERS = 64; // per unit
-};
-
-template<> struct Traits<PC_FPGA>: public Traits<PC_Common>
-{
-    static const bool enabled = true;
-
-    static const unsigned int DMA_BUFFER_SIZE = 64 * 1024; // 64 KB
-};
 __END_SYS
 
 #endif

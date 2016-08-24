@@ -20,17 +20,19 @@ private:
     static const unsigned long M = 4294967295U;
 
 public:
-    static int random() {
+    Random() {}
+        
+    static unsigned long random() {
         _seed = ((_seed * A) + C) % M; //_seed = (_seed << 1) ^ n;
         return _seed;
     }
 
-    static void seed(int value) {
+    static void seed(unsigned long value) {
         _seed = value;
     }
 
 private:
-    static int _seed;
+    static unsigned long _seed;
 };
 
 __END_UTIL

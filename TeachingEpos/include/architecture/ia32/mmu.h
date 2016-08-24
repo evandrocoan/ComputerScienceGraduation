@@ -216,10 +216,10 @@ public:
 
         void activate() const { IA32::pdp(reinterpret_cast<IA32::Reg32>(_pd)); }
 
-        Log_Addr attach(const Chunk & chunk, unsigned int from = 0) {
-            for(unsigned int i = from; i < PD_ENTRIES; i++)
-                if(attach(i, chunk.pt(), chunk.pts(), chunk.flags()))
-        	        return i << DIRECTORY_SHIFT;
+        Log_Addr attach(const Chunk & chunk) {
+            for(unsigned int i = 0; i < PD_ENTRIES; i++)
+        	if(attach(i, chunk.pt(), chunk.pts(), chunk.flags()))
+        	    return i << DIRECTORY_SHIFT;
             return false;
         }
 
@@ -227,6 +227,7 @@ public:
             unsigned int from = directory(addr);
             if(!attach(from, chunk.pt(), chunk.pts(), chunk.flags()))
         	return Log_Addr(false);
+
             return from << DIRECTORY_SHIFT;
         }
 
@@ -236,14 +237,14 @@ public:
         	    detach(i, chunk.pt(), chunk.pts());
         	    return;
         	}
-            db<MMU>(WRN) << "MMU::Directory::detach(pt=" << chunk.pt() << ") failed!" << endl;
+            db<IA32_MMU>(WRN) << "IA32_MMU::Directory::detach(pt=" << chunk.pt() << ") failed!" << endl;
  	}
 
  	void detach(const Chunk & chunk, const Log_Addr & addr) {
             unsigned int from = directory(addr);
 //            if(indexes((*_pd)[from]) != indexes(chunk.pt())) {
             if(indexes((*static_cast<Log_Addr *>(phy2log(_pd)))[from]) != indexes(chunk.pt())) {
-        	db<MMU>(WRN) << "MMU::Directory::detach(pt=" << chunk.pt() << ",addr=" << addr << ") failed!" << endl;
+        	db<IA32_MMU>(WRN) << "IA32_MMU::Directory::detach(pt=" << chunk.pt() << ",addr=" << addr << ") failed!" << endl;
         	return;
             }
             detach(from, chunk.pt(), chunk.pts());
@@ -283,15 +284,15 @@ public:
     public:
         DMA_Buffer(unsigned int s) : Chunk(s, IA32_Flags::DMA) {
             Directory dir(current());
-            _log_addr = dir.attach(*this, MMU::directory(PHY_MEM));
-            db<MMU>(TRC) << "MMU::DMA_Buffer() => " << *this << endl;
+            _log_addr = dir.attach(*this);
+            db<IA32_MMU>(TRC) << "IA32_MMU::DMA_Buffer() => " << *this << endl;
         }
 
         DMA_Buffer(unsigned int s, const Log_Addr & d): Chunk(s, IA32_Flags::DMA) {
             Directory dir(current());
             _log_addr = dir.attach(*this);
             memcpy(_log_addr, d, s);
-            db<MMU>(TRC) << "MMU::DMA_Buffer(phy=" << *this << " <= " << d << endl;
+            db<IA32_MMU>(TRC) << "IA32_MMU::DMA_Buffer(phy=" << *this << " <= " << d << endl;
         }
         
         Log_Addr log_address() const { return _log_addr; }
@@ -319,10 +320,10 @@ public:
             if(e)
         	phy = e->object() + e->size();
             else
-        	db<MMU>(WRN) << "MMU::alloc() failed!" << endl;
+        	db<IA32_MMU>(WRN) << "IA32_MMU::alloc() failed!" << endl;
         }
 
-        db<MMU>(TRC) << "MMU::alloc(frames=" << frames << ") => " << phy << endl;
+        db<IA32_MMU>(TRC) << "IA32_MMU::alloc(frames=" << frames << ") => " << phy << endl;
 
         return phy;
     }
@@ -339,7 +340,7 @@ public:
         // Clean up MMU flags in frame address
         frame = indexes(frame); 
 
-        db<MMU>(TRC) << "MMU::free(frame=" << frame << ",n=" << n << ")" << endl;
+        db<IA32_MMU>(TRC) << "IA32_MMU::free(frame=" << frame << ",n=" << n << ")" << endl;
 
         if(frame && n) {
             List::Element * e = new (phy2log(frame)) List::Element(frame, n);
