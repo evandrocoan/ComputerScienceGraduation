@@ -1,4 +1,17 @@
-Semestre-2014-2
+Semester-2016-2
 ===============
 
-Repositório para Material da disciplina de Sistemas Operacionais I.
+
+
+Repository for the INE - UFSC Operating Systems' graduation discipline.
+
+
+
+
+
+
+
+
+
+
+

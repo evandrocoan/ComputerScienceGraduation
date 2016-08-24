@@ -1,1 +1,0 @@
-../src/abstraction/semaphore_test_traits.h
