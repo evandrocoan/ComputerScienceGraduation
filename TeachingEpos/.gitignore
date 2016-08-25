@@ -3,3 +3,6 @@
 # Ignore the svn stuff
 .svn
 
+# Compilation cache file
+.epos_flag_file.txt
+
