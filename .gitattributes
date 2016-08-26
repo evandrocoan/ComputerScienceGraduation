@@ -31,3 +31,15 @@
 *.o binary
 *.obj binary
 
+*.pdf binary
+*.png binary
+*.odt binary
+*.gz binary
+*.jpg binary
+*.vpp
+*.vpp~*
+
+
+
+
+
