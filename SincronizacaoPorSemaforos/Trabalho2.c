@@ -1,5 +1,5 @@
 /**
- * @authors Luiz Henrique Urias, Evandro  Coan
+ * @authors Luiz Henrique Urias, Evandro Coan
  */
 /*
  * Serão duas threads,

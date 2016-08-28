@@ -1,7 +1,7 @@
 /**
  * Produto escalar concorrente usando threads
  *
- * \author Luiz Henrique, Evandro  Coan
+ * \author Luiz Henrique, Evandro Coan
  * \version 1.0
  */
 
