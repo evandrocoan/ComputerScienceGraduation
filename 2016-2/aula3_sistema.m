@@ -1,24 +1,23 @@
-A = [ pi,      e,        sqrt(2),    1; 
-      sqrt(3), sqrt(10), -1/sqrt(3), 2; 
-      e,       -sqrt(2), 1/sqrt(10), 3 ]
+ManualOperatedMatrix = [ pi       ,  e         ,  sqrt(2)       , 1; 
+                         sqrt( 3 ),  sqrt( 10 ), -1 / sqrt( 3 ) , 2; 
+                         e        , -sqrt( 2 ) ,  1 / sqrt( 10 ), 3; ]
 
-B = A;
-
-
-aux1 = A(2,1)/A(1,1);
-A(2,:)=A(2,:)-aux1*A(1,:);
+OriginalInicialMatrix = ManualOperatedMatrix;
 
 
-aux2 = A(3,1)/A(1,1);
-A(3,:)=A(3,:)-aux2*A(1,:);
+aux1 = ManualOperatedMatrix( 2, 1 ) / ManualOperatedMatrix( 1, 1 );
+ManualOperatedMatrix( 2, : )= ManualOperatedMatrix( 2, : ) - aux1 * ManualOperatedMatrix( 1, : );
+
+aux2 = ManualOperatedMatrix( 3, 1 ) / ManualOperatedMatrix( 1, 1 );
+ManualOperatedMatrix( 3, : )=ManualOperatedMatrix( 3, : ) - aux2 * ManualOperatedMatrix( 1, : );
+
+aux3 = ManualOperatedMatrix( 3,2 ) / ManualOperatedMatrix( 2,  2);
+ManualOperatedMatrix( 3, : ) = ManualOperatedMatrix( 3, : ) - aux3 * ManualOperatedMatrix( 2, : );
+
+ManualOperatedMatrix
 
 
-aux3 = A(3,2)/A(2,2);
-A(3,:)=A(3,:)-aux3*A(2,:);
+aula3_fgauss( OriginalInicialMatrix )
 
-A
-
-X = aula3_fgauss( B )
-
-
+OriginalInicialMatrix
 

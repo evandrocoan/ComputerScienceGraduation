@@ -1,21 +1,19 @@
-function X = aula3_fgauss( A )
+function aula3_fgauss( Matrix )
 	
 	
-	n = size( A, 1)
+	column_size = size( Matrix, 1)
 	
-	
-	for k = 1 : n - 1
+	% TODO
+	for current_processing_step = 1 : column_size - 1
 		
-		for i = k + 1 : n
+		for current_line = current_processing_step + 1 : column_size
 			
-			aux = A( i, k ) / A( k, k )
-			A( i, : ) = A( i, : ) - aux * A(k, :)
+			aux = Matrix( current_line, current_processing_step ) / Matrix( current_processing_step, current_processing_step )
+			Matrix( current_line, : ) = Matrix( current_line, : ) - aux * Matrix( current_processing_step, : )
 			
 		end
 		
 	end
-	
-	A
 	
 end
 
