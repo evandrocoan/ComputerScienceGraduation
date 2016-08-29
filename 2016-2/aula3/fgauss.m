@@ -1,4 +1,4 @@
-function aula3_fgauss( Matrix )
+function fgauss( Matrix )
 	
 	
 	column_size = size( Matrix, 1)

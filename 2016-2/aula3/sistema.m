@@ -17,7 +17,7 @@ ManualOperatedMatrix( 3, : ) = ManualOperatedMatrix( 3, : ) - aux3 * ManualOpera
 ManualOperatedMatrix
 
 
-aula3_fgauss( OriginalInicialMatrix )
+fgauss( OriginalInicialMatrix )
 
 OriginalInicialMatrix
 

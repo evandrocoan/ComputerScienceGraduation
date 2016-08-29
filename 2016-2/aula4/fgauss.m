@@ -1,4 +1,4 @@
-function aula3_fgauss( Matrix )
+function Solution = fgauss( Matrix )
 	
 	
 	column_size = size( Matrix, 1)
@@ -14,6 +14,8 @@ function aula3_fgauss( Matrix )
 		end
 		
 	end
+	
+	Solution = [ Matrix( :, column_size ) ];
 	
 end
 
