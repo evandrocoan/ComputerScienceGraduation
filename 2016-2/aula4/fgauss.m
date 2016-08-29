@@ -1,15 +1,23 @@
-function Solution = fgauss( Matrix )
+% Assuming an matrix as 3x4, 2x4, etc.
+function Solution = fgauss( Matrix, line_size, column_size )
 	
+	last_column_to_process = column_size - 1
 	
-	column_size = size( Matrix, 1)
-	
-	% TODO
-	for current_processing_step = 1 : column_size - 1
+	for current_column = 1 : last_column_to_process
 		
-		for current_line = current_processing_step + 1 : column_size
+		current_processing_colunm = current_column + 1
+		
+		for current_line = current_processing_colunm : line_size
 			
-			aux = Matrix( current_line, current_processing_step ) / Matrix( current_processing_step, current_processing_step )
-			Matrix( current_line, : ) = Matrix( current_line, : ) - aux * Matrix( current_processing_step, : )
+			aux                                    = Matrix( current_line, current_column ) / Matrix( current_column, current_column )
+			Matrix( current_line, current_column ) = 0
+			
+			for non_zero_column = current_processing_colunm : column_size
+				
+				current_element                         = Matrix( current_line, non_zero_column )
+				Matrix( current_line, non_zero_column ) = current_element - aux * current_element
+				
+			end
 			
 		end
 		
