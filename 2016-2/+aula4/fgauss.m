@@ -18,7 +18,7 @@ function Solution = fgauss( Matrix, line_size, column_size )
         
     end
     
-    Solution = retro_substitution( Matrix, line_size, column_size )
+    Solution = retro_substitution( Matrix, line_size, column_size );
     
 end
 
