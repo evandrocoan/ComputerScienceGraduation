@@ -1,0 +1,21 @@
+{
+    "folders":
+    [
+        {
+            "path": "."
+        }
+    ],
+    "build_systems":
+    [
+        {
+            "working_dir": "$project_path/2016-2/+aula4",
+            // "selector_old": "source.matlab, source.octave", // comment this to build from everywhere
+            
+            "name": "Build Main file",
+            "cmd": ["sh","$packages/SublimeBuildSystem/Octave.sh","sistemas.m"],
+            
+            "target": "ansi_color_build",
+            "syntax": "Packages/ANSIescape/ANSI.tmLanguage"
+        }
+    ]
+}
