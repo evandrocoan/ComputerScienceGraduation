@@ -15,16 +15,14 @@ sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu ../../TeachingEpos/* $EPOS_COM
 
 # Get the application name
 APPLICATION_TO_RUN=$(echo $1 | cut -d'.' -f 1)
-export APPLICATION=$APPLICATION_TO_RUN
 
 
 REMOTE_COMMAND_TO_RUN="cd /home/evandro.coan/2016-2_OperatingSystems/TeachingEpos;
 pwd;
-sh compile_and_run.sh;"
+sh compile_and_run.sh $APPLICATION_TO_RUN;"
+
 
 sshpass -p $EPOS_COMPILER_MACHINE_PASS ssh $EPOS_COMPILER_MACHINE_ADDRESS $REMOTE_COMMAND_TO_RUN;
-
-
 
 showTheElapsedSeconds "$0"
 
