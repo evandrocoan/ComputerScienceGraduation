@@ -1,5 +1,7 @@
 function result = rmax( Matrix, line_count, solution )
     
+    printf( '\n\n\n\n\n\nStarting the maximum residue calculation...\n\n' )
+    
     Matrix
     line_count
     

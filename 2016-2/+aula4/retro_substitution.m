@@ -1,8 +1,8 @@
 function Solution = retro_substitution( Matrix, line_count, column_count )
     
     printf( '\n\n\n\n\n\nStarting the retro_substitution...\n\n' )
-    % Calculates the first term
-    % 4x=5 --> x = 5/4
+    
+    % Calculates the first term, 4x=5 --> x = 5/4
     Matrix( line_count, column_count ) = Matrix( line_count, column_count ) / Matrix( line_count, column_count - 1 );
     
     current_line = line_count - 1
@@ -23,6 +23,6 @@ function Solution = retro_substitution( Matrix, line_count, column_count )
         
     end
     
-    Solution = Matrix( :, column_count );
+    Solution = Matrix( :, column_count )';
     
 end

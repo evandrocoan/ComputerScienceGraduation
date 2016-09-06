@@ -3,19 +3,30 @@ function x = fgauss(A, n)
 %Escalonamento para transformar A em U (triangular superior)
 %troca de linhas e escolhe a melhor linha 1
     for k = 1 : n - 1
+        
+        processing_step = k
+        Matrix = A
+        
         for i =  k + 1 : n
             %resolver o probs do zero
             #antes de usar, escolhe o melhor pivô
             #k indica qual linha quer melhorar
-            
+            current_line = i
             A = pivot_parcial(A,n,k); #imprime com linhas trocadas
+            Matrix
             
             aux = A(i, k)/A(k, k);
+            aux
             for j = k + 1 : n + 1
+                non_zero = j
                 A(i,j) = A(i, j) - aux*A(k, j); %Li <- Li - aux * Lk
+                
+                Matrix
             end 
             
+            
             A(i,k) = 0; %coluna j=k tem resultado ZERO conhecido
+            Matrix
             
         end
        

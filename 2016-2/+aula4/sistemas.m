@@ -29,31 +29,41 @@ SystemSolution = [ 3.00000   1.00000  -1.00000  -3.00000 ];
 SystemMatrix   = RandomSystemMatrix
 SystemSolution = RandomSystemSolution
 
-line_size   = size( SystemMatrix, 1 )
-column_size = size( SystemMatrix, 2 ) % Pega o tamanho da primeira coluna
+line_count   = size( SystemMatrix, 1 )
+column_count = size( SystemMatrix, 2 ) % Pega o tamanho da primeira coluna
 
 
 % Utiliza o pivotamento_parcial(3), para cada uma das linhas e evitar zeros na diagonal principal
-MySolution = fgauss( SystemMatrix, line_size, column_size )
+MySolution = fgauss( SystemMatrix, line_count, column_count )
 
+printf( '\n\n\n\n\n\nChanging directory to ../+aula3\n\n' )
 cd '../+aula3'
-printf( 'Changing directory to ../+aula3\n\n\n\n\n\n' )
 fgauss( SystemMatrix )
 
+printf( '\n\n\n\n\n\nChanging directory to ../2_19.08\n\n' )
 cd '../2_19.08'
-printf( 'Changing directory to ../2_19.08\n\n\n\n\n\n' )
 
-MySolution = fgauss( SystemMatrix, line_size )
+TeachersSolution = fgauss( SystemMatrix, line_count )
 SystemSolution
 
 cd '../+aula4'
 
 %Dificilmente um numero real será igual a zero. Para isso fazemos abs( n ) < 1.e-15
-residuo_maximo = rmax( SystemMatrix, line_size, MySolution )
+residuo_maximo = rmax( SystemMatrix, line_count, MySolution )
 
 
+printf( '\n\n\n\n\n\nStarting using the Octave calculation...\n\n' )
+SystemMatrix
+SquareMatrix = SystemMatrix;
 
+% Remove the last column from the matrix
+SquareMatrix( :, [column_count] ) = []
+last_colunm = SystemMatrix( :, column_count )
 
+% Use the octave built-in functions to solve the system
+OctaveSolution = ( inv( SquareMatrix ) * last_colunm )'
 
+TeachersSolution
+MySolution
 
 
