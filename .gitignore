@@ -4,8 +4,6 @@
 *.o
 *.obj
 *nppBackup
-*.sublime-workspace
-*.sublime-project
 *.db
 *.stackdump
 *.h.gch
