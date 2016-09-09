@@ -8,7 +8,7 @@
     "build_systems":
     [
         {
-            "working_dir": "$project_path/2016-2/+aula4",
+            "working_dir": "$project_path/2016-2/Trabalho1_JacobWay/",
             // "selector_old": "source.matlab, source.octave", // comment this to build from everywhere
             
             "name": "Build Main file",
