@@ -17,10 +17,10 @@ A( i, n + 1 )     = 100;
 
 para i = n / 2 + 1 : n - 1
 A( i, i - n / 2 ) = 11;
-A( i, i - 1 ) = 3;
-A( i, i ) = 60;
-A( i, i + 1 ) = 1;
-A( i, n + 1 ) = 200;
+A( i, i - 1 )     = 3;
+A( i, i )         = 60;
+A( i, i + 1 )     = 1;
+A( i, n + 1 )     = 200;
 
 para i = n;
 A( i, i - 1 ) = 3;
@@ -75,10 +75,36 @@ printf( ' a). Determine a solução do sistema acima pelo método direto de Gaus
 printf( '     Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas. \n' )
 printf( '     Calcule o resíduo máximo e o erro de Truncamento máximo na solução acima; \n' )
 
+n = 50;
+i = 1;
+A( i, i )     = 3;
+A( i, i + 1 ) = 1;
+A( i, n + 1 ) = 450;
 
 
+for i = 2 : n / 2
+    A( i, i - 1 )     = 20;
+    A( i, i )         = 50;
+    A( i, i + 1 )     = 1;
+    A( i, i + n / 2 ) = 1;
+    A( i, n + 1 )     = 100;
+end
 
+for i = n / 2 + 1 : n - 1
+    A( i, i - n / 2 ) = 11;
+    A( i, i - 1 )     = 3;
+    A( i, i )         = 60;
+    A( i, i + 1 )     = 1;
+    A( i, n + 1 )     = 200;
+end
 
+i = n;
+A( i, i - 1 ) = 3;
+A( i, i )     = 10;
+A( i, n + 1 ) = 300;
 
+[ solucao, operacoes ] = fgauss_sem_pivotacao( A, n, n + 1 );
 
+operacoes
+solucao'
 
