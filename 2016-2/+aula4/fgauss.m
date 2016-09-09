@@ -4,12 +4,16 @@ function Solution = fgauss( Matrix, line_count, column_count )
     for processing_step = 1 : line_count - 1
         
         processing_step
-        Matrix = pivotamento_parcial( Matrix, processing_step )
+        #Matrix = pivotamento_parcial( Matrix, processing_step )
         
         for current_line = processing_step + 1 : line_count
             
             current_line
-            aux = Matrix( current_line, processing_step ) / Matrix( processing_step, processing_step )
+            dividendo = Matrix( current_line, processing_step )
+            divisor   = Matrix( processing_step, processing_step )
+            aux       = dividendo / divisor
+            
+            Matrix( current_line, processing_step ) = 0
             
             for non_zero = processing_step + 1 : column_count
                 
@@ -17,8 +21,6 @@ function Solution = fgauss( Matrix, line_count, column_count )
                 Matrix( current_line, non_zero ) = Matrix( current_line, non_zero ) - aux * Matrix( processing_step, non_zero )
                 
             end
-            
-            Matrix( current_line, processing_step ) = 0;
             
         end
         

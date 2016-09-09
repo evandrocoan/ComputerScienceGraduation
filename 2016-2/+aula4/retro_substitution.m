@@ -4,8 +4,7 @@ function Solution = retro_substitution( Matrix, line_count, column_count )
     
     % Calculates the first term, 4x=5 --> x = 5/4
     Matrix( line_count, column_count ) = Matrix( line_count, column_count ) / Matrix( line_count, column_count - 1 );
-    
-    current_line = line_count - 1
+    current_line                       = line_count - 1
     
     % Calculate the remaining terms.
     while( current_line > 0 )
@@ -14,11 +13,14 @@ function Solution = retro_substitution( Matrix, line_count, column_count )
         
         for non_zero = column_count - 1: -1: current_line + 1
             
-            sum = sum + Matrix( current_line, non_zero ) * Matrix( non_zero, column_count )
+            non_zero
+            multiplado    = Matrix( current_line, non_zero )
+            multiplicador = Matrix( non_zero, column_count )
+            sum           = sum + multiplado * multiplicador
             
         end
         
-        Matrix( current_line, column_count ) = - sum / Matrix( current_line, current_line )
+        Matrix( current_line, column_count ) = (  ( ( ( -1 * sum ) + Matrix( current_line, column_count ) ) / Matrix( current_line, current_line ) ) )
         current_line = current_line - 1
         
     end

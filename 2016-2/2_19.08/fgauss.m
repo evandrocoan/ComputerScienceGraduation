@@ -5,34 +5,36 @@ function x = fgauss(A, n)
     for k = 1 : n - 1
         
         processing_step = k
-        Matrix = A
+        #A = pivot_parcial(A,n,k); #imprime com linhas trocadas
+        #Matrix = A
         
         for i =  k + 1 : n
             %resolver o probs do zero
             #antes de usar, escolhe o melhor pivô
             #k indica qual linha quer melhorar
             current_line = i
-            A = pivot_parcial(A,n,k); #imprime com linhas trocadas
-            Matrix
             
-            aux = A(i, k)/A(k, k);
-            aux
-            for j = k + 1 : n + 1
-                non_zero = j
-                A(i,j) = A(i, j) - aux*A(k, j); %Li <- Li - aux * Lk
-                
-                Matrix
-            end 
-            
+            dividendo = A(i, k)
+            divisor   = A(k, k)
+            aux       = dividendo / divisor
             
             A(i,k) = 0; %coluna j=k tem resultado ZERO conhecido
-            Matrix
+            Matrix = A
+            
+            for j = k + 1 : n + 1
+                
+                non_zero = j
+                A(i,j)   = A(i, j) - aux*A(k, j); %Li <- Li - aux * Lk
+                Matrix   = A
+                
+            end 
             
         end
        
     end
     
-   
+    Matrix = A
+    
 %retrosubstituição
 #ultimo x é o primeiro a ser calculado
 #testar o sistema
@@ -49,12 +51,19 @@ else
 
 endif
 
+
+printf( '\n\n\n\n\n\nStarting the retro_substitution...\n\n' )
+
 for i=(n-1):-1:1
-    soma = 0;
+    current_line = i
+    sum = 0
     for j=(i+1):n
-       soma = soma + (A(i,j) * x(j));
+       non_zero = j
+       multiplado = A(i,j)
+       multiplicador = x(j)
+       sum = sum + (A(i,j) * x(j))
     end %j
-  x(i) = (A(i, n+1) - soma)/ A(i,i);
+    x(i) = (A(i, n+1) - sum)/ A(i,i)
 end %i
 
 %   x

@@ -32,6 +32,14 @@ SystemSolution = RandomSystemSolution
 line_count   = size( SystemMatrix, 1 )
 column_count = size( SystemMatrix, 2 ) % Pega o tamanho da primeira coluna
 
+#{
+printf( '\n\n' )
+
+MySolution = fgauss( SystemMatrix, line_count, column_count )
+
+cd '../2_19.08'
+TeachersSolution = fgauss( SystemMatrix, line_count )
+#}
 
 % Utiliza o pivotamento_parcial(3), para cada uma das linhas e evitar zeros na diagonal principal
 MySolution = fgauss( SystemMatrix, line_count, column_count )
@@ -46,6 +54,7 @@ cd '../2_19.08'
 TeachersSolution = fgauss( SystemMatrix, line_count )
 SystemSolution
 
+printf( '\n\n\n\n\n\nChanging directory to ../+aula4\n\n' )
 cd '../+aula4'
 
 %Dificilmente um numero real será igual a zero. Para isso fazemos abs( n ) < 1.e-15
