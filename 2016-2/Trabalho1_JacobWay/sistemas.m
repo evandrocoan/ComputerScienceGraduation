@@ -31,16 +31,16 @@ A( i, n + 1 ) = 300;
 Equations form:
 
 para i = 1;
-3 * x( i ) + x( i + 1 )                                          = 450;
+3 * x( i ) + x( i + 1 )                                         = 450;
 
 para i = 2 : n / 2
-20 * x( i - 1 ) + 50 * x( i ) + x( i + 1 ) + x( i + n / 2 )      = 100;
+20 * x( i - 1 ) + 50 * x( i ) + x( i + 1 ) + x( i + n / 2 )     = 100;
 
 para i = n / 2 + 1 : n - 1
-11 * x( i - n / 2 ) + 3 * x( i - 1 ) + 60 * x( i ) + x( i + 1 )  = 200;
+11 * x( i - n / 2 ) + 3 * x( i - 1 ) + 60 * x( i ) + x( i + 1 ) = 200;
 
 para i = n;
-3 * x( i - 1 ) + 10 * x( i )                                     = 300;
+3 * x( i - 1 ) + 10 * x( i )                                    = 300;
 
 a). Determine a solução do sistema acima pelo método direto de Gauss SEM pivotação. 
 Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas. 
@@ -69,14 +69,29 @@ por: max| x( aproximado, double, iter=n ) .- x( aproximado, double, iter=2n ) |
 #}
 
 
+
+printf( 'Dado o sistema linear abaixo para n=50 equações: \n\n' );
 n = 50;
+
+printf( 'para i = 1;\n' );
+printf( '3 * x( i ) + x( i + 1 )                                         = 450;\n' );
+printf( '\n' );
+printf( 'para i = 2 : n / 2\n' );
+printf( '20 * x( i - 1 ) + 50 * x( i ) + x( i + 1 ) + x( i + n / 2 )     = 100;\n' );
+printf( '\n' );
+printf( 'para i = n / 2 + 1 : n - 1\n' );
+printf( '11 * x( i - n / 2 ) + 3 * x( i - 1 ) + 60 * x( i ) + x( i + 1 ) = 200;\n' );
+printf( '\n' );
+printf( 'para i = n;\n' );
+printf( '3 * x( i - 1 ) + 10 * x( i )                                    = 300;\n' );
+printf( '\n' );
 
 format long
 split_long_rows(0)
 #output_precision(30)
 #output_max_field_width(0)
 
-#{
+
 ############################################################################################################
 ############################################################################################################
 printf( 'a) Determine a solução do sistema acima pelo método direto de Gauss SEM pivotação. \n' )
@@ -113,16 +128,16 @@ printf( '\nc) Compare o resíduo máximo das 2 soluções acima e defina qual é
 max_residue_diff = max_residue - max_residue2;
 printf( '\nA segunda solucao eh mais exata por que apresenta um resíduo menor.\n' );
 printf( 'Isso pode ser visto por que ao fazer max_residue - max_residue2, temos um numero\n' );
-printf( 'positivo. Assim sabemos que o primeiro numero eh maior que o segundo.\n' );
-#}
+printf( 'positivo. Assim sabemos que o primeiro numero eh maior que o segundo.\n\n\n' );
+
 
 ############################################################################################################
 ############################################################################################################
-printf( ' d). Determine a solução do sistema acima pelo método iterativo de Jacobi. \n' );
-printf( ' Teste fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu \n' );
-printf( ' valor otimizado (aquele que permite a convergência com o menor número de iterações). \n' );
-printf( ' Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, \n' );
-printf( ' para critério de parada soma|(x-xi)|<1e-4;\n\n' );
+printf( 'd) Determine a solução do sistema acima pelo método iterativo de Jacobi. \n' );
+printf( '   Teste fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu \n' );
+printf( '   valor otimizado (aquele que permite a convergência com o menor número de iterações). \n' );
+printf( '   Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, \n' );
+printf( '   para critério de parada soma|(x-xi)|<1e-4;\n\n' );
 
 [ x, operacoes, currentError ] = jabob( 1.0, n );
 printf( '\nFator: 1.0, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
@@ -139,8 +154,47 @@ printf( '\nFator: 1.9, operacoes: %20f, currentError: %20.20f', operacoes, curre
 [ x, operacoes, currentError ] = jabob( 0.1, n );
 printf( '\nFator: 0.1, operacoes: %20f, currentError: %20.20f\n', operacoes, currentError );
 
-printf( 'A melhor convergencia foi com fator de relaxação 1.0' );
+printf( 'A melhor convergencia foi com fator de relaxação 1.0\n\n' );
 x
+
+
+############################################################################################################
+############################################################################################################
+printf( 'e) Determine a solução do sistema acima pelo método iterativo de Gauss-Seidel. Teste \n' );
+printf( '   fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu valor otimizado. \n' );
+printf( '   Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, para \n' );
+printf( '   critério de parada soma|(x-xi)|<1e-4. Calcule erro de Truncamento máximo da solução \n' );
+printf( '   aproximada obtida.\n' );
+printf( '   Lembre-se que o erro de Truncamento máximo de uma solução iterativa pode ser estimado \n' );
+printf( '   por: max| x( aproximado, double, iter=n ) .- x( aproximado, double, iter=2n ) |\n' );
+
+[ x, operacoes, currentError ] = gaussSeidel( 1.0, n );
+printf( '\nFator: 1.0, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+
+[ x, operacoes, currentError ] = gaussSeidel( 1.5, n );
+printf( '\nFator: 1.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+
+[ x, operacoes, currentError ] = gaussSeidel( 0.5, n );
+printf( '\nFator: 0.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+
+[ x, operacoes, currentError ] = gaussSeidel( 1.9, n );
+printf( '\nFator: 1.9, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+
+[ x, operacoes, currentError ] = gaussSeidel( 0.1, n );
+printf( '\nFator: 0.1, operacoes: %20f, currentError: %20.20f\n', operacoes, currentError );
+
+printf( 'A melhor convergencia foi com fator de relaxação 1.0\n\n' );
+x
+
+
+
+
+
+
+
+
+
+
 
 
 
