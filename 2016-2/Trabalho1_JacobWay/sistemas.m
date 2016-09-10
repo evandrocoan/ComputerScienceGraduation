@@ -77,7 +77,7 @@ split_long_rows(0)
 #output_max_field_width(0)
 
 #{
-#########################################################################################################
+############################################################################################################
 ############################################################################################################
 printf( 'a) Determine a solução do sistema acima pelo método direto de Gauss SEM pivotação. \n' )
 printf( '   Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas. \n' )
@@ -106,7 +106,7 @@ printf( '\nO residuo maximo foi: %10.30f, e a solucao eh: \n', max_residue );
 print_solution( solucao, n );
 
 
-#########################################################################################################
+###########################################################################################################
 ############################################################################################################
 printf( '\nc) Compare o resíduo máximo das 2 soluções acima e defina qual é a mais exata; \n' );
 
@@ -116,7 +116,7 @@ printf( 'Isso pode ser visto por que ao fazer max_residue - max_residue2, temos 
 printf( 'positivo. Assim sabemos que o primeiro numero eh maior que o segundo.\n' );
 #}
 
-#########################################################################################################
+############################################################################################################
 ############################################################################################################
 printf( ' d). Determine a solução do sistema acima pelo método iterativo de Jacobi. \n' );
 printf( ' Teste fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu \n' );
@@ -124,63 +124,22 @@ printf( ' valor otimizado (aquele que permite a convergência com o menor númer
 printf( ' Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, \n' );
 printf( ' para critério de parada soma|(x-xi)|<1e-4;\n\n' );
 
-for i = 1 : n
-    
-    xi( i ) = 1;
-    
-end
+[ x, operacoes, currentError ] = jabob( 1.0, n );
+printf( '\nFator: 1.0, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
 
-operacoes = 0;
+[ x, operacoes, currentError ] = jabob( 1.5, n );
+printf( '\nFator: 1.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
 
-currentStep  = 0;
-maximumSteps = 1000;
+[ x, operacoes, currentError ] = jabob( 0.5, n );
+printf( '\nFator: 0.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
 
-currentError = 1;
-desiredError = 1e-4;
+[ x, operacoes, currentError ] = jabob( 1.9, n );
+printf( '\nFator: 1.9, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
 
-while( ( currentStep < maximumSteps ) && ( currentError > desiredError ) )
-    
-    currentStep = currentStep + 1
-    
-    i = 1;
-    x( i ) = ( - xi( i + 1 ) + 450 ) / 3;
-    operacoes = operacoes + 1;
-    
-    for i = 2 : n / 2
-        
-        x( i ) = ( 100 + xi( i + 1 ) + xi( i + n / 2 ) + 20 * xi( i - 1 ) ) / 50;
-        operacoes = operacoes + 2;
-        
-    end
-    
-    for i = n / 2 + 1 : n - 1
-        
-        x( i ) = ( 200 + 11 * xi( i - n / 2 ) + 3 * xi( i - 1 ) + xi( i + 1 ) ) / 60; 
-        operacoes = operacoes + 3;
-        
-    end
-    
-    i = n;
-    x( i ) = ( 300 + 3 * xi( i - 1 ) ) / 10;
-    operacoes = operacoes + 2;
-    
-    errors       = xi .- x;
-    currentError = 0;
-    
-    for i = 1 : n
-        
-        currentError = currentError + abs( errors( i ) );
-        
-    end
-    
-    currentError;
-    xi = x;
-    
-end
+[ x, operacoes, currentError ] = jabob( 0.1, n );
+printf( '\nFator: 0.1, operacoes: %20f, currentError: %20.20f\n', operacoes, currentError );
 
-operacoes
-currentError
-xi
+printf( 'A melhor convergencia foi com fator de relaxação 1.0' );
 x
 
 
