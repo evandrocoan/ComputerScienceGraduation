@@ -1,10 +1,11 @@
-function [ Solution, operacoes ] = fgauss_sem_pivotacao( Matrix, line_count, column_count )
+function [ Solution, operacoes ] = fgauss_com_pivotacao( Matrix, line_count, column_count )
     
     operacoes = 0;
     
     for processing_step = 1 : line_count - 1
         
         processing_step;
+        Matrix = pivotamento_parcial( Matrix, processing_step );
         
         for current_line = processing_step + 1 : line_count
             
