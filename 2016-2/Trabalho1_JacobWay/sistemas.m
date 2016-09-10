@@ -103,13 +103,14 @@ SingleMatrix               = create_single_matrix( n );
 [ max_residue, operacoes ] = rmax( SingleMatrix, n, solucao, operacoes );
 
 printf( '\nO numero de operacoes de ponto flutuante foi: %d', operacoes );
-printf( '\nO residuo maximo foi: %10.30f, e a solucao eh: \n', max_residue );
+printf( '\nO residuo maximo foi: %f, e a solucao eh: \n', max_residue );
 print_solution( solucao, n );
+printf( '\n' );
 
 
 ############################################################################################################
 ############################################################################################################
-printf( '\nb) Determine a solução do sistema acima pelo método direto de Gauss COM pivotação.\n' );
+printf( 'b) Determine a solução do sistema acima pelo método direto de Gauss COM pivotação.\n' );
 printf( '   Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas.\n' );
 printf( '   Calcule o resíduo máximo na solução acima.\n' );
 
@@ -117,13 +118,13 @@ printf( '   Calcule o resíduo máximo na solução acima.\n' );
 [ max_residue2, operacoes ] = rmax( SingleMatrix, n, solucao, operacoes );
 
 printf( '\nO numero de operacoes de ponto flutuante foi: %d', operacoes );
-printf( '\nO residuo maximo foi: %10.30f, e a solucao eh: \n', max_residue );
+printf( '\nO residuo maximo foi: %f, e a solucao eh: \n', max_residue );
 print_solution( solucao, n );
 
 
 ###########################################################################################################
 ############################################################################################################
-printf( '\nc) Compare o resíduo máximo das 2 soluções acima e defina qual é a mais exata; \n' );
+printf( 'c) Compare o resíduo máximo das 2 soluções acima e defina qual é a mais exata; \n' );
 
 max_residue_diff = max_residue - max_residue2;
 printf( '\nA segunda solucao eh mais exata por que apresenta um resíduo menor.\n' );
@@ -140,22 +141,23 @@ printf( '   Registre (via contador) o número total de operações em PONTO FLUT
 printf( '   para critério de parada soma|(x-xi)|<1e-4;\n\n' );
 
 [ x, operacoes, currentError ] = jabob( 1.0, n );
-printf( '\nFator: 1.0, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 1.0, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = jabob( 1.5, n );
-printf( '\nFator: 1.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 1.5, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = jabob( 0.5, n );
-printf( '\nFator: 0.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 0.5, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = jabob( 1.9, n );
-printf( '\nFator: 1.9, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 1.9, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = jabob( 0.1, n );
-printf( '\nFator: 0.1, operacoes: %20f, currentError: %20.20f\n', operacoes, currentError );
+printf( '\nFator: 0.1, operacoes: %10d, currentError: %30f\n', operacoes, currentError );
 
 printf( 'A melhor convergencia foi com fator de relaxação 1.0\n\n' );
-x
+print_solution( x, n );
+printf( '\n' );
 
 
 ############################################################################################################
@@ -169,22 +171,19 @@ printf( '   Lembre-se que o erro de Truncamento máximo de uma solução iterati
 printf( '   por: max| x( aproximado, double, iter=n ) .- x( aproximado, double, iter=2n ) |\n' );
 
 [ x, operacoes, currentError ] = gaussSeidel( 1.0, n );
-printf( '\nFator: 1.0, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 1.0, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = gaussSeidel( 1.5, n );
-printf( '\nFator: 1.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 1.5, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = gaussSeidel( 0.5, n );
-printf( '\nFator: 0.5, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
-
-[ x, operacoes, currentError ] = gaussSeidel( 1.9, n );
-printf( '\nFator: 1.9, operacoes: %20f, currentError: %20.20f', operacoes, currentError );
+printf( '\nFator: 0.5, operacoes: %10d, currentError: %30f', operacoes, currentError );
 
 [ x, operacoes, currentError ] = gaussSeidel( 0.1, n );
-printf( '\nFator: 0.1, operacoes: %20f, currentError: %20.20f\n', operacoes, currentError );
+printf( '\nFator: 0.1, operacoes: %10d, currentError: %30f\n', operacoes, currentError );
 
 printf( 'A melhor convergencia foi com fator de relaxação 1.0\n\n' );
-x
+print_solution( x, n );
 
 
 
