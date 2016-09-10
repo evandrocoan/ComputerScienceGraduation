@@ -63,13 +63,13 @@ fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu va
 Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, para 
 critério de parada soma|(x-xi)|<1e-4. Calcule erro de Truncamento máximo da solução 
 aproximada obtida.
-
 Lembre-se que o erro de Truncamento máximo de uma solução iterativa pode ser estimado 
-por:
-max| x(aproximado,double,iter=n) .- x(aproximado,double,iter=2n) |
+por: max| x( aproximado, double, iter=n ) .- x( aproximado, double, iter=2n ) |
 
 #}
 
+
+n = 50;
 
 format long
 split_long_rows(0)
@@ -83,7 +83,6 @@ printf( 'a) Determine a solução do sistema acima pelo método direto de Gauss 
 printf( '   Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas. \n' )
 printf( '   Calcule o resíduo máximo e o erro de Truncamento máximo na solução acima; \n' )
 
-n                          = 50;
 SingleMatrix               = create_single_matrix( n );
 [ solucao, operacoes ]     = fgauss_sem_pivotacao( SingleMatrix, n, n + 1 );
 [ max_residue, operacoes ] = rmax( SingleMatrix, n, solucao, operacoes );
@@ -123,12 +122,66 @@ printf( ' d). Determine a solução do sistema acima pelo método iterativo de J
 printf( ' Teste fatores de relaxação (sub ou sobre, entre 0<relax<2), determine e use o seu \n' );
 printf( ' valor otimizado (aquele que permite a convergência com o menor número de iterações). \n' );
 printf( ' Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas, \n' );
-printf( ' para critério de parada soma|(x-xi)|<1e-4;\n' );
+printf( ' para critério de parada soma|(x-xi)|<1e-4;\n\n' );
 
+for i = 1 : n
+    
+    xi( i ) = 1;
+    
+end
 
+operacoes = 0;
 
+currentStep  = 0;
+maximumSteps = 1000;
 
+currentError = 1;
+desiredError = 1e-4;
 
+while( ( currentStep < maximumSteps ) && ( currentError > desiredError ) )
+    
+    currentStep = currentStep + 1
+    
+    i = 1;
+    x( i ) = ( - xi( i + 1 ) + 450 ) / 3;
+    operacoes = operacoes + 1;
+    
+    for i = 2 : n / 2
+        
+        x( i ) = ( 100 + xi( i + 1 ) + xi( i + n / 2 ) + 20 * xi( i - 1 ) ) / 50;
+        operacoes = operacoes + 2;
+        
+    end
+    
+    for i = n / 2 + 1 : n - 1
+        
+        x( i ) = ( 200 + 11 * xi( i - n / 2 ) + 3 * xi( i - 1 ) + xi( i + 1 ) ) / 60; 
+        operacoes = operacoes + 3;
+        
+    end
+    
+    i = n;
+    x( i ) = ( 300 + 3 * xi( i - 1 ) ) / 10;
+    operacoes = operacoes + 2;
+    
+    errors       = xi .- x;
+    currentError = 0;
+    
+    for i = 1 : n
+        
+        currentError = currentError + abs( errors( i ) );
+        
+    end
+    
+    currentError;
+    xi = x;
+    
+end
+
+operacoes
+currentError
+xi
+x
 
 
 
