@@ -71,40 +71,46 @@ max| x(aproximado,double,iter=n) .- x(aproximado,double,iter=2n) |
 #}
 
 
+format long
+split_long_rows(0)
+#output_precision(30)
+#output_max_field_width(0)
+
 printf( ' a). Determine a solução do sistema acima pelo método direto de Gauss SEM pivotação. \n' )
 printf( '     Registre (via contador) o número total de operações em PONTO FLUTUANTE utilizadas. \n' )
 printf( '     Calcule o resíduo máximo e o erro de Truncamento máximo na solução acima; \n' )
 
-n = 50;
-i = 1;
-A( i, i )     = 3;
-A( i, i + 1 ) = 1;
-A( i, n + 1 ) = 450;
+n                      = 50;
+SingleMatrix           = create_single_matrix( n );
+[ solucao, operacoes ] = fgauss_sem_pivotacao( SingleMatrix, n, n + 1 );
+
+printf( '\nO numero de operacoes de ponto flutuante foi: %d, e a solucao eh: \n', operacoes );
+print_solution( solucao, n );
 
 
-for i = 2 : n / 2
-    A( i, i - 1 )     = 20;
-    A( i, i )         = 50;
-    A( i, i + 1 )     = 1;
-    A( i, i + n / 2 ) = 1;
-    A( i, n + 1 )     = 100;
-end
 
-for i = n / 2 + 1 : n - 1
-    A( i, i - n / 2 ) = 11;
-    A( i, i - 1 )     = 3;
-    A( i, i )         = 60;
-    A( i, i + 1 )     = 1;
-    A( i, n + 1 )     = 200;
-end
 
-i = n;
-A( i, i - 1 ) = 3;
-A( i, i )     = 10;
-A( i, n + 1 ) = 300;
 
-[ solucao, operacoes ] = fgauss_sem_pivotacao( A, n, n + 1 );
 
-operacoes
-solucao'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
