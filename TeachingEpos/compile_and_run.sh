@@ -15,6 +15,9 @@ APPLICATION_PATH=$(echo $APPLICATION_PATH | sed -r "s/((.+\/)+)//")
 APPLICATION_NAME=$(echo $APPLICATION_PATH | cut -d'.' -f 1)
 
 
+# Clean everthing to be sure it is the right thing
+make veryclean
+
 # Get the application name
 # qemu-system-i386 -smp 1 -m 262144k -nographic -no-reboot -fda  philosophers_dinner.img | tee philosophers_dinner.out
 make APPLICATION=$APPLICATION_NAME run
