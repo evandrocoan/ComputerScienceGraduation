@@ -23,4 +23,20 @@ function x = fMetodoDeNewton( xi, tolerancia )
 end
 
 
+# Dom = x \in ( 0, +inf )
+function x = f( x )
+    
+    x = x * log( x ) - 1;
+    
+end
+
+function x = f_devidada1( x )
+    
+    x = log( x ) + 1;
+    
+end
+
+
+
+
 

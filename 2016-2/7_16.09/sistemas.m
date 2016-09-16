@@ -42,7 +42,7 @@ erroDoX = abs( xAprox - xExato )
 
 
 
-
+printf( 'here' )
 
 
 
