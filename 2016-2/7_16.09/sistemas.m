@@ -7,8 +7,6 @@ split_long_rows(0)
 #output_max_field_width(0)
 
 x = [ 1.76: 0.001 : 1.77 ];
-
-
 y = x .* log( x ) .- 1;
 
 %plot( x, y )
