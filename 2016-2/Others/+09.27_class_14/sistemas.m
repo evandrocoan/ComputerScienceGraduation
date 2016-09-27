@@ -66,13 +66,21 @@ end
 
 
 
-function x = cute_roots( a )
+# 
+function x = my_roots( a )
     
     n = size( a, 2 ) - 1
     
     k = 1
     
     xi( k ) = fLocaliza( n, a )
+    
+    [ x(k), m(k) ] = fNPolinomios( n, a, )
+    
+    # Redução de grau pela raiz x, M vezes
+    # Criar um função de redução de grau, que receba (n, a, x(k) ) e retorne o novo [n,a] para
+    # continuar o processo.
+    [n, a] = reducao_de_grau( n, a, x( k ), M( k ) )
     
 end
 
@@ -125,7 +133,7 @@ end
 # P3^0( xi == 2 ) = 0! * R( 0 + 1 ) = R( 1 ) = 1
 # 
 a = [ 1, -3, 3, -1 ]
-cute_roots( a )
+my_roots( a )
 
 
 function R = calculo_dos_restos_da_divisao( n, a, xi )
