@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Interface.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.keyword-directive {color: #0000e6}
+.ST4 {color: #ce7b00; font-family: Monospaced; font-weight: bold}
+.ST2 {color: #009900}
+.character {color: #ce7b00}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.ST1 {font-family: Monospaced; font-weight: bold}
+.ST3 {font-family: Monospaced; font-style: italic}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">D:\Evandro\Documentos\NetBeansProjects\INE5402_POO\src\Trabalho1\Interface.java</td></tr></table>
+<pre>
+ 1 <span class="comment">/*</span>
+ 2 <span class="comment"> * To change this template, choose Tools | Templates</span>
+ 3 <span class="comment"> * and open the template in the editor.</span>
+ 4 <span class="comment"> */</span>
+ 5 
+ 6 <span class="keyword-directive">package</span> Trabalho1;
+ 7 
+ 8 <span class="keyword-directive">import</span> javax.swing.JOptionPane;
+ 9 
+10 <span class="comment">/**</span>
+11 <span class="comment"> *</span>
+12 <span class="comment"> * </span><span class="ST0">@author</span> <span class="comment">Evandro</span> <span class="comment"></span> <span class="comment">Coan</span>
+13  <span class="comment">*/</span>
+14 <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> <span class="ST1">Interface</span> 
+15 {
+16         <span class="keyword-directive">double</span> <span class="ST2">base</span>, <span class="ST2">altura</span>;
+17         String <span class="ST2">text</span>, <span class="comment">// texto inserido pelo usuário</span>
+18                         <span class="ST2">text2</span>; <span class="comment">// texto (mensagem) enviada (mostrada) ao usuário</span>
+19         
+20         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">pecaBase</span>()
+21         {
+22                 <span class="ST2">text</span> = JOptionPane.<span class="ST3">showInputDialog</span>( <span class="character">&quot;</span><span class="character">Insira a base: </span><span class="character">&quot;</span> );
+23                 <span class="ST2">base</span> = Double.<span class="ST3">parseDouble</span>(<span class="ST2">text</span>);
+24                 <span class="keyword-directive">return</span>  <span class="ST2">base</span>;
+25                 
+26         }
+27         
+28         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">pecaAltura</span>() 
+29         {
+30                 <span class="ST2">text</span> = JOptionPane.<span class="ST3">showInputDialog</span>( <span class="character">&quot;</span><span class="character">Insira a base: </span><span class="character">&quot;</span> );
+31                 <span class="ST2">altura</span> = Double.<span class="ST3">parseDouble</span>(<span class="ST2">text</span>);
+32                 <span class="keyword-directive">return</span>  <span class="ST2">altura</span>;
+33                 
+34         }
+35         
+36         <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> <span class="ST1">mostreResultado</span>( <span class="keyword-directive">double</span> valorArea, <span class="keyword-directive">double</span> base,
+37                         <span class="keyword-directive">double</span> altura, <span class="keyword-directive">double</span> perimetro )
+38         {
+39                 <span class="ST2">text2</span> = String.<span class="ST3">format</span>( <span class="character">&quot;</span><span class="character">O valor da área é: %f </span><span class="ST4">\n</span><span class="character">E sua base é: %f</span><span class="character">&quot;</span> + 
+40                                 <span class="character">&quot;</span><span class="ST4">\n</span><span class="character">E sua altura é: %f</span><span class="ST4">\n</span><span class="character">E o seu perímetro é: %f</span><span class="character">&quot;</span>, 
+41                                 valorArea, base, altura, perimetro );
+42                 JOptionPane.<span class="ST3">showMessageDialog</span>(<span class="keyword-directive">null</span>, <span class="ST2">text2</span> );
+43                 
+44         }
+45         
+46 } <span class="comment">// end class Interface</span>
+47 
+</pre></body>
+</html>

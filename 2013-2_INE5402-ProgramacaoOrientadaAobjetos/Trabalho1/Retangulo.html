@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Retangulo.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.keyword-directive {color: #0000e6}
+.ST2 {color: #009900}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.ST1 {font-family: Monospaced; font-weight: bold}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">D:\Evandro\Documentos\NetBeansProjects\INE5402_POO\src\Trabalho1\Retangulo.java</td></tr></table>
+<pre>
+ 1 <span class="comment">/*</span>
+ 2 <span class="comment"> * To change this template, choose Tools | Templates</span>
+ 3 <span class="comment"> * and open the template in the editor.</span>
+ 4 <span class="comment"> */</span>
+ 5 
+ 6 <span class="keyword-directive">package</span> Trabalho1;
+ 7 
+ 8 <span class="comment">/**</span>
+ 9 <span class="comment"> *</span>
+10 <span class="comment"> * </span><span class="ST0">@author</span> <span class="comment">Evandro</span> <span class="comment"></span> <span class="comment">Coan</span>
+11  <span class="comment">*/</span>
+12 <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> <span class="ST1">Retangulo</span> 
+13 {
+14         <span class="keyword-directive">private</span> <span class="keyword-directive">double</span> <span class="ST2">base</span>, <span class="ST2">altura</span>; <span class="comment">// atributos</span>
+15         
+16         <span class="keyword-directive">public</span> <span class="ST1">Retangulo</span>()
+17         {
+18                 <span class="ST2">base</span> = 0.0;
+19                 <span class="ST2">altura</span> = 0.0;
+20         }
+21         
+22         <span class="keyword-directive">public</span> <span class="ST1">Retangulo</span>( <span class="keyword-directive">double</span> base, <span class="keyword-directive">double</span> altura )
+23         {
+24                 <span class="keyword-directive">this</span>.<span class="ST2">base</span> = base;
+25                 <span class="keyword-directive">this</span>.<span class="ST2">altura</span> = altura;
+26         }
+27         
+28         <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> <span class="ST1">altereBase</span>( <span class="keyword-directive">double</span> base )
+29         {
+30                 <span class="keyword-directive">this</span>.<span class="ST2">base</span> = base;
+31         }
+32         
+33         <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> <span class="ST1">altereAltura</span>( <span class="keyword-directive">double</span> altura )
+34         {
+35                 <span class="keyword-directive">this</span>.<span class="ST2">altura</span> = altura;
+36         }
+37         
+38         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">informeBase</span>()
+39         {
+40                 <span class="keyword-directive">return</span> <span class="ST2">base</span>;
+41         }
+42         
+43         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">informeAltura</span>()
+44         {
+45                 <span class="keyword-directive">return</span> <span class="ST2">altura</span>;
+46         }
+47         
+48         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">forneceArea</span>()
+49         {
+50                 <span class="keyword-directive">return</span> <span class="ST2">base</span> * <span class="ST2">altura</span>;
+51         }
+52         
+53         <span class="keyword-directive">public</span> <span class="keyword-directive">double</span> <span class="ST1">fornecePerimetro</span>()
+54         {
+55                 <span class="keyword-directive">return</span> 2 * <span class="ST2">base</span> + 2 * <span class="ST2">altura</span>;
+56         }
+57         
+58 } <span class="comment">// end class Retangulo</span>
+59 
+</pre></body>
+</html>

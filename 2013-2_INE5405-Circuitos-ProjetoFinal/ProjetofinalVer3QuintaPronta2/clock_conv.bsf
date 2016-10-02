@@ -1,0 +1,92 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 1991-2011 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 208 232)
+	(text "clock_conv" (rect 5 0 61 12)(font "Arial" ))
+	(text "inst" (rect 8 152 25 164)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "I50MHz" (rect 0 0 36 12)(font "Arial" ))
+		(text "I50MHz" (rect 21 27 57 39)(font "Arial" ))
+		(line (pt 0 32)(pt 16 32))
+	)
+	(port
+		(pt 144 32)
+		(output)
+		(text "O0_1Hz" (rect 0 0 38 12)(font "Arial" ))
+		(text "O0_1Hz" (rect 91 27 123 39)(font "Arial" ))
+		(line (pt 144 32)(pt 128 32))
+	)
+	(port
+		(pt 144 48)
+		(output)
+		(text "O0_2Hz" (rect 0 0 38 12)(font "Arial" ))
+		(text "O0_2Hz" (rect 91 43 123 55)(font "Arial" ))
+		(line (pt 144 48)(pt 128 48))
+	)
+	(port
+		(pt 144 64)
+		(output)
+		(text "O0_25Hz" (rect 0 0 44 12)(font "Arial" ))
+		(text "O0_25Hz" (rect 86 59 123 71)(font "Arial" ))
+		(line (pt 144 64)(pt 128 64))
+	)
+	(port
+		(pt 144 80)
+		(output)
+		(text "O0_5Hz" (rect 0 0 38 12)(font "Arial" ))
+		(text "O0_5Hz" (rect 91 75 123 87)(font "Arial" ))
+		(line (pt 144 80)(pt 128 80))
+	)
+	(port
+		(pt 144 96)
+		(output)
+		(text "O1Hz" (rect 0 0 27 12)(font "Arial" ))
+		(text "O1Hz" (rect 101 91 123 103)(font "Arial" ))
+		(line (pt 144 96)(pt 128 96))
+	)
+	(port
+		(pt 144 112)
+		(output)
+		(text "O2Hz" (rect 0 0 27 12)(font "Arial" ))
+		(text "O2Hz" (rect 101 107 123 119)(font "Arial" ))
+		(line (pt 144 112)(pt 128 112))
+	)
+	(port
+		(pt 144 128)
+		(output)
+		(text "O10Hz" (rect 0 0 33 12)(font "Arial" ))
+		(text "O10Hz" (rect 96 123 123 135)(font "Arial" ))
+		(line (pt 144 128)(pt 128 128))
+	)
+	(port
+		(pt 72 0)
+		(output)
+		(text "O10Hza" (rect 64 24 78 70)(font "Arial" (font_size 8))(vertical))
+		(text "O10Hza" (rect 64 8 78 54)(font "Arial" (font_size 8))(vertical))
+		(line (pt 72 0)(pt 72 16))
+	)
+	(drawing
+		(rectangle (rect 16 16 128 152))
+	)
+)

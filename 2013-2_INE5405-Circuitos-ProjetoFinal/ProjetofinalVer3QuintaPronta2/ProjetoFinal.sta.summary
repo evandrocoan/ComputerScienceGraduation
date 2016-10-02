@@ -1,0 +1,157 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow Model Setup 'clock_conv:inst|O10Hza'
+Slack : -3.588
+TNS   : -21.873
+
+Type  : Slow Model Setup 'CLOCK_50'
+Slack : -2.439
+TNS   : -27.786
+
+Type  : Slow Model Setup 'clock_conv:inst|O10Hz'
+Slack : -2.268
+TNS   : -11.572
+
+Type  : Slow Model Setup 'clock_conv:inst|aux'
+Slack : -0.465
+TNS   : -1.478
+
+Type  : Slow Model Setup 'PS2_CLK'
+Slack : -0.119
+TNS   : -0.512
+
+Type  : Slow Model Hold 'clock_conv:inst|O10Hza'
+Slack : 0.391
+TNS   : 0.000
+
+Type  : Slow Model Hold 'clock_conv:inst|aux'
+Slack : 0.391
+TNS   : 0.000
+
+Type  : Slow Model Hold 'PS2_CLK'
+Slack : 0.516
+TNS   : 0.000
+
+Type  : Slow Model Hold 'CLOCK_50'
+Slack : 0.802
+TNS   : 0.000
+
+Type  : Slow Model Hold 'clock_conv:inst|O10Hz'
+Slack : 1.173
+TNS   : 0.000
+
+Type  : Slow Model Recovery 'clock_conv:inst|O10Hza'
+Slack : -0.456
+TNS   : -2.177
+
+Type  : Slow Model Recovery 'PS2_CLK'
+Slack : 0.744
+TNS   : 0.000
+
+Type  : Slow Model Removal 'PS2_CLK'
+Slack : -0.506
+TNS   : -4.156
+
+Type  : Slow Model Removal 'clock_conv:inst|O10Hza'
+Slack : 1.051
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'CLOCK_50'
+Slack : -1.380
+TNS   : -21.380
+
+Type  : Slow Model Minimum Pulse Width 'PS2_CLK'
+Slack : -1.222
+TNS   : -34.222
+
+Type  : Slow Model Minimum Pulse Width 'clock_conv:inst|O10Hza'
+Slack : -0.500
+TNS   : -8.000
+
+Type  : Slow Model Minimum Pulse Width 'clock_conv:inst|O10Hz'
+Slack : -0.500
+TNS   : -6.000
+
+Type  : Slow Model Minimum Pulse Width 'clock_conv:inst|aux'
+Slack : -0.500
+TNS   : -6.000
+
+Type  : Fast Model Setup 'clock_conv:inst|O10Hza'
+Slack : -1.008
+TNS   : -5.728
+
+Type  : Fast Model Setup 'CLOCK_50'
+Slack : -0.585
+TNS   : -3.929
+
+Type  : Fast Model Setup 'clock_conv:inst|O10Hz'
+Slack : -0.465
+TNS   : -1.946
+
+Type  : Fast Model Setup 'clock_conv:inst|aux'
+Slack : 0.341
+TNS   : 0.000
+
+Type  : Fast Model Setup 'PS2_CLK'
+Slack : 0.444
+TNS   : 0.000
+
+Type  : Fast Model Hold 'clock_conv:inst|O10Hza'
+Slack : 0.215
+TNS   : 0.000
+
+Type  : Fast Model Hold 'clock_conv:inst|aux'
+Slack : 0.215
+TNS   : 0.000
+
+Type  : Fast Model Hold 'PS2_CLK'
+Slack : 0.237
+TNS   : 0.000
+
+Type  : Fast Model Hold 'CLOCK_50'
+Slack : 0.358
+TNS   : 0.000
+
+Type  : Fast Model Hold 'clock_conv:inst|O10Hz'
+Slack : 0.544
+TNS   : 0.000
+
+Type  : Fast Model Recovery 'clock_conv:inst|O10Hza'
+Slack : 0.205
+TNS   : 0.000
+
+Type  : Fast Model Recovery 'PS2_CLK'
+Slack : 0.727
+TNS   : 0.000
+
+Type  : Fast Model Removal 'PS2_CLK'
+Slack : -0.088
+TNS   : -0.464
+
+Type  : Fast Model Removal 'clock_conv:inst|O10Hza'
+Slack : 0.591
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'CLOCK_50'
+Slack : -1.380
+TNS   : -21.380
+
+Type  : Fast Model Minimum Pulse Width 'PS2_CLK'
+Slack : -1.222
+TNS   : -34.222
+
+Type  : Fast Model Minimum Pulse Width 'clock_conv:inst|O10Hza'
+Slack : -0.500
+TNS   : -8.000
+
+Type  : Fast Model Minimum Pulse Width 'clock_conv:inst|O10Hz'
+Slack : -0.500
+TNS   : -6.000
+
+Type  : Fast Model Minimum Pulse Width 'clock_conv:inst|aux'
+Slack : -0.500
+TNS   : -6.000
+
+------------------------------------------------------------

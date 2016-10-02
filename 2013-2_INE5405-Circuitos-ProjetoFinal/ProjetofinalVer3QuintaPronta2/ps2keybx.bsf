@@ -1,0 +1,99 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 1991-2011 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 232 248)
+	(text "ps2keybx" (rect 5 0 60 14)(font "Arial" (font_size 8)))
+	(text "inst" (rect 8 168 25 180)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "ps2data" (rect 0 0 46 14)(font "Arial" (font_size 8)))
+		(text "ps2data" (rect 21 27 67 41)(font "Arial" (font_size 8)))
+		(line (pt 0 32)(pt 16 32))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "ps2clock" (rect 0 0 50 14)(font "Arial" (font_size 8)))
+		(text "ps2clock" (rect 21 43 71 57)(font "Arial" (font_size 8)))
+		(line (pt 0 48)(pt 16 48))
+	)
+	(port
+		(pt 72 184)
+		(input)
+		(text "mainclock" (rect 64 133 78 188)(font "Arial" (font_size 8))(vertical))
+		(text "mainclock" (rect 64 109 78 164)(font "Arial" (font_size 8))(vertical))
+		(line (pt 72 184)(pt 72 168))
+	)
+	(port
+		(pt 168 32)
+		(output)
+		(text "dataout[3]" (rect 0 0 56 14)(font "Arial" (font_size 8)))
+		(text "dataout[3]" (rect 91 27 147 41)(font "Arial" (font_size 8)))
+		(line (pt 168 32)(pt 152 32))
+	)
+	(port
+		(pt 168 48)
+		(output)
+		(text "dataout[2]" (rect 0 0 56 14)(font "Arial" (font_size 8)))
+		(text "dataout[2]" (rect 91 43 147 57)(font "Arial" (font_size 8)))
+		(line (pt 168 48)(pt 152 48))
+	)
+	(port
+		(pt 168 64)
+		(output)
+		(text "dataout[1]" (rect 0 0 56 14)(font "Arial" (font_size 8)))
+		(text "dataout[1]" (rect 91 59 147 73)(font "Arial" (font_size 8)))
+		(line (pt 168 64)(pt 152 64))
+	)
+	(port
+		(pt 168 152)
+		(output)
+		(text "hasdata" (rect 0 0 46 14)(font "Arial" (font_size 8)))
+		(text "hasdata" (rect 101 147 147 161)(font "Arial" (font_size 8)))
+		(line (pt 168 152)(pt 152 152))
+	)
+	(port
+		(pt 168 80)
+		(output)
+		(text "dataout[0]" (rect 0 0 56 14)(font "Arial" (font_size 8)))
+		(text "dataout[0]" (rect 91 75 147 89)(font "Arial" (font_size 8)))
+		(line (pt 168 80)(pt 152 80))
+	)
+	(port
+		(pt 168 96)
+		(output)
+		(text "space" (rect 0 0 35 14)(font "Arial" (font_size 8)))
+		(text "space" (rect 112 91 147 105)(font "Arial" (font_size 8)))
+		(line (pt 168 96)(pt 152 96))
+	)
+	(port
+		(pt 168 112)
+		(output)
+		(text "esc" (rect 0 0 21 14)(font "Arial" (font_size 8)))
+		(text "esc" (rect 126 107 147 121)(font "Arial" (font_size 8)))
+		(line (pt 168 112)(pt 152 112))
+	)
+	(drawing
+		(rectangle (rect 16 16 152 168))
+	)
+)

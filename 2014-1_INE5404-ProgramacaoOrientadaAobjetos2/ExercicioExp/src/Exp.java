@@ -1,0 +1,4 @@
+interface Exp {
+	
+	double avaliar();
+}

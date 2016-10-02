@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Principal.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.keyword-directive {color: #0000e6}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">D:\Evandro\Documentos\NetBeansProjects\INE5402_POO\src\Trabalho1\Principal.java</td></tr></table>
+<pre>
+ 1 <span class="comment">/*</span>
+ 2 <span class="comment"> * To change this template, choose Tools | Templates</span>
+ 3 <span class="comment"> * and open the template in the editor.</span>
+ 4 <span class="comment"> */</span>
+ 5 
+ 6 <span class="keyword-directive">package</span> Trabalho1;
+ 7 
+ 8 <span class="comment">/**</span>
+ 9 <span class="comment"> *</span>
+10 <span class="comment"> * </span><span class="ST0">@author</span> <span class="comment">Evandro</span> <span class="comment"></span> <span class="comment">Coan</span>
+11  <span class="comment">*/</span>
+12 <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> Principal 
+13 {
+14         <span class="comment">// main method begins execution Java application</span>
+15         <span class="keyword-directive">public</span> <span class="keyword-directive">static</span> <span class="keyword-directive">void</span> main( String[] args )
+16         {
+17                 Interface aInterface = <span class="keyword-directive">new</span> Interface();
+18                 
+19                 <span class="keyword-directive">double</span> base = aInterface.pecaBase();
+20                 <span class="keyword-directive">double</span> altura = aInterface.pecaAltura();
+21                 
+22                 Retangulo umRetangulo = <span class="keyword-directive">new</span> Retangulo( base, altura);
+23 
+24                 <span class="keyword-directive">double</span> valorArea = umRetangulo.forneceArea();
+25                 <span class="keyword-directive">double</span> perimetro = umRetangulo.fornecePerimetro();
+26                 
+27                 aInterface.mostreResultado( valorArea, base, altura, perimetro );
+28                 
+29         } <span class="comment">// end main method</span>
+30         
+31 } <span class="comment">// end class Principal</span>
+32 
+</pre></body>
+</html>
