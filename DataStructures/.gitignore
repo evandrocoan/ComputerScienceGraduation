@@ -1,0 +1,26 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*nppBackup
+*.sublime-workspace
+*.sublime-project
+*.db
+ListaEncadeada/main.cpp
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
