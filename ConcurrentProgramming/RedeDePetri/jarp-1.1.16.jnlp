@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jnlp-descriptor PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 1.0//EN" "http://java.sun.com/products/j2se/dtds/jnlp_1_0.dtd">
+
+<!-- JNLP File for 1.1.16 (build 200607301301) -->
+<!-- $Id: jarp.jnlp,v 1.6 2003/10/24 13:25:19 ricardo_padilha Exp $ -->
+<jnlp spec="1.0" codebase="http://jarp.sf.net/webstart/" href="jarp.jnlp">
+
+	<information>
+		<title>JARP 1.1.16 (build 200607301301)</title>
+		<vendor>Ricardo S. Padilha (SF.net)</vendor>
+		<description>Petri nets editor and simulator.</description>
+		<description kind="one-line">Java Petri Nets Analyzer</description>
+		<description kind="tooltip">Petri nets editor</description>
+		<homepage href="http://jarp.sf.net/"/>
+		<icon href="jarp.gif" width="32" height="32"/>
+		<icon href="splash.gif" kind="splash" width="400" height="300"/>
+		<offline-allowed/>
+	</information>
+
+	<information locale="pt_BR">
+		<description>Editor e simulador de redes de Petri.</description>
+		<description kind="one-line">Analisador de Redes de Petri em Java</description>
+		<description kind="tooltip">Editor de redes de Petri</description>
+	</information>
+
+	<resources>
+		<j2se version="1.4+"/>
+
+		<j2se version="1.3">
+			<jar href="crimson.jar" download="lazy"/>
+			<jar href="jaxp.jar" download="lazy"/>
+		</j2se>
+
+		<j2se version="1.2" href="http://java.sun.com/products/autodl/j2se">
+			<jar href="crimson.jar" download="lazy"/>
+			<jar href="jaxp.jar" download="lazy"/>
+		</j2se>
+
+		<jar href="jarp.jar" main="true"/>
+		<jar href="jhotdraw.jar"/>
+		<jar href="dom4j-full.jar"/>
+
+		<jar href="epsgraphics.jar" download="lazy"/>
+	</resources>
+
+	<application-desc main-class="org.jarp.Main"/>
+
+	<security>
+		<all-permissions/>
+	</security>
+
+</jnlp>

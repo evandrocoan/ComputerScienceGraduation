@@ -1,0 +1,88 @@
+Tina version 3.3.0 -- 11/18/14 -- LAAS/CNRS
+
+mode -C
+
+INPUT NET ------------------------------------------------------- 
+
+parsed net RedeOriginal_Tina
+
+8 places, 8 transitions
+
+net RedeOriginal_Tina
+tr t1 p1 -> p3 
+tr t2 p1 -> p4 
+tr t3 p2 -> p5 
+tr t4 p2 -> p6 
+tr t5 p3 p5 -> p7 
+tr t6 p7 -> p1 p2 
+tr t7 p4 p6 -> p8 
+tr t8 p8 -> p1 p2 
+pl p1 (1)
+pl p2 (1)
+
+0.000s
+
+REACHABILITY ANALYSIS ------------------------------------------- 
+
+bounded
+
+11 classe(s), 16 transition(s)
+
+CLASSES:
+
+0 : p1 p2
+1 : p2 p3
+2 : p2 p4
+3 : p1 p5
+4 : p1 p6
+5 : p3 p5
+6 : p3 p6
+7 : p4 p5
+8 : p4 p6
+9 : p7
+10 : p8
+
+REACHABILITY GRAPH:
+
+0 -> t1/1, t2/2, t3/3, t4/4
+1 -> t3/5, t4/6
+2 -> t3/7, t4/8
+3 -> t1/5, t2/7
+4 -> t1/6, t2/8
+5 -> t5/9
+6 -> 
+7 -> 
+8 -> t7/10
+9 -> t6/0
+10 -> t8/0
+
+0.000s
+
+LIVENESS ANALYSIS ----------------------------------------------- 
+
+not live
+possibly reversible
+
+2 dead classe(s), 2 live classe(s)
+0 dead transition(s), 0 live transition(s)
+
+dead classe(s): 7 6
+
+STRONG CONNECTED COMPONENTS:
+
+0 : 6
+1 : 7
+2 : 10 9 8 5 4 3 2 1 0
+
+SCC GRAPH:
+
+0 ->
+1 ->
+2 -> t8/2, t6/2, t7/2, t5/2, t1/0, t2/2, t1/2, t2/1, t3/1, t4/2, t3/2, t4/0
+
+0.000s
+
+ANALYSIS COMPLETED ---------------------------------------------- 
+
+
+

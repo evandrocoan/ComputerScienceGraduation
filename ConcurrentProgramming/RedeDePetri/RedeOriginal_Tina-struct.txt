@@ -1,0 +1,42 @@
+Struct version 3.3.0 -- 11/18/14 -- LAAS/CNRS
+
+parsed net RedeOriginal_Tina_1
+
+8 places, 8 transitions
+
+net RedeOriginal_Tina_1
+tr t1 p1 -> p3 
+tr t2 p1 -> p4 
+tr t3 p2 -> p5 
+tr t4 p2 -> p6 
+tr t5 p3 p5 -> p7 
+tr t6 p7 -> p1 p2 
+tr t7 p4 p6 -> p8 
+tr t8 p8 -> p1 p2 
+pl p1 (1)
+pl p2 (1)
+
+0.000s
+
+P-SEMI-FLOWS GENERATING SET ------------------------------------- 
+
+invariant
+
+p2 p5 p6 p7 p8
+p1 p3 p4 p7 p8
+
+0.000s
+
+T-SEMI-FLOWS GENERATING SET ------------------------------------- 
+
+consistent
+
+t1 t3 t5 t6
+t2 t4 t7 t8
+
+0.000s
+
+ANALYSIS COMPLETED  --------------------------------------------- 
+
+
+
