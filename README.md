@@ -1,5 +1,7 @@
-﻿2013-2_2014-1_Semestres
+﻿Computer Science Graduation
 ==========================
 
-Repositório para os trabalhos e arquivos de aula criados antes do semestre de 
-2014-2.
+Repository for work and class files while coursing the Computer Science Graduation Bachelor Course.
+
+
+
