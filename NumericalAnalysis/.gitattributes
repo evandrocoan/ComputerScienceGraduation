@@ -1,0 +1,8 @@
+# Ensure those won't be messed up with
+*.jpg binary
+*.data binary
+
+*.pdf binary
+*.png binary
+*.odt binary
+
