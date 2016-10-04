@@ -22,7 +22,27 @@ Starting postgresql service:                               [  OK  ]
 https://www.tutorialspoint.com/postgresql/postgresql_environment.htm
 
 
+
 Up this:
+
+Modify password for role postgres:
+
+sudo -u postgres psql postgres
+
+alter user postgres with password 'postgres';
+Now connect to pgadmin using username postgres and password postgres
+
+Now you can create roles & databases using pgAdmin
+
+
+Name:              localhost
+Host:              localhost
+Port:              5432
+Service:           empty
+Maintenance DB:    postgres
+Username:          postgres
+Password:          postgres
+
 http://stackoverflow.com/questions/24917832/how-connect-postgres-to-localhost-server-using-pgadmin-on-ubuntu
 
 */
