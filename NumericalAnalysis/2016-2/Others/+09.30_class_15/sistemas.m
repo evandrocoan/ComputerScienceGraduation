@@ -46,8 +46,32 @@ format long
 # a(1)   != 0, para grau n
 # a(n+1) != 0, para excluir raízes nulas
 #
-# r = 1 + { max( { abs( a(2) ), abs( a(3) ), ..., abs( a(n) ), abs( a(n+1) ) } ) } / abs( a(1)
-
+# Calculo do raio máximo da raiz inicial do polinômio:
+# 
+# r = 1 + max( ( abs( a(2) ), abs( a(3) ), ..., abs( a(n) ), abs( a(n+1) ) ) ) / abs( a(1) )
+#
+# r = 1 + 3 / 1
+# r = 4
+#
+# Precisa-se de um polinômio auxiliar para calculo do raio máximo:
+# Pn( x ) = 1/a(1)*x^n + 1/a(2)*x^(n-1) + ... + 1/a(n)*x + 1/a(n+1) = 0
+# 
+# r = 1 + 1/3 / 1/1
+# r = 1,33
+#
+# Calculo do raio mínimo das raízes do polinômio
+# r_minimo = inverso_do_raio_maximo = 1 / r_maximo
+#
+# Calculamos o raio médio, por que tem mais chances de estar por lá.
+# Se existir raízes complexas e chutar-se um valor inicial real, o sistema jamais irá convergir.
+# r_medio = ( r_maximo + r_minimo ) / 2 
+# 
+# Por isso se chuta a raiz inicial como uma raiz complexa utilizando o valor do raio médio:
+# xi = complex( +-r_medio +-r_medio )
+#
+# Mas melhor aina é projetar o RAIO nos eixo real e complexo:
+# xi = complex( +-r_medio*cos(pi/*4) +-r_medio*sen(pi*4) )
+#
 
 
 
@@ -73,7 +97,7 @@ format long
 #
 #   xi | a(1) | a(2) | ... | a(n) | a(n+1)
 # ---------------------------------
-#      | b(1) | b(2) | ... | b(n) | b(n+1)
+#      | b(1) | b(2) | ... | b(n) | b(n+1)  <-- Novo polinômio de menor grau
 #
 # b(1)   = a(1), 
 # b(2)   = a(2) + xi*b(1), 
@@ -81,7 +105,7 @@ format long
 # b(i)   = a(n) + xi*b(n-1), 
 # b(n+1) = a(n+1) + xi*b(n)
 # 
-#
+# 
 # Pn^n( xi ) = k! * R( k + 1 ), x = 0, 1, 2, ...
 # R( k + 1 ) é o resto da divisão k de Pn( x ) por ( x - xi )
 #

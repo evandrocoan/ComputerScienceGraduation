@@ -1,4 +1,4 @@
-function X = fNewtonPolinomios()
+function [ x m ] = fNewtonPolinomios()
     
     
     
