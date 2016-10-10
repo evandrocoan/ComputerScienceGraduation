@@ -80,7 +80,7 @@ function x = my_roots( a )
     # Redução de grau pela raiz x, M vezes
     # Criar um função de redução de grau, que receba (n, a, x(k) ) e retorne o novo [n,a] para
     # continuar o processo.
-    [n, a] = reducao_de_grau( n, a, x( k ), M( k ) )
+    [n, a] = reduzirGrauDoPolinomio( n, a, x( k ), M( k ) )
     
 end
 
@@ -136,7 +136,7 @@ a = [ 1, -3, 3, -1 ]
 my_roots( a )
 
 
-function R = calculo_dos_restos_da_divisao( n, a, xi )
+function R = calcularRestoDaDivisao( n, a, xi )
     
     while( ndiv > 0 )
         

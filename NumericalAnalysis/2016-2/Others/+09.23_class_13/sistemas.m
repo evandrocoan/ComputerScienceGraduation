@@ -128,7 +128,7 @@ a = [ 1, -3, 3, -1 ]
 cute_roots( a )
 
 
-function R = calculo_dos_restos_da_divisao( n, a, xi )
+function R = calcularRestoDaDivisao( n, a, xi )
     
     while( ndiv > 0 )
         

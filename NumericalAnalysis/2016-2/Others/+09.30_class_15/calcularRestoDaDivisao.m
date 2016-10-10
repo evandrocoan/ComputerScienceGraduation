@@ -1,4 +1,4 @@
-function R = calculo_dos_restos_da_divisao( n, a, xi )
+function R = calcularRestoDaDivisao( n, a, xi )
     
     while( ndiv > 0 )
         
