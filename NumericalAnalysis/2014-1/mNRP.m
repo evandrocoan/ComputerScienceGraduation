@@ -9,7 +9,7 @@ coef =a;
 xi = [complex(1,1), complex(1,1), complex(1,1), complex(1,1), complex(1,1), complex(1,1)]
 j = 1;
 erro = 0;
-while (j <= nRaizes & erro <= 1.e-12)
+while (j <= nRaizes && erro <= 1.e-12)
 	a;
 	[x(j) erro cont] = fNRPM(n,a,xi(j));
 	if erro <= 1.e-12

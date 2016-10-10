@@ -1,7 +1,7 @@
 function [x erro cont] = fNRPM(n,a,xi)
 	erro = 1.0;
 	cont = 0.0;
-	while( erro > 1.e-12 & cont < 100 )
+	while( erro > 1.e-12 && cont < 100 )
 		cont = cont + 1;
 		# Temos que descobrir o M e os Rs (restos)
 		[M R] = restos(n, a, xi);
