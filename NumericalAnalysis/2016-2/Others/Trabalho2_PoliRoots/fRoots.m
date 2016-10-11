@@ -1,4 +1,4 @@
-function [ x, M ] = fRoots( coeficientesDoPolinomio, restoLimiteEscolhido, numeroMaximoDeIteracoes, toleranciaMinima )
+function [ x, M, iteracoes ] = fRoots( coeficientesDoPolinomio, restoLimiteEscolhido, numeroMaximoDeIteracoes, toleranciaMinima )
 
     passoDaIteracao         = 1;
     grauDoPolinomio         = length( coeficientesDoPolinomio ) - 1;
@@ -9,15 +9,20 @@ function [ x, M ] = fRoots( coeficientesDoPolinomio, restoLimiteEscolhido, numer
 
     while grauDoPolinomio > 0
 
-        xi( passoDaIteracao )                          = fLocaliza( grauDoPolinomio, coeficientesDoPolinomio );
-        [ x( passoDaIteracao ), M( passoDaIteracao ) ] = fNPolinomios(
-                                                                       grauDoPolinomio,
-                                                                       coeficientesDoPolinomio,
-                                                                       xi( passoDaIteracao ),
-                                                                       restoLimiteEscolhido,
-                                                                       numeroMaximoDeIteracoes,
-                                                                       toleranciaMinima
-                                                                     );
+        xi( passoDaIteracao ) = fLocaliza( grauDoPolinomio, coeficientesDoPolinomio );
+
+        [ a, b, c ] = fNPolinomios(
+                                     grauDoPolinomio,
+                                     coeficientesDoPolinomio,
+                                     xi( passoDaIteracao ),
+                                     restoLimiteEscolhido,
+                                     numeroMaximoDeIteracoes,
+                                     toleranciaMinima
+                                  );
+
+        x( passoDaIteracao )         = a;
+        M( passoDaIteracao )         = b;
+        iteracoes( passoDaIteracao ) = c;
 
         # Redução de grau pela raiz x, M vezes.
         # Criar um função de redução de grau, que receba retorne o novo para continuar o processo.
@@ -27,12 +32,13 @@ function [ x, M ] = fRoots( coeficientesDoPolinomio, restoLimiteEscolhido, numer
                                                                                x( passoDaIteracao ),
                                                                                M( passoDaIteracao )
                                                                              );
-        
+
         passoDaIteracao = passoDaIteracao + 1;
 
     end
-    
-    x = x.';
-    M = M.';
-    
+
+    x         = x.';
+    M         = M.';
+    iteracoes = iteracoes.';
+
 end

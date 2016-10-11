@@ -1,5 +1,5 @@
 #{
-1). Dada a seguinte eq. polinomial de coeficientes complexos com grau n=5, 
+1). Dada a seguinte eq. polinomial de coeficientes complexos com grau n=5,
 determine e imprima as suas n raízes (em precisão double), respectivas
 multiplicidades M e o Resto limite escolhido Rlim. Use critério de parada no
 limite da precisão da sua variável (sugestão (abs(dx)+abs(R(1))<1e-12 (altere
@@ -55,10 +55,10 @@ printf( "(polinômio fatorado (x-0.9)(x-1)3(x-I), I=sqrt(-1) -> complexo)\n\n\n"
 
 
 maximoDeIteracoes       = 120
-criterioDeParada        = 1e-16
+criterioDeParada        = 1e-15
 restoLimiteEscolhido    = 1e-4
 coeficientesDoPolinomio = [
-                            1, 
+                            1,
                             complex( -3.9, -1.0 ),
                             complex(  5.7,  3.9 ),
                             complex( -3.7, -5.7 ),
@@ -68,7 +68,7 @@ coeficientesDoPolinomio = [
 
 grauDoPolinomio                = length( coeficientesDoPolinomio ) - 1
 raizesDoPolinomioPeloOctave    = roots(  coeficientesDoPolinomio )
-raizesDoPolinomioPeloProfessor = [ 
+raizesDoPolinomioPeloProfessor = [
                                    complex( 0,  1.0 ),
                                    0.9,
                                    1.0,
@@ -79,7 +79,7 @@ raizesDoPolinomioPeloProfessor = [
 # Wolfram Mathematica 10, code used:
 #
 # OrderedForm=HoldForm[+##]&@@MonomialList[#][[Ordering[Total[#]&@@@CoefficientRules[#],All,GreaterEqual]]]&;
-# 
+#
 # coef = {
 #          Complex[1,0],
 #          Complex[-3.9,-1.0],
@@ -89,7 +89,7 @@ raizesDoPolinomioPeloProfessor = [
 #          Complex[0.0,-0.9]
 #        }
 #
-# grau =Length[ coef ]-1
+# grau =Length[ coef ] - 1
 # poli = x^Range[ 0, grau ].Reverse[ coef ];
 # poli //OrderedForm
 # Roots[ poli==0, x ]
@@ -108,13 +108,18 @@ raizesDoPolinomioPeloWolfram = [
                                  1.0
                                ]
 
+
 printf( "\n\nStarting the my roots calculation:\n\n" )
 
-[ raizesDoPolinomioPeloMeuRoots, multiplicidadeDasRaizesPeloMeuRoots ] = fRoots(
-                                                                                  coeficientesDoPolinomio,
-                                                                                  restoLimiteEscolhido,
-                                                                                  maximoDeIteracoes,
-                                                                                  criterioDeParada
-                                                                               )
+[ a, b, c ] = fRoots(
+                       coeficientesDoPolinomio,
+                       restoLimiteEscolhido,
+                       maximoDeIteracoes,
+                       criterioDeParada
+                    );
+
+raizesDoPolinomioPeloMeuRoots       = a
+multiplicidadeDasRaizesPeloMeuRoots = b
+iteracoesDaRaiz                     = c
 
 
