@@ -21,7 +21,7 @@ function x = my_roots( coeficientes_do_polinomio )
                                                                                    coeficientes_do_polinomio,
                                                                                    x( passo_atual_de_iteracao ),
                                                                                    M( passo_atual_de_iteracao )
-                                                                                  )
+                                                                                 )
         
     end
 

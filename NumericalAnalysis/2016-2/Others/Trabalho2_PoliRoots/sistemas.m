@@ -57,7 +57,8 @@ printf( "(polinômio fatorado (x-0.9)(x-1)3(x-I), I=sqrt(-1) -> complexo)\n\n\n"
 maximoDeIteracoes       = 120
 criterioDeParada        = 1e-16
 restoLimiteEscolhido    = 1e-4
-coeficientesDoPolinomio = [ 1, 
+coeficientesDoPolinomio = [
+                            1, 
                             complex( -3.9, -1.0 ),
                             complex(  5.7,  3.9 ),
                             complex( -3.7, -5.7 ),
@@ -67,28 +68,31 @@ coeficientesDoPolinomio = [ 1,
 
 grauDoPolinomio                = length( coeficientesDoPolinomio ) - 1
 raizesDoPolinomioPeloOctave    = roots(  coeficientesDoPolinomio )
-raizesDoPolinomioPeloProfessor = [ complex( 0,  1.0 ),
+raizesDoPolinomioPeloProfessor = [ 
+                                   complex( 0,  1.0 ),
                                    0.9,
                                    1.0,
                                    1.0,
                                    1.0
                                  ]
 
-# Mathematica code used
+# Wolfram Mathematica 10, code used:
 #
 # OrderedForm=HoldForm[+##]&@@MonomialList[#][[Ordering[Total[#]&@@@CoefficientRules[#],All,GreaterEqual]]]&;
+# 
 # coef = {
-#         Complex[1,0],
-#         Complex[-3.9,-1.0],
-#         Complex[5.7,3.9],
-#         Complex[-3.7,-5.7],
-#         Complex[0.9,3.7],
-#         Complex[0.0,-0.9]
-#       }
-# grau =Length[coef]-1
-# poli = x^Range[0, grau].Reverse[coef];
+#          Complex[1,0],
+#          Complex[-3.9,-1.0],
+#          Complex[5.7,3.9],
+#          Complex[-3.7,-5.7],
+#          Complex[0.9,3.7],
+#          Complex[0.0,-0.9]
+#        }
+#
+# grau =Length[ coef ]-1
+# poli = x^Range[ 0, grau ].Reverse[ coef ];
 # poli //OrderedForm
-# Roots[ poli==0, x]
+# Roots[ poli==0, x ]
 #
 # Output:
 # Out[126]= {1,-3.9-1. I,5.7 +3.9 I,-3.7-5.7 I,0.9 +3.7 I,0. -0.9 I}
@@ -96,13 +100,21 @@ raizesDoPolinomioPeloProfessor = [ complex( 0,  1.0 ),
 # Out[129]= x^5-(3.9 +1. I) x^4+(5.7 +3.9 I) x^3-(3.7 +5.7 I) x^2+(0.9 +3.7 I) x-(0. +0.9 I)
 # Out[130]= x==0. +1. I||x==0.9||x==1.||x==1.||x==1.
 
-raizesDoPolinomioPeloWolfram = [ complex( 0,  1.0 ),
+raizesDoPolinomioPeloWolfram = [
+                                 complex( 0,  1.0 ),
                                  0.9,
                                  1.0,
                                  1.0,
                                  1.0
                                ]
 
-raizesDoPolinomioPeloMeuRoots = fRoots( coeficientesDoPolinomio )
+printf( "\n\nStarting the my roots calculation:\n\n" )
+
+[ raizesDoPolinomioPeloMeuRoots, multiplicidadeDasRaizesPeloMeuRoots ] = fRoots(
+                                                                                  coeficientesDoPolinomio,
+                                                                                  restoLimiteEscolhido,
+                                                                                  maximoDeIteracoes,
+                                                                                  criterioDeParada
+                                                                               )
 
 
