@@ -66,15 +66,29 @@ coeficientesDoPolinomio = [
                             complex(  0.0, -0.9 )
                           ]
 
-grauDoPolinomio                = length( coeficientesDoPolinomio ) - 1
-raizesDoPolinomioPeloOctave    = roots(  coeficientesDoPolinomio )
-raizesDoPolinomioPeloProfessor = [
-                                   complex( 0,  1.0 ),
-                                   0.9,
-                                   1.0,
-                                   1.0,
-                                   1.0
-                                 ]
+
+grauDoPolinomio = length( coeficientesDoPolinomio ) - 1
+printf( "\n\nStarting the my roots calculation:\n\n" )
+
+[ a, b, c ] = fRoots(
+                       coeficientesDoPolinomio,
+                       restoLimiteEscolhido,
+                       maximoDeIteracoes,
+                       criterioDeParada
+                    );
+
+raizesDoPolinomioPeloMeuRoots       = a
+multiplicidadeDasRaizesPeloMeuRoots = b
+iteracoesDaRaiz                     = c
+
+
+
+##############################################################################################################
+##############################################################################################################
+
+printf( "\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do próprio octave, \n\
+        do WolframAlpha e compare com os seus resultados.\n\n" )
+
 
 # Wolfram Mathematica 10, code used:
 #
@@ -99,6 +113,7 @@ raizesDoPolinomioPeloProfessor = [
 # Out[127]= 5
 # Out[129]= x^5-(3.9 +1. I) x^4+(5.7 +3.9 I) x^3-(3.7 +5.7 I) x^2+(0.9 +3.7 I) x-(0. +0.9 I)
 # Out[130]= x==0. +1. I||x==0.9||x==1.||x==1.||x==1.
+raizesDoPolinomioPeloOctave  = roots(  coeficientesDoPolinomio )
 
 raizesDoPolinomioPeloWolfram = [
                                  complex( 0,  1.0 ),
@@ -108,18 +123,15 @@ raizesDoPolinomioPeloWolfram = [
                                  1.0
                                ]
 
+raizesDoPolinomioPeloProfessor = [
+                                   complex( 0,  1.0 ),
+                                   0.9,
+                                   1.0,
+                                   1.0,
+                                   1.0
+                                 ]
 
-printf( "\n\nStarting the my roots calculation:\n\n" )
 
-[ a, b, c ] = fRoots(
-                       coeficientesDoPolinomio,
-                       restoLimiteEscolhido,
-                       maximoDeIteracoes,
-                       criterioDeParada
-                    );
 
-raizesDoPolinomioPeloMeuRoots       = a
-multiplicidadeDasRaizesPeloMeuRoots = b
-iteracoesDaRaiz                     = c
 
 
