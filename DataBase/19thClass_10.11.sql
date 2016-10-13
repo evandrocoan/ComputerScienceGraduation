@@ -35,7 +35,7 @@ revisao (codAut#, codLiv#, codRev#, data, alteracao, obs)
 -- "Hei you!!!";"Inglês";120;120;112.00
 
 SELECT *
-FROM LIVRO
+FROM LIVRO;
 
 --
 -- 2. Recuperar todos os dados de livros cujo idioma é ‘Português’.
@@ -46,7 +46,7 @@ FROM LIVRO
 
 SELECT *
 FROM LIVRO
-WHERE IDIOMA = 'Português'
+WHERE IDIOMA = 'Português';
 
 --
 -- 3. Recuperar todos os dados de autores cujo nome comece com ‘C’.
@@ -57,7 +57,7 @@ WHERE IDIOMA = 'Português'
 
 SELECT *
 FROM autor
-WHERE nome like 'C%'
+WHERE nome like 'C%';
 
 --
 -- 4. Recuperar o nome das cidades, que comece com ‘S’ e que sejam do ‘RS’ ou de ‘SP’.
@@ -68,7 +68,7 @@ WHERE nome like 'C%'
 
 SELECT *
 FROM cidade
-WHERE cidade.nome like 'S%' and ( UF = 'SP' OR UF = 'RS' )
+WHERE cidade.nome like 'S%' and ( UF = 'SP' OR UF = 'RS' );
 
 --
 -- 5. Recuperar titulo dos livros e preco sugerido. O preço deve ser maior do que 100 e
@@ -82,7 +82,7 @@ WHERE cidade.nome like 'S%' and ( UF = 'SP' OR UF = 'RS' )
 
 SELECT titulo, precoSugerido
 FROM livro
-WHERE precoSugerido > 100 and titulo LIKE 'H%'
+WHERE precoSugerido > 100 and titulo LIKE 'H%';
 
 --
 -- 6. Recuperar todos os autores que tenham nascido na década de 80 e cujo nome comece com C.
@@ -93,7 +93,7 @@ WHERE precoSugerido > 100 and titulo LIKE 'H%'
 
 SELECT *
 FROM autor
-WHERE dataNasc < '1990/01/01' and dataNasc > '1979/12/31' and nome LIKE 'C%'
+WHERE dataNasc < '1990/01/01' and dataNasc > '1979/12/31' and nome LIKE 'C%';
 
 --
 -- 7. Recuperar idiomas existentes para os livros cadastrados. A resposta não pode possuir
@@ -104,7 +104,7 @@ WHERE dataNasc < '1990/01/01' and dataNasc > '1979/12/31' and nome LIKE 'C%'
 -- "Português"
 
 SELECT DISTINCT idioma
-FROM livro
+FROM livro;
 
 --
 -- 8. Selecionar título dos livros com preços sugeridos superiores a 50,00
@@ -118,7 +118,7 @@ FROM livro
 
 SELECT titulo
 FROM livro
-WHERE precoSugerido > 50
+WHERE precoSugerido > 50;
 
 --
 -- 9. Selecionar nome do autor, e nome e UF das cidades dos autores cuja data de nascimento
@@ -137,7 +137,7 @@ WHERE precoSugerido > 50
 
 SELECT autor.nome, cidade.nome, cidade.UF
 FROM autor, cidade
-WHERE dataNasc > '1970/01/01' and autor.codCid = cidade.codigo
+WHERE dataNasc > '1970/01/01' and autor.codCid = cidade.codigo;
 
 --
 -- 10. Selecionar nome dos autores e títulos dos livros cujo idioma ‘Português’.
@@ -152,7 +152,7 @@ SELECT autor.nome, livro.titulo
 FROM autor, livro, autoria
 WHERE livro.idioma = 'Português'
 	and autoria.codAut = autor.codigo
-	and autoria.codLiv = livro.codigo
+	and autoria.codLiv = livro.codigo;
 
 --
 -- b. Opção 2:join
@@ -160,7 +160,7 @@ WHERE livro.idioma = 'Português'
 SELECT autor.nome, livro.titulo
 FROM autoria JOIN autor ON autoria.codAut = autor.codigo
     JOIN livro ON autoria.codLiv = livro.codigo
-WHERE livro.idioma = 'Português'
+WHERE livro.idioma = 'Português';
 
 --
 -- 11. Selecionar as alterações solicitadas para a as autorias feitas no ano de 2000
@@ -176,7 +176,7 @@ SELECT alteracao
 FROM autoria, revisao
 WHERE autoria.data >= '01/01/2000'
         and autoria.data < '01/01/2001'
-        and autoria.codLiv = revisao.codLiv
+        and autoria.codLiv = revisao.codLiv;
 
 --
 -- b. Opção 2:JOIN
@@ -184,7 +184,7 @@ WHERE autoria.data >= '01/01/2000'
 SELECT alteracao
 FROM autoria join revisao on autoria.codLiv = revisao.codLiv
 WHERE autoria.data >= '01/01/2000'
-        and autoria.data < '01/01/2001'
+        and autoria.data < '01/01/2001';
 
 --
 -- 12. Selecionar título dos livros, nomes de seus autores, nomes de seus revisores e qual a
@@ -203,9 +203,8 @@ SELECT livro.titulo, autorEscritor.nome, autorRevisor.nome, revisao.alteracao
 FROM livro, autor autorEscritor, autor autorRevisor, autoria, revisao
 WHERE autoria.codLiv = livro.codigo
   and autoria.codAut = autorEscritor.codigo
-  --and revisao.codAut = autorRevisor.codigo
   and revisao.codLiv = livro.codigo
-  and revisao.codRev = autorRevisor.codigo
+  and revisao.codRev = autorRevisor.codigo;
 
 --
 -- b. Opção 2:JOIN
@@ -214,7 +213,7 @@ SELECT livro.titulo, autorEscritor.nome, autorRevisor.nome, revisao.alteracao
 FROM autoria join livro               on autoria.codLiv = livro.codigo
              join autor autorEscritor on autoria.codAut = autorEscritor.codigo
              join revisao             on revisao.codLiv = livro.codigo
-             join autor autorRevisor  on revisao.codRev = autorRevisor.codigo
+             join autor autorRevisor  on revisao.codRev = autorRevisor.codigo;
 
 --
 -- 13. Selecionar título dos livros e preço sugerido, cujo o nome do tipo contenha a
@@ -230,14 +229,14 @@ FROM autoria join livro               on autoria.codLiv = livro.codigo
 SELECT livro.titulo, livro.precoSugerido
 FROM livro, tipo
 WHERE livro.codTip = tipo.codigo
-  and tipo.nome like '%Literatura%'
+  and tipo.nome like '%Literatura%';
 
 --
 -- b. Opção 2:JOIN
 
 SELECT livro.titulo, livro.precoSugerido
 FROM livro join tipo on livro.codTip = tipo.codigo
-where tipo.nome like '%Literatura%'
+where tipo.nome like '%Literatura%';
 
 --
 -- 14. Selecionar o nome dos autores, nome e UF das cidades. O nome da cidade deve
@@ -253,7 +252,7 @@ SELECT autor.nome, cidade.nome, cidade.UF
 FROM autor, cidade
 WHERE autor.codCid = cidade.codigo
   and ( cidade.nome like 'Floripa'
-        or cidade.nome like 'Marau' )
+        or cidade.nome like 'Marau' );
 
 --
 -- b. Opção 2:JOIN
@@ -261,7 +260,7 @@ WHERE autor.codCid = cidade.codigo
 SELECT autor.nome, cidade.nome, cidade.UF
 FROM autor join cidade on autor.codCid = cidade.codigo
 where cidade.nome like 'Floripa'
-      or cidade.nome like 'Marau'
+      or cidade.nome like 'Marau';
 
 
 
