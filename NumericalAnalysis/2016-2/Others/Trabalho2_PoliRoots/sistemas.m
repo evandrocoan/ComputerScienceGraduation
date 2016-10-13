@@ -223,6 +223,31 @@ criterio = 1e-2
 [ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
 
 
+printf( "\n\n1b). Monte um algoritmo que determine e imprima a solução X do sistema de n=2 equações não\n" )
+printf( "lineares pelo método de Newton:\n" )
+printf( "\n" )
+printf( "function x = f1( x1, x2 )\n" )
+printf( "    x = sin( x1 ) + cos( x2 ) - 1\n" )
+printf( "end\n" )
+printf( "\n" )
+printf( "function x = f2( x1, x2 )\n" )
+printf( "    x = x1^2 + x2^2 - 3\n" )
+printf( "end\n" )
+printf( "\n" )
+printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada \n\
+         max(|Δxj)|)<10-14 ∀ j.\n\n" )
+
+xi       = [ 1, 1 ]
+criterio = 1e-14
+
+[ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
+
+
+
+
+
+
+
 
 
 

@@ -4,16 +4,16 @@
 # 1) Chutar um valor inicial real, não converge caso as raízes da solução sejam complexas.
 # 2) Mas chutar um valor initial complexo, converge caso as raízes sejam reais ou complexas.
 #
-function [ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
+function [ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, tolerancia )
 
     % São três passos:
     % Calcular delta x (dx)
     # Calcular x
     # Calcular xi
     
-    tolerancia = 1e-15;
-    contador   = 0;
-    dx         = [ 1e-4, 1e-4 ];
+    criterio = 1;
+    contador = 0;
+    dx       = [ 1e-4, 1e-4 ];
     
     while criterio > tolerancia && contador < 120
         
@@ -40,7 +40,7 @@ function [ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, crite
     end
     
     passos         = contador;
-    residuo_maximo = max( abs( f1( x(1), x(2) ) ), abs( f2( x(1), x(2) ) ) )
+    residuo_maximo = max( abs( f1( x(1), x(2) ) ), abs( f2( x(1), x(2) ) ) );
     
 end
 
