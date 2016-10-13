@@ -40,3 +40,5 @@ function A = pivotacao(N,A,k)
      A(k,:) = A(imax, :);
     A(imax,:) = aux;
 end %function
+
+

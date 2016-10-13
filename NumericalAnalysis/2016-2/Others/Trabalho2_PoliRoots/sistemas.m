@@ -41,6 +41,11 @@ split_long_rows(0)
 #output_precision(30)
 #output_max_field_width(0)
 
+
+
+##############################################################################################################
+##############################################################################################################
+
 printf( "1). Dada a seguinte eq. polinomial de coeficientes complexos com grau n=5, \n" )
 printf( "determine e imprima as suas n raízes (em precisão double), respectivas\n" )
 printf( "multiplicidades M e o Resto limite escolhido Rlim. Use critério de parada no\n" )
@@ -90,7 +95,7 @@ printf( "\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do pr�
         do WolframAlpha e compare com os seus resultados.\n\n" )
 
 
-# Wolfram Mathematica 10, code used:
+# Wolfram Mathematica 10 (WolframAlpha program for computers, as octave/matlab):
 #
 # OrderedForm=HoldForm[+##]&@@MonomialList[#][[Ordering[Total[#]&@@@CoefficientRules[#],All,GreaterEqual]]]&;
 #
@@ -113,16 +118,26 @@ printf( "\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do pr�
 # Out[127]= 5
 # Out[129]= x^5-(3.9 +1. I) x^4+(5.7 +3.9 I) x^3-(3.7 +5.7 I) x^2+(0.9 +3.7 I) x-(0. +0.9 I)
 # Out[130]= x==0. +1. I||x==0.9||x==1.||x==1.||x==1.
-raizesDoPolinomioPeloOctave  = roots(  coeficientesDoPolinomio )
+#
+# Calculo pelo Wolfram Alpha Free:
+#
+# https://www.wolframalpha.com/input/?i=x%5E5-(3.9+%2B1.+I)+x%5E4%2B(5.7+%2B3.9+I)+x%5E3-(3.7+%2B5.7+I)+x%5E2%2B(0.9+%2B3.7+I)+x-(0.+%2B0.9+I)+%3D+0
+# 
+# x = 0.9
+# x = 0.99999
+# x = 1. i
+# x = 1.00001+8.96723×10^-6 i
+# x = 1.00001-8.96723×10^-6 i
 
 raizesDoPolinomioPeloWolfram = [
-                                 complex( 0,  1.0 ),
                                  0.9,
-                                 1.0,
-                                 1.0,
-                                 1.0
+                                 0.99999,
+                                 complex( 0      ,  1.0        ),
+                                 complex( 1.00001,  8.96723e-6 ),
+                                 complex( 1.00001,  8.96723e-6 ),
                                ]
 
+raizesDoPolinomioPeloOctave    = roots( coeficientesDoPolinomio )
 raizesDoPolinomioPeloProfessor = [
                                    complex( 0,  1.0 ),
                                    0.9,
@@ -131,7 +146,36 @@ raizesDoPolinomioPeloProfessor = [
                                    1.0
                                  ]
 
+diferencaEntreMeuRootsVesusOctave(1)   = abs( raizesDoPolinomioPeloMeuRoots(1) .- raizesDoPolinomioPeloOctave(3) );
+diferencaEntreMeuRootsVesusOctave(1) .+= abs( raizesDoPolinomioPeloMeuRoots(1) .- raizesDoPolinomioPeloOctave(4) );
+diferencaEntreMeuRootsVesusOctave(1) .+= abs( raizesDoPolinomioPeloMeuRoots(1) .- raizesDoPolinomioPeloOctave(5) );
+diferencaEntreMeuRootsVesusOctave(2)   = abs( raizesDoPolinomioPeloMeuRoots(3) .- raizesDoPolinomioPeloOctave(2) );
+diferencaEntreMeuRootsVesusOctave(3)   = abs( raizesDoPolinomioPeloMeuRoots(2) .- raizesDoPolinomioPeloOctave(1) );
 
+printf( "Os resultados dados pelo WolframMathematica foram iguais as raízes fornecidas pelo\n\
+         Professor, como podemos ver logo acima. Entretanto, as raízes do octave foram\n\
+         não tão boa, contendo mais erros, quando comparados com as raízes calculadas\n\
+         pelo meu roots. A seguir podemos ver essas diferenças de resíduos, e nelas \n\
+         notamos que pelo fato de calcularmos a multiplicidade da raiz, conseguimos um \n\
+         erro menor no calculo da raiz de multiplicidade três: \n\n" )
+
+diferencaEntreMeuRootsVesusOctave.'
+
+
+
+##############################################################################################################
+##############################################################################################################
+
+printf( "\n\n\nGrupo 19, exercícios 3 = 3, 4 = 1\n\n" )
+printf( "ExemplodeGrupo.m\n" )
+printf( "numerogrupo=5\n" )
+printf( "if (mod(numerogrupo,16)==0) numeroexercicio3=16 else numeroexercicio3=mod(numerogrupo,16) end\n" )
+printf( "if (mod(numerogrupo,3 )==0)  numeroexercicio4= 3 else  numeroexercicio4=mod(numerogrupo,3 ) end\n" )
+printf( "\n" )
+printf( "3.3) Compare a eficiência do Método da Newton tradicional de 1ª ordem com o Método de Newton de\n" )
+printf( "2ª ordem, partindo de uma mesma condição inicial x0 na determinação de uma raiz positiva de \n" )
+printf( "x^10 – 2 = 0 ( x = 2^(1/10) ) com todos os dígitos exatos na variável double.\n" )
+printf( "Sugestão para valor inicial xi = 1.\n\n" )
 
 
 
