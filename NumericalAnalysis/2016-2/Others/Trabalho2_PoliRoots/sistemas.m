@@ -43,6 +43,7 @@ split_long_rows(0)
 #output_max_field_width(0)
 
 addpath( 'polynoms' )
+addpath( 'nonlinears' )
 
 #{
 
@@ -179,7 +180,7 @@ printf( "3.3) Compare a eficiência do Método da Newton tradicional de 1ª orde
 printf( "2ª ordem, partindo de uma mesma condição inicial x0 na determinação de uma raiz positiva de \n" )
 printf( "x^10 – 2 = 0 ( x = 2^(1/10) ) com todos os dígitos exatos na variável double.\n" )
 printf( "Sugestão para valor inicial xi = 1.\n\n" )
-#}
+
 
 xi         = 1
 tolerancia = 1e-15
@@ -191,17 +192,35 @@ printf( "\nStarting the fMetodoDeNewtonOrdem2...\n" )
 xi                        = 1
 [ x2, passos, diferenca ] = fMetodoDeNewtonOrdem2( xi, tolerancia )
 
-printf( "\nA diferença da precisão de ambos não é perceptível pois já está no limite da\n\
-         variável double. Mas podemos perceber que a segunda ordem custou 4/6 - 1 = 33.33%%,\n\
+printf( "\nA diferença da precisão de ambos não é perceptível pois já estamos no limite da\n\
+         variável double. Mas podemos perceber que a segunda ordem custou 1 - 4/6 = 33.33%%,\n\
          passos a menos que o método de primeira ordem. A seguir podemos ver a diferença entre\n\
          a os resultados de ordem primeira e segunda ordem:\n\n" )
 
 x = abs( x1 - x2 )
+#}
 
 
+##############################################################################################################
+##############################################################################################################
 
+printf( "1a). Calcule a solução X para o sistema de n=2 equações não lineares pelo método de Newton:\n" )
+printf( "\n" )
+printf( "function x = f1( x1, x2 )\n" )
+printf( "    x = sin( x1 ) + cos( x2 ) - 1\n" )
+printf( "end\n" )
+printf( "\n" )
+printf( "function x = f2( x1, x2 )\n" )
+printf( "    x = x1^2 + x2^2 - 3\n" )
+printf( "end\n" )
+printf( "\n" )
+printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada \n\
+         max(|Δxj)|)<10^-2 ∀ j.)\n\n" )
 
+xi       = [ 1, 1 ]
+criterio = 1e-2
 
+[ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
 
 
 
