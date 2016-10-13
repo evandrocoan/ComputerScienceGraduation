@@ -184,7 +184,26 @@ printf( "Sugestão para valor inicial xi = 1.\n\n" )
 xi         = 1
 tolerancia = 1e-15
 
-[ x, passos, diferenca ] = fMetodoDeNewtonOrdem1( xi, tolerancia )
+printf( "\nStarting the fMetodoDeNewtonOrdem1...\n" )
+[ x1, passos, diferenca ] = fMetodoDeNewtonOrdem1( xi, tolerancia )
+
+printf( "\nStarting the fMetodoDeNewtonOrdem2...\n" )
+xi                        = 1
+[ x2, passos, diferenca ] = fMetodoDeNewtonOrdem2( xi, tolerancia )
+
+printf( "\nA diferença da precisão de ambos não é perceptível pois já está no limite da\n\
+         variável double. Mas podemos perceber que a segunda ordem custou 4/6 - 1 = 33.33%%,\n\
+         passos a menos que o método de primeira ordem. A seguir podemos ver a diferença entre\n\
+         a os resultados de ordem primeira e segunda ordem:\n\n" )
+
+x = abs( x1 - x2 )
+
+
+
+
+
+
+
 
 
 
