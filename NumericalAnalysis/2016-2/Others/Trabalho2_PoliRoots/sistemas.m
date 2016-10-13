@@ -38,10 +38,13 @@ numeroexercicio4 = 2
 
 format long
 split_long_rows(0)
+#format rat
 #output_precision(30)
 #output_max_field_width(0)
 
+addpath( 'polynoms' )
 
+#{
 
 ##############################################################################################################
 ##############################################################################################################
@@ -176,6 +179,13 @@ printf( "3.3) Compare a eficiência do Método da Newton tradicional de 1ª orde
 printf( "2ª ordem, partindo de uma mesma condição inicial x0 na determinação de uma raiz positiva de \n" )
 printf( "x^10 – 2 = 0 ( x = 2^(1/10) ) com todos os dígitos exatos na variável double.\n" )
 printf( "Sugestão para valor inicial xi = 1.\n\n" )
+#}
+
+xi         = 1
+tolerancia = 1e-15
+
+[ x, passos, diferenca ] = fMetodoDeNewtonOrdem1( xi, tolerancia )
+
 
 
 
