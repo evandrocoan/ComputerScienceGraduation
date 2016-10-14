@@ -249,6 +249,16 @@ criterio = 1e-14
 
 
 
+printf( "\n\n1d). Aplique um algoritmo que determine e imprima a solução X do sistema de n=2 equações não\n" )
+printf( "lineares pelo método de Broyden com derivadas calculadas numericamente.\n" )
+printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada\n" )
+printf( "Σ j=1..n, |Δx_j| < 10^-14 ∀j.\n\n" )
+
+xi = [ 0.5 0.5 ]
+x  = fBroyden( xi )
+
+
+
 
 
 
