@@ -1,10 +1,10 @@
 #
-# fNewtonSistemasNaoLineares com derivada exata.
+# fNewtonSistemasNaoLineares com derivada numérica.
 #
 # 1) Chutar um valor inicial real, não converge caso as raízes da solução sejam complexas.
 # 2) Mas chutar um valor initial complexo, converge caso as raízes sejam reais ou complexas.
 #
-function [ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLineares_a( xi, tolerancia )
+function [ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLineares_c( xi, tolerancia )
 
     % São três passos:
     % 1) Calcular delta x (dx)
@@ -19,12 +19,12 @@ function [ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLine
 
         contador = contador + 1;
 
-        A( 1, 1 ) =   cos( xi(1) );
-        A( 1, 2 ) = - sin( xi(2) );
+        A( 1, 1 ) = ( f1( xi(1) + dx( 1 ), xi(2)         ) - f1( xi(1), xi(2) ) ) / dx(1);
+        A( 1, 2 ) = ( f1( xi(1)          , xi(2) + dx(2) ) - f1( xi(1), xi(2) ) ) / dx(2);
         A( 1, 3 ) = - f1( xi(1), xi(2) );
 
-        A( 2, 1 ) = 2*xi(1);
-        A( 2, 2 ) = 2*xi(2);
+        A( 2, 1 ) = ( f2( xi(1) + dx( 1 ), xi(2)         ) - f2( xi(1), xi(2) ) ) / dx(1);
+        A( 2, 2 ) = ( f2( xi(1)          , xi(2) + dx(2) ) - f2( xi(1), xi(2) ) ) / dx(2);
         A( 2, 3 ) = - f2( xi(1), xi(2) );
 
         A;

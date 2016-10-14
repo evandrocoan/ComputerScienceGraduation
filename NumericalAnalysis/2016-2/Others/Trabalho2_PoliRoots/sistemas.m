@@ -126,7 +126,7 @@ printf( "\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do pr�
 # Calculo pelo Wolfram Alpha Free:
 #
 # https://www.wolframalpha.com/input/?i=x%5E5-(3.9+%2B1.+I)+x%5E4%2B(5.7+%2B3.9+I)+x%5E3-(3.7+%2B5.7+I)+x%5E2%2B(0.9+%2B3.7+I)+x-(0.+%2B0.9+I)+%3D+0
-# 
+#
 # x = 0.9
 # x = 0.99999
 # x = 1. i
@@ -204,7 +204,7 @@ x = abs( x1 - x2 )
 ##############################################################################################################
 ##############################################################################################################
 
-printf( "1a). Calcule a solução X para o sistema de n=2 equações não lineares pelo método de Newton:\n" )
+printf( "\n\n1) Use o seguinte sistema linear para os próximos exercícios:" )
 printf( "\n" )
 printf( "function x = f1( x1, x2 )\n" )
 printf( "    x = sin( x1 ) + cos( x2 ) - 1\n" )
@@ -214,38 +214,38 @@ printf( "function x = f2( x1, x2 )\n" )
 printf( "    x = x1^2 + x2^2 - 3\n" )
 printf( "end\n" )
 printf( "\n" )
+printf( "1a). Calcule a solução X para o sistema de n=2 equações não lineares pelo método de Newton.\n" )
 printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada \n\
          max(|Δxj)|)<10^-2 ∀ j.)\n\n" )
 
 xi       = [ 1, 1 ]
 criterio = 1e-2
 
-[ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
+[ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLineares_a( xi, criterio )
+
 
 
 printf( "\n\n1b). Monte um algoritmo que determine e imprima a solução X do sistema de n=2 equações não\n" )
-printf( "lineares pelo método de Newton:\n" )
-printf( "\n" )
-printf( "function x = f1( x1, x2 )\n" )
-printf( "    x = sin( x1 ) + cos( x2 ) - 1\n" )
-printf( "end\n" )
-printf( "\n" )
-printf( "function x = f2( x1, x2 )\n" )
-printf( "    x = x1^2 + x2^2 - 3\n" )
-printf( "end\n" )
-printf( "\n" )
+printf( "lineares pelo método de Newton.\n" )
 printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada \n\
          max(|Δxj)|)<10-14 ∀ j.\n\n" )
 
 xi       = [ 1, 1 ]
 criterio = 1e-14
 
-[ x, passos, residuo_maximo ] = fNewtonSistemasNaoLineares_a( xi, criterio )
+[ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLineares_a( xi, criterio )
 
 
 
+printf( "\n\n1c). Aplique um algoritmo que determine e imprima a solução X do sistema de n=2 equações não\n" )
+printf( "lineares pelo método de Newton com derivadas calculadas numericamente.\n" )
+printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada \n\
+         max(|Δxj)|)<10-14 ∀ j.\n\n" )
 
+xi       = [ 1, 1 ]
+criterio = 1e-14
 
+[ x, passos, residuo_fgauss, residuo_sistema ] = fNewtonSistemasNaoLineares_c( xi, criterio )
 
 
 
