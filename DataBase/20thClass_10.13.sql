@@ -17,7 +17,7 @@ WHERE birthDate > '10/10/1990'
 GROUP BY nome ASC
 
 ASC  - Ascending order ( it is the default, does not need to be explicit.
-DESC - Descending order 
+DESC - Descending order
 
 Otherwise, it will return doubled results:
 400 RS
@@ -43,7 +43,14 @@ HAVING count(*) > 10
 
 6. Never EVER use count(*) > 10 on the WHERE clause.
 
+*/
 
+
+-- Recupere os seguintes dados, utilizando comandos SQL:
+-- Obs.: se houver alguma consulta cujo retorno seja diferente do apresentado na
+-- questão, favor, avisar a professora.
+
+/*
 
 profissao (codigo, area, nome)
 cidade (codigo, nome, UF)
@@ -67,33 +74,29 @@ cons_medicame (data, hora, codPac, codMedica)
    codMedica REFERENCIA medicamento (codigo)
    (data, hora, codPac) REFERENCIA consulta (data, hora, codPac)
 
-
-
--- Recupere os seguintes dados, utilizando comandos SQL:
--- Obs.: se houver alguma consulta cujo retorno seja diferente do apresentado na 
--- questão, favor, avisar a professora. 
-
+*/
+/*
 --
 -- 1. Quantidade de médicos com consultas anteriores a ‘2005/09/01’
 -- 2
 
 SELECT COUNT( DISTINCT codMed )
 FROM consulta
-WHERE data < '2005/09/01';
+WHERE DATA < '2005/09/01';
 
--- 
+--
 -- 2. Valor total das consultas já feitas.
--- 
+--
 -- 824.0000
 
 SELECT SUM( valor )
 FROM consulta;
 
 
--- 
+--
 -- 3. O código, nome e CRM dos médicos, e a quantidade de consultas realizadas por cada
 --  um em ‘2006’. O resultado deve ser ordenado por nome do médico.
--- 
+--
 -- 2;"Ana Maria";"555453";2
 -- 4;"Carla Ana";"987666";1
 -- 3;"José Paulo O";"677755";2
@@ -101,41 +104,41 @@ FROM consulta;
 -- 1;"Paulo Rangel";"23453";1
 
 SELECT medico.codigo, medico.nome, medico.CRM, COUNT(*)
-FROM consulta join medico On consulta.codMed = medico.codigo
-WHERE consulta.data between '2006/01/01' and'2006/12/31'
-GROUP by medico.codigo, medico.nome, medico.CRM
-order by medico.nome asc;
+FROM consulta JOIN medico ON consulta.codMed = medico.codigo
+WHERE consulta.data BETWEEN '2006/01/01' AND'2006/12/31'
+GROUP BY medico.codigo, medico.nome, medico.CRM
+ORDER BY medico.nome ASC;
 
--- 
--- 4. Data e hora da consulta, nome do médico e nome do paciente. Pacientes devem ter 
+--
+-- 4. Data e hora da consulta, nome do médico e nome do paciente. Pacientes devem ter
 -- idade inferior a 18 anos, e a especialização do médico deve ser ‘Pediatria’.
--- Ordenar por data e hora da consulta. 
--- 
+-- Ordenar por data e hora da consulta.
+--
 -- "2006-03-21";"09:00:00";"Luara dos Santos";"Maria Aparecida"
 -- "2006-03-21";"09:00:00";"Luara dos Santos";"Antonio Carlos"
 
 SELECT consulta.data, consulta.hora, medico.nome, paciente.nome
-FROM consulta join medico         on consulta.codMed = medico.codigo
-              join paciente       on consulta.codPac = paciente.codigo
-              join medEsp         on medEsp.codMed   = medico.codigo
-              join especializacao on medEsp.codEsp   = especializacao.codigo
+FROM consulta JOIN medico         ON consulta.codMed = medico.codigo
+              JOIN paciente       ON consulta.codPac = paciente.codigo
+              JOIN medEsp         ON medEsp.codMed   = medico.codigo
+              JOIN especializacao ON medEsp.codEsp   = especializacao.codigo
 WHERE especializacao.nome = 'Pediatria'
-order by consulta.data, consulta.hora asc;
+ORDER BY consulta.data, consulta.hora ASC;
 
--- 
+--
 -- 5. Data das consultas, e para cada data o somatório total dos valores, desde que
--- este total seja maior do que 100.00. 
--- 
+-- este total seja maior do que 100.00.
+--
 -- "2006-03-21";300.0000
 
 SELECT consulta.data, sum( consulta.valor )
 FROM consulta
-GROUP by consulta.data
-having sum( consulta.valor ) > 100;
+GROUP BY consulta.data
+HAVING sum( consulta.valor ) > 100;
 
--- 
+--
 -- 6. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas.
--- Ordenar o resultado por ordem decrescente de nome de cidade. 
+-- Ordenar o resultado por ordem decrescente de nome de cidade.
 -- "São Paulo";1
 -- "Porto Alegre";1
 -- "Cruz Alta";2
@@ -143,34 +146,34 @@ having sum( consulta.valor ) > 100;
 -- "Carazinho";5
 */
 SELECT cidade.nome, count(*)
-FROM cidade join paciente on paciente.codCid = cidade.codigo
-GROUP by cidade.nome
-order by cidade.nome desc;
+FROM cidade JOIN paciente ON paciente.codCid = cidade.codigo
+GROUP BY cidade.nome
+ORDER BY cidade.nome DESC;
 
--- 
+--
 -- 7. Descrição do medicamento e para cada um deles a quantidade receitada
 -- nas consultas. Ordenar o resultado por pela descrição do medicamento, e
 -- colocar na resposta apenas aqueles cuja quantidade receitada é maior do que 1.
--- 
+--
 -- "Engove";2
 -- "Moura Brasil";5
 -- "Olina";2
 
 
 
--- 
+--
 -- 8. Nome da especialização e nome do médico que possui CRM = 23453.
--- Ordenar o resultado por ordem decrescente do nome da especialização. 
--- 
+-- Ordenar o resultado por ordem decrescente do nome da especialização.
+--
 -- "Urologia";"Paulo Rangel"
 -- "Psicologia";"Paulo Rangel"
 
 
 
--- 
+--
 -- 9. Código, nome e CRM dos médicos que possuem consulta. Ordenar o resultado
 -- por CRM do médico, por ordem decrescente.
--- 
+--
 -- 4;"Carla Ana";"987666"
 -- 7;"Luara dos Santos";"983456"
 -- 3;"José Paulo O";"677755"
@@ -179,10 +182,10 @@ order by cidade.nome desc;
 
 
 
--- 
+--
 -- 10. Nome do médico e para cada um deles a quantidade de consultas efetuadas.
 -- Devem aparecer no resultado apenas médicos com mais de uma consulta efetuada.
--- 
+--
 -- "Luara dos Santos";2
 -- "José Paulo O";2
 -- "Paulo Rangel";2
@@ -190,10 +193,10 @@ order by cidade.nome desc;
 
 
 
--- 
+--
 -- 11. Descrição dos medicamentos prescritos, e para cada um deles a quantidade
 -- total prescrita. Ordenar pela descrição.
--- 
+--
 -- "Aspirina";1
 -- "Diclofenaco";1
 -- "Engove";2
@@ -206,9 +209,9 @@ order by cidade.nome desc;
 
 
 
--- 
+--
 -- 12. Data da consulta, e a quantidade de pacientes com idade menor que 25.
--- 
+--
 -- "2006-03-20";1
 -- "2006-02-21";1
 -- "2006-02-20";1
@@ -217,31 +220,31 @@ order by cidade.nome desc;
 
 
 
--- 
+--
 -- 13. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas,
 -- desde que o número de pacientes moradores seja mais do que 1 (>=2). Ordenar o
 -- resultado por ordem decrescente de nome de cidade.
--- 
+--
 -- "Carazinho";5
 -- "Cruz Alta";2
 
 
 
--- 
+--
 -- 14. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas,
 -- cujo nome da cidade comece com ‘C’. Ordenar o resultado por ordem decrescente de
 -- nome de cidade.
--- 
+--
 -- "Cruz Alta";2
 -- "Casca";1
 -- "Carazinho";5
 
 
 
--- 
+--
 -- 15. Nome do médico, e para cada um deles a quantidade de consultas efetuadas; o
 -- nome do médico deve começar com ‘P’ ou com ‘C’.
--- 
+--
 -- "Paulo Rangel";2
 -- "Carla Ana";1
 
