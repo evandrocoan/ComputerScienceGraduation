@@ -3,29 +3,6 @@ clear
 clc
 format long
 
-
-# Dominio da tangante { x \in \R | x != pi / 2 + k * pi, k \in \Z } 
-#function x = f( x )
-#    
-#    x = tan( x ) - 1
-#    
-#end
-
-# Encontre as 5 raízes positivas
-#
-# x * tan( x ) - 1 = 0
-# tan( x ) 
-#
-# tan x = cateto oposto / cateto adjacente
-# tan \theta = sen \theta / cos \theta
-# 
-# tan( 180º ) = 0, -> tan( 0 ) = 0
-# tan( 3 pi / 4 = 35º ) = 1 
-#
-# tan( 91º ) = perto de - \inf 
-# tan( 89º ) = perto de + \inf 
-
-
 # Ex:
 # P3( x ) = x^3 - 3*x^2 + 3x - 1 = 0;
 # -> (x - 1)^3 = 0
@@ -45,6 +22,8 @@ format long
 # 
 # a(1)   != 0, para grau n
 # a(n+1) != 0, para excluir raízes nulas
+#
+#
 #
 # Calculo do raio máximo da raiz inicial do polinômio:
 # 
@@ -72,13 +51,10 @@ format long
 # Mas melhor aina é projetar o RAIO nos eixo real e complexo:
 # xi = complex( +-r_medio*cos(pi/*4) +-r_medio*sen(pi*4) )
 #
-
-
-
-
-
-
-
+#
+#
+#
+#
 # Divisão sintética de Brio-Rufini
 #
 # Somente funciona para polinômios onde o divisor é da forma x - 1.
@@ -112,8 +88,16 @@ format long
 # Se xi = 2, P3( xi == 2 ) = 2^3 - 3*2^2 + 3*2 - 1 == 0
 # P3^0( xi == 2 ) = 0! * R( 0 + 1 ) = R( 1 ) = 1
 # 
-a = [ 1, -3, 3, -1 ]
-my_roots( a )
+a = [
+      1,
+      complex( -3.9, -1.0 ),
+      complex(  5.7,  3.9 ),
+      complex( -3.7, -5.7 ),
+      complex(  0.9,  3.7 ),
+      complex(  0.0, -0.9 )
+    ]
+
+[ x, M ] = my_roots( a, 1e-14 )
 
 
 

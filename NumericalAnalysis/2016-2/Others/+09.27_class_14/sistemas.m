@@ -3,22 +3,6 @@ clear
 clc
 format long
 
-% x   = [ 0:0.01: 5 * pi ];
-% y_1 = tan( x );
-% y_2 = 1 ./ x;
-
-# encontrar os pontos onde: tan( x ) == 1 / x
-#
-#plot( x, y_1, 'b', x, y_2, 'r', 'linewidth', 5 )
-#
-# localizamos as 5 raizes iniciais
-
-xi = [ pi / 4, pi, 2 * pi, 3 * pi, 4 * pi ];
-
-for i = 1 : 5
-    i;
-    x( i ) = fMetodoDeNewton( xi( i ), 1e-15 );
-end
 
 # Dominio da tangante { x \in \R | x != pi / 2 + k * pi, k \in \Z } 
 #function x = f( x )
@@ -42,61 +26,24 @@ end
 # tan( 89º ) = perto de + \inf 
 
 
-# Ex:
-# P3( x ) = x^3 - 3*x^2 + 3x - 1 = 0;
-# -> (x - 1)^3 = 0
-# \alpha = 1 :: M = 3 ( multiplicidade, há três raízes )
-# 
-# Raízes podem ser simples ou repetidas (múltiplas)
-#
-# Domínio = { x \in \C }
-# a + bi = a + 0i, \R contido \C
-#   \C       \R
-#
-# 1º passo
-# xi = ?
-# abs( xi ) <= r (que é a cota limitante, i.e., raio)
-# 
-# Pn( x ) = a(1)*x^n + a(2)*x^(n-1) + ... + a(n)*x + a(n+1) = 0
-# 
-# a(1)   != 0, para grau n
-# a(n+1) != 0, para excluir raízes nulas
-#
-# r = 1 + { max( { abs( a(2) ), abs( a(3) ), ..., abs( a(n) ), abs( a(n+1) ) } ) } / abs( a(1)
+% x   = [ 0:0.01: 5 * pi ];
+% y_1 = tan( x );
+% y_2 = 1 ./ x;
 
+# encontrar os pontos onde: tan( x ) == 1 / x
+#
+#plot( x, y_1, 'b', x, y_2, 'r', 'linewidth', 5 )
+#
+# localizamos as 5 raizes iniciais
 
+xi = [ pi / 4, pi, 2 * pi, 3 * pi, 4 * pi ];
 
-# 
-function x = my_roots( a )
-    
-    n = size( a, 2 ) - 1
-    
-    k = 1
-    
-    xi( k ) = fLocaliza( n, a )
-    
-    [ x(k), m(k) ] = fNPolinomios( n, a, )
-    
-    # Redução de grau pela raiz x, M vezes
-    # Criar um função de redução de grau, que receba (n, a, x(k) ) e retorne o novo [n,a] para
-    # continuar o processo.
-    [n, a] = reduzirGrauDoPolinomio( n, a, x( k ), M( k ) )
-    
+for i = 1 : 5
+    i;
+    x( i ) = fMetodoDeNewton( xi( i ), 1e-15 );
 end
 
 
-function xi = fLocaliza( n, a )
-    
-    # Encontrar o raio inicial
-    raio_inicial = 1 + max( abs( a(2:n+1) ) ) / abs( a(1) )
-    
-    # Encontrar o raio mínimo das raízes. Abaixo dele não existe raízes.
-    raio_minimo = 1 / ( 1 + max( abs( a(1:n) ) ) / abs( a(n+1) ) )
-    
-    xi = ( raio_inicial + raio_minimo ) / 2
-    
-    
-end
 
 
 # Divisão sintética de Brio-Rufini
@@ -132,9 +79,6 @@ end
 # Se xi = 2, P3( xi == 2 ) = 2^3 - 3*2^2 + 3*2 - 1 == 0
 # P3^0( xi == 2 ) = 0! * R( 0 + 1 ) = R( 1 ) = 1
 # 
-a = [ 1, -3, 3, -1 ]
-my_roots( a )
-
 
 function R = calcularRestoDaDivisao( n, a, xi )
     
@@ -164,6 +108,52 @@ function R = calcularRestoDaDivisao( n, a, xi )
 end
 
 
+
+
+# Ex:
+# P3( x ) = x^3 - 3*x^2 + 3x - 1 = 0;
+# -> (x - 1)^3 = 0
+# \alpha = 1 :: M = 3 ( multiplicidade, há três raízes )
+# 
+# Raízes podem ser simples ou repetidas (múltiplas)
+#
+# Domínio = { x \in \C }
+# a + bi = a + 0i, \R contido \C
+#   \C       \R
+#
+# 1º passo
+# xi = ?
+# abs( xi ) <= r (que é a cota limitante, i.e., raio)
+# 
+# Pn( x ) = a(1)*x^n + a(2)*x^(n-1) + ... + a(n)*x + a(n+1) = 0
+# 
+# a(1)   != 0, para grau n
+# a(n+1) != 0, para excluir raízes nulas
+#
+# r = 1 + { max( { abs( a(2) ), abs( a(3) ), ..., abs( a(n) ), abs( a(n+1) ) } ) } / abs( a(1)
+
+function x = my_roots( a )
+    
+    n = size( a, 2 ) - 1
+    
+    k = 1
+    
+    xi( k ) = fLocaliza( n, a )
+    
+    [ x(k), m(k) ] = fNPolinomios( n, a )
+    
+    # Redução de grau pela raiz x, M vezes
+    # Criar um função de redução de grau, que receba (n, a, x(k) ) e retorne o novo [n,a] para
+    # continuar o processo.
+    [n, a] = reduzirGrauDoPolinomio( n, a, x( k ), M( k ) )
+    
+end
+
+
+
+a = [ 1, -3, 3, -1 ]
+
+my_roots( a )
 
 
 
