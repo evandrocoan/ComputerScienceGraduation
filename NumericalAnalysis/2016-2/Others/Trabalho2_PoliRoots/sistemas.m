@@ -6,7 +6,7 @@ limite da precisão da sua variável (sugestão (abs(dx)+abs(R(1))<1e-12 (altere
 se necessário) e 120 iterações máximas). Use o método de Newton com a correção
 pela multiplicidade M.
 
-P5(x)=1 x^5+(- 3.9 - 1. I) x^4+(5.7 + 3.9 I) x^3+(-3.7 - 5.7 I) x^2+(0.9 + 3.7 I) x+(0. - 0.9 I) = 0
+P5(x)= 1*x^5 + ( -3.9 -1*I)*x^4 + ( 5.7 + 3.9*I )*x^3 + ( -3.7 -5.7*I)*x^2 + ( 0.9 + 3.7*I )*x + ( 0.0 - 0.9*I ) = 0
 
 
 (polinômio fatorado (x-0.9)(x-1)3(x-I), I=sqrt(-1) -> complexo)
@@ -45,7 +45,7 @@ split_long_rows(0)
 addpath( 'polynoms' )
 addpath( 'nonlinears' )
 
-#{
+
 
 ##############################################################################################################
 ##############################################################################################################
@@ -95,7 +95,7 @@ iteracoesDaRaiz                     = c
 ##############################################################################################################
 ##############################################################################################################
 
-printf( "\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do próprio octave, \n\
+printf( "\n\n\n2). Determine essas raízes de P5(x)=0 pela função roots() do próprio octave, \n\
         do WolframAlpha e compare com os seus resultados.\n\n" )
 
 
@@ -181,11 +181,10 @@ printf( "2ª ordem, partindo de uma mesma condição inicial x0 na determinaçã
 printf( "x^10 – 2 = 0 ( x = 2^(1/10) ) com todos os dígitos exatos na variável double.\n" )
 printf( "Sugestão para valor inicial xi = 1.\n\n" )
 
-
-xi         = 1
 tolerancia = 1e-15
 
 printf( "\nStarting the fMetodoDeNewtonOrdem1...\n" )
+xi                        = 1
 [ x1, passos, diferenca ] = fMetodoDeNewtonOrdem1( xi, tolerancia )
 
 printf( "\nStarting the fMetodoDeNewtonOrdem2...\n" )
@@ -197,14 +196,14 @@ printf( "\nA diferença da precisão de ambos não é perceptível pois já esta
          passos a menos que o método de primeira ordem. A seguir podemos ver a diferença entre\n\
          a os resultados de ordem primeira e segunda ordem:\n\n" )
 
-x = abs( x1 - x2 )
-#}
+diferencaEntrePrimeiraOrdemVersusSegundaOrdem = abs( x1 - x2 )
+
 
 
 ##############################################################################################################
 ##############################################################################################################
 
-printf( "\n\n1) Use o seguinte sistema linear para os próximos exercícios:" )
+printf( "\n\n\n4.1) Use o seguinte sistema linear para os próximos exercícios:" )
 printf( "\n" )
 printf( "function x = f1( x1, x2 )\n" )
 printf( "    x = sin( x1 ) + cos( x2 ) - 1\n" )
@@ -254,8 +253,8 @@ printf( "lineares pelo método de Broyden com derivadas calculadas numericamente
 printf( "Considerando como valores iniciais X0=[+1 +1] e como critério limite de parada\n" )
 printf( "Σ j=1..n, |Δx_j| < 10^-14 ∀j.\n\n" )
 
-xi = [ 0.5 0.5 ]
-x  = fBroyden( xi )
+xi                                         = [ 1, 1 ]
+[ x, passos, diferenca, residuo_sistema ]  = fBroyden( xi )
 
 
 
