@@ -75,7 +75,7 @@ cons_medicame (data, hora, codPac, codMedica)
    (data, hora, codPac) REFERENCIA consulta (data, hora, codPac)
 
 */
-/*
+
 --
 -- 1. Quantidade de médicos com consultas anteriores a ‘2005/09/01’
 -- 2
@@ -144,7 +144,7 @@ HAVING sum( consulta.valor ) > 100;
 -- "Cruz Alta";2
 -- "Casca";1
 -- "Carazinho";5
-*/
+
 SELECT cidade.nome, count(*)
 FROM cidade JOIN paciente ON paciente.codCid = cidade.codigo
 GROUP BY cidade.nome
@@ -159,7 +159,11 @@ ORDER BY cidade.nome DESC;
 -- "Moura Brasil";5
 -- "Olina";2
 
-
+SELECT medicamento.descricao, COUNT( cons_medicame.codMedica )
+FROM medicamento JOIN cons_medicame ON medicamento.codigo = cons_medicame.codMedica
+GROUP BY medicamento.descricao
+HAVING COUNT( cons_medicame.codMedica ) > 1
+ORDER BY medicamento.descricao ASC;
 
 --
 -- 8. Nome da especialização e nome do médico que possui CRM = 23453.
@@ -168,7 +172,11 @@ ORDER BY cidade.nome DESC;
 -- "Urologia";"Paulo Rangel"
 -- "Psicologia";"Paulo Rangel"
 
-
+SELECT especializacao.nome, medico.nome
+FROM medico JOIN medEsp         ON medEsp.codMed = medico.codigo
+            JOIN especializacao ON medEsp.codEsp = especializacao.codigo
+WHERE medico.crm = '23453'
+ORDER BY especializacao.nome DESC;
 
 --
 -- 9. Código, nome e CRM dos médicos que possuem consulta. Ordenar o resultado
@@ -180,7 +188,9 @@ ORDER BY cidade.nome DESC;
 -- 2;"Ana Maria";"555453"
 -- 1;"Paulo Rangel";"23453"
 
-
+SELECT DISTINCT medico.codigo, medico.nome, medico.crm
+FROM medico JOIN consulta ON medico.codigo = consulta.codMed
+ORDER BY medico.crm DESC;
 
 --
 -- 10. Nome do médico e para cada um deles a quantidade de consultas efetuadas.
@@ -191,7 +201,19 @@ ORDER BY cidade.nome DESC;
 -- "Paulo Rangel";2
 -- "Ana Maria";3
 
+SELECT medico.nome, COUNT(*)
+FROM consulta JOIN medico ON consulta.codMed = medico.codigo
+GROUP BY medico.nome
+HAVING COUNT(*) > 1
+ORDER BY COUNT(*) ASC;
 
+--        nome       | count
+-- ------------------+-------
+--  José Paulo O     |     2
+--  Paulo Rangel     |     2
+--  Luara dos Santos |     2
+--  Ana Maria        |     3
+-- (4 rows)
 
 --
 -- 11. Descrição dos medicamentos prescritos, e para cada um deles a quantidade
@@ -207,7 +229,10 @@ ORDER BY cidade.nome DESC;
 -- "Sonrisal";1
 -- "Tylenol";1
 
-
+SELECT medicamento.descricao, COUNT( cons_medicame.codMedica )
+FROM medicamento JOIN cons_medicame ON medicamento.codigo = cons_medicame.codMedica
+GROUP BY medicamento.descricao
+ORDER BY medicamento.descricao ASC;
 
 --
 -- 12. Data da consulta, e a quantidade de pacientes com idade menor que 25.
@@ -218,7 +243,10 @@ ORDER BY cidade.nome DESC;
 -- "2006-03-21";3
 -- "2005-02-20";1
 
-
+SELECT consulta.data, COUNT( paciente.idade )
+FROM consulta JOIN paciente ON consulta.codPac = paciente.codigo
+WHERE paciente.idade < 25
+GROUP BY consulta.data;
 
 --
 -- 13. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas,
@@ -228,7 +256,17 @@ ORDER BY cidade.nome DESC;
 -- "Carazinho";5
 -- "Cruz Alta";2
 
+SELECT cidade.nome, COUNT( paciente.nome )
+FROM cidade JOIN paciente ON cidade.codigo = paciente.codCid
+GROUP BY cidade.nome
+HAVING COUNT( paciente.nome ) > 1
+ORDER BY cidade.nome DESC;
 
+--    nome    | count
+-- -----------+-------
+--  Cruz Alta |     2
+--  Carazinho |     5
+-- (2 rows)
 
 --
 -- 14. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas,
@@ -239,7 +277,11 @@ ORDER BY cidade.nome DESC;
 -- "Casca";1
 -- "Carazinho";5
 
-
+SELECT cidade.nome, COUNT( paciente.codigo )
+FROM cidade JOIN paciente ON cidade.codigo = paciente.codCid
+WHERE cidade.nome LIKE 'C%'
+GROUP BY cidade.nome
+ORDER BY cidade.nome DESC;
 
 --
 -- 15. Nome do médico, e para cada um deles a quantidade de consultas efetuadas; o
@@ -248,7 +290,15 @@ ORDER BY cidade.nome DESC;
 -- "Paulo Rangel";2
 -- "Carla Ana";1
 
+SELECT medico.nome, COUNT( consulta.codMed )
+FROM medico JOIN consulta ON medico.codigo = consulta.codMed
+WHERE medico.nome LIKE 'P%'
+   OR medico.nome LIKE 'C%'
+GROUP BY medico.nome;
 
-
+--      nome     | count
+-- --------------+-------
+--  Carla Ana    |     1
+--  Paulo Rangel |     2
 
 
