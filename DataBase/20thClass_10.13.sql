@@ -207,14 +207,6 @@ GROUP BY medico.nome
 HAVING COUNT(*) > 1
 ORDER BY COUNT(*) ASC;
 
---        nome       | count
--- ------------------+-------
---  José Paulo O     |     2
---  Paulo Rangel     |     2
---  Luara dos Santos |     2
---  Ana Maria        |     3
--- (4 rows)
-
 --
 -- 11. Descrição dos medicamentos prescritos, e para cada um deles a quantidade
 -- total prescrita. Ordenar pela descrição.
@@ -262,12 +254,6 @@ GROUP BY cidade.nome
 HAVING COUNT( paciente.nome ) > 1
 ORDER BY cidade.nome DESC;
 
---    nome    | count
--- -----------+-------
---  Cruz Alta |     2
---  Carazinho |     5
--- (2 rows)
-
 --
 -- 14. Nome das cidades, e a quantidade de pacientes moradores em cada uma delas,
 -- cujo nome da cidade comece com ‘C’. Ordenar o resultado por ordem decrescente de
@@ -295,10 +281,5 @@ FROM medico JOIN consulta ON medico.codigo = consulta.codMed
 WHERE medico.nome LIKE 'P%'
    OR medico.nome LIKE 'C%'
 GROUP BY medico.nome;
-
---      nome     | count
--- --------------+-------
---  Carla Ana    |     1
---  Paulo Rangel |     2
 
 
