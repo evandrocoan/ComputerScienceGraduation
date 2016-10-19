@@ -17,11 +17,12 @@
 
 #include "Tester.h"
 
-/*
- * 
+/**
+ * To run it do: reset;make;./dist/Debug/GNU-Linux/cppcodeexamples
+ * If needed do this on the main root folder CppCodeExamples: chmod 777 *
  */
 int main(int argc, char** argv) {
-    int test = 0;
+    int test = 4;
     switch (test) {
         case 0:
             Tester::TestOperatorOverriding();

@@ -78,8 +78,8 @@ public:
         AbstractionInterface* abstraction = new Abstraction();
         abstraction->operation();
         
-        AbstractionInterface* abstraction2 = new Abstraction();
-        abstraction2->operation();
+        /*AbstractionInterface* abstraction2 = new Abstraction();
+        abstraction2->operation();*/
 
     }
 };

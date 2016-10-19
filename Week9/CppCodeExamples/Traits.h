@@ -26,6 +26,8 @@
     template<> struct Traits<AbstractionInterface> {
         static constexpr bool doublePrecision = false;
         static constexpr bool isRemote = false;
+        static constexpr int aspecto = 0;
+        static constexpr int abstraction = 2;
     };
 
 
