@@ -11,9 +11,22 @@
  * Created on 27 de Setembro de 2016, 22:05
  */
 
+#include "Traits.h"
 #include "Adapter.h"
 
 #include <iostream>
+
+/*
+template< bool condition, typename Then > struct IF
+{
+    Then;
+};
+
+
+template< typename Then, typename Else > struct IF< false, Then >
+{
+    
+};*/
 
 namespace OS {
 
@@ -28,8 +41,20 @@ namespace OS {
 
     void Adapter::operation() {
         std::cout << "void Adapter::operation()" << std::endl;
+        
+        
+        // define to tipo da variavel em tempo de compilação dependendo do arquivo de configuração
+        // Traits. Muito melhor do que ficar fazendo #ifdef... etc.
+        //IF< Traits < AbstractionInterface >::aspecto, this->Scenario::enter() >;
+        
+    #if MINHA_MACRO_FOFINHA > 0
         this->Scenario::enter();
+    #endif
         this->Abstraction::operation();
+    #if MINHA_MACRO_FOFINHA > 0
         this->Scenario::leave();
+    #endif
+        
+        //IF< Traits < AbstractionInterface >::aspecto, this->Scenario::leave() >;
     }
 }

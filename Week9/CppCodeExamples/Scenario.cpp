@@ -19,6 +19,23 @@
 
 #include <iostream>
 
+template< int condition, typename Then, typename Else > struct IF
+{
+    typedef Else Result;
+};
+
+
+template< typename Then, typename Else > struct IF< 1, Then, Else >
+{
+    typedef Then Result;
+};
+
+template< typename Then, typename Else > struct IF< 2, Then, Else >
+{
+    typedef Else Result;
+};
+
+
 namespace OS {
 Scenario::Scenario() {
 }
@@ -32,7 +49,7 @@ Scenario::~Scenario() {
 void Scenario::enter() {
     std::cout << "void Scenario::enter()" << std::endl;
     
-    switch( Traits < AbstractionInterface >::aspecto )
+    /*switch( Traits < AbstractionInterface >::aspecto )
     {
         case 1:
         {
@@ -46,13 +63,18 @@ void Scenario::enter() {
             aspecto2->enter();
             break;
         }
-    }
+    }*/
+    
+    IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result* aspecto = 
+        new IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result();
+    
+    aspecto->enter();
 }
 
 void Scenario::leave() {
     std::cout << "void Scenario::leave()" << std::endl;
     
-    switch( Traits < AbstractionInterface >::aspecto )
+    /*switch( Traits < AbstractionInterface >::aspecto )
     {
         case 1:
         {
@@ -66,6 +88,11 @@ void Scenario::leave() {
             aspecto2->leave();
             break;
         }
-    }
+    }*/
+    
+    IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result* aspecto = 
+        new IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result();
+    
+    aspecto->leave();
 }
 }
