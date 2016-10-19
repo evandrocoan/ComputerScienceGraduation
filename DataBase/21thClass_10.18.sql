@@ -39,12 +39,13 @@ cons_medicame (data, hora, codPac, codMedica)
     (data, hora, codPac) REFERENCIA consulta (data, hora, codPac)
 
 */
--- Recupere os seguintes dados, utilizando comandos SQL:
--- Obs.: se houver alguma consulta cujo retorno seja diferente do apresentado na questão,
--- favor, avisar a professora.
+DO $$ BEGIN
+    RAISE INFO 'Recupere os seguintes dados, utilizando comandos SQL:';
+    RAISE INFO 'Obs.: se houver alguma consulta cujo retorno seja diferente do apresentado na questão,';
+    RAISE INFO 'favor, avisar a professora.';
 
---
--- 1. O nome do paciente mais novo da clínica.
+    RAISE INFO '1. O nome do paciente mais novo da clínica.';
+END $$;
 
 SELECT paciente.nome
 FROM paciente
@@ -56,10 +57,11 @@ WHERE paciente.idade =
 -- -----------------
 --  Maria Aparecida
 
---
--- 2. Obter a data e o horário das consultas da consulta mais cara (o valor  aparece neste
--- resultado apenas para que vejam o valor da consulta mais cara – a consulta SQL não deve
--- retornar isso no select).
+DO $$ BEGIN
+    RAISE INFO '2. Obter a data e o horário das consultas da consulta mais cara (o valor  aparece neste';
+    RAISE INFO 'resultado apenas para que vejam o valor da consulta mais cara – a consulta SQL não deve';
+    RAISE INFO 'retornar isso no select).';
+END $$;
 
 SELECT consulta.data, consulta.hora
 FROM consulta
@@ -70,10 +72,11 @@ WHERE consulta.valor =
 --      Data        hora      valor
 -- "2002-03-21"; "09:00:00";122.0000
 
---
--- 3. (nível difícil) A data que representa o dia com o maior valor total arrecadado com
--- consultas (o sum aparece neste resultado abaixo apenas para que vejam o maior valor
--- arrecadado – a consulta SQL não deve retornar isso no select).
+DO $$ BEGIN
+    RAISE INFO '3. (nível difícil) A data que representa o dia com o maior valor total arrecadado com';
+    RAISE INFO 'consultas (o sum aparece neste resultado abaixo apenas para que vejam o maior valor';
+    RAISE INFO 'arrecadado – a consulta SQL não deve retornar isso no select).';
+END $$;
 
 SELECT resultTableAlias.data
 FROM
@@ -96,9 +99,10 @@ WHERE resultTableAlias.resultColumnAlias =
 -- ------------
 --  2006-03-21
 
---
--- 4. Data e hora das consultas, e nome dos convênios usados. Recupere todas as consultas,
--- mesmo quando não foi usado nenhum convenio.
+DO $$ BEGIN
+    RAISE INFO '4. Data e hora das consultas, e nome dos convênios usados. Recupere todas as consultas,';
+    RAISE INFO 'mesmo quando não foi usado nenhum convenio.';
+END $$;
 
 SELECT consulta.data, consulta.hora, convenio.nome
 FROM consulta LEFT OUTER JOIN convenio ON consulta.codconv = convenio.codigo;
@@ -118,9 +122,10 @@ FROM consulta LEFT OUTER JOIN convenio ON consulta.codconv = convenio.codigo;
 --  2002-03-21 | 09:00:00 | 
 --  2004-10-20 | 15:00:00 | 
 
---
--- 5. No Banco de Dados acima, existe alguma consulta usando NATURAL JOIN que faria sentido?
--- Qual? Mostre o código SQL desta consulta com um filtro na cláusula WHERE.
+DO $$ BEGIN
+    RAISE INFO '5. No Banco de Dados acima, existe alguma consulta usando NATURAL JOIN que faria sentido?';
+    RAISE INFO 'Qual? Mostre o código SQL desta consulta com um filtro na cláusula WHERE.';
+END $$;
 
 SELECT DISTINCT medicamento.descricao
 FROM consulta NATURAL JOIN cons_medicame
@@ -139,10 +144,11 @@ WHERE consulta.data > '2000/05/05';
 --  Aspirina
 --  Olina
 
---
--- 6. Data das consultas e descrição dos medicamentos usados. Recupere todas as consultas,
--- mesmo aquelas em que não houve prescrição de nenhum medicamento. Ordene a resposta por
--- ordem crescente de descrição.
+DO $$ BEGIN
+    RAISE INFO '6. Data das consultas e descrição dos medicamentos usados. Recupere todas as consultas,';
+    RAISE INFO 'mesmo aquelas em que não houve prescrição de nenhum medicamento. Ordene a resposta por';
+    RAISE INFO 'ordem crescente de descrição.';
+END $$;
 
 SELECT consulta.data, medicamento.descricao
 FROM consulta LEFT OUTER JOIN cons_medicame ON ( consulta.data   = cons_medicame.data
@@ -174,9 +180,11 @@ ORDER BY medicamento.descricao;
 --  2006-03-21 | 
 --  2002-03-21 | 
 
---
--- 7. Selecionar o nome do paciente que seja mais velho do que todos os pacientes da cidade
--- de “Cruz Alta” (Coloquei mais colunas no SELECT para vocês visualizarem as idades).
+DO $$ BEGIN
+    RAISE INFO '7. Selecionar o nome do paciente que seja mais velho do que todos os pacientes da cidade';
+    RAISE INFO 'de “Cruz Alta” (Coloquei mais colunas no SELECT para vocês visualizarem as idades).';
+END $$;
+
 -- WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, 
 SELECT paciente.nome, paciente.idade, cidade.nome
 FROM paciente JOIN cidade ON paciente.codCid = cidade.codigo
@@ -188,7 +196,7 @@ WHERE cidade.nome = 'Cruz Alta'
             (
                 SELECT paciente.nome, paciente.idade
                 FROM paciente JOIN cidade ON paciente.codCid = cidade.codigo
-                WHERE cidade.nome = 'Cruz Alta'
+                WHERE cidade.nome = 'Cruz Alta';
             ) pacientesDeCruzAlta
     );
 
@@ -214,9 +222,11 @@ WHERE cidade.nome = 'Cruz Alta';
 --  Pedro Avares       |    20 | Carazinho
 -- (10 rows)
 
---
--- 8. Uma consulta com NATURAL JOIN entre paciente e medico, qual seria o resultado?
--- Mostre o SQL.
+DO $$ BEGIN
+    RAISE INFO '8. Uma consulta com NATURAL JOIN entre paciente e medico, qual seria o resultado?';
+    RAISE INFO 'Mostre o SQL.';
+END $$;
+
 -- WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, 
 SELECT *
 FROM paciente NATURAL JOIN medico;
@@ -225,9 +235,11 @@ FROM paciente NATURAL JOIN medico;
 -- --------+------+-------+--------+------+---------+-------+-----
 -- (0 rows)
 
---
--- 9. Nome dos médicos e áreas de suas especializações. Recupere médicos que não tem
--- especialização e especializações que não foram associadas a nenhum médico.
+DO $$ BEGIN
+    RAISE INFO '9. Nome dos médicos e áreas de suas especializações. Recupere médicos que não tem';
+    RAISE INFO 'especialização e especializações que não foram associadas a nenhum médico.';
+END $$;
+
 -- WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, 
 SELECT medico.nome, especializacao.nome
 FROM medEsp FULL OUTER JOIN medico        ON medEsp.codMed = medico.codigo
@@ -268,9 +280,11 @@ FROM medEsp FULL OUTER JOIN medico        ON medEsp.codMed = medico.codigo
 --                   | Clínico Geral
 -- (15 rows)
 
---
--- 10. Nomes dos pacientes e datas de suas consultas anteriores a 2007. Mesmo os
--- pacientes que não tiveram consulta nesta época devem aparecer no resultado.
+DO $$ BEGIN
+    RAISE INFO '10. Nomes dos pacientes e datas de suas consultas anteriores a 2007. Mesmo os';
+    RAISE INFO 'pacientes que não tiveram consulta nesta época devem aparecer no resultado.';
+END $$;
+
 -- WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, WRONG, 
 SELECT paciente.nome, consulta.data
 FROM paciente LEFT OUTER JOIN consulta ON paciente.codigo = consulta.codPac
@@ -295,10 +309,11 @@ FROM paciente LEFT OUTER JOIN consulta ON paciente.codigo = consulta.codPac
 --  Joana Darq         | 
 -- (15 rows)
 
---
--- 11. Nome, email e idade dos pacientes e quantidade de consultas já realizadas na
--- clínica. Mesmo os pacientes que não tiveram consulta devem aparecer no resultado.
--- Ordenar o resultado pela quantidade.
+DO $$ BEGIN
+    RAISE INFO '11. Nome, email e idade dos pacientes e quantidade de consultas já realizadas na';
+    RAISE INFO 'clínica. Mesmo os pacientes que não tiveram consulta devem aparecer no resultado.';
+    RAISE INFO 'Ordenar o resultado pela quantidade.';
+END $$;
 
 SELECT paciente.nome, paciente.email, paciente.idade, COUNT( consulta.codPac )
 FROM consulta RIGHT OUTER JOIN paciente ON consulta.codPac = paciente.codigo
@@ -330,9 +345,10 @@ ORDER BY 4;
 -- "Marcos Vinicius";"";45;2
 -- "Antonio Carlos";"ac@a.bcd.efg";12;4
 
---
--- 12. Nome e fone dos pacientes e valor total já gasto com consultas. Mesmo os
--- pacientes que não tiveram consulta devem aparecer no resultado. Ordenar o resultado pelo somatório.
+DO $$ BEGIN
+    RAISE INFO '12. Nome e fone dos pacientes e valor total já gasto com consultas. Mesmo os';
+    RAISE INFO 'pacientes que não tiveram consulta devem aparecer no resultado. Ordenar o resultado pelo somatório.';
+END $$;
 
 SELECT paciente.nome, paciente.fone, SUM( consulta.valor )
 FROM paciente LEFT OUTER JOIN consulta ON paciente.codigo = consulta.codPac
@@ -351,11 +367,10 @@ ORDER BY 3;
 -- "Pedro Avares";"13239830";
 
 
-do $$ begin
+DO $$ BEGIN
     RAISE INFO 'col1      col2';  
     RAISE INFO '-----    -------';  
-end
-$$
+END $$;
 
 
 
