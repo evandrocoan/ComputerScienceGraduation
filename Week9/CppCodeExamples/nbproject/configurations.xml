@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Arquivos de Cabeçalho"
+                   projectFiles="true">
+      <itemPath>Abstraction.h</itemPath>
+      <itemPath>AbstractionInterface.h</itemPath>
+      <itemPath>Abstraction_OS.h</itemPath>
+      <itemPath>Adapter.h</itemPath>
+      <itemPath>FractionNumber.h</itemPath>
+      <itemPath>Handle.h</itemPath>
+      <itemPath>Proxy.h</itemPath>
+      <itemPath>Scenario.h</itemPath>
+      <itemPath>Stub.h</itemPath>
+      <itemPath>Templater.h</itemPath>
+      <itemPath>Tester.h</itemPath>
+      <itemPath>Traits.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Arquivos de Código-Fonte"
+                   projectFiles="true">
+      <itemPath>Abstraction.cpp</itemPath>
+      <itemPath>Abstraction_OS.cpp</itemPath>
+      <itemPath>Adapter.cpp</itemPath>
+      <itemPath>FractionNumber.cpp</itemPath>
+      <itemPath>Handle.cpp</itemPath>
+      <itemPath>Proxy.cpp</itemPath>
+      <itemPath>Scenario.cpp</itemPath>
+      <itemPath>Stub.cpp</itemPath>
+      <itemPath>Tester.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Arquivos de Recurso"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Arquivos de Teste"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Arquivos Importantes"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandlineTool>g++</commandlineTool>
+        </ccTool>
+      </compileType>
+      <item path="Abstraction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Abstraction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AbstractionInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Abstraction_OS.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Abstraction_OS.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Adapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Adapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FractionNumber.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FractionNumber.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Handle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Handle.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Proxy.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Proxy.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Scenario.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Scenario.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stub.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stub.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Templater.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Tester.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Tester.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Traits.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Abstraction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Abstraction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AbstractionInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Abstraction_OS.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Abstraction_OS.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Adapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Adapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FractionNumber.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FractionNumber.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Handle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Handle.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Proxy.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Proxy.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Scenario.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Scenario.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stub.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Stub.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Templater.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Tester.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Tester.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Traits.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
