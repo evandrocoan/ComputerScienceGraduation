@@ -69,50 +69,133 @@ function x = f( x )
     x = log( x );
 end
 
-
-a = 1
-b = 2
-n = 2
-
-h = ( b - a ) / n
-x = 1: h : 2
-y = f( x )
-
-
-coef_by_polyfit = polyfit( x, y, n )
-
-# O Octave/Mathematica invertem os coeficientes do polinômio, por isso a utilizamos
-# a funções fliplr para inverte-los.
-# 
-# coef_by_polyfit = fliplr( coef_by_polyfit )
-
-# coef_by_polyfit =
-#   -0.235566071312766   1.399845394498243  -1.164279323185477
-# 
-# -0.235566071312766*x^2 + 1.399845394498243*x^1 - 1.164279323185477*x^0
-#
-
-coef_by_me = interpolacaoPolinomial( x, y, n )
-
-# coef_by_me =
-#   -1.164279323185479   1.399845394498246  -0.235566071312767
-# 
-# -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
-
-xp = a : h / 20 : b;
-#yp = f( xp );
-
-function x = fPn( n, a, xp )
+function yp = fPnPorHorner( n, a, xp )
     
-    aux1 = a(n) + a(n+1)*xp;
     
-    aux2 = 
-    
-    #yp  = aux*xp + a(n-1); 
+    for k = 1 : length( xp )
+        
+        # Precisamos limpar auxiliar a cada iteração
+        aux = a( n + 1 );
+        
+        for i = n : -1 : 1
+            
+            aux = a( i ) + xp( k )*aux;
+            
+        end
+        
+        yp( k ) = aux;
+        
+    end
     
 end
 
-yp = fPn( n, coef_by_me, xp )
+function yp = fPnPorBriotRunifi( n, a, xp )
+    
+    a      = fliplr( a );
+    b( 1 ) = a( 1 );
+    
+    for k = 1 : length( xp )
+        
+        for i = 2 : n + 1
+            
+            b( i ) = a( i ) + xp( k )*b( i - 1 );
+            
+        end
+        
+        yp( k ) = b( n + 1 );
+        
+    end
+    
+end
 
-plot( x, y, '*', 2.2, 0, xp, xp, 'k' )
+passos         = 0;
+tolerancia     = sqrt( 10 )*1.e-6;
+erroMaximoDePn = 1;
+
+a = 1
+b = 2
+n = 1
+
+while erroMaximoDePn > tolerancia && passos < 100
+
+    h = ( b - a ) / n;
+    x = 1: h : 2;
+    y = f( x );
+
+    passos          = passos + 1;
+    coef_by_polyfit = polyfit( x, y, n );
+
+    # O Octave/Mathematica invertem os coeficientes do polinômio, por isso a utilizamos
+    # a funções fliplr para inverte-los.
+    # 
+    # coef_by_polyfit = fliplr( coef_by_polyfit )
+
+    # coef_by_polyfit =
+    #   -0.235566071312766   1.399845394498243  -1.164279323185477
+    # 
+    # -0.235566071312766*x^2 + 1.399845394498243*x^1 - 1.164279323185477*x^0
+    #
+
+    coef_by_me = interpolacaoPolinomial( x, y, n );
+
+    # coef_by_me =
+    #   -1.164279323185479   1.399845394498246  -0.235566071312767
+    # 
+    # -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
+
+    xp = a : h / 20 : b;
+    #yp = f( xp );
+
+    # Aqui calculamos o valor do polinômio nos pontos xp, utilizando o método de Horner e de Briot Rufini.
+    # Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
+    # a(1) + a(2)*x^1 + a(3)*x(^2)+...+a(n+1)*x^n
+    # 
+    #yp = fPnPorBriotRunifi( n, coef_by_me, xp )
+    yp = fPnPorHorner( n, coef_by_me, xp );
+
+    yExato = f( xp );
+
+
+    erroDePn       = abs( yp .- yExato );
+    erroMaximoDePn = max( erroDePn );
+
+end
+
+#plot( x, y, '*', 2.2, 0, xp, yp, 'r', xp, yExato, 'c' )
+
+plot( xp, erroDePn, 'm', 'linewidth', 2 )
+legend( 'Erro de P(n)', 'location', 'north' )
+
+# Erro de Pn Maximo ( Serie de Taylor ) = max( abs( f_devirade_de_ordem( n + 1 )( x ) ) )*h( n + 1 ) / 4*( n + 1 )
+# h = ( b - a ) / n
+# Se n = 2, f( x ) = log( x )
+# f'( x )     = x^-1
+# f''( x )    = ( -1 )*x^-2
+# f'''( x )   = ( -1 )*( -2 )*x^-3
+# f''''( x )  = ( -1 )*( -2 )*( -3 )*x^-4
+#
+# max( abs( f'''( x )_x=1 = abs( ( -1 )*( -2 )*( 1 )^-3
+# = 2
+#
+# ErroDePn = abs( 2 )*( 0.5 )^( 2 + 1 ) / 4( 2 + 1 )
+#
+# ErroDePnEstimado = 0.
+#
+# Estimativa conservativa é uma estimativa que visa sempre o pior caso, ou seja, tende a ser mais
+# alta do que o erro máximo real. Assim serve para fazer uma previsão.
+# 
+# 
+# Se for maior do que 10^( 1/2 ) = 3.16... A ordem do erro é 1.(e+1)
+# Se for menor do que 10^( 1/2 ) = 3.16... A ordem do erro é 1.(e)
+# 
+# Exemplo: 
+# 4e-6, tem ordem de erro igual a -5
+# 3e-6, tem ordem de erro igual a -6
+# 
+# O erro do polinomio de interpolacao tem maior erro nas pontos por que elas estão mais soltas,
+# pois na sua esquerda e direita não há outros pontos para prende-las.
+# 
+
+
+
 

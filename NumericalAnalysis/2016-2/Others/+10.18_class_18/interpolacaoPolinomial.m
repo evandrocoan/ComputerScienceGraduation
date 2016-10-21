@@ -17,7 +17,7 @@ function coeficientes = interpolacaoPolinomial( x, y, grau_do_polinomio )
         
     end
     
-    A
+    A;
     coeficientes = fgauss( numero_de_coeficientes, A );
     
 end
