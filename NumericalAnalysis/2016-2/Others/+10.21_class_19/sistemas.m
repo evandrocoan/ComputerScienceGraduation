@@ -16,8 +16,8 @@ end
 
 Mas como determinar o `n` em função do erro com 1e-6
 e o `a`?
-    O erro é: Erro = ValorAproximado - ValorExato
     Error(x) = Pn(x) - f(x)
+    O erro é: ErroMax = max( ValorAproximado .- ValorExato )
 
 Exemplo:
 
@@ -30,7 +30,7 @@ f(x) = a(1) + a(2)*x^1 + a(3)*x^2
 Então, para resolver esse problema basta criar um sistema com 3 equações,
 utilizando/escolhendo 3 pontos para calcular a função f(x).
 
-Dividindo o nosso intervalo [ 1, 2 ] em 3 pontos, pois temos três incógnitas a(1), a(2) e a(3).
+Dividindo o nosso intervalo [ 1, 2 ] em 3 pontos 1, 1.5 e 2 então temos três incógnitas a(1), a(2) e a(3).
 
 Para x = 1, 1.5 e 2:
 f(x) = a(1) + a(2)*x^1 + a(3)*x^2
@@ -69,60 +69,23 @@ function x = f( x )
     x = log( x );
 end
 
-function yp = fPnPorHorner( n, a, xp )
-    
-    
-    for k = 1 : length( xp )
-        
-        # Precisamos limpar auxiliar a cada iteração
-        aux = a( n + 1 );
-        
-        for i = n : -1 : 1
-            
-            aux = a( i ) + xp( k )*aux;
-            
-        end
-        
-        yp( k ) = aux;
-        
-    end
-    
-end
 
-function yp = fPnPorBriotRunifi( n, a, xp )
-    
-    a      = fliplr( a );
-    b( 1 ) = a( 1 );
-    
-    for k = 1 : length( xp )
-        
-        for i = 2 : n + 1
-            
-            b( i ) = a( i ) + xp( k )*b( i - 1 );
-            
-        end
-        
-        yp( k ) = b( n + 1 );
-        
-    end
-    
-end
 
 passos         = 0;
-tolerancia     = sqrt( 10 )*1.e-6;
+tolerancia     = sqrt( 10 )*1.e-8;
 erroMaximoDePn = 1;
 
 a = 1
 b = 2
 n = 1
 
-while erroMaximoDePn > tolerancia && passos < 100
+while erroMaximoDePn > tolerancia && passos < 20
 
     h = ( b - a ) / n;
     x = 1: h : 2;
     y = f( x );
 
-    passos          = passos + 1;
+    passos          = passos + 1
     coef_by_polyfit = polyfit( x, y, n );
 
     # O Octave/Mathematica invertem os coeficientes do polinômio, por isso a utilizamos
@@ -155,11 +118,17 @@ while erroMaximoDePn > tolerancia && passos < 100
 
     yExato = f( xp );
 
-
     erroDePn       = abs( yp .- yExato );
     erroMaximoDePn = max( erroDePn );
 
+    n = n + 1;
+
 end
+
+n
+passos
+erroDePn
+erroMaximoDePn
 
 #plot( x, y, '*', 2.2, 0, xp, yp, 'r', xp, yExato, 'c' )
 
@@ -192,7 +161,7 @@ legend( 'Erro de P(n)', 'location', 'north' )
 # 4e-6, tem ordem de erro igual a -5
 # 3e-6, tem ordem de erro igual a -6
 # 
-# O erro do polinomio de interpolacao tem maior erro nas pontos por que elas estão mais soltas,
+# O erro do polinômio de interpolação tem maior erro nas pontos por que elas estão mais soltas,
 # pois na sua esquerda e direita não há outros pontos para prende-las.
 # 
 

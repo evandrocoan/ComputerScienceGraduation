@@ -1,3 +1,10 @@
+#
+# Matrix form:
+#
+# a( 1 )*x(1)^0 + a( 2 )*x(1)^1 + a( 3 )*x(1)^2 = f( x(1) )
+# a( 1 )*x(2)^0 + a( 2 )*x(2)^1 + a( 3 )*x(2)^2 = f( x(2) )
+# a( 1 )*x(3)^0 + a( 2 )*x(3)^1 + a( 3 )*x(3)^2 = f( x(3) )
+#
 function coeficientes = interpolacaoPolinomial( x, y, grau_do_polinomio )
     
     numero_de_coeficientes = grau_do_polinomio + 1;
@@ -17,7 +24,7 @@ function coeficientes = interpolacaoPolinomial( x, y, grau_do_polinomio )
         
     end
     
-    A
+    A;
     coeficientes = fgauss( numero_de_coeficientes, A );
     
 end
