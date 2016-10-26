@@ -14,7 +14,7 @@
 #ifndef TRAITS_H
 #define TRAITS_H
 
-#define MINHA_MACRO_FOFINHA 1
+#define ASPECTO_MACRO Aspecto1
 
 #include "AbstractionInterface.h"
 
@@ -25,11 +25,10 @@
         static const bool enabled = true;
     };
 
-    template<> struct Traits<AbstractionInterface> {
+    template<> struct Traits<AbstractionInterface> 
+    {
         static constexpr bool doublePrecision = false;
         static constexpr bool isRemote = false;
-        static constexpr int aspecto = MINHA_MACRO_FOFINHA;
-        static constexpr int abstraction = 2;
     };
 
 

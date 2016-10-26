@@ -19,7 +19,13 @@
 
 namespace OS {
 
-    class Adapter : public Abstraction, public Scenario {
+    class Adapter : public Abstraction
+    
+    #if defined ASPECTO_MACRO
+    , public Scenario
+    #endif
+    
+    {
     public:
         Adapter();
         Adapter(const Adapter& orig);

@@ -65,8 +65,7 @@ void Scenario::enter() {
         }
     }*/
     
-    IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result* aspecto = 
-        new IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result();
+    ASPECTO_MACRO* aspecto = new ASPECTO_MACRO();
     
     aspecto->enter();
 }
@@ -90,8 +89,7 @@ void Scenario::leave() {
         }
     }*/
     
-    IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result* aspecto = 
-        new IF< Traits < AbstractionInterface >::aspecto, Aspecto1, Aspecto2 >::Result();
+    ASPECTO_MACRO* aspecto = new ASPECTO_MACRO();
     
     aspecto->leave();
 }

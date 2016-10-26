@@ -47,11 +47,13 @@ namespace OS {
         // Traits. Muito melhor do que ficar fazendo #ifdef... etc.
         //IF< Traits < AbstractionInterface >::aspecto, this->Scenario::enter() >;
         
-    #if MINHA_MACRO_FOFINHA > 0
+    #if defined ASPECTO_MACRO
         this->Scenario::enter();
     #endif
+        
         this->Abstraction::operation();
-    #if MINHA_MACRO_FOFINHA > 0
+        
+    #if defined ASPECTO_MACRO
         this->Scenario::leave();
     #endif
         
