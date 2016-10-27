@@ -132,9 +132,9 @@ FROM
                 FROM cliente
             )
         ) todoMundo
-        
+
     EXCEPT
-        
+
         SELECT *
         FROM
         (
@@ -147,7 +147,7 @@ FROM
                 SELECT cliente.codigo, cliente.nome
                 FROM cliente JOIN venda ON cliente.codigo = venda.codclie
             )
-        
+
         ) todasVendas
 
 ) resultado
@@ -188,7 +188,7 @@ EXCEPT
         --    sells as `NULL`.
         SELECT cliente.nome, cliente.email
         FROM cliente JOIN venda     ON cliente.codigo = venda.codclie
-                     JOIN 
+                     JOIN
         (
             -- 2. We select all the clients names, emails and sell types as a new table `novaVenda`.
             SELECT venda.codclie, venda.tipo, cliente.nome, cliente.email
