@@ -25,6 +25,7 @@ funcionario (codigo, nome, email, dtaNasc, salario)
 venda (numero, data, hora, codclie#, codFun#, tipo)
    codClie REFERENCES cliente (codigo)
    codFun REFERENCES funcionario (codigo)
+
 produto (codigo, nome, preco, qtdEstoque)
 produtoVendido (numero#, codProd#, qtd, valor)
    numero REFERENCES venda (numero),
@@ -60,8 +61,7 @@ produtoVendido (numero#, codProd#, qtd, valor)
 \echo 'INFO: Usando NOT EXISTS'
 \echo 'INFO:'
 
-SELECT naoVendidos.nome, naoVendidos.preco
-FROM
+WITH naoVendidos AS
 (
     SELECT produto.nome, produto.preco
     FROM produto
@@ -71,21 +71,14 @@ FROM
         FROM produtoVendido
         WHERE produtoVendido.codProd = produto.codigo
     )
-) naoVendidos
+)
+
+SELECT naoVendidos.nome, naoVendidos.preco
+FROM naoVendidos
 WHERE naoVendidos.preco =
 (
     SELECT MAX( naoVendidos.preco )
-    FROM
-    (
-        SELECT produto.nome, produto.preco
-        FROM produto
-        WHERE NOT EXISTS
-        (
-            SELECT *
-            FROM produtoVendido
-            WHERE produtoVendido.codProd = produto.codigo
-        )
-    ) naoVendidos
+    FROM naoVendidos
 );
 
 \echo 'INFO:'
@@ -115,8 +108,6 @@ WHERE NOT EXISTS
     )
 );
 
-
-
 \echo 'INFO:'
 \echo 'INFO:'
 \echo 'INFO:'
@@ -139,6 +130,160 @@ FROM venda LEFT JOIN cliente ON venda.codclie = cliente.codigo;
 \echo 'INFO: 4. Nomes dos produtos que não foram vendidos no período de: início de 2004 até'
 \echo 'INFO: final de 2007. Usando NOT EXISTS.'
 \echo 'INFO:'
+
+SELECT produto.nome
+FROM produto
+WHERE NOT EXISTS
+(
+    SELECT *
+    FROM produtoVendido
+    WHERE produto.codigo = produtoVendido.codProd AND EXISTS
+    (
+        SELECT *
+        FROM venda
+        WHERE venda.data > '2003/12/31' AND venda.data < '2008/01/01'
+    )
+);
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: 5. Nomes dos produtos cujo preço de venda seja inferior ao seu preço de custo.'
+\echo 'INFO: USAR EXISTS.'
+\echo 'INFO:'
+
+SELECT produto.nome, produto.preco
+FROM produto
+WHERE EXISTS
+(
+    SELECT *
+    FROM produtoVendido
+    WHERE produto.codigo = produtoVendido.codProd AND produto.preco > produtoVendido.valor
+);
+
+/*
+SELECT *
+FROM produto;
+
+SELECT *
+FROM produtoVendido;
+*/
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: 6. Retornar o nome do funcionário que também já foi cliente. Neste caso, uma mesma'
+\echo 'INFO: pessoa é identificada pelo nome + e-mail, ou seja, cliente e funcionário que têm'
+\echo 'INFO: o mesmo nome e o mesmo e-mail são consideradas a mesma pessoa.'
+\echo 'INFO: a. Usando EXISTS'
+\echo 'INFO:'
+
+SELECT funcionario.nome
+FROM funcionario
+WHERE EXISTS
+(
+    SELECT *
+    FROM cliente
+    WHERE funcionario.nome = cliente.nome AND funcionario.email = cliente.email
+);
+
+/*
+SELECT *
+FROM cliente;
+
+SELECT *
+FROM funcionario;
+*/
+
+\echo 'INFO: b. Usando JOIN'
+\echo 'INFO:'
+
+SELECT funcionario.nome
+FROM funcionario JOIN cliente ON funcionario.nome  = cliente.nome
+                             AND funcionario.email = cliente.email;
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: 7. Data de venda, nome do produto e o valor total vendido. Só recuperar as vendas'
+\echo 'INFO: realizadas no período de: início de 2003 até final de 2004, com o total superior'
+\echo 'INFO: a 100. Ordene por data de venda.'
+\echo 'INFO:'
+
+SELECT *
+FROM
+(
+    SELECT venda.data, produto.nome, produtoVendido.qtd * produtoVendido.valor AS TotalVendido
+    FROM produto JOIN produtoVendido ON produto.codigo = produtoVendido.codProd
+                 JOIN venda          ON venda.numero   = produtoVendido.numero
+    WHERE venda.data > '2002/12/31' AND venda.data < '2005/01/01'
+) resultTable
+WHERE resultTable.TotalVendido > 100;
+
+/*
+SELECT *
+FROM venda;
+*/
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: 8. Data da venda, nome do funcionário que efetuou a venda e total vendido para o'
+\echo 'INFO: cliente \'Monira Rosa\'. Ordene por data de venda.'
+\echo 'INFO:'
+
+SELECT venda.data, funcionario.nome, produtoVendido.valor * produtoVendido.qtd AS TotalVendido
+FROM venda JOIN funcionario    ON venda.codFun = funcionario.codigo
+           JOIN produtoVendido ON venda.numero = produtoVendido.numero
+WHERE EXISTS
+(
+    SELECT *
+    FROM cliente
+    WHERE cliente.nome = 'Monira Rosa' AND cliente.codigo = venda.codclie
+)
+ORDER BY venda.data;
+
+/*
+SELECT *
+FROM cliente JOIN venda          ON cliente.codigo = venda.codclie
+             JOIN produtoVendido ON venda.numero   = produtoVendido.numero; 
+*/
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: 9. Selecionar o nome do funcionário sujo salário é maior do que o funcionário'
+\echo 'INFO: mais velho da empresa.'
+\echo 'INFO:'
+
+SELECT funcionario.nome, funcionario.salario
+FROM funcionario
+WHERE EXISTS
+(
+    SELECT *
+    FROM funcionario funcionarioMaisVelhos
+    WHERE funcionarioMaisVelhos.dtaNasc =
+    (
+        SELECT MIN( idadeDoMaisVelhos.dtaNasc )
+        FROM funcionario idadeDoMaisVelhos
+    ) AND funcionarioMaisVelhos.salario < funcionario.salario
+);
+
 
 
 
