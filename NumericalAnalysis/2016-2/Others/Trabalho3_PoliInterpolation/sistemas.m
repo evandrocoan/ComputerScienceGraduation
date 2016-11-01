@@ -56,7 +56,7 @@ printf( "Sugestão: Monte um algoritmo de busca que incremente sequencialmente o
 printf( "‘n’, enquanto o erro de truncamento máximo exato esteja maior que √10*10-2.\n\n" )
 
 
-function x = f( x )
+function x = f61( x )
     x = sin( x );
 end
 
@@ -73,7 +73,7 @@ while erroMaximoDePn > tolerancia && passos < 20
     n = n + 1;
     h = ( b - a ) / n;
     x = a : h : b;
-    y = f( x );
+    y = f61( x );
 
     passos = passos + 1;
 
@@ -85,7 +85,7 @@ while erroMaximoDePn > tolerancia && passos < 20
     coef_by_polyfit = fliplr( polyfit( x, y, n ) );
 
     xInterPontos = a : h / 20 : b;
-    yInterPontos = f( xInterPontos );
+    yInterPontos = f61( xInterPontos );
 
     # Aqui calculamos o valor do polinômio nos pontos xInterPontos, utilizando o método de Horner e de Briot Rufini.
     # Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
@@ -121,6 +121,82 @@ printf( "série de Maclaurin Mn(x).\n" )
 printf( "Determine, ou monte um algoritmo de busca que determine, o grau ‘n’ mínimo\n" )
 printf( "necessário e os coeficientes de Mn(x), para que o erro de truncamento máximo\n" )
 printf( "‘exato’ entre Mn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2);\n\n" )
+
+function x = f62( x )
+    x = sin( x );
+end
+
+tolerancia = sqrt(10)*1e-2
+
+clc
+clear
+
+%f(x)=sen(x); com x entre [a=-1;b=+1]
+n = 1;
+a = -1
+b = +1
+numeroMaximoDePassos = 100
+
+%N. de pontos para plotar os resultados aproximados
+np = 100;
+hp = (b-a)/np;
+xp = a:hp:b;
+
+%valores exatos para plotagem
+ye = sin(xp); 
+
+%Serie de Maclaurin
+%coeficientes de Maclaurin ordem crescente de grau
+for i=1:numeroMaximoDePassos/2
+
+    ii=2*i;
+    c(ii-1)=0;
+    c(ii)=(-1)^(i-1)/factorial(2*i-1);
+
+end
+
+c
+n         = 0;
+passos    = 0;
+erromaxMn = 1;
+
+%O(1e-2)
+while( erromaxMn>sqrt(10)*1e-2 && passos < numeroMaximoDePassos ) 
+
+    passos = passos + 1;
+    n=n+1
+    % t=0.5.*(b.-a).+0.5.*(b.+a);
+    % Aprox. serie Maclaurin
+    yiM =fPnPorHorner(n, c, xp);
+    erroMn=abs(yiM.-ye);
+    erromaxMn=max(erroMn)
+
+end
+
+'Maclaurin'
+n
+erromaxMn
+'coeficientes da serie de MacLaurim:'
+c(1:n+1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
