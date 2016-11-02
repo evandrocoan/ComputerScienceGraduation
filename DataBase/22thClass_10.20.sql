@@ -13,12 +13,12 @@ Trabalhaem(codEmp, codProj, horasTrab)
 */
 
 -- below code assumes that the name of your schema is public
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
+DROP SCHEMA PUBLIC CASCADE;
+CREATE SCHEMA PUBLIC;
 
 -- For PostgreSQL 9.3 or greater, you may also need to restore the default grants.
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO public;
+GRANT ALL ON SCHEMA PUBLIC TO postgres;
+GRANT ALL ON SCHEMA PUBLIC TO PUBLIC;
 
 \echo 'INFO:'
 \echo 'INFO:'
@@ -112,10 +112,10 @@ CREATE TABLE Trabalhaem
 
 \echo 'INFO: Departamento (codDepto, nome)'
 
-insert into Departamento VALUES( 1, 'Dep: Ticular' );
-insert into Departamento VALUES( 2, 'Dep: ParUni'  );
-insert into Departamento VALUES( 3, 'Pesquisa'     );
-insert into Departamento VALUES( 4, 'Dep: Tarar'   );
+INSERT INTO Departamento VALUES( 1, 'Dep: Ticular' );
+INSERT INTO Departamento VALUES( 2, 'Dep: ParUni'  );
+INSERT INTO Departamento VALUES( 3, 'Pesquisa'     );
+INSERT INTO Departamento VALUES( 4, 'Dep: Tarar'   );
 
 \echo 'INFO: Empregado (codemp, nome, endereco, dataNasc, salario, codDepto)'
 \echo 'INFO:     codDepto referencia departamento (codDepto)'
@@ -128,10 +128,10 @@ INSERT INTO Empregado( codemp, nome, endereco, dataNasc, salario, codDepto ) VAL
 
 \echo 'INFO: Projeto (codproj, titulo)'
 
-insert into Projeto VALUES( 1, 'Proj: Particular' );
-insert into Projeto VALUES( 2, 'Proj: Uni'        );
-insert into Projeto VALUES( 3, 'Transmogrifador'  );
-insert into Projeto VALUES( 4, 'Tarar'            );
+INSERT INTO Projeto VALUES( 1, 'Proj: Particular' );
+INSERT INTO Projeto VALUES( 2, 'Proj: Uni'        );
+INSERT INTO Projeto VALUES( 3, 'Transmogrifador'  );
+INSERT INTO Projeto VALUES( 4, 'Tarar'            );
 
 \echo 'INFO: Trabalhaem(codEmp, codProj, horasTrab)'
 \echo 'INFO:     codEmp referencia Empregado (codEmp)'
@@ -226,7 +226,7 @@ WHERE empregado.nome LIKE 'A%';
 
 SELECT empregado.nome, empregado.dataNasc
 FROM empregado
-WHERE EXTRACT( month FROM empregado.dataNasc ) = 10;
+WHERE EXTRACT( MONTH FROM empregado.dataNasc ) = 10;
 
 \echo 'INFO:'
 \echo 'INFO:'
@@ -380,7 +380,7 @@ WITH ContagemTable AS
 
 SELECT ContagemTable.titulo
 FROM ContagemTable
-WHERE ContagemTable.count = 
+WHERE ContagemTable.count =
     (
         SELECT MAX( ContagemTable.count )
         FROM ContagemTable JOIN Projeto ON ContagemTable.codproj = Projeto.codproj
