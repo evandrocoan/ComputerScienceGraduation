@@ -1,4 +1,6 @@
 #{
+Vandermonde matrix: https://en.wikipedia.org/wiki/Vandermonde_matrix
+
 Determine uma aproximação para
 
 function x = f( x )
