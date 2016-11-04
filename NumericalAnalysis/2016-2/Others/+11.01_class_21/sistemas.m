@@ -31,6 +31,8 @@ function x = fLog( x )
 end
 
 # Linear transformation to convert the [a, b] domain to [-1, 1] domain.
+# We may call it as `t(x)`.
+# 
 function t = MaclaurinLinearTransformationDomainIn( x, a, b )
     
     t = ( 2*x - (b+a) ) / ( b-a );
@@ -38,6 +40,10 @@ function t = MaclaurinLinearTransformationDomainIn( x, a, b )
 end
 
 # Linear transformation to convert the [-1, 1] domain to [a, b] domain.
+# 
+# We may call it as `x(t)`. On this way, we apply the the approximation
+# methods to the `f(x(t))`, were `x` belongs to the Domain [a, b].
+# 
 function x = MaclaurinLinearTransformationDomainOut( t, a, b )
     
     x = ( (b-a)*t + (b+a) ) / 2;
@@ -45,15 +51,16 @@ function x = MaclaurinLinearTransformationDomainOut( t, a, b )
 end
 
 # 
+# Function: log( x )
 # For the Domain [-1, 1]
-# MaclaurinSeries( 0 ) = f( 0 ) + (f'( 0 )*q^1) / 1! + (f''( 0 )*q^2) / 2! + ... + (f^n'( 0 )*q^n) / n!
+# MaclaurinSeries( 0 ) = f( 0 ) + (f'( 0 )*z^1) / 1! + (f''( 0 )*z^2) / 2! + ... + (f^n'( 0 )*z^n) / n!
 # 
 # For the Domain [a, b]
 # MaclaurinSeries( 0 ) = f( 0 )
-#                        + (f'( 0 )*q^1) / 1!
-#                        + (f''( 0 )*q^2) / 2!
+#                        + (f'( 0 )*z^1) / 1!
+#                        + (f''( 0 )*z^2) / 2!
 #                        + ...
-#                        + (f^n'( 0 )*q^n) / n!
+#                        + (f^n'( 0 )*z^n) / n!
 # 
 function coef = fMaclaurinForLog( n, a, b )
     
@@ -62,15 +69,13 @@ function coef = fMaclaurinForLog( n, a, b )
     # to the original or correct Domain [a, b] for the function `fLog`.
     # This is the whole reason why we may apply the derivative functions on the 0 point.
     MaclaurinDomainPointZero = MaclaurinLinearTransformationDomainOut( 0, a, b )
-    OriginalDomainPointZero  = MaclaurinLinearTransformationDomainIn ( 1.5, a, b )
     
-    their = ( b - a ) / ( b + a )
-    
+    cache = ( b - a ) / ( b + a )
     coef( 1 ) = fLog( MaclaurinDomainPointZero )
     
-    for i = 1 : n
+    for i = 2 : n + 1
         
-        coef( i + 1 ) =  (-1)^(i+1) * ( their^( i ) ) / ( i );
+        coef( i ) =  (-1)^(i) * (cache^(i-1)) / (i-1);
         
     end
     
