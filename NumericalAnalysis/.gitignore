@@ -4,6 +4,7 @@
 *.o
 *.obj
 *nppBackup
+*octave-workspace
 
 # Compiled Dynamic libraries
 *.so
