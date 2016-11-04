@@ -52,8 +52,8 @@ end %for
 erroMac = abs(yp .- yM);
 erroMacMax = max(erroMac)
 
-#series de Chebyschev
-'coeficientes da serie de Chebyschev:'
+#series de Chebyshev
+'coeficientes da serie de Chebyshev:'
 temp=[46079./46080  0 -959./5760. 0 +23./2880.]   
 
 tC = tM;

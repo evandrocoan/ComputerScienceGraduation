@@ -52,8 +52,8 @@ end %for
 erroMac = abs(yp .- yM);
 erroMacMax = max(erroMac)
 
-#series de Chebyschev
-'coeficientes da serie de Chebyschev:'
+#series de Chebyshev
+'coeficientes da serie de Chebyshev:'
 temp=[46079./46080  0 -959./5760. 0 +23./2880.]   
 
 tC = tM;
@@ -94,7 +94,7 @@ erroPade=abs(yp-ypade);
 erroPadeMax=max(erroPade)
 
 %%%%%%%%%%%%%%
-%Como a serie MacLaurin de sen(x) tem termos nulos para gruas pares, os erros de Padé foram mais altos, para n=4 PAR no numerador, que MacLaurin e Chebyschev.  
+%Como a serie MacLaurin de sen(x) tem termos nulos para gruas pares, os erros de Padé foram mais altos, para n=4 PAR no numerador, que MacLaurin e Chebyshev.  
 %%%%%%%%%%%%%%
 
 

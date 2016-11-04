@@ -70,7 +70,7 @@ end %for
 erroMac = abs(yp .- yM);
 erroMacMax = max(erroMac)
 
-#series de Chebyschev
+#series de Chebyshev
 tC = tM;
 yC = -0.0170103 .*tC.^2+0.20625 .*tC + 1.22475;
 

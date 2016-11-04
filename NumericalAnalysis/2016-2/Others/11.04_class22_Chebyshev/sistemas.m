@@ -102,8 +102,8 @@ yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos )
 # intervalo [-1,1], ou seja, em -1 ou em 1. 
 # 
 # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Tchebyshev, que possui
-# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Tchebyshev e Maclaurin).
+# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
 erroDeMaclaurin       = abs( yAproximado .- yInterPontos )
 erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 
@@ -112,23 +112,23 @@ erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 #}
 
 
-# Método de Tchebyshev
+# Método de Chebyshev
 # 
 # f(t) = log( .5*t + 1.5 ) in [-1, 1]
 # 
-# fTchebyshev( t ) = b0*T0( t ) + b1*T1( t ) + b2*T2( t ) + b3*T3( t ) + 
+# fChebyshev( t ) = b0*T0( t ) + b1*T1( t ) + b2*T2( t ) + b3*T3( t ) + 
 # b0 = 1/m \sum_j=1^m f( t(j) ), m = 10
 # 
 # t(j) = cos( ( 2*j - 1 ) * pi / 2*m ), j = 1 : m
 # 
 
-# Grau da Série de Tchebyshev
+# Grau da Série de Chebyshev
 k = 3
 
-# Grau de precisão da Integral Numérica, e também o número de nós de Tchebyshev
+# Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
 m = 10
 
-function coef = TchebyshevForLog( k, m )
+function coef = ChebyshevForLog( k, m )
     
     # Calculamos os t(j)
     # Para encontrar os polinômios T1, T2, ..., consulte a tabela
@@ -194,7 +194,7 @@ function coef = TchebyshevForLog( k, m )
 end
 
 
-# Gráfico de Tchebyshev
+# Gráfico de Chebyshev
 n = 7
 a = 1
 b = 2
@@ -207,9 +207,9 @@ xInterPontos = a : h/20 : b
 yInterPontos = fLog( xInterPontos )
 
 tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b )
-b            = TchebyshevForLog( k, m )
+b            = ChebyshevForLog( k, m )
 
-# fTchebyshev( t ) = b0*T0( t ) + b1*T1( t ) + b2*T2( t ) + b3*T3( t ) + ...
+# fChebyshev( t ) = b0*T0( t ) + b1*T1( t ) + b2*T2( t ) + b3*T3( t ) + ...
 function x = T1( x )
     x = x;
 end
@@ -232,8 +232,8 @@ yAproximado = b(1) + b(2)*T1( tInterPontos ) + b(3)*T2( tInterPontos ) + b(4)*T3
 # intervalo [-1,1], ou seja, em -1 ou em 1. 
 # 
 # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Tchebyshev, que possui
-# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Tchebyshev e Maclaurin).
+# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
 erroDeMaclaurin       = abs( yAproximado .- yInterPontos )
 erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 
