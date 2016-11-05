@@ -16,11 +16,11 @@ function chebyshev_test01 ( )
 %
 %    John Burkardt
 %
-  fprintf ( 1, '\n' );
-  fprintf ( 1, 'CHEBYSHEV_TEST01\n' );
-  fprintf ( 1, '  CHEBYSHEV_COEFFICIENTS computes the coefficients of the\n' );
-  fprintf ( 1, '  Chebyshev interpolant.\n' );
-  fprintf ( 1, '  CHEBYSHEV_INTERPOLANT evaluates the interpolant.\n' );
+  printf( '\n' );
+  printf( 'CHEBYSHEV_TEST01\n' );
+  printf( '  CHEBYSHEV_COEFFICIENTS computes the coefficients of the\n' );
+  printf( '  Chebyshev interpolant.\n' );
+  printf( '  CHEBYSHEV_INTERPOLANT evaluates the interpolant.\n' );
 
   n = 5;
   a = -1.0;
@@ -35,13 +35,13 @@ function chebyshev_test01 ( )
   m = n;
   fc = chebyshev_interpolant ( a, b, n, c, m, x );
 
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '  F(X) is a trig function:\n' );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '      X           C(I)        F(X)       C(F)(X)\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( '  F(X) is a trig function:\n' );
+  printf( '\n' );
+  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
+  printf( '\n' );
   for i = 1 : n
-    fprintf ( 1, '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
+    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
   end
 %
 %  Try a variant interval.
@@ -59,13 +59,13 @@ function chebyshev_test01 ( )
   m = n;
   fc = chebyshev_interpolant ( a, b, n, c, m, x );
 
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '  Consider the same F(X), but now over [0,3]:\n' );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '      X           C(I)        F(X)       C(F)(X)\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( '  Consider the same F(X), but now over [0,3]:\n' );
+  printf( '\n' );
+  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
+  printf( '\n' );
   for i = 1 : n
-    fprintf ( 1, '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
+    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
   end
 %
 %  Try a higher order.
@@ -83,13 +83,13 @@ function chebyshev_test01 ( )
   m = n;
   fc = chebyshev_interpolant ( a, b, n, c, m, x );
 
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '  Consider the same F(X), but now with higher order:\n' );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '      X           C(I)        F(X)       C(F)(X)\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( '  Consider the same F(X), but now with higher order:\n' );
+  printf( '\n' );
+  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
+  printf( '\n' );
   for i = 1 : n
-    fprintf ( 1, '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
+    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
   end
 %
 %  Try a polynomial.
@@ -107,13 +107,13 @@ function chebyshev_test01 ( )
   m = n;
   fc = chebyshev_interpolant ( a, b, n, c, m, x );
 
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '  F(X) is a degree 4 polynomial:\n' );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '      X           C(I)        F(X)       C(F)(X)\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( '  F(X) is a degree 4 polynomial:\n' );
+  printf( '\n' );
+  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
+  printf( '\n' );
   for i = 1 : n
-    fprintf ( 1, '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
+    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
   end
 %
 %  Try a function with decaying behavior.
@@ -131,14 +131,16 @@ function chebyshev_test01 ( )
   m = n;
   fc = chebyshev_interpolant ( a, b, n, c, m, x );
 
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '  The polynomial approximation to F(X) decays:\n' );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, '      X           C(I)        F(X)       C(F)(X)\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( '  The polynomial approximation to F(X) decays:\n' );
+  printf( '\n' );
+  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
+  printf( '\n' );
   for i = 1 : n
-    fprintf ( 1, '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
+    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
   end
 
   return
 end
+
+chebyshev_test01

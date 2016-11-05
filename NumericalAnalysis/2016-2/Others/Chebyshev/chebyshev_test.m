@@ -17,23 +17,23 @@ function chebyshev_test ( )
 %    John Burkardt
 %
   timestamp ( );
-  fprintf ( 1, '\n' );
-  fprintf ( 1, 'CHEBYSHEV_TEST\n' );
-  fprintf ( 1, '  MATLAB version.\n' );
-  fprintf ( 1, '  Test the CHEBYSHEV library.\n' );
+  printf( '\n' );
+  printf( 'CHEBYSHEV_TEST\n' );
+  printf( '  MATLAB version.\n' );
+  printf( '  Test the CHEBYSHEV library.\n' );
 
   chebyshev_test01 ( );
 %
 %  Terminate.
 %
-  fprintf ( 1, '\n' );
-  fprintf ( 1, 'CHEBYSHEV_TEST\n' );
-  fprintf ( 1, '  Normal end of execution.\n' );
-  fprintf ( 1, '\n' );
+  printf( '\n' );
+  printf( 'CHEBYSHEV_TEST\n' );
+  printf( '  Normal end of execution.\n' );
+  printf( '\n' );
   timestamp ( );
 
   return
 end
 
 
-
+chebyshev_test
