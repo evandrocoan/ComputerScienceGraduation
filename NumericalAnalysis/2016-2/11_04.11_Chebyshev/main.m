@@ -1,3 +1,12 @@
+
+clc
+clear
+close all
+
+more off
+format long
+split_long_rows(0)
+
 % Aproximação ln(x) [1,2] com erro 1e-6
 % 1- Interpolação polinomial - Método de Interpolação de Lagrange
 xa = 1;
@@ -11,14 +20,14 @@ xp = xa : h/20 : xb; %Pontos para o gráfico e para o erro
 yp = fPnLagrange(n, x , y , xp);
 ye = log(xp); % y exato para comparacao
 erroPn=abs(yp.-ye);
-erroPnMax=max(erroPn)
+erroPnMax=max(erroPn);
 
 % 2- Serie de Maclaurim
 % Transformação de variável
 % x(t) = 0,5*(b-a)*t + 0,5*(b+a)
 % f(x(t))= ln(0,5*t + 1,5)
 n = 9;
-coefMac = fmac1(n)
+coefMac = fmac1(n);
 %Graficos e erros
 tp = (2.*xp .- (xb.+xa)) ./ (xb.-xa);
 
@@ -26,7 +35,7 @@ tp = (2.*xp .- (xb.+xa)) ./ (xb.-xa);
 yMac = fPnBriot(n, coefMac, tp);
 % Calculo de erros
 erroMac = abs(yMac - ye);
-erroMacMax = max(erroMac)
+erroMacMax = max(erroMac);
 
 
 %3 Serie de Tchebychev
