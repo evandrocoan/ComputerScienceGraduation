@@ -38,11 +38,7 @@ function chebyshev_test01 ( )
   printf( '\n' );
   printf( '  F(X) is a trig function:\n' );
   printf( '\n' );
-  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
-  printf( '\n' );
-  for i = 1 : n
-    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
-  end
+  print_results( x, c, fx, fc, n )
 %
 %  Try a variant interval.
 %
@@ -62,11 +58,7 @@ function chebyshev_test01 ( )
   printf( '\n' );
   printf( '  Consider the same F(X), but now over [0,3]:\n' );
   printf( '\n' );
-  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
-  printf( '\n' );
-  for i = 1 : n
-    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
-  end
+  print_results( x, c, fx, fc, n )
 %
 %  Try a higher order.
 %
@@ -86,11 +78,7 @@ function chebyshev_test01 ( )
   printf( '\n' );
   printf( '  Consider the same F(X), but now with higher order:\n' );
   printf( '\n' );
-  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
-  printf( '\n' );
-  for i = 1 : n
-    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
-  end
+  print_results( x, c, fx, fc, n )
 %
 %  Try a polynomial.
 %
@@ -110,11 +98,7 @@ function chebyshev_test01 ( )
   printf( '\n' );
   printf( '  F(X) is a degree 4 polynomial:\n' );
   printf( '\n' );
-  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
-  printf( '\n' );
-  for i = 1 : n
-    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
-  end
+  print_results( x, c, fx, fc, n )
 %
 %  Try a function with decaying behavior.
 %
@@ -134,13 +118,18 @@ function chebyshev_test01 ( )
   printf( '\n' );
   printf( '  The polynomial approximation to F(X) decays:\n' );
   printf( '\n' );
-  printf( '      X           C(I)        F(X)       C(F)(X)\n' );
-  printf( '\n' );
-  for i = 1 : n
-    printf( '  %10f  %10f  %10f  %10f\n', x(i), c(i), fx(i), fc(i) );
-  end
+  print_results( x, c, fx, fc, n )
 
   return
 end
 
+function print_results( x, c, fx, fc, n )
+  printf( '               X                        C(I)                        F(X)                       C(F)(X)\n' );
+  printf( '\n' );
+  for i = 1 : n
+    printf( '  %25.20f  %25.20f  %25.20f  %25.20f\n', x(i), c(i), fx(i), fc(i) );
+  end
+end
+
+format long
 chebyshev_test01
