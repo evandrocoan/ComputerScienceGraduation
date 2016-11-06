@@ -106,6 +106,19 @@ erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 #}
 
 
+
+# Profiling
+# 
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+# 
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
+
 # Método de Chebyshev
 #
 # f(t) = log( .5*t + 1.5 ) in [-1, 1]
@@ -170,6 +183,24 @@ erroMaximoDeChebyshev = max( erroDeChebyshev )
 
 % plot( x, y, '*' )
 plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
+
+
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
+
+# Interactively explore hierarchical profiler output.
+% profexplore()
+
+# Show the profile resume, displaying per-function profiler results.
+# 
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+profshow( profile ("info"), 15 )
+
+
+
+
 
 
 

@@ -91,8 +91,8 @@ function result = getnthChebyshevPolynomOfFirstKind( k, t, sequence )
         computed      = 1;
         originalValue = sequence;
 
-        chebyshevPolynomCoefficient( 1 ) = 1;
-        chebyshevPolynomCoefficients     = chebyshevPolynomCoefficient;
+        chebyshevPolynomCoefficient( 1: numel(t) ) = 1;
+        chebyshevPolynomCoefficients               = chebyshevPolynomCoefficient;
 
     end
 
@@ -109,19 +109,19 @@ function result = getnthChebyshevPolynomOfFirstKind( k, t, sequence )
 
             if i == 0
 
-                chebyshevPolynomCoefficients( i + 1 ) = 1;
+                chebyshevPolynomCoefficients( i + 1 : numel(t)  ) = 1;
 
             elseif i == 1
 
-                chebyshevPolynomCoefficients( i + 1 ) = t;
+                chebyshevPolynomCoefficients( i + 1, : ) = t;
 
             elseif mod( i, 2 ) == 0
 
-                chebyshevPolynomCoefficients( i + 1 ) = 2.*getnthChebyshevPolynomOfFirstKind( i/2, t, sequence ).^2 .- 1;
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevPolynomOfFirstKind( i/2, t, sequence ).^2 .- 1;
 
             else
 
-                chebyshevPolynomCoefficients( i + 1 ) = 2.*getnthChebyshevPolynomOfFirstKind( (i-1) / 2, t, sequence ) ...
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevPolynomOfFirstKind( (i-1) / 2, t, sequence ) ...
                                                          .*getnthChebyshevPolynomOfFirstKind( (i+1) / 2, t, sequence ) - t;
 
             end
