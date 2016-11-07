@@ -36,16 +36,16 @@ split_long_rows(0)
 #                        + ...
 #                        + (f^n'( 0 )*z^n) / n!
 #
-function coef = fMaclaurinForLog( n, a, b )
+function coef = fMaclaurin( n, a, b, targetFunction )
 
     # Here we applicate the first coefficient from the Maclaurin series on its Domain [-1, 1]
-    # middle point 0. Before apply our function `fLog` we need to convert from the Domain [-1, 1]
-    # to the original or correct Domain [a, b] for the function `fLog`.
+    # middle point 0. Before apply our function `targetFunction` we need to convert from the 
+    # Domain [-1, 1] to the original or correct Domain [a, b] for the function `targetFunction`.
     # This is the whole reason why we may apply the derivative functions on the 0 point.
     MaclaurinDomainPointZero = MaclaurinLinearTransformationDomainOut( 0, a, b )
 
     cache = ( b - a ) / ( b + a )
-    coef( 1 ) = fLog( MaclaurinDomainPointZero )
+    coef( 1 ) = targetFunction( MaclaurinDomainPointZero )
 
     for i = 2 : n + 1
 
@@ -55,13 +55,13 @@ function coef = fMaclaurinForLog( n, a, b )
 
 end
 
-#{
+
 n = 7
 a = 1
 b = 2
 h = (b-a)/n
 
-coefMaclaurin = fMaclaurinForLog( n, a, b )
+coefMaclaurin = fMaclaurin( n, a, b, @fLog )
 
 x = a : h : b
 y = fLog( x )
@@ -83,9 +83,9 @@ erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 
 % plot( x, y, '*' )
 % plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
-#}
 
 
+#{
 
 # Profiling
 # 
