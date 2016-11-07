@@ -73,6 +73,7 @@ source( "ChebyshevPolynomsOfFirstKindList.m" )
 #
 function result = getnthChebyshevPolynomOfFirstKind_( k )
 
+    # https://en.wikibooks.org/wiki/Octave_Programming_Tutorial/Polynomials
     persistent chebyshevPolynomCoefficients;
     computed = numel( chebyshevPolynomCoefficients );
 
