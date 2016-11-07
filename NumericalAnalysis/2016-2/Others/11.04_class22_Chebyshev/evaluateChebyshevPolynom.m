@@ -21,13 +21,13 @@
 # @param b, the `m` b's Chebyshev coefficients.
 # @param t, the [-1, 1] points to evaluate the Chebyshev Polynom.
 # 
-function value = evaluateChebyshevPolynom( m, b, t )
+function value = evaluateChebyshevPolynom( m, b, t, chebyshevPolynomType )
     
     value = 0;
     
     for i = 1 : m
         
-        value = value + b( i )*evaluateChebyshevPolynomOfFirstKindAt( i - 1, t );
+        value = value + b( i )*chebyshevPolynomType( i - 1, t );
         
     end
     

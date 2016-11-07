@@ -13,7 +13,7 @@
 # @param b             , Input, real   , the function handle original ending domain from [a, b].
 # @param targetFunction, Input, real   , targetFunction( X ), a function handle.
 #
-function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
+function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType )
 
     # Calculamos os t(j)
     # Para encontrar os polinômios T1, T2, ..., consulte a tabela
@@ -51,7 +51,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
         % soma =  3.76452812919195
         %
         % soma = soma + fLog( x(j) ) * T0( t(j) );
-        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( 0, t(j) );
+        soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( 0, t(j) );
 
     end
 
@@ -80,7 +80,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
         % soma =  1.71572875253810
         %
         % soma = soma + fLog( x(j) ) * T1( t(j) );
-        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( 1, t(j) );
+        soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( 1, t(j) );
 
     end
 
@@ -96,7 +96,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
 
         for j = 1 : m
 
-            soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( k, t(j) );
+            soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( k, t(j) );
 
         end
 
