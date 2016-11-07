@@ -27,7 +27,7 @@ function value = evaluateChebyshevPolynom( m, b, t )
     
     for i = 1 : m
         
-        value = value + b( i )*evaluateChebyshevPolynomOfFirstKindAt_( i - 1, t );
+        value = value + b( i )*evaluateChebyshevPolynomOfFirstKindAt( i - 1, t );
         
     end
     

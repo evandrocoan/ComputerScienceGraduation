@@ -51,7 +51,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
         % soma =  3.76452812919195
         %
         % soma = soma + fLog( x(j) ) * T0( t(j) );
-        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt_( 0, t(j) );
+        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( 0, t(j) );
 
     end
 
@@ -80,7 +80,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
         % soma =  1.71572875253810
         %
         % soma = soma + fLog( x(j) ) * T1( t(j) );
-        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt_( 1, t(j) );
+        soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( 1, t(j) );
 
     end
 
@@ -96,7 +96,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction )
 
         for j = 1 : m
 
-            soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt_( k, t(j) );
+            soma = soma + targetFunction( x(j) ) * evaluateChebyshevPolynomOfFirstKindAt( k, t(j) );
 
         end
 

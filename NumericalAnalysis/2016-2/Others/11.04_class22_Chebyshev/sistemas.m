@@ -176,7 +176,7 @@ profile off
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
-profshow( profile ("info"), 15 )
+profshow( profile ("info"), 8 )
 
 
 
