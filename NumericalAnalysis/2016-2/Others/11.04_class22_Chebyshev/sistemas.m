@@ -24,26 +24,6 @@ split_long_rows(0)
 # Como vamos padronizar o domínio [a, b] da aproximado para [-1, 1], pode-se fixar o x da série em 0.
 #
 
-# Linear transformation to convert the [a, b] domain to [-1, 1] domain.
-# We may call it as `t(x)`.
-#
-function t = MaclaurinLinearTransformationDomainIn( x, a, b )
-
-    t = ( 2*x - (b+a) ) / ( b-a );
-
-end
-
-# Linear transformation to convert the [-1, 1] domain to [a, b] domain.
-#
-# We may call it as `x(t)`. On this way, we apply the the approximation
-# methods to the `f(x(t))`, were `x` belongs to the Domain [a, b].
-#
-function x = MaclaurinLinearTransformationDomainOut( t, a, b )
-
-    x = ( (b-a)*t + (b+a) ) / 2;
-
-end
-
 #
 # Function: log( x )
 # For the Domain [-1, 1]
