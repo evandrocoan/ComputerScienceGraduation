@@ -1,7 +1,7 @@
 
-# 
+#
 # Evaluate the Chebyshev Polynom
-# 
+#
 # i = 1 : k
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
 #
@@ -16,21 +16,23 @@
 #             + coef_b( 9)*T8( tInterPontos ) ...
 #             + coef_b(10)*T9( tInterPontos )
 #
-# 
-# @param m, Chebyshev's series degree.
-# @param b, the `m` b's Chebyshev coefficients.
+#
+# @param n, Chebyshev's series degree.
+# @param b, the `n` b's Chebyshev coefficients.
 # @param t, the [-1, 1] points to evaluate the Chebyshev Polynom.
-# 
-function value = evaluateChebyshevPolynom( m, b, t, chebyshevPolynomType )
-    
+#
+function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
+
+    b;
     value = 0;
-    
-    for i = 1 : m
-        
+
+    for i = 1 : n
+
+        i;
         value = value + b( i )*chebyshevPolynomType( i - 1, t );
-        
+
     end
-    
+
 end
 
 

@@ -15,7 +15,7 @@ split_long_rows(0)
 ###################################################################################################
 ###################################################################################################
 # Método de MacLaurin
-# 
+#
 # Derivatives
 # ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
 #
@@ -70,11 +70,11 @@ end
 #
 # i = 1 : n
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
-# 
+#
 # b0 = 1/m \sum_j=1^m f( t(j) ), m = 10
 #
 # t(j) = cos( ( 2*j - 1 ) * pi / 2*m ), j = 1 : m
-# 
+#
 function run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
 
     source( "ChebyshevPolynomsOfFirstKindList.m" );
@@ -123,14 +123,14 @@ end
 
 
 # Profiling
-# 
+#
 # Command: profile on
 # Command: profile off
 # Command: profile resume
 # Command: profile clear
 # Function File: S = profile ("status")
 # Function File: T = profile ("info")
-# 
+#
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile on
 
@@ -139,7 +139,7 @@ profile on
 
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 20
+n = 10
 
 # Domínio
 a = 1
@@ -151,7 +151,7 @@ b = 2
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
 m = 50
 
-% run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
+run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
 run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )
 
 chebyshevCoefficientsByPolinom_at_06__ = getChebyshevCoefficientsByPolinom  ( n, 0.6 )
@@ -170,7 +170,7 @@ profile off
 % profexplore()
 
 # Show the profile resume, displaying per-function profiler results.
-# 
+#
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
