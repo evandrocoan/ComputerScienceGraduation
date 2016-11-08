@@ -87,13 +87,13 @@ function run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
 
     xInterPontos = a : h/20 : b;
     tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
-    coef_b       = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType )
+    coef_b       = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType );
 
     # For log( x ) in [1, 2]
     correct_b = [  3.76452812919196e-001,  3.43145750507620e-001, -2.94372515228575e-002, ...
                    3.36708925555306e-003, -4.33275888539416e-004,  5.94707115514397e-005, ...
                   -8.50296480504678e-006,  1.25045018720205e-006, -1.87619547238052e-007, ...
-                   2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ]
+                   2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ];
 
     # i = 1 : n
     # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
@@ -139,7 +139,7 @@ profile on
 
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 10
+n = 20
 
 # Domínio
 a = 1
@@ -149,15 +149,15 @@ b = 2
 
 
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 100
+m = 50
 
-% run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
+run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
 run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )
 
 chebyshevCoefficientsByPolinom_at_06__ = getChebyshevCoefficientsByPolinom  ( n, 0.6 )
 chebyshevCoefficientsNumerically_at_06 = getChebyshevCoefficientsNumerically( n, 0.6 )
 
-getChebyshevCoefficientsPolinom = getChebyshevCoefficientsPolinom( n )
+chebyshevCoefficientsPolinom_n = getChebyshevCoefficientsPolinom( n )
 % polyout( polynom );
 
 

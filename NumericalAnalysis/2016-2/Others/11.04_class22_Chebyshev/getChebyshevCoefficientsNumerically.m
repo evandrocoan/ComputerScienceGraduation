@@ -12,9 +12,9 @@
 function value = getChebyshevCoefficientsNumerically( k, t )
 
     persistent currentSequence = 0;
-
     currentSequence = mod( currentSequence + 1, 2 );
-    value           = getnthChebyshevCoefficientsNumerically( k, t, currentSequence );
+    
+    value = getnthChebyshevCoefficientsNumerically( k, t, currentSequence );
 
 end
 
@@ -68,7 +68,7 @@ function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
     if k + 1 > computed
 
-        for i = computed : k + 1
+        for i = computed : k
 
             % printf( 'Starting computing the %d coefficient of %d (k) coefficients.\n', i, k );
 
@@ -95,7 +95,7 @@ function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
     end
 
-    result = chebyshevPolynomCoefficients( k + 1 );
+    result = chebyshevPolynomCoefficients( k + 1, : );
 
 end
 
@@ -177,7 +177,7 @@ printf( '\n' )
 
 
 
-value = 0.6
+value = [ 0.6, 0.4 ]
 
 T9_correct = T9( value )
 T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 0 )
