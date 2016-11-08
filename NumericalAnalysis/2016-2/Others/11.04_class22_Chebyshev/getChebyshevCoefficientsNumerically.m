@@ -9,47 +9,12 @@
 # @param t, the value to evaluate at the k'th Chebyshev Polynom
 #
 
-function value = evaluateChebyshevPolynomOfFirstKindAt2( k, t )
+function value = getChebyshevCoefficientsNumerically( k, t )
 
     persistent currentSequence = 0;
 
-    switch( k )
-
-        case 0
-            value = T0( t );
-
-        case 1
-            value = T1( t );
-
-        case 2
-            value = T2( t );
-
-        case 3
-            value = T3( t );
-
-        case 4
-            value = T4( t );
-
-        case 5
-            value = T5( t );
-
-        case 6
-            value = T6( t );
-
-        case 7
-            value = T7( t );
-
-        case 8
-            value = T8( t );
-
-        case 9
-            value = T9( t );
-
-         otherwise
-            currentSequence = mod( currentSequence + 1, 2 );
-            value           = getnthChebyshevPolynomOfFirstKind2( k, t, currentSequence );
-
-    end
+    currentSequence = mod( currentSequence + 1, 2 );
+    value           = getnthChebyshevCoefficientsNumerically( k, t, currentSequence );
 
 end
 
@@ -74,7 +39,7 @@ source( "ChebyshevPolynomsOfFirstKindList.m" )
 #                  And later when calculating the Chebyshev Polynom for `t` = 0.4, set this
 #                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
 #
-function result = getnthChebyshevPolynomOfFirstKind2( k, t, sequence )
+function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
     persistent originalValue;
     persistent chebyshevPolynomCoefficients;
@@ -117,12 +82,12 @@ function result = getnthChebyshevPolynomOfFirstKind2( k, t, sequence )
 
             elseif mod( i, 2 ) == 0
 
-                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevPolynomOfFirstKind2( i/2, t, sequence ).^2 .- 1;
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( i/2, t, sequence ).^2 .- 1;
 
             else
 
-                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevPolynomOfFirstKind2( (i-1) / 2, t, sequence ) ...
-                                                            .*getnthChebyshevPolynomOfFirstKind2( (i+1) / 2, t, sequence ) - t;
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( (i-1) / 2, t, sequence ) ...
+                                                            .*getnthChebyshevCoefficientsNumerically( (i+1) / 2, t, sequence ) - t;
 
             end
 
@@ -142,39 +107,39 @@ split_long_rows(0)
 value = 0.6;
 
 T0_correct = T0( value )
-T0_calcula = getnthChebyshevPolynomOfFirstKind2( 0, value, 0 )
+T0_calcula = getnthChebyshevCoefficientsNumerically( 0, value, 0 )
 printf( '\n' )
 
 T1_correct = T1( value )
-T1_calcula = getnthChebyshevPolynomOfFirstKind2( 1, value, 0 )
+T1_calcula = getnthChebyshevCoefficientsNumerically( 1, value, 0 )
 printf( '\n' )
 
 T2_correct = T2( value )
-T2_calcula = getnthChebyshevPolynomOfFirstKind2( 2, value, 0 )
+T2_calcula = getnthChebyshevCoefficientsNumerically( 2, value, 0 )
 printf( '\n' )
 
 T3_correct = T3( value )
-T3_calcula = getnthChebyshevPolynomOfFirstKind2( 3, value, 0 )
+T3_calcula = getnthChebyshevCoefficientsNumerically( 3, value, 0 )
 printf( '\n' )
 
 T4_correct = T4( value )
-T4_calcula = getnthChebyshevPolynomOfFirstKind2( 4, value, 0 )
+T4_calcula = getnthChebyshevCoefficientsNumerically( 4, value, 0 )
 printf( '\n' )
 
 T5_correct = T5( value )
-T5_calcula = getnthChebyshevPolynomOfFirstKind2( 5, value, 0 )
+T5_calcula = getnthChebyshevCoefficientsNumerically( 5, value, 0 )
 printf( '\n' )
 
 T6_correct = T6( value )
-T6_calcula = getnthChebyshevPolynomOfFirstKind2( 6, value, 0 )
+T6_calcula = getnthChebyshevCoefficientsNumerically( 6, value, 0 )
 printf( '\n' )
 
 T7_correct = T7( value )
-T7_calcula = getnthChebyshevPolynomOfFirstKind2( 7, value, 0 )
+T7_calcula = getnthChebyshevCoefficientsNumerically( 7, value, 0 )
 printf( '\n' )
 
 T8_correct = T8( value )
-T8_calcula = getnthChebyshevPolynomOfFirstKind2( 8, value, 0 )
+T8_calcula = getnthChebyshevCoefficientsNumerically( 8, value, 0 )
 printf( '\n' )
 
 # value = 0.6;
@@ -187,7 +152,7 @@ printf( '\n' )
 #
 # T9_calcula = -0.472103424000000
 T9_correct = T9( value )
-T9_calcula = getnthChebyshevPolynomOfFirstKind2( 9, value, 0 )
+T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 0 )
 printf( '\n' )
 
 
@@ -195,19 +160,19 @@ printf( '\n' )
 value = 0.4
 
 T6_correct = T6( value )
-T6_calcula = getnthChebyshevPolynomOfFirstKind2( 6, value, 1 )
+T6_calcula = getnthChebyshevCoefficientsNumerically( 6, value, 1 )
 printf( '\n' )
 
 T7_correct = T7( value )
-T7_calcula = getnthChebyshevPolynomOfFirstKind2( 7, value, 1 )
+T7_calcula = getnthChebyshevCoefficientsNumerically( 7, value, 1 )
 printf( '\n' )
 
 T8_correct = T8( value )
-T8_calcula = getnthChebyshevPolynomOfFirstKind2( 8, value, 1 )
+T8_calcula = getnthChebyshevCoefficientsNumerically( 8, value, 1 )
 printf( '\n' )
 
 T9_correct = T9( value )
-T9_calcula = getnthChebyshevPolynomOfFirstKind2( 9, value, 1 )
+T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 1 )
 printf( '\n' )
 
 
@@ -215,7 +180,7 @@ printf( '\n' )
 value = 0.6
 
 T9_correct = T9( value )
-T9_calcula = getnthChebyshevPolynomOfFirstKind2( 9, value, 0 )
+T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 0 )
 printf( '\n' )
 
 
