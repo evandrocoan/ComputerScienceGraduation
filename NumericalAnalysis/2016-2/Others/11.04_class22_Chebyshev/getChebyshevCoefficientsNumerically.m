@@ -9,12 +9,50 @@
 # @param t, the value to evaluate at the k'th Chebyshev Polynom
 #
 
-function value = getChebyshevCoefficientsNumerically( k, t )
+function value = getChebyshevCoefficientsNumerically( k, t, isToDiscartTheSavedRecursion = false )
+
+    persistent originalValue;
+    persistent chebyshevPolynomCoefficients;
 
     persistent currentSequence = 0;
-    currentSequence = mod( currentSequence + 1, 2 );
-    
-    value = getnthChebyshevCoefficientsNumerically( k, t, currentSequence );
+    chebyshevPolynomCoefficients;
+
+    if isToDiscartTheSavedRecursion
+
+        currentSequence = mod( currentSequence + 1, 2 );
+
+    end
+
+    % printf( 'Calling Chebyshev Polynom Coefficients with computed = %d, k = %d and t_size: %d \n', computed, k, t_size );
+
+    t_size   = numel( t );
+    computed = numel( chebyshevPolynomCoefficients );
+
+    % When the function is called for the first time, initialize the first element and also reset
+    % the old data, when a new variable `t` is calculated.
+    if computed == 0 || originalValue ~= currentSequence
+
+        % printf( 'Cleaning chebyshevPolynomCoefficients! computed: %d, k: %d\n\n\n\n\n', computed, k );
+
+        computed      = 1;
+        originalValue = currentSequence;
+
+        for i = 1 : t_size
+
+            chebyshevPolynomCoefficient( i ).vector = 1;
+
+        end
+
+        chebyshevPolynomCoefficients = chebyshevPolynomCoefficient;
+
+    end
+
+    for i = 1 : t_size
+
+        [ value( i ), chebyshevPolynomCoefficients( i ).vector ] = getnthChebyshevCoefficientsNumerically( ...
+                k, t( i ), chebyshevPolynomCoefficients( i ).vector );
+
+    end
 
 end
 
@@ -39,33 +77,18 @@ source( "ChebyshevPolynomsOfFirstKindList.m" )
 #                  And later when calculating the Chebyshev Polynom for `t` = 0.4, set this
 #                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
 #
-function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
+function [ result, chebyshevPolynomCoefficients ] = getnthChebyshevCoefficientsNumerically( k, t, chebyshevPolynomCoefficients )
 
-    persistent originalValue;
-    persistent chebyshevPolynomCoefficients;
+    k;
+    t;
 
     computed = numel( chebyshevPolynomCoefficients );
-    % printf( 'Calling Chebyshev Polynom Coefficients with computed = %d and k = %d\n', computed, k );
-
-    % When the function is called for the first time, initialize the first element and also reset
-    % the old data, when a new variable `t` is calculated.
-    if computed == 0 || originalValue ~= sequence
-
-        % printf( 'Cleaning chebyshevPolynomCoefficients! computed: %d, k: %d\n\n\n\n\n', computed, k );
-
-        computed      = 1;
-        originalValue = sequence;
-
-        chebyshevPolynomCoefficient( 1: numel(t) ) = 1;
-        chebyshevPolynomCoefficients               = chebyshevPolynomCoefficient;
-
-    end
+    % printf( 'Calling getnthChebyshevCoefficientsNumerically with computed = %d and k = %d\n', computed, k );
 
     % Compute in uncomputed `chebyshevPolynomCoefficients`. The indexes are `k + 1` shifted because
     % the b's Chebyshev Polynom Coefficients starts on 0, but octave only allow indexes starting
     % at 1. This starts calculating all the missing b's Chebyshev Polynom from the index `computed`
     % until the requested coefficient `k`.
-
     if k + 1 > computed
 
         for i = computed : k
@@ -74,7 +97,7 @@ function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
             if i == 0
 
-                chebyshevPolynomCoefficients( i + 1 : numel(t)  ) = 1;
+                chebyshevPolynomCoefficients( i + 1, : ) = 1;
 
             elseif i == 1
 
@@ -82,12 +105,14 @@ function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
             elseif mod( i, 2 ) == 0
 
-                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( i/2, t, sequence ).^2 .- 1;
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( ...
+                        i/2, t, chebyshevPolynomCoefficients ).^2 .- 1;
 
             else
 
-                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( (i-1) / 2, t, sequence ) ...
-                                                            .*getnthChebyshevCoefficientsNumerically( (i+1) / 2, t, sequence ) - t;
+                chebyshevPolynomCoefficients( i + 1, : ) = 2.*getnthChebyshevCoefficientsNumerically( ...
+                        (i-1) / 2, t, chebyshevPolynomCoefficients ).*getnthChebyshevCoefficientsNumerically( ...
+                        (i+1) / 2, t, chebyshevPolynomCoefficients ) - t;
 
             end
 
@@ -95,7 +120,10 @@ function result = getnthChebyshevCoefficientsNumerically( k, t, sequence )
 
     end
 
-    result = chebyshevPolynomCoefficients( k + 1, : );
+    k;
+    chebyshevPolynomCoefficients;
+
+    result = chebyshevPolynomCoefficients( k + 1 );
 
 end
 
@@ -104,85 +132,67 @@ end
 format long;
 split_long_rows(0)
 
-value = 0.6;
+values( 1 ).vector = 0.6;
+values( 2 ).vector = 0.4;
+values( 3 ).vector = [ 0.4, 0.6 ];
+values( 4 ).vector = [ 0.4, 0.6, 0.8 ];
+values( 5 ).vector = [ 0.2, 0.4, 0.6, 0.8 ];
 
-T0_correct = T0( value )
-T0_calcula = getnthChebyshevCoefficientsNumerically( 0, value, 0 )
-printf( '\n' )
+sizeof = numel( values )
 
-T1_correct = T1( value )
-T1_calcula = getnthChebyshevCoefficientsNumerically( 1, value, 0 )
-printf( '\n' )
+for i = 1 : sizeof
 
-T2_correct = T2( value )
-T2_calcula = getnthChebyshevCoefficientsNumerically( 2, value, 0 )
-printf( '\n' )
+    T0_correct = T0( values( i ).vector )
+    T0_calcula = getChebyshevCoefficientsNumerically( 0, values( i ).vector, true )
+    printf( '\n' )
 
-T3_correct = T3( value )
-T3_calcula = getnthChebyshevCoefficientsNumerically( 3, value, 0 )
-printf( '\n' )
+    T1_correct = T1( values( i ).vector )
+    T1_calcula = getChebyshevCoefficientsNumerically( 1, values( i ).vector )
+    printf( '\n' )
 
-T4_correct = T4( value )
-T4_calcula = getnthChebyshevCoefficientsNumerically( 4, value, 0 )
-printf( '\n' )
+    T2_correct = T2( values( i ).vector )
+    T2_calcula = getChebyshevCoefficientsNumerically( 2, values( i ).vector )
+    printf( '\n' )
 
-T5_correct = T5( value )
-T5_calcula = getnthChebyshevCoefficientsNumerically( 5, value, 0 )
-printf( '\n' )
+    T3_correct = T3( values( i ).vector )
+    T3_calcula = getChebyshevCoefficientsNumerically( 3, values( i ).vector )
+    printf( '\n' )
 
-T6_correct = T6( value )
-T6_calcula = getnthChebyshevCoefficientsNumerically( 6, value, 0 )
-printf( '\n' )
+    T4_correct = T4( values( i ).vector )
+    T4_calcula = getChebyshevCoefficientsNumerically( 4, values( i ).vector )
+    printf( '\n' )
 
-T7_correct = T7( value )
-T7_calcula = getnthChebyshevCoefficientsNumerically( 7, value, 0 )
-printf( '\n' )
+    T5_correct = T5( values( i ).vector )
+    T5_calcula = getChebyshevCoefficientsNumerically( 5, values( i ).vector )
+    printf( '\n' )
 
-T8_correct = T8( value )
-T8_calcula = getnthChebyshevCoefficientsNumerically( 8, value, 0 )
-printf( '\n' )
+    T6_correct = T6( values( i ).vector )
+    T6_calcula = getChebyshevCoefficientsNumerically( 6, values( i ).vector )
+    printf( '\n' )
 
-# value = 0.6;
-# T9_correct = -0.472103423999999
-# chebyshevPolynomCoefficients =
-#
-#    1.0000000000000000   0.6000000000000000  -0.2800000000000000  -0.9359999999999999  ...
-#   -0.8431999999999999  -0.0758399999999999   0.7521919999999997   0.9784703999999999  ...
-#    0.4219724799999998  -0.4721034240000002
-#
-# T9_calcula = -0.472103424000000
-T9_correct = T9( value )
-T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 0 )
-printf( '\n' )
+    T7_correct = T7( values( i ).vector )
+    T7_calcula = getChebyshevCoefficientsNumerically( 7, values( i ).vector )
+    printf( '\n' )
 
+    T8_correct = T8( values( i ).vector )
+    T8_calcula = getChebyshevCoefficientsNumerically( 8, values( i ).vector )
+    printf( '\n' )
 
+    # value = 0.6;
+    # T9_correct = -0.472103423999999
+    # chebyshevPolynomCoefficients =
+    #
+    #    1.0000000000000000   0.6000000000000000  -0.2800000000000000  -0.9359999999999999  ...
+    #   -0.8431999999999999  -0.0758399999999999   0.7521919999999997   0.9784703999999999  ...
+    #    0.4219724799999998  -0.4721034240000002
+    #
+    # T9_calcula = -0.472103424000000
+    #
+    T9_correct = T9( values( i ).vector )
+    T9_calcula = getChebyshevCoefficientsNumerically( 9, values( i ).vector )
+    printf( '\n' )
 
-value = 0.4
-
-T6_correct = T6( value )
-T6_calcula = getnthChebyshevCoefficientsNumerically( 6, value, 1 )
-printf( '\n' )
-
-T7_correct = T7( value )
-T7_calcula = getnthChebyshevCoefficientsNumerically( 7, value, 1 )
-printf( '\n' )
-
-T8_correct = T8( value )
-T8_calcula = getnthChebyshevCoefficientsNumerically( 8, value, 1 )
-printf( '\n' )
-
-T9_correct = T9( value )
-T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 1 )
-printf( '\n' )
-
-
-
-value = [ 0.6, 0.4 ]
-
-T9_correct = T9( value )
-T9_calcula = getnthChebyshevCoefficientsNumerically( 9, value, 0 )
-printf( '\n' )
-
+end
 
 
 
