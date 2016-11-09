@@ -26,10 +26,23 @@ function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
     b;
     value = 0;
 
-    for i = 1 : n
+    # At the first time, reset the last values result, which are wrong for this new `t`'s values.
+    value = value + b( 1 )*chebyshevPolynomType( 0, t, true );
 
-        i;
-        value = value + b( i )*chebyshevPolynomType( i - 1, t, true );
+    for i = 2 : n
+
+        printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', i ); chebyshevPolynomType
+
+        # Setting this to true causes forces the `getnthChebyshevCoefficientsNumerically` to do:
+        # Time(s): 38.566, Time(%): 83.84 and Calls: 110.981
+        #
+        # Setting this to false causes forces the `getnthChebyshevCoefficientsNumerically` to do:
+        # Time(s): 5.409, Time(%): 55.65 and Calls: 20.756
+        #
+        # When using n = 20 and m = 40. This is due the recursive remember feature used due setting
+        # the `isToDiscartTheSavedRecursion` to false.
+        #
+        value = value + b( i )*chebyshevPolynomType( i - 1, t, false );
 
     end
 

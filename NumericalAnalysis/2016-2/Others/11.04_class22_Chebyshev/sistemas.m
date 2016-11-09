@@ -95,6 +95,9 @@ function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m,
                   -8.50296480504678e-006,  1.25045018720205e-006, -1.87619547238052e-007, ...
                    2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ];
 
+    %
+    % printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
+
     # i = 1 : n
     # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
     #
@@ -103,7 +106,6 @@ function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m,
     #             + coef_b( 3)*T2( tInterPontos ) ...
     #             + coef_b( 4)*T3( tInterPontos );
     #
-    % printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
     yAproximado = evaluateChebyshevPolynom( n, coef_b, tInterPontos, chebyshevPolynomType );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
@@ -140,7 +142,7 @@ profile on
 
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 15
+n = 10
 
 # Domínio
 a = 1
@@ -150,7 +152,7 @@ b = 2
 
 
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 40
+m = 100
 
 errorByPolinom__ = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
 errorNumerically = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )

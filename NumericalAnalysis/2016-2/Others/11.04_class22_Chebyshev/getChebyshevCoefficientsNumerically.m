@@ -23,7 +23,8 @@ function value = getChebyshevCoefficientsNumerically( k, t, isToDiscartTheSavedR
     % the old data, when a new variable `t` is calculated.
     if computed == 0 || isToDiscartTheSavedRecursion
 
-        % printf( '\n\n\n\n\n( getChebyshevCoefficientsNumerically ) Cleaning chebyshevPolynomCoefficients! computed: %d, k: %d\n', computed, k );
+        % printf( '\n\n\n\n\n( getChebyshevCoefficientsNumerically ) Cleaning ' );
+        % printf(  'chebyshevPolynomCoefficients! computed: %d, k: %d\n', computed, k );
 
         for i = 1 : t_size
 
@@ -88,7 +89,8 @@ function [ result, chebyshevPolynomCoefficients ] = getnthChebyshevCoefficientsN
 
         for i = computed : k
 
-            % printf( '( getnthChebyshevCoefficientsNumerically ) Starting computing the %d coefficient of %d (k) coefficients.\n', i, k );
+            % printf( '( getnthChebyshevCoefficientsNumerically ) Starting computing the %d ', i );
+            % printf( 'coefficient of %d (k) coefficients.\n',  k );
 
             if i == 0
 
