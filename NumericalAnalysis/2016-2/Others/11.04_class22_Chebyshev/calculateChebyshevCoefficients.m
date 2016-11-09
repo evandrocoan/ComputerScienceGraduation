@@ -20,11 +20,13 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     #
     t( 1 ) = 0;
 
-    #k=1:m; t=cos((2.*k.-1).*pi./(2.*m))
+    # k=1:m;
+    # t=cos((2.*k.-1).*pi./(2.*m))
     k = 1 : m;
-
     t = cos( ( ( 2.*k .- 1 ) / (2*m) ) * pi );
-    x = MaclaurinLinearTransformationDomainOut( t, a, b );
+
+    x           = MaclaurinLinearTransformationDomainOut( t, a, b );
+    functionOnX = targetFunction( x );
 
     # Calculo do b0/coef(1) no indice 1 do array b
     # x^0 = T0
@@ -43,7 +45,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     # soma( 11 ) = 3.76452812919195
     #
     % printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', 0 ); chebyshevPolynomType
-    result = targetFunction( x ) .* chebyshevPolynomType( 0, t, false );
+    result = functionOnX.*chebyshevPolynomType( 0, t, true );
 
     soma      = sum( result );
     coef( 1 ) = ( 1 / m ) * soma;
@@ -52,8 +54,17 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     #
     for i = 1 : n - 1
 
-        % printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', i ); chebyshevPolynomType
-        result = targetFunction( x ) .* chebyshevPolynomType( i, t, false );
+        printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', i ); chebyshevPolynomType
+
+        # When using n = 10 and m = 10000. This is due the recursive remember feature set to false.
+        #
+        # Setting this to true causes to force the `getnthChebyshevCoefficientsNumerically` to do:
+        # Time(s): 181.631, Time(%): 79.51 and Calls: 620.000
+        #
+        # Setting this to false cause to force the `getnthChebyshevCoefficientsNumerically` to do:
+        # Time(s): 51.683, Time(%): 60.30 and Calls: 220.000
+        #
+        result = functionOnX.*chebyshevPolynomType( i, t, false );
 
         soma          = sum( result );
         coef( i + 1 ) = ( 2 / m ) * soma;
@@ -61,27 +72,6 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     end
 
 end
-
-# soma = soma + fLog( x(j) ) * T0( t(j) )#
-#
-#
-# Calculo do b1/coef(2) no indice 2 do array b
-# x^1 = T1
-#
-# Assuming f( x ) = log( x ), in [1, 2]
-# soma( 1  ) = 0.681568679859111
-# soma( 2  ) = 1.27455195679119
-# soma( 3  ) = 1.71091076772066
-# soma( 4  ) = 1.95896348102698
-# soma( 5  ) = 2.03034388231146
-# soma( 6  ) = 1.97529278658466
-# soma( 7  ) = 1.86570853659771
-# soma( 8  ) = 1.76907019459963
-# soma( 9  ) = 1.72179015635938
-# soma( 10 ) = 1.71572875253810
-#
-# soma = soma + fLog( x(j) ) * T1( t(j) );
-#
 
 # Include the T0, T1, ... Chebyshev's Polynoms of First Kind
 source( "ChebyshevPolynomsOfFirstKindList.m" )
@@ -97,20 +87,22 @@ split_long_rows(0)
 
 
 
-
+profile on
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 5;
+n = 50;
+
+# Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
+m = 40;
 
 # Domínio
 a = 1;
 b = 2;
 
-# Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 10;
-
 coef_b = calculateChebyshevCoefficients( n, m, a, b, @fLog, @getChebyshevCoefficientsNumerically )
 
+profile off
+profshow( profile ("info"), 8 )
 
 
 
@@ -120,8 +112,8 @@ coef_b = calculateChebyshevCoefficients( n, m, a, b, @fLog, @getChebyshevCoeffic
 % getChebyshevCoefficientsNumerically( 2, 0.6, true )
 % getChebyshevCoefficientsNumerically( 2, [0.6, 0.4], true )
 
-value = [ 0.6, 0.4 ];
 
+% value = [ 0.6, 0.4 ];
 % T9_correct = T9( value )
 % T9_calcula = getChebyshevCoefficientsNumerically( 9, value, true )
 % printf( '\n' )

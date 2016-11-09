@@ -152,17 +152,19 @@ b = 2
 
 
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 100
+m = 1000
 
-errorByPolinom__ = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
-errorNumerically = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )
+errorByPolinom__ = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom );
+errorNumerically = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically );
 
 chebyshevCoefficientsByPolinom_at_06__ = getChebyshevCoefficientsByPolinom  ( n, 0.6 )
 chebyshevCoefficientsNumerically_at_06 = getChebyshevCoefficientsNumerically( n, 0.6 )
 
+errorByPolinom__
+errorNumerically
+
 chebyshevCoefficientsPolinom_n = getChebyshevCoefficientsPolinom( n );
 polyout( chebyshevCoefficientsPolinom_n );
-
 
 
 

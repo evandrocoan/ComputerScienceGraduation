@@ -33,14 +33,13 @@ function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
 
         printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', i ); chebyshevPolynomType
 
-        # Setting this to true causes forces the `getnthChebyshevCoefficientsNumerically` to do:
+        # When using n = 20 and m = 40. This is due the recursive remember feature set to false.
+        #
+        # Setting this to true cause to force the `getnthChebyshevCoefficientsNumerically` to do:
         # Time(s): 38.566, Time(%): 83.84 and Calls: 110.981
         #
-        # Setting this to false causes forces the `getnthChebyshevCoefficientsNumerically` to do:
+        # Setting this to false cause to force the `getnthChebyshevCoefficientsNumerically` to do:
         # Time(s): 5.409, Time(%): 55.65 and Calls: 20.756
-        #
-        # When using n = 20 and m = 40. This is due the recursive remember feature used due setting
-        # the `isToDiscartTheSavedRecursion` to false.
         #
         value = value + b( i )*chebyshevPolynomType( i - 1, t, false );
 
