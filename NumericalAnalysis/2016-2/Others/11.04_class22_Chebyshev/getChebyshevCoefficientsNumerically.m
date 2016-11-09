@@ -5,26 +5,31 @@
 # i = 1 : n
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
 #
-# @param k, the k'th Chebyshev Polynom
-# @param t, the value to evaluate at the k'th Chebyshev Polynom
+# @param k                           , the k'th Chebyshev Polynom.
+# @param t                           , the value to evaluate at the k'th Chebyshev Polynom.
+# @param isToDiscartTheSavedRecursion, true to indicate the current `t`'s Chebyshev Polynom sequence
+#                                      must to be discarded. You must to always discard the old
+#                                      sequence when a new `t` value is provided. Use false to
+#                                      preserve the `t` cached values and use the recursion remember
+#                                      feature.
 #
-
 function value = getChebyshevCoefficientsNumerically( k, t, isToDiscartTheSavedRecursion = true )
 
     persistent chebyshevPolynomCoefficients;
     chebyshevPolynomCoefficients;
 
-    % printf( 'Calling Chebyshev Polynom Coefficients with computed = %d, k = %d and t_size: %d \n', computed, k, t_size );
-
     t_size   = numel( t );
     computed = numel( chebyshevPolynomCoefficients );
 
-    % When the function is called for the first time, initialize the first element and also reset
-    % the old data, when a new variable `t` is calculated.
+    # printf( 'Calling Chebyshev Polynom Coefficients with computed = %d, k = %d ', computed, k );
+    # printf( 'and t_size: %d \n', t_size );
+
+    # When the function is called for the first time, initialize the first element and also reset
+    # the old data, when a new variable `t` is calculated.
     if computed == 0 || isToDiscartTheSavedRecursion
 
-        % printf( '\n\n\n\n\n( getChebyshevCoefficientsNumerically ) Cleaning ' );
-        % printf(  'chebyshevPolynomCoefficients! computed: %d, k: %d\n', computed, k );
+        # printf( '\n\n\n\n\n( getChebyshevCoefficientsNumerically ) Cleaning ' );
+        # printf(  'chebyshevPolynomCoefficients! computed: %d, k: %d\n', computed, k );
 
         for i = 1 : t_size
 
@@ -44,16 +49,13 @@ function value = getChebyshevCoefficientsNumerically( k, t, isToDiscartTheSavedR
 
     for i = 1 : t_size
 
-        % printf( '( getChebyshevCoefficientsNumerically ) Calculating the %dth t''s vector point.\n', i );
+        # printf( '( getChebyshevCoefficientsNumerically ) Calculating the %dth t''s vector point.\n', i );
         [ value( i ), chebyshevPolynomCoefficients( i ).vector ] = getnthChebyshevCoefficientsNumerically( ...
                 k, t( i ), chebyshevPolynomCoefficients( i ).vector );
 
     end
 
 end
-
-# Include the T0, T1, ... Chebyshev's Polynoms of First Kind
-source( "ChebyshevPolynomsOfFirstKindList.m" )
 
 #
 # Efficient Computation of Chebyshev Polynomials in Computer Algebra
@@ -65,32 +67,29 @@ source( "ChebyshevPolynomsOfFirstKindList.m" )
 # Are there functions that remember values they have found on Octave?
 # http://stackoverflow.com/questions/40445316/are-there-functions-that-remember-values-they-have-found-on-octave
 #
-# @param k       , the k'th Chebyshev Polynom
-# @param t       , the value to evaluate at the k'th Chebyshev Polynom
-# @param sequence, 0 or 1 to indicate the current `t`'s Chebyshev Polynom sequence.
-#                  For example, to calculate the `t` = 0.6's Chebyshev Polynoms, use the
-#                  `sequence` as 0.
-#                  And later when calculating the Chebyshev Polynom for `t` = 0.4, set this
-#                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
+# @param k                           , the k'th Chebyshev Polynom.
+# @param t                           , the value to evaluate at the k'th Chebyshev Polynom.
+# @param chebyshevPolynomCoefficients, a vector within the cached Chebyshev Polynom sequences.
 #
-function [ result, chebyshevPolynomCoefficients ] = getnthChebyshevCoefficientsNumerically( k, t, chebyshevPolynomCoefficients )
+function [ result, chebyshevPolynomCoefficients ] = ...
+        getnthChebyshevCoefficientsNumerically( k, t, chebyshevPolynomCoefficients )
 
-    k;
     t;
-
     computed = numel( chebyshevPolynomCoefficients );
-    % printf( '( getnthChebyshevCoefficientsNumerically ) Calling with computed = %d and k = %d\n', computed, k );
 
-    % Compute in uncomputed `chebyshevPolynomCoefficients`. The indexes are `k + 1` shifted because
-    % the b's Chebyshev Polynom Coefficients starts on 0, but octave only allow indexes starting
-    % at 1. This starts calculating all the missing b's Chebyshev Polynom from the index `computed`
-    % until the requested coefficient `k`.
+    # printf( '( getnthChebyshevCoefficientsNumerically ) Calling with computed = ' );
+    # printf( '%d and k = %d\n', computed, k );
+
+    # Compute in uncomputed `chebyshevPolynomCoefficients`. The indexes are `k + 1` shifted because
+    # the b's Chebyshev Polynom Coefficients starts on 0, but octave only allow indexes starting
+    # at 1. This starts calculating all the missing b's Chebyshev Polynom from the index `computed`
+    # until the requested coefficient `k`.
     if k + 1 > computed
 
         for i = computed : k
 
-            % printf( '( getnthChebyshevCoefficientsNumerically ) Starting computing the %d ', i );
-            % printf( 'coefficient of %d (k) coefficients.\n',  k );
+            # printf( '( getnthChebyshevCoefficientsNumerically ) Starting computing the %d ', i );
+            # printf( 'coefficient of %d (k) coefficients.\n', k );
 
             if i == 0
 
@@ -126,6 +125,13 @@ end
 
 
 
+
+
+
+
+# Include the T0, T1, ... Chebyshev's Polynoms of First Kind
+source( "ChebyshevPolynomsOfFirstKindList.m" )
+
 format long;
 split_long_rows(0)
 
@@ -134,6 +140,15 @@ values( 2 ).vector = 0.4;
 values( 3 ).vector = [ 0.4, 0.6 ];
 values( 4 ).vector = [ 0.4, 0.6, 0.8 ];
 values( 5 ).vector = [ 0.2, 0.4, 0.6, 0.8 ];
+
+
+
+# T9_correct = T9( values( 1 ).vector )
+# T9_calcula = getChebyshevCoefficientsNumerically( 9, values( 1 ).vector, false )
+# printf( '\n' )
+
+
+
 
 sizeof = numel( values )
 
