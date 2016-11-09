@@ -17,95 +17,123 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
 
     # Calculamos os t(j)
     # Para encontrar os polinômios T1, T2, ..., consulte a tabela
+    #
     t( 1 ) = 0;
 
     #k=1:m; t=cos((2.*k.-1).*pi./(2.*m))
-    for j = 1 : m
+    k = 1 : m;
 
-        t( j ) = cos( ( ( 2*j - 1 ) / (2*m) ) * pi );
-
-    end
-
-    t;
+    t = cos( ( ( 2.*k .- 1 ) / (2*m) ) * pi );
     x = MaclaurinLinearTransformationDomainOut( t, a, b );
 
+    # Calculo do b0/coef(1) no indice 1 do array b
+    # x^0 = T0
+    #
+    # Assuming f( x ) = log( x ), in [1, 2]
+    # soma( 1  ) = 0.690064519186718
+    # soma( 2  ) = 1.35558520936599
+    # soma( 3  ) = 1.97268975784344
+    # soma( 4  ) = 2.51907280649452
+    # soma( 5  ) = 2.97536868263748
+    # soma( 6  ) = 3.32728023686338
+    # soma( 7  ) = 3.56866028787727
+    # soma( 8  ) = 3.70532754177620
+    # soma( 9  ) = 3.75839116920959
+    # soma( 10 ) = 3.76452812919195
+    # soma( 11 ) = 3.76452812919195
+    #
+    % printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', 0 ); chebyshevPolynomType
+    result = targetFunction( x ) .* chebyshevPolynomType( 0, t, false );
 
-    # Agora calculamos o b0 no indice 1 do array b
-    soma = 0;
+    soma      = sum( result );
+    coef( 1 ) = ( 1 / m ) * soma;
 
-    for j = 1 : m
+    # Agora calculamos os b(2) : n - 1, no indice 1 : n do array b/coef.
+    #
+    for i = 1 : n - 1
 
-        # x^0 = T0
-        #
-        % Assuming f( x ) = log( x ), in [1, 2]
-        % soma =  0.690064519186718
-        % soma =  1.35558520936599
-        % soma =  1.97268975784344
-        % soma =  2.51907280649452
-        % soma =  2.97536868263748
-        % soma =  3.32728023686338
-        % soma =  3.56866028787727
-        % soma =  3.70532754177620
-        % soma =  3.75839116920959
-        % soma =  3.76452812919195
-        % soma =  3.76452812919195
-        %
-        % soma = soma + fLog( x(j) ) * T0( t(j) );
-        soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( 0, t(j) );
+        % printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', i ); chebyshevPolynomType
+        result = targetFunction( x ) .* chebyshevPolynomType( i, t, false );
 
-    end
-
-    correct_value = 3.76452812919195;
-    soma;
-    coef(1) = ( 1 / m ) * soma;
-
-
-    # Agora calculamos o b1 no indice 2 do array b
-    soma = 0;
-
-    for j = 1 : m
-
-        # x^1 = T1
-        #
-        % Assuming f( x ) = log( x ), in [1, 2]
-        % soma =  0.681568679859111
-        % soma =  1.27455195679119
-        % soma =  1.71091076772066
-        % soma =  1.95896348102698
-        % soma =  2.03034388231146
-        % soma =  1.97529278658466
-        % soma =  1.86570853659771
-        % soma =  1.76907019459963
-        % soma =  1.72179015635938
-        % soma =  1.71572875253810
-        %
-        % soma = soma + fLog( x(j) ) * T1( t(j) );
-        soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( 1, t(j) );
-
-    end
-
-    correct_value = 1.71572875253810;
-    soma;
-    coef(2) = ( 2 / m ) * soma;
-
-
-    # Agora calculamos os b(2) : n - 1, no indice 3 : n do array b (coef).
-    for k = 2 : n - 1
-
-        soma = 0;
-
-        for j = 1 : m
-
-            soma = soma + targetFunction( x(j) ) * chebyshevPolynomType( k, t(j) );
-
-        end
-
-        coef( k + 1 ) = ( 2 / m ) * soma;
+        soma          = sum( result );
+        coef( i + 1 ) = ( 2 / m ) * soma;
 
     end
 
 end
 
+# soma = soma + fLog( x(j) ) * T0( t(j) )#
+#
+#
+# Calculo do b1/coef(2) no indice 2 do array b
+# x^1 = T1
+#
+# Assuming f( x ) = log( x ), in [1, 2]
+# soma( 1  ) = 0.681568679859111
+# soma( 2  ) = 1.27455195679119
+# soma( 3  ) = 1.71091076772066
+# soma( 4  ) = 1.95896348102698
+# soma( 5  ) = 2.03034388231146
+# soma( 6  ) = 1.97529278658466
+# soma( 7  ) = 1.86570853659771
+# soma( 8  ) = 1.76907019459963
+# soma( 9  ) = 1.72179015635938
+# soma( 10 ) = 1.71572875253810
+#
+# soma = soma + fLog( x(j) ) * T1( t(j) );
+#
+
 # Include the T0, T1, ... Chebyshev's Polynoms of First Kind
 source( "ChebyshevPolynomsOfFirstKindList.m" )
+
+
+clc
+clear
+close all
+
+more off
+format long
+split_long_rows(0)
+
+
+
+
+
+# Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
+n = 5;
+
+# Domínio
+a = 1;
+b = 2;
+
+# Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
+m = 10;
+
+coef_b = calculateChebyshevCoefficients( n, m, a, b, @fLog, @getChebyshevCoefficientsNumerically )
+
+
+
+
+
+% getChebyshevCoefficientsNumerically( 0, 0.6, true )
+% getChebyshevCoefficientsNumerically( 1, 0.6, true )
+% getChebyshevCoefficientsNumerically( 2, 0.6, true )
+% getChebyshevCoefficientsNumerically( 2, [0.6, 0.4], true )
+
+value = [ 0.6, 0.4 ];
+
+% T9_correct = T9( value )
+% T9_calcula = getChebyshevCoefficientsNumerically( 9, value, true )
+% printf( '\n' )
+
+
+
+
+
+
+
+
+
+
+
 

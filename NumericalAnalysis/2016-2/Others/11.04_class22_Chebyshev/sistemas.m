@@ -75,7 +75,7 @@ end
 #
 # t(j) = cos( ( 2*j - 1 ) * pi / 2*m ), j = 1 : m
 #
-function run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
+function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
 
     source( "ChebyshevPolynomsOfFirstKindList.m" );
 
@@ -103,6 +103,7 @@ function run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
     #             + coef_b( 3)*T2( tInterPontos ) ...
     #             + coef_b( 4)*T3( tInterPontos );
     #
+    % printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
     yAproximado = evaluateChebyshevPolynom( n, coef_b, tInterPontos, chebyshevPolynomType );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
@@ -114,7 +115,7 @@ function run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
     #
     yInterPontos          = targetFunction( xInterPontos );
     erroDeChebyshev       = abs( yAproximado .- yInterPontos );
-    erroMaximoDeChebyshev = max( erroDeChebyshev )
+    erroMaximoDeChebyshev = max( erroDeChebyshev );
 
     % plot( x, y, '*' )
     plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' );
@@ -139,7 +140,7 @@ profile on
 
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 10
+n = 15
 
 # Domínio
 a = 1
@@ -149,10 +150,10 @@ b = 2
 
 
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 50
+m = 40
 
-run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
-run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )
+errorByPolinom__ = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom )
+errorNumerically = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically )
 
 chebyshevCoefficientsByPolinom_at_06__ = getChebyshevCoefficientsByPolinom  ( n, 0.6 )
 chebyshevCoefficientsNumerically_at_06 = getChebyshevCoefficientsNumerically( n, 0.6 )

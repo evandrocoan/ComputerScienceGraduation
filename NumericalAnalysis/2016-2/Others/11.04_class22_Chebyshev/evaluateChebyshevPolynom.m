@@ -29,7 +29,7 @@ function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
     for i = 1 : n
 
         i;
-        value = value + b( i )*chebyshevPolynomType( i - 1, t );
+        value = value + b( i )*chebyshevPolynomType( i - 1, t, true );
 
     end
 
