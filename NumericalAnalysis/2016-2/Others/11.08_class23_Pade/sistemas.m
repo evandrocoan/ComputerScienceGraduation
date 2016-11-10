@@ -10,12 +10,11 @@ format long
 split_long_rows(0)
 
 
-
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
 # Método de MacLaurin
-# 
+#
 # Derivatives
 # ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
 #
@@ -63,14 +62,14 @@ end
 
 
 # Profiling
-# 
+#
 # Command: profile on
 # Command: profile off
 # Command: profile resume
 # Command: profile clear
 # Function File: S = profile ("status")
 # Function File: T = profile ("info")
-# 
+#
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile on
 
@@ -82,13 +81,14 @@ profile on
 # 1. Chebyshev
 # 2. MacLaurin
 # 3. Pade
-# 
-n = 5
+#
+n = 20
 
 # Grau de precisão da:
 # 1. Integral Numérica de Chebyshev e número de nós de Chebyshev.
 # 2. M de Pade.
-m = 4
+#
+m = 3
 
 # Domínio
 a = 1
@@ -100,11 +100,11 @@ b = 2
 
 
 # 4-aproximação racional de padé
-# 
+#
 # yPade(x) = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
-# 
+#
 # R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
-# 
+#
 
 h = (b-a)/n;
 
@@ -118,17 +118,26 @@ coefMaclaurinParaPade   = calculateMaclaurinCoefficients( grauDeMaclaurinParaPad
 xInterPontos      = a : h/20 : b;
 yInterPontosExato = fLog( xInterPontos );
 
-%R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
-[ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade )
+# R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
+#
+[ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
 tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
+
+# For fLog( x ) in [1, 2]
+ap_correct_value = [ 0.4054651   0.4955194   0.0912933   0.0012346 ];
+aPadeCoefficients;
+
+# For fLog( x ) in [1, 2]
+bp_correct_value = [ 1.00000     0.40000     0.03333     0.00000   ];
+bPadeCoefficients;
 
 # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos )
 % yAproximadoPorPade = polyval( aPadeCoefficients, tInterPontos ) / polyval( bPadeCoefficients, tInterPontos );
 yAproximadoPorPade = fPnPorBriotRunifi( ...
         n, aPadeCoefficients, tInterPontos ) ./ fPnPorBriotRunifi( ...
-        m, bPadeCoefficients, tInterPontos );
+        n, bPadeCoefficients, tInterPontos );
 
-erroDePade       = abs( yAproximadoPorPade - yInterPontosExato );
+erroDePade       = abs( yAproximadoPorPade .- yInterPontosExato );
 erroMaximoDePade = max( erroDePade )
 
 % plot( x, y, '*' )
@@ -146,10 +155,10 @@ plot( x, y, '*', xInterPontos, yInterPontosExato, 'g', xInterPontos, yAproximado
 #
 # A método de Pade é útil para funções assintoticas como 1/x.
 # Ele é o contrário da Serie de Chebyshev, que não funciona para funções assintóticas.
-# 
+#
 # Por exemplo, a função log( x ) é assintótica entre perto de 0 até 1. Mas podemos utilizar
 # Chebyshev no função log( x ) no intervalo [1, 2] ou mais, onde a função é suave/bem comportada.
-# 
+#
 
 
 
@@ -166,7 +175,7 @@ profile off
 % profexplore()
 
 # Show the profile resume, displaying per-function profiler results.
-# 
+#
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
