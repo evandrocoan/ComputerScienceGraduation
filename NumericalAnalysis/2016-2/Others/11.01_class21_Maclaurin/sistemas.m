@@ -29,7 +29,7 @@ function run_maclarin_test( n, a, b, targetFunction )
     xInterPontos = a : h/20 : b;
     yInterPontos = targetFunction( xInterPontos );
 
-    coefMaclaurin = calculateMaclaurinCoefficients( n, a, b, targetFunction );
+    coefMaclaurin = calculateMaclaurinCoefficientsForLog( n, a, b );
 
     tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
     yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos );
@@ -43,8 +43,8 @@ function run_maclarin_test( n, a, b, targetFunction )
     erroDeMaclaurin       = abs( yAproximado .- yInterPontos );
     erroMaximoDeMaclaurin = max( erroDeMaclaurin )
 
-    % plot( x, y, '*' )
-    % plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
+    # plot( x, y, '*' )
+    # plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
 
 end
 
@@ -83,7 +83,7 @@ run_maclarin_test( n, a, b, @fLog )
 profile off
 
 # Interactively explore hierarchical profiler output.
-% profexplore()
+# profexplore()
 
 # Show the profile resume, displaying per-function profiler results.
 #

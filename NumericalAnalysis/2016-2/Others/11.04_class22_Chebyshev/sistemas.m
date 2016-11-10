@@ -35,8 +35,8 @@ function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m,
                   -8.50296480504678e-006,  1.25045018720205e-006, -1.87619547238052e-007, ...
                    2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ];
 
-    %
-    % printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
+    #
+    # printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
 
     # i = 1 : n
     # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
@@ -59,7 +59,7 @@ function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m,
     erroDeChebyshev       = abs( yAproximado .- yInterPontos );
     erroMaximoDeChebyshev = max( erroDeChebyshev );
 
-    % plot( x, y, '*' )
+    # plot( x, y, '*' )
     plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' );
 
 end
@@ -112,7 +112,7 @@ polyout( chebyshevCoefficientsPolinom_n, "t" );
 profile off
 
 # Interactively explore hierarchical profiler output.
-% profexplore()
+# profexplore()
 
 # Show the profile resume, displaying per-function profiler results.
 #

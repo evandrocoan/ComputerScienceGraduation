@@ -27,7 +27,7 @@ function run_pade_test( n, m, a, b, targetFunction )
     y = targetFunction( x );
 
     grauDeMaclaurinParaPade = n + m;
-    coefMaclaurinParaPade   = calculateMaclaurinCoefficients( grauDeMaclaurinParaPade, a, b, targetFunction )
+    coefMaclaurinParaPade   = calculateMaclaurinCoefficientsForLog( grauDeMaclaurinParaPade, a, b )
 
     xInterPontos      = a : h/20 : b;
     yInterPontosExato = targetFunction( xInterPontos );
@@ -62,7 +62,7 @@ function run_pade_test( n, m, a, b, targetFunction )
     erroDePade       = abs( yAproximadoPorPade .- yInterPontosExato );
     erroMaximoDePade = max( erroDePade )
 
-    % plot( x, y, '*' )
+    # plot( x, y, '*' )
     plot( x, y, '*', xInterPontos, yInterPontosExato, 'g', xInterPontos, yAproximadoPorPade, 'b' )
 
 end
