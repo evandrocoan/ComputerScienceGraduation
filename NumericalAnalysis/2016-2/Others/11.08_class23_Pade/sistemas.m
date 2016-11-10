@@ -113,7 +113,7 @@ y = fLog( x );
 
 
 grauDeMaclaurinParaPade = n + m;
-coefMaclaurinParaPade   = calculateMaclaurinCoefficients( grauDeMaclaurinParaPade, a, b, @fLog );
+coefMaclaurinParaPade   = calculateMaclaurinCoefficients( grauDeMaclaurinParaPade, a, b, @fLog )
 
 xInterPontos      = a : h/20 : b;
 yInterPontosExato = fLog( xInterPontos );
@@ -128,6 +128,7 @@ ap_correct_value = [ 0.4054651   0.4955194   0.0912933   0.0012346 ];
 aPadeCoefficients;
 
 # For fLog( x ) in [1, 2] with n = 3 and m = 2
+
 bp_correct_value = [ 1.00000     0.40000     0.03333     0.00000   ];
 bPadeCoefficients;
 
@@ -137,6 +138,12 @@ yAproximadoPorPade = fPnPorBriotRunifi( ...
         n, aPadeCoefficients, tInterPontos ) ./ fPnPorBriotRunifi( ...
         m, bPadeCoefficients, tInterPontos );
 
+#
+# O erro de Pade é como o erro de Maclaurin, ele é 0 no ponto 0 entre [-1,1], como o Maclaurin.
+# O Maclaurin tem esse erro por que o Maclaurin é expandido em torno do ponto 0.
+# Mas mesmo o Pade sendo feito em base do Maclaurin, ele melhora um pouco o erro de Maclaurin com
+# seu polinômio interpolador.
+#
 erroDePade       = abs( yAproximadoPorPade .- yInterPontosExato );
 erroMaximoDePade = max( erroDePade )
 
@@ -172,14 +179,14 @@ plot( x, y, '*', xInterPontos, yInterPontosExato, 'g', xInterPontos, yAproximado
 profile off
 
 # Interactively explore hierarchical profiler output.
-% profexplore()
+# profexplore()
 
 # Show the profile resume, displaying per-function profiler results.
 #
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
-% profshow( profile ("info"), 8 )
+profshow( profile ("info"), 8 )
 
 
 

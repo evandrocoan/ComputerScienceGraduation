@@ -142,7 +142,7 @@ profile on
 
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin
-n = 10
+n = 18
 
 # Domínio
 a = 1
@@ -152,7 +152,7 @@ b = 2
 
 
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
-m = 1000
+m = 100
 
 errorByPolinom__ = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsByPolinom );
 errorNumerically = run_chebyshev_test( a, b, @fLog, n, m, @getChebyshevCoefficientsNumerically );
@@ -164,7 +164,7 @@ errorByPolinom__
 errorNumerically
 
 chebyshevCoefficientsPolinom_n = getChebyshevCoefficientsPolinom( n );
-polyout( chebyshevCoefficientsPolinom_n );
+polyout( chebyshevCoefficientsPolinom_n, "t" );
 
 
 
