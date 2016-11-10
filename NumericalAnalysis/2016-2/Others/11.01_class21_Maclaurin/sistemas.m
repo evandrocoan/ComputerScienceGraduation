@@ -1,5 +1,53 @@
 
 
+
+###################################################################################################
+###################################################################################################
+###################################################################################################
+# Método de MacLaurin
+#
+# Derivatives
+# ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
+#
+# To create the MacLaurin coefficients we need to derivate several times aways applying them on the
+# 0 point, because that is the MacLaurin Series, the Taylor series applied on the zero point.
+#
+# 1. Always to transform the domain from [a, b] to [-1, +1] using this formula:
+#    x(t) = 0.5*( b-a )*t + 0.5*( b+a )
+#
+# Now we got f( x(t) ) with t on [-1, 1]. This is useful/necessary to the Chebyshev Series.
+# And we always to apply the derivatives on this new domain [-1, +1] at the point 0, to deduce
+# the nth derivate formula at the point 0 by backtracking.
+# Como vamos padronizar o domínio [a, b] da aproximado para [-1, 1], pode-se fixar o x da série em 0.
+#
+function run_maclarin_test( n, a, b, targetFunction )
+
+    h = (b-a) / n;
+    x = a : h : b;
+    y = targetFunction( x );
+
+    xInterPontos = a : h/20 : b;
+    yInterPontos = targetFunction( xInterPontos );
+
+    coefMaclaurin = calculateMaclaurinCoefficients( n, a, b, targetFunction );
+
+    tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
+    yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos );
+
+    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
+    # intervalo [-1,1], ou seja, em -1 ou em 1.
+    #
+    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
+    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
+    erroDeMaclaurin       = abs( yAproximado .- yInterPontos );
+    erroMaximoDeMaclaurin = max( erroDeMaclaurin )
+
+    % plot( x, y, '*' )
+    % plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
+
+end
+
 clc
 clear
 close all
@@ -8,100 +56,47 @@ more off
 format long
 split_long_rows(0)
 
-# Derivatives
-# 
-# ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
-# 
-# To create the MacLaurin coefficients we need to derivate several times aways applying them on the
-# 0 point, because that is the MacLaurin Series, the Taylor series applied on the zero point.
-# 
-# 1. Always to transform the domain from [a, b] to [-1, +1] using this formula:
-#    x(t) = 0.5*( b-a )*t + 0.5*( b+a )
-# 
-# Now we got f( x(t) ) with t on [-1, 1]. This is useful/necessary to the Chebchev Series.
-# And we always to apply the derivatives on this new domain [-1, +1] at the point 0, to deduce
-# the nth derivate formula at the point 0 by backtracking.
-# Como vamos padronizar o domínio [a, b] da aproximado para [-1, 1], pode-se fixar o x da série em 0.
-# 
+# Profiling
+#
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+#
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
 
-function x = fLog( x )
-    
-    x = log( x );
-    
-end
+# Numero de pontos do Gráfico e grau n da Série de MacLaurin
+#
+n = 5
 
-# Linear transformation to convert the [a, b] domain to [-1, 1] domain.
-# We may call it as `t(x)`.
-# 
-function t = MaclaurinLinearTransformationDomainIn( x, a, b )
-    
-    t = ( 2*x - (b+a) ) / ( b-a );
-    
-end
-
-# Linear transformation to convert the [-1, 1] domain to [a, b] domain.
-# 
-# We may call it as `x(t)`. On this way, we apply the the approximation
-# methods to the `f(x(t))`, were `x` belongs to the Domain [a, b].
-# 
-function x = MaclaurinLinearTransformationDomainOut( t, a, b )
-    
-    x = ( (b-a)*t + (b+a) ) / 2;
-    
-end
-
-# 
-# Function: log( x )
-# For the Domain [-1, 1]
-# MaclaurinSeries( 0 ) = f( 0 ) + (f'( 0 )*z^1) / 1! + (f''( 0 )*z^2) / 2! + ... + (f^n'( 0 )*z^n) / n!
-# 
-# For the Domain [a, b]
-# MaclaurinSeries( 0 ) = f( 0 )
-#                        + (f'( 0 )*z^1) / 1!
-#                        + (f''( 0 )*z^2) / 2!
-#                        + ...
-#                        + (f^n'( 0 )*z^n) / n!
-# 
-function coef = fMaclaurinForLog( n, a, b )
-    
-    # Here we applicate the first coefficient from the Maclaurin series on its Domain [-1, 1]
-    # middle point 0. Before apply our function `fLog` we need to convert from the Domain [-1, 1]
-    # to the original or correct Domain [a, b] for the function `fLog`.
-    # This is the whole reason why we may apply the derivative functions on the 0 point.
-    MaclaurinDomainPointZero = MaclaurinLinearTransformationDomainOut( 0, a, b )
-    
-    cache = ( b - a ) / ( b + a )
-    coef( 1 ) = fLog( MaclaurinDomainPointZero )
-    
-    for i = 2 : n + 1
-        
-        coef( i ) =  (-1)^(i) * (cache^(i-1)) / (i-1);
-        
-    end
-    
-end
-
-n = 7
+# Domínio
 a = 1
 b = 2
-h = (b-a)/n
 
-coefMaclaurin = fMaclaurinForLog( n, a, b )
+run_maclarin_test( n, a, b, @fLog )
 
-x = a : h : b
-y = fLog( x )
 
-xInterPontos = a : h/20 : b
-yInterPontos = fLog( xInterPontos )
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
 
-tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b )
-yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos )
+# Interactively explore hierarchical profiler output.
+% profexplore()
 
-erroDeMaclaurin       = abs( yAproximado .- yInterPontos )
-erroMaximoDeMaclaurin = max( erroDeMaclaurin )
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+profshow( profile ("info"), 8 )
 
-% plot( x, y, '*' )
-plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
+
+
+
+
+
 
 
 
