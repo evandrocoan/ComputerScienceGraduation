@@ -35,7 +35,7 @@ function run_pade_test( n, m, a, b, targetFunction )
     # R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
     #
     [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
-    tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
+    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
 
     # For fLog( x ) in [1, 2] with n = 3 and m = 2
     ap_correct_value = [ 0.4054651   0.4955194   0.0912933   0.0012346 ];

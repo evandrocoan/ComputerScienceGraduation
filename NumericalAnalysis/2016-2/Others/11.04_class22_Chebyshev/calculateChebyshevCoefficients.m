@@ -25,7 +25,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     k = 1 : m;
     t = cos( ( ( 2.*k .- 1 ) / (2*m) ) * pi );
 
-    x           = MaclaurinLinearTransformationDomainOut( t, a, b );
+    x           = ChebyshevDomainLinearTransformationOut( t, a, b );
     functionOnX = targetFunction( x );
 
     # Calculo do b0/coef(1) no indice 1 do array b

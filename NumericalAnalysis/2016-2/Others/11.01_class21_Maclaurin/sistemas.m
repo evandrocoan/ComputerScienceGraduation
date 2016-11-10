@@ -31,7 +31,7 @@ function run_maclarin_test( n, a, b, targetFunction )
 
     coefMaclaurin = calculateMaclaurinCoefficientsForLog( n, a, b );
 
-    tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
+    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
     yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso

@@ -18,7 +18,7 @@ function coef = calculateMaclaurinCoefficientsForLog( n, a, b )
     # middle point 0. Before apply our function `targetFunction` we need to convert from the
     # Domain [-1, 1] to the original or correct Domain [a, b] for the function `targetFunction`.
     # This is the whole reason why we may apply the derivative functions on the 0 point.
-    MaclaurinDomainPointZero = MaclaurinLinearTransformationDomainOut( 0, a, b );
+    MaclaurinDomainPointZero = ChebyshevDomainLinearTransformationOut( 0, a, b );
 
     cache = ( b - a ) / ( b + a );
     coef( 1 ) = fLog( MaclaurinDomainPointZero );

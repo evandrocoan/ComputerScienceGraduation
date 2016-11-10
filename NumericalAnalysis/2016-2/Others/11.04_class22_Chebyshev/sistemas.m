@@ -26,7 +26,7 @@ function erroMaximoDeChebyshev = run_chebyshev_test( a, b, targetFunction, n, m,
     y = targetFunction( x );
 
     xInterPontos = a : h/20 : b;
-    tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
+    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
     coef_b       = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType );
 
     # For log( x ) in [1, 2]
