@@ -82,13 +82,13 @@ profile on
 # 2. MacLaurin
 # 3. Pade
 #
-n = 20
+n = 5
 
 # Grau de precisão da:
 # 1. Integral Numérica de Chebyshev e número de nós de Chebyshev.
 # 2. M de Pade.
 #
-m = 3
+m = 2
 
 # Domínio
 a = 1
@@ -123,11 +123,11 @@ yInterPontosExato = fLog( xInterPontos );
 [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
 tInterPontos = MaclaurinLinearTransformationDomainIn( xInterPontos, a, b );
 
-# For fLog( x ) in [1, 2]
+# For fLog( x ) in [1, 2] with n = 3 and m = 2
 ap_correct_value = [ 0.4054651   0.4955194   0.0912933   0.0012346 ];
 aPadeCoefficients;
 
-# For fLog( x ) in [1, 2]
+# For fLog( x ) in [1, 2] with n = 3 and m = 2
 bp_correct_value = [ 1.00000     0.40000     0.03333     0.00000   ];
 bPadeCoefficients;
 
@@ -135,7 +135,7 @@ bPadeCoefficients;
 % yAproximadoPorPade = polyval( aPadeCoefficients, tInterPontos ) / polyval( bPadeCoefficients, tInterPontos );
 yAproximadoPorPade = fPnPorBriotRunifi( ...
         n, aPadeCoefficients, tInterPontos ) ./ fPnPorBriotRunifi( ...
-        n, bPadeCoefficients, tInterPontos );
+        m, bPadeCoefficients, tInterPontos );
 
 erroDePade       = abs( yAproximadoPorPade .- yInterPontosExato );
 erroMaximoDePade = max( erroDePade )

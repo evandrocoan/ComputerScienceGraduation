@@ -61,6 +61,9 @@ function [a b] = calculatePadeCoefficients( npade, mpade, c )
         a(i) = S;
     
     end
+    
+    b = b( 1 : mpade+1 );
+    
 end
 
 
