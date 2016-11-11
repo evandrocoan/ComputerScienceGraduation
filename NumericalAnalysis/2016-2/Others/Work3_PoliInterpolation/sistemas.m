@@ -41,11 +41,9 @@ split_long_rows(0)
 
 
 
-##############################################################################################################
-##############################################################################################################
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
 
-
-#{
 printf( "\nGrupo 19, exercícios 5 = 1, 6 = 1\n\n" )
 printf( "ExemplodeGrupo.m\n" )
 printf( "numerogrupo=5\n" )
@@ -73,6 +71,7 @@ printf( "‘n’, enquanto o erro de truncamento máximo exato esteja maior que 
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 passos         = 0;
@@ -136,11 +135,10 @@ profshow( profile ("info"), 8 )
 
 
 
-##############################################################################################################
-##############################################################################################################
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
 
-
-printf( "\n\n6.1b). Uma outra alternativa de representação é a expansão de f(x) em termos da\n" )
+printf( "\n6.1b). Uma outra alternativa de representação é a expansão de f(x) em termos da\n" )
 printf( "série de Maclaurin Mn(x).\n" )
 printf( "Determine, ou monte um algoritmo de busca que determine, o grau ‘n’ mínimo\n" )
 printf( "necessário e os coeficientes de Mn(x), para que o erro de truncamento máximo\n" )
@@ -156,6 +154,7 @@ printf( "‘exato’ entre Mn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2);\
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 # Numero de pontos do Gráfico e grau n da Série de MacLaurin
@@ -189,14 +188,14 @@ profshow( profile ("info"), 8 )
 
 
 
-##############################################################################################################
-##############################################################################################################
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
 
-printf( "\n\n6.1c). Outra alternativa de representação é a expansão algébrica de f(x) em termos\n" )
-printf( "da série de Tchebyschev Tn(x). Determine algébricamente os coeficientes da série\n" )
+printf( "\n6.1c). Outra alternativa de representação é a expansão algébrica de f(x) em termos\n" )
+printf( "da série de Tchebyschev Tn(x). Determine algebricamente os coeficientes da série\n" )
 printf( "de ChebyschevTn(x), para n=3 e 5, e o seu erro máximo ‘exato’ entre Tn(x) e f(x). Os\n" )
 printf( "erros máximos normalmente estão nas extremidades do intervalo [a, b], mas para a\n" )
-printf( "série de Tchebyschev os erros estão distribuidos no intervalo, então calcule erros em\n" )
+printf( "série de Tchebyschev os erros estão distribuídos no intervalo, então calcule erros em\n" )
 printf( "pelo menos 5 pontos de [a, b], e tome o maior destes erros como referência;\n\n" )
 
 # Profiling
@@ -209,6 +208,7 @@ printf( "pelo menos 5 pontos de [a, b], e tome o maior destes erros como referê
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 # Grau da Série de Chebyshev
@@ -221,7 +221,13 @@ m = 100
 a = -1
 b = 1
 
-printf( "\nCalculating the Chebyshev Polynom's\n", i );
+printf( "\nAqui os coeficientes de Chebyshev serao calculados utilizando a funcao generica\n" );
+printf( "`getChebyshevCoefficientsByPolinom`para o calculo do nesimo coeficiente de Chebyshev\n" );
+printf( "analiticamente pelos polinomios de Chebyshev.\n" );
+printf( "A funcao getChebyshevCoefficientsByPolinom, utiliza a funcao generica `getChebyshevCoefficientsPolinom`\n" );
+printf( "que calcula o nesimo polinomio de Chebyshev, e entao calcula o polinomio gerado nos pontos\n" );
+printf( "necessarios.\n" );
+printf( "Calculating the Chebyshev Polynom's\n", i );
 
 for i = 0 : n
 
@@ -260,10 +266,10 @@ profshow( profile ("info"), 8 )
 
 
 
-##############################################################################################################
-##############################################################################################################
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
 
-printf( "\n\n6.1d). Determine numericamente, através de um algoritmo, os coeficientes da série\n" )
+printf( "\n6.1d). Determine numericamente, através de um algoritmo, os coeficientes da série\n" )
 printf( "de Chebyschev Tn(x), para n=3 e 5, e o seus erros máximo exatos entre Tn(x) e f(x);\n\n" )
 
 # Profiling
@@ -276,6 +282,7 @@ printf( "de Chebyschev Tn(x), para n=3 e 5, e o seus erros máximo exatos entre 
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 # Grau da Série de Chebyshev
@@ -288,13 +295,19 @@ m = 100
 a = -1
 b = 1
 printf( "\n" );
-
+printf( "Aqui os coeficientes de Chebyshev serao calculados utilizando a funcao generica\n" );
+printf( "`getChebyshevCoefficientsNumerically`para o calculo no nesimo coeficiente de Chebyshev\n" );
+printf( "numericamente.\n" );
 n = 3
-[ errorNumerically_n3, chebyshevBCoefficients_n3 ] = run_chebyshev_test( a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
+[ errorNumerically_n3, chebyshevBCoefficients_n3, ...
+        xInterPontosChebyshev_n3, erroDeChebyshev_n3 ] = run_chebyshev_test( ...
+        a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
 printf( "\n" );
 
 n = 5
-[ errorNumerically_n5, chebyshevBCoefficients_n5 ] = run_chebyshev_test( a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
+[ errorNumerically_n5, chebyshevBCoefficients_n5, ...
+        xInterPontosChebyshev_n5, erroDeChebyshev_n5 ] = run_chebyshev_test( ...
+        a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
 printf( "\n" );
 
 chebyshevBCoefficients_n3
@@ -313,13 +326,13 @@ profile off
 # If n is unspecified it defaults to 20.
 printf( "\n" );
 profshow( profile ("info"), 8 )
-#}
 
 
-##############################################################################################################
-##############################################################################################################
 
-printf( "\n\n6.1e). Ainda uma outra alternativa de representação é a expansão de f(x) em termos\n" )
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
+printf( "\n6.1e). Ainda uma outra alternativa de representação é a expansão de f(x) em termos\n" )
 printf( "da série racional de Padé Rnm(x). Determine, ou monte um algoritmo que detemine,\n" )
 printf( "os coeficientes da aproximação de Padé R32(x), a partir de Maclaurin com grau total\n" )
 printf( "M=5 e o seu erro de truncamento máximo ‘exato’ entre Rnm(x) e f(x).\n\n" )
@@ -334,6 +347,7 @@ printf( "M=5 e o seu erro de truncamento máximo ‘exato’ entre Rnm(x) e f(x)
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 # Numero de pontos do Gráfico e grau n da Série de Pade
@@ -347,7 +361,7 @@ a = -1
 b = 1
 printf( "\n" );
 
-[ erroMaximoDePade, aPadeCoefficients, bPadeCoefficients ] = run_pade_test( ...
+[ erroMaximoDePade, aPadeCoefficients, bPadeCoefficients, xInterPontosPade, erroDePade ] = run_pade_test( ...
         n, m, a, b, @sin, @calculateMaclaurinCoefficientsForSin );
 
 aPadeCoefficients
@@ -365,8 +379,19 @@ profile off
 # If n is unspecified it defaults to 20.
 printf( "\n" );
 profshow( profile ("info"), 8 )
-#}
 
 
 
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
+printf( "\n6.1f). Plote os gráficos dos erros exatos entre as aproximações de Tchebyschev e\n" )
+printf( "Padé com f(x).\n\n" )
+
+plot( ...
+      # xInterPontosChebyshev_n3, erroDeChebyshev_n3, "b;Erro de Chebyshev n = 3;", ...
+      xInterPontosChebyshev_n5, erroDeChebyshev_n5, "g;Erro de Chebyshev n = 5;", ...
+      xInterPontosPade        , erroDePade        , "r;Erro de Pade;" );
+legend('location','north');
+grid on;
 

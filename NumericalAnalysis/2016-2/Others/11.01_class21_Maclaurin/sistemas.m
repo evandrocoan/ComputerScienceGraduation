@@ -66,6 +66,7 @@ split_long_rows(0)
 # Function File: T = profile ("info")
 #
 # https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile clear
 profile on
 
 # Numero de pontos do Gráfico e grau n da Série de MacLaurin

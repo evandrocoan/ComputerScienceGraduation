@@ -5,9 +5,6 @@
 # i = 1 : n
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
 #
-# @param k, the k'th Chebyshev Polynom
-# @param t, the value to evaluate at the k'th Chebyshev Polynom
-#
 #
 # Efficient Computation of Chebyshev Polynomials in Computer Algebra
 # http://www.mathematik.uni-kassel.de/koepf/cheby.pdf

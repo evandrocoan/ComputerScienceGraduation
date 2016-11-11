@@ -86,3 +86,10 @@ xInterpontos = min( x ) : 0.01 : max( x );
 
 plot( x, y, '*', xInterpontos, yp );
 
+
+
+
+
+
+
+

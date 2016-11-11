@@ -10,7 +10,8 @@
 #
 # t(j) = cos( ( 2*j - 1 ) * pi / 2*m ), j = 1 : m
 #
-function [ erroMaximoDeChebyshev, coef_b ] = run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
+function [ erroMaximoDeChebyshev, coef_b, xInterPontos, erroDeChebyshev ] = run_chebyshev_test( ...
+        a, b, targetFunction, n, m, chebyshevPolynomType )
 
     source( "ChebyshevPolynomsOfFirstKindList.m" );
 
@@ -55,7 +56,7 @@ function [ erroMaximoDeChebyshev, coef_b ] = run_chebyshev_test( a, b, targetFun
     erroMaximoDeChebyshev = max( erroDeChebyshev );
 
     # plot( x, y, '*' )
-    plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' );
+    # plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' );
 
 end
 

@@ -87,6 +87,7 @@ split_long_rows(0)
 
 
 
+profile clear
 profile on
 
 # Numero de pontos do Gráfico e grau da Série de Chebyshev/MacLaurin

@@ -24,10 +24,10 @@
 #                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
 #
 function result = getChebyshevCoefficientsByPolinom( k, t )
-    
+
     polynom = getChebyshevCoefficientsPolinom( k );
     result  = polyval( polynom, t );
-    
+
 end
 
 
