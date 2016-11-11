@@ -32,17 +32,20 @@ close all
 more off
 format long
 split_long_rows(0)
+
 #format rat
 #output_precision(30)
 #output_max_field_width(0)
 
-addpath( 'Maclaurin' )
+# addpath( 'Maclaurin' )
+
+
 
 ##############################################################################################################
 ##############################################################################################################
+
 
 #{
-
 printf( "\n\n\nGrupo 19, exercícios 5 = 1, 6 = 1\n\n" )
 printf( "ExemplodeGrupo.m\n" )
 printf( "numerogrupo=5\n" )
@@ -60,27 +63,32 @@ printf( "‘exato’ entre Pn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2).\
 printf( "Sugestão: Monte um algoritmo de busca que incremente sequencialmente o valor de\n" )
 printf( "‘n’, enquanto o erro de truncamento máximo exato esteja maior que √10*10-2.\n\n" )
 
-
-function x = f61( x )
-    x = sin( x );
-end
+# Profiling
+#
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+#
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
 
 passos         = 0;
-tolerancia     = sqrt(10)*1e-2
+tolerancia     = sqrt(10)*1e-2;
 erroMaximoDePn = 1;
 
 a = -1;
 b =  1;
 n =  0;
 
-while erroMaximoDePn > tolerancia && passos < 20
+while erroMaximoDePn > tolerancia && n < 20
 
     n = n + 1;
     h = ( b - a ) / n;
     x = a : h : b;
-    y = f61( x );
-
-    passos = passos + 1;
+    y = sin( x );
 
     # coef_by_me =
     #   -1.164279323185479   1.399845394498246  -0.235566071312767
@@ -90,7 +98,7 @@ while erroMaximoDePn > tolerancia && passos < 20
     coef_by_polyfit = fliplr( polyfit( x, y, n ) );
 
     xInterPontos = a : h / 20 : b;
-    yInterPontos = f61( xInterPontos );
+    yInterPontos = sin( xInterPontos );
 
     # Aqui calculamos o valor do polinômio nos pontos xInterPontos, utilizando o método de Horner e de Briot Rufini.
     # Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
@@ -104,18 +112,28 @@ while erroMaximoDePn > tolerancia && passos < 20
 
 end
 
-n
-passos;
-erroDePn;
-
 coef_by_me
 coef_by_polyfit
+
+n
+tolerancia
 erroMaximoDePn
 
-plot( x, y, '*', xInterPontos, yAproximado, 'g', xInterPontos, yInterPontos, 'b' )
+# plot( x, y, '*', xInterPontos, yAproximado, 'g', xInterPontos, yInterPontos, 'b' )
 % plot( xInterPontos, erroDePn )
 
-#}
+
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
+
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+profshow( profile ("info"), 8 )
+
+
 
 ##############################################################################################################
 ##############################################################################################################
@@ -204,16 +222,13 @@ end
 # Stop profiling. The collected data can later be retrieved and examined.
 profile off
 
-# Interactively explore hierarchical profiler output.
-# profexplore()
-
 # Show the profile resume, displaying per-function profiler results.
 #
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 profshow( profile ("info"), 8 )
-
+#}
 
 
 ##############################################################################################################
