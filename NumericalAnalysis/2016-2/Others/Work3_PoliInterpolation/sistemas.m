@@ -46,7 +46,7 @@ split_long_rows(0)
 
 
 #{
-printf( "\n\n\nGrupo 19, exercícios 5 = 1, 6 = 1\n\n" )
+printf( "\nGrupo 19, exercícios 5 = 1, 6 = 1\n\n" )
 printf( "ExemplodeGrupo.m\n" )
 printf( "numerogrupo=5\n" )
 printf( "if (mod(numerogrupo,6)==0) numeroexercicio5=6 else numeroexercicio5=mod(numerogrupo,6) end\n" )
@@ -131,6 +131,7 @@ profile off
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
+printf( "\n" );
 profshow( profile ("info"), 8 )
 
 
@@ -144,50 +145,6 @@ printf( "série de Maclaurin Mn(x).\n" )
 printf( "Determine, ou monte um algoritmo de busca que determine, o grau ‘n’ mínimo\n" )
 printf( "necessário e os coeficientes de Mn(x), para que o erro de truncamento máximo\n" )
 printf( "‘exato’ entre Mn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2);\n\n" )
-
-# Método de MacLaurin
-#
-# Derivatives
-# ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
-#
-# To create the MacLaurin coefficients we need to derivate several times aways applying them on the
-# 0 point, because that is the MacLaurin Series, the Taylor series applied on the zero point.
-#
-# 1. Always to transform the domain from [a, b] to [-1, +1] using this formula:
-#    x(t) = 0.5*( b-a )*t + 0.5*( b+a )
-#
-# Now we got f( x(t) ) with t on [-1, 1]. This is useful/necessary to the Chebyshev Series.
-# And we always to apply the derivatives on this new domain [-1, +1] at the point 0, to deduce
-# the nth derivate formula at the point 0 by backtracking.
-# Como vamos padronizar o domínio [a, b] da aproximado para [-1, 1], pode-se fixar o x da série em 0.
-#
-function erroMaximoDeMaclaurin = run_maclarin_test( n, a, b, targetFunction )
-
-    h = (b-a) / n;
-    x = a : h : b;
-    y = targetFunction( x );
-
-    xInterPontos = a : h/20 : b;
-    yInterPontos = targetFunction( xInterPontos );
-
-    coefMaclaurin = calculateMaclaurinCoefficientsForSin( n, a, b );
-
-    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
-    yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos );
-
-    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
-    # intervalo [-1,1], ou seja, em -1 ou em 1.
-    #
-    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
-    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    erroDeMaclaurin       = abs( yAproximado .- yInterPontos );
-    erroMaximoDeMaclaurin = max( erroDeMaclaurin );
-
-    # plot( x, y, '*' )
-    # plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
-
-end
 
 # Profiling
 #
@@ -227,8 +184,9 @@ profile off
 # profshow (data, n)
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
+printf( "\n" );
 profshow( profile ("info"), 8 )
-#}
+
 
 
 ##############################################################################################################
@@ -241,65 +199,17 @@ printf( "erros máximos normalmente estão nas extremidades do intervalo [a, b],
 printf( "série de Tchebyschev os erros estão distribuidos no intervalo, então calcule erros em\n" )
 printf( "pelo menos 5 pontos de [a, b], e tome o maior destes erros como referência;\n\n" )
 
-# Método de Chebyshev
+# Profiling
 #
-# f(t) = log( .5*t + 1.5 ) in [-1, 1]
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
 #
-# i = 1 : n
-# fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
-#
-# b0 = 1/m \sum_j=1^m f( t(j) ), m = 10
-#
-# t(j) = cos( ( 2*j - 1 ) * pi / 2*m ), j = 1 : m
-#
-function [ erroMaximoDeChebyshev, coef_b ] = run_chebyshev_test( a, b, targetFunction, n, m, chebyshevPolynomType )
-
-    source( "ChebyshevPolynomsOfFirstKindList.m" );
-
-    # Gráfico de Chebyshev
-    h = (b-a)/n;
-
-    x = a : h : b;
-    y = targetFunction( x );
-
-    xInterPontos = a : h/20 : b;
-    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
-    coef_b       = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType );
-
-    # For log( x ) in [1, 2]
-    correct_b = [  3.76452812919196e-001,  3.43145750507620e-001, -2.94372515228575e-002, ...
-                   3.36708925555306e-003, -4.33275888539416e-004,  5.94707115514397e-005, ...
-                  -8.50296480504678e-006,  1.25045018720205e-006, -1.87619547238052e-007, ...
-                   2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ];
-
-    #
-    # printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
-
-    # i = 1 : n
-    # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
-    #
-    # yAproximado = coef_b( 1)*T0( tInterPontos ) ...
-    #             + coef_b( 2)*T1( tInterPontos ) ...
-    #             + coef_b( 3)*T2( tInterPontos ) ...
-    #             + coef_b( 4)*T3( tInterPontos );
-    #
-    yAproximado = evaluateChebyshevPolynom( n, coef_b, tInterPontos, chebyshevPolynomType );
-
-    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
-    # intervalo [-1,1], ou seja, em -1 ou em 1.
-    #
-    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
-    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    #
-    yInterPontos          = targetFunction( xInterPontos );
-    erroDeChebyshev       = abs( yAproximado .- yInterPontos );
-    erroMaximoDeChebyshev = max( erroDeChebyshev );
-
-    # plot( x, y, '*' )
-    plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' );
-
-end
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
 
 # Grau da Série de Chebyshev
 n = 5
@@ -337,6 +247,24 @@ chebyshevBCoefficients_n5
 errorByPolinom_n3
 errorByPolinom_n5
 
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
+
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+printf( "\n" );
+profshow( profile ("info"), 8 )
+#}
+
+
+##############################################################################################################
+##############################################################################################################
+
+printf( "\n\n6.1d). Determine numericamente, através de um algoritmo, os coeficientes da série\n" )
+printf( "de Chebyschev Tn(x), para n=3 e 5, e o seus erros máximo exatos entre Tn(x) e f(x);\n\n" )
 
 
 
