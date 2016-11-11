@@ -347,7 +347,8 @@ a = -1
 b = 1
 printf( "\n" );
 
-[ erroMaximoDePade, aPadeCoefficients, bPadeCoefficients ] = run_pade_test( n, m, a, b, @sin );
+[ erroMaximoDePade, aPadeCoefficients, bPadeCoefficients ] = run_pade_test( ...
+        n, m, a, b, @sin, @calculateMaclaurinCoefficientsForSin );
 
 aPadeCoefficients
 bPadeCoefficients

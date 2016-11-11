@@ -1,7 +1,7 @@
 
 
 #
-# Maclaurin coefficients for the function: log( x ), on the converted Domain [-1, 1]
+# Maclaurin coefficients for the function: sin( x ), on the converted Domain [-1, 1]
 #
 # MaclaurinSeries( 0 ) = f( 0 ) + (f'( 0 )*z^1) / 1! + (f''( 0 )*z^2) / 2! + ... + (f^n'( 0 )*z^n) / n!
 #

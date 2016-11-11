@@ -19,7 +19,7 @@
 # Por exemplo, a função log( x ) é assintótica entre perto de 0 até 1. Mas podemos utilizar
 # Chebyshev no função log( x ) no intervalo [1, 2] ou mais, onde a função é suave/bem comportada.
 #
-function run_pade_test( n, m, a, b, targetFunction )
+function run_pade_test( n, m, a, b, targetFunction, maclaurinCoefficientsFunction )
 
     h = (b-a)/n;
 
@@ -27,7 +27,7 @@ function run_pade_test( n, m, a, b, targetFunction )
     y = targetFunction( x );
 
     grauDeMaclaurinParaPade = n + m;
-    coefMaclaurinParaPade   = calculateMaclaurinCoefficientsForLog( grauDeMaclaurinParaPade, a, b )
+    coefMaclaurinParaPade   = maclaurinCoefficientsFunction( grauDeMaclaurinParaPade, a, b )
 
     xInterPontos      = a : h/20 : b;
     yInterPontosExato = targetFunction( xInterPontos );
@@ -97,7 +97,7 @@ m = 2
 a = 1
 b = 2
 
-run_pade_test( n, m, a, b, @log )
+run_pade_test( n, m, a, b, @log, @calculateMaclaurinCoefficientsForLog )
 
 
 
