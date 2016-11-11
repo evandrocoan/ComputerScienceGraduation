@@ -44,7 +44,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
     # soma( 10 ) = 3.76452812919195
     # soma( 11 ) = 3.76452812919195
     #
-    % printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', 0 ); chebyshevPolynomType
+    printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', 0 ); chebyshevPolynomType
     result = functionOnX.*chebyshevPolynomType( 0, t, true );
 
     soma      = sum( result );

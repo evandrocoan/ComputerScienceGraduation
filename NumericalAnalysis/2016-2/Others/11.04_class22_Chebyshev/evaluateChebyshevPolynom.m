@@ -27,11 +27,12 @@ function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
     value = 0;
 
     # At the first time, reset the last values result, which are wrong for this new `t`'s values.
+    printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', 0 ); chebyshevPolynomType
     value = value + b( 1 )*chebyshevPolynomType( 0, t, true );
 
     for i = 2 : n
 
-        printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', i ); chebyshevPolynomType
+        printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', i - 1 ); chebyshevPolynomType
 
         # When using n = 20 and m = 40. This is due the recursive remember feature set to false.
         #
