@@ -266,7 +266,53 @@ profshow( profile ("info"), 8 )
 printf( "\n\n6.1d). Determine numericamente, através de um algoritmo, os coeficientes da série\n" )
 printf( "de Chebyschev Tn(x), para n=3 e 5, e o seus erros máximo exatos entre Tn(x) e f(x);\n\n" )
 
+# Profiling
+#
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+#
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
 
+# Grau da Série de Chebyshev
+n = 5
+
+# Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
+m = 100
+
+# Domínio
+a = -1
+b = 1
+printf( "\n" );
+
+n = 3
+[ errorNumerically_n3, chebyshevBCoefficients_n3 ] = run_chebyshev_test( a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
+printf( "\n" );
+
+n = 5
+[ errorNumerically_n5, chebyshevBCoefficients_n5 ] = run_chebyshev_test( a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
+printf( "\n" );
+
+chebyshevBCoefficients_n3
+chebyshevBCoefficients_n5
+
+errorNumerically_n3
+errorNumerically_n5
+
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
+
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+printf( "\n" );
+profshow( profile ("info"), 8 )
 
 
 
