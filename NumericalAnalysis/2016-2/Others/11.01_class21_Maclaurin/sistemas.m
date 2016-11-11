@@ -76,7 +76,7 @@ n = 5
 a = 1
 b = 2
 
-run_maclarin_test( n, a, b, @fLog )
+run_maclarin_test( n, a, b, @log )
 
 
 # Stop profiling. The collected data can later be retrieved and examined.

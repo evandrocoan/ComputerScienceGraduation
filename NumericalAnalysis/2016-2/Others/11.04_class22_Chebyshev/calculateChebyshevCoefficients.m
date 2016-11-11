@@ -99,7 +99,7 @@ m = 40;
 a = 1;
 b = 2;
 
-coef_b = calculateChebyshevCoefficients( n, m, a, b, @fLog, @getChebyshevCoefficientsNumerically )
+coef_b = calculateChebyshevCoefficients( n, m, a, b, @log, @getChebyshevCoefficientsNumerically )
 
 profile off
 profshow( profile ("info"), 8 )

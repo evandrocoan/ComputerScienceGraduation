@@ -37,11 +37,11 @@ function run_pade_test( n, m, a, b, targetFunction )
     [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
     tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
 
-    # For fLog( x ) in [1, 2] with n = 3 and m = 2
+    # For log( x ) in [1, 2] with n = 3 and m = 2
     ap_correct_value = [ 0.4054651   0.4955194   0.0912933   0.0012346 ];
     aPadeCoefficients;
 
-    # For fLog( x ) in [1, 2] with n = 3 and m = 2
+    # For log( x ) in [1, 2] with n = 3 and m = 2
 
     bp_correct_value = [ 1.00000     0.40000     0.03333     0.00000   ];
     bPadeCoefficients;
@@ -97,7 +97,7 @@ m = 2
 a = 1
 b = 2
 
-run_pade_test( n, m, a, b, @fLog )
+run_pade_test( n, m, a, b, @log )
 
 
 

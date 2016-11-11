@@ -24,7 +24,7 @@ function coef = calculateMaclaurinCoefficientsForLog( n, a, b )
     MaclaurinDomainPointZero = ChebyshevDomainLinearTransformationOut( 0, a, b );
 
     cache = ( b - a ) / ( b + a );
-    coef( 1 ) = fLog( MaclaurinDomainPointZero );
+    coef( 1 ) = log( MaclaurinDomainPointZero );
 
     # Precisamos dos zeros em séries como sen(x) que já são entre [-1, 1]
     # Assim um for antes de calcular a sério serve para completar os zeros serve para corrigir/ajudar.
