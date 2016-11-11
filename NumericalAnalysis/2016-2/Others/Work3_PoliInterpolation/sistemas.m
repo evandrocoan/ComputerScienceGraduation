@@ -257,7 +257,7 @@ profile off
 # If n is unspecified it defaults to 20.
 printf( "\n" );
 profshow( profile ("info"), 8 )
-#}
+
 
 
 ##############################################################################################################
@@ -313,7 +313,58 @@ profile off
 # If n is unspecified it defaults to 20.
 printf( "\n" );
 profshow( profile ("info"), 8 )
+#}
 
+
+##############################################################################################################
+##############################################################################################################
+
+printf( "\n\n6.1e). Ainda uma outra alternativa de representação é a expansão de f(x) em termos\n" )
+printf( "da série racional de Padé Rnm(x). Determine, ou monte um algoritmo que detemine,\n" )
+printf( "os coeficientes da aproximação de Padé R32(x), a partir de Maclaurin com grau total\n" )
+printf( "M=5 e o seu erro de truncamento máximo ‘exato’ entre Rnm(x) e f(x).\n\n" )
+
+# Profiling
+#
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+#
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
+
+# Numero de pontos do Gráfico e grau n da Série de Pade
+n = 3
+
+# Grau do polinômio dividendo de Pade.
+m = 2
+
+# Domínio
+a = -1
+b = 1
+printf( "\n" );
+
+[ erroMaximoDePade, aPadeCoefficients, bPadeCoefficients ] = run_pade_test( n, m, a, b, @sin );
+
+aPadeCoefficients
+bPadeCoefficients
+erroMaximoDePade
+
+
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
+
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+printf( "\n" );
+profshow( profile ("info"), 8 )
+#}
 
 
 
