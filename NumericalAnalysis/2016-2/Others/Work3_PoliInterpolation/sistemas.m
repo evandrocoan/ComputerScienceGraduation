@@ -25,13 +25,18 @@ numeroexerciciocap6= 1
 #}
 
 
+clc
+clear
+close all
+
+more off
 format long
 split_long_rows(0)
 #format rat
 #output_precision(30)
 #output_max_field_width(0)
 
-#addpath( 'polynoms' )
+addpath( 'Maclaurin' )
 
 ##############################################################################################################
 ##############################################################################################################
@@ -122,65 +127,104 @@ printf( "Determine, ou monte um algoritmo de busca que determine, o grau ‘n’
 printf( "necessário e os coeficientes de Mn(x), para que o erro de truncamento máximo\n" )
 printf( "‘exato’ entre Mn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2);\n\n" )
 
-function x = f62( x )
-    x = sin( x );
+# Método de MacLaurin
+#
+# Derivatives
+# ( u^n )' = n*u^(n-1)*u'   <-- Chain rule, the external derivative times the internal derivative.
+#
+# To create the MacLaurin coefficients we need to derivate several times aways applying them on the
+# 0 point, because that is the MacLaurin Series, the Taylor series applied on the zero point.
+#
+# 1. Always to transform the domain from [a, b] to [-1, +1] using this formula:
+#    x(t) = 0.5*( b-a )*t + 0.5*( b+a )
+#
+# Now we got f( x(t) ) with t on [-1, 1]. This is useful/necessary to the Chebyshev Series.
+# And we always to apply the derivatives on this new domain [-1, +1] at the point 0, to deduce
+# the nth derivate formula at the point 0 by backtracking.
+# Como vamos padronizar o domínio [a, b] da aproximado para [-1, 1], pode-se fixar o x da série em 0.
+#
+function erroMaximoDeMaclaurin = run_maclarin_test( n, a, b, targetFunction )
+
+    h = (b-a) / n;
+    x = a : h : b;
+    y = targetFunction( x );
+
+    xInterPontos = a : h/20 : b;
+    yInterPontos = targetFunction( xInterPontos );
+
+    coefMaclaurin = calculateMaclaurinCoefficientsForSin( n, a, b );
+
+    tInterPontos = ChebyshevDomainLinearTransformationIn( xInterPontos, a, b );
+    yAproximado  = fPnPorBriotRunifi( n, coefMaclaurin, tInterPontos );
+
+    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
+    # intervalo [-1,1], ou seja, em -1 ou em 1.
+    #
+    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
+    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
+    erroDeMaclaurin       = abs( yAproximado .- yInterPontos );
+    erroMaximoDeMaclaurin = max( erroDeMaclaurin );
+
+    # plot( x, y, '*' )
+    # plot( x, y, '*', xInterPontos, yInterPontos, 'g', xInterPontos, yAproximado, 'b' )
+
 end
 
-tolerancia = sqrt(10)*1e-2
+# Profiling
+#
+# Command: profile on
+# Command: profile off
+# Command: profile resume
+# Command: profile clear
+# Function File: S = profile ("status")
+# Function File: T = profile ("info")
+#
+# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
+profile on
 
-clc
-clear
+# Numero de pontos do Gráfico e grau n da Série de MacLaurin
+#
+n = 1
 
-%f(x)=sen(x); com x entre [a=-1;b=+1]
-n = 1;
+# Domínio
 a = -1
-b = +1
-numeroMaximoDePassos = 100
+b = 1
 
-%N. de pontos para plotar os resultados aproximados
-np = 100;
-hp = (b-a)/np;
-xp = a:hp:b;
+erroMinimoDeMaclaurin = sqrt(10)*1e-2
+erroMaximoDeMaclaurin = 1;
 
-%valores exatos para plotagem
-ye = sin(xp); 
+while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
 
-%Serie de Maclaurin
-%coeficientes de Maclaurin ordem crescente de grau
-for i=1:numeroMaximoDePassos/2
-
-    ii=2*i;
-    c(ii-1)=0;
-    c(ii)=(-1)^(i-1)/factorial(2*i-1);
+    erroMaximoDeMaclaurin = run_maclarin_test( n, a, b, @sin )
+    n = n + 1
 
 end
 
-c
-n         = 0;
-passos    = 0;
-erromaxMn = 1;
+# Stop profiling. The collected data can later be retrieved and examined.
+profile off
 
-%O(1e-2)
-while( erromaxMn>sqrt(10)*1e-2 && passos < numeroMaximoDePassos ) 
+# Interactively explore hierarchical profiler output.
+# profexplore()
 
-    passos = passos + 1;
-    n=n+1
-    % t=0.5.*(b.-a).+0.5.*(b.+a);
-    % Aprox. serie Maclaurin
-    yiM =fPnPorHorner(n, c, xp);
-    erroMn=abs(yiM.-ye);
-    erromaxMn=max(erroMn)
-
-end
-
-'Maclaurin'
-n
-erromaxMn
-'coeficientes da serie de MacLaurim:'
-c(1:n+1)
+# Show the profile resume, displaying per-function profiler results.
+#
+# profshow (data, n)
+# If data is unspecified, profshow will use the current profile dataset.
+# If n is unspecified it defaults to 20.
+profshow( profile ("info"), 8 )
 
 
 
+##############################################################################################################
+##############################################################################################################
+
+printf( "\n\n6.1c). Outra alternativa de representação é a expansão algébrica de f(x) em termos\n" )
+printf( "da série de Tchebyschev Tn(x). Determine algébricamente os coeficientes da série\n" )
+printf( "de ChebyschevTn(x), para n=3 e 5, e o seu erro máximo ‘exato’ entre Tn(x) e f(x). Os\n" )
+printf( "erros máximos normalmente estão nas extremidades do intervalo [a, b], mas para a\n" )
+printf( "série de Tchebyschev os erros estão distribuidos no intervalo, então calcule erros em\n" )
+printf( "pelo menos 5 pontos de [a, b], e tome o maior destes erros como referência;\n\n" )
 
 
 
