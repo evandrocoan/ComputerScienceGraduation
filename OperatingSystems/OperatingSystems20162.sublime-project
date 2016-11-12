@@ -1,0 +1,40 @@
+{
+    "folders":
+    [
+        {
+            "folder_exclude_patterns":
+            [
+                "EposMotes_SmartObjects"
+            ],
+            "path": "."
+        }
+    ],
+    "build_systems":
+    [
+        {
+            "working_dir": "$project_path/TeachingEpos",
+            // "selector_old": "source.matlab, source.octave", // comment this to build from everywhere
+            
+            "name": "Build Main File",
+            "cmd": ["sh", "choose_a_compiler.sh", "producer_consumer.cc"],
+            
+            "variants":
+            [
+                {
+                    "name": "XFCE4 Terminal",
+                    "cmd":
+                    [
+                        "/usr/bin/xfce4-terminal",
+                        "--maximize",
+                        "--hold",
+                        "--command",
+                        "sh compile_and_run.sh philosophers_dinner.cc"
+                    ]
+                }
+            ],
+            
+            "target": "ansi_color_build",
+            "syntax": "Packages/ANSIescape/ANSI.tmLanguage"
+        }
+    ]
+}
