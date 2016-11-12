@@ -15,13 +15,8 @@
 # Are there functions that remember values they have found on Octave?
 # http://stackoverflow.com/questions/40445316/are-there-functions-that-remember-values-they-have-found-on-octave
 #
-# @param k       , the k'th Chebyshev Polynom
-# @param t       , the value to evaluate at the k'th Chebyshev Polynom
-# @param sequence, 0 or 1 to indicate the current `t`'s Chebyshev Polynom sequence.
-#                  For example, to calculate the `t` = 0.6's Chebyshev Polynoms, use the
-#                  `sequence` as 0.
-#                  And later when calculating the Chebyshev Polynom for `t` = 0.4, set this
-#                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
+# @param k, the k'th Chebyshev Polynom index to be used
+# @param t, the value to evaluate at the k'th Chebyshev Polynom
 #
 function result = getChebyshevCoefficientsByPolinom( k, t )
 

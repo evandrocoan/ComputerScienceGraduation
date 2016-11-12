@@ -15,7 +15,7 @@
 # Are there functions that remember values they have found on Octave?
 # http://stackoverflow.com/questions/40445316/are-there-functions-that-remember-values-they-have-found-on-octave
 #
-# @param k, the k'th Chebyshev Polynom
+# @param k, the k'th Chebyshev Polynom index to be used
 #
 function result = getChebyshevCoefficientsPolinom( k )
 

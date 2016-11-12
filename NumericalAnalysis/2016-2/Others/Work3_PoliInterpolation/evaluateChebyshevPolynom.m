@@ -17,9 +17,10 @@
 #             + coef_b(10)*T9( tInterPontos )
 #
 #
-# @param n, Chebyshev's series degree.
-# @param b, the `n` b's Chebyshev coefficients.
-# @param t, the [-1, 1] points to evaluate the Chebyshev Polynom.
+# @param n                   , Chebyshev's series degree.
+# @param b                   , the `n` b's Chebyshev coefficients.
+# @param t                   , the [-1, 1] points to evaluate the Chebyshev Polynom.
+# @param chebyshevPolynomType, a function handle to get the nth Chebyshev Polynom.
 #
 function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
 

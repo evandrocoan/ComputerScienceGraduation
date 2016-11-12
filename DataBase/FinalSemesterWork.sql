@@ -1,4 +1,4 @@
-﻿
+
 /*
 
 Curso( CodCurso, NomeCurso )
@@ -73,7 +73,7 @@ CREATE TABLE Pessoa
     Sexo         varchar(1),
     EMailPref    varchar,
     CodCurso     integer,
-    
+
     CHECK( Sexo = 'M' OR Sexo = 'F' ),
 
     -- CONSTRAINT + nome_da_constraint
@@ -250,7 +250,7 @@ SELECT Projeto.CodProj, Projeto.NomeProj
 FROM Projeto
 WHERE Projeto.AnoInicio BETWEEN 1990 AND 2000 AND Projeto.AnoFim > 2010;
 
---  codproj |   nomeproj    
+--  codproj |   nomeproj
 -- ---------+---------------
 --        5 | NomeProjeto 5
 
@@ -279,12 +279,12 @@ WHERE Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 
 
 SELECT Projeto.CodProj, Projeto.NomeProj, ProjetoPessoa.PapelPessProj
 FROM Projeto, ProjetoPessoa
-WHERE Projeto.CodProj = ProjetoPessoa.CodProj AND 
+WHERE Projeto.CodProj = ProjetoPessoa.CodProj AND
 (
     Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960
 );
 
---  codproj |   nomeproj    | papelpessproj 
+--  codproj |   nomeproj    | papelpessproj
 -- ---------+---------------+---------------
 --        6 | NomeProjeto 6 | Papel 1
 --        6 | NomeProjeto 6 | Papel 5
@@ -323,7 +323,7 @@ FROM Projeto JOIN ProjetoPessoa ON Projeto.CodProj            = ProjetoPessoa.Co
 ) Contagem ON Contagem.NumeroCartao = ProjetoPessoa.NumeroCartao
 WHERE Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960;
 
---    nomeproj    | papelpessproj |   nomepess   | contagem_de_projetos 
+--    nomeproj    | papelpessproj |   nomepess   | contagem_de_projetos
 -- ---------------+---------------+--------------+----------------------
 --  NomeProjeto 6 | Papel 1       | NomePessoa 8 |                    4
 --  NomeProjeto 6 | Papel 5       | NomePessoa 4 |                    3
@@ -354,14 +354,14 @@ FROM Curso JOIN
                 JOIN Curso      ON Pessoa.CodCurso     = Curso.CodCurso
     GROUP BY 1
 ) OutraTabela ON Curso.CodCurso = OutraTabela.CodCurso
+WHERE Curso.NomeCurso LIKE '%Curso%' AND Curso.CodCurso < 4
 ORDER BY 2;
 
---  codcurso | nomecurso | count 
+--  codcurso | nomecurso | count
 -- ----------+-----------+-------
 --         1 | Curso 1   |     5
 --         3 | Curso 3   |     2
---         4 | Curso 4   |     2
--- (3 rows)
+-- (2 rows)
 
 
 

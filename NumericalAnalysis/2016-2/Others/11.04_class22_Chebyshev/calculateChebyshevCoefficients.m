@@ -12,6 +12,7 @@
 # @param a             , Input, real   , the function handle original starting domain from [a, b].
 # @param b             , Input, real   , the function handle original ending domain from [a, b].
 # @param targetFunction, Input, real   , targetFunction( X ), a function handle.
+# @param chebyshevPolynomType, a function handle to get the nth Chebyshev Polynom.
 #
 function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, chebyshevPolynomType )
 
