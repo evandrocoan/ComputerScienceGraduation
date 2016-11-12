@@ -1,6 +1,6 @@
 
 #
-# Evaluate the t variable at the k'th Chebyshev Polynom
+# Evaluate the t variable at the k'th Chebyshev Polynom analytically calculated.
 #
 # i = 1 : n
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
@@ -24,10 +24,10 @@
 #                  value to 1, to clear the last Chebyshev Polynom cached values for `t` = 0.6.
 #
 function result = getChebyshevCoefficientsByPolinom( k, t )
-    
+
     polynom = getChebyshevCoefficientsPolinom( k );
     result  = polyval( polynom, t );
-    
+
 end
 
 
