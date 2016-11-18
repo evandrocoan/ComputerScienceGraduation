@@ -40,15 +40,37 @@ split_long_rows(0)
 # addpath( 'Maclaurin' )
 
 
-
-printf( "\n\n\n##############################################################################################################\n" )
-printf( "##############################################################################################################\n" )
-
 printf( "\nGrupo 19, exercícios 5 = 1, 6 = 1\n\n" )
 printf( "ExemplodeGrupo.m\n" )
 printf( "numerogrupo=5\n" )
 printf( "if (mod(numerogrupo,6)==0) numeroexercicio5=6 else numeroexercicio5=mod(numerogrupo,6) end\n" )
 printf( "if (mod(numerogrupo,2 )==0)  numeroexercicio6= 4 else  numeroexercicio6=mod(numerogrupo,2 ) end\n" )
+
+
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
+printf( "Exercício de fixação:\n" )
+printf( "5.1). Na função a seguir está representado o consumo de energia elétrica em um determinado local em\n" )
+printf( "função dos anos. Determinar quando (t = ?) o consumo atingirá o limite instalado de 7.5 KW:\n" )
+printf( "t(ano)      85 89  93  95  96  ... ?\n" )
+printf( "Consumo(KW) 5  5.7 6.2 6.7 7.0 ... 7.5\n" )
+
+profile clear
+profile on
+
+
+
+
+profile off
+printf( "\n" );
+# profshow( profile ("info"), 8 )
+
+#{
+
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
 printf( "\n" )
 printf( "6.1). Pode-se avaliar uma função como f(x)= sen(x), em xÎ[-1, +1] (radianos),\n" )
 printf( "utilizando apenas operações algébricas simples, como adição/subtração,\n" )
@@ -204,11 +226,28 @@ n = 5
 [ errorByPolinom_n5, chebyshevBCoefficients_n5 ] = run_chebyshev_test( a, b, @sin, n, m, @getChebyshevCoefficientsByPolinom );
 printf( "\n" );
 
+printf( "\n" );
+printf( "A seguir são apresentados os coeficientes de Chebyshev para n = 3 e 5,\n" );
+printf( "calculados pelo algoritmo generico que calcula pelo polinomio o nesimo coeficiente\n" );
+printf( "de Chebyshev.\n" );
+
 chebyshevBCoefficients_n3
 chebyshevBCoefficients_n5
 
+printf( "\n" );
+printf( "\n" );
+printf( "A seguir são apresentados os erros de Chebyshev para n = 3 e 5.\n" );
+printf( "O primeiro valor é o calculado pelo algoritmo generico que calcula pelo polinomio o\n" );
+printf( "nesimo coeficiente de Chebyshev.\n" );
+printf( "O segundo valor é a resposta que se encontra no livro de Calculo Numerico utilizado\n" );
+printf( "para a resolucao deste exercicio.\n" );
+printf( "\n" );
 errorByPolinom_n3
+errorByPolinom_n3 = 5.67503606437536e-04
+
+printf( "\n" );
 errorByPolinom_n5
+errorByPolinom_n5 = 1.08876303214656e-04
 
 profile off
 printf( "\n" );
@@ -248,13 +287,31 @@ n = 5
 [ errorNumerically_n5, chebyshevBCoefficients_n5, ...
         xInterPontosChebyshev_n5, erroDeChebyshev_n5 ] = run_chebyshev_test( ...
         a, b, @sin, n, m, @getChebyshevCoefficientsNumerically );
+
 printf( "\n" );
+printf( "\n" );
+printf( "A seguir são apresentados os erro e os coeficientes de Chebyshev para n = 3 e 5.\n" );
+printf( "O primeiro valor é o calculado pelo algoritmo generico que calcula numericamente o\n" );
+printf( "nesimo coeficiente de Chebyshev.\n" );
+printf( "O segundo valor é a resposta que se encontra no livro de Calculo Numerico utilizado\n" );
+printf( "para a resolucao deste exercicio.\n" );
 
+printf( "\n" );
 chebyshevBCoefficients_n3
-chebyshevBCoefficients_n5
+chebyshevBCoefficients_n3 = [ 2.83773005094190e-17 8.80101171489865e-01 3.41948691584548e-18 -3.91267079653375e-02 ]
 
+printf( "\n" );
+chebyshevBCoefficients_n5
+chebyshevBCoefficients_n5 = [ 2.83773005094190e-17 8.80101171489865e-01 3.41948691584548e-18 -3.91267079653375e-02 ...
+                              4.89386309254769e-17 4.99515460422549e-04 ]
+
+printf( "\n" );
 errorNumerically_n3
+errorNumerically_n3 = 5.01502505832752e-04
+
+printf( "\n" );
 errorNumerically_n5
+errorNumerically_n5 = 3.01373744460154e-06
 
 profile off
 printf( "\n" );
@@ -309,4 +366,4 @@ plot( ...
       xInterPontosPade        , erroDePade        , "r;Erro de Pade;" );
 legend('location','north');
 grid on;
-
+#}
