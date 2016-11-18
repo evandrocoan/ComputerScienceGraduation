@@ -53,7 +53,7 @@ function coef = calculateChebyshevCoefficients( n, m, a, b, targetFunction, cheb
 
     # Agora calculamos os b(2) : n - 1, no indice 1 : n do array b/coef.
     #
-    for i = 1 : n - 1
+    for i = 1 : n
 
         printf( '( calculateChebyshevCoefficients ) Calculating the %dth coefficient by ', i ); chebyshevPolynomType
 

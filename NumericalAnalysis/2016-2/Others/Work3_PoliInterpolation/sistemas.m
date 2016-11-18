@@ -131,7 +131,7 @@ profile off
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 printf( "\n" );
-profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
@@ -184,7 +184,7 @@ profile off
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 printf( "\n" );
-profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
@@ -263,7 +263,7 @@ profile off
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 printf( "\n" );
-profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
@@ -326,7 +326,7 @@ profile off
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 printf( "\n" );
-profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
@@ -379,7 +379,7 @@ profile off
 # If data is unspecified, profshow will use the current profile dataset.
 # If n is unspecified it defaults to 20.
 printf( "\n" );
-profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
