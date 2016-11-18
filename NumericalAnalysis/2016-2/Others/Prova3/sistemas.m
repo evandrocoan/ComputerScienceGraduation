@@ -1,5 +1,9 @@
 
 
+clc
+clear
+close all
+
 more off
 format long
 split_long_rows(0)
@@ -18,7 +22,6 @@ printf( "\n" )
 printf( "A função composta\n" )
 printf( " f ( x) = ∫ e − z 2 dz\n" )
 printf( " em x∈[-1, +1], pode-se aproxima-la de diversas maneiras utilizando apenas\n" )
-printf( "\n" )
 printf( "operações algébricas simples, como adição, multiplicação e divisão. Uma alternativa de representação é a expansão\n" )
 printf( "de f(x) em termos da série de Maclaurin:\n" )
 printf( "\n" )
@@ -26,9 +29,9 @@ printf( "(3,0) 1). Determine o grau ‘n’ mínimo necessário para que o erro 
 printf( "f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
 
 
-clc
-clear
-close all
+% clc
+% clear
+% close all
 
 profile clear
 profile on
@@ -44,14 +47,14 @@ printf( "\n" )
 
 while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
 
-    h            = (b-a) / n;
-    xInterPontos = a : h/20 : b;
+    h                     = (b-a) / n;
+    xInterPontosMaclaurin = a : h/20 : b;
 
     coefMaclaurinAproximado = calculateMaclaurinCoefficientsForEulerInteger( n );
     coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( n^2 );
     
-    yAproximado = fPnPorBriotRunifi( n  , coefMaclaurinAproximado, xInterPontos );
-    yExato     = fPnPorBriotRunifi( n^2, coefMaclaurinExato     , xInterPontos );
+    yAproximado = fPnPorBriotRunifi( n  , coefMaclaurinAproximado, xInterPontosMaclaurin );
+    yExato      = fPnPorBriotRunifi( n^2, coefMaclaurinExato     , xInterPontosMaclaurin );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
     # intervalo [-1,1], ou seja, em -1 ou em 1.
@@ -59,7 +62,7 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
     # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
     # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
     # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    errosDeMaclaurin       = abs( yAproximado .- yExato );
+    errosDeMaclaurin      = abs( yAproximado .- yExato );
     erroMaximoDeMaclaurin = max( errosDeMaclaurin );
 
     n = n + 1;
@@ -67,16 +70,16 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
 end
 
 
-printf( "\nO valor de n necessário é:\n" )
+printf( "\nO valor de n mínimo necessário é:\n" )
 n
 
 
-printf( "\nE o grau da série de Euler necessário é:\n" )
+printf( "\nE o grau da série de Euler necessário/equivalente para aquele n mínimo é:\n" )
 grau = 2*n + 1
 
 
 
-% plot( xInterPontos, yExato, 'g', xInterPontos, yAproximado, 'b' )
+% plot( xInterPontosMaclaurin, yExato, 'g', xInterPontosMaclaurin, yAproximado, 'b' )
 
 printf( "\n" );
 profile off
@@ -91,9 +94,9 @@ printf( "(4,0) 2).Uma outra alternativa de representação é a expansão de f(x
 printf( "n, m e os coeficientes da aproximação de Padé, a partir de Maclaurin com grau total M=n+m, para que o erro de\n" )
 printf( "truncamento máximo ‘estimado’ entre Rnm (x) e f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
 
-clc
-clear
-close all
+% clc
+% clear
+% close all
 
 profile clear
 profile on
@@ -116,8 +119,8 @@ printf( "\n" )
 
 while( erroMaximoDePade > erroMinimoDePade && n < 100 )
 
-    h            = (b-a) / n;
-    xInterPontos = a : h/20 : b;
+    h                = (b-a) / n;
+    xInterPontosPade = a : h/20 : b;
 
 
     # Calculo de Pade Exato
@@ -128,12 +131,12 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     #
     [ aPadeCoefficientsExato, bPadeCoefficientsExato ] = calculatePadeCoefficients( n^2, m^2, coefMaclaurinParaPadeExato );
     
-    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontos )
-    # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontos ) / polyval( bPadeCoefficients, xInterPontos );
+    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
+    # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
     yExato = fPnPorBriotRunifi( ...
-            n^2, aPadeCoefficientsExato, xInterPontos ) ./ fPnPorBriotRunifi( ...
-            m^2, bPadeCoefficientsExato, xInterPontos );
+            n^2, aPadeCoefficientsExato, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
+            m^2, bPadeCoefficientsExato, xInterPontosPade );
     
     
     # Calculo de Pade Aproximado
@@ -144,12 +147,12 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     #
     [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
 
-    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontos )
-    # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontos ) / polyval( bPadeCoefficients, xInterPontos );
+    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
+    # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
     yAproximado = fPnPorBriotRunifi( ...
-            n, aPadeCoefficients, xInterPontos ) ./ fPnPorBriotRunifi( ...
-            m, bPadeCoefficients, xInterPontos );
+            n, aPadeCoefficients, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
+            m, bPadeCoefficients, xInterPontosPade );
 
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
@@ -175,11 +178,11 @@ printf( "\nOs coeficientes a e b de Pade são:\n" )
 aPadeCoefficients
 bPadeCoefficients
 
-printf( "\nO erro maximo de Pade para os coeficientes foram:\n" )
+printf( "\nO erro maximo de Pade para estes coeficientes foi:\n" )
 erroMaximoDePade
 
 
-% plot( xInterPontos, yExato, 'g', xInterPontos, yAproximado, 'b' )
+% plot( xInterPontosPade, yExato, 'g', xInterPontosPade, yAproximado, 'b' )
 
 printf( "\n" );
 profile off
@@ -190,19 +193,39 @@ profile off
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
 
-printf( "(4,0) 2).Uma outra alternativa de representação é a expansão de f(x) em termos da série de Padé Rnm(x). Determine\n" )
-printf( "n, m e os coeficientes da aproximação de Padé, a partir de Maclaurin com grau total M=n+m, para que o erro de\n" )
-printf( "truncamento máximo ‘estimado’ entre Rnm (x) e f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
+printf( "0) 4). Determine e Plote os erros máximos, em cada caso.\n\n" )
 
-clc
-clear
-close all
+% clc
+% clear
+% close all
 
 profile clear
 profile on
 
 
-plot( xInterPontos, errosDePade, 'g', xInterPontos, errosDeMaclaurin, 'b' )
+
+printf( "\nO valor e o ponto de erro máximo do Pade são:\n" )
+[ valorDoErroMaximoDePade, pontoDeErroMaximoDePade ] = max( errosDePade )
+
+
+printf( "\nO valor e o ponto de erro máximo do Maclaurin são:\n" )
+[ valorDoErroMaximoDeMaclaurin, pontoDeErroMaximoDeMaclaurin ] = max( errosDeMaclaurin )
+
+
+plot( ...
+      xInterPontosPade     , errosDePade     , "g;Erro de Chebyshev;", ...
+      xInterPontosMaclaurin, errosDeMaclaurin, "b;Erro de Maclaurin;" ...
+    );
+legend('location','north');
+grid on;
+
+
+
+printf( "\n" );
+profile off
+% profshow( profile ("info"), 8 )
+
+
 
 
 
