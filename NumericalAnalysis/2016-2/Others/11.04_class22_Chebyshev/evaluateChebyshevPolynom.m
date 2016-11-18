@@ -25,13 +25,12 @@
 function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
 
     b;
-    value = 0;
 
     # At the first time, reset the last values result, which are wrong for this new `t`'s values.
     printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', 0 ); chebyshevPolynomType
-    value = value + b( 1 )*chebyshevPolynomType( 0, t, true );
+    value = b( 1 )*chebyshevPolynomType( 0, t, true );
 
-    for i = 2 : n
+    for i = 1 : n
 
         printf( '( evaluateChebyshevPolynom ) Evaluating the %dth b''s coefficient by ', i - 1 ); chebyshevPolynomType
 
@@ -43,7 +42,7 @@ function value = evaluateChebyshevPolynom( n, b, t, chebyshevPolynomType )
         # Setting this to false cause to force the `getnthChebyshevCoefficientsNumerically` to do:
         # Time(s): 5.409, Time(%): 55.65 and Calls: 20.756
         #
-        value = value + b( i )*chebyshevPolynomType( i - 1, t, false );
+        value = value + b( i+1 )*chebyshevPolynomType( i, t, false );
 
     end
 
