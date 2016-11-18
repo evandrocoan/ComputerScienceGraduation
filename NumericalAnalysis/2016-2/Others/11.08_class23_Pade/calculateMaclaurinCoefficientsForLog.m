@@ -26,8 +26,8 @@ function coef = calculateMaclaurinCoefficientsForLog( n, a, b )
     cache = ( b - a ) / ( b + a );
     coef( 1 ) = log( MaclaurinDomainPointZero );
 
-    # Precisamos dos zeros em séries como sen(x) que já são entre [-1, 1]
-    # Assim um for antes de calcular a sério serve para completar os zeros serve para corrigir/ajudar.
+    # Precisamos dos zeros em séries como sen(x), que usualmente já são entre [-1, 1]
+    # Assim um for antes de calcular a série para completar os zeros serve para ajudar.
     #
     # for i = 0 : 2 : n
     #
@@ -36,7 +36,7 @@ function coef = calculateMaclaurinCoefficientsForLog( n, a, b )
     # end
     for i = 2 : n + 1
 
-        coef( i ) =  (-1)^(i) * (cache^(i-1)) / (i-1);
+        coef( i ) = (-1)^(i) * (cache^(i-1)) / (i-1);
 
     end
 

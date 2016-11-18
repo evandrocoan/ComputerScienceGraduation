@@ -308,7 +308,7 @@ WHERE Projeto.CodProj = ProjetoPessoa.CodProj AND
 \echo 'INFO: Selecione o nome do projeto, o papel e o nome das pessoas envolvidas nos projetos'
 \echo 'INFO: que começaram depois de 2000 e terminaram antes de 2016 ou que iniciaram antes de 1960.'
 \echo 'INFO: Também conte em quantos dos projetos existentes cada uma das pessoas está/esteve'
-\echo 'INFO:  envolvida, como uma nova coluna chamada `contagem_de_projetos`'
+\echo 'INFO: envolvida, como uma nova coluna chamada `contagem_de_projetos`'
 \echo 'INFO:'
 
 SELECT Projeto.NomeProj, ProjetoPessoa.PapelPessProj, Pessoa.NomePess,
@@ -362,6 +362,44 @@ ORDER BY 2;
 --         1 | Curso 1   |     5
 --         3 | Curso 3   |     2
 -- (2 rows)
+
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO:'
+\echo 'INFO: V. Crie uma consulta, que acesse três tabelas, que utilize o HAVING . A cláusula WHERE'
+\echo 'INFO: deve possuir pelo menos dois filtros. O HAVING deve testar o valor de retorno de'
+\echo 'INFO: uma função de agregação escrita em uma cláusula SELECT.'
+\echo 'INFO:'
+
+\echo 'INFO: Selecione o nome do projeto, o papel e o nome das pessoas envolvidas nos projetos'
+\echo 'INFO: que começaram depois de 1970 e terminaram antes de 2016 ou que iniciaram antes de 1960.'
+\echo 'INFO: Também conte em quantos dos projetos existentes cada uma das pessoas está/esteve'
+\echo 'INFO: envolvida, como uma nova coluna chamada `contagem_de_projetos`, que somente deve'
+\echo 'INFO: incluir as `contagem_de_projetos` maiores do que 3.'
+\echo 'INFO:'
+
+SELECT Projeto.NomeProj, ProjetoPessoa.PapelPessProj, Pessoa.NomePess,
+       Contagem.count AS contagem_de_projetos
+FROM Projeto JOIN ProjetoPessoa ON Projeto.CodProj            = ProjetoPessoa.CodProj
+             JOIN Pessoa        ON ProjetoPessoa.NumeroCartao = Pessoa.NumeroCartao
+             JOIN
+(
+    SELECT ProjetoPessoa.NumeroCartao, COUNT( * )
+    FROM ProjetoPessoa
+    GROUP BY 1
+    HAVING COUNT( * ) > 3
+) Contagem ON Contagem.NumeroCartao = ProjetoPessoa.NumeroCartao
+WHERE Projeto.AnoInicio > 1970 AND Projeto.AnoFim < 2016;
+
+--     nomeproj    | papelpessproj |   nomepess   | contagem_de_projetos
+-- ----------------+---------------+--------------+----------------------
+--  NomeProjeto 12 | Papel 3       | NomePessoa 8 |                    4
+--  NomeProjeto 2  | Papel 5       | NomePessoa 8 |                    4
+-- (2 rows)
+
 
 
 
