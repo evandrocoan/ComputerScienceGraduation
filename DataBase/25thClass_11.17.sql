@@ -17,6 +17,18 @@ jogo (codTimeA#, codTimeB#, dataJogo, codCidade#, vencedor)
 
 */
 
+-- below code assumes that the name of your schema is public
+DROP SCHEMA PUBLIC CASCADE;
+CREATE SCHEMA PUBLIC;
+
+-- For PostgreSQL 9.3 or greater, you may also need to restore the default grants.
+GRANT ALL ON SCHEMA PUBLIC TO postgres;
+GRANT ALL ON SCHEMA PUBLIC TO PUBLIC;
+
+-- Include this exercise database.
+\i 25thClass_11.17_jogos.sql
+
+
 \echo 'INFO:'
 \echo 'INFO: Exercícios Visão e Permissão'
 \echo 'INFO: Para os exercícios abaixo, utilize a base de dados ‘jogos’ fornecida no Moodle.'
@@ -45,7 +57,7 @@ jogo (codTimeA#, codTimeB#, dataJogo, codCidade#, vencedor)
 \echo 'INFO: a. Obter o nome das cidades que têm mais de um time.'
 \echo 'INFO:'
 
-DROP VIEW IF EXISTS view_cidades_com_mais_de_um_time CASCADE;
+-- DROP VIEW IF EXISTS view_cidades_com_mais_de_um_time CASCADE;
 
 CREATE VIEW view_cidades_com_mais_de_um_time
 AS
@@ -66,8 +78,8 @@ FROM view_cidades_com_mais_de_um_time;
 \echo 'INFO: b. Obter a equipe que mais jogou jogos, e o número de partidas disputadas.'
 \echo 'INFO:'
 
-DROP VIEW IF EXISTS view_equipe_que_mais_jogou_jogos CASCADE;
-DROP VIEW IF EXISTS view_equipes_e_contagem_de_jogos CASCADE;
+-- DROP VIEW IF EXISTS view_equipe_que_mais_jogou_jogos CASCADE;
+-- DROP VIEW IF EXISTS view_equipes_e_contagem_de_jogos CASCADE;
 
 CREATE VIEW view_equipes_e_contagem_de_jogos
 AS
@@ -98,7 +110,7 @@ FROM view_equipe_que_mais_jogou_jogos;
 \echo 'INFO: c. Equipes que nunca empataram ou perderam como mandante.'
 \echo 'INFO:'
 
-DROP VIEW IF EXISTS view_equipes_que_nunca_empataram CASCADE;
+-- DROP VIEW IF EXISTS view_equipes_que_nunca_empataram CASCADE;
 
 CREATE VIEW view_equipes_que_nunca_empataram
 AS
@@ -108,7 +120,6 @@ AS
     )
     EXCEPT
     (
-
         SELECT equipe.codigo
         FROM equipe JOIN jogo ON equipe.codigo = jogo.codTimeA
         WHERE jogo.vencedor = 'Empate' OR jogo.vencedor = 'Visitante'
@@ -120,6 +131,7 @@ AS
         WHERE jogo.vencedor = 'Mandante'
     );
 
+    -- Short alternative query:
     -- SELECT * FROM equipe WHERE codigo not IN (
     --    SELECT equipe.codigo
     --    FROM equipe JOIN jogo ON equipe.codigo = jogo.codTimeA
