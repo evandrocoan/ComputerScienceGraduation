@@ -61,16 +61,6 @@ printf( "‘exato’ entre Pn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2).\
 printf( "Sugestão: Monte um algoritmo de busca que incremente sequencialmente o valor de\n" )
 printf( "‘n’, enquanto o erro de truncamento máximo exato esteja maior que √10*10-2.\n\n" )
 
-# Profiling
-#
-# Command: profile on
-# Command: profile off
-# Command: profile resume
-# Command: profile clear
-# Function File: S = profile ("status")
-# Function File: T = profile ("info")
-#
-# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile clear
 profile on
 
@@ -122,14 +112,7 @@ erroMaximoDePn
 % plot( xInterPontos, erroDePn )
 
 
-# Stop profiling. The collected data can later be retrieved and examined.
 profile off
-
-# Show the profile resume, displaying per-function profiler results.
-#
-# profshow (data, n)
-# If data is unspecified, profshow will use the current profile dataset.
-# If n is unspecified it defaults to 20.
 printf( "\n" );
 # profshow( profile ("info"), 8 )
 
@@ -144,16 +127,6 @@ printf( "Determine, ou monte um algoritmo de busca que determine, o grau ‘n’
 printf( "necessário e os coeficientes de Mn(x), para que o erro de truncamento máximo\n" )
 printf( "‘exato’ entre Mn(x) e f(x) seja da ordem de O(10-2) (<√10*10-2);\n\n" )
 
-# Profiling
-#
-# Command: profile on
-# Command: profile off
-# Command: profile resume
-# Command: profile clear
-# Function File: S = profile ("status")
-# Function File: T = profile ("info")
-#
-# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile clear
 profile on
 
@@ -175,14 +148,7 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
 
 end
 
-# Stop profiling. The collected data can later be retrieved and examined.
 profile off
-
-# Show the profile resume, displaying per-function profiler results.
-#
-# profshow (data, n)
-# If data is unspecified, profshow will use the current profile dataset.
-# If n is unspecified it defaults to 20.
 printf( "\n" );
 # profshow( profile ("info"), 8 )
 
@@ -198,16 +164,6 @@ printf( "erros máximos normalmente estão nas extremidades do intervalo [a, b],
 printf( "série de Tchebyschev os erros estão distribuídos no intervalo, então calcule erros em\n" )
 printf( "pelo menos 5 pontos de [a, b], e tome o maior destes erros como referência;\n\n" )
 
-# Profiling
-#
-# Command: profile on
-# Command: profile off
-# Command: profile resume
-# Command: profile clear
-# Function File: S = profile ("status")
-# Function File: T = profile ("info")
-#
-# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile clear
 profile on
 
@@ -254,14 +210,7 @@ chebyshevBCoefficients_n5
 errorByPolinom_n3
 errorByPolinom_n5
 
-# Stop profiling. The collected data can later be retrieved and examined.
 profile off
-
-# Show the profile resume, displaying per-function profiler results.
-#
-# profshow (data, n)
-# If data is unspecified, profshow will use the current profile dataset.
-# If n is unspecified it defaults to 20.
 printf( "\n" );
 # profshow( profile ("info"), 8 )
 
@@ -273,16 +222,6 @@ printf( "#######################################################################
 printf( "\n6.1d). Determine numericamente, através de um algoritmo, os coeficientes da série\n" )
 printf( "de Chebyschev Tn(x), para n=3 e 5, e o seus erros máximo exatos entre Tn(x) e f(x);\n\n" )
 
-# Profiling
-#
-# Command: profile on
-# Command: profile off
-# Command: profile resume
-# Command: profile clear
-# Function File: S = profile ("status")
-# Function File: T = profile ("info")
-#
-# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile clear
 profile on
 
@@ -317,14 +256,7 @@ chebyshevBCoefficients_n5
 errorNumerically_n3
 errorNumerically_n5
 
-# Stop profiling. The collected data can later be retrieved and examined.
 profile off
-
-# Show the profile resume, displaying per-function profiler results.
-#
-# profshow (data, n)
-# If data is unspecified, profshow will use the current profile dataset.
-# If n is unspecified it defaults to 20.
 printf( "\n" );
 # profshow( profile ("info"), 8 )
 
@@ -338,16 +270,6 @@ printf( "da série racional de Padé Rnm(x). Determine, ou monte um algoritmo qu
 printf( "os coeficientes da aproximação de Padé R32(x), a partir de Maclaurin com grau total\n" )
 printf( "M=5 e o seu erro de truncamento máximo ‘exato’ entre Rnm(x) e f(x).\n\n" )
 
-# Profiling
-#
-# Command: profile on
-# Command: profile off
-# Command: profile resume
-# Command: profile clear
-# Function File: S = profile ("status")
-# Function File: T = profile ("info")
-#
-# https://www.gnu.org/software/octave/doc/v4.0.1/Profiling.html
 profile clear
 profile on
 
@@ -369,15 +291,7 @@ aPadeCoefficients
 bPadeCoefficients
 erroMaximoDePade
 
-
-# Stop profiling. The collected data can later be retrieved and examined.
 profile off
-
-# Show the profile resume, displaying per-function profiler results.
-#
-# profshow (data, n)
-# If data is unspecified, profshow will use the current profile dataset.
-# If n is unspecified it defaults to 20.
 printf( "\n" );
 # profshow( profile ("info"), 8 )
 
