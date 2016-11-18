@@ -53,8 +53,8 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
     coefMaclaurinAproximado = calculateMaclaurinCoefficientsForEulerInteger( n );
     coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( n^2 );
     
-    yAproximado = fPnPorBriotRunifi( n  , coefMaclaurinAproximado, xInterPontosMaclaurin );
-    yExato      = fPnPorBriotRunifi( n^2, coefMaclaurinExato     , xInterPontosMaclaurin );
+    yAproximadoMaclaurin = fPnPorBriotRunifi( n  , coefMaclaurinAproximado, xInterPontosMaclaurin );
+    yExatoMaclaurin      = fPnPorBriotRunifi( n^2, coefMaclaurinExato     , xInterPontosMaclaurin );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
     # intervalo [-1,1], ou seja, em -1 ou em 1.
@@ -62,7 +62,7 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
     # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
     # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
     # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    errosDeMaclaurin      = abs( yAproximado .- yExato );
+    errosDeMaclaurin      = abs( yAproximadoMaclaurin .- yExatoMaclaurin );
     erroMaximoDeMaclaurin = max( errosDeMaclaurin );
 
     n = n + 1;
@@ -79,7 +79,7 @@ grau = 2*n + 1
 
 
 
-% plot( xInterPontosMaclaurin, yExato, 'g', xInterPontosMaclaurin, yAproximado, 'b' )
+% plot( xInterPontosMaclaurin, yExatoMaclaurin, 'g', xInterPontosMaclaurin, yAproximadoMaclaurin, 'b' )
 
 printf( "\n" );
 profile off
@@ -134,7 +134,7 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
     # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
-    yExato = fPnPorBriotRunifi( ...
+    yExatoPade = fPnPorBriotRunifi( ...
             n^2, aPadeCoefficientsExato, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
             m^2, bPadeCoefficientsExato, xInterPontosPade );
     
@@ -147,10 +147,10 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     #
     [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
 
-    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
+    # yAproximadoPade = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
     # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
-    yAproximado = fPnPorBriotRunifi( ...
+    yAproximadoPade = fPnPorBriotRunifi( ...
             n, aPadeCoefficients, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
             m, bPadeCoefficients, xInterPontosPade );
 
@@ -161,7 +161,7 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
     # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
     # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    errosDePade      = abs( yAproximado .- yExato );
+    errosDePade      = abs( yAproximadoPade .- yExatoPade );
     erroMaximoDePade = max( errosDePade );
 
     n = n + 1;
@@ -182,7 +182,7 @@ printf( "\nO erro maximo de Pade para estes coeficientes foi:\n" )
 erroMaximoDePade
 
 
-% plot( xInterPontosPade, yExato, 'g', xInterPontosPade, yAproximado, 'b' )
+% plot( xInterPontosPade, yExatoPade, 'g', xInterPontosPade, yAproximadoPade, 'b' )
 
 printf( "\n" );
 profile off
@@ -226,6 +226,16 @@ profile off
 % profshow( profile ("info"), 8 )
 
 
+n = 100
+xInterPontosMaclaurin = 0.5
 
+# No ponto 1, O valor exato de `fPnPorBriotRunifi` deve ser:
+# 0.7468241328124270253994674361318530053544996868126063290276544989586053275617728314978484298229019197
+# 
+# https://www.wolframalpha.com/input/?i=integrate+e%5E(-x%5E2)+dx+from+0+to+1
+coefMaclaurinExato = calculateMaclaurinCoefficientsForEulerInteger( n );
+
+yWolfr = 0.7468241328124270253994674361318530053544996868126063290276544989586053275617728314978484298229019197
+yExato = fPnPorBriotRunifi( n, coefMaclaurinExato, xInterPontosMaclaurin )
 
 
