@@ -25,9 +25,16 @@ function coef = calculateMaclaurinCoefficientsForEulerInteger( n )
     #     c( i+1 ) = 0;
     #
     # end
+
+    # coef 0 = 0
+    # coef 1 = 1
+    # coef 2 = 0
+    # coef 3 =
+    # coef 4 = 0
+
     for i = 0 : n
 
-        coef( i+1 ) = (-1)^i / ( factorial(i)*(2*i + 1) );
+        coef( 2*i+1+1 ) = (-1)^i / ( factorial(i)*(2*i + 1) );
 
     end
 

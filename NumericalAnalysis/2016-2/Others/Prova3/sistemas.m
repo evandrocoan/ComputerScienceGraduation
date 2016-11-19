@@ -29,14 +29,14 @@ printf( "(3,0) 1). Determine o grau ‘n’ mínimo necessário para que o erro 
 printf( "f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
 
 
-% clc
-% clear
-% close all
+# clc
+# clear
+# close all
 
 profile clear
 profile on
 
-n =  2;
+n =  1;
 a = -1;
 b =  1;
 
@@ -47,14 +47,17 @@ printf( "\n" )
 
 while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
 
-    h                     = (b-a) / n;
+    n = n + 1;
+    h = (b-a) / n;
+
+    # x                     = a : h : b;
     xInterPontosMaclaurin = a : h/20 : b;
 
     coefMaclaurinAproximado = calculateMaclaurinCoefficientsForEulerInteger( n );
-    coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( n^2 );
-    
-    yAproximadoMaclaurin = fPnPorBriotRunifi( n  , coefMaclaurinAproximado, xInterPontosMaclaurin );
-    yExatoMaclaurin      = fPnPorBriotRunifi( n^2, coefMaclaurinExato     , xInterPontosMaclaurin );
+    coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( n*2 );
+
+    yAproximadoMaclaurin = fPnPorHorner( n  , coefMaclaurinAproximado, xInterPontosMaclaurin );
+    yExatoMaclaurin      = fPnPorHorner( n*2, coefMaclaurinExato     , xInterPontosMaclaurin );
 
     # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
     # intervalo [-1,1], ou seja, em -1 ou em 1.
@@ -63,9 +66,7 @@ while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
     # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
     # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
     errosDeMaclaurin      = abs( yAproximadoMaclaurin .- yExatoMaclaurin );
-    erroMaximoDeMaclaurin = max( errosDeMaclaurin );
-
-    n = n + 1;
+    erroMaximoDeMaclaurin = max( errosDeMaclaurin )
 
 end
 
@@ -79,12 +80,17 @@ grau = 2*n + 1
 
 
 
-% plot( xInterPontosMaclaurin, yExatoMaclaurin, 'g', xInterPontosMaclaurin, yAproximadoMaclaurin, 'b' )
-
+plot( xInterPontosMaclaurin, yExatoMaclaurin, 'g', xInterPontosMaclaurin, yAproximadoMaclaurin, 'b' )
+# plot( ...
+#       xInterPontosMaclaurin, errosDeMaclaurin, "b;Erro de Maclaurin;" ...
+#     );
+# legend('location','north');
+# grid on;
+#
 printf( "\n" );
 profile off
-% profshow( profile ("info"), 8 )
-#
+# profshow( profile ("info"), 8 )
+#{
 
 
 printf( "\n\n\n##############################################################################################################\n" )
@@ -94,9 +100,9 @@ printf( "(4,0) 2).Uma outra alternativa de representação é a expansão de f(x
 printf( "n, m e os coeficientes da aproximação de Padé, a partir de Maclaurin com grau total M=n+m, para que o erro de\n" )
 printf( "truncamento máximo ‘estimado’ entre Rnm (x) e f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
 
-% clc
-% clear
-% close all
+# clc
+# clear
+# close all
 
 profile clear
 profile on
@@ -117,7 +123,7 @@ erroMaximoDePade = 1;
 
 printf( "\n" )
 
-while( erroMaximoDePade > erroMinimoDePade && n < 100 )
+while( erroMaximoDePade > erroMinimoDePade && n < 10 )
 
     h                = (b-a) / n;
     xInterPontosPade = a : h/20 : b;
@@ -126,19 +132,19 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     # Calculo de Pade Exato
     grauDeMaclaurinParaPadeExato = n^2 + m^2;
     coefMaclaurinParaPadeExato   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPadeExato );
-    
+
     # R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
     #
     [ aPadeCoefficientsExato, bPadeCoefficientsExato ] = calculatePadeCoefficients( n^2, m^2, coefMaclaurinParaPadeExato );
-    
-    # yAproximado = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
+
+    # yAproximado = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
     # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
-    yExatoPade = fPnPorBriotRunifi( ...
-            n^2, aPadeCoefficientsExato, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
+    yExatoPade = fPnPorHorner( ...
+            n^2, aPadeCoefficientsExato, xInterPontosPade ) ./ fPnPorHorner( ...
             m^2, bPadeCoefficientsExato, xInterPontosPade );
-    
-    
+
+
     # Calculo de Pade Aproximado
     grauDeMaclaurinParaPade = n + m;
     coefMaclaurinParaPade   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPade );
@@ -147,11 +153,11 @@ while( erroMaximoDePade > erroMinimoDePade && n < 100 )
     #
     [ aPadeCoefficients, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPade );
 
-    # yAproximadoPade = fPnPorBriotRunifi( n, coefMaclaurin, xInterPontosPade )
+    # yAproximadoPade = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
     # yAproximadoPorPade = polyval( aPadeCoefficients, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
     #
-    yAproximadoPade = fPnPorBriotRunifi( ...
-            n, aPadeCoefficients, xInterPontosPade ) ./ fPnPorBriotRunifi( ...
+    yAproximadoPade = fPnPorHorner( ...
+            n, aPadeCoefficients, xInterPontosPade ) ./ fPnPorHorner( ...
             m, bPadeCoefficients, xInterPontosPade );
 
 
@@ -182,11 +188,11 @@ printf( "\nO erro maximo de Pade para estes coeficientes foi:\n" )
 erroMaximoDePade
 
 
-% plot( xInterPontosPade, yExatoPade, 'g', xInterPontosPade, yAproximadoPade, 'b' )
+# plot( xInterPontosPade, yExatoPade, 'g', xInterPontosPade, yAproximadoPade, 'b' )
 
 printf( "\n" );
 profile off
-% profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
 
 
 
@@ -195,9 +201,9 @@ printf( "#######################################################################
 
 printf( "0) 4). Determine e Plote os erros máximos, em cada caso.\n\n" )
 
-% clc
-% clear
-% close all
+# clc
+# clear
+# close all
 
 profile clear
 profile on
@@ -205,11 +211,14 @@ profile on
 
 
 printf( "\nO valor e o ponto de erro máximo do Pade são:\n" )
-[ valorDoErroMaximoDePade, pontoDeErroMaximoDePade ] = max( errosDePade )
-
+[ valorDoErroMaximoDePade, pontoDeErroMaximoDePade ] = max( errosDePade );
+valorDoErroMaximoDePade
+xInterPontosPade( valorDoErroMaximoDePade )
 
 printf( "\nO valor e o ponto de erro máximo do Maclaurin são:\n" )
-[ valorDoErroMaximoDeMaclaurin, pontoDeErroMaximoDeMaclaurin ] = max( errosDeMaclaurin )
+[ valorDoErroMaximoDeMaclaurin, pontoDeErroMaximoDeMaclaurin ] = max( errosDeMaclaurin );
+valorDoErroMaximoDeMaclaurin
+xInterPontosMaclaurin( pontoDeErroMaximoDeMaclaurin )
 
 
 plot( ...
@@ -223,19 +232,30 @@ grid on;
 
 printf( "\n" );
 profile off
-% profshow( profile ("info"), 8 )
+# profshow( profile ("info"), 8 )
+#}
 
 
-n = 100
-xInterPontosMaclaurin = 0.5
 
-# No ponto 1, O valor exato de `fPnPorBriotRunifi` deve ser:
+#
+# No ponto 1, O valor exato de `fPnPorHorner` deve ser:
 # 0.7468241328124270253994674361318530053544996868126063290276544989586053275617728314978484298229019197
-# 
+#
 # https://www.wolframalpha.com/input/?i=integrate+e%5E(-x%5E2)+dx+from+0+to+1
-coefMaclaurinExato = calculateMaclaurinCoefficientsForEulerInteger( n );
+#
+# No e no ponto 0.5:
+# 0.4612810064127924603027963712520431727170944213867187500000000000000000000000000000000000000000000000
 
-yWolfr = 0.7468241328124270253994674361318530053544996868126063290276544989586053275617728314978484298229019197
-yExato = fPnPorBriotRunifi( n, coefMaclaurinExato, xInterPontosMaclaurin )
+# n                                = 10
+# xInterPontosMaclaurin            = 0.5
+# coefMaclaurinParaHorner          = calculateMaclaurinCoefficientsForEulerInteger( n )
+# coefMaclaurinCorretosPara0ponto5 = [ 5.00000000000000e-01   -4.16666666666667e-02   3.12500000000000e-03 ...
+#                                     -1.86011904761905e-04    9.04224537037037e-06  -3.69910037878788e-07 ...
+#                                      1.30417000534188e-08   -4.03671668320106e-10   1.11306526191206e-11 ...
+#                                     -2.76639027083406e-13    6.25731132688656e-15 ]
+
+# yMeu___ParaX_InterPontosMaclaurin = polyval( fliplr( coefMaclaurinParaHorner ), xInterPontosMaclaurin )
+# yMeu___ParaX_InterPontosMaclaurin = fPnPorHorner( n, coefMaclaurinParaHorner, xInterPontosMaclaurin )
+# yOctaveParaX_InterPontosMaclaurin = sqrt( pi )*erf( xInterPontosMaclaurin ) / 2
 
 
