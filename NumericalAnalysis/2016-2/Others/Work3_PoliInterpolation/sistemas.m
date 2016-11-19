@@ -54,19 +54,55 @@ printf( "Exercício de fixação:\n" )
 printf( "5.1). Na função a seguir está representado o consumo de energia elétrica em um determinado local em\n" )
 printf( "função dos anos. Determinar quando (t = ?) o consumo atingirá o limite instalado de 7.5 KW:\n" )
 printf( "t(ano)      85 89  93  95  96  ... ?\n" )
-printf( "Consumo(KW) 5  5.7 6.2 6.7 7.0 ... 7.5\n" )
+printf( "Consumo(KW) 5  5.7 6.2 6.7 7.0 ... 7.5\n\n" )
 
 profile clear
 profile on
 
+
+x = [  5.0  5.7  6.2  6.7  7.0 ]
+y = [ 85.0 89.0 93.0 95.0 96.0 ]
+
+a = min( x );
+b = max( x );
+
+n = numel( x ) - 1;
+h = ( b - a ) / n;
+
+
+# coef_by_me =
+#   -1.164279323185479   1.399845394498246  -0.235566071312767
+#
+# -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
+#
+coef_by_me      = interpolacaoPolinomial( x, y, n );
+coef_by_polyfit = fliplr( polyfit( x, y, n ) );
+
+
+# Aqui calculamos o valor do polinômio nos pontos xInterPontos, utilizando o método de Horner e de Briot Rufini.
+# Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
+# a(1) + a(2)*x^1 + a(3)*x(^2)+...+a(n+1)*x^n
+#
+consumoDesejado = 7.5
+anoDesejado     = fPnPorHorner( n, coef_by_me, consumoDesejado )
+
+printf( "\nSe Consumo=7.50KW, então tempo=%2.2f (após o 4º mês de 2001, o consumo deve atingir 7.5kW)\n\n", anoDesejado )
+
+
+xInterPontos = a - 1 : h / 20 : b + 1;
+yAproximado  = fPnPorHorner( n, coef_by_me, xInterPontos );
+
+# plot( x, y, '*', xInterPontos, yAproximado, "g;Funcao Aproximadora do Consumo pelo interpolacaoPolinomial;" )
+# legend('location','north');
+# grid on;
 
 
 
 profile off
 printf( "\n" );
 # profshow( profile ("info"), 8 )
-
 #
+
 
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
@@ -301,9 +337,23 @@ chebyshevBCoefficients_n3
 chebyshevBCoefficients_n3 = [ 2.83773005094190e-17 8.80101171489865e-01 3.41948691584548e-18 -3.91267079653375e-02 ]
 
 printf( "\n" );
+printf( "A seguir são apresentados os erro e os coeficientes de Chebyshev para n = 3 e 5.\n" );
+printf( "O primeiro valor é o calculado pelo algoritmo generico que calcula numericamente o\n" );
+printf( "nesimo coeficiente de Chebyshev.\n" );
+printf( "O segundo valor é a resposta que se encontra no livro de Calculo Numerico utilizado\n" );
+printf( "para a resolucao deste exercicio.\n" );
+
+printf( "\n" );
 chebyshevBCoefficients_n5
 chebyshevBCoefficients_n5 = [ 2.83773005094190e-17 8.80101171489865e-01 3.41948691584548e-18 -3.91267079653375e-02 ...
                               4.89386309254769e-17 4.99515460422549e-04 ]
+
+printf( "\n" );
+printf( "A seguir são apresentados os erro e os coeficientes de Chebyshev para n = 3 e 5.\n" );
+printf( "O primeiro valor é o calculado pelo algoritmo generico que calcula numericamente o\n" );
+printf( "nesimo coeficiente de Chebyshev.\n" );
+printf( "O segundo valor é a resposta que se encontra no livro de Calculo Numerico utilizado\n" );
+printf( "para a resolucao deste exercicio.\n" );
 
 printf( "\n" );
 errorNumerically_n3
@@ -366,4 +416,4 @@ plot( ...
       xInterPontosPade        , erroDePade        , "r;Erro de Pade;" );
 legend('location','north');
 grid on;
-#}
+#
