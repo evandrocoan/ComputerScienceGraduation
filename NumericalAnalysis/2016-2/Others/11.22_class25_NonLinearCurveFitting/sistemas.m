@@ -30,7 +30,8 @@ yInterPontosAproximado = aSolucao(1) * sin( xInterpontos*aSolucao(2) );
 plot( x, y, '*', xInterpontos, yInterPontosAproximado );
 
 
-
+# Desvio quadrático médio = sum(d.^2) / m
+# Desvio                  = sum( abs(d) )
 
 
 
