@@ -4,7 +4,7 @@
 # 1) Chutar um valor inicial real, não converge caso as raízes da solução sejam complexas.
 # 2) Mas chutar um valor initial complexo, converge caso as raízes sejam reais ou complexas.
 #
-function x = fNewtonSistemasNaoLineares( xi, f1, f2 )
+function x = fNewtonSistemasNaoLineares( xi, functions )
 
     % São três passos:
     % Calcular delta x (dx)
@@ -20,13 +20,13 @@ function x = fNewtonSistemasNaoLineares( xi, f1, f2 )
 
         contador = contador + 1;
 
-        A( 1, 1 ) = ( f1( [ xi(1) + dx( 1 ), xi(2)         ] ) - f1( xi ) ) / dx(1);
-        A( 1, 2 ) = ( f1( [ xi(1)          , xi(2) + dx(2) ] ) - f1( xi ) ) / dx(2);
-        A( 1, 3 ) = - f1( xi );
+        A( 1, 1 ) = ( functions(1).vector( [ xi(1) + dx( 1 ), xi(2)         ] ) - functions(1).vector( xi ) ) / dx(1);
+        A( 1, 2 ) = ( functions(1).vector( [ xi(1)          , xi(2) + dx(2) ] ) - functions(1).vector( xi ) ) / dx(2);
+        A( 1, 3 ) = - functions(1).vector( xi );
 
-        A( 2, 1 ) = ( f2( [ xi(1) + dx( 1 ), xi(2)         ] ) - f2( xi ) ) / dx(1);
-        A( 2, 2 ) = ( f2( [ xi(1)          , xi(2) + dx(2) ] ) - f2( xi ) ) / dx(2);
-        A( 2, 3 ) = - f2( xi );
+        A( 2, 1 ) = ( functions(2).vector( [ xi(1) + dx( 1 ), xi(2)         ] ) - functions(2).vector( xi ) ) / dx(1);
+        A( 2, 2 ) = ( functions(2).vector( [ xi(1)          , xi(2) + dx(2) ] ) - functions(2).vector( xi ) ) / dx(2);
+        A( 2, 3 ) = - functions(2).vector( xi );
 
         A;
         dx = fgauss( 2, A );
