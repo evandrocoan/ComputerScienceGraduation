@@ -78,7 +78,7 @@ y = [ 0.99, 0.92, 0.71, 0.28 ]
 m = numel( x )
 
 
-coeficientes = ajusteDeCurvasParaCos( m, x, y )
+coeficientes = ajusteDeCurvasLinearesParaCos( m, x, y )
 
 # Os pontos podem não estar ordenados, portanto calculamos os intervalos a partir dos pontos
 # mínimo e máximo de `x`.
