@@ -70,7 +70,7 @@ AS $$
     BEGIN
 
         SELECT codigo into codigoDoTime FROM equipe WHERE nomeDoTime = equipe.nome;
-        RAISE INFO 'O codigo do time/equipe % eh %', nomeDoTime, codigoDoTime;
+        RAISE INFO 'O codigo da equipe % eh %', nomeDoTime, codigoDoTime;
 
         -- Instead of save the whole table on memory (1.000.000 records), this saves memory iterating
         -- through each element as they are found.
@@ -85,10 +85,12 @@ AS $$
             -- if( partida.codTimeA = partida.codigo )
 
             pontuacaoDoTime = pontuacaoDoTime + 3;
-            RAISE INFO 'A pontuacaoDoTime do time/equipe % eh %', nomeDoTime, pontuacaoDoTime;
+            RAISE INFO 'A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
 
         END LOOP;
 
+        RAISE INFO 'RETURNING: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+        RAISE INFO '';
         return pontuacaoDoTime;
 
     END;
@@ -98,12 +100,12 @@ $$ LANGUAGE plpgsql;
 
 DO $$ BEGIN
 
-    maiorPontiacaoDoTime( 'Figueirense' );
-    maiorPontiacaoDoTime( 'Avai' );
+    PERFORM maiorPontiacaoDoTime( 'Figueirense' );
+    -- PERFORM maiorPontiacaoDoTime( 'Avai' );
 
 END $$;
 
--- SELECT maiorPontiacaoDoTime( 'Figueirense' );
+
 -- SELECT maiorPontiacaoDoTime( 'Avai' );
 
 
