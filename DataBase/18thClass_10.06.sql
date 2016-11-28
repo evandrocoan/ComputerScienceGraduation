@@ -45,7 +45,7 @@ CREATE TABLE equipe
     codFederacao integer,
     codCidade integer,
     ...
-    CONSTRAINT fk_cidade_federacao FOREIGN KEY(codFederacao,codCidade) 
+    CONSTRAINT fk_cidade_federacao FOREIGN KEY(codFederacao,codCidade)
             REFERENCES federacao(codigo,codCidade)
 );
 
@@ -60,7 +60,7 @@ CREATE TABLE pais
     codigo    integer NOT NULL,
     nome      varchar (40),
     populacao integer,
-    
+
     CONSTRAINT pk_medico PRIMARY KEY(codigo)
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE cidade
     UF      varchar (40),
     regiao  varchar (40),
     codPais integer,
-    
+
     CONSTRAINT pk_cidade PRIMARY KEY(codigo),
     CONSTRAINT fk_cidade_pais FOREIGN KEY (codPais) REFERENCES cidade(codigo)
 );
@@ -102,11 +102,11 @@ CREATE TABLE jogo
     dataJogo   date,
     codCidade  integer,
     vencedor   varchar (40),
-    
+
     CONSTRAINT pk_equipe PRIMARY KEY(codEquipeA,codEquipeB,dataJogo),
     CONSTRAINT fk_jogo_cidade FOREIGN KEY(codCidade)
             REFERENCES cidade(codigo),
-            
+
     CONSTRAINT fk_jogo_equipeA FOREIGN KEY(codEquipeA)
             REFERENCES equipe(codigo) ON DELETE SET NULL,
     CONSTRAINT fk_jogo_equipeB FOREIGN KEY(codEquipeB)
@@ -293,3 +293,19 @@ CREATE TABLE equipe
 -- Or comment everything and also the `BEGIN TRANSACTION;` at this script beginning.
 ROLLBACK TRANSACTION;
 -- COMMIT TRANSACTION;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

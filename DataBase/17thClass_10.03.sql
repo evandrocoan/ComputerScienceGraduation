@@ -81,7 +81,7 @@ CREATE TABLE pais
 
 -- This cannot be dropped, as depends:
 DROP TABLE IF EXISTS cidade CASCADE;
--- 
+--
 -- ERROR:  cannot drop table cidade because other objects depend on it
 -- DETAIL:  constraint fk_cidade_pais on table federacao depends on table cidade
 -- HINT:  Use DROP ... CASCADE to drop the dependent objects too.
@@ -109,7 +109,7 @@ CREATE TABLE cidade
 -- This cannot be dropped, as depends:
 DROP TABLE IF EXISTS federacao CASCADE;
 
--- 
+--
 -- ERROR:  cannot drop table cidade because other objects depend on it
 -- DETAIL: constraint fk_cidade_pais on table federacao depends on table cidade
 -- HINT:   Use DROP ... CASCADE to drop the dependent objects too.
@@ -277,6 +277,14 @@ WHERE codigo = 1;
 
 --ROLLBACK TRANSACTION;
 COMMIT TRANSACTION;
+
+
+
+
+
+
+
+
 
 
 

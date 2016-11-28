@@ -250,6 +250,10 @@ SELECT Projeto.CodProj, Projeto.NomeProj
 FROM Projeto
 WHERE Projeto.AnoInicio BETWEEN 1990 AND 2000 AND Projeto.AnoFim > 2010;
 
+--
+-- linhas  <- sig Projeto.AnoInicio > 1990 AND Projeto.AnoInicio < 2000 AND Projeto.AnoFim < 2010 (Projeto)
+-- colunas <- pi Projeto.CodProj, Projeto.NomeProj (linhas)
+--
 --  codproj |   nomeproj
 -- ---------+---------------
 --        5 | NomeProjeto 5
@@ -274,6 +278,12 @@ SELECT Projeto.CodProj, Projeto.NomeProj, ProjetoPessoa.PapelPessProj
 FROM Projeto JOIN ProjetoPessoa ON Projeto.CodProj = ProjetoPessoa.CodProj
 WHERE Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960;
 
+--
+-- linhas  <- Projeto        JOIN Projeto.CodProj = ProjetoPessoa.CodProj       ProjetoPessoa
+-- linhas2 <- sig Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960 (linhas)
+-- pi Projeto.CodProj, Projeto.NomeProj, ProjetoPessoa.PapelPessProj (linhas2)
+--
+
 \echo 'INFO: (b) com operador de produto cartesiano'
 \echo 'INFO:'
 
@@ -284,6 +294,11 @@ WHERE Projeto.CodProj = ProjetoPessoa.CodProj AND
     Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960
 );
 
+--
+-- linhas  <- sig Projeto.CodProj   =     ProjetoPessoa.CodProj                 (Projeto X ProjetoPessoa)
+-- linhas2 <- sig Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960 (linhas)
+-- pi Projeto.CodProj, Projeto.NomeProj, ProjetoPessoa.PapelPessProj (linhas2)
+--
 --  codproj |   nomeproj    | papelpessproj
 -- ---------+---------------+---------------
 --        6 | NomeProjeto 6 | Papel 1
@@ -323,6 +338,13 @@ FROM Projeto JOIN ProjetoPessoa ON Projeto.CodProj            = ProjetoPessoa.Co
 ) Contagem ON Contagem.NumeroCartao = ProjetoPessoa.NumeroCartao
 WHERE Projeto.AnoInicio > 2000 AND Projeto.AnoFim < 2016 OR Projeto.AnoInicio < 1960;
 
+--
+-- linhas  <- Projeto  JOIN Projeto.CodProj            = ProjetoPessoa.CodProj         ProjetoPessoa
+-- linhas2 <- Pessoa   JOIN ProjetoPessoa.NumeroCartao = Pessoa.NumeroCartao           linhas
+-- linhas3 <- Contagem JOIN Contagem.NumeroCartao      = ProjetoPessoa.NumeroCartao    linhas2
+-- linhas4 <- sig Projeto.AnoInicio > 2000     AND      Projeto.AnoFim < 2016          (linhas3)
+-- pi Projeto.NomeProj, ProjetoPessoa.PapelPessProj, Pessoa.NomePessoa, Contagem.count (linhas4)
+--
 --    nomeproj    | papelpessproj |   nomepess   | contagem_de_projetos
 -- ---------------+---------------+--------------+----------------------
 --  NomeProjeto 6 | Papel 1       | NomePessoa 8 |                    4
@@ -357,6 +379,14 @@ FROM Curso JOIN
 WHERE Curso.NomeCurso LIKE '%Curso%' AND Curso.CodCurso < 4
 ORDER BY 2;
 
+--
+-- linhas      <- Pessoa JOIN Pessoa.NumeroCartao = OutroEMail.NumeroCartao          OutroEMail
+-- linhas2     <- Curso  JOIN Pessoa.CodCurso     = Curso.CodCurso                   linhas
+-- OutraTabela <- pi          Curso.CodCurso, count                                  (linhas2)
+-- linhas4     <- Curso  JOIN Curso.CodCurso      = OutraTabela.CodCurso             OutraTabela
+-- linhas5     <- sig Curso.NomeCurso             = '%Curso%' AND Curso.CodCurso < 4 linhas4
+-- pi       Curso.CodCurso, Curso.NomeCurso, OutraTabela.count      (linhas5)
+--
 --  codcurso | nomecurso | count
 -- ----------+-----------+-------
 --         1 | Curso 1   |     5
@@ -394,6 +424,14 @@ FROM Projeto JOIN ProjetoPessoa ON Projeto.CodProj            = ProjetoPessoa.Co
 ) Contagem ON Contagem.NumeroCartao = ProjetoPessoa.NumeroCartao
 WHERE Projeto.AnoInicio > 1970 AND Projeto.AnoFim < 2016;
 
+--
+-- Contagem <- pi      ProjetoPessoa.NumeroCartao, count         ProjetoPessoa
+-- linhas   <- Projeto  JOIN Projeto.CodProj            = ProjetoPessoa.CodProj      ProjetoPessoa
+-- linhas2  <- Pessoa   JOIN ProjetoPessoa.NumeroCartao = Pessoa.NumeroCartao        linhas
+-- linhas3  <- Contagem JOIN Contagem.NumeroCartao      = ProjetoPessoa.NumeroCartao linhas2
+-- linhas4  <- sig    Projeto.AnoInicio > 1970 AND Projeto.AnoFim < 2016     (linhas3)
+-- pi    Projeto.NomeProj, ProjetoPessoa.PapelPessProj, Pessoa.NomePessoa, Contagem.count    (linhas4)
+--
 --     nomeproj    | papelpessproj |   nomepess   | contagem_de_projetos
 -- ----------------+---------------+--------------+----------------------
 --  NomeProjeto 12 | Papel 3       | NomePessoa 8 |                    4
