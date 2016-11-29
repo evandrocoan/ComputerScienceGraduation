@@ -70,7 +70,7 @@ AS $$
     BEGIN
 
         SELECT codigo into codigoDoTime FROM equipe WHERE nomeDoTime = equipe.nome;
-        RAISE INFO 'O codigo da equipe % eh %', nomeDoTime, codigoDoTime;
+        -- RAISE INFO 'O codigo da equipe % eh %', nomeDoTime, codigoDoTime;
 
         -- Instead of save the whole table on memory (1.000.000 records), this saves memory iterating
         -- through each element as they are found.
@@ -78,19 +78,49 @@ AS $$
 
             SELECT *
             FROM jogo
-            WHERE jogo.codTimeA = codigoDoTime AND jogo.vencedor = 'Mandante'
 
         LOOP
 
-            -- if( partida.codTimeA = partida.codigo )
+            --
+            -- http://stackoverflow.com/questions/11299037/postgresql-if-statement/37476851
+            -- https://www.postgresql.org/docs/9.1/static/plpgsql-control-structures.html
+            CASE
+                WHEN partida.codTimeA = codigoDoTime AND partida.vencedor = 'Mandante' THEN
 
-            pontuacaoDoTime = pontuacaoDoTime + 3;
-            RAISE INFO 'A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+                    pontuacaoDoTime := pontuacaoDoTime + 3;
+                    -- RAISE INFO 'A_MANDANT: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+
+                WHEN partida.codTimeB = codigoDoTime AND partida.vencedor = 'Mandante' THEN
+
+                    pontuacaoDoTime := pontuacaoDoTime + 1;
+                    -- RAISE INFO 'B_MANDANT: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+
+                WHEN partida.codTimeA = codigoDoTime AND partida.vencedor = 'Visitante' THEN
+
+                    pontuacaoDoTime := pontuacaoDoTime + 1;
+                    -- RAISE INFO 'A_VISITAN: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+
+                WHEN partida.codTimeB = codigoDoTime AND partida.vencedor = 'Visitante' THEN
+
+                    pontuacaoDoTime := pontuacaoDoTime + 3;
+                    -- RAISE INFO 'B_VISITAN: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+
+                WHEN partida.vencedor = 'Empate'
+                AND ( partida.codTimeA = codigoDoTime OR partida.codTimeB = codigoDoTime ) THEN
+
+                    pontuacaoDoTime := pontuacaoDoTime + 1;
+                    -- RAISE INFO 'EMPATE___: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
+
+                ELSE
+
+                    -- RAISE INFO 'ELSE_____: Doing nothing.';
+
+            END CASE;
 
         END LOOP;
 
         RAISE INFO 'RETURNING: A pontuacaoDoTime da equipe % eh %', nomeDoTime, pontuacaoDoTime;
-        RAISE INFO '';
+        -- RAISE INFO '';
         return pontuacaoDoTime;
 
     END;
@@ -98,21 +128,18 @@ AS $$
 $$ LANGUAGE plpgsql;
 
 
+-- SELECT maiorPontiacaoDoTime( 'Figueirense' );
+-- SELECT maiorPontiacaoDoTime( 'Avai' );
+
 DO $$ BEGIN
 
     PERFORM maiorPontiacaoDoTime( 'Figueirense' );
-    -- PERFORM maiorPontiacaoDoTime( 'Avai' );
+    PERFORM maiorPontiacaoDoTime( 'Avai' );
 
 END $$;
 
-
--- SELECT maiorPontiacaoDoTime( 'Avai' );
-
-
---      nome      | count
--- ---------------+-------
---  Florianópolis |     2
--- (1 row)
+-- INFO:  RETURNING: A pontuacaoDoTime da equipe Figueirense eh 2
+-- INFO:  RETURNING: A pontuacaoDoTime da equipe Avai eh 3
 
 -- \echo 'INFO:'
 -- \echo 'INFO:'
