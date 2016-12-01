@@ -18,6 +18,17 @@ printf( "\nCalculatin the sin of 1:\n" )
 b(1,1).vector(1)
 
 
+
+
+function x = f( x )
+
+    x = x^3/3 + log( cos(x) - 1 )/2 - log( cos(x) + 1 )/2
+
+end
+
+f(2)
+
+
 #
 # How do I declare a symbolic matrix in Octave?
 #
@@ -41,7 +52,6 @@ b(1,1).vector
 b(1,2).vector
 b(2,1).vector
 b(2,2).vector
-
 
 
 
