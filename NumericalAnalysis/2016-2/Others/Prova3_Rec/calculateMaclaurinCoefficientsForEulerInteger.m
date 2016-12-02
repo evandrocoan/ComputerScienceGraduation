@@ -15,7 +15,7 @@
 # For other series as sin( x ), the domain conversion is not necessary as they already may be
 # evaluated on the domain [-1, 1].
 #
-function coef = calculateMaclaurinCoefficientsForEulerInteger( n )
+function coef = calculateMaclaurinCoefficientsForEulerInteger( grau )
 
     # Precisamos dos zeros em séries como sen(x) que já são entre [-1, 1]
     # Assim um for antes de calcular a sério serve para completar os zeros serve para corrigir/ajudar.
@@ -32,7 +32,13 @@ function coef = calculateMaclaurinCoefficientsForEulerInteger( n )
     # coef 3 =
     # coef 4 = 0
 
-    for i = 0 : n
+    for i = 1 : grau+1
+
+        coef( i ) = 0;
+
+    end
+
+    for i = 0 : fix( ( grau - 1 ) / 2 )
 
         coef( 2*i+1+1 ) = (-1)^i / ( factorial(i)*(2*i + 1) );
 

@@ -12,248 +12,374 @@ split_long_rows(0)
 #output_precision(30)
 #output_max_field_width(0)
 
+
+printf( "\nUse a função f(x)=(sqrt(pi)/2)*erf(x) (aproximação para 'double' do Octave), que é a\n" )
+printf( "mesma da  Prova 3 do dia 18.11.2016 e refaça as questões a seguir:\n\n" )
+
+FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO = 2
+
+
+
 #
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
 
-
-FATOR_MULTIPLICATIVO_DO_VALOR_EXATO = 2
-
-printf( "\n3a Prova (18/11/2016): (poste todos os algoritmos e imprima somente as respostas, de forma clara)\n" )
-printf( "\n" )
-printf( "A função composta\n" )
-printf( " f ( x) = ∫ e − z 2 dz\n" )
-printf( " em x∈[-1, +1], pode-se aproxima-la de diversas maneiras utilizando apenas\n" )
-printf( "operações algébricas simples, como adição, multiplicação e divisão. Uma alternativa de representação é a expansão\n" )
-printf( "de f(x) em termos da série de Maclaurin:\n" )
-printf( "\n" )
-printf( "(3,0) 1). Determine o grau ‘n’ mínimo necessário para que o erro de truncamento máximo ‘estimado’ entre Mn(x) e\n" )
-printf( "f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
-
+printf( "\n1. Dada a f(x) calcule os coeficientes de um polinômio interpolador de grau 11, \n" )
+printf( "o erro máximo estimado e o erro exato;\n\n" )
 
 # clc
 # clear
-# close all
 
-profile clear
-profile on
+n = 11
 
-
-n = 1;
-
-a = -1;
-b = 1;
-printf( "\n" )
-
-erroMinimoDeMaclaurin = sqrt(10)*1e-6;
-erroMaximoDeMaclaurin = 1;
-
-printf( "\n" )
-
-while( erroMaximoDeMaclaurin > erroMinimoDeMaclaurin && n < 100 )
-
-    n = n + 1;
-    h = (b-a) / n;
-
-    # x                     = a : h : b;
-    xInterPontosMaclaurin = a : h/20 : b;
-
-    coefMaclaurinAproximado = calculateMaclaurinCoefficientsForEulerInteger( n );
-    coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( n*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO );
-
-    yAproximadoMaclaurin = fPnPorHorner( n, coefMaclaurinAproximado, xInterPontosMaclaurin );
-    yExatoMaclaurin      = fPnPorHorner( n*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO, coefMaclaurinExato, xInterPontosMaclaurin );
-
-    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
-    # intervalo [-1,1], ou seja, em -1 ou em 1.
-    #
-    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
-    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    errosDeMaclaurin      = abs( yAproximadoMaclaurin .- yExatoMaclaurin );
-    erroMaximoDeMaclaurin = max( errosDeMaclaurin )
-
-end
-
-
-printf( "\nO valor de n mínimo necessário é:\n" )
-n
-
-
-printf( "\nE o grau da série de Euler necessário/equivalente para aquele n mínimo é:\n" )
-grau = 2*n + 1
+a = -1
+b =  1
 
 
 
-# plot( xInterPontosMaclaurin, yExatoMaclaurin, 'g', xInterPontosMaclaurin, yAproximadoMaclaurin, 'b' )
-# plot( ...
-#       xInterPontosMaclaurin, errosDeMaclaurin, "b;Erro de Maclaurin;" ...
-#     );
+hEstimado = ( b - a ) / n;
+
+xPontosEstimado = a : hEstimado : b;
+yExatoEstimado  = erfFunction( xPontosEstimado );
+
+
+hExato = ( b - a ) / ( n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO ) ;
+
+xPontosExato = a : hExato : b;
+yExatoExato  = erfFunction( xPontosExato );
+
+
+# coef_by_me =
+#   -1.164279323185479   1.399845394498246  -0.235566071312767
+#
+# -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
+#
+coef_by_meAproximado = interpolacaoPolinomial( xPontosEstimado, yExatoEstimado, n );
+coef_by_meEstimado   = interpolacaoPolinomial( xPontosExato   , yExatoExato   , n * FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO );
+
+
+
+xInterPontos = a : hEstimado/20 : b;
+
+# Aqui calculamos o valor do polinômio nos pontos xInterPontos, utilizando o método de Horner e de Briot Rufini.
+# Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
+# a(1) + a(2)*x^1 + a(3)*x(^2)+...+a(n+1)*x^n
+#
+yAproximadoInterPontos = fPnPorHorner( n                                         , coef_by_meAproximado, xInterPontos );
+yEstimadoInterPontos   = fPnPorHorner( n * FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, coef_by_meEstimado  , xInterPontos );
+
+
+# Erros estimados
+errosEstimadoInterpolador      = abs( yAproximadoInterPontos .- yEstimadoInterPontos );
+erroMaximoEstimadoInterpolador = max( errosEstimadoInterpolador );
+
+
+# Erros exatos
+yExatoInterPontos = erfFunction( xInterPontos );
+
+errosExatoDeInterpolador       = abs( yAproximadoInterPontos .- yExatoInterPontos );
+erroMaximoExatoInterpolador___ = max( errosExatoDeInterpolador );
+
+
+erroMaximoExatoInterpolador___
+erroMaximoEstimadoInterpolador
+coef_by_meAproximado
+
+
+
+
+
+# plot( x, y, '*', xInterPontos, yAproximado, "g;Funcao Aproximadora do Consumo pelo interpolacaoPolinomial;" )
 # legend('location','north');
 # grid on;
-
-printf( "\n" );
-profile off
-# profshow( profile ("info"), 8 )
 #
 
 
+#
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
 
-printf( "(4,0) 2).Uma outra alternativa de representação é a expansão de f(x) em termos da série de Padé Rnm(x). Determine\n" )
-printf( "n, m e os coeficientes da aproximação de Padé, a partir de Maclaurin com grau total M=n+m, para que o erro de\n" )
-printf( "truncamento máximo ‘estimado’ entre Rnm (x) e f(x) seja da ordem de O(10 ) (<(√10).10 ).\n\n" )
+printf( "\n2. Dada a f(x) calcule os coeficientes de uma série de Maclaurin de grau 11, \n" )
+printf( " o erro máximo estimado e o erro exato;\n\n" )
 
 # clc
 # clear
-# close all
 
-profile clear
-profile on
+# grau = 2*n + 1
+
+a = -1
+b =  1
+
+grau = 11
+n = fix( ( grau - 1 ) / 2 )
+
+h = (b-a) / n;
+
+# x                     = a : h : b;
+xInterPontosMaclaurin = a : h/20 : b;
+
+coefMaclaurinAproximado = calculateMaclaurinCoefficientsForEulerInteger( grau );
+coefMaclaurinExato      = calculateMaclaurinCoefficientsForEulerInteger( grau*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO );
+
+yAproximadoMaclaurin = fPnPorHorner( n, coefMaclaurinAproximado, xInterPontosMaclaurin );
+yEstimadoMaclaurin   = fPnPorHorner( n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, coefMaclaurinExato, xInterPontosMaclaurin );
+
+
+# Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
+# intervalo [-1,1], ou seja, em -1 ou em 1.
+#
+# O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
+# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
+errosEstimadosDeMaclaurin   = abs( yAproximadoMaclaurin .- yEstimadoMaclaurin );
+erroMaximoEstimadoMaclaurin = max( errosEstimadosDeMaclaurin );
+
+
+yExato = erfFunction( xInterPontosMaclaurin );
+
+errosExatoDeMaclaurin       = abs( yAproximadoMaclaurin .- yExato );
+erroMaximoExatoMaclaurin___ = max( errosExatoDeMaclaurin );
+
+
+erroMaximoExatoMaclaurin___
+erroMaximoEstimadoMaclaurin
+coefMaclaurinAproximado
+
+
+
+#
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
+printf( "\n3. Dada a f(x) calcule os coeficientes de uma série de Tchebychev de grau 11, \n" )
+printf( "o erro máximo estimado e o erro máximo exato; \n\n" )
+
+# clc
+# clear
+
+a = -1
+b =  1
+
+n = 11
+m = 100
+
+
+# Gráfico de Chebyshev
+h = (b-a)/n;
+
+x = a : h : b;
+y = erfFunction( x );
+
+xInterPontosChebyshev = a : h/20 : b;
+tInterPontos          = ChebyshevDomainLinearTransformationIn( xInterPontosChebyshev, a, b );
+
+
+chebyshevAproximadoCoefficients = calculateChebyshevCoefficients( n, m, a, b, @erfFunction, @getChebyshevCoefficientsByPolinom );
+chebyshevEstimadoCoefficients   = calculateChebyshevCoefficients( ...
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, m, a, b, @erfFunction, @getChebyshevCoefficientsByPolinom );
+
+
+# For log( x ) in [1, 2]
+correct_b = [  3.76452812919196e-001,  3.43145750507620e-001, -2.94372515228575e-002, ...
+               3.36708925555306e-003, -4.33275888539416e-004,  5.94707115514397e-005, ...
+              -8.50296480504678e-006,  1.25045018720205e-006, -1.87619547238052e-007, ...
+               2.79406818857846e-008,  1.71766583014649e-014, -2.79406536352273e-008 ];
+
+#
+# printf( '\n\n\n\n\n( run_chebyshev_test ) Calling the evaluateChebyshevPolynom.\n' );
+
+# i = 1 : n
+# fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
+#
+# yAproximado = coef_b( 1)*T0( tInterPontos ) ...
+#             + coef_b( 2)*T1( tInterPontos ) ...
+#             + coef_b( 3)*T2( tInterPontos ) ...
+#             + coef_b( 4)*T3( tInterPontos );
+#
+yAproximado = evaluateChebyshevPolynom( n, chebyshevAproximadoCoefficients, tInterPontos, @getChebyshevCoefficientsByPolinom );
+yEstimado   = evaluateChebyshevPolynom( ...
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, chebyshevEstimadoCoefficients  , tInterPontos, @getChebyshevCoefficientsByPolinom );
+
+
+# Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
+# intervalo [-1,1], ou seja, em -1 ou em 1.
+#
+# O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
+# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
+#
+erroEstimadoDeChebyshev       = abs( yAproximado .- yEstimado );
+erroMaximoEstimadoDeChebyshev = max( erroEstimadoDeChebyshev );
+
+
+yExato = erfFunction( xInterPontosChebyshev );
+
+erroExatoDeChebyshev          = abs( yAproximado .- yExato );
+erroMaximoExatoDeChebyshev___ = max( erroExatoDeChebyshev );
+
+
+# plot( x, y, '*' )
+# plot( x, y, '*', xInterPontosChebyshev, yInterPontos, 'g', xInterPontosChebyshev, yAproximado, 'b' );
+
+printf( "\n" );
+
+
+erroMaximoExatoDeChebyshev___
+erroMaximoEstimadoDeChebyshev
+chebyshevAproximadoCoefficients
+
+
+
+#
+printf( "\n\n\n##############################################################################################################\n" )
+printf( "##############################################################################################################\n" )
+
+printf( "\n4. Dados os coeficientes numéricos da serie de Maclaurin de grau 21 para f(x):\n" )
+printf( "c=[  ...  ]\n" )
+printf( ", calcule uma série racional de Padé R(6,5), o erro máximo estimado (comparando Padé R6,5 \n" )
+printf( " com Padé R11,10) e o erro exato.\n\n" )
+
+# clc
+# clear
 
 # Numero de pontos do Gráfico e grau n da Série de Pade
-n = 0;
+n = 6;
 
 # Grau do polinômio dividendo de Pade.
-m = 0;
+m = 6;
 
 # Domínio
 a = -1;
-b = 1;
-printf( "\n" );
+b =  1;
 
-erroMinimoDePade = sqrt(10)*1e-6;
-erroMaximoDePade = 1;
-
-printf( "\n" )
-
-while( erroMaximoDePade > erroMinimoDePade && n < 10 )
-
-    n = n + 1;
-    m = m + 1;
-
-    h                = (b-a) / n;
-    xInterPontosPade = a : h/20 : b;
+# printf( "\n" );
+# printf( "\n" )
+h                = (b-a) / n;
+xInterPontosPade = a : h/20 : b;
 
 
-    # Calculo de Pade Exato
-    grauDeMaclaurinParaPadeExato = n*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO + m*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO;
-    coefMaclaurinParaPadeExato   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPadeExato );
 
-    # R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
-    #
-    [ aPadeCoefficientsExato, bPadeCoefficientsExato ] = calculatePadeCoefficients( ...
-            n*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO, m*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO, coefMaclaurinParaPadeExato );
+# Calculo de Pade Aproximado
+grauDeMaclaurinParaPadeAproximado = n + m;
+coefMaclaurinParaPadeAproximado   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPadeAproximado );
 
-    # yAproximado = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
-    # yAproximadoPorPade = polyval( aPadeCoefficientsExato, xInterPontosPade ) / polyval( bPadeCoefficientsExato, xInterPontosPade );
-    #
-    yExatoPade = fPnPorHorner( ...
-            n*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO, aPadeCoefficientsExato, xInterPontosPade ) ./ fPnPorHorner( ...
-            m*FATOR_MULTIPLICATIVO_DO_VALOR_EXATO, bPadeCoefficientsExato, xInterPontosPade );
+# R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
+#
+[ aPadeCoefficientsAproximado, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPadeAproximado );
 
-
-    # Calculo de Pade Aproximado
-    grauDeMaclaurinParaPadeAproximado = n + m;
-    coefMaclaurinParaPadeAproximado   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPadeAproximado );
-
-    # R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
-    #
-    [ aPadeCoefficientsAproximado, bPadeCoefficients ] = calculatePadeCoefficients( n, m, coefMaclaurinParaPadeAproximado );
-
-    # yAproximadoPade = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
-    # yAproximadoPorPade = polyval( aPadeCoefficientsAproximado, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
-    #
-    yAproximadoPade = fPnPorHorner( ...
-            n, aPadeCoefficientsAproximado, xInterPontosPade ) ./ fPnPorHorner( ...
-            m, bPadeCoefficients, xInterPontosPade );
+# yAproximadoPade = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
+# yAproximadoPorPade = polyval( aPadeCoefficientsAproximado, xInterPontosPade ) / polyval( bPadeCoefficients, xInterPontosPade );
+#
+yAproximadoPade = fPnPorHorner( ...
+        n, aPadeCoefficientsAproximado, xInterPontosPade ) ./ fPnPorHorner( ...
+        m, bPadeCoefficients, xInterPontosPade );
 
 
-    # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
-    # intervalo [-1,1], ou seja, em -1 ou em 1.
-    #
-    # O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
-    # que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
-    # um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
-    errosDePade      = abs( yAproximadoPade .- yExatoPade );
-    erroMaximoDePade = max( errosDePade )
 
-end
+# Calculo de Pade Estimado
+grauDeMaclaurinParaPadeEstimado = n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO + m*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO;
+coefMaclaurinParaPadeEstimado   = calculateMaclaurinCoefficientsForEulerInteger( grauDeMaclaurinParaPadeEstimado );
+
+# R32 = (a(1) + a(2)x + a(3)x^2 + a(4)x^3)/(1 + b(1)x + b(2)*x^2)
+#
+[ aPadeCoefficientsEstimado, bPadeCoefficientsEstimado ] = calculatePadeCoefficients( ...
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, m*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, coefMaclaurinParaPadeEstimado );
+
+# yAproximado = fPnPorHorner( n, coefMaclaurin, xInterPontosPade )
+# yAproximadoPorPade = polyval( aPadeCoefficientsEstimado, xInterPontosPade ) / polyval( bPadeCoefficientsEstimado, xInterPontosPade );
+#
+yEstimadoPade = fPnPorHorner( ...
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, aPadeCoefficientsEstimado, xInterPontosPade ) ./ fPnPorHorner( ...
+        m*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, bPadeCoefficientsEstimado, xInterPontosPade );
 
 
-printf( "\nOs graus de n e m de Pade são:\n" )
+
+# Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
+# intervalo [-1,1], ou seja, em -1 ou em 1.
+#
+# O gráfico do erro mostra que o erro é 0 no ponto 0 (do intervalo [-1,1]), por que foi ali
+# que fizemos a expansão da série de Maclaurin. O contrário da Sério de Chebyshev, que possui
+# um erro mais distribuído ao londo do intervalo (Comparar um Gráfico de Chebyshev e Maclaurin).
+errosEstimadoDePade      = abs( yAproximadoPade .- yEstimadoPade );
+erroEstimadoMaximoDePade = max( errosEstimadoDePade );
+
+
+yExato = erfFunction( xInterPontosPade );
+
+erroExatoDePade          = abs( yAproximadoPade .- yExato );
+erroMaximoExatoDePade___ = max( erroExatoDePade );
+
+
+printf( "Os graus de n e m de Pade são:\n" )
 n
 m
+
+printf( "\nO erro maximo de Pade para estes coeficientes foi:\n" )
+
+erroMaximoExatoDePade___
+erroEstimadoMaximoDePade
 
 printf( "\nOs coeficientes a e b de Pade são:\n" )
 aPadeCoefficientsAproximado
 bPadeCoefficients
 
-printf( "\nO erro maximo de Pade para estes coeficientes foi:\n" )
-erroMaximoDePade
 
-
-# plot( xInterPontosPade, yExatoPade, 'g', xInterPontosPade, yAproximadoPade, 'b' )
+# plot( xInterPontosPade, yEstimadoPade, 'g', xInterPontosPade, yAproximadoPade, 'b' )
 # plot( ...
-#       xInterPontosPade, errosDePade, "g;Erro de Pade;" ...
+#       xInterPontosPade, errosEstimadoDePade, "g;Erro de Pade;" ...
 #     );
 # legend('location','north');
 # grid on;
 
-printf( "\n" );
-profile off
-# profshow( profile ("info"), 8 )
+
+
 #
-
-
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
 
-printf( "0) 4). Determine e Plote os erros máximos, em cada caso.\n\n" )
-
-# clc
-# clear
-# close all
-
-profile clear
-profile on
-
+printf( "\n\nImprima, para cada aproximaçao, “somente” os:\n" )
+printf( "- nome do metodo\n" )
+printf( "- grau \n" )
+printf( "- coeficientes;\n" )
+printf( "- erro máximo estimado e\n" )
+printf( "- exato atingido em cada caso;\n" )
+printf( "Qual das 4 aproximações foi a mais precisa?\n\n" )
 
 
-printf( "\nO valor e o ponto de erro máximo do Maclaurin são:\n" )
-[ valorDoErroMaximoDeMaclaurin_______, indexDoPontoDeErroMaximoDeMaclaurin ] = max( errosDeMaclaurin );
-
-valorDoErroMaximoDeMaclaurin_______
-indexDoPontoDeErroMaximoDeMaclaurin
-valorDoPontoErroMaximoDeMaclaurin__ = xInterPontosMaclaurin( indexDoPontoDeErroMaximoDeMaclaurin )
+printf( "\nClaramente como podemos ver a seguir, a melhor aproximação foi a de Chebyshev.\n" )
+printf( "E também vemos que o interpolador polinomial em segundo lugar.\n" )
 
 
-printf( "\nO valor e o ponto de erro máximo do Pade são:\n" )
-[ valorDoErroMaximoDePade_______, indexDoPontoDeErroMaximoDePade ] = max( errosDePade );
+printf( "\nInterpolador\n" )
+erroMaximoExatoInterpolador___
+erroMaximoEstimadoInterpolador
 
-valorDoErroMaximoDePade_______
-indexDoPontoDeErroMaximoDePade
-valorDoPontoErroMaximoDePade__ = xInterPontosPade( indexDoPontoDeErroMaximoDePade )
+printf( "\nMaclaurin\n" )
+erroMaximoExatoMaclaurin___
+erroMaximoEstimadoMaclaurin
+
+printf( "\nChebyshev\n" )
+erroMaximoExatoDeChebyshev___
+erroMaximoEstimadoDeChebyshev
+
+printf( "\nPade\n" )
+erroMaximoExatoDePade___
+erroEstimadoMaximoDePade
+
 
 
 plot( ...
-      xInterPontosPade     , errosDePade     , "g;Erro de Chebyshev;", ...
-      xInterPontosMaclaurin, errosDeMaclaurin, "b;Erro de Maclaurin;" ...
+      xInterPontosPade       , errosEstimadoDePade       , "g;Erro de Pade;", ...
+      erroEstimadoDeChebyshev, erroEstimadoDeChebyshev   , "g;Erro de Pade;", ...
+      xInterPontosMaclaurin  , errosEstimadosDeMaclaurin , "b;Erro de Maclaurin;" ...
     );
 legend('location','north');
 grid on;
 
 
 
-printf( "\n" );
-profile off
-# profshow( profile ("info"), 8 )
+
 #}
-
-
-
-#
 # No ponto 1, O valor exato de `fPnPorHorner` deve ser:
 # 0.7468241328124270253994674361318530053544996868126063290276544989586053275617728314978484298229019197
 #
@@ -273,5 +399,7 @@ profile off
 # yMeu___ParaX_InterPontosMaclaurin = polyval( fliplr( coefMaclaurinParaHorner ), xInterPontosMaclaurin )
 # yMeu___ParaX_InterPontosMaclaurin = fPnPorHorner( n, coefMaclaurinParaHorner, xInterPontosMaclaurin )
 # yOctaveParaX_InterPontosMaclaurin = sqrt( pi )*erf( xInterPontosMaclaurin ) / 2
+
+
 
 
