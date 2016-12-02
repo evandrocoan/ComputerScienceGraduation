@@ -32,8 +32,8 @@ printf( "o erro máximo estimado e o erro exato;\n\n" )
 
 n = 11
 
-a = -1
-b =  1
+a = -1;
+b =  1;
 
 
 
@@ -55,18 +55,18 @@ yExatoExato  = erfFunction( xPontosExato );
 # -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
 #
 coef_by_meAproximado = interpolacaoPolinomial( xPontosEstimado, yExatoEstimado, n );
-coef_by_meEstimado   = interpolacaoPolinomial( xPontosExato   , yExatoExato   , n * FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO );
+coef_by_meEstimado   = interpolacaoPolinomial( xPontosExato   , yExatoExato   , n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO );
 
 
 
-xInterPontos = a : hEstimado/20 : b;
+xInterPontosInterpolador = a : hEstimado/20 : b;
 
-# Aqui calculamos o valor do polinômio nos pontos xInterPontos, utilizando o método de Horner e de Briot Rufini.
+# Aqui calculamos o valor do polinômio nos pontos xInterPontosInterpolador, utilizando o método de Horner e de Briot Rufini.
 # Isso por que custa muito caro efetuar as operações de potência ao calcular o polinômio:
 # a(1) + a(2)*x^1 + a(3)*x(^2)+...+a(n+1)*x^n
 #
-yAproximadoInterPontos = fPnPorHorner( n                                         , coef_by_meAproximado, xInterPontos );
-yEstimadoInterPontos   = fPnPorHorner( n * FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, coef_by_meEstimado  , xInterPontos );
+yAproximadoInterPontos = fPnPorHorner( n                                       , coef_by_meAproximado, xInterPontosInterpolador );
+yEstimadoInterPontos   = fPnPorHorner( n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, coef_by_meEstimado  , xInterPontosInterpolador );
 
 
 # Erros estimados
@@ -75,7 +75,7 @@ erroMaximoEstimadoInterpolador = max( errosEstimadoInterpolador );
 
 
 # Erros exatos
-yExatoInterPontos = erfFunction( xInterPontos );
+yExatoInterPontos = erfFunction( xInterPontosInterpolador );
 
 errosExatoDeInterpolador       = abs( yAproximadoInterPontos .- yExatoInterPontos );
 erroMaximoExatoInterpolador___ = max( errosExatoDeInterpolador );
@@ -89,7 +89,7 @@ coef_by_meAproximado
 
 
 
-# plot( x, y, '*', xInterPontos, yAproximado, "g;Funcao Aproximadora do Consumo pelo interpolacaoPolinomial;" )
+# plot( x, y, '*', xInterPontosInterpolador, yAproximado, "g;Funcao Aproximadora do Consumo pelo interpolacaoPolinomial;" )
 # legend('location','north');
 # grid on;
 #
@@ -107,8 +107,8 @@ printf( " o erro máximo estimado e o erro exato;\n\n" )
 
 # grau = 2*n + 1
 
-a = -1
-b =  1
+a = -1;
+b =  1;
 
 grau = 11
 n = fix( ( grau - 1 ) / 2 )
@@ -157,8 +157,8 @@ printf( "o erro máximo estimado e o erro máximo exato; \n\n" )
 # clc
 # clear
 
-a = -1
-b =  1
+a = -1;
+b =  1;
 
 n = 11
 m = 100
@@ -171,7 +171,7 @@ x = a : h : b;
 y = erfFunction( x );
 
 xInterPontosChebyshev = a : h/20 : b;
-tInterPontos          = ChebyshevDomainLinearTransformationIn( xInterPontosChebyshev, a, b );
+tInterPontosChebyshev          = ChebyshevDomainLinearTransformationIn( xInterPontosChebyshev, a, b );
 
 
 chebyshevAproximadoCoefficients = calculateChebyshevCoefficients( n, m, a, b, @erfFunction, @getChebyshevCoefficientsByPolinom );
@@ -191,14 +191,14 @@ correct_b = [  3.76452812919196e-001,  3.43145750507620e-001, -2.94372515228575e
 # i = 1 : n
 # fChebyshev( i ) = b0*T0( t(i) ) + b1*T1( t(i) ) + b2*T2( t(i) ) + b3*T3( t(i) ) + ...
 #
-# yAproximado = coef_b( 1)*T0( tInterPontos ) ...
-#             + coef_b( 2)*T1( tInterPontos ) ...
-#             + coef_b( 3)*T2( tInterPontos ) ...
-#             + coef_b( 4)*T3( tInterPontos );
+# yAproximado = coef_b( 1)*T0( tInterPontosChebyshev ) ...
+#             + coef_b( 2)*T1( tInterPontosChebyshev ) ...
+#             + coef_b( 3)*T2( tInterPontosChebyshev ) ...
+#             + coef_b( 4)*T3( tInterPontosChebyshev );
 #
-yAproximado = evaluateChebyshevPolynom( n, chebyshevAproximadoCoefficients, tInterPontos, @getChebyshevCoefficientsByPolinom );
+yAproximado = evaluateChebyshevPolynom( n, chebyshevAproximadoCoefficients, tInterPontosChebyshev, @getChebyshevCoefficientsByPolinom );
 yEstimado   = evaluateChebyshevPolynom( ...
-        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, chebyshevEstimadoCoefficients  , tInterPontos, @getChebyshevCoefficientsByPolinom );
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, chebyshevEstimadoCoefficients, tInterPontosChebyshev, @getChebyshevCoefficientsByPolinom );
 
 
 # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
@@ -342,13 +342,11 @@ printf( "- nome do metodo\n" )
 printf( "- grau \n" )
 printf( "- coeficientes;\n" )
 printf( "- erro máximo estimado e\n" )
-printf( "- exato atingido em cada caso;\n" )
+printf( "- exato atingido em cada caso;\n\n" )
 printf( "Qual das 4 aproximações foi a mais precisa?\n\n" )
 
 
 printf( "\nClaramente como podemos ver a seguir, a melhor aproximação foi a de Chebyshev.\n" )
-printf( "E também vemos que o interpolador polinomial em segundo lugar.\n" )
-
 
 printf( "\nInterpolador\n" )
 erroMaximoExatoInterpolador___
@@ -368,13 +366,14 @@ erroEstimadoMaximoDePade
 
 
 
-plot( ...
-      xInterPontosPade       , errosEstimadoDePade       , "g;Erro de Pade;", ...
-      erroEstimadoDeChebyshev, erroEstimadoDeChebyshev   , "g;Erro de Pade;", ...
-      xInterPontosMaclaurin  , errosEstimadosDeMaclaurin , "b;Erro de Maclaurin;" ...
-    );
-legend('location','north');
-grid on;
+# plot( ...
+#       # xInterPontosMaclaurin   , errosEstimadosDeMaclaurin, "b;Erro de Maclaurin;", ...
+#       tInterPontosChebyshev , erroEstimadoDeChebyshev  , "r;Erro de Chebyshev;", ...
+#       xInterPontosInterpolador, errosEstimadoInterpolador, "y;Erro de Interpolador;", ...
+#       xInterPontosPade        , errosEstimadoDePade      , "g;Erro de Pade;" ...
+#     );
+# legend('location','north');
+# grid on;
 
 
 
