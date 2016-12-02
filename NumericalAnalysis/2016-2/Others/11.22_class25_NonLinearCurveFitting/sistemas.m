@@ -8,6 +8,18 @@
 # D( a(1), a(2) ) = \sum_k=1^m ( log( a(1) + a(2)*x(k)^2 ) - y(k) )^2
 #
 
+clc
+clear
+close all
+
+more off
+format long
+split_long_rows(0)
+
+#format rat
+#output_precision(30)
+#output_max_field_width(0)
+
 
 y = [ 0.1, 0.3, 0.9, 1.2, 1.3, 1.2, 1 ]
 m = numel( y )
@@ -49,7 +61,7 @@ DesvioLocal =
 #     desvioLocal = a(1)*x(k) + a(2)*cos(x(k)) - y(k)
 #     D( a(1), a(2) ) = \sum_k=1^m ( desvioLocal )^2
 #
-# Desvio quadrático médio = sum(d.^2) / m
+# Desvio quadrático médio = sum(desvioLocal.^2) / m
 
 
 

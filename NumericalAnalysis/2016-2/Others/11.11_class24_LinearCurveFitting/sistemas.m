@@ -72,6 +72,18 @@
 # `D( a(1), a(2) )`.
 #
 
+clc
+clear
+close all
+
+more off
+format long
+split_long_rows(0)
+
+#format rat
+#output_precision(30)
+#output_max_field_width(0)
+
 
 x = [ 0   , 0.39, 0.78, 1.18 ]
 y = [ 0.99, 0.92, 0.71, 0.28 ]
@@ -82,9 +94,10 @@ coeficientes = ajusteDeCurvasLinearesParaCos( m, x, y )
 
 # Os pontos podem não estar ordenados, portanto calculamos os intervalos a partir dos pontos
 # mínimo e máximo de `x`.
-xInterpontos = min( x ) : 0.01 : max( x );
+xInterpontos = min( x ) - 0.2 : 0.01 : max( x ) + 0.2;
+yInterpontos = coeficientes(1).*xInterpontos .+ coeficientes(2).*cos(xInterpontos);
 
-plot( x, y, '*', xInterpontos, yp );
+plot( x, y, '*', xInterpontos, yInterpontos );
 
 
 
