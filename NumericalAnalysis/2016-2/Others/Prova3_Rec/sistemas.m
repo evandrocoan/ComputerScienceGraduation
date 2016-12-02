@@ -105,14 +105,12 @@ printf( " o erro máximo estimado e o erro exato;\n\n" )
 # clc
 # clear
 
-# grau = 2*n + 1
-
 a = -1;
 b =  1;
 
 grau = 11
-n = fix( ( grau - 1 ) / 2 )
 
+n = grau;
 h = (b-a) / n;
 
 # x                     = a : h : b;
@@ -171,7 +169,7 @@ x = a : h : b;
 y = erfFunction( x );
 
 xInterPontosChebyshev = a : h/20 : b;
-tInterPontosChebyshev          = ChebyshevDomainLinearTransformationIn( xInterPontosChebyshev, a, b );
+tInterPontosChebyshev = ChebyshevDomainLinearTransformationIn( xInterPontosChebyshev, a, b );
 
 
 chebyshevAproximadoCoefficients = calculateChebyshevCoefficients( n, m, a, b, @erfFunction, @getChebyshevCoefficientsByPolinom );
@@ -198,7 +196,8 @@ correct_b = [  3.76452812919196e-001,  3.43145750507620e-001, -2.94372515228575e
 #
 yAproximado = evaluateChebyshevPolynom( n, chebyshevAproximadoCoefficients, tInterPontosChebyshev, @getChebyshevCoefficientsByPolinom );
 yEstimado   = evaluateChebyshevPolynom( ...
-        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, chebyshevEstimadoCoefficients, tInterPontosChebyshev, @getChebyshevCoefficientsByPolinom );
+        n*FATOR_MULTIPLICATIVO_DO_VALOR_ESTIMADO, chebyshevEstimadoCoefficients, ...
+        tInterPontosChebyshev, @getChebyshevCoefficientsByPolinom );
 
 
 # Erro máximo deve ser calculado pelas formulas deve ser feito nos limites do nosso
@@ -366,14 +365,14 @@ erroEstimadoMaximoDePade
 
 
 
-# plot( ...
-#       # xInterPontosMaclaurin   , errosEstimadosDeMaclaurin, "b;Erro de Maclaurin;", ...
-#       tInterPontosChebyshev , erroEstimadoDeChebyshev  , "r;Erro de Chebyshev;", ...
-#       xInterPontosInterpolador, errosEstimadoInterpolador, "y;Erro de Interpolador;", ...
-#       xInterPontosPade        , errosEstimadoDePade      , "g;Erro de Pade;" ...
-#     );
-# legend('location','north');
-# grid on;
+plot( ...
+      # xInterPontosMaclaurin   , errosEstimadosDeMaclaurin, "k;Erro de Maclaurin;", ...
+      xInterPontosChebyshev   , erroEstimadoDeChebyshev  , "r;Erro de Chebyshev;", ...
+      xInterPontosInterpolador, errosEstimadoInterpolador, "b;Erro de Interpolador;", ...
+      xInterPontosPade        , errosEstimadoDePade      , "g;Erro de Pade;" ...
+    );
+legend('location','north');
+grid on;
 
 
 
