@@ -11,7 +11,7 @@ function summation = f2Problema1( a )
 
     for k = 1 : m
 
-        summation = summation + ( a(1) * sin( a(2)*x(k) ) - y(k) ) * cos( a(2)*x(k) ) * x(k);
+        summation = summation + ( a(1) * sin(a(2) * x(k)) - y(k) ) * a(1) * (cos(a(2)*x(k))) * x(k);
 
     end
 

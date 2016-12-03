@@ -16,7 +16,7 @@ function x = fNewtonSistemasNaoLineares( xi, functions )
     contador   = 0;
     dx         = [ 1e-4, 1e-4 ];
 
-    while criterio > tolerancia && contador < 10
+    while criterio > tolerancia && contador < 100
 
         contador = contador + 1;
 
