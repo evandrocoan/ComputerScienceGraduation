@@ -4,9 +4,12 @@ function gaussChebyshevIntegral = problem1GaussChebyshevIntegral( m, targetFunct
 
     summation = 0;
 
-    for i = 1 : m
+    for k = 1 : m
 
-        summation = summation + C(m,i)*problem1Function( x(i) );
+        %m 'nós' de Tchebyschev
+        x = cos((2*k-1)*pi/(2*m));
+
+        summation = summation + targetFunction( x );
 
     end
 

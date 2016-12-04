@@ -48,9 +48,18 @@ gaussLegendreIntegral
 printf( "\n" )
 printf( "\n" )
 
+t = [  0        , 0        , 0        ;
+      -1/sqrt(3), 1/sqrt(3), 0        ;
+      -sqrt(3/5), 0        , sqrt(3/5); ...
+    ];
+
+C = [ 2  , 0  , 0   ;
+      1  , 1  , 0   ;
+      5/9, 8/9, 5/9 ; ...
+    ]
 
 # GaussChebychev's Integral
-#
+#{
 
 # Sempre:
 a = -1
@@ -66,6 +75,12 @@ gaussChebyshevIntegralExacly_____ = problem1GaussChebyshevIntegral( m  , @sin );
 gaussChebyshevIntegralApproximate = problem1GaussChebyshevIntegral( m*2, @sin );
 
 
-erroEstimado = abs( gaussChebyshevIntegralExacly_____ - gaussChebyshevIntegralApproximate )
+erroEstimado = abs( gaussChebyshevIntegralExacly_____ - gaussChebyshevIntegralApproximate );
+
+gaussChebyshevIntegralExacly_____
+gaussChebyshevIntegralApproximate
+
+erroEstimado
+#}
 
 
