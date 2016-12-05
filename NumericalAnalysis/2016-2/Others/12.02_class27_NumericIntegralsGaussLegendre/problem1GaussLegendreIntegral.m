@@ -33,7 +33,7 @@ function gaussLegendreIntegral = problem1GaussLegendreIntegral( m, a, b )
     #   ];
 
     t = calculateLegendreWeightCoefficients( m );
-    C = calculateLegendreNodeCoefficients( m, t )
+    C = calculateLegendreNodeCoefficients( m, t );
 
     summation = 0;
 

@@ -20,7 +20,7 @@ function C = calculateLegendreNodeCoefficients( m, t )
 
     for k=1:m
 
-        k
+        k;
 
         for i=1:k
 
@@ -40,71 +40,19 @@ function C = calculateLegendreNodeCoefficients( m, t )
 
         end
 
-        A = [A transpose(b)]
+        A = [A transpose(b)];
 
-        if k == 1
+        # aux = A;
+        # aux = fgausspivparcial(k, A);
+        aux = fgauss( k, A );
 
-            C( k, k ) = A( 2 );
+        for j=1:k
 
-        else
+            C(k, j)=aux( 1, j );
 
-            # aux = A;
-            aux = fpivotacaototal(1,A)
-
-            for j=1:k
-
-                C(k, j)=aux( 1, j )
-
-            end %armazena na forma de matriz
-
-        end
+        end %armazena na forma de matriz
 
     end %m
 
 end
-
-
-% escolha e localização do maior modulo da matriz, a partir da linha k: Amax, imax e jmax
-function A=fpivotacaototal(k,A)
-
-    linesCount   = size( A, 1 );
-    columnsCount = size( A, 2 );
-
-    Amax = abs(A(k,k));
-    imax = k;
-    jmax = k;
-
-    for i=k:linesCount
-
-        for j=k:linesCount
-
-        if(abs(A(i,j))>Amax)
-
-            Amax = abs(A(i,j));
-            imax = i;
-            jmax = j;
-
-            end %if
-
-        end %for j
-
-    end %for i
-
-    % troca de linhas, entre a linha i=k e a linha i=imax
-    Aux=A(k,:);
-    A(k,:)=A(imax,:);
-    A(imax,:)=Aux;
-
-    % troca de colunas, entre a coluna j=k e a coluna j=jmax
-    Aux=A(:,k);
-    A(:,k)=A(:,jmax);
-    A(:,jmax)=Aux;
-
-end %function
-
-A = [ 1 2 ; 2 1];
-A = [  1.000000000000000   1.000000000000000   2.000000000000000
-      -0.577350269189626   0.577350269189626   0.000000000000000 ]
-
-fpivotacaototal(1,A)
 

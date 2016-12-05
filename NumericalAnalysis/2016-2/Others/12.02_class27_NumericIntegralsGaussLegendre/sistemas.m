@@ -30,20 +30,21 @@ split_long_rows(0)
 
 a = 1
 b = 6
+
+# GaussLegendre
+m = 16
 printf( "\n" )
 
 # Problem 1 integral
 integralAtIntervalab_ = log( b+1 ) - log( a+1 );
-
-
-# GaussLegendre
-m = 3
-
 gaussLegendreIntegral = problem1GaussLegendreIntegral( m, a, b );
 
+erroExato = abs( integralAtIntervalab_ - gaussLegendreIntegral );
 
 integralAtIntervalab_
 gaussLegendreIntegral
+
+erroExato
 
 printf( "\n" )
 printf( "\n" )
@@ -56,31 +57,30 @@ t = [  0        , 0        , 0        ;
 C = [ 2  , 0  , 0   ;
       1  , 1  , 0   ;
       5/9, 8/9, 5/9 ; ...
-    ]
+    ];
 
 # GaussChebychev's Integral
-#{
+
 
 # Sempre:
 a = -1
 b =  1
 
-m = 500
+m = 3
 
 # Here we will use f(x) as sin(x). The GaussChebychev integral is always on the from:
 #
 #     \int _-1 ^1 f(x)/( sqrt(1-x^2) ) dx
 #
-gaussChebyshevIntegralExacly_____ = problem1GaussChebyshevIntegral( m  , @sin );
-gaussChebyshevIntegralApproximate = problem1GaussChebyshevIntegral( m*2, @sin );
+gaussChebyshevIntegralApproximate = problem1GaussChebyshevIntegral( m  , @sin );
+gaussChebyshevIntegralExacly_____ = problem1GaussChebyshevIntegral( m*2, @sin );
 
-
+printf( "\n" )
 erroEstimado = abs( gaussChebyshevIntegralExacly_____ - gaussChebyshevIntegralApproximate );
 
 gaussChebyshevIntegralExacly_____
 gaussChebyshevIntegralApproximate
 
+printf( "\n" )
 erroEstimado
-#}
-
 
