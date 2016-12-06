@@ -48,12 +48,9 @@ printf( "\n7.3). A tabela abaixo relaciona, experimentalmente, a medição do vo
 printf( "mistura em função da sua temperatura de reação:\n" )
 printf( "Temperatura(oC) 13.9 37.0 67.8 79.0 85.5 93.1 99.2\n" )
 printf( "Volume    (cm3) 1.04 1.18 1.29 1.35 1.28 1.21 1.06\n" )
-printf( "\n" )
+printf( "" )
 
-# profile clear
-# profile on
-
-printf( "7.3a). Determine funções representativas dos pontos tabelados por ajuste de curvas na faixa medida\n" )
+printf( "\n\n\n7.3a). Determine funções representativas dos pontos tabelados por ajuste de curvas na faixa medida\n" )
 printf( "(sugestão use função polinomial de grau n=1 e 2).\n" )
 printf( "\n" )
 
@@ -285,9 +282,9 @@ m;
 coefficientsForPn1=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya1=fPnH(n,coefficientsForPn1,xp);
-desvioParaP1=fdesvioPn(n,coefficientsForPn1,m,x,y);
-R1=fCoefDeterminacaoPn(n,coefficientsForPn1,m,x,y);
+ya1                       = fPnH( n, coefficientsForPn1, xp );
+desvioParaP1              = fdesvioPn( n, coefficientsForPn1, m, x, y );
+coeficienteDeterminacaoR1 = fCoefDeterminacaoPn( n, coefficientsForPn1, m, x, y );
 
 n
 coefficientsForPn1
@@ -298,9 +295,9 @@ n=2;
 coefficientsForPn2=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya2=fPnH(n,coefficientsForPn2,xp);
-desvioParaP2=fdesvioPn(n,coefficientsForPn2,m,x,y);
-R2=fCoefDeterminacaoPn(n,coefficientsForPn2,m,x,y);
+ya2                       = fPnH( n, coefficientsForPn2, xp );
+desvioParaP2              = fdesvioPn( n, coefficientsForPn2, m, x, y );
+coeficienteDeterminacaoR2 = fCoefDeterminacaoPn( n, coefficientsForPn2, m, x, y );
 
 n
 coefficientsForPn2
@@ -311,9 +308,9 @@ n=3;
 coefficientsForPn3=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya3=fPnH(n,coefficientsForPn3,xp);
-desvioParaP3=fdesvioPn(n,coefficientsForPn3,m,x,y);
-R3=fCoefDeterminacaoPn(n,coefficientsForPn3,m,x,y);
+ya3                       = fPnH( n, coefficientsForPn3, xp );
+desvioParaP3              = fdesvioPn( n, coefficientsForPn3, m, x, y );
+coeficienteDeterminacaoR3 = fCoefDeterminacaoPn( n, coefficientsForPn3, m, x, y );
 
 n
 coefficientsForPn3
@@ -324,9 +321,9 @@ n=4;
 coefficientsForPn4=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya4=fPnH(n,coefficientsForPn4,xp);
-desvioParaP4=fdesvioPn(n,coefficientsForPn4,m,x,y);
-R4=fCoefDeterminacaoPn(n,coefficientsForPn4,m,x,y);
+ya4                       = fPnH( n, coefficientsForPn4, xp );
+desvioParaP4              = fdesvioPn( n, coefficientsForPn4, m, x, y );
+coeficienteDeterminacaoR4 = fCoefDeterminacaoPn( n, coefficientsForPn4, m, x, y );
 
 n
 coefficientsForPn4
@@ -337,9 +334,9 @@ n=5;
 coefficientsForPn5=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya5=fPnH(n,coefficientsForPn5,xp);
-desvioParaP5=fdesvioPn(n,coefficientsForPn5,m,x,y);
-R5=fCoefDeterminacaoPn(n,coefficientsForPn5,m,x,y);
+ya5                       = fPnH( n, coefficientsForPn5, xp );
+desvioParaP5              = fdesvioPn( n, coefficientsForPn5, m, x, y );
+coeficienteDeterminacaoR5 = fCoefDeterminacaoPn( n, coefficientsForPn5, m, x, y );
 
 n
 coefficientsForPn5
@@ -368,10 +365,11 @@ y
 # hold function.
 # https://www.gnu.org/software/octave/doc/v4.0.0/Manipulation-of-Plot-Windows.html#XREFhold
 hold all;
+grid on;
 
 # You can open multiple plot windows using the `figure(1)` function.
 # https://www.gnu.org/software/octave/doc/v4.0.3/Multiple-Plot-Windows.html
-# figure(1);
+figure(1);
 
 # Octave can display more than one plot in a single figure. The simplest way to do
 # this is to use the subplot function to divide the plot area into a series of subplot
@@ -389,24 +387,23 @@ legendText(end+1) = { 'f(x) tabelada' };
 plot(xp,ya1,'--b','LineWidth',2);
 legendText(end+1) = { 'P1(x) ajuste' };
 
-plot(xp,ya2,'-k','LineWidth',2);
-legendText(end+1) = { 'P2(x) ajuste' };
+# plot(xp,ya2,'-k','LineWidth',2);
+# legendText(end+1) = { 'P2(x) ajuste' };
 
-plot(xp,ya3,'-g','LineWidth',2);
-legendText(end+1) = { 'P3(x) ajuste' };
+# plot(xp,ya3,'-g','LineWidth',2);
+# legendText(end+1) = { 'P3(x) ajuste' };
 
 plot(xp,ya4,'-r','LineWidth',2);
 legendText(end+1) = { 'P4(x) ajuste' };
 
-plot(xp,ya5,'-c','LineWidth',2);
-legendText(end+1) = { 'P5(x) ajuste' };
+# plot(xp,ya5,'-c','LineWidth',2);
+# legendText(end+1) = { 'P5(x) ajuste' };
 
 # plot(xp,ya6,'-y','LineWidth',2);
 # legendText(end+1) = { 'P6(x) ajuste' };
 
-legend(legendText,'location','northwest');
-grid on;
-hold off;
+# legend(legendText,'location','northwest');
+# hold off;
 
 # By default, Octave refreshes the plot window when a prompt is printed, or when
 # waiting for input. The drawnow function is used to cause a plot window to be updated.
@@ -414,12 +411,10 @@ hold off;
 # drawnow();
 
 printf( "Dentre as funções testadas a que melhor parece se adequar aos pontos é\n" );
-printf( "o Polinômio de grau 4. Essa conclusao foi feita analizando o gráfico das funções.\n\n\n" );
-
-#}
+printf( "o Polinômio de grau 4. Essa conclusao foi feita analizando o gráfico das funções.\n" );
 
 
-printf( "7.3b). Determine uma função representativa dos pontos tabelados por interpolação polinomial na\n" )
+printf( "\n\n\n7.3b). Determine uma função representativa dos pontos tabelados por interpolação polinomial na\n" )
 printf( "faixa medida.\n" )
 printf( "\n" )
 
@@ -448,64 +443,85 @@ coef_by_me
 
 
 # To plot the graphcs
-hold all;
-grid on;
-plot( x, y , '*', 'markersize', 20 );
-legendText(end+1) = { 'f(x) tabelada' };
+# hold all;
+# grid on;
+# plot( x, y , '*', 'markersize', 20 );
+# legendText(end+1) = { 'f(x) tabelada' };
 
 plot( xInterPontos, yAproximado, '-k', 'LineWidth', 2 );
 legendText(end+1) = { 'Interpolacao Polinomial' };
 
-legend(legendText,'location','north');
-hold off;
+# legend(legendText,'location','north');
+# hold off;
 
 
-
-
-#{
-
-printf( "7.3c). Plote um gráfico com os pontos experimentais, as funções aproximadoras obtidos em (7.3a) e\n" )
+printf( "\n\n7.3c). Plote um gráfico com os pontos experimentais, as funções aproximadoras obtidos em (7.3a) e\n" )
 printf( "em (7.3b);\n" )
 printf( "\n" )
 
+legend(legendText,'location','northwest');
+hold off;
 
 
-printf( "7.3d). Calcule o Coeficiente de Determinação R2;\n" )
+printf( "\n\n\n7.3d). Calcule o Coeficiente de Determinação R2;\n" )
 printf( "\n" )
 
+coeficienteDeterminacaoR1
+coeficienteDeterminacaoR2
+coeficienteDeterminacaoR3
+coeficienteDeterminacaoR4
+coeficienteDeterminacaoR5
 
 
-printf( "7.3e). Faça o gráfico da função ajustada e estabeleça a metodologia mais adequada para representar\n" )
+printf( "\n\n\n7.3e). Faça o gráfico da função ajustada e estabeleça a metodologia mais adequada para representar\n" )
 printf( "o comportamento do volume de álcool em função da temperatura na faixa medida. Justifique.\n" )
-printf( "\n" )
+printf( "" )
 
+figure(2);
+hold on;
 
-
-
-
-# plot( x, y, '*', xInterPontos, yAproximado, "g;Funcao Aproximadora do Consumo pelo interpolacaoPolinomial;" )
-# legend('location','north');
+# To plot the graphcs
+# hold all;
 # grid on;
 
-profile off
-printf( "\n" );
-# profshow( profile ("info"), 8 )
-#
+plot(x,y,'*','markersize',20);
+legendText2(end+1) = { 'f(x) tabelada' };
 
+plot(xp,ya1,'--b','LineWidth',2);
+legendText2(end+1) = { 'P1(x) ajuste' };
+
+plot(xp,ya2,'-r','LineWidth',2);
+legendText2(end+1) = { 'P2(x) ajuste' };
+
+plot( xInterPontos, yAproximado, '-k', 'LineWidth', 2 );
+legendText2(end+1) = { 'Interpolacao Polinomial' };
+
+legend(legendText2,'location','northwest');
+hold off;
+
+
+printf( "A melhor representação para o comportamento do volume de álcool em função da temperatura\n" );
+printf( "na faixa medida é o obtido via ajuste quadrático, n=2, vide gráfico, onde a interpolação polinomial fica\n" );
+printf( "inviável, muito sinuosa, e o ajuste linear não captura a leve curvatura dos pontos experimentais.\n" );
+printf( "Observe que o Coeficiente de Determinação R2 não deve ser usado isoladamente como informação\n" );
+printf( "para a definição da aproximação mais adequada, pois para a interpolação polinomial temos\n" );
+printf( "coeficientes de determinação unitários, com resíduos (desvios locais) nulos, mas no intervalo entre os\n" );
+printf( "pontos tabelados podemos ter uma aproximação inconsistente.\n" );
+
+#}
 
 
 printf( "\n\n\n##############################################################################################################\n" )
 printf( "##############################################################################################################\n" )
 
 printf( "\n8.5). Considere a integral I x dx = ∫ ln( )\n" )
-printf( "\n" )
+printf( "" )
 
-profile clear
-profile on
-
-printf( "8.5a). Quais métodos podem ser aplicados para calcular numericamente esta\n" )
+printf( "\n\n\n8.5a). Quais métodos podem ser aplicados para calcular numericamente esta\n" )
 printf( "integral imprópria? Justifique;\n" )
 printf( "\n" )
+
+
 
 
 printf( "8.5b). Monte uma function Gm fGm a b m = ( , , ) , para integrar numericamente um\n" )
@@ -529,13 +545,6 @@ printf( "\n" )
 
 #}
 
-
-
-
-# profile off
-# printf( "\n" );
-# profshow( profile ("info"), 8 )
-#
 
 
 
