@@ -31,6 +31,7 @@ split_long_rows(0)
 
 # addpath( 'Maclaurin' )
 
+#{
 
 printf( "\nGrupo 19, exercícios 7 = 3, 8 = 5\n\n" )
 printf( "ExemplodeGrupo.m\n" )
@@ -60,7 +61,7 @@ printf( "\n" )
 function a = fdetajustePn(n,m,x,y)
 
     %N. de equacoes e incognitas
-    neq = n+1
+    neq = n+1;
 
     for i=1:neq
 
@@ -249,19 +250,21 @@ function x=fCholesky(n,a,b)
 
 end
 
+
 # Algoritmo de ajuste polinomial (Ex. 7.2):
 
 clear
 clc
 format long
 
-%Numero de pontos experimentais
-m=5
+x=[ 13.9, 37.0, 67.8, 79.0, 85.5, 93.1, 99.2 ];
+y=[ 1.04, 1.18, 1.29, 1.35, 1.28, 1.21, 1.06 ];
 
-x=[0 0.25 0.50 0.75 1.00 ]
-y=[1 1.32 1.79 1.64 1.41 ]
-xinicial=x(1)
-xfinal =x(m)
+%Numero de pontos experimentais
+m = numel( x );
+
+xinicial=min(x);
+xfinal  =max(x);
 
 % Numero de intervalos para analise e plotagem
 np= 64;
@@ -276,23 +279,88 @@ xp=xinicial:hp:xfinal;
 % Aproximação de função por Ajuste de curvas (INDICADA PARA PONTOS EXPERIMENTAIS)
 %
 
-n1=1 % Ajuste a um polinomio de 1. grau, escolhido em função de seu comportamento grafico;
-m
-coef1=fdetajustePn(n1,m,x,y)
+% Ajuste a um polinomio de 1. grau, escolhido em função de seu comportamento grafico;
+n=1;
+m;
+coefficientsForPn1=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya1=fPnH(n1,coef1,xp);
-D1=fdesvioPn(n1,coef1,m,x,y)
-R1=fCoefDeterminacaoPn(n1,coef1,m,x,y)
+ya1=fPnH(n,coefficientsForPn1,xp);
+desvioParaP1=fdesvioPn(n,coefficientsForPn1,m,x,y);
+R1=fCoefDeterminacaoPn(n,coefficientsForPn1,m,x,y);
+
+n
+coefficientsForPn1
+
 
 % Ajuste a um polinomio de 2. grau, escolhido em funçãode seu comportamento grafico;
-n2=2
-coef2=fdetajustePn(n2,m,x,y)
+n=2;
+coefficientsForPn2=fdetajustePn(n,m,x,y);
 
 % Calculo dos valores do polinomio ajustado em todos os xp
-ya2=fPnH(n2,coef2,xp);
-D2=fdesvioPn(n2,coef2,m,x,y)
-R2=fCoefDeterminacaoPn(n2,coef2,m,x,y)
+ya2=fPnH(n,coefficientsForPn2,xp);
+desvioParaP2=fdesvioPn(n,coefficientsForPn2,m,x,y);
+R2=fCoefDeterminacaoPn(n,coefficientsForPn2,m,x,y);
+
+n
+coefficientsForPn2
+
+
+% Ajuste a um polinomio de 3. grau, escolhido em funçãode seu comportamento grafico;
+n=3;
+coefficientsForPn3=fdetajustePn(n,m,x,y);
+
+% Calculo dos valores do polinomio ajustado em todos os xp
+ya3=fPnH(n,coefficientsForPn3,xp);
+desvioParaP3=fdesvioPn(n,coefficientsForPn3,m,x,y);
+R3=fCoefDeterminacaoPn(n,coefficientsForPn3,m,x,y);
+
+n
+coefficientsForPn3
+
+
+% Ajuste a um polinomio de 4. grau, escolhido em funçãode seu comportamento grafico;
+n=4;
+coefficientsForPn4=fdetajustePn(n,m,x,y);
+
+% Calculo dos valores do polinomio ajustado em todos os xp
+ya4=fPnH(n,coefficientsForPn4,xp);
+desvioParaP4=fdesvioPn(n,coefficientsForPn4,m,x,y);
+R4=fCoefDeterminacaoPn(n,coefficientsForPn4,m,x,y);
+
+n
+coefficientsForPn4
+
+
+% Ajuste a um polinomio de 5. grau, escolhido em funçãode seu comportamento grafico;
+n=5;
+coefficientsForPn5=fdetajustePn(n,m,x,y);
+
+% Calculo dos valores do polinomio ajustado em todos os xp
+ya5=fPnH(n,coefficientsForPn5,xp);
+desvioParaP5=fdesvioPn(n,coefficientsForPn5,m,x,y);
+R5=fCoefDeterminacaoPn(n,coefficientsForPn5,m,x,y);
+
+n
+coefficientsForPn5
+
+
+# % Ajuste a um polinomio de 6. grau, escolhido em funçãode seu comportamento grafico;
+# n=6;
+# coefficientsForPn6=fdetajustePn(n,m,x,y);
+
+# % Calculo dos valores do polinomio ajustado em todos os xp
+# ya6=fPnH(n,coefficientsForPn6,xp);
+# desvioParaP6=fdesvioPn(n,coefficientsForPn6,m,x,y);
+# R6=fCoefDeterminacaoPn(n,coefficientsForPn6,m,x,y);
+
+# n
+# coefficientsForPn6
+
+
+m
+x
+y
 
 # Normally, high-level plot functions like plot or mesh call newplot to initializ
 # the state of the current axes so that the next plot is drawn in a blank window with
@@ -324,6 +392,18 @@ legendText(end+1) = { 'P1(x) ajuste' };
 plot(xp,ya2,'-k','LineWidth',2);
 legendText(end+1) = { 'P2(x) ajuste' };
 
+plot(xp,ya3,'-g','LineWidth',2);
+legendText(end+1) = { 'P3(x) ajuste' };
+
+plot(xp,ya4,'-r','LineWidth',2);
+legendText(end+1) = { 'P4(x) ajuste' };
+
+plot(xp,ya5,'-c','LineWidth',2);
+legendText(end+1) = { 'P5(x) ajuste' };
+
+# plot(xp,ya6,'-y','LineWidth',2);
+# legendText(end+1) = { 'P6(x) ajuste' };
+
 legend(legendText,'location','northwest');
 grid on;
 hold off;
@@ -333,14 +413,56 @@ hold off;
 # https://www.gnu.org/software/octave/doc/v4.0.0/Manipulation-of-Plot-Windows.html
 # drawnow();
 
+printf( "Dentre as funções testadas a que melhor parece se adequar aos pontos é\n" );
+printf( "o Polinômio de grau 4. Essa conclusao foi feita analizando o gráfico das funções.\n\n\n" );
 
-#{
+#}
+
 
 printf( "7.3b). Determine uma função representativa dos pontos tabelados por interpolação polinomial na\n" )
 printf( "faixa medida.\n" )
 printf( "\n" )
 
+x=[ 13.9, 37.0, 67.8, 79.0, 85.5, 93.1, 99.2 ];
+y=[ 1.04, 1.18, 1.29, 1.35, 1.28, 1.21, 1.06 ];
 
+a = min( x );
+b = max( x );
+
+n = numel( x ) - 1;
+h = ( b - a ) / n;
+
+
+# coef_by_me =
+#   -1.164279323185479   1.399845394498246  -0.235566071312767
+#
+# -1.164279323185479 + 1.399845394498246*x^1 - 0.235566071312767*x^2
+#
+coef_by_me      = interpolacaoPolinomial( x, y, n );
+coef_by_polyfit = fliplr( polyfit( x, y, n ) );
+
+xInterPontos = a - 1 : h / 20 : b + 1;
+yAproximado  = fPnPorHorner( n, coef_by_me, xInterPontos );
+
+coef_by_me
+
+
+# To plot the graphcs
+hold all;
+grid on;
+plot( x, y , '*', 'markersize', 20 );
+legendText(end+1) = { 'f(x) tabelada' };
+
+plot( xInterPontos, yAproximado, '-k', 'LineWidth', 2 );
+legendText(end+1) = { 'Interpolacao Polinomial' };
+
+legend(legendText,'location','north');
+hold off;
+
+
+
+
+#{
 
 printf( "7.3c). Plote um gráfico com os pontos experimentais, as funções aproximadoras obtidos em (7.3a) e\n" )
 printf( "em (7.3b);\n" )
