@@ -403,7 +403,8 @@ legendTextProblem73abc(end+1) = { 'P4(x) ajuste' };
 # legendTextProblem73abc(end+1) = { 'P6(x) ajuste' };
 
 # legend(legendTextProblem73abc,'location','northwest');
-# hold off;
+hold off;
+
 
 # By default, Octave refreshes the plot window when a prompt is printed, or when
 # waiting for input. The drawnow function is used to cause a plot window to be updated.
@@ -412,6 +413,7 @@ legendTextProblem73abc(end+1) = { 'P4(x) ajuste' };
 
 printf( "Dentre as funções testadas a que melhor parece se adequar aos pontos é\n" );
 printf( "o Polinômio de grau 4. Essa conclusao foi feita analizando o gráfico das funções.\n" );
+
 
 
 printf( "\n\n\n7.3b). Determine uma função representativa dos pontos tabelados por interpolação polinomial na\n" )
@@ -443,8 +445,9 @@ coef_by_me
 
 
 # To plot the graphcs
-# hold all;
-# grid on;
+hold all;
+grid on;
+
 # plot( x, y , '*', 'markersize', 20 );
 # legendTextProblem73abc(end+1) = { 'f(x) tabelada' };
 
@@ -477,12 +480,11 @@ printf( "\n\n\n7.3e). Faça o gráfico da função ajustada e estabeleça a meto
 printf( "o comportamento do volume de álcool em função da temperatura na faixa medida. Justifique.\n" )
 printf( "" )
 
-figure(2);
-hold on;
 
 # To plot the graphcs
-# hold all;
-# grid on;
+figure(2);
+hold all;
+grid on;
 
 plot(x,y,'*','markersize',20);
 legendTextProblem71e(end+1) = { 'f(x) tabelada' };

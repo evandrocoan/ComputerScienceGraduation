@@ -126,7 +126,6 @@ b0 = ( 1/pi ) * problem1GaussChebyshevIntegral( m, @cos, 0 )
 #     b(1) = (2/pi)*integral( f(x)*T(1)) / sqrt(1-x^2) ) dx
 #
 # b(1) multiplica T(1) `Polinômio` de Chebyshev. T(1) = x;
-#
 # Find out how to create a function here and pass it. The @cos here is supposed to be `cos(x)*x`.
 #
 b1 = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos, 1 )
@@ -137,7 +136,6 @@ b1 = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos, 1 )
 #     b(2) = (2/pi)*integral( f(x)*T(1)) / sqrt(1-x^2) ) dx
 #
 # b(2) multiplica T(2) `Polinômio` de Chebyshev. T(2) = x^2 - 1;
-#
 # Find out how to create a function here and pass it. The @cos here is supposed to be `cos(x)*x`.
 #
 b2 = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos, 2 )

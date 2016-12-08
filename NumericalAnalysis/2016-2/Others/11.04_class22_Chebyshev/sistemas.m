@@ -95,19 +95,26 @@ b = 2
 # Grau de precisão da Integral Numérica, e também o número de nós de Chebyshev
 m = 100
 
+
+printf( "\n" )
 errorByPolinom__ = run_chebyshev_test( a, b, @log, n, m, @getChebyshevCoefficientsByPolinom );
+
+printf( "\n" )
 errorNumerically = run_chebyshev_test( a, b, @log, n, m, @getChebyshevCoefficientsNumerically );
 
+printf( "\n" )
 chebyshevCoefficientsByPolinom_at_06__ = getChebyshevCoefficientsByPolinom  ( n, 0.6 )
 chebyshevCoefficientsNumerically_at_06 = getChebyshevCoefficientsNumerically( n, 0.6 )
 
+printf( "\n" )
 errorByPolinom__
 errorNumerically
 
+printf( "\n" )
 chebyshevCoefficientsPolinom_n = getChebyshevPolinom( n );
 polyout( chebyshevCoefficientsPolinom_n, "t" );
 
-
+printf( "\n" )
 
 # Stop profiling. The collected data can later be retrieved and examined.
 profile off
