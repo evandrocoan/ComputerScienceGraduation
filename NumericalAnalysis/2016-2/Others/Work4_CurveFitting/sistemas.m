@@ -54,10 +54,10 @@ printf( "\n\n\n7.3a). Determine funções representativas dos pontos tabelados p
 printf( "(sugestão use função polinomial de grau n=1 e 2).\n" )
 printf( "\n" )
 
-% Construcao do sistema do ajuste polinomial
+# Construcao do sistema do ajuste polinomial
 function a = fdetajustePn(n,m,x,y)
 
-    %N. de equacoes e incognitas
+    #N. de equacoes e incognitas
     neq = n+1;
 
     for i=1:neq
@@ -93,11 +93,11 @@ function a = fdetajustePn(n,m,x,y)
 
 end
 
-%Pn(xi)=a(1)+a(2)*xi+a(3)*xi^2+...+a(n)*xi^(n-1)+a(n+1)*xi^n
-%Pn(xi)=a(1)+xi*(a(2)+xi*(a(3)+...+xi*(a(n)+xi*a(n+1))...))% HORNER
+#Pn(xi)=a(1)+a(2)*xi+a(3)*xi^2+...+a(n)*xi^(n-1)+a(n+1)*xi^n
+#Pn(xi)=a(1)+xi*(a(2)+xi*(a(3)+...+xi*(a(n)+xi*a(n+1))...))% HORNER
 function y=fPnH(n,a,xi)
 
-    %calcula y p/ cada elemento de xi
+    #calcula y p/ cada elemento de xi
     for ip=1:length(xi)
 
         y(ip)=a(n+1);
@@ -126,7 +126,7 @@ end
 
 function R2=fCoefDeterminacaoPn(n,a,m,x,y)
 
-    %valor médio
+    #valor médio
     ym=0;
 
     for k=1:m
@@ -138,7 +138,7 @@ function R2=fCoefDeterminacaoPn(n,a,m,x,y)
     ym=ym/m;
     SQT=0;
 
-    %soma dos quadrados totais
+    #soma dos quadrados totais
     for k=1:m
 
        SQT=SQT+(y(k)-ym )^2;
@@ -147,20 +147,20 @@ function R2=fCoefDeterminacaoPn(n,a,m,x,y)
 
     SQE=0;
 
-    %soma do quadrado dos residuos
+    #soma do quadrado dos residuos
     for k=1:m
 
         SQE=SQE+(y(k)-fPnH(n,a,x(k)))^2;
 
     end
 
-    %coeficiente de determinação simplificado
+    #coeficiente de determinação simplificado
     R2=1-SQE/SQT;
 
 end
 
-% Algoritmo de Cholesky
-%Matriz de coeficientes simétrica, positiva definida, de ordem n x n
+# Algoritmo de Cholesky
+#Matriz de coeficientes simétrica, positiva definida, de ordem n x n
 function x=fCholesky(n,a,b)
 
     k=1;
@@ -211,8 +211,8 @@ function x=fCholesky(n,a,b)
 
     L(k,k)=sqrt(a(k,k)-soma);
 
-    % Resolvendo o sistema para o termo independente b
-    %L.C=b
+    # Resolvendo o sistema para o termo independente b
+    #L.C=b
     c(1)=b(1)/L(1,1);
 
     for i=2:n
@@ -229,7 +229,7 @@ function x=fCholesky(n,a,b)
 
     end
 
-    %U*X=C ->LT*X=C
+    #U*X=C ->LT*X=C
     x(n)=c(n)/L(n,n);
 
     for i=n-1:-1:1
@@ -257,31 +257,31 @@ format long
 x=[ 13.9, 37.0, 67.8, 79.0, 85.5, 93.1, 99.2 ];
 y=[ 1.04, 1.18, 1.29, 1.35, 1.28, 1.21, 1.06 ];
 
-%Numero de pontos experimentais
+#Numero de pontos experimentais
 m = numel( x );
 
 xinicial=min(x);
 xfinal  =max(x);
 
-% Numero de intervalos para analise e plotagem
+# Numero de intervalos para analise e plotagem
 np= 64;
 
-% Valor espaçamento de cada intervalo para plotagem
+# Valor espaçamento de cada intervalo para plotagem
 hp=(xfinal-xinicial)/np;
 
-% Valores dos 'np+1' pontos xp(k) (k=1:np+1)
+# Valores dos 'np+1' pontos xp(k) (k=1:np+1)
 xp=xinicial:hp:xfinal;
 
-%
-% Aproximação de função por Ajuste de curvas (INDICADA PARA PONTOS EXPERIMENTAIS)
-%
+#
+# Aproximação de função por Ajuste de curvas (INDICADA PARA PONTOS EXPERIMENTAIS)
+#
 
-% Ajuste a um polinomio de 1. grau, escolhido em função de seu comportamento grafico;
+# Ajuste a um polinomio de 1. grau, escolhido em função de seu comportamento grafico;
 n=1;
 m;
 coefficientsForPn1=fdetajustePn(n,m,x,y);
 
-% Calculo dos valores do polinomio ajustado em todos os xp
+# Calculo dos valores do polinomio ajustado em todos os xp
 ya1                       = fPnH( n, coefficientsForPn1, xp );
 desvioParaP1              = fdesvioPn( n, coefficientsForPn1, m, x, y );
 coeficienteDeterminacaoR1 = fCoefDeterminacaoPn( n, coefficientsForPn1, m, x, y );
@@ -290,11 +290,11 @@ n
 coefficientsForPn1
 
 
-% Ajuste a um polinomio de 2. grau, escolhido em funçãode seu comportamento grafico;
+# Ajuste a um polinomio de 2. grau, escolhido em funçãode seu comportamento grafico;
 n=2;
 coefficientsForPn2=fdetajustePn(n,m,x,y);
 
-% Calculo dos valores do polinomio ajustado em todos os xp
+# Calculo dos valores do polinomio ajustado em todos os xp
 ya2                       = fPnH( n, coefficientsForPn2, xp );
 desvioParaP2              = fdesvioPn( n, coefficientsForPn2, m, x, y );
 coeficienteDeterminacaoR2 = fCoefDeterminacaoPn( n, coefficientsForPn2, m, x, y );
@@ -303,11 +303,11 @@ n
 coefficientsForPn2
 
 
-% Ajuste a um polinomio de 3. grau, escolhido em funçãode seu comportamento grafico;
+# Ajuste a um polinomio de 3. grau, escolhido em funçãode seu comportamento grafico;
 n=3;
 coefficientsForPn3=fdetajustePn(n,m,x,y);
 
-% Calculo dos valores do polinomio ajustado em todos os xp
+# Calculo dos valores do polinomio ajustado em todos os xp
 ya3                       = fPnH( n, coefficientsForPn3, xp );
 desvioParaP3              = fdesvioPn( n, coefficientsForPn3, m, x, y );
 coeficienteDeterminacaoR3 = fCoefDeterminacaoPn( n, coefficientsForPn3, m, x, y );
@@ -316,11 +316,11 @@ n
 coefficientsForPn3
 
 
-% Ajuste a um polinomio de 4. grau, escolhido em funçãode seu comportamento grafico;
+# Ajuste a um polinomio de 4. grau, escolhido em funçãode seu comportamento grafico;
 n=4;
 coefficientsForPn4=fdetajustePn(n,m,x,y);
 
-% Calculo dos valores do polinomio ajustado em todos os xp
+# Calculo dos valores do polinomio ajustado em todos os xp
 ya4                       = fPnH( n, coefficientsForPn4, xp );
 desvioParaP4              = fdesvioPn( n, coefficientsForPn4, m, x, y );
 coeficienteDeterminacaoR4 = fCoefDeterminacaoPn( n, coefficientsForPn4, m, x, y );
@@ -329,11 +329,11 @@ n
 coefficientsForPn4
 
 
-% Ajuste a um polinomio de 5. grau, escolhido em funçãode seu comportamento grafico;
+# Ajuste a um polinomio de 5. grau, escolhido em funçãode seu comportamento grafico;
 n=5;
 coefficientsForPn5=fdetajustePn(n,m,x,y);
 
-% Calculo dos valores do polinomio ajustado em todos os xp
+# Calculo dos valores do polinomio ajustado em todos os xp
 ya5                       = fPnH( n, coefficientsForPn5, xp );
 desvioParaP5              = fdesvioPn( n, coefficientsForPn5, m, x, y );
 coeficienteDeterminacaoR5 = fCoefDeterminacaoPn( n, coefficientsForPn5, m, x, y );
@@ -369,7 +369,7 @@ grid on;
 
 # You can open multiple plot windows using the `figure(1)` function.
 # https://www.gnu.org/software/octave/doc/v4.0.3/Multiple-Plot-Windows.html
-figure(1);
+# figure(1);
 
 # Octave can display more than one plot in a single figure. The simplest way to do
 # this is to use the subplot function to divide the plot area into a series of subplot
@@ -377,15 +377,15 @@ figure(1);
 # https://www.gnu.org/software/octave/doc/v4.2.0/Multiple-Plots-on-One-Page.html
 # subplot (2, 1, 1)
 
-% Plotagem dos pontos originais (*) e ajustadores
-plot(x,y,'*','markersize',20);
-legendTextProblem73abc(end+1) = { 'f(x) tabelada' };
+# Plotagem dos pontos originais (*) e ajustadores
+# plot(x,y,'*','markersize',20);
+# legendTextProblem73abc(end+1) = { 'f(x) tabelada' };
 
 # figure(2);
 # subplot (2, 1, 2)
 
-plot(xp,ya1,'--b','LineWidth',2);
-legendTextProblem73abc(end+1) = { 'P1(x) ajuste' };
+# plot(xp,ya1,'--b','LineWidth',2);
+# legendTextProblem73abc(end+1) = { 'P1(x) ajuste' };
 
 # plot(xp,ya2,'-k','LineWidth',2);
 # legendTextProblem73abc(end+1) = { 'P2(x) ajuste' };
@@ -393,8 +393,8 @@ legendTextProblem73abc(end+1) = { 'P1(x) ajuste' };
 # plot(xp,ya3,'-g','LineWidth',2);
 # legendTextProblem73abc(end+1) = { 'P3(x) ajuste' };
 
-plot(xp,ya4,'-r','LineWidth',2);
-legendTextProblem73abc(end+1) = { 'P4(x) ajuste' };
+# plot(xp,ya4,'-r','LineWidth',2);
+# legendTextProblem73abc(end+1) = { 'P4(x) ajuste' };
 
 # plot(xp,ya5,'-c','LineWidth',2);
 # legendTextProblem73abc(end+1) = { 'P5(x) ajuste' };
@@ -403,7 +403,7 @@ legendTextProblem73abc(end+1) = { 'P4(x) ajuste' };
 # legendTextProblem73abc(end+1) = { 'P6(x) ajuste' };
 
 # legend(legendTextProblem73abc,'location','northwest');
-hold off;
+# hold off;
 
 
 # By default, Octave refreshes the plot window when a prompt is printed, or when
@@ -445,14 +445,14 @@ coef_by_me
 
 
 # To plot the graphcs
-hold all;
-grid on;
+# hold all;
+# grid on;
 
 # plot( x, y , '*', 'markersize', 20 );
 # legendTextProblem73abc(end+1) = { 'f(x) tabelada' };
 
-plot( xInterPontos, yAproximado, '-k', 'LineWidth', 2 );
-legendTextProblem73abc(end+1) = { 'Interpolacao Polinomial' };
+# plot( xInterPontos, yAproximado, '-k', 'LineWidth', 2 );
+# legendTextProblem73abc(end+1) = { 'Interpolacao Polinomial' };
 
 # legend(legendTextProblem73abc,'location','north');
 # hold off;
@@ -462,8 +462,8 @@ printf( "\n\n7.3c). Plote um gráfico com os pontos experimentais, as funções 
 printf( "em (7.3b);\n" )
 printf( "\n" )
 
-legend(legendTextProblem73abc,'location','northwest');
-hold off;
+# legend(legendTextProblem73abc,'location','northwest');
+# hold off;
 
 
 printf( "\n\n\n7.3d). Calcule o Coeficiente de Determinação R2;\n" )
@@ -482,9 +482,13 @@ printf( "" )
 
 
 # To plot the graphcs
-figure(2);
-hold all;
-grid on;
+# figure(2);
+# hold all;
+# grid on;
+
+# for i = 1 : numel( legendTextProblem73abc )
+#     legendTextProblem71e(end+1) = legendTextProblem73abc(i);
+# end
 
 plot(x,y,'*','markersize',20);
 legendTextProblem71e(end+1) = { 'f(x) tabelada' };
@@ -762,9 +766,15 @@ for m = plotInvervalStart : plotInvervalEnd
 end
 
 
+#{
+
 figure(3);
 hold all;
 grid on;
+
+# for i = 1 : numel( legendTextProblem71e )
+#     legendText2(end+1) = legendTextProblem71e(i);
+# end
 
 plot( plotInvervalStart : 1 : plotInvervalEnd, gaussLegendreIntegralErroEstimadoY, '-k', 'LineWidth', 2 );
 legendText2(end+1) = { 'gaussLegendreIntegralErroEstimadoY' };
@@ -775,7 +785,7 @@ legendText2(end+1) = { 'errorGrowth' };
 legend(legendText2,'location','north');
 hold off;
 
-
+#}
 
 
 
