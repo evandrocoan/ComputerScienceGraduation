@@ -238,7 +238,7 @@ b = 1
 printf( "\nAqui os coeficientes de Chebyshev serao calculados utilizando a funcao generica\n" );
 printf( "`getChebyshevCoefficientsByPolinom`para o calculo do nesimo coeficiente de Chebyshev\n" );
 printf( "analiticamente pelos polinomios de Chebyshev.\n" );
-printf( "A funcao getChebyshevCoefficientsByPolinom, utiliza a funcao generica `getChebyshevCoefficientsPolinom`\n" );
+printf( "A funcao getChebyshevCoefficientsByPolinom, utiliza a funcao generica `getChebyshevPolinom`\n" );
 printf( "que calcula o nesimo polinomio de Chebyshev, e entao calcula o polinomio gerado nos pontos\n" );
 printf( "necessarios.\n\n" );
 
@@ -246,7 +246,7 @@ printf( "Calculating the Chebyshev Polynom's\n", i );
 
 for i = 0 : n
 
-    chebyshevCoefficientsPolinom( i + 1 ).polynom = getChebyshevCoefficientsPolinom( i );
+    chebyshevCoefficientsPolinom( i + 1 ).polynom = getChebyshevPolinom( i );
 
     printf( "The %d'th Chebyshev Polynom is: ", i );
     polyout( chebyshevCoefficientsPolinom( i + 1 ).polynom, "t" );

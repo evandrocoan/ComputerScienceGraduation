@@ -20,7 +20,7 @@
 #
 function result = getChebyshevCoefficientsByPolinom( k, t )
 
-    polynom = getChebyshevCoefficientsPolinom( k );
+    polynom = getChebyshevPolinom( k );
     result  = polyval( polynom, t );
 
 end

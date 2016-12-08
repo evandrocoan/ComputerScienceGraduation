@@ -1,9 +1,9 @@
 
 
-function gaussChebyshevIntegral = problem1GaussChebyshevIntegral( m, targetFunction, chebyshevPolynomDegree )
+function gaussChebyshevIntegral = problem1GaussChebyshevIntegral( m, targetFunction, chebyshevPolynomDegree = 0 )
 
     summation               = 0;
-    chebyshevPolynomDesired = getChebyshevCoefficientsPolinom( chebyshevPolynomDegree );
+    chebyshevPolynomDesired = getChebyshevPolinom( chebyshevPolynomDegree );
 
     %m 'nós' de Tchebyschev
     for k = 1 : m

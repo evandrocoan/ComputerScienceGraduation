@@ -17,7 +17,7 @@
 #
 # @param k, the k'th Chebyshev Polynom index to be used
 #
-function result = getChebyshevCoefficientsPolinom( k )
+function result = getChebyshevPolinom( k )
 
     # https://en.wikibooks.org/wiki/Octave_Programming_Tutorial/Polynomials
     persistent chebyshevPolynomCoefficients;
@@ -58,8 +58,8 @@ function result = getChebyshevCoefficientsPolinom( k )
 
             elseif mod( i, 2 ) == 0
 
-                # 2*getChebyshevCoefficientsPolinom( n/2 )^2 - 1
-                polynom        = getChebyshevCoefficientsPolinom( i/2 );
+                # 2*getChebyshevPolinom( n/2 )^2 - 1
+                polynom        = getChebyshevPolinom( i/2 );
                 polynom        = 2.*conv( polynom, polynom );
                 polynom( end ) = polynom( end ) - 1;
 
@@ -67,9 +67,9 @@ function result = getChebyshevCoefficientsPolinom( k )
 
             else
 
-                # 2*getChebyshevCoefficientsPolinom( (n-1)/2 )*getChebyshevCoefficientsPolinom( (n+1)/2 ) - x
-                polynom = 2.*conv( getChebyshevCoefficientsPolinom( (i-1) / 2 ), ...
-                                   getChebyshevCoefficientsPolinom( (i+1) / 2 ) );
+                # 2*getChebyshevPolinom( (n-1)/2 )*getChebyshevPolinom( (n+1)/2 ) - x
+                polynom = 2.*conv( getChebyshevPolinom( (i-1) / 2 ), ...
+                                   getChebyshevPolinom( (i+1) / 2 ) );
 
                 polynom( end - 1 )                            = polynom( end - 1 ) - 1;
                 chebyshevPolynomCoefficients( i + 1 ).polynom = polynom;
@@ -100,83 +100,83 @@ value = 0.6;
 printf( '\n' )
 
 T0_correct = polyout( T0_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 0 );
+polynom    = getChebyshevPolinom( 0 );
 n          = numel( polynom ) - 1;
 T0_calcula = polyout( polynom, "x" )
 correct_va = T0_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 0 ), value )
+calcula_va = polyval( getChebyshevPolinom( 0 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T1_correct = polyout( T1_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 1 );
+polynom    = getChebyshevPolinom( 1 );
 n          = numel( polynom ) - 1;
 T1_calcula = polyout( polynom, "x" )
 correct_va = T1_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 1 ), value )
+calcula_va = polyval( getChebyshevPolinom( 1 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T2_correct = polyout( T2_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 2 );
+polynom    = getChebyshevPolinom( 2 );
 n          = numel( polynom ) - 1;
 T2_calcula = polyout( polynom, "x" )
 correct_va = T2_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 2 ), value )
+calcula_va = polyval( getChebyshevPolinom( 2 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T3_correct = polyout( T3_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 3 );
+polynom    = getChebyshevPolinom( 3 );
 n          = numel( polynom ) - 1;
 T3_calcula = polyout( polynom, "x" )
 correct_va = T3_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 3 ), value )
+calcula_va = polyval( getChebyshevPolinom( 3 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T4_correct = polyout( T4_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 4 );
+polynom    = getChebyshevPolinom( 4 );
 n          = numel( polynom ) - 1;
 T4_calcula = polyout( polynom, "x" )
 correct_va = T4_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 4 ), value )
+calcula_va = polyval( getChebyshevPolinom( 4 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T5_correct = polyout( T5_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 5 );
+polynom    = getChebyshevPolinom( 5 );
 n          = numel( polynom ) - 1;
 T5_calcula = polyout( polynom, "x" )
 correct_va = T5_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 5 ), value )
+calcula_va = polyval( getChebyshevPolinom( 5 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T6_correct = polyout( T6_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 6 );
+polynom    = getChebyshevPolinom( 6 );
 n          = numel( polynom ) - 1;
 T6_calcula = polyout( polynom, "x" )
 correct_va = T6_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 6 ), value )
+calcula_va = polyval( getChebyshevPolinom( 6 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T7_correct = polyout( T7_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 7 );
+polynom    = getChebyshevPolinom( 7 );
 n          = numel( polynom ) - 1;
 T7_calcula = polyout( polynom, "x" )
 correct_va = T7_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 7 ), value )
+calcula_va = polyval( getChebyshevPolinom( 7 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T8_correct = polyout( T8_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 8 );
+polynom    = getChebyshevPolinom( 8 );
 n          = numel( polynom ) - 1;
 T8_calcula = polyout( polynom, "x" )
 correct_va = T8_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 8 ), value )
+calcula_va = polyval( getChebyshevPolinom( 8 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
@@ -190,11 +190,11 @@ printf( '\n' )
 #
 # T9_calcula = -0.472103424000000
 T9_correct = polyout( T9_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 9 );
+polynom    = getChebyshevPolinom( 9 );
 n          = numel( polynom ) - 1;
 T9_calcula = polyout( polynom, "x" )
 correct_va = T9_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 9 ), value )
+calcula_va = polyval( getChebyshevPolinom( 9 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
@@ -204,38 +204,38 @@ value = 0.4
 printf( '\n' )
 
 T6_correct = polyout( T6_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 6 );
+polynom    = getChebyshevPolinom( 6 );
 n          = numel( polynom ) - 1;
 T6_calcula = polyout( polynom, "x" )
 correct_va = T6_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 6 ), value )
+calcula_va = polyval( getChebyshevPolinom( 6 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T7_correct = polyout( T7_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 7 );
+polynom    = getChebyshevPolinom( 7 );
 n          = numel( polynom ) - 1;
 T7_calcula = polyout( polynom, "x" )
 correct_va = T7_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 7 ), value )
+calcula_va = polyval( getChebyshevPolinom( 7 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T8_correct = polyout( T8_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 8 );
+polynom    = getChebyshevPolinom( 8 );
 n          = numel( polynom ) - 1;
 T8_calcula = polyout( polynom, "x" )
 correct_va = T8_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 8 ), value )
+calcula_va = polyval( getChebyshevPolinom( 8 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
 T9_correct = polyout( T9_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 9 );
+polynom    = getChebyshevPolinom( 9 );
 n          = numel( polynom ) - 1;
 T9_calcula = polyout( polynom, "x" )
 correct_va = T9_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 9 ), value )
+calcula_va = polyval( getChebyshevPolinom( 9 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 
@@ -245,11 +245,11 @@ value = 0.6
 printf( '\n' )
 
 T9_correct = polyout( T9_(), "x" )
-polynom    = getChebyshevCoefficientsPolinom( 9 );
+polynom    = getChebyshevPolinom( 9 );
 n          = numel( polynom ) - 1;
 T9_calcula = polyout( polynom, "x" )
 correct_va = T9_( value )
-calcula_va = polyval( getChebyshevCoefficientsPolinom( 9 ), value )
+calcula_va = polyval( getChebyshevPolinom( 9 ), value )
 briotRunif = fPnPorBriotRunifi( n, fliplr( polynom ), value )
 printf( '\n' )
 

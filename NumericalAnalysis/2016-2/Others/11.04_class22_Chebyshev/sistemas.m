@@ -104,7 +104,7 @@ chebyshevCoefficientsNumerically_at_06 = getChebyshevCoefficientsNumerically( n,
 errorByPolinom__
 errorNumerically
 
-chebyshevCoefficientsPolinom_n = getChebyshevCoefficientsPolinom( n );
+chebyshevCoefficientsPolinom_n = getChebyshevPolinom( n );
 polyout( chebyshevCoefficientsPolinom_n, "t" );
 
 
