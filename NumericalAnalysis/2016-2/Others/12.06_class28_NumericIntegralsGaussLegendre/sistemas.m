@@ -27,6 +27,7 @@ split_long_rows(0)
 #     x(i) = (b-a)/2*t(m,i) + (b+a)/2
 #
 
+#{
 
 a = 1
 b = 6
@@ -103,6 +104,11 @@ erroExato___
 printf( "\n" )
 printf( "\n" )
 
+#}
+
+
+m = 500
+
 
 # Calcule o primeiro 1º coeficiente da serie de Chebyshev de f(x) = cos(x)
 #
@@ -110,7 +116,7 @@ printf( "\n" )
 #
 # b(0) multiplica T(0) `Polinômio` de Chebyshev. T(0) = 1;
 #
-b(0+1) = ( 1/pi ) * problem1GaussChebyshevIntegral( m, @cos )
+b0 = ( 1/pi ) * problem1GaussChebyshevIntegral( m, @cos, 0 )
 
 
 # Calcule o segundo 2º coeficiente da serie de Chebyshev de f(x) = cos(x)
@@ -120,6 +126,19 @@ b(0+1) = ( 1/pi ) * problem1GaussChebyshevIntegral( m, @cos )
 # b(0) multiplica T(0) `Polinômio` de Chebyshev. T(1) = x;
 #
 # Find out how to create a function here and pass it. The @cos here is supposed to be `cos(x)*x`.
-b(1+1) = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos )
+#
+b1 = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos, 1 )
+
+
+# Calcule o segundo 3º coeficiente da serie de Chebyshev de f(x) = cos(x)
+#
+#     b(0) = (2/pi)*integral( f(x)*T(1)) / sqrt(1-x^2) ) dx
+#
+# b(0) multiplica T(0) `Polinômio` de Chebyshev. T(1) = x;
+#
+# Find out how to create a function here and pass it. The @cos here is supposed to be `cos(x)*x`.
+#
+b2 = ( 2/pi ) * problem1GaussChebyshevIntegral( m, @cos, 2 )
+
 
 
