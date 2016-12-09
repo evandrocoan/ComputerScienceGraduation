@@ -94,7 +94,7 @@ coeficientes = ajusteDeCurvasLinearesParaCos( m, x, y )
 
 # Os pontos podem não estar ordenados, portanto calculamos os intervalos a partir dos pontos
 # mínimo e máximo de `x`.
-xInterpontos = min( x ) - 0.2 : 0.01 : max( x ) + 0.2;
+xInterpontos = min( x ) - 0.0 : 0.01 : max( x ) + 0.0;
 yInterpontos = coeficientes(1).*xInterpontos .+ coeficientes(2).*cos(xInterpontos);
 
 plot( x, y, '*', xInterpontos, yInterpontos );
