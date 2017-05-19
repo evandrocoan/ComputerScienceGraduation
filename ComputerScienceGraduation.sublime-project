@@ -3,6 +3,35 @@
 	[
 		{
 			"path": "."
-		}
-	]
+		},
+        {
+            "path": "D:/User/Dropbox/Applications/SoftwareVersioning/SublimeText/Data/Packages",
+            "folder_exclude_patterns":
+            [
+                "Packages/ObjectBeautifier",
+                "Packages/User/Color Highlighter",
+            ],
+        },
+	],
+    "build_systems":
+    [
+        {
+            "working_dir": "$project_path/ArtificialIntelligence/DrawLotsAiGame",
+            // "selector": "source.AmxxPawn, source.AMXX", // comment this to build from everywhere
+
+            "name": "Run ArtificialIntelligence - DrawLotsAiGame",
+            "cmd": ["python", "main.py"],
+
+            "quiet": true,
+        },
+        {
+            "working_dir": "$project_path/ArtificialIntelligence/AnswersGuessAiGame",
+            // "selector": "source.AmxxPawn, source.AMXX", // comment this to build from everywhere
+
+            "name": "Run ArtificialIntelligence - AnswersGuessAiGame",
+            "cmd": ["make", "-silent", "main"],
+
+            "quiet": true,
+        },
+    ]
 }

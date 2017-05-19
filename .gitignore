@@ -1,2 +1,7 @@
+
+
 # Arquivos de backup
 *nppBackup
+*.pyc
+
+*.sublime-workspace
