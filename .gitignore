@@ -1,0 +1,23 @@
+
+
+*.class
+*.pyc
+
+
+# Latex stuff
+*.pdf
+
+*.aux
+*.bbl
+*.log
+*.out
+*.toc
+*.dvi
+
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+
+
