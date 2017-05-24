@@ -22,7 +22,13 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
+sys.path.insert(0,'../python_debug')
+
 import debug_tools
+
+from PyQt4.QtGui import *
+from debug_tools import log
 
 
 # Enable debug messages: (bitwise)
@@ -33,6 +39,7 @@ import debug_tools
 #
 # 127 - All debugging levels at the same time.
 debug_tools.g_debug_level = 127
+log( 1, "Importing " + __name__ )
 
 
 # How many stickies each player has when the game begins.

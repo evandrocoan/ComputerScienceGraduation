@@ -21,17 +21,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys
-sys.path.insert(0,'../python_debug')
-
-from debug_tools import log
-
 from settings import *
-from PyQt4.QtGui import *
+from main_window import MainWindow
+
 
 log( 1, "Debugging" )
 log( 1, "..." )
 log( 1, "..." )
+
 
 
 def main():
@@ -45,31 +42,7 @@ def main():
     # http://pyqt.sourceforge.net/Docs/PyQt4/qapplication.html
     simulatorApplication = QApplication( sys.argv )
 
-    # The QWidget widget is the base class of all user interface objects in PyQt4.
-    #
-    # The widget is the atom of the user interface: it receives mouse, keyboard and other events
-    # from the window system, and paints a representation of itself on the screen. Every widget is
-    # rectangular, and they are sorted in a Z-order. A widget is clipped by its parent and by the
-    # widgets in front of it. http://pyqt.sourceforge.net/Docs/PyQt4/qwidget.html
-    userInterfaceWidget = QWidget()
-
-    # Set window size.
-    userInterfaceWidget.resize( 1120, 640 )
-
-    # Set window title
-    userInterfaceWidget.setWindowTitle( "Drunk Walk Simulator" )
-
-    # https://github.com/GNOME/adwaita-icon-theme
-    # https://code.google.com/archive/p/faenza-icon-theme/
-    mainApplicationIcon = QIcon( 'login.png' )
-
-    # PyQt4 set windows taskbar icon
-    # https://stackoverflow.com/questions/12432637/pyqt4-set-windows-taskbar-icon
-    # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
-    userInterfaceWidget.setWindowIcon( mainApplicationIcon )
-
-    # Show window
-    userInterfaceWidget.show()
+    ex = MainWindow()
 
     # The mainloop of the application. The event handling starts from this point. The mainloop
     # receives events from the window system and dispatches them to the application widgets. The
