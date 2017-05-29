@@ -22,8 +22,9 @@
 #
 
 from settings import *
-from main_window import MainWindow
 
+from PyQt4 import QtGui, QtCore
+from main_window import MainWindow
 
 log( 1, "Debugging" )
 log( 1, "..." )
@@ -40,9 +41,10 @@ def main():
     # finalization, and provides session management. In addition, QApplication handles most of the
     # system-wide and application-wide settings.
     # http://pyqt.sourceforge.net/Docs/PyQt4/qapplication.html
-    simulatorApplication = QApplication( sys.argv )
+    simulatorApplication = QtGui.QApplication( sys.argv )
 
-    ex = MainWindow()
+    mainWindow = MainWindow()
+    mainWindow.show()
 
     # The mainloop of the application. The event handling starts from this point. The mainloop
     # receives events from the window system and dispatches them to the application widgets. The

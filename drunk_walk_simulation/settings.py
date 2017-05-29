@@ -26,8 +26,6 @@ import sys
 sys.path.insert(0,'../python_debug')
 
 import debug_tools
-
-from PyQt4.QtGui import *
 from debug_tools import log
 
 
