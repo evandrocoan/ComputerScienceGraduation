@@ -44,14 +44,14 @@ class DrawingPanel(QtGui.QGraphicsView):
         pencil = QtGui.QPen( QtCore.Qt.black, 2)
         pencil.setStyle( QtCore.Qt.SolidLine )
 
+        # pencil.setStyle( QtCore.Qt.UpArrow )
+        scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
+
         # http://pyqt.sourceforge.net/Docs/PyQt4/qpainter.html#RenderHint-enum
         self.setRenderHint( QtGui.QPainter.Antialiasing );
         self.setRenderHint( QtGui.QPainter.TextAntialiasing );
         self.setRenderHint( QtGui.QPainter.SmoothPixmapTransform );
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
-
-        # pencil.setStyle( QtCore.Qt.UpArrow )
-        scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
 
         x = 0
         y = 0
