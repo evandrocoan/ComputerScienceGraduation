@@ -91,30 +91,33 @@ class DrawingPanel( QtGui.QGraphicsView ):
             super( DrawingPanel, self ).wheelEvent( event )
 
         else:
-            # Zoom Factor
-            zoomInFactor = 1.1
-            zoomOutFactor = 1 / zoomInFactor
+            self.performScrollZoom( event )
 
-            # Set Anchors
-            self.setTransformationAnchor( QtGui.QGraphicsView.NoAnchor )
-            self.setResizeAnchor( QtGui.QGraphicsView.NoAnchor )
+    def performScrollZoom( self, event ):
+        # Zoom Factor
+        zoomInFactor = 1.1
+        zoomOutFactor = 1 / zoomInFactor
 
-            # Save the scene pos
-            oldPos = self.mapToScene( event.pos() )
+        # Set Anchors
+        self.setTransformationAnchor( QtGui.QGraphicsView.NoAnchor )
+        self.setResizeAnchor( QtGui.QGraphicsView.NoAnchor )
 
-            # Zoom
-            if event.delta() > 0:
-                zoomFactor = zoomInFactor
-            else:
-                zoomFactor = zoomOutFactor
-            self.scale( zoomFactor, zoomFactor )
+        # Save the scene pos
+        oldPos = self.mapToScene( event.pos() )
 
-            # Get the new position
-            newPos = self.mapToScene( event.pos() )
+        # Zoom
+        if event.delta() > 0:
+            zoomFactor = zoomInFactor
+        else:
+            zoomFactor = zoomOutFactor
+        self.scale( zoomFactor, zoomFactor )
 
-            # Move scene to old position
-            delta = newPos - oldPos
-            self.translate( delta.x(), delta.y() )
+        # Get the new position
+        newPos = self.mapToScene( event.pos() )
+
+        # Move scene to old position
+        delta = newPos - oldPos
+        self.translate( delta.x(), delta.y() )
 
 
 
