@@ -101,16 +101,18 @@ class MainWindow( QtGui.QWidget ):
         self.setLayout( verticalLayout )
 
     def handleClearView(self):
-        scene = self.drawingPanel.scene()
+        scene = self.drawingPanel.scene
         scene.clear()
 
         self.handleFitInView()
 
     def handleFitInView(self):
-        scene = self.drawingPanel.scene()
+        scene = self.drawingPanel.scene
 
-        self.drawingPanel.ensureVisible ( scene.sceneRect() )
-        self.drawingPanel.fitInView( scene.sceneRect(), QtCore.Qt.KeepAspectRatio )
+        # Auto scale a QGraphicsView
+        # http://www.qtcentre.org/threads/42917-Auto-scale-a-QGraphicsView
+        self.drawingPanel.ensureVisible ( scene.itemsBoundingRect() )
+        self.drawingPanel.fitInView( scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
 
     def handleZoomButton(self):
 
