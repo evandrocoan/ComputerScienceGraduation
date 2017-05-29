@@ -43,15 +43,20 @@ class MainWindow( QtGui.QWidget ):
         """
         super( MainWindow, self ).__init__()
 
+        # Drawing a line consisting of multiple points using PyQt
+        # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
+        self.drawingPanel = DrawingPanel( self )
+
+        self.addButtons()
+        self.setWindowLayout()
+        self.configureMainWindow()
+
+    def configureMainWindow( self ):
         # Set window size.
         self.resize( 1120, 640 )
 
         # Set window title
         self.setWindowTitle( "Drunk Walk Simulator" )
-
-        # Drawing a line consisting of multiple points using PyQt
-        # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
-        self.drawingPanel = DrawingPanel( self )
 
         # https://github.com/GNOME/adwaita-icon-theme
         # https://code.google.com/archive/p/faenza-icon-theme/
@@ -61,9 +66,6 @@ class MainWindow( QtGui.QWidget ):
         # https://stackoverflow.com/questions/12432637/pyqt4-set-windows-taskbar-icon
         # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
         self.setWindowIcon( mainApplicationIcon )
-
-        self.addButtons()
-        self.setWindowLayout()
 
     def addButtons( self ):
         # Creates the clear button
