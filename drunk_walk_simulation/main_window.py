@@ -49,6 +49,10 @@ class MainWindow( QtGui.QWidget ):
         # Set window title
         self.setWindowTitle( "Drunk Walk Simulator" )
 
+        # Drawing a line consisting of multiple points using PyQt
+        # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
+        self.drawingPanel = DrawingPanel( self )
+
         # https://github.com/GNOME/adwaita-icon-theme
         # https://code.google.com/archive/p/faenza-icon-theme/
         mainApplicationIcon = QtGui.QIcon( 'login.png' )
@@ -57,10 +61,6 @@ class MainWindow( QtGui.QWidget ):
         # https://stackoverflow.com/questions/12432637/pyqt4-set-windows-taskbar-icon
         # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
         self.setWindowIcon( mainApplicationIcon )
-
-        # Drawing a line consisting of multiple points using PyQt
-        # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
-        self.drawingPanel = DrawingPanel( self )
 
         self.addButtons()
         self.setWindowLayout()
@@ -100,13 +100,13 @@ class MainWindow( QtGui.QWidget ):
 
         self.setLayout( verticalLayout )
 
-    def handleClearView(self):
+    def handleClearView( self ):
         scene = self.drawingPanel.scene
         scene.clear()
 
         self.handleFitInView()
 
-    def handleFitInView(self):
+    def handleFitInView( self ):
         scene = self.drawingPanel.scene
 
         # Auto scale a QGraphicsView
@@ -114,7 +114,7 @@ class MainWindow( QtGui.QWidget ):
         self.drawingPanel.ensureVisible ( scene.itemsBoundingRect() )
         self.drawingPanel.fitInView( scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
 
-    def handleZoomButton(self):
+    def handleZoomButton( self ):
 
         if self.drawingPanel.isScrollEnabled:
             self.drawingPanel.isScrollEnabled = False

@@ -27,7 +27,7 @@ from PyQt4 import QtGui, QtCore
 log( 1, "Importing " + __name__ )
 
 
-class DrawingPanel(QtGui.QGraphicsView):
+class DrawingPanel( QtGui.QGraphicsView ):
 
     def __init__( self, parent=None ):
         super( DrawingPanel, self ).__init__( parent )
@@ -57,7 +57,7 @@ class DrawingPanel(QtGui.QGraphicsView):
             QPen Class Reference
             http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
         """
-        pencil = QtGui.QPen( QtCore.Qt.black, 2)
+        pencil = QtGui.QPen( QtCore.Qt.black, 2 )
         pencil.setStyle( QtCore.Qt.SolidLine )
 
         # pencil.setStyle( QtCore.Qt.UpArrow )
@@ -78,7 +78,7 @@ class DrawingPanel(QtGui.QGraphicsView):
         item = self.scene.addEllipse( x, y, w, h, pen, brush )
         item.setFlag( QtGui.QGraphicsItem.ItemIsMovable )
 
-    def wheelEvent(self, event):
+    def wheelEvent( self, event ):
         """
             PyQT4 WheelEvent? how to detect if the wheel have been use?
             https://stackoverflow.com/questions/9475772/pyqt4-wheelevent-how-to-detect-if-the-wheel-have-been-use
@@ -88,7 +88,7 @@ class DrawingPanel(QtGui.QGraphicsView):
         """
 
         if self.isScrollEnabled:
-            super(DrawingPanel, self).wheelEvent(event)
+            super( DrawingPanel, self ).wheelEvent( event )
 
         else:
             # Zoom Factor
@@ -96,25 +96,25 @@ class DrawingPanel(QtGui.QGraphicsView):
             zoomOutFactor = 1 / zoomInFactor
 
             # Set Anchors
-            self.setTransformationAnchor(QtGui.QGraphicsView.NoAnchor)
-            self.setResizeAnchor(QtGui.QGraphicsView.NoAnchor)
+            self.setTransformationAnchor( QtGui.QGraphicsView.NoAnchor )
+            self.setResizeAnchor( QtGui.QGraphicsView.NoAnchor )
 
             # Save the scene pos
-            oldPos = self.mapToScene(event.pos())
+            oldPos = self.mapToScene( event.pos() )
 
             # Zoom
             if event.delta() > 0:
                 zoomFactor = zoomInFactor
             else:
                 zoomFactor = zoomOutFactor
-            self.scale(zoomFactor, zoomFactor)
+            self.scale( zoomFactor, zoomFactor )
 
             # Get the new position
-            newPos = self.mapToScene(event.pos())
+            newPos = self.mapToScene( event.pos() )
 
             # Move scene to old position
             delta = newPos - oldPos
-            self.translate(delta.x(), delta.y())
+            self.translate( delta.x(), delta.y() )
 
 
 
