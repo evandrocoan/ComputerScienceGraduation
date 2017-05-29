@@ -31,21 +31,20 @@ class DrawingPanel(QtGui.QGraphicsView):
 
     def __init__( self, parent=None ):
         super( DrawingPanel, self ).__init__( parent )
+
+        self.scene = QtGui.QGraphicsScene()
+        self.setScene( self.scene )
+
+        self.addExampleLine()
+        self.addExampleEllipse()
+        self.configurePanelSettings()
+
+    def configurePanelSettings( self ):
         self.isScrollEnabled = True
 
         # http://pyqt.sourceforge.net/Docs/PyQt4/qgraphicsview.html#DragMode-enum
         # https://stackoverflow.com/questions/40684884/how-can-i-override-a-pyqt4-qgraphicsview-mousepressevent
         self.setDragMode( QtGui.QGraphicsView.ScrollHandDrag )
-
-        scene = QtGui.QGraphicsScene()
-        self.setScene( scene )
-
-        # http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
-        pencil = QtGui.QPen( QtCore.Qt.black, 2)
-        pencil.setStyle( QtCore.Qt.SolidLine )
-
-        # pencil.setStyle( QtCore.Qt.UpArrow )
-        scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
 
         # http://pyqt.sourceforge.net/Docs/PyQt4/qpainter.html#RenderHint-enum
         self.setRenderHint( QtGui.QPainter.Antialiasing );
@@ -53,6 +52,22 @@ class DrawingPanel(QtGui.QGraphicsView):
         self.setRenderHint( QtGui.QPainter.SmoothPixmapTransform );
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
 
+    def addExampleLine( self ):
+        """
+            QPen Class Reference
+            http://pyqt.sourceforge.net/Docs/PyQt4/qpen.html
+        """
+        pencil = QtGui.QPen( QtCore.Qt.black, 2)
+        pencil.setStyle( QtCore.Qt.SolidLine )
+
+        # pencil.setStyle( QtCore.Qt.UpArrow )
+        self.scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
+
+    def addExampleEllipse(self):
+        """
+            Python PyQt: How can I move my widgets on the window with mouse?
+            https://stackoverflow.com/questions/12213391/python-pyqt-how-can-i-move-my-widgets-on-the-window-with-mouse
+        """
         x = 0
         y = 0
         w = 45
@@ -60,7 +75,7 @@ class DrawingPanel(QtGui.QGraphicsView):
         pen   = QtGui.QPen( QtGui.QColor( QtCore.Qt.green ) )
         brush = QtGui.QBrush( pen.color().darker( 150 ) )
 
-        item = scene.addEllipse( x, y, w, h, pen, brush )
+        item = self.scene.addEllipse( x, y, w, h, pen, brush )
         item.setFlag( QtGui.QGraphicsItem.ItemIsMovable )
 
     def wheelEvent(self, event):
