@@ -24,7 +24,7 @@
 from settings import *
 from drawing_panel import DrawingPanel
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, Qt
 log( 1, "Importing " + __name__ )
 
 
@@ -42,9 +42,6 @@ class MainWindow( QtGui.QWidget ):
             http://pyqt.sourceforge.net/Docs/PyQt4/qwidget.html
         """
         super( MainWindow, self ).__init__()
-        self.createAndDisplayWindow()
-
-    def createAndDisplayWindow( self ):
 
         # Set window size.
         self.resize( 1120, 640 )
@@ -61,19 +58,22 @@ class MainWindow( QtGui.QWidget ):
         # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
         self.setWindowIcon( mainApplicationIcon )
 
-        self.createDrawingPanel()
-
-    def createDrawingPanel( self ):
-        """
-            Drawing a line consisting of multiple points using PyQt
-            https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
-        """
-
+        # Drawing a line consisting of multiple points using PyQt
+        # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
         self.drawingPanel = DrawingPanel( self )
 
+        self.addButtons()
+        self.setWindowLayout()
+
+    def addButtons( self ):
         # Creates the clear button
-        self.clearDrawingButton = QtGui.QPushButton( 'Clear DrawingPanel', self )
+        self.clearDrawingButton = QtGui.QPushButton( 'Clear Drawing Panel', self )
         self.clearDrawingButton.clicked.connect( self.handleClearView )
+
+        # Creates the restore zoom button
+        # https://forum.qt.io/topic/14842/solved-how-to-fit-in-view-the-pixmaps-in-qgraphicsview-qgraphicsscene-without-changing-aspect-ratio
+        self.fitInViewButton = QtGui.QPushButton( 'Fit In View', self )
+        self.fitInViewButton.clicked.connect( self.handleFitInView )
 
         # Programmatically Toggle a Python PyQt QPushbutton
         # https://stackoverflow.com/questions/19508450/programmatically-toggle-a-python-pyqt-qpushbutton
@@ -81,11 +81,13 @@ class MainWindow( QtGui.QWidget ):
         self.zoomButton.clicked.connect( self.handleZoomButton )
         self.zoomButton.setCheckable( True )
 
+    def setWindowLayout( self ):
         # How to align the layouts QHBoxLayout and QVBoxLayout on pyqt4?
         # https://stackoverflow.com/questions/44230856/how-to-align-the-layouts-qhboxlayout-and-qvboxlayout-on-pyqt4
         horizontalLayout = QtGui.QHBoxLayout()
         horizontalLayout.addWidget( self.clearDrawingButton )
         horizontalLayout.addWidget( self.zoomButton )
+        horizontalLayout.addWidget( self.fitInViewButton )
 
         # Creates a box to align vertically the panels
         # https://doc.qt.io/qt-4.8/qvboxlayout.html
@@ -99,7 +101,16 @@ class MainWindow( QtGui.QWidget ):
         self.setLayout( verticalLayout )
 
     def handleClearView(self):
-        self.drawingPanel.scene().clear()
+        scene = self.drawingPanel.scene()
+        scene.clear()
+
+        self.handleFitInView()
+
+    def handleFitInView(self):
+        scene = self.drawingPanel.scene()
+
+        self.drawingPanel.ensureVisible ( scene.sceneRect() )
+        self.drawingPanel.fitInView( scene.sceneRect(), QtCore.Qt.KeepAspectRatio )
 
     def handleZoomButton(self):
 

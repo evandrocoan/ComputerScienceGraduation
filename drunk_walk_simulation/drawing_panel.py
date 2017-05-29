@@ -63,8 +63,6 @@ class DrawingPanel(QtGui.QGraphicsView):
         item = scene.addEllipse( x, y, w, h, pen, brush )
         item.setFlag( QtGui.QGraphicsItem.ItemIsMovable )
 
-        # print( "scene.itemsBoundingRect(): " + str( scene.itemsBoundingRect() ) )
-
     def wheelEvent(self, event):
         """
             PyQT4 WheelEvent? how to detect if the wheel have been use?
