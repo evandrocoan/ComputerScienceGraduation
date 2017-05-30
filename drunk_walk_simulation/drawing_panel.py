@@ -35,9 +35,15 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.scene = QtGui.QGraphicsScene()
         self.setScene( self.scene )
 
-        self.addExampleLine()
-        self.addExampleEllipse()
+        self.clearView()
         self.configurePanelSettings()
+
+        # self.addExampleLine()
+        # self.addExampleEllipse()
+
+    def clearView( self ):
+        self.scene.clear()
+        self.drawAxes( 200 )
 
     def configurePanelSettings( self ):
         self.isScrollEnabled = True
@@ -52,6 +58,13 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setRenderHint( QtGui.QPainter.SmoothPixmapTransform );
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
 
+    def drawAxes(self, lenght ):
+        pencil = QtGui.QPen( QtCore.Qt.black, 1)
+        pencil.setStyle( QtCore.Qt.DotLine )
+
+        self.scene.addLine( QtCore.QLineF( 0, -lenght, 0, lenght ), pencil )
+        self.scene.addLine( QtCore.QLineF( -lenght, 0, lenght, 0 ), pencil )
+
     def addExampleLine( self ):
         """
             QPen Class Reference
@@ -60,8 +73,14 @@ class DrawingPanel( QtGui.QGraphicsView ):
         pencil = QtGui.QPen( QtCore.Qt.black, 2 )
         pencil.setStyle( QtCore.Qt.SolidLine )
 
-        # pencil.setStyle( QtCore.Qt.UpArrow )
-        self.scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
+        # How to rotate a polygon on a QGraphicsScene at pyqt4?
+        # https://stackoverflow.com/questions/44267547/how-to-rotate-a-polygon-on-a-qgraphicsscene-at-pyqt4
+        polygonItem = self.scene.addLine( QtCore.QLineF( 0, 0, 300, 900 ), pencil )
+
+        transform = QtGui.QTransform()
+        transform.translate( -150, -450 )
+
+        polygonItem.setTransform( transform )
 
     def addExampleEllipse(self):
         """
@@ -108,8 +127,10 @@ class DrawingPanel( QtGui.QGraphicsView ):
         # Zoom
         if event.delta() > 0:
             zoomFactor = zoomInFactor
+
         else:
             zoomFactor = zoomOutFactor
+
         self.scale( zoomFactor, zoomFactor )
 
         # Get the new position

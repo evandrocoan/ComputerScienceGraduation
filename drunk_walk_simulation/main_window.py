@@ -21,7 +21,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from settings import *
+from settings      import *
+from simulator     import Simulator
 from drawing_panel import DrawingPanel
 
 from PyQt4 import QtGui, QtCore, Qt
@@ -42,6 +43,7 @@ class MainWindow( QtGui.QWidget ):
             http://pyqt.sourceforge.net/Docs/PyQt4/qwidget.html
         """
         super( MainWindow, self ).__init__()
+        self.simulation = None
 
         # Drawing a line consisting of multiple points using PyQt
         # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
@@ -68,6 +70,17 @@ class MainWindow( QtGui.QWidget ):
         self.setWindowIcon( mainApplicationIcon )
 
     def addButtons( self ):
+        self.startSimulationButton = QtGui.QPushButton( 'Start Simulation', self )
+        self.startSimulationButton.clicked.connect( self.handleSimulationStart )
+
+        self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
+        self.stepNumberLineEdit = QtGui.QLineEdit()
+        self.stepNumberLineEdit.setValidator( QtGui.QIntValidator( 100, 999999, self ) )
+
+        self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
+        self.replicationsNumberLineEdit = QtGui.QLineEdit()
+        self.replicationsNumberLineEdit.setValidator( QtGui.QIntValidator( 0, 999999, self ) )
+
         # Creates the clear button
         self.clearDrawingButton = QtGui.QPushButton( 'Clear Drawing Panel', self )
         self.clearDrawingButton.clicked.connect( self.handleClearView )
@@ -87,6 +100,14 @@ class MainWindow( QtGui.QWidget ):
         # How to align the layouts QHBoxLayout and QVBoxLayout on pyqt4?
         # https://stackoverflow.com/questions/44230856/how-to-align-the-layouts-qhboxlayout-and-qvboxlayout-on-pyqt4
         horizontalLayout = QtGui.QHBoxLayout()
+        horizontalLayout.addWidget( self.startSimulationButton )
+
+        horizontalLayout.addWidget( self.replicationsNumberLineLabel )
+        horizontalLayout.addWidget( self.replicationsNumberLineEdit )
+
+        horizontalLayout.addWidget( self.stepNumberLineLabel )
+        horizontalLayout.addWidget( self.stepNumberLineEdit )
+
         horizontalLayout.addWidget( self.clearDrawingButton )
         horizontalLayout.addWidget( self.zoomButton )
         horizontalLayout.addWidget( self.fitInViewButton )
@@ -103,18 +124,26 @@ class MainWindow( QtGui.QWidget ):
         self.setLayout( verticalLayout )
 
     def handleClearView( self ):
-        scene = self.drawingPanel.scene
-        scene.clear()
+        # How to restore a QGraphicsView zoom to 100%, i.e., the zoom when the program started?
+        # https://stackoverflow.com/questions/44270301/how-to-restore-a-qgraphicsview-zoom-to-100-i-e-the-zoom-when-the-program-sta
+        self.drawingPanel.clearView()
+        self.drawingPanel.setTransform( QtGui.QTransform() )
 
-        self.handleFitInView()
+    def handleSimulationStart( self ):
+
+        try:
+            self.simulation = Simulator( self, self.drawingPanel )
+
+        except:
+            print( "Error" )
+
+        self.simulation.startSimulation()
 
     def handleFitInView( self ):
-        scene = self.drawingPanel.scene
-
         # Auto scale a QGraphicsView
         # http://www.qtcentre.org/threads/42917-Auto-scale-a-QGraphicsView
-        self.drawingPanel.ensureVisible ( scene.itemsBoundingRect() )
-        self.drawingPanel.fitInView( scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
+        self.drawingPanel.ensureVisible ( self.drawingPanel.scene.itemsBoundingRect() )
+        self.drawingPanel.fitInView( self.drawingPanel.scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
 
     def handleZoomButton( self ):
 
