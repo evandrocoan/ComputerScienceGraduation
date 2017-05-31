@@ -32,6 +32,10 @@ class DrawingPanel( QtGui.QGraphicsView ):
     def __init__( self, parent=None ):
         super( DrawingPanel, self ).__init__( parent )
         self.isScrollEnabled = False
+        self.paintAmplifation = 50
+
+        self.currentAxisX = None
+        self.currentAxisY = None
 
         self.scene = QtGui.QGraphicsScene()
         self.setScene( self.scene )
@@ -70,16 +74,48 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setRenderHint( QtGui.QPainter.SmoothPixmapTransform );
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
 
-    def drawAxes(self, lenght ):
+    def drawAxes(self, length ):
+        self.addAxisLines( length )
+        self.addAxisLables( length )
+
+    def addAxisLines( self, length ):
         pencil = QtGui.QPen( QtCore.Qt.blue, 2)
         pencil.setStyle( QtCore.Qt.DotLine )
 
-        self.scene.addLine( QtCore.QLineF( 0, -lenght, 0, lenght ), pencil )
-        self.scene.addLine( QtCore.QLineF( -lenght, 0, lenght, 0 ), pencil )
+        self.currentAxisX = self.scene.addLine( QtCore.QLineF( 0, -length, 0, length ), pencil )
+        self.currentAxisY = self.scene.addLine( QtCore.QLineF( -length, 0, length, 0 ), pencil )
+
+    def addAxisLables( self, length ):
+        labelSize   = 2
+        labelShiftX = 0
+        labelShiftY = - self.paintAmplifation * .35
+        labelsCount = length / self.paintAmplifation / labelSize + 1
+
+        log( 4, "( DrawingPanel::addAxisLables ) labelSize:   %f, labelsCount: %f" % ( labelSize  , labelsCount ) )
+        log( 4, "( DrawingPanel::addAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
+
+        for label_index in range( 1, labelsCount ):
+            labelValue = label_index * labelSize
+            labelPosition = labelValue * self.paintAmplifation
+
+            # X axis
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelPosition - self.paintAmplifation * .4, labelShiftX )
+
+            labelItem = self.scene.addText( str( -labelValue ) )
+            labelItem.setPos( -labelPosition, labelShiftX )
+
+            # Y axis
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelShiftY, labelPosition - self.paintAmplifation * .4 )
+
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelShiftY, -labelPosition )
 
     def drawLines( self, x1, y1, x2, y2 ):
-        amplify = 50
-        self.scene.addLine( QtCore.QLineF( amplify * x1, amplify * y1, amplify * x2, amplify * y2 ), self.pencil )
+        self.scene.addLine( QtCore.QLineF( \
+                self.paintAmplifation * x1, self.paintAmplifation * y1, \
+                self.paintAmplifation * x2, self.paintAmplifation * y2 ), self.pencil )
 
     def addExampleLine( self ):
         """

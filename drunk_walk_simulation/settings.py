@@ -34,6 +34,7 @@ from debug_tools import log
 # 0   - Disabled debugging
 # 1   - Basic logging messages
 # 2   - Simulator debugging
+# 4   - Drawing panel debugging
 #
 # 127 - All debugging levels at the same time.
 debug_tools.g_debug_level = 127
