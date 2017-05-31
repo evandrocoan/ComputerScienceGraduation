@@ -75,11 +75,13 @@ class MainWindow( QtGui.QWidget ):
 
         self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
         self.stepNumberLineEdit = QtGui.QLineEdit()
-        self.stepNumberLineEdit.setValidator( QtGui.QIntValidator( 100, 999999, self ) )
+        self.stepNumberLineEdit.setValidator( QtGui.QIntValidator( 1, 999999, self ) )
+        self.stepNumberLineEdit.setText( "1000" )
 
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
         self.replicationsNumberLineEdit = QtGui.QLineEdit()
-        self.replicationsNumberLineEdit.setValidator( QtGui.QIntValidator( 0, 999999, self ) )
+        self.replicationsNumberLineEdit.setValidator( QtGui.QIntValidator( 1, 999999, self ) )
+        self.replicationsNumberLineEdit.setText( "1" )
 
         # Creates the clear button
         self.clearDrawingButton = QtGui.QPushButton( 'Clear Drawing Panel', self )
@@ -95,6 +97,7 @@ class MainWindow( QtGui.QWidget ):
         self.zoomButton = QtGui.QPushButton( 'Use zoom?', self )
         self.zoomButton.clicked.connect( self.handleZoomButton )
         self.zoomButton.setCheckable( True )
+        self.zoomButton.setChecked(True)
 
     def setWindowLayout( self ):
         # How to align the layouts QHBoxLayout and QVBoxLayout on pyqt4?
@@ -136,7 +139,9 @@ class MainWindow( QtGui.QWidget ):
 
         except:
             print( "Error" )
+            return
 
+        self.handleClearView()
         self.simulation.startSimulation()
 
     def handleFitInView( self ):
@@ -148,12 +153,12 @@ class MainWindow( QtGui.QWidget ):
     def handleZoomButton( self ):
 
         if self.drawingPanel.isScrollEnabled:
-            self.drawingPanel.isScrollEnabled = False
             self.zoomButton.setChecked(True)
+            self.drawingPanel.isScrollEnabled = False
 
         else:
-            self.drawingPanel.isScrollEnabled = True
             self.zoomButton.setChecked(False)
+            self.drawingPanel.isScrollEnabled = True
 
 
 

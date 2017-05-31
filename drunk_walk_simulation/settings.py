@@ -31,9 +31,9 @@ from debug_tools import log
 
 # Enable debug messages: (bitwise)
 #
-# 0   - Disabled debugging.
-# 1   - Basic logging messages.
-# 2   - ...
+# 0   - Disabled debugging
+# 1   - Basic logging messages
+# 2   - Simulator debugging
 #
 # 127 - All debugging levels at the same time.
 debug_tools.g_debug_level = 127

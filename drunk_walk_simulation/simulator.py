@@ -21,7 +21,10 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from settings import *
+import math
+import random
+
+from settings      import *
 from drawing_panel import DrawingPanel
 
 from PyQt4 import QtGui, QtCore, Qt
@@ -39,10 +42,42 @@ class Simulator():
 
             @throws error when some input data is invalid
         """
-        pass
+        self.maxAngle = 2 * math.pi
+        self.mainWindow = mainWindow
+        self.drawingPanel = drawingPanel
+
+        log( 2, "( Simulator::__init__ ) self.maxAngle: " + repr( self.maxAngle ) )
 
     def startSimulation( self ):
         """
             Begin the simulation process.
         """
-        pass
+        howManySteps = int( self.mainWindow.stepNumberLineEdit.text() )
+        howManyTimes = int( self.mainWindow.replicationsNumberLineEdit.text() )
+
+        x = 0.0
+        y = 0.0
+        pathLength = 0.0
+
+        for index in range( 0, howManySteps ):
+            randomAngle = self.getRandomAngle()
+            randomDegree = math.degrees( randomAngle )
+            # log( 2, "( Simulator::startSimulation ) randomAngle: %s (%f°)" % ( repr( randomAngle ), randomDegree ) )
+
+            x_old = x
+            y_old = y
+            x += math.cos( randomAngle )
+            y += math.sin( randomAngle )
+
+            self.drawingPanel.drawLines( x_old, y_old, x, y )
+            pathLength = self.getPointsDistance( 0, x, 0, y )
+
+            # log( 2, "( Simulator::startSimulation ) x: %f, y: %f, pathLength: %f" % ( x, y, pathLength ) )
+
+        log( 2, "( Simulator::startSimulation ) x: %f, y: %f, pathLength: %f" % ( x, y, pathLength ) )
+
+    def getRandomAngle( self ):
+        return random.uniform(0, self.maxAngle)
+
+    def getPointsDistance( self, x1, y1, x2, y2 ):
+        return math.hypot( x2 - x1, y2 - y1 )

@@ -38,6 +38,9 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.clearView()
         self.configurePanelSettings()
 
+        self.pencil = QtGui.QPen( QtCore.Qt.black, 1 )
+        self.pencil.setStyle( QtCore.Qt.SolidLine )
+
         # self.addExampleLine()
         # self.addExampleEllipse()
 
@@ -46,7 +49,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.drawAxes( 200 )
 
     def configurePanelSettings( self ):
-        self.isScrollEnabled = True
+        self.isScrollEnabled = False
 
         # http://pyqt.sourceforge.net/Docs/PyQt4/qgraphicsview.html#DragMode-enum
         # https://stackoverflow.com/questions/40684884/how-can-i-override-a-pyqt4-qgraphicsview-mousepressevent
@@ -59,11 +62,15 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
 
     def drawAxes(self, lenght ):
-        pencil = QtGui.QPen( QtCore.Qt.black, 1)
+        pencil = QtGui.QPen( QtCore.Qt.blue, 2)
         pencil.setStyle( QtCore.Qt.DotLine )
 
         self.scene.addLine( QtCore.QLineF( 0, -lenght, 0, lenght ), pencil )
         self.scene.addLine( QtCore.QLineF( -lenght, 0, lenght, 0 ), pencil )
+
+    def drawLines( self, x1, y1, x2, y2 ):
+        amplify = 50
+        self.scene.addLine( QtCore.QLineF( amplify * x1, amplify * y1, amplify * x2, amplify * y2 ), self.pencil )
 
     def addExampleLine( self ):
         """
