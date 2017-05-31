@@ -92,6 +92,9 @@ class MainWindow( QtGui.QWidget ):
         self.fitInViewButton = QtGui.QPushButton( 'Fit In View', self )
         self.fitInViewButton.clicked.connect( self.handleFitInView )
 
+        self.defaultZoomButton = QtGui.QPushButton( 'Restore Zoom', self )
+        self.defaultZoomButton.clicked.connect( self.handleDefaultZoom )
+
         # Programmatically Toggle a Python PyQt QPushbutton
         # https://stackoverflow.com/questions/19508450/programmatically-toggle-a-python-pyqt-qpushbutton
         self.zoomButton = QtGui.QPushButton( 'Use zoom?', self )
@@ -114,6 +117,7 @@ class MainWindow( QtGui.QWidget ):
         horizontalLayout.addWidget( self.clearDrawingButton )
         horizontalLayout.addWidget( self.zoomButton )
         horizontalLayout.addWidget( self.fitInViewButton )
+        horizontalLayout.addWidget( self.defaultZoomButton )
 
         # Creates a box to align vertically the panels
         # https://doc.qt.io/qt-4.8/qvboxlayout.html
@@ -127,10 +131,7 @@ class MainWindow( QtGui.QWidget ):
         self.setLayout( verticalLayout )
 
     def handleClearView( self ):
-        # How to restore a QGraphicsView zoom to 100%, i.e., the zoom when the program started?
-        # https://stackoverflow.com/questions/44270301/how-to-restore-a-qgraphicsview-zoom-to-100-i-e-the-zoom-when-the-program-sta
         self.drawingPanel.clearView()
-        self.drawingPanel.setTransform( QtGui.QTransform() )
 
     def handleSimulationStart( self ):
 
@@ -143,12 +144,18 @@ class MainWindow( QtGui.QWidget ):
 
         self.handleClearView()
         self.simulation.startSimulation()
+        self.handleFitInView()
 
     def handleFitInView( self ):
         # Auto scale a QGraphicsView
         # http://www.qtcentre.org/threads/42917-Auto-scale-a-QGraphicsView
-        self.drawingPanel.ensureVisible ( self.drawingPanel.scene.itemsBoundingRect() )
+        self.drawingPanel.ensureVisible( self.drawingPanel.scene.itemsBoundingRect() )
         self.drawingPanel.fitInView( self.drawingPanel.scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
+
+    def handleDefaultZoom( self ):
+        # How to restore a QGraphicsView zoom to 100%, i.e., the zoom when the program started?
+        # https://stackoverflow.com/questions/44270301/how-to-restore-a-qgraphicsview-zoom-to-100-i-e-the-zoom-when-the-program-sta
+        self.drawingPanel.setDefealtZoom()
 
     def handleZoomButton( self ):
 

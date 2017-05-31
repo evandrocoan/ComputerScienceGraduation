@@ -45,8 +45,18 @@ class DrawingPanel( QtGui.QGraphicsView ):
         # self.addExampleEllipse()
 
     def clearView( self ):
+        """
+            Remove all objects from the drawing panel and recreate its origin axis.
+        """
         self.scene.clear()
+        self.scene = QtGui.QGraphicsScene()
+        self.setScene( self.scene )
+
+        self.setDefealtZoom()
         self.drawAxes( 200 )
+
+    def setDefealtZoom( self ):
+        self.setTransform( QtGui.QTransform() )
 
     def configurePanelSettings( self ):
         self.isScrollEnabled = False
