@@ -31,6 +31,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
 
     def __init__( self, parent=None ):
         super( DrawingPanel, self ).__init__( parent )
+        self.isScrollEnabled = False
 
         self.scene = QtGui.QGraphicsScene()
         self.setScene( self.scene )
@@ -59,8 +60,6 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setTransform( QtGui.QTransform() )
 
     def configurePanelSettings( self ):
-        self.isScrollEnabled = False
-
         # http://pyqt.sourceforge.net/Docs/PyQt4/qgraphicsview.html#DragMode-enum
         # https://stackoverflow.com/questions/40684884/how-can-i-override-a-pyqt4-qgraphicsview-mousepressevent
         self.setDragMode( QtGui.QGraphicsView.ScrollHandDrag )

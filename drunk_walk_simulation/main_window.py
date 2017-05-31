@@ -49,8 +49,8 @@ class MainWindow( QtGui.QWidget ):
         # https://stackoverflow.com/questions/13368947/drawing-a-line-consisting-of-multiple-points-using-pyqt
         self.drawingPanel = DrawingPanel( self )
 
-        self.addButtons()
-        self.setWindowLayout()
+        # You must configure it after creating the drawing panel because we here we configure panel
+        # default options.
         self.configureMainWindow()
 
     def configureMainWindow( self ):
@@ -68,6 +68,9 @@ class MainWindow( QtGui.QWidget ):
         # https://stackoverflow.com/questions/12432637/pyqt4-set-windows-taskbar-icon
         # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
         self.setWindowIcon( mainApplicationIcon )
+
+        self.addButtons()
+        self.setWindowLayout()
 
     def addButtons( self ):
         self.startSimulationButton = QtGui.QPushButton( 'Start Simulation', self )
@@ -100,7 +103,7 @@ class MainWindow( QtGui.QWidget ):
         self.zoomButton = QtGui.QPushButton( 'Use zoom?', self )
         self.zoomButton.clicked.connect( self.handleZoomButton )
         self.zoomButton.setCheckable( True )
-        self.zoomButton.setChecked(True)
+        self.setZoomState( True )
 
     def setWindowLayout( self ):
         # How to align the layouts QHBoxLayout and QVBoxLayout on pyqt4?
@@ -160,12 +163,13 @@ class MainWindow( QtGui.QWidget ):
     def handleZoomButton( self ):
 
         if self.drawingPanel.isScrollEnabled:
-            self.zoomButton.setChecked(True)
-            self.drawingPanel.isScrollEnabled = False
+            self.setZoomState( True )
 
         else:
-            self.zoomButton.setChecked(False)
-            self.drawingPanel.isScrollEnabled = True
+            self.setZoomState( False )
 
+    def setZoomState( self, is_enabled ):
+        self.zoomButton.setChecked( is_enabled )
+        self.drawingPanel.isScrollEnabled = not is_enabled
 
 
