@@ -12,7 +12,7 @@ https://stackoverflow.com/questions/9141732/how-does-numpy-histogram-work
 import numpy as np
 import random
 import math
-from matplotlib import c
+from matplotlib import pyplot
 
 data = np.random.normal(0, 20, 1000)
 
