@@ -21,6 +21,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import math
 from settings import *
 
 from PyQt4 import QtGui, QtCore
@@ -44,6 +45,8 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.configurePanelSettings()
 
         self.drawAxes( 200 )
+        self.brush = QtGui.QBrush( QtGui.QColor( 125, 125, 125, 125 ) )
+
         self.pencil = QtGui.QPen( QtCore.Qt.black, 1 )
         self.pencil.setStyle( QtCore.Qt.SolidLine )
 
@@ -214,6 +217,24 @@ class DrawingPanel( QtGui.QGraphicsView ):
             labelItem.setPos( labelShiftY, -labelPosition )
 
     def drawLine( self, x1, y1, x2, y2 ):
+        """
+            Drawing an arrow
+            https://math.stackexchange.com/questions/1314006/drawing-an-arrow
+        """
+        angle = math.pi / 6
+        arraw_size = 0.2
+
+        x3 = x2 + arraw_size * ( (x1 - x2)*math.cos(angle) + (y1 - y2)*math.sin(angle) )
+        y3 = y2 + arraw_size * ( (y1 - y2)*math.cos(angle) - (x1 - x2)*math.sin(angle) )
+
+        x4 = x2 + arraw_size * ( (x1 - x2)*math.cos(angle) - (y1 - y2)*math.sin(angle) )
+        y4 = y2 + arraw_size * ( (y1 - y2)*math.cos(angle) + (x1 - x2)*math.sin(angle) )
+
+        self.scene.addPolygon( QtGui.QPolygonF( [ \
+                QtCore.QPointF( self.paintAmplifation * x3 , self.paintAmplifation * y3 ), \
+                QtCore.QPointF( self.paintAmplifation * x2, self.paintAmplifation * y2 ), \
+                QtCore.QPointF( self.paintAmplifation * x4, self.paintAmplifation * y4 ) ] ), self.pencil, self.brush )
+
         self.scene.addLine( QtCore.QLineF( \
                 self.paintAmplifation * x1, self.paintAmplifation * y1, \
                 self.paintAmplifation * x2, self.paintAmplifation * y2 ), self.pencil )
