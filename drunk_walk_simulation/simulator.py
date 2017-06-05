@@ -22,6 +22,7 @@
 #
 
 import math
+import pylab
 import numpy
 import random
 
@@ -86,8 +87,37 @@ class Simulator():
         if howManyTimes > 1:
             self.plotHistogram( howManyTimes )
 
+        else:
+            self.plotWalkedPath( howManySteps )
+
         self.drawingPanel.fitAxes()
         self.mainWindow.handleFitInView()
+
+    def plotWalkedPath( self, howManySteps ):
+        """
+            Plotting more than one plot on the same set of axes
+            http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
+
+            Matplotlib: linewidth is added to the length of a line
+            https://stackoverflow.com/questions/10297220/matplotlib-linewidth-is-added-to-the-length-of-a-line
+        """
+
+        # Make x, y arrays for each graph
+        x1 = range( 0, howManySteps )
+        y1 = self.firstIterationSteps
+
+        # use pylab to plot x and y
+        pylab.plot(x1, y1, 'g', linewidth=0.5)
+
+        # give plot a title
+        pylab.title('Plot of y vs. x')
+
+        # make axis labels
+        pylab.xlabel('x axis')
+        pylab.ylabel('y axis')
+
+        # show the plot on the screen
+        pylab.show()
 
     def plotHistogram( self, howManyTimes ):
         """
@@ -146,6 +176,7 @@ class Simulator():
                 def addLine():
                     computeLineWithHistogram()
                     self.drawingPanel.drawLine( x_old, y_old, x, y )
+
                     return progressBar.incrementBarParcial()
 
             else:

@@ -220,6 +220,12 @@ class DrawingPanel( QtGui.QGraphicsView ):
         """
             Drawing an arrow
             https://math.stackexchange.com/questions/1314006/drawing-an-arrow
+
+            Degree/Radian Circle
+            http://math.rice.edu/~pcmi/sphere/drg_txt.html
+
+            Python Numbers
+            https://www.tutorialspoint.com/python/python_numbers.htm
         """
         angle = math.pi / 6
         arraw_size = 0.2
