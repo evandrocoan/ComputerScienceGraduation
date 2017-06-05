@@ -82,7 +82,7 @@ class MainWindow( QtGui.QWidget ):
         validator = QtGui.QIntValidator( self )
         validator.setBottom( 1 )
         self.stepNumberLineEdit.setValidator( validator )
-        self.stepNumberLineEdit.setText( "999" )
+        self.stepNumberLineEdit.setText( "99" )
 
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
         self.replicationsNumberLineEdit = QtGui.QLineEdit()

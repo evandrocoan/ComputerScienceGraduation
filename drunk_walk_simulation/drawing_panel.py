@@ -96,10 +96,10 @@ class DrawingPanel( QtGui.QGraphicsView ):
         xUp   = int( upPoint.x() )
         xDown = int( downPoint.x() )
 
-        yUp   = self.increaseAxe( yUp   )
-        yDown = self.increaseAxe( yDown )
-        xUp   = self.increaseAxe( xUp   )
-        xDown = self.increaseAxe( xDown )
+        yUp   = self.increaseAxe( yUp  , yDown )
+        yDown = self.increaseAxe( yDown, yUp   )
+        xUp   = self.increaseAxe( xUp  , xDown )
+        xDown = self.increaseAxe( xDown, xUp   )
 
         log( 4, "( DrawingPanel::fitAxes ) yUp :      %s" % ( str( yUp ) ) )
         log( 4, "( DrawingPanel::fitAxes ) yDown:     %s" % ( str( yDown ) ) )
@@ -108,14 +108,72 @@ class DrawingPanel( QtGui.QGraphicsView ):
 
         self.currentAxisY = self.scene.addLine( QtCore.QLineF( 0, yUp, 0, yDown ), pencil )
         self.currentAxisX = self.scene.addLine( QtCore.QLineF( xUp, 0, xDown, 0 ), pencil )
+        self.fitAxisLables( yUp, yDown, xUp, xDown )
 
-    def increaseAxe( self, point ):
+    def increaseAxe( self, increasePoint, oppositePoint ):
         extraScreen = 200
 
-        if( point < 0 ):
-            return point - extraScreen
+        if increasePoint < 0:
 
-        return point + extraScreen
+            if oppositePoint >= 0:
+                return increasePoint - extraScreen
+
+            else:
+                return increasePoint + extraScreen
+
+        if oppositePoint < 0:
+            return increasePoint + extraScreen
+
+        return increasePoint - extraScreen
+
+    def scaleAxeLabel( self, point ):
+        return abs( int( point / self.paintAmplifation / 2 ) )
+
+    def fitAxisLables( self, yUp, yDown, xUp, xDown ):
+        labelSize   = 2
+        labelShiftX = 0
+        labelShiftY = - self.paintAmplifation * .35
+
+        log( 4, "( DrawingPanel::addAxisLables ) labelSize:   %f" % ( labelSize ) )
+        log( 4, "( DrawingPanel::addAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
+
+        yUp   = self.scaleAxeLabel( yUp   )
+        yDown = self.scaleAxeLabel( yDown )
+        xUp   = self.scaleAxeLabel( xUp   )
+        xDown = self.scaleAxeLabel( xDown )
+
+        log( 4, "( DrawingPanel::fitAxisLables ) yUp :  %s" % ( str( yUp ) ) )
+        log( 4, "( DrawingPanel::fitAxisLables ) yDown: %s" % ( str( yDown ) ) )
+        log( 4, "( DrawingPanel::fitAxisLables ) xUp:   %s" % ( str( xUp ) ) )
+        log( 4, "( DrawingPanel::fitAxisLables ) xDown: %s" % ( str( xDown ) ) )
+
+        for label_index in range( 1, xDown + 1 ):
+            labelValue    = label_index * labelSize
+            labelPosition = labelValue * self.paintAmplifation
+
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelPosition - self.paintAmplifation * .4, labelShiftX )
+
+        for label_index in range( 1, xUp ):
+            labelValue    = - label_index * labelSize
+            labelPosition = labelValue * self.paintAmplifation
+
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelPosition, labelShiftX )
+
+        for label_index in range( 1, yUp ):
+            labelValue    = - label_index * labelSize
+            labelPosition = labelValue * self.paintAmplifation
+
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelShiftY, labelPosition + self.paintAmplifation * .05 )
+
+        for label_index in range( 1, yDown + 1 ):
+            labelValue    = - label_index * labelSize
+            labelPosition = labelValue * self.paintAmplifation
+
+            labelItem = self.scene.addText( str( labelValue ) )
+            labelItem.setPos( labelShiftY, -labelPosition - self.paintAmplifation * .4 )
 
     def drawAxes(self, length ):
         self.addAxisLines( length )
@@ -138,7 +196,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
         log( 4, "( DrawingPanel::addAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
 
         for label_index in range( 1, labelsCount ):
-            labelValue = label_index * labelSize
+            labelValue    = label_index * labelSize
             labelPosition = labelValue * self.paintAmplifation
 
             # X axis

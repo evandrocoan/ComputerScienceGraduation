@@ -86,8 +86,8 @@ class Simulator():
         if howManyTimes > 1:
             self.plotHistogram( howManyTimes )
 
-        self.mainWindow.handleFitInView()
         self.drawingPanel.fitAxes()
+        self.mainWindow.handleFitInView()
 
     def plotHistogram( self, howManyTimes ):
         """
