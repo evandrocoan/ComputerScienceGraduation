@@ -46,6 +46,20 @@ MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS = 99999
 
 
 
+def increaseAxe( increasePoint, oppositePoint, extraScreen=200 ):
+
+    if increasePoint < 0:
+
+        if oppositePoint >= 0:
+            return increasePoint - extraScreen
+
+        else:
+            return increasePoint + extraScreen
+
+    if oppositePoint < 0:
+        return increasePoint + extraScreen
+
+    return increasePoint - extraScreen
 
 
 

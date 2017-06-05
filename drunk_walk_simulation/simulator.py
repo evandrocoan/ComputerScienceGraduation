@@ -85,7 +85,7 @@ class Simulator():
 
         itemsBounding = self.drawingPanel.fitAxes()
 
-        self.showResults()
+        self.showResults( itemsBounding, howManySteps )
         self.mainWindow.fitSceneInView( itemsBounding )
 
         if howManyTimes > 1:
@@ -94,15 +94,22 @@ class Simulator():
         else:
             self.plotWalkedPath( howManySteps )
 
-    def showResults( self ):
+    def showResults( self, itemsBounding, howManySteps ):
         """
             addText() change the text color inside a QGraphicsView
             https://stackoverflow.com/questions/27612052/addtext-change-the-text-color-inside-a-qgraphicsview
         """
         results = QtGui.QGraphicsTextItem()
-        results.setPos(150,70)
+        topLeft = itemsBounding.topLeft()
+        bottomRight = itemsBounding.bottomRight()
 
-        results.setPlainText( "Barev" )
+        x = increaseAxe( topLeft.x(), bottomRight.x(), 160 )
+        y = increaseAxe( topLeft.y(), bottomRight.y(), 80 )
+
+        results.setPos( x, y )
+        results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada: %f" %
+                ( self.firstIterationSteps[-1], abs( self.firstIterationSteps[-1] - math.sqrt( howManySteps ) ) ) )
+
         self.drawingPanel.scene.addItem( results )
 
     def plotWalkedPath( self, howManySteps ):

@@ -99,10 +99,10 @@ class DrawingPanel( QtGui.QGraphicsView ):
         xUp   = int( upPoint.x() )
         xDown = int( downPoint.x() )
 
-        yUp   = self.increaseAxe( yUp  , yDown )
-        yDown = self.increaseAxe( yDown, yUp   )
-        xUp   = self.increaseAxe( xUp  , xDown )
-        xDown = self.increaseAxe( xDown, xUp   )
+        yUp   = increaseAxe( yUp  , yDown )
+        yDown = increaseAxe( yDown, yUp   )
+        xUp   = increaseAxe( xUp  , xDown )
+        xDown = increaseAxe( xDown, xUp   )
 
         log( 4, "( DrawingPanel::fitAxes ) yUp :      %s" % ( str( yUp ) ) )
         log( 4, "( DrawingPanel::fitAxes ) yDown:     %s" % ( str( yDown ) ) )
@@ -114,22 +114,6 @@ class DrawingPanel( QtGui.QGraphicsView ):
 
         self.fitAxisLables( yUp, yDown, xUp, xDown )
         return itemsBounding
-
-    def increaseAxe( self, increasePoint, oppositePoint ):
-        extraScreen = 200
-
-        if increasePoint < 0:
-
-            if oppositePoint >= 0:
-                return increasePoint - extraScreen
-
-            else:
-                return increasePoint + extraScreen
-
-        if oppositePoint < 0:
-            return increasePoint + extraScreen
-
-        return increasePoint - extraScreen
 
     def scaleAxeLabel( self, point ):
         return abs( int( point / self.paintAmplifation / 2 ) )
