@@ -1,18 +1,24 @@
+"""
+
+Histogram Matplotlib
+https://stackoverflow.com/questions/5328556/histogram-matplotlib
+
+"""
 
 
-import random
+
 import matplotlib.pyplot as plt
+import numpy as np
 
+mu, sigma = 100, 15
+x = mu + sigma * np.random.randn(10000)
 
-x = random.sample(range(1000), 30)
-xbins = [0, len(x)]
+hist, bins = np.histogram(x, bins=50)
 
-print( "x: " + str( x ) )
-print( "xbins: " + str( xbins ) )
+width = 0.7 * (bins[1] - bins[0])
+center = (bins[:-1] + bins[1:]) / 2
 
-plt.bar(range(0,30), x)
+plt.bar(center, hist, align='center', width=width)
 plt.show()
-
-
 
 

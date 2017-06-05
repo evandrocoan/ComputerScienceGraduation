@@ -43,6 +43,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.clearView()
         self.configurePanelSettings()
 
+        self.drawAxes( 200 )
         self.pencil = QtGui.QPen( QtCore.Qt.black, 1 )
         self.pencil.setStyle( QtCore.Qt.SolidLine )
 
@@ -55,10 +56,9 @@ class DrawingPanel( QtGui.QGraphicsView ):
         """
         self.scene.clear()
         self.scene = QtGui.QGraphicsScene()
-        self.setScene( self.scene )
 
+        self.setScene( self.scene )
         self.setDefealtZoom()
-        self.drawAxes( 200 )
 
     def setDefealtZoom( self ):
         self.setTransform( QtGui.QTransform() )
@@ -73,6 +73,49 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setRenderHint( QtGui.QPainter.TextAntialiasing );
         self.setRenderHint( QtGui.QPainter.SmoothPixmapTransform );
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
+
+    def fitAxes( self ):
+        itemsBounding = self.scene.itemsBoundingRect()
+        width  = itemsBounding.width()
+        height = itemsBounding.height()
+
+        upPoint   = itemsBounding.topLeft()
+        downPoint = itemsBounding.bottomRight()
+
+        log( 4, "( DrawingPanel::fitAxes ) width :        %s" % ( str( width ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) height:        %s" % ( str( height ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) upPoint:       %s" % ( str( upPoint ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) downPoint:     %s" % ( str( downPoint ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) itemsBounding: %s" % ( str( itemsBounding ) ) )
+
+        pencil = QtGui.QPen( QtCore.Qt.blue, 2)
+        pencil.setStyle( QtCore.Qt.DotLine )
+
+        yUp   = int( upPoint.y() )
+        yDown = int( downPoint.y() )
+        xUp   = int( upPoint.x() )
+        xDown = int( downPoint.x() )
+
+        yUp   = self.increaseAxe( yUp   )
+        yDown = self.increaseAxe( yDown )
+        xUp   = self.increaseAxe( xUp   )
+        xDown = self.increaseAxe( xDown )
+
+        log( 4, "( DrawingPanel::fitAxes ) yUp :      %s" % ( str( yUp ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) yDown:     %s" % ( str( yDown ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) xUp:       %s" % ( str( xUp ) ) )
+        log( 4, "( DrawingPanel::fitAxes ) xDown:     %s" % ( str( xDown ) ) )
+
+        self.currentAxisY = self.scene.addLine( QtCore.QLineF( 0, yUp, 0, yDown ), pencil )
+        self.currentAxisX = self.scene.addLine( QtCore.QLineF( xUp, 0, xDown, 0 ), pencil )
+
+    def increaseAxe( self, point ):
+        extraScreen = 200
+
+        if( point < 0 ):
+            return point - extraScreen
+
+        return point + extraScreen
 
     def drawAxes(self, length ):
         self.addAxisLines( length )
@@ -89,7 +132,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
         labelSize   = 2
         labelShiftX = 0
         labelShiftY = - self.paintAmplifation * .35
-        labelsCount = length / self.paintAmplifation / labelSize + 1
+        labelsCount = int( length / self.paintAmplifation / labelSize + 1 )
 
         log( 4, "( DrawingPanel::addAxisLables ) labelSize:   %f, labelsCount: %f" % ( labelSize  , labelsCount ) )
         log( 4, "( DrawingPanel::addAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
@@ -112,7 +155,7 @@ class DrawingPanel( QtGui.QGraphicsView ):
             labelItem = self.scene.addText( str( labelValue ) )
             labelItem.setPos( labelShiftY, -labelPosition )
 
-    def drawLines( self, x1, y1, x2, y2 ):
+    def drawLine( self, x1, y1, x2, y2 ):
         self.scene.addLine( QtCore.QLineF( \
                 self.paintAmplifation * x1, self.paintAmplifation * y1, \
                 self.paintAmplifation * x2, self.paintAmplifation * y2 ), self.pencil )

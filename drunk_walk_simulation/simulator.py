@@ -22,9 +22,12 @@
 #
 
 import math
+import numpy
 import random
 
 from settings      import *
+from matplotlib    import pyplot
+from progress_bar  import ProgressBar
 from drawing_panel import DrawingPanel
 
 from PyQt4 import QtGui, QtCore, Qt
@@ -43,6 +46,9 @@ class Simulator():
             @throws error when some input data is invalid
         """
         self.maxAngle = 2 * math.pi
+        self.allIterationsResult = []
+        self.firstIterationSteps = []
+
         self.mainWindow = mainWindow
         self.drawingPanel = drawingPanel
 
@@ -55,29 +61,123 @@ class Simulator():
         howManySteps = int( self.mainWindow.stepNumberLineEdit.text() )
         howManyTimes = int( self.mainWindow.replicationsNumberLineEdit.text() )
 
+        progressBar = ProgressBar( None, howManyTimes, howManySteps )
+        progressBar.show()
+
+        # Set it 100% it will not be updated for performance increase
+        if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+            progressBar.progressBarPartial.setValue( howManySteps )
+
+        if howManyTimes < 2:
+            self.mainWindow.handleClearView( True )
+
+        # Why is local variable access faster than class member access in Python?
+        # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python
+        #
+        # My Python for loop is causing a MemoryError. How can I optimize this?
+        # https://stackoverflow.com/questions/4405083/my-python-for-loop-is-causing-a-memoryerror-how-can-i-optimize-this
+        for iterationCount in xrange( 0, howManyTimes ):
+
+            # Stops the process when the cancel button is hit
+            if self.runOneIteration( iterationCount, howManySteps, howManyTimes, progressBar ) \
+                    or progressBar.incrementBarOverall():
+                break
+
+        if howManyTimes > 1:
+            self.plotHistogram( howManyTimes )
+
+        self.mainWindow.handleFitInView()
+        self.drawingPanel.fitAxes()
+
+    def plotHistogram( self, howManyTimes ):
+        """
+            https://matplotlib.org/api/pyplot_api.html
+
+            How does numpy.histogram() work?
+            https://stackoverflow.com/questions/9141732/how-does-numpy-histogram-work
+
+            Python histogram outline
+            https://stackoverflow.com/questions/42741687/python-histogram-outline
+        """
+        histogramClasses = int( math.ceil( math.sqrt( howManyTimes ) ) )
+
+        # Set the maximum classes limit to 30
+        if histogramClasses > 30:
+            histogramClasses = 30
+
+        # log( 2, "( Simulator::plotHistogram ) histogramClasses:         " + str( histogramClasses ) )
+        # log( 2, "( Simulator::plotHistogram ) self.allIterationsResult: " + str( self.allIterationsResult ) )
+
+        # hist, bin_edges = numpy.histogram( self.allIterationsResult, bins=histogramClasses )
+        # log( 2, "( Simulator::plotHistogram ) hist:      " + str( hist ) )
+        # log( 2, "( Simulator::plotHistogram ) bin_edges: " + str( bin_edges ) )
+        # pyplot.bar( bin_edges[:-1], hist )
+
+        pyplot.hist( self.allIterationsResult, bins=histogramClasses, edgecolor='black', linewidth=1.2 )
+        pyplot.show()
+
+    def runOneIteration( self, iterationCount, howManySteps, howManyTimes, progressBar ):
         x = 0.0
         y = 0.0
         pathLength = 0.0
 
-        for index in range( 0, howManySteps ):
+        progress_bar_trigger = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000
+
+        def computeLineWithHistogram():
+            pathLength = self.getPointsDistance( 0, x, 0, y )
+            self.firstIterationSteps.append( pathLength )
+
+        if iterationCount > 0 or howManyTimes > 1:
+
+            if howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+
+                def addLine():
+                    return progressBar.incrementBarParcial()
+
+            else:
+
+                def addLine():
+                    pass
+
+        else:
+
+            if howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+
+                def addLine():
+                    computeLineWithHistogram()
+                    self.drawingPanel.drawLine( x_old, y_old, x, y )
+                    return progressBar.incrementBarParcial()
+
+            else:
+
+                def addLine():
+                    computeLineWithHistogram()
+                    self.drawingPanel.drawLine( x_old, y_old, x, y )
+
+        for index in xrange( 0, howManySteps ):
             randomAngle = self.getRandomAngle()
             randomDegree = math.degrees( randomAngle )
-            # log( 2, "( Simulator::startSimulation ) randomAngle: %s (%f°)" % ( repr( randomAngle ), randomDegree ) )
+            # log( 2, "( Simulator::runOneIteration ) randomAngle: %20s (%14f°)" % ( repr( randomAngle ), randomDegree ) )
 
             x_old = x
             y_old = y
             x += math.cos( randomAngle )
             y += math.sin( randomAngle )
 
-            self.drawingPanel.drawLines( x_old, y_old, x, y )
-            pathLength = self.getPointsDistance( 0, x, 0, y )
+            if addLine():
+                return True
 
-            # log( 2, "( Simulator::startSimulation ) x: %f, y: %f, pathLength: %f" % ( x, y, pathLength ) )
+        pathLength = self.getPointsDistance( 0, x, 0, y )
+        self.allIterationsResult.append( pathLength )
 
-        log( 2, "( Simulator::startSimulation ) x: %f, y: %f, pathLength: %f" % ( x, y, pathLength ) )
+        # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f, pathLength: %14f" % ( x, y, pathLength ) )
+        return False
 
     def getRandomAngle( self ):
         return random.uniform(0, self.maxAngle)
 
     def getPointsDistance( self, x1, y1, x2, y2 ):
         return math.hypot( x2 - x1, y2 - y1 )
+
+
+

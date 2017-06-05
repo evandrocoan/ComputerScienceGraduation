@@ -41,25 +41,10 @@ debug_tools.g_debug_level = 127
 log( 1, "Importing " + __name__ )
 
 
-# How many stickies each player has when the game begins.
-INITIAL_HAND_STICKIES = 3
+#
+MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS = 99999
 
 
-# How many AI players are going to join when the game begins.
-INITIAL_AI_PLAYERS = 5
-
-
-# Bet tree location
-BET_TREE_LOCATION = "D:/User/Downloads/tree.txt"
-
-
-class TYPES():
-    AI     = 0
-    RANDOM = 1
-
-
-# Whether to use the AI or range valid random numbers to play the game.
-GAME_FLOW_TYPE = TYPES.RANDOM
 
 
 

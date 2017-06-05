@@ -78,15 +78,18 @@ class MainWindow( QtGui.QWidget ):
 
         self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
         self.stepNumberLineEdit = QtGui.QLineEdit()
-        self.stepNumberLineEdit.setValidator( QtGui.QIntValidator( 1, 999999, self ) )
-        self.stepNumberLineEdit.setText( "1000" )
+
+        validator = QtGui.QIntValidator( self )
+        validator.setBottom( 1 )
+        self.stepNumberLineEdit.setValidator( validator )
+        self.stepNumberLineEdit.setText( "999" )
 
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
         self.replicationsNumberLineEdit = QtGui.QLineEdit()
-        self.replicationsNumberLineEdit.setValidator( QtGui.QIntValidator( 1, 999999, self ) )
+        self.replicationsNumberLineEdit.setValidator( validator )
         self.replicationsNumberLineEdit.setText( "1" )
 
-        # Creates the clear button
+        # Creates the clear button, 999999999
         self.clearDrawingButton = QtGui.QPushButton( 'Clear Drawing Panel', self )
         self.clearDrawingButton.clicked.connect( self.handleClearView )
 
@@ -133,8 +136,11 @@ class MainWindow( QtGui.QWidget ):
 
         self.setLayout( verticalLayout )
 
-    def handleClearView( self ):
+    def handleClearView( self, fullClean=False ):
         self.drawingPanel.clearView()
+
+        if not fullClean:
+            self.drawingPanel.drawAxes( 200 )
 
     def handleSimulationStart( self ):
 
@@ -145,9 +151,7 @@ class MainWindow( QtGui.QWidget ):
             print( "Error" )
             return
 
-        self.handleClearView()
         self.simulation.startSimulation()
-        self.handleFitInView()
 
     def handleFitInView( self ):
         # Auto scale a QGraphicsView
