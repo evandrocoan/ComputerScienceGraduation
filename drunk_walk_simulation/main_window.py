@@ -73,21 +73,27 @@ class MainWindow( QtGui.QWidget ):
         self.setWindowLayout()
 
     def addButtons( self ):
+        """
+            Detecting enter on a QLineEdit or QPushButton
+            https://stackoverflow.com/questions/15561608/detecting-enter-on-a-qlineedit-or-qpushbutton
+        """
         self.startSimulationButton = QtGui.QPushButton( 'Start Simulation', self )
         self.startSimulationButton.clicked.connect( self.handleSimulationStart )
 
-        self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
-        self.stepNumberLineEdit = QtGui.QLineEdit()
-
         validator = QtGui.QIntValidator( self )
         validator.setBottom( 1 )
+
+        self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
+        self.stepNumberLineEdit = QtGui.QLineEdit()
         self.stepNumberLineEdit.setValidator( validator )
         self.stepNumberLineEdit.setText( "99" )
+        self.stepNumberLineEdit.returnPressed.connect( self.handleSimulationStart )
 
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
         self.replicationsNumberLineEdit = QtGui.QLineEdit()
         self.replicationsNumberLineEdit.setValidator( validator )
         self.replicationsNumberLineEdit.setText( "1" )
+        self.replicationsNumberLineEdit.returnPressed.connect( self.handleSimulationStart )
 
         # Creates the clear button, 999999999
         self.clearDrawingButton = QtGui.QPushButton( 'Clear Drawing Panel', self )

@@ -106,7 +106,7 @@ class Simulator():
         y = increaseAxe( topLeft.y(), bottomRight.y(), 80 )
 
         results.setPos( x, y )
-        results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada: %f" %
+        results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada e de: %f" %
                 ( self.firstIterationSteps[-1], abs( self.firstIterationSteps[-1] - math.sqrt( howManySteps ) ) ) )
 
         self.drawingPanel.scene.addItem( results )
