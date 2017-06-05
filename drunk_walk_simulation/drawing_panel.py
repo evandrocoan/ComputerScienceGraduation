@@ -249,19 +249,19 @@ class DrawingPanel( QtGui.QGraphicsView ):
 
         polygonItem.setTransform( transform )
 
-    def addExampleEllipse(self):
+    def addExampleEllipse(self, x=0, y=0):
         """
             Python PyQt: How can I move my widgets on the window with mouse?
             https://stackoverflow.com/questions/12213391/python-pyqt-how-can-i-move-my-widgets-on-the-window-with-mouse
         """
-        x = 0
-        y = 0
-        w = 45
-        h = 45
+        radious = 12
+        w = radious
+        h = radious
+
         pen   = QtGui.QPen( QtGui.QColor( QtCore.Qt.green ) )
         brush = QtGui.QBrush( pen.color().darker( 150 ) )
 
-        item = self.scene.addEllipse( x, y, w, h, pen, brush )
+        item = self.scene.addEllipse( self.paintAmplifation * x, self.paintAmplifation * y, w, h, pen, brush )
         item.setFlag( QtGui.QGraphicsItem.ItemIsMovable )
 
     def wheelEvent( self, event ):

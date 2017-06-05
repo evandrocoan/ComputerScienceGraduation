@@ -69,7 +69,7 @@ class Simulator():
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
             progressBar.progressBarPartial.setValue( howManySteps )
 
-        self.mainWindow.handleClearView( True )
+        self.mainWindow.handleClearView()
 
         # Why is local variable access faster than class member access in Python?
         # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python
@@ -83,15 +83,14 @@ class Simulator():
                     or progressBar.incrementBarOverall():
                 break
 
-        itemsBounding = self.drawingPanel.fitAxes()
-
-        self.showResults( itemsBounding, howManySteps )
-        self.mainWindow.fitSceneInView( itemsBounding )
-
         if howManyTimes > 1:
             self.plotHistogram( howManyTimes )
 
         else:
+            itemsBounding = self.drawingPanel.fitAxes()
+            self.mainWindow.fitSceneInView( itemsBounding )
+
+            self.showResults( itemsBounding, howManySteps )
             self.plotWalkedPath( howManySteps )
 
     def showResults( self, itemsBounding, howManySteps ):
@@ -168,17 +167,34 @@ class Simulator():
     def runOneIteration( self, iterationCount, howManySteps, howManyTimes, progressBar ):
         x = 0.0
         y = 0.0
-        pathLength = 0.0
 
-        progress_bar_trigger = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000
+        pathLength = 0.0
+        isToDrawLines = not ( iterationCount > 0 or howManyTimes > 1 )
+        isToUpdateProgressBar = howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
         def computeLineWithHistogram():
             pathLength = self.getPointsDistance( 0, x, 0, y )
             self.firstIterationSteps.append( pathLength )
 
-        if iterationCount > 0 or howManyTimes > 1:
+        if isToDrawLines:
 
-            if howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+            if isToUpdateProgressBar:
+
+                def addLine():
+                    computeLineWithHistogram()
+                    self.drawingPanel.drawLine( x_old, y_old, x, y )
+
+                    return progressBar.incrementBarParcial()
+
+            else:
+
+                def addLine():
+                    computeLineWithHistogram()
+                    self.drawingPanel.drawLine( x_old, y_old, x, y )
+
+        else:
+
+            if isToUpdateProgressBar:
 
                 def addLine():
                     return progressBar.incrementBarParcial()
@@ -187,22 +203,6 @@ class Simulator():
 
                 def addLine():
                     pass
-
-        else:
-
-            if howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
-
-                def addLine():
-                    computeLineWithHistogram()
-                    self.drawingPanel.drawLine( x_old, y_old, x, y )
-
-                    return progressBar.incrementBarParcial()
-
-            else:
-
-                def addLine():
-                    computeLineWithHistogram()
-                    self.drawingPanel.drawLine( x_old, y_old, x, y )
 
         for index in xrange( 0, howManySteps ):
             randomAngle = self.getRandomAngle()
@@ -216,6 +216,9 @@ class Simulator():
 
             if addLine():
                 return True
+
+        if isToDrawLines:
+            self.drawingPanel.addExampleEllipse( x, y )
 
         pathLength = self.getPointsDistance( 0, x, 0, y )
         self.allIterationsResult.append( pathLength )
