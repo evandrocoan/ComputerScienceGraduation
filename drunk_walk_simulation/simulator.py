@@ -69,8 +69,7 @@ class Simulator():
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
             progressBar.progressBarPartial.setValue( howManySteps )
 
-        if howManyTimes < 2:
-            self.mainWindow.handleClearView( True )
+        self.mainWindow.handleClearView( True )
 
         # Why is local variable access faster than class member access in Python?
         # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python

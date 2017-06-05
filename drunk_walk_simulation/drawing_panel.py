@@ -180,7 +180,8 @@ class DrawingPanel( QtGui.QGraphicsView ):
             labelItem = self.scene.addText( str( labelValue ) )
             labelItem.setPos( labelShiftY, -labelPosition - self.paintAmplifation * .4 )
 
-    def drawAxes(self, length ):
+    def drawAxes( self, length ):
+        self.scene.clear()
         self.addAxisLines( length )
         self.addAxisLables( length )
 
