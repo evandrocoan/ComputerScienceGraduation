@@ -25,6 +25,7 @@ import math
 import pylab
 import numpy
 import random
+import matplotlib
 
 from settings      import *
 from matplotlib    import pyplot
@@ -59,6 +60,11 @@ class Simulator():
         """
             Begin the simulation process.
         """
+        matplotlib.pyplot.close("all")
+        self.startSimulation_()
+
+    def startSimulation_( self ):
+
         howManySteps = int( self.mainWindow.stepNumberLineEdit.text() )
         howManyTimes = int( self.mainWindow.replicationsNumberLineEdit.text() )
 
@@ -69,7 +75,11 @@ class Simulator():
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
             progressBar.progressBarPartial.setValue( howManySteps )
 
-        self.mainWindow.handleClearView()
+        if howManyTimes > 1:
+            self.mainWindow.handleClearView()
+
+        else:
+            self.mainWindow.handleClearView( True )
 
         # Why is local variable access faster than class member access in Python?
         # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python
