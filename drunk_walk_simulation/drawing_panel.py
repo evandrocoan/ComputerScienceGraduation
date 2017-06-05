@@ -111,7 +111,9 @@ class DrawingPanel( QtGui.QGraphicsView ):
 
         self.currentAxisY = self.scene.addLine( QtCore.QLineF( 0, yUp, 0, yDown ), pencil )
         self.currentAxisX = self.scene.addLine( QtCore.QLineF( xUp, 0, xDown, 0 ), pencil )
+
         self.fitAxisLables( yUp, yDown, xUp, xDown )
+        return itemsBounding
 
     def increaseAxe( self, increasePoint, oppositePoint ):
         extraScreen = 200

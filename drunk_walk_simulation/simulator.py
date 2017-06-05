@@ -84,14 +84,27 @@ class Simulator():
                     or progressBar.incrementBarOverall():
                 break
 
+        itemsBounding = self.drawingPanel.fitAxes()
+
+        self.showResults()
+        self.mainWindow.fitSceneInView( itemsBounding )
+
         if howManyTimes > 1:
             self.plotHistogram( howManyTimes )
 
         else:
             self.plotWalkedPath( howManySteps )
 
-        self.drawingPanel.fitAxes()
-        self.mainWindow.handleFitInView()
+    def showResults( self ):
+        """
+            addText() change the text color inside a QGraphicsView
+            https://stackoverflow.com/questions/27612052/addtext-change-the-text-color-inside-a-qgraphicsview
+        """
+        results = QtGui.QGraphicsTextItem()
+        results.setPos(150,70)
+
+        results.setPlainText( "Barev" )
+        self.drawingPanel.scene.addItem( results )
 
     def plotWalkedPath( self, howManySteps ):
         """

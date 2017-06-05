@@ -154,9 +154,12 @@ class MainWindow( QtGui.QWidget ):
         self.simulation.startSimulation()
 
     def handleFitInView( self ):
+        self.fitSceneInView( self.drawingPanel.scene.itemsBoundingRect() )
+
+    def fitSceneInView( self, itemsBounding ):
         # Auto scale a QGraphicsView
         # http://www.qtcentre.org/threads/42917-Auto-scale-a-QGraphicsView
-        self.drawingPanel.ensureVisible( self.drawingPanel.scene.itemsBoundingRect() )
+        self.drawingPanel.ensureVisible( itemsBounding )
         self.drawingPanel.fitInView( self.drawingPanel.scene.itemsBoundingRect(), QtCore.Qt.KeepAspectRatio )
 
     def handleDefaultZoom( self ):
