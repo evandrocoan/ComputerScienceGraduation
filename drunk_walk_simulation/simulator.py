@@ -53,6 +53,7 @@ class Simulator():
 
         self.mainWindow = mainWindow
         self.drawingPanel = drawingPanel
+        self.isSimulationRunning = False
 
         log( 2, "( Simulator::__init__ ) self.maxAngle: " + repr( self.maxAngle ) )
 
@@ -60,8 +61,11 @@ class Simulator():
         """
             Begin the simulation process.
         """
+        self.isSimulationRunning = True
         matplotlib.pyplot.close("all")
+
         self.startSimulation_()
+        self.isSimulationRunning = False
 
     def startSimulation_( self ):
 

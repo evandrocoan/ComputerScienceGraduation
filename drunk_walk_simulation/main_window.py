@@ -62,12 +62,12 @@ class MainWindow( QtGui.QWidget ):
 
         # https://github.com/GNOME/adwaita-icon-theme
         # https://code.google.com/archive/p/faenza-icon-theme/
-        mainApplicationIcon = QtGui.QIcon( 'login.png' )
+        self.mainApplicationIcon = QtGui.QIcon( 'login.png' )
 
         # PyQt4 set windows taskbar icon
         # https://stackoverflow.com/questions/12432637/pyqt4-set-windows-taskbar-icon
         # https://stackoverflow.com/questions/44161669/how-to-set-a-python-qt4-window-icon
-        self.setWindowIcon( mainApplicationIcon )
+        self.setWindowIcon( self.mainApplicationIcon )
 
         self.addButtons()
         self.setWindowLayout()
@@ -149,6 +149,18 @@ class MainWindow( QtGui.QWidget ):
             self.drawingPanel.drawAxes( 200 )
 
     def handleSimulationStart( self ):
+        """
+            Python PyQt4.QtGui.QMessageBox Examples
+            http://www.programcreek.com/python/example/62361/PyQt4.QtGui.QMessageBox
+        """
+        if self.simulation and self.simulation.isSimulationRunning:
+            msgBox = QtGui.QMessageBox( self )
+            msgBox.setIcon( QtGui.QMessageBox.Information )
+            msgBox.setText( "You need to close all simulations windows/graphics before starting a new simulation." )
+
+            msgBox.addButton( QtGui.QMessageBox.Ok )
+            returnValue = msgBox.exec_()
+            return
 
         try:
             self.simulation = Simulator( self, self.drawingPanel )
