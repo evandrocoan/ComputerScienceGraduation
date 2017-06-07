@@ -63,6 +63,9 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setScene( self.scene )
         self.setDefealtZoom()
 
+    def centerOn( self, x, y ):
+        super( DrawingPanel, self ).centerOn( x * self.paintAmplifation, y * self.paintAmplifation )
+
     def setDefealtZoom( self ):
         self.setTransform( QtGui.QTransform() )
 

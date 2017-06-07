@@ -86,7 +86,7 @@ class MainWindow( QtGui.QWidget ):
         self.stepNumberLineLabel = QtGui.QLabel( 'How many steps?' )
         self.stepNumberLineEdit = QtGui.QLineEdit()
         self.stepNumberLineEdit.setValidator( validator )
-        self.stepNumberLineEdit.setText( "999999999" )
+        self.stepNumberLineEdit.setText( "99" )
         self.stepNumberLineEdit.returnPressed.connect( self.handleSimulationStart )
 
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
@@ -106,6 +106,12 @@ class MainWindow( QtGui.QWidget ):
 
         self.defaultZoomButton = QtGui.QPushButton( 'Restore Zoom', self )
         self.defaultZoomButton.clicked.connect( self.handleDefaultZoom )
+
+        self.focusCenterButton = QtGui.QPushButton( 'Center', self )
+        self.focusCenterButton.clicked.connect( self.handleFocusCenter )
+
+        self.focusEndButton = QtGui.QPushButton( 'End', self )
+        self.focusEndButton.clicked.connect( self.handleFocusEnd )
 
         # Programmatically Toggle a Python PyQt QPushbutton
         # https://stackoverflow.com/questions/19508450/programmatically-toggle-a-python-pyqt-qpushbutton
@@ -130,6 +136,8 @@ class MainWindow( QtGui.QWidget ):
         horizontalLayout.addWidget( self.zoomButton )
         horizontalLayout.addWidget( self.fitInViewButton )
         horizontalLayout.addWidget( self.defaultZoomButton )
+        horizontalLayout.addWidget( self.focusCenterButton )
+        horizontalLayout.addWidget( self.focusEndButton )
 
         # Creates a box to align vertically the panels
         # https://doc.qt.io/qt-4.8/qvboxlayout.html
@@ -184,6 +192,22 @@ class MainWindow( QtGui.QWidget ):
         # How to restore a QGraphicsView zoom to 100%, i.e., the zoom when the program started?
         # https://stackoverflow.com/questions/44270301/how-to-restore-a-qgraphicsview-zoom-to-100-i-e-the-zoom-when-the-program-sta
         self.drawingPanel.setDefealtZoom()
+
+    def handleFocusCenter( self ):
+        """
+            Make QGraphicsView do smooth centerOn
+            https://stackoverflow.com/questions/4104494/make-qgraphicsview-do-smooth-centeron
+        """
+        self.drawingPanel.centerOn( 0.0, 0.0 )
+
+    def handleFocusEnd( self ):
+
+        if self.simulation:
+            x = self.simulation.pathEndPoint[0]
+            y = self.simulation.pathEndPoint[1]
+
+            log( 8, "( MainWindow::handleFocusEnd ) x: %f, y: %f" % ( x, y ) )
+            self.drawingPanel.centerOn( x, y )
 
     def handleZoomButton( self ):
 

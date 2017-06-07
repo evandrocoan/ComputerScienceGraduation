@@ -47,14 +47,16 @@ class Simulator():
 
             @throws error when some input data is invalid
         """
-        self.maxAngle = 2 * math.pi
+        self.maxAngle     = 2 * math.pi
+        self.pathEndPoint = QtCore.QPointF( 0.0, 0.0 )
+
         self.allIterationsResult = []
         self.firstIterationSteps = []
 
-        self.mainWindow = mainWindow
+        self.mainWindow   = mainWindow
         self.drawingPanel = drawingPanel
-        self.isSimulationRunning = False
 
+        self.isSimulationRunning = False
         log( 2, "( Simulator::__init__ ) self.maxAngle: " + repr( self.maxAngle ) )
 
     def startSimulation( self ):
@@ -152,7 +154,7 @@ class Simulator():
                 self.mainWindow.fitSceneInView( itemsBounding )
 
                 self.showResults( itemsBounding, howManySteps )
-                self.plotWalkedPath( howManySteps )
+                self.plotWalkedPath()
 
             else:
                 self.plotHistogram( howManyTimes )
@@ -177,7 +179,7 @@ class Simulator():
 
         self.drawingPanel.scene.addItem( results )
 
-    def plotWalkedPath( self, howManySteps ):
+    def plotWalkedPath( self ):
         """
             Plotting more than one plot on the same set of axes
             http://www.ast.uct.ac.za/~sarblyth/pythonGuide/PythonPlottingBeginnersGuide.pdf
@@ -186,8 +188,8 @@ class Simulator():
             https://stackoverflow.com/questions/10297220/matplotlib-linewidth-is-added-to-the-length-of-a-line
         """
 
-        if howManySteps > MAXIMUM_COMPUTABLE_SIZE:
-            howManySteps = MAXIMUM_COMPUTABLE_SIZE
+        # This is only set when the simulation was cancelled by the user
+        howManySteps = len( self.firstIterationSteps)
 
         # Make x, y arrays for each graph
         x1 = range( 0, howManySteps )
@@ -251,6 +253,8 @@ class Simulator():
             Initializing a list to a known number of elements in Python [duplicate]
             https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
         """
+        returnValue = False
+
         x     = [0.0]
         y     = [0.0]
         x_old = [0.0]
@@ -313,10 +317,12 @@ class Simulator():
         for index in xrange( 0, totalFullIterations ):
 
             if iterationFullStep( stepsPerCycle ):
-                return True
+                returnValue = True
+                break
 
         # Compute the remaining steps
         iterationFullStep( lastIterations )
+        self.pathEndPoint = ( x[0], y[0] )
 
         if isToDrawLines:
             self.drawingPanel.addExampleEllipse( x[0], y[0] )
@@ -324,8 +330,9 @@ class Simulator():
         pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
         self.allIterationsResult.append( pathLength )
 
+        # log( 2, "( Simulator::runOneIteration ) self.pathEndPoint: %s" % ( str( self.pathEndPoint ) ) )
         # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f, pathLength: %14f" % ( x[0], y[0], pathLength ) )
-        return False
+        return returnValue
 
     def getRandomAngle( self ):
         return random.uniform(0, self.maxAngle)
