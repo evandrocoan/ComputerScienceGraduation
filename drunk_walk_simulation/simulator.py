@@ -72,18 +72,25 @@ class Simulator():
         howManySteps = int( self.mainWindow.stepNumberLineEdit.text() )
         howManyTimes = int( self.mainWindow.replicationsNumberLineEdit.text() )
 
-        progressBar = ProgressBar( None, howManyTimes, howManySteps )
+        lastInterations     = howManySteps % MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
+        totalFullIterations = int( howManySteps / MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS )
+        totalIterations     = totalFullIterations + ( 1 if lastInterations > 0 else 0 )
+
+        progressBar = ProgressBar( None, howManyTimes, totalIterations )
         progressBar.show()
 
         # Set it 100% it will not be updated for performance increase
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
-            progressBar.progressBarPartial.setValue( howManySteps )
+            progressBar.progressBarPartial.setValue( totalIterations )
 
-        if howManyTimes > 1:
-            self.mainWindow.handleClearView()
+        isToDrawLines = howManyTimes < 2
+
+        if isToDrawLines:
+            self.mainWindow.handleClearView( True )
 
         else:
-            self.mainWindow.handleClearView( True )
+            self.mainWindow.handleClearView()
+
 
         # Why is local variable access faster than class member access in Python?
         # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python
@@ -93,19 +100,19 @@ class Simulator():
         for iterationCount in xrange( 0, howManyTimes ):
 
             # Stops the process when the cancel button is hit
-            if self.runOneIteration( iterationCount, howManySteps, howManyTimes, progressBar ) \
+            if self.runOneIteration( isToDrawLines, totalFullIterations, lastInterations, progressBar ) \
                     or progressBar.incrementBarOverall():
                 break
 
-        if howManyTimes > 1:
-            self.plotHistogram( howManyTimes )
-
-        else:
+        if isToDrawLines:
             itemsBounding = self.drawingPanel.fitAxes()
             self.mainWindow.fitSceneInView( itemsBounding )
 
             self.showResults( itemsBounding, howManySteps )
             self.plotWalkedPath( howManySteps )
+
+        else:
+            self.plotHistogram( howManyTimes )
 
     def showResults( self, itemsBounding, howManySteps ):
         """
@@ -193,66 +200,73 @@ class Simulator():
         pyplot.hist( self.allIterationsResult, bins=histogramClasses, edgecolor='black', linewidth=1.2 )
         pyplot.show()
 
-    def runOneIteration( self, iterationCount, howManySteps, howManyTimes, progressBar ):
-        x = 0.0
-        y = 0.0
+    def runOneIteration( self, isToDrawLines, totalFullIterations, lastInterations, progressBar ):
+        """
+            Initializing a list to a known number of elements in Python [duplicate]
+            https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
+        """
+        x     = [0.0]
+        y     = [0.0]
+        x_old = [0.0]
+        y_old = [0.0]
 
-        pathLength = 0.0
-        isToDrawLines = not ( iterationCount > 0 or howManyTimes > 1 )
-        isToUpdateProgressBar = howManySteps > MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
+        pathLength            = 0.0
+        isToUpdateProgressBar = totalFullIterations > 1
+
+        # log( 2, "( Simulator::runOneIteration ) isToDrawLines:       %d" % ( isToDrawLines ) )
+        # log( 2, "( Simulator::runOneIteration ) lastInterations:     %d" % ( lastInterations ) )
+        # log( 2, "( Simulator::runOneIteration ) totalFullIterations: %d" % ( totalFullIterations ) )
 
         def computeLineWithHistogram():
-            pathLength = self.getPointsDistance( 0, x, 0, y )
+            pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
             self.firstIterationSteps.append( pathLength )
 
         if isToDrawLines:
 
-            if isToUpdateProgressBar:
-
-                def addLine():
-                    computeLineWithHistogram()
-                    self.drawingPanel.drawLine( x_old, y_old, x, y )
-
-                    return progressBar.incrementBarParcial()
-
-            else:
-
-                def addLine():
-                    computeLineWithHistogram()
-                    self.drawingPanel.drawLine( x_old, y_old, x, y )
+            def addLine():
+                computeLineWithHistogram()
+                self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
 
         else:
 
+            def addLine():
+                pass
+
+        # scoping error in recursive closure
+        # https://stackoverflow.com/questions/2516652/scoping-error-in-recursive-closure
+        def iterationFullStep( howManySteps ):
+
+            for index in xrange( 0, howManySteps ):
+                randomAngle = self.getRandomAngle()
+                randomDegree = math.degrees( randomAngle )
+                # log( 2, "( Simulator::runOneIteration ) randomAngle: %20s (%14f°)" % ( repr( randomAngle ), randomDegree ) )
+
+                x_old[0] = x[0]
+                y_old[0] = y[0]
+                x[0]     += math.cos( randomAngle )
+                y[0]     += math.sin( randomAngle )
+
+                addLine()
+
             if isToUpdateProgressBar:
+                return progressBar.incrementBarParcial()
 
-                def addLine():
-                    return progressBar.incrementBarParcial()
+        # Do the iterations
+        for index in xrange( 0, totalFullIterations ):
 
-            else:
-
-                def addLine():
-                    pass
-
-        for index in xrange( 0, howManySteps ):
-            randomAngle = self.getRandomAngle()
-            randomDegree = math.degrees( randomAngle )
-            # log( 2, "( Simulator::runOneIteration ) randomAngle: %20s (%14f°)" % ( repr( randomAngle ), randomDegree ) )
-
-            x_old = x
-            y_old = y
-            x += math.cos( randomAngle )
-            y += math.sin( randomAngle )
-
-            if addLine():
+            if iterationFullStep( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS ):
                 return True
 
-        if isToDrawLines:
-            self.drawingPanel.addExampleEllipse( x, y )
+        # Compute the remaining steps
+        iterationFullStep( lastInterations )
 
-        pathLength = self.getPointsDistance( 0, x, 0, y )
+        if isToDrawLines:
+            self.drawingPanel.addExampleEllipse( x[0], y[0] )
+
+        pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
         self.allIterationsResult.append( pathLength )
 
-        # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f, pathLength: %14f" % ( x, y, pathLength ) )
+        # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f, pathLength: %14f" % ( x[0], y[0], pathLength ) )
         return False
 
     def getRandomAngle( self ):
