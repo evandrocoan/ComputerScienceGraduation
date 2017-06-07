@@ -232,6 +232,11 @@ class DrawingPanel( QtGui.QGraphicsView ):
                 self.paintAmplifation * x1, self.paintAmplifation * y1, \
                 self.paintAmplifation * x2, self.paintAmplifation * y2 ), self.pencil )
 
+    def drawSimpleLine( self, x1, y1, x2, y2 ):
+        self.scene.addLine( QtCore.QLineF( \
+                self.paintAmplifation * x1, self.paintAmplifation * y1, \
+                self.paintAmplifation * x2, self.paintAmplifation * y2 ), self.pencil )
+
     def addExampleLine( self ):
         """
             QPen Class Reference

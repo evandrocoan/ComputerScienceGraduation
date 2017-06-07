@@ -79,14 +79,21 @@ class Simulator():
         # if the interaction step is too big, the application will hang
         timeStepSize = 1
 
-        if howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 ):
-            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 )
+        if isToDrawLines:
+            self.mainWindow.handleClearView( True )
+            timeStepSize = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
-        elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 ):
-            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 )
+        else:
+            self.mainWindow.handleClearView()
 
-        elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10 ):
-            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10000 )
+            if howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 ):
+                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 )
+
+            elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 ):
+                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 )
+
+            elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10 ):
+                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10000 )
 
         lastCycles      = howManyTimes % timeStepSize
         totalFullCycles = int( howManyTimes / timeStepSize )
@@ -96,17 +103,13 @@ class Simulator():
         progressBar.show()
 
         # Set it 100% it will not be updated for performance increase
-        if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+        if not isToDrawLines \
+                and howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
+
             # Bug fix. Directly setting it to `totalIterations` was causing it to not fill completely
             progressBar.progressBarPartial.setMaximum( 5 )
             QtGui.qApp.processEvents()
             progressBar.progressBarPartial.setValue( 5 )
-
-        if isToDrawLines:
-            self.mainWindow.handleClearView( True )
-
-        else:
-            self.mainWindow.handleClearView()
 
         log( 2, "( Simulator::startSimulation_ ) lastCycles:      %d" % ( lastCycles ) )
         log( 2, "( Simulator::startSimulation_ ) timeStepSize:    %d" % ( timeStepSize ) )
@@ -134,19 +137,25 @@ class Simulator():
             if iterationFullCycle( timeStepSize ):
                 break
 
+
         # Compute the remaining cycles, only if not cancelled by the user
         if progressBar._active:
             iterationFullCycle( lastCycles )
 
         if isToDrawLines:
             itemsBounding = self.drawingPanel.fitAxes()
-            self.mainWindow.fitSceneInView( itemsBounding )
 
-            self.showResults( itemsBounding, howManySteps )
-            self.plotWalkedPath( howManySteps )
+        # Need to re-check due iterations only with one cycle
+        if progressBar._active:
 
-        else:
-            self.plotHistogram( howManyTimes )
+            if isToDrawLines:
+                self.mainWindow.fitSceneInView( itemsBounding )
+
+                self.showResults( itemsBounding, howManySteps )
+                self.plotWalkedPath( howManySteps )
+
+            else:
+                self.plotHistogram( howManyTimes )
 
     def showResults( self, itemsBounding, howManySteps ):
         """
@@ -176,6 +185,9 @@ class Simulator():
             Matplotlib: linewidth is added to the length of a line
             https://stackoverflow.com/questions/10297220/matplotlib-linewidth-is-added-to-the-length-of-a-line
         """
+
+        if howManySteps > MAXIMUM_COMPUTABLE_SIZE:
+            howManySteps = MAXIMUM_COMPUTABLE_SIZE
 
         # Make x, y arrays for each graph
         x1 = range( 0, howManySteps )
@@ -245,23 +257,34 @@ class Simulator():
         y_old = [0.0]
 
         pathLength            = 0.0
-        isToUpdateProgressBar = totalFullIterations > 1
+        stepsPerCycle         = 0
+        isToUpdateProgressBar = totalFullIterations > 0
 
-        # log( 2, "( Simulator::runOneIteration ) isToDrawLines:       %d" % ( isToDrawLines ) )
-        # log( 2, "( Simulator::runOneIteration ) lastIterations:      %d" % ( lastIterations ) )
-        # log( 2, "( Simulator::runOneIteration ) totalFullIterations: %d" % ( totalFullIterations ) )
+        log( 2, "( Simulator::runOneIteration ) isToDrawLines:       %d" % ( isToDrawLines ) )
+        log( 2, "( Simulator::runOneIteration ) lastIterations:      %d" % ( lastIterations ) )
+        log( 2, "( Simulator::runOneIteration ) totalFullIterations: %d" % ( totalFullIterations ) )
 
         def computeLineWithHistogram():
             pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
             self.firstIterationSteps.append( pathLength )
 
         if isToDrawLines:
+            stepsPerCycle = MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
 
-            def addLine():
-                computeLineWithHistogram()
-                self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
+            # Simplify if the requested simulation is too big
+            if MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS * totalFullIterations > MAXIMUM_COMPUTABLE_SIZE:
+
+                def addLine():
+                    self.drawingPanel.drawSimpleLine( x_old[0], y_old[0], x[0], y[0] )
+
+            else:
+
+                def addLine():
+                    computeLineWithHistogram()
+                    self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
 
         else:
+            stepsPerCycle = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
             def addLine():
                 pass
@@ -269,6 +292,7 @@ class Simulator():
         # scoping error in recursive closure
         # https://stackoverflow.com/questions/2516652/scoping-error-in-recursive-closure
         def iterationFullStep( howManySteps ):
+            # log( 2, "( Simulator::runOneIteration ) howManySteps: %d" % ( howManySteps) )
 
             for index in xrange( 0, howManySteps ):
                 randomAngle = self.getRandomAngle()
@@ -288,7 +312,7 @@ class Simulator():
         # Do the iterations
         for index in xrange( 0, totalFullIterations ):
 
-            if iterationFullStep( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS ):
+            if iterationFullStep( stepsPerCycle ):
                 return True
 
         # Compute the remaining steps

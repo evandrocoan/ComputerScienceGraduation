@@ -42,7 +42,14 @@ log( 1, "Importing " + __name__ )
 
 
 #
+MINIMUM_STEPS_WHEN_DRAWING_THE_PATH    = 999
 MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS = 99999
+
+
+# To plot the path lengths we need to create an array which cannot pass this limit, otherwise
+# a memory overflow will be throw.
+MAXIMUM_COMPUTABLE_SIZE = 9999999
+
 
 
 
