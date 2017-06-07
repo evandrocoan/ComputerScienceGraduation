@@ -178,6 +178,10 @@ class Simulator():
         if histogramClasses > 30:
             histogramClasses = 30
 
+        if len( self.allIterationsResult ) < 1:
+            log( 2, "( Simulator::plotHistogram ) not enough data: " + str( self.allIterationsResult ) )
+            return
+
         # log( 2, "( Simulator::plotHistogram ) histogramClasses:         " + str( histogramClasses ) )
         # log( 2, "( Simulator::plotHistogram ) self.allIterationsResult: " + str( self.allIterationsResult ) )
 
