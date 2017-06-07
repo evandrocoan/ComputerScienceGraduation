@@ -45,6 +45,7 @@ log( 1, "Importing " + __name__ )
 #
 MINIMUM_STEPS_WHEN_DRAWING_THE_PATH    = 999
 MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS = 99999
+COMPENSATION_FOR_TOTAL_CYCLES = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
 
 
 # To plot the path lengths we need to create an array which cannot pass this limit, otherwise

@@ -253,7 +253,8 @@ class Simulator():
             Initializing a list to a known number of elements in Python [duplicate]
             https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
         """
-        returnValue = False
+        returnValue   = False
+        stepsPerCycle = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
         x     = [0.0]
         y     = [0.0]
@@ -261,19 +262,15 @@ class Simulator():
         y_old = [0.0]
 
         pathLength            = 0.0
-        stepsPerCycle         = 0
         isToUpdateProgressBar = totalFullIterations > 0
-
-        log( 2, "( Simulator::runOneIteration ) isToDrawLines:       %d" % ( isToDrawLines ) )
-        log( 2, "( Simulator::runOneIteration ) lastIterations:      %d" % ( lastIterations ) )
-        log( 2, "( Simulator::runOneIteration ) totalFullIterations: %d" % ( totalFullIterations ) )
 
         def computeLineWithHistogram():
             pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
             self.firstIterationSteps.append( pathLength )
 
         if isToDrawLines:
-            stepsPerCycle = MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
+            stepsPerCycle        = MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
+            totalFullIterations *= int( totalFullIterations * COMPENSATION_FOR_TOTAL_CYCLES )
 
             # Simplify if the requested simulation is too big
             if MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS * totalFullIterations > MAXIMUM_COMPUTABLE_SIZE:
@@ -292,6 +289,12 @@ class Simulator():
 
             def addLine():
                 pass
+
+        log( 2, "( Simulator::runOneIteration ) isToDrawLines:         %d" % ( isToDrawLines ) )
+        log( 2, "( Simulator::runOneIteration ) stepsPerCycle:         %d" % ( stepsPerCycle ) )
+        log( 2, "( Simulator::runOneIteration ) lastIterations:        %d" % ( lastIterations ) )
+        log( 2, "( Simulator::runOneIteration ) totalFullIterations:   %d" % ( totalFullIterations ) )
+        log( 2, "( Simulator::runOneIteration ) isToUpdateProgressBar: %d" % ( isToUpdateProgressBar ) )
 
         # scoping error in recursive closure
         # https://stackoverflow.com/questions/2516652/scoping-error-in-recursive-closure
