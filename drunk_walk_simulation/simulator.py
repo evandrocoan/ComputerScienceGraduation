@@ -97,8 +97,10 @@ class Simulator():
 
         # Set it 100% it will not be updated for performance increase
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
-            progressBar.progressBarPartial.setValue( totalIterations )
+            # Bug fix. Directly setting it to `totalIterations` was causing it to not fill completely
+            progressBar.progressBarPartial.setMaximum( 5 )
             QtGui.qApp.processEvents()
+            progressBar.progressBarPartial.setValue( 5 )
 
         if isToDrawLines:
             self.mainWindow.handleClearView( True )
