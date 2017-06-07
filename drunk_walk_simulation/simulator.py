@@ -114,14 +114,16 @@ class Simulator():
         """
         results = QtGui.QGraphicsTextItem()
         topLeft = itemsBounding.topLeft()
-        bottomRight = itemsBounding.bottomRight()
+
+        bottomRight     = itemsBounding.bottomRight()
+        estimatedLength = math.sqrt( howManySteps )
 
         x = increaseAxe( topLeft.x(), bottomRight.x(), 160 )
         y = increaseAxe( topLeft.y(), bottomRight.y(), 80 )
 
         results.setPos( x, y )
-        results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada e de: %f" %
-                ( self.firstIterationSteps[-1], abs( self.firstIterationSteps[-1] - math.sqrt( howManySteps ) ) ) )
+        results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada (%f) eh de: %f" %
+                ( self.firstIterationSteps[-1], estimatedLength, self.firstIterationSteps[-1] - estimatedLength ) )
 
         self.drawingPanel.scene.addItem( results )
 
@@ -137,12 +139,21 @@ class Simulator():
         # Make x, y arrays for each graph
         x1 = range( 0, howManySteps )
         y1 = self.firstIterationSteps
+        y2 = []
+
+        for x in x1:
+            y2.append( math.sqrt( x ) )
 
         # use pylab to plot x and y
-        pylab.plot(x1, y1, 'g', linewidth=0.5)
+        pylab.plot(x1, y1, 'g', linewidth=0.5, label="Drunk Path")
+        pylab.plot(x1, y2, 'b', linewidth=0.5, label="Raiz de N")
 
         # give plot a title
         pylab.title('Plot of y vs. x')
+
+        # Adding a legend to PyPlot in Matplotlib in the most simple manner possible
+        # https://stackoverflow.com/questions/19125722/adding-a-legend-to-pyplot-in-matplotlib-in-the-most-simple-manner-possible
+        pylab.legend(loc='upper left')
 
         # make axis labels
         pylab.xlabel('x axis')
