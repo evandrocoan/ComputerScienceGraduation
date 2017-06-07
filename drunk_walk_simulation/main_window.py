@@ -92,7 +92,7 @@ class MainWindow( QtGui.QWidget ):
         self.replicationsNumberLineLabel = QtGui.QLabel( 'How many Replications?' )
         self.replicationsNumberLineEdit = QtGui.QLineEdit()
         self.replicationsNumberLineEdit.setValidator( validator )
-        self.replicationsNumberLineEdit.setText( "1" )
+        self.replicationsNumberLineEdit.setText( "999999999" )
         self.replicationsNumberLineEdit.returnPressed.connect( self.handleSimulationStart )
 
         # Creates the clear button, 999999999

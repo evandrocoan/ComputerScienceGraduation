@@ -37,7 +37,7 @@ class ProgressBar( QtGui.QWidget ):
     https://stackoverflow.com/questions/13269936/python-qt-progressbar
 
     """
-    def __init__( self, parent=None, total=20, partial=20 ):
+    def __init__( self, parent=None, total=20, partial=20, timeStepSize=1 ):
         super( ProgressBar, self ).__init__( parent )
         self.resize( 720, 100 )
 
@@ -57,8 +57,14 @@ class ProgressBar( QtGui.QWidget ):
         main_layout.addWidget( self.progressBarPartial, 0, 1 )
         main_layout.addWidget( self.progressBarOverall, 1, 1 )
 
-        self.processedStepsOverall = QtGui.QLabel( '0 interactions' )
-        main_layout.addWidget( self.processedStepsOverall, 2, 1, QtCore.Qt.AlignRight )
+        self.processedStepsTotal   = QtGui.QLabel( 'of interactions ' + intWithCommas( timeStepSize ) )
+        self.processedStepsOverall = QtGui.QLabel( '0' )
+
+        horizontalLayout = QtGui.QHBoxLayout()
+        horizontalLayout.addWidget( self.processedStepsOverall )
+        horizontalLayout.addWidget( self.processedStepsTotal )
+
+        main_layout.addLayout( horizontalLayout, 2, 1, QtCore.Qt.AlignRight )
 
         self.setLayout( main_layout )
         self.setWindowTitle('Progress')
@@ -90,7 +96,7 @@ class ProgressBar( QtGui.QWidget ):
 
         return not self._active
 
-    def incrementBarOverall( self ):
+    def incrementBarOverall( self, timeStepSize=1 ):
         """
             Return true when the simulation was cancelled by the user, False otherwise.
         """
@@ -102,7 +108,7 @@ class ProgressBar( QtGui.QWidget ):
             self.hide()
             return True
 
-        self.processedStepsOverall.setText( str( value ) + " interactions" )
+        self.processedStepsOverall.setText( str( value * timeStepSize ) )
         self.progressBarOverall.setValue( value )
         QtGui.qApp.processEvents()
 

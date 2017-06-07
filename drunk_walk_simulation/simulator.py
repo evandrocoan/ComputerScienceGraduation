@@ -68,22 +68,37 @@ class Simulator():
         self.isSimulationRunning = False
 
     def startSimulation_( self ):
+        howManySteps  = int( self.mainWindow.stepNumberLineEdit.text() )
+        howManyTimes  = int( self.mainWindow.replicationsNumberLineEdit.text() )
+        isToDrawLines = howManyTimes < 2
 
-        howManySteps = int( self.mainWindow.stepNumberLineEdit.text() )
-        howManyTimes = int( self.mainWindow.replicationsNumberLineEdit.text() )
-
-        lastInterations     = howManySteps % MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
+        lastIterations      = howManySteps % MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
         totalFullIterations = int( howManySteps / MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS )
-        totalIterations     = totalFullIterations + ( 1 if lastInterations > 0 else 0 )
+        totalIterations     = totalFullIterations + ( 1 if lastIterations > 0 else 0 )
 
-        progressBar = ProgressBar( None, howManyTimes, totalIterations )
+        # if the interaction step is too big, the application will hang
+        timeStepSize = 1
+
+        if howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 ):
+            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 )
+
+        elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 ):
+            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 )
+
+        elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10 ):
+            timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10000 )
+
+        lastCycles      = howManyTimes % timeStepSize
+        totalFullCycles = int( howManyTimes / timeStepSize )
+        totalCycles     = totalFullCycles + ( 1 if lastCycles > 0 else 0 )
+
+        progressBar = ProgressBar( None, totalCycles, totalIterations, howManyTimes )
         progressBar.show()
 
         # Set it 100% it will not be updated for performance increase
         if howManySteps <= MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS:
             progressBar.progressBarPartial.setValue( totalIterations )
-
-        isToDrawLines = howManyTimes < 2
+            QtGui.qApp.processEvents()
 
         if isToDrawLines:
             self.mainWindow.handleClearView( True )
@@ -91,18 +106,35 @@ class Simulator():
         else:
             self.mainWindow.handleClearView()
 
+        log( 2, "( Simulator::startSimulation_ ) lastCycles:      %d" % ( lastCycles ) )
+        log( 2, "( Simulator::startSimulation_ ) timeStepSize:    %d" % ( timeStepSize ) )
+        log( 2, "( Simulator::startSimulation_ ) totalFullCycles: %d" % ( totalFullCycles ) )
+        log( 2, "( Simulator::startSimulation_ ) totalCycles:     %d" % ( totalCycles ) )
 
         # Why is local variable access faster than class member access in Python?
         # https://stackoverflow.com/questions/12397984/why-is-local-variable-access-faster-than-class-member-access-in-python
         #
         # My Python for loop is causing a MemoryError. How can I optimize this?
         # https://stackoverflow.com/questions/4405083/my-python-for-loop-is-causing-a-memoryerror-how-can-i-optimize-this
-        for iterationCount in xrange( 0, howManyTimes ):
+        def iterationFullCycle( howManyCycles ):
 
-            # Stops the process when the cancel button is hit
-            if self.runOneIteration( isToDrawLines, totalFullIterations, lastInterations, progressBar ) \
-                    or progressBar.incrementBarOverall():
+            for iterationCount in xrange( 0, howManyCycles ):
+
+                # Stops the process when the cancel button is hit
+                if self.runOneIteration( isToDrawLines, totalFullIterations, lastIterations, progressBar ):
+                    return True
+
+            return progressBar.incrementBarOverall( timeStepSize )
+
+        # Do the cycles
+        for index in xrange( 0, totalFullCycles ):
+
+            if iterationFullCycle( timeStepSize ):
                 break
+
+        # Compute the remaining cycles, only if not cancelled by the user
+        if progressBar._active:
+            iterationFullCycle( lastCycles )
 
         if isToDrawLines:
             itemsBounding = self.drawingPanel.fitAxes()
@@ -200,7 +232,7 @@ class Simulator():
         pyplot.hist( self.allIterationsResult, bins=histogramClasses, edgecolor='black', linewidth=1.2 )
         pyplot.show()
 
-    def runOneIteration( self, isToDrawLines, totalFullIterations, lastInterations, progressBar ):
+    def runOneIteration( self, isToDrawLines, totalFullIterations, lastIterations, progressBar ):
         """
             Initializing a list to a known number of elements in Python [duplicate]
             https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
@@ -214,7 +246,7 @@ class Simulator():
         isToUpdateProgressBar = totalFullIterations > 1
 
         # log( 2, "( Simulator::runOneIteration ) isToDrawLines:       %d" % ( isToDrawLines ) )
-        # log( 2, "( Simulator::runOneIteration ) lastInterations:     %d" % ( lastInterations ) )
+        # log( 2, "( Simulator::runOneIteration ) lastIterations:      %d" % ( lastIterations ) )
         # log( 2, "( Simulator::runOneIteration ) totalFullIterations: %d" % ( totalFullIterations ) )
 
         def computeLineWithHistogram():
@@ -258,7 +290,7 @@ class Simulator():
                 return True
 
         # Compute the remaining steps
-        iterationFullStep( lastInterations )
+        iterationFullStep( lastIterations )
 
         if isToDrawLines:
             self.drawingPanel.addExampleEllipse( x[0], y[0] )
