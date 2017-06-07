@@ -81,7 +81,11 @@ class DrawingPanel( QtGui.QGraphicsView ):
         self.setRenderHint( QtGui.QPainter.HighQualityAntialiasing );
 
     def fitAxes( self ):
-        itemsBounding = self.scene.itemsBoundingRect()
+        """
+            QGraphicsScene::clear doesn't change sceneRect
+            https://stackoverflow.com/questions/34449357/qgraphicssceneclear-doesnt-change-scenerect
+        """
+        itemsBounding = self.scene.sceneRect()
         width  = itemsBounding.width()
         height = itemsBounding.height()
 
@@ -126,8 +130,8 @@ class DrawingPanel( QtGui.QGraphicsView ):
         labelShiftX = 0
         labelShiftY = - self.paintAmplifation * .35
 
-        log( 4, "( DrawingPanel::addAxisLables ) labelSize:   %f" % ( labelSize ) )
-        log( 4, "( DrawingPanel::addAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
+        log( 4, "( DrawingPanel::fitAxisLables ) labelSize:   %f" % ( labelSize ) )
+        log( 4, "( DrawingPanel::fitAxisLables ) labelShiftX: %f, labelShiftY: %f" % ( labelShiftX, labelShiftY ) )
 
         yUp   = self.scaleAxeLabel( yUp   )
         yDown = self.scaleAxeLabel( yDown )

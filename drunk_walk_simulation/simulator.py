@@ -70,12 +70,18 @@ class Simulator():
         self.isSimulationRunning = False
 
     def startSimulation_( self ):
-        howManySteps  = int( self.mainWindow.stepNumberLineEdit.text() )
+        itemsBounding = None
+        stepsPerCycle = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
+
         howManyTimes  = int( self.mainWindow.replicationsNumberLineEdit.text() )
+        howManySteps  = int( self.mainWindow.stepNumberLineEdit.text() )
         isToDrawLines = howManyTimes < 2
 
-        lastIterations      = howManySteps % MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
-        totalFullIterations = int( howManySteps / MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS )
+        if isToDrawLines:
+            stepsPerCycle = MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
+
+        lastIterations      = howManySteps % stepsPerCycle
+        totalFullIterations = int( howManySteps / stepsPerCycle )
         totalIterations     = totalFullIterations + ( 1 if lastIterations > 0 else 0 )
 
         # if the interaction step is too big, the application will hang
@@ -83,7 +89,7 @@ class Simulator():
 
         if isToDrawLines:
             self.mainWindow.handleClearView( True )
-            timeStepSize = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
+            timeStepSize  = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
         else:
             self.mainWindow.handleClearView()
@@ -96,6 +102,7 @@ class Simulator():
 
             elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10 ):
                 timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10000 )
+
 
         lastCycles      = howManyTimes % timeStepSize
         totalFullCycles = int( howManyTimes / timeStepSize )
@@ -125,20 +132,22 @@ class Simulator():
         # https://stackoverflow.com/questions/4405083/my-python-for-loop-is-causing-a-memoryerror-how-can-i-optimize-this
         def iterationFullCycle( howManyCycles ):
 
+            # Do the sub-cycles where it breathes after several iterations as 100 or even 1,
+            # depending on the step size.
             for iterationCount in xrange( 0, howManyCycles ):
 
                 # Stops the process when the cancel button is hit
-                if self.runOneIteration( isToDrawLines, totalFullIterations, lastIterations, progressBar ):
+                if self.runOneIteration( isToDrawLines, totalFullIterations, lastIterations, stepsPerCycle, progressBar ):
                     return True
 
             return progressBar.incrementBarOverall( timeStepSize )
 
-        # Do the cycles
+        # Do the cycles, breathing each cycle end. So the progress bar can be updated like each 100
+        # full cycles, of 100000 step drawing.
         for index in xrange( 0, totalFullCycles ):
 
             if iterationFullCycle( timeStepSize ):
                 break
-
 
         # Compute the remaining cycles, only if not cancelled by the user
         if progressBar._active:
@@ -151,7 +160,7 @@ class Simulator():
         if progressBar._active:
 
             if isToDrawLines:
-                self.mainWindow.fitSceneInView( itemsBounding )
+                # self.mainWindow.fitSceneInView( itemsBounding )
 
                 self.showResults( itemsBounding, howManySteps )
                 self.plotWalkedPath()
@@ -248,13 +257,12 @@ class Simulator():
         pyplot.hist( self.allIterationsResult, bins=histogramClasses, edgecolor='black', linewidth=1.2 )
         pyplot.show()
 
-    def runOneIteration( self, isToDrawLines, totalFullIterations, lastIterations, progressBar ):
+    def runOneIteration( self, isToDrawLines, totalFullIterations, lastIterations, stepsPerCycle, progressBar ):
         """
             Initializing a list to a known number of elements in Python [duplicate]
             https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
         """
         returnValue   = False
-        stepsPerCycle = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
         x     = [0.0]
         y     = [0.0]
@@ -269,11 +277,9 @@ class Simulator():
             self.firstIterationSteps.append( pathLength )
 
         if isToDrawLines:
-            stepsPerCycle        = MINIMUM_STEPS_WHEN_DRAWING_THE_PATH
-            totalFullIterations *= int( totalFullIterations * COMPENSATION_FOR_TOTAL_CYCLES )
 
             # Simplify if the requested simulation is too big
-            if MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS * totalFullIterations > MAXIMUM_COMPUTABLE_SIZE:
+            if stepsPerCycle * totalFullIterations > MAXIMUM_COMPUTABLE_SIZE:
 
                 def addLine():
                     self.drawingPanel.drawSimpleLine( x_old[0], y_old[0], x[0], y[0] )
@@ -285,16 +291,15 @@ class Simulator():
                     self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
 
         else:
-            stepsPerCycle = MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS
 
             def addLine():
                 pass
 
-        log( 2, "( Simulator::runOneIteration ) isToDrawLines:         %d" % ( isToDrawLines ) )
-        log( 2, "( Simulator::runOneIteration ) stepsPerCycle:         %d" % ( stepsPerCycle ) )
-        log( 2, "( Simulator::runOneIteration ) lastIterations:        %d" % ( lastIterations ) )
-        log( 2, "( Simulator::runOneIteration ) totalFullIterations:   %d" % ( totalFullIterations ) )
-        log( 2, "( Simulator::runOneIteration ) isToUpdateProgressBar: %d" % ( isToUpdateProgressBar ) )
+        # log( 2, "( Simulator::runOneIteration ) isToDrawLines:         %d" % ( isToDrawLines ) )
+        # log( 2, "( Simulator::runOneIteration ) stepsPerCycle:         %d" % ( stepsPerCycle ) )
+        # log( 2, "( Simulator::runOneIteration ) lastIterations:        %d" % ( lastIterations ) )
+        # log( 2, "( Simulator::runOneIteration ) totalFullIterations:   %d" % ( totalFullIterations ) )
+        # log( 2, "( Simulator::runOneIteration ) isToUpdateProgressBar: %d" % ( isToUpdateProgressBar ) )
 
         # scoping error in recursive closure
         # https://stackoverflow.com/questions/2516652/scoping-error-in-recursive-closure
