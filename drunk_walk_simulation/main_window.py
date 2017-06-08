@@ -113,6 +113,9 @@ class MainWindow( QtGui.QWidget ):
         self.focusEndButton = QtGui.QPushButton( 'End', self )
         self.focusEndButton.clicked.connect( self.handleFocusEnd )
 
+        self.resultsButton = QtGui.QPushButton( 'Results', self )
+        self.resultsButton.clicked.connect( self.handleResults )
+
         # Programmatically Toggle a Python PyQt QPushbutton
         # https://stackoverflow.com/questions/19508450/programmatically-toggle-a-python-pyqt-qpushbutton
         self.zoomButton = QtGui.QPushButton( 'Use zoom?', self )
@@ -138,6 +141,7 @@ class MainWindow( QtGui.QWidget ):
         horizontalLayout.addWidget( self.defaultZoomButton )
         horizontalLayout.addWidget( self.focusCenterButton )
         horizontalLayout.addWidget( self.focusEndButton )
+        horizontalLayout.addWidget( self.resultsButton )
 
         # Creates a box to align vertically the panels
         # https://doc.qt.io/qt-4.8/qvboxlayout.html
@@ -207,6 +211,15 @@ class MainWindow( QtGui.QWidget ):
             y = self.simulation.pathEndPoint[1]
 
             log( 8, "( MainWindow::handleFocusEnd ) x: %f, y: %f" % ( x, y ) )
+            self.drawingPanel.centerOn( x, y )
+
+    def handleResults( self ):
+
+        if self.simulation:
+            x = self.simulation.resultsPoint[0]
+            y = self.simulation.resultsPoint[1]
+
+            log( 8, "( MainWindow::handleResults ) x: %f, y: %f" % ( x, y ) )
             self.drawingPanel.centerOn( x, y )
 
     def handleZoomButton( self ):

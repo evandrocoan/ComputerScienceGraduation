@@ -48,7 +48,8 @@ class Simulator():
             @throws error when some input data is invalid
         """
         self.maxAngle     = 2 * math.pi
-        self.pathEndPoint = QtCore.QPointF( 0.0, 0.0 )
+        self.pathEndPoint = ( 0.0, 0.0 )
+        self.resultsPoint = ( 0.0, 0.0 )
 
         self.allIterationsResult = []
         self.firstIterationSteps = []
@@ -186,6 +187,7 @@ class Simulator():
         results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada (%f) eh de: %f" %
                 ( self.firstIterationSteps[-1], estimatedLength, self.firstIterationSteps[-1] - estimatedLength ) )
 
+        self.resultsPoint = ( x, y )
         self.drawingPanel.scene.addItem( results )
 
     def plotWalkedPath( self ):
