@@ -292,9 +292,18 @@ class Simulator():
 
             else:
 
-                def addLine():
-                    computeLineWithHistogram()
-                    self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
+                # Draw simple lines for performance
+                if stepsPerCycle * totalFullIterations < MAXIMUM_FULL_LINE_SIZE:
+
+                    def addLine():
+                        computeLineWithHistogram()
+                        self.drawingPanel.drawLine( x_old[0], y_old[0], x[0], y[0] )
+
+                else:
+
+                    def addLine():
+                        computeLineWithHistogram()
+                        self.drawingPanel.drawSimpleLine( x_old[0], y_old[0], x[0], y[0] )
 
         else:
 
