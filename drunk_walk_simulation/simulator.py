@@ -95,15 +95,17 @@ class Simulator():
         else:
             self.mainWindow.handleClearView()
 
-            if howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 ):
-                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 )
+            if howManySteps < 10:
+                timeStepSize = 10000
 
-            elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 100 ):
-                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 1000 )
+            if howManySteps < 100:
+                timeStepSize = 1000
 
-            elif howManySteps <= int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10 ):
-                timeStepSize = int( MINIMUM_STEPS_TO_SHOW_PARTIAL_PROGRESS / 10000 )
+            elif howManySteps < 1000:
+                timeStepSize = 100
 
+            elif howManySteps < 10000:
+                timeStepSize = 10
 
         lastCycles      = howManyTimes % timeStepSize
         totalFullCycles = int( howManyTimes / timeStepSize )
