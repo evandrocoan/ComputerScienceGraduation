@@ -186,10 +186,12 @@ class Simulator():
         y = increaseAxe( topLeft.y(), bottomRight.y(), 80 )
 
         results.setPos( x, y )
+        self.resultsPoint = ( x, y )
+
         results.setPlainText( "A distancia final percorrida: %f\n\nA diferenca para a distancia estimada (%f) eh de: %f" %
                 ( self.firstIterationSteps[-1], estimatedLength, self.firstIterationSteps[-1] - estimatedLength ) )
 
-        self.resultsPoint = ( x, y )
+        results.setFlag( QtGui.QGraphicsItem.ItemIsMovable )
         self.drawingPanel.scene.addItem( results )
 
     def plotWalkedPath( self ):
@@ -312,8 +314,7 @@ class Simulator():
 
             for index in xrange( 0, howManySteps ):
                 randomAngle = self.getRandomAngle()
-                randomDegree = math.degrees( randomAngle )
-                # log( 2, "( Simulator::runOneIteration ) randomAngle: %20s (%14f°)" % ( repr( randomAngle ), randomDegree ) )
+                # log( 2, "( Simulator::runOneIteration ) randomAngle: %20s (%14f°)" % ( repr( randomAngle ), math.degrees( randomAngle ) ) )
 
                 x_old[0] = x[0]
                 y_old[0] = y[0]
