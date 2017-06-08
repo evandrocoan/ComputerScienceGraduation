@@ -31,6 +31,7 @@ from settings      import *
 from matplotlib    import pyplot
 from progress_bar  import ProgressBar
 from drawing_panel import DrawingPanel
+from scipy.spatial import distance
 
 from PyQt4 import QtGui, QtCore, Qt
 log( 1, "Importing " + __name__ )
@@ -360,7 +361,14 @@ class Simulator():
         return random.uniform(0, self.maxAngle)
 
     def getPointsDistance( self, x1, y1, x2, y2 ):
-        return math.hypot( x2 - x1, y2 - y1 )
+        """
+            How can the euclidean distance be calculated with numpy?
+            https://stackoverflow.com/questions/1401712/how-can-the-euclidean-distance-be-calculated-with-numpy
+        """
+        # log( 2, "hard.coded:         %f" % ( ( (x1 - x2)**2 + (y1 - y2)**2 )**.5 ) )
+        # log( 2, "math.hypot:         %f" % ( math.hypot( x2 - x1, y2 - y1 ) ) )
+        # log( 2, "distance.euclidean: %f" % ( distance.euclidean( (x1, x2), (y1, y2) ) ) )
+        return distance.euclidean( (x1, x2), (y1, y2) )
 
 
 
