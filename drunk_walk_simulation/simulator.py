@@ -52,12 +52,14 @@ class Simulator():
         self.pathEndPoint = ( 0.0, 0.0 )
         self.resultsPoint = ( 0.0, 0.0 )
 
-        self.allIterationsResult = []
-        self.firstIterationSteps = []
+        self.firstIterationSqrt    = []
+        self.firstIterationSteps   = []
+        self.firstIterationIndexes = []
 
         self.mainWindow   = mainWindow
         self.drawingPanel = drawingPanel
 
+        self.allIterationsResult = []
         self.isSimulationRunning = False
         log( 2, "( Simulator::__init__ ) self.maxAngle: " + repr( self.maxAngle ) )
 
@@ -160,7 +162,7 @@ class Simulator():
         if isToDrawLines:
             itemsBounding = self.drawingPanel.fitAxes()
 
-        # Need to re-check due iterations only with one cycle
+        # This is only set when the simulation was not cancelled by the user
         if progressBar._active:
 
             if isToDrawLines:
@@ -204,20 +206,9 @@ class Simulator():
             https://stackoverflow.com/questions/10297220/matplotlib-linewidth-is-added-to-the-length-of-a-line
         """
 
-        # This is only set when the simulation was cancelled by the user
-        howManySteps = len( self.firstIterationSteps)
-
-        # Make x, y arrays for each graph
-        x1 = range( 0, howManySteps )
-        y1 = self.firstIterationSteps
-        y2 = []
-
-        for x in x1:
-            y2.append( math.sqrt( x ) )
-
         # use pylab to plot x and y
-        pylab.plot(x1, y1, 'g', linewidth=0.5, label="Drunk Path")
-        pylab.plot(x1, y2, 'b', linewidth=0.5, label="Raiz de N")
+        pylab.plot( self.firstIterationIndexes, self.firstIterationSteps, 'g', linewidth=0.5, label="Drunk Path" )
+        pylab.plot( self.firstIterationIndexes, self.firstIterationSqrt , 'b', linewidth=0.5, label="Raiz de N" )
 
         # give plot a title
         pylab.title('Plot of y vs. x')
@@ -269,19 +260,23 @@ class Simulator():
             Initializing a list to a known number of elements in Python [duplicate]
             https://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-number-of-elements-in-python
         """
-        returnValue   = False
 
         x     = [0.0]
         y     = [0.0]
         x_old = [0.0]
         y_old = [0.0]
 
-        pathLength            = 0.0
+        returnValue           = False
+        firstIterationIndex   = [0]
         isToUpdateProgressBar = totalFullIterations > 0
 
+        # Make x, y arrays for each graph
         def computeLineWithHistogram():
-            pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
-            self.firstIterationSteps.append( pathLength )
+            self.firstIterationIndexes.append( firstIterationIndex[0] )
+            self.firstIterationSqrt.append( math.sqrt( firstIterationIndex[0] ) )
+
+            firstIterationIndex[0] += 1
+            self.firstIterationSteps.append( self.getPointsDistance( 0, x[0], 0, y[0] ) )
 
         if isToDrawLines:
 
@@ -350,11 +345,10 @@ class Simulator():
         if isToDrawLines:
             self.drawingPanel.addExampleEllipse( x[0], y[0] )
 
-        pathLength = self.getPointsDistance( 0, x[0], 0, y[0] )
-        self.allIterationsResult.append( pathLength )
+        self.allIterationsResult.append( self.getPointsDistance( 0, x[0], 0, y[0] ) )
 
         # log( 2, "( Simulator::runOneIteration ) self.pathEndPoint: %s" % ( str( self.pathEndPoint ) ) )
-        # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f, pathLength: %14f" % ( x[0], y[0], pathLength ) )
+        # log( 2, "( Simulator::runOneIteration ) x: %14f, y: %14f" % ( x[0], y[0] ) )
         return returnValue
 
     def getRandomAngle( self ):
