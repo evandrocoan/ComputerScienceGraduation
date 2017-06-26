@@ -8,7 +8,7 @@ The chart should be generated only when you request a replication. When more tha
 It is necessary to perform a histogram instead of the graph.
 
 
-### Installing 
+### Installing
 
 To run the program you need installed:
 
@@ -25,11 +25,25 @@ And using its package manager with the commands:
 1. `conda install matplotlib`
 
 
-### Running 
+### Running
 
 To run this application you just need to type from this folder:
 ```
 python drunk_walk_simulation/main.py
 ```
+
+
+
+### Exporting an executable
+
+To export an executable you can use http://www.pyinstaller.org/ and run the command:
+```
+pyinstaller main.py
+```
+But you first need to copy the debug tools module from `../python_debug/debug_tools.py` to the
+`main.py` the source folder. This is because `pyinstaller` does not support external include
+folder using `sys.path.insert(0,'../python_debug')`. See the issue:
+
+1. [pyinstaller#2640](https://github.com/pyinstaller/pyinstaller/issues/2640) Python files included by `sys.path.insert()` are missing on the final executable
 
 
