@@ -1,0 +1,3 @@
+[submodule "ModelingAndSimulation/python_debug"]
+	path = ModelingAndSimulation/python_debug
+	url = https://github.com/evandrocoan/PythonDebugTools
