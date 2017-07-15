@@ -4,14 +4,6 @@
 		{
 			"path": "."
 		},
-        {
-            "path": "D:/User/Dropbox/Applications/SoftwareVersioning/SublimeText/Data/Packages",
-            "folder_exclude_patterns":
-            [
-                "Packages/ObjectBeautifier",
-                "Packages/User/Color Highlighter",
-            ],
-        },
 	],
     "build_systems":
     [
