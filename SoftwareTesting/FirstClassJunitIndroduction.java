@@ -7,7 +7,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.Period;
 import org.junit.Test;
 
-public class Testes {
+public class FirstClassJunitIndroduction{
 
 	@Test
 	public void criaDataNatal2017() {
@@ -355,7 +355,7 @@ public class Testes {
 
 		// Fixture Teardown
 	}
-	
+
 	@Test
 	public void criaçãoDeIntervalos() {
 		// Fixture Setup
@@ -394,7 +394,7 @@ public class Testes {
 
 		// Fixture Teardown
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void criaçãoDeIntervalosFalha() {
 		// Fixture Setup
