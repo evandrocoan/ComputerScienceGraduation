@@ -1,3 +1,6 @@
 [submodule "ModelingAndSimulation/python_debug"]
 	path = ModelingAndSimulation/python_debug
 	url = https://github.com/evandrocoan/PythonDebugTools
+[submodule "SoftwareTesting/Libraries"]
+	path = SoftwareTesting/Libraries
+	url = https://github.com/evandrocoan/SoftwareTestingLibraries
