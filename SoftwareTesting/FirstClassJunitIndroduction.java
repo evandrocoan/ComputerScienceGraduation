@@ -12,15 +12,15 @@ public class FirstClassJunitIndroduction
     // http://www.joda.org/joda-time/apidocs/index.html
     // http://www.joda.org/joda-time/userguide.html#Intervals
     @Test
-    public void criaçãoDataHora()
+    public void creationDateHour()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour = new DateTime( 1, 1, 1, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( dataHora );
+        Assert.assertNotNull( DateHour );
 
         // Fixture Teardown
     }
@@ -29,13 +29,13 @@ public class FirstClassJunitIndroduction
     public void beforeAfterMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 1, 1, 2 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora2.isAfter( dataHora1 ) );
+        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
 
         // Fixture Teardown
     }
@@ -44,13 +44,13 @@ public class FirstClassJunitIndroduction
     public void beforeAfterHour()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 1, 2, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 2, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora2.isAfter( dataHora1 ) );
+        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
 
         // Fixture Teardown
     }
@@ -59,13 +59,13 @@ public class FirstClassJunitIndroduction
     public void beforeAfterDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 2, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora2.isAfter( dataHora1 ) );
+        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
 
         // Fixture Teardown
     }
@@ -74,13 +74,13 @@ public class FirstClassJunitIndroduction
     public void beforeAfterMonth()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 2, 1, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 2, 1, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora2.isAfter( dataHora1 ) );
+        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
 
         // Fixture Teardown
     }
@@ -89,13 +89,13 @@ public class FirstClassJunitIndroduction
     public void beforeAfterYear()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 2, 1, 1, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 2, 1, 1, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora2.isAfter( dataHora1 ) );
+        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
 
         // Fixture Teardown
     }
@@ -104,13 +104,13 @@ public class FirstClassJunitIndroduction
     public void beforeBeforeMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 1, 1, 2 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora1.isBefore( dataHora2 ) );
+        Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
         // Fixture Teardown
     }
@@ -119,13 +119,13 @@ public class FirstClassJunitIndroduction
     public void beforeBeforeHour()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 1, 2, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 2, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora1.isBefore( dataHora2 ) );
+        Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
         // Fixture Teardown
     }
@@ -134,13 +134,13 @@ public class FirstClassJunitIndroduction
     public void beforeBeforeDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 1, 2, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora1.isBefore( dataHora2 ) );
+        Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
         // Fixture Teardown
     }
@@ -149,13 +149,13 @@ public class FirstClassJunitIndroduction
     public void beforeBeforeMonth()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 1, 2, 1, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 2, 1, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora1.isBefore( dataHora2 ) );
+        Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
         // Fixture Teardown
     }
@@ -164,159 +164,159 @@ public class FirstClassJunitIndroduction
     public void beforeBeforeYear()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHora2 = new DateTime( 2, 1, 1, 1, 1 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 2, 1, 1, 1, 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( dataHora1.isBefore( dataHora2 ) );
+        Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDataHoraMinus()
+    public void creationDateHourMinus()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHoraEsperado = new DateTime( -1, 11, 30, 0, 0 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHourEsperado = new DateTime( -1, 11, 30, 0, 0 );
 
         // Exercise SUT
-        DateTime dataHoraSoma = dataHora1.minusYears( 1 );
-        dataHoraSoma = dataHoraSoma.minusMonths( 1 );
-        dataHoraSoma = dataHoraSoma.minusDays( 1 );
-        dataHoraSoma = dataHoraSoma.minusHours( 1 );
-        dataHoraSoma = dataHoraSoma.minusMinutes( 1 );
+        DateTime DateHoursum = DateHour1.minusYears( 1 );
+        DateHoursum = DateHoursum.minusMonths( 1 );
+        DateHoursum = DateHoursum.minusDays( 1 );
+        DateHoursum = DateHoursum.minusHours( 1 );
+        DateHoursum = DateHoursum.minusMinutes( 1 );
 
         // Result Verification
-        Assert.assertEquals( dataHoraEsperado, dataHoraSoma );
+        Assert.assertEquals( DateHourEsperado, DateHoursum );
 
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDataHoraPlus()
+    public void creationDateHourPlus()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime dataHoraEsperado = new DateTime( 2, 2, 2, 2, 2 );
+        final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
+        final DateTime DateHourEsperado = new DateTime( 2, 2, 2, 2, 2 );
 
         // Exercise SUT
-        DateTime dataHoraSoma = dataHora1.plusYears( 1 );
-        dataHoraSoma = dataHoraSoma.plusMonths( 1 );
-        dataHoraSoma = dataHoraSoma.plusDays( 1 );
-        dataHoraSoma = dataHoraSoma.plusHours( 1 );
-        dataHoraSoma = dataHoraSoma.plusMinutes( 1 );
+        DateTime DateHoursum = DateHour1.plusYears( 1 );
+        DateHoursum = DateHoursum.plusMonths( 1 );
+        DateHoursum = DateHoursum.plusDays( 1 );
+        DateHoursum = DateHoursum.plusHours( 1 );
+        DateHoursum = DateHoursum.plusMinutes( 1 );
 
         // Result Verification
-        Assert.assertEquals( dataHoraEsperado, dataHoraSoma );
+        Assert.assertEquals( DateHourEsperado, DateHoursum );
 
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaMinute()
+    public void creationDateHourFalhaMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 1, 1, 1, 1, -1 );
-        // Exercise SUT
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaHourMinute()
-    {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 1, 1, 1, -1, -1 );
+        final DateTime DateHour = new DateTime( 1, 1, 1, 1, -1 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaDayHourMinute()
+    public void creationDateHourFalhaHourMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 1, 1, -1, -1, -1 );
+        final DateTime DateHour = new DateTime( 1, 1, 1, -1, -1 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaMonthDayHourMinute()
+    public void creationDateHourFalhaDayHourMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 1, -1, -1, -1, -1 );
+        final DateTime DateHour = new DateTime( 1, 1, -1, -1, -1 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaYearMonthDayHourMinute()
+    public void creationDateHourFalhaMonthDayHourMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( -1, -1, -1, -1, -1 );
+        final DateTime DateHour = new DateTime( 1, -1, -1, -1, -1 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaYearMonthDayHour()
+    public void creationDateHourFalhaYearMonthDayHourMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( -1, -1, -1, -1, 0 );
+        final DateTime DateHour = new DateTime( -1, -1, -1, -1, -1 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaYearMonthDay()
+    public void creationDateHourFalhaYearMonthDayHour()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( -1, -1, -1, 0, 0 );
+        final DateTime DateHour = new DateTime( -1, -1, -1, -1, 0 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaYearMonth()
+    public void creationDateHourFalhaYearMonthDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( -1, -1, 0, 0, 0 );
+        final DateTime DateHour = new DateTime( -1, -1, -1, 0, 0 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaYear()
+    public void creationDateHourFalhaYearMonth()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( -1, 0, 0, 0, 0 );
+        final DateTime DateHour = new DateTime( -1, -1, 0, 0, 0 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDataHoraFalhaAll()
+    public void creationDateHourFalhaYear()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime dataHora = new DateTime( 0, 0, 0, 0, 0 );
+        final DateTime DateHour = new DateTime( -1, 0, 0, 0, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaAll()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 0, 0, 0, 0, 0 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test
-    public void CriaçãoDeDataRandom1()
+    public void creationDeDateRandom1()
     {
         // Fixture Setup
         // Exercise SUT
@@ -329,7 +329,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void CriaçãoDeDataRandom2()
+    public void creationDeDateRandom2()
     {
         // Fixture Setup
         // Exercise SUT
@@ -342,7 +342,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void CriaçãoDeDataNegative()
+    public void creationDeDateNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -352,7 +352,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void CriaçãoDeDataNegative2()
+    public void creationDeDateNegative2()
     {
         // Fixture Setup
         // Exercise SUT
@@ -362,7 +362,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaDayNegative()
+    public void creationDeDateFalhaDayNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -372,7 +372,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaMonthNegative()
+    public void creationDeDateFalhaMonthNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -382,7 +382,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void CriaçãoDeDataYearNegative()
+    public void creationDeDateYearNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -392,7 +392,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaYearMontDayNegative()
+    public void creationDeDateFalhaYearMontDayNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -402,7 +402,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaYearMonthNegative()
+    public void creationDeDateFalhaYearMonthNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -412,7 +412,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaMonthDayNegative()
+    public void creationDeDateFalhaMonthDayNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -422,7 +422,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void CriaçãoDeDataFalhaYearNegative()
+    public void creationDeDateFalhaYearNegative()
     {
         // Fixture Setup
         // Exercise SUT
@@ -432,105 +432,105 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void criaçãoDeHoras()
+    public void creationDeHours()
     {
         // Fixture Setup
-        final LocalTime horaAtual = new LocalTime( 12, 12, 25 );
-        final LocalTime horaEsperada = new LocalTime( 11, 12, 25 );
+        final LocalTime HourAtual = new LocalTime( 12, 12, 25 );
+        final LocalTime HourEsperada = new LocalTime( 11, 12, 25 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertTrue( horaAtual.getHourOfDay() > horaEsperada.getHourOfDay() );
+        Assert.assertTrue( HourAtual.getHourOfDay() > HourEsperada.getHourOfDay() );
 
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaçãoDeHorasFalha()
+    public void creationDeHoursFalha()
     {
         // Fixture Setup
-        final LocalTime horaAtual = new LocalTime( -12, 12, 25 );
+        final LocalTime HourAtual = new LocalTime( -12, 12, 25 );
         // Exercise SUT
         // Result Verification
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDeIntervalos()
+    public void creationDeIntervalos()
     {
         // Fixture Setup
-        final Interval hora1 = new Interval( 0, 50 );
+        final Interval Hour1 = new Interval( 0, 50 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( hora1 );
+        Assert.assertNotNull( Hour1 );
 
         // Fixture Teardown
     }
 
     @Test( expected = IllegalArgumentException.class )
-    public void criaçãoDeIntervalosFalha()
+    public void creationDeIntervalosFalha()
     {
         // Fixture Setup
-        final Interval hora1 = new Interval( 0, -50 );
+        final Interval Hour1 = new Interval( 0, -50 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( hora1 );
+        Assert.assertNotNull( Hour1 );
 
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDeIntervalosVazios()
+    public void creationDeIntervalosVazios()
     {
         // Fixture Setup
-        final Interval hora1 = new Interval( 0, 0 );
+        final Interval Hour1 = new Interval( 0, 0 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( hora1 );
+        Assert.assertNotNull( Hour1 );
 
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDeIntervalosVaziosNegativos()
+    public void creationDeIntervalosVaziosNegativos()
     {
         // Fixture Setup
-        final Interval hora1 = new Interval( -1, -1 );
+        final Interval Hour1 = new Interval( -1, -1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( hora1 );
+        Assert.assertNotNull( Hour1 );
 
         // Fixture Teardown
     }
 
     @Test
-    public void criaçãoDePeriodos()
+    public void creationDePeriodos()
     {
         // Fixture Setup
-        final Period hora1 = new Period( 1 );
+        final Period Hour1 = new Period( 1 );
 
         // Exercise SUT
 
         // Result Verification
-        Assert.assertNotNull( hora1 );
+        Assert.assertNotNull( Hour1 );
 
         // Fixture Teardown
     }
 
     @Test( expected = IllegalArgumentException.class )
-    public void criaçãoDePeriodosFalha()
+    public void creationDePeriodosFalha()
     {
         // Fixture Setup
-        final Period hora1 = new Period( "1" );
+        final Period Hour1 = new Period( "1" );
 
         // Exercise SUT
 
@@ -540,7 +540,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void criaDataDeAnoBissextoValido()
+    public void criaDateDeAnoBissextoValido()
     {
         // Fixture Setup
         // Exercise SUT
@@ -550,7 +550,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void criaDatAFalhaDeAnoBissextoInvalido()
+    public void criaDateFalhaDeAnoBissextoInvalido()
     {
         // Fixture Setup
         // Exercise SUT
@@ -560,7 +560,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void criaDataNatal2017()
+    public void criaDateNatal2017()
     {
         // Fixture Setup
         // Exercise SUT
@@ -573,7 +573,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void somaDeAnos()
+    public void sumDeAnos()
     {
         // Fixture Setup
         final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
@@ -589,7 +589,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void somaDeAnosFalha()
+    public void sumDeAnosFalha()
     {
         // Fixture Setup
         final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
@@ -605,41 +605,41 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void somaDeHoras()
+    public void sumDeHours()
     {
         // Fixture Setup
-        final LocalTime hora1 = new LocalTime( 1, 12, 25 );
-        final LocalTime hora2 = new LocalTime( 2, 12, 25 );
-        final LocalTime horaEsperada = new LocalTime( 3, 12, 25 );
+        final LocalTime Hour1 = new LocalTime( 1, 12, 25 );
+        final LocalTime Hour2 = new LocalTime( 2, 12, 25 );
+        final LocalTime HourEsperada = new LocalTime( 3, 12, 25 );
 
         // Exercise SUT
-        final int novaHora = hora1.getHourOfDay() + hora2.getHourOfDay();
+        final int novaHour = Hour1.getHourOfDay() + Hour2.getHourOfDay();
 
         // Result Verification
-        Assert.assertEquals( novaHora, horaEsperada.getHourOfDay() );
+        Assert.assertEquals( novaHour, HourEsperada.getHourOfDay() );
 
         // Fixture Teardown
     }
 
     @Test
-    public void somaDeHorasFalha()
+    public void sumDeHoursFalha()
     {
         // Fixture Setup
-        final LocalTime hora1 = new LocalTime( 1, 12, 25 );
-        final LocalTime hora2 = new LocalTime( 2, 12, 25 );
-        final LocalTime horaEsperada = new LocalTime( 2, 12, 25 );
+        final LocalTime Hour1 = new LocalTime( 1, 12, 25 );
+        final LocalTime Hour2 = new LocalTime( 2, 12, 25 );
+        final LocalTime HourEsperada = new LocalTime( 2, 12, 25 );
 
         // Exercise SUT
-        final int novaHora = hora1.getHourOfDay() + hora2.getHourOfDay();
+        final int novaHour = Hour1.getHourOfDay() + Hour2.getHourOfDay();
 
         // Result Verification
-        Assert.assertNotEquals( novaHora, horaEsperada.getHourOfDay() );
+        Assert.assertNotEquals( novaHour, HourEsperada.getHourOfDay() );
 
         // Fixture Teardown
     }
 
     @Test
-    public void subtraçãoDeDatas()
+    public void subtraçãoDeDates()
     {
         // Fixture Setup
         final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
@@ -655,7 +655,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void subtraçãoDeDatasFalha()
+    public void subtraçãoDeDatesFalha()
     {
         // Fixture Setup
         final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
