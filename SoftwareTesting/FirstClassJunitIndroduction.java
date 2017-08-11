@@ -9,28 +9,12 @@ import org.junit.Test;
 
 public class FirstClassJunitIndroduction
 {
-    // http://www.joda.org/joda-time/apidocs/index.html
-    // http://www.joda.org/joda-time/userguide.html#Intervals
     @Test
-    public void creationDateHour()
-    {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 1, 1, 1, 1, 1 );
-
-        // Exercise SUT
-
-        // Result Verification
-        Assert.assertNotNull( DateHour );
-
-        // Fixture Teardown
-    }
-
-    @Test
-    public void beforeAfterMinute()
+    public void beforeAfterDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
 
         // Exercise SUT
 
@@ -56,11 +40,11 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeAfterDay()
+    public void beforeAfterMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
 
         // Exercise SUT
 
@@ -101,11 +85,11 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeMinute()
+    public void beforeDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
 
         // Exercise SUT
 
@@ -131,11 +115,11 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeDay()
+    public void beforeMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
-        final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
+        final DateTime DateHour2 = new DateTime( 1, 1, 1, 1, 2 );
 
         // Exercise SUT
 
@@ -172,6 +156,122 @@ public class FirstClassJunitIndroduction
         // Result Verification
         Assert.assertTrue( DateHour1.isBefore( DateHour2 ) );
 
+        // Fixture Teardown
+    }
+
+    // http://www.joda.org/joda-time/apidocs/index.html
+    // http://www.joda.org/joda-time/userguide.html#Intervals
+    @Test
+    public void creationDateHour()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 1, 1, 1, 1, 1 );
+
+        // Exercise SUT
+
+        // Result Verification
+        Assert.assertNotNull( DateHour );
+
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaAll()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 0, 0, 0, 0, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaDayHourMinute()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 1, 1, -1, -1, -1 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaHourMinute()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 1, 1, 1, -1, -1 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaMinute()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 1, 1, 1, 1, -1 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaMonthDayHourMinute()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( 1, -1, -1, -1, -1 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaYear()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( -1, 0, 0, 0, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaYearMonth()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( -1, -1, 0, 0, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaYearMonthDay()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( -1, -1, -1, 0, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaYearMonthDayHour()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( -1, -1, -1, -1, 0 );
+        // Exercise SUT
+        // Result Verification
+        // Fixture Teardown
+    }
+
+    @Test( expected = IllegalFieldValueException.class )
+    public void creationDateHourFalhaYearMonthDayHourMinute()
+    {
+        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+        final DateTime DateHour = new DateTime( -1, -1, -1, -1, -1 );
+        // Exercise SUT
+        // Result Verification
         // Fixture Teardown
     }
 
@@ -216,101 +316,81 @@ public class FirstClassJunitIndroduction
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaMinute()
+    public void creationDeDateFalhaDayNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 1, 1, 1, 1, -1 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( 2017, 12, -1 );
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaHourMinute()
+    public void creationDeDateFalhaMonthDayNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 1, 1, 1, -1, -1 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( 0, -1, -1 );
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaDayHourMinute()
+    public void creationDeDateFalhaMonthNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 1, 1, -1, -1, -1 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( 2017, -1, 1 );
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaMonthDayHourMinute()
+    public void creationDeDateFalhaYearMontDayNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 1, -1, -1, -1, -1 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( -1, -1, -1 );
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaYearMonthDayHourMinute()
+    public void creationDeDateFalhaYearMonthNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( -1, -1, -1, -1, -1 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( -1, -1, 1 );
         // Result Verification
         // Fixture Teardown
     }
 
     @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaYearMonthDayHour()
+    public void creationDeDateFalhaYearNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( -1, -1, -1, -1, 0 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( -20, 1, 0 );
         // Result Verification
         // Fixture Teardown
     }
 
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaYearMonthDay()
+    @Test
+    public void creationDeDateNegative()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( -1, -1, -1, 0, 0 );
+        // Fixture Setup
         // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( -1, 1, 1 );
         // Result Verification
         // Fixture Teardown
     }
 
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaYearMonth()
+    @Test
+    public void creationDeDateNegative2()
     {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( -1, -1, 0, 0, 0 );
+        // Fixture Setup
         // Exercise SUT
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaYear()
-    {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( -1, 0, 0, 0, 0 );
-        // Exercise SUT
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDateHourFalhaAll()
-    {
-        // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
-        final DateTime DateHour = new DateTime( 0, 0, 0, 0, 0 );
-        // Exercise SUT
+        final LocalDate natal2017 = new LocalDate( -20, 10, 10 );
         // Result Verification
         // Fixture Teardown
     }
@@ -342,91 +422,11 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void creationDeDateNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( -1, 1, 1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test
-    public void creationDeDateNegative2()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( -20, 10, 10 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaDayNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( 2017, 12, -1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaMonthNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( 2017, -1, 1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test
     public void creationDeDateYearNegative()
     {
         // Fixture Setup
         // Exercise SUT
         final LocalDate natal2017 = new LocalDate( -1, 1, 1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaYearMontDayNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( -1, -1, -1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaYearMonthNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( -1, -1, 1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaMonthDayNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( 0, -1, -1 );
-        // Result Verification
-        // Fixture Teardown
-    }
-
-    @Test( expected = IllegalFieldValueException.class )
-    public void creationDeDateFalhaYearNegative()
-    {
-        // Fixture Setup
-        // Exercise SUT
-        final LocalDate natal2017 = new LocalDate( -20, 1, 0 );
         // Result Verification
         // Fixture Teardown
     }
@@ -573,6 +573,38 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
+    public void subtraçãoDeDates()
+    {
+        // Fixture Setup
+        final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
+        final LocalDate natal2016 = new LocalDate( 2016, 12, 25 );
+
+        // Exercise SUT
+        final LocalDate ultimoNatal = natal2017.minusYears( 1 );
+
+        // Result Verification
+        Assert.assertEquals( natal2016, ultimoNatal );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void subtraçãoDeDatesFalha()
+    {
+        // Fixture Setup
+        final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
+        final LocalDate natal2016 = new LocalDate( 2018, 12, 25 );
+
+        // Exercise SUT
+        final LocalDate ultimoNatal = natal2017.minusYears( 2 );
+
+        // Result Verification
+        Assert.assertNotEquals( natal2016, ultimoNatal );
+
+        // Fixture Teardown
+    }
+
+    @Test
     public void sumDeAnos()
     {
         // Fixture Setup
@@ -634,38 +666,6 @@ public class FirstClassJunitIndroduction
 
         // Result Verification
         Assert.assertNotEquals( novaHour, HourEsperada.getHourOfDay() );
-
-        // Fixture Teardown
-    }
-
-    @Test
-    public void subtraçãoDeDates()
-    {
-        // Fixture Setup
-        final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
-        final LocalDate natal2016 = new LocalDate( 2016, 12, 25 );
-
-        // Exercise SUT
-        final LocalDate ultimoNatal = natal2017.minusYears( 1 );
-
-        // Result Verification
-        Assert.assertEquals( natal2016, ultimoNatal );
-
-        // Fixture Teardown
-    }
-
-    @Test
-    public void subtraçãoDeDatesFalha()
-    {
-        // Fixture Setup
-        final LocalDate natal2017 = new LocalDate( 2017, 12, 25 );
-        final LocalDate natal2016 = new LocalDate( 2018, 12, 25 );
-
-        // Exercise SUT
-        final LocalDate ultimoNatal = natal2017.minusYears( 2 );
-
-        // Result Verification
-        Assert.assertNotEquals( natal2016, ultimoNatal );
 
         // Fixture Teardown
     }
