@@ -101,7 +101,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeBeforeMinute()
+    public void beforeMinute()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
@@ -116,7 +116,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeBeforeHour()
+    public void beforeHour()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
@@ -131,7 +131,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeBeforeDay()
+    public void beforeDay()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
@@ -146,7 +146,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeBeforeMonth()
+    public void beforeMonth()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
@@ -161,7 +161,7 @@ public class FirstClassJunitIndroduction
     }
 
     @Test
-    public void beforeBeforeYear()
+    public void beforeYear()
     {
         // Fixture Setup, DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
         final DateTime DateHour1 = new DateTime( 1, 1, 1, 1, 1 );
