@@ -7,6 +7,10 @@ import org.joda.time.Period;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * http://www.joda.org/joda-time/apidocs/index.html
+ * http://www.joda.org/joda-time/userguide.html#Intervals
+ */
 public class FirstClassJunitIndroduction
 {
     @Test
@@ -159,8 +163,6 @@ public class FirstClassJunitIndroduction
         // Fixture Teardown
     }
 
-    // http://www.joda.org/joda-time/apidocs/index.html
-    // http://www.joda.org/joda-time/userguide.html#Intervals
     @Test
     public void creationDateHour()
     {
@@ -676,8 +678,7 @@ public class FirstClassJunitIndroduction
         // Fixture Setup
         final Period periodoUmAno = new Period( new LocalDate( 2017, 12, 25 ), new LocalDate( 2018, 12, 25 ) );
 
-        // Period(int years, int months, int weeks, int days, int hours, int
-        // minutes, int seconds, int millis)
+        // Period(int years, int months, int weeks, int days, int hours, int minutes, int seconds, int millis)
         final Period periodoUmAnoEsperado = new Period( 1, 0, 0, 0, 0, 0, 0, 0 );
 
         // Exercise SUT
@@ -694,8 +695,7 @@ public class FirstClassJunitIndroduction
         // Fixture Setup
         final Period periodoUmAno = new Period( new LocalDate( 2017, 12, 25 ), new LocalDate( 2019, 12, 25 ) );
 
-        // Period(int years, int months, int weeks, int days, int hours, int
-        // minutes, int seconds, int millis)
+        // Period(int years, int months, int weeks, int days, int hours, int minutes, int seconds, int millis)
         final Period periodoUmAnoEsperado = new Period( 1, 0, 0, 0, 0, 0, 0, 0 );
 
         // Exercise SUT
@@ -712,8 +712,7 @@ public class FirstClassJunitIndroduction
         // Fixture Setup
         final Period periodoUmAno = new Period( new LocalDate( 2017, 12, 18 ), new LocalDate( 2017, 12, 25 ) );
 
-        // Period(int years, int months, int weeks, int days, int hours, int
-        // minutes, int seconds, int millis)
+        // Period(int years, int months, int weeks, int days, int hours, int minutes, int seconds, int millis)
         final Period periodoUmAnoEsperado = new Period( 0, 0, 1, 0, 0, 0, 0, 0 );
 
         // Exercise SUT
@@ -730,8 +729,7 @@ public class FirstClassJunitIndroduction
         // Fixture Setup
         final Period periodoUmAno = new Period( new LocalDate( 2017, 12, 17 ), new LocalDate( 2017, 12, 25 ) );
 
-        // Period(int years, int months, int weeks, int days, int hours, int
-        // minutes, int seconds, int millis)
+        // Period(int years, int months, int weeks, int days, int hours, int minutes, int seconds, int millis)
         final Period periodoUmAnoEsperado = new Period( 0, 0, 1, 0, 0, 0, 0, 0 );
 
         // Exercise SUT
