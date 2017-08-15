@@ -1,3 +1,78 @@
-# Ignora a conversão de CRLF-LF
+# Force LF eol in git repo and working copy
 # https://stackoverflow.com/questions/9976986/force-lf-eol-in-git-repo-and-working-copy
 * eol=lf
+
+*.sublime-project txt
+*.sublime-workspace txt
+*.md txt
+*.txt txt
+*.vhd txt
+*.csv txt
+*.c txt
+*.sh txt
+*.java txt
+*.m txt
+*.ini txt
+*.html txt
+*.xml txt
+*.bat txt
+*.cc txt
+*.h txt
+*.sql txt
+*.hpp txt
+*.cpp txt
+*.MD txt
+*.py txt
+*.pl txt
+*.log txt
+*.hs txt
+*.inc txt
+
+
+*.config binary
+*.sample binary
+*.idx binary
+*.pack binary
+*.cdr binary
+*.lfcn binary
+*.png binary
+*.xlsx binary
+*.bsf binary
+*.bak binary
+*.bdf binary
+*.cmp binary
+*.qip binary
+*.rpt binary
+*.cdf binary
+*.done binary
+*.smsg binary
+*.summary binary
+*.jdi binary
+*.pin binary
+*.qpf binary
+*.qsf binary
+*.qdf binary
+*.c~ binary
+*.class binary
+*.jnlp binary
+*.properties binary
+*.pnml binary
+*.ktz binary
+*.ndr binary
+*.db binary
+*.jpg binary
+*.nb binary
+*.S binary
+*.zuml binary
+*.prg binary
+*.s binary
+*.mk binary
+*.bash binary
+*.key binary
+*.bmp binary
+*.uml_atv binary
+*.activity_diagram binary
+*.uml_pck binary
+*.jar binary
+
+
