@@ -3,5 +3,6 @@
 # Arquivos de backup
 *nppBackup
 *.pyc
+*.class
 
 *.sublime-workspace
