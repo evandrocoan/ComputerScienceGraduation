@@ -21,9 +21,10 @@ public class FirstClassJunitIndroduction
         final DateTime DateHour2 = new DateTime( 1, 1, 2, 1, 1 );
 
         // Exercise SUT
+        final boolean dataChecking = DateHour2.isAfter( DateHour1 );
 
         // Result Verification
-        Assert.assertTrue( DateHour2.isAfter( DateHour1 ) );
+        Assert.assertTrue( dataChecking );
 
         // Fixture Teardown
     }
