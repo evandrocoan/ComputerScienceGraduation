@@ -1,7 +1,5 @@
-package br.ufsc.ine.leb.sistemaBancario.testes;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,27 +8,28 @@ import br.ufsc.ine.leb.sistemaBancario.Banco;
 import br.ufsc.ine.leb.sistemaBancario.Conta;
 import br.ufsc.ine.leb.sistemaBancario.Moeda;
 import br.ufsc.ine.leb.sistemaBancario.SistemaBancario;
-import br.ufsc.ine.leb.sistemaBancario.ValorMonetario;
-import br.ufsc.ine.leb.sistemaBancario.Dinheiro;
 
-public class TesteConta {
+public class TesteConta
+{
 
-	private Agencia agencia;
+    private Agencia agencia;
 
-	@Before
-	public void executedBeforeEach() {
-		SistemaBancario sistemaBancario = new SistemaBancario();
-		Banco caixaEconomica = sistemaBancario.criarBanco("Caixa Economica", Moeda.BRL);
-		agencia = caixaEconomica.criarAgencia( "Agencia" );
-	}
+    @Before
+    public void executedBeforeEach()
+    {
+        final SistemaBancario sistemaBancario = new SistemaBancario();
+        final Banco caixaEconomica = sistemaBancario.criarBanco( "Caixa Economica", Moeda.BRL );
+        this.agencia = caixaEconomica.criarAgencia( "Agencia" );
+    }
 
-	@Test
-	public void criarConta() {
-		// Fixture Setup
-		// Exercise SUT
-		Conta minhaConta = agencia.criarConta("Conta Test");
-		// Result Verification
-		assertNotNull(minhaConta);
-		// Fixture Teardown
-	}
+    @Test
+    public void criarConta()
+    {
+        // Fixture Setup
+        // Exercise SUT
+        final Conta minhaConta = this.agencia.criarConta( "Conta Test" );
+        // Result Verification
+        Assert.assertNotNull( minhaConta );
+        // Fixture Teardown
+    }
 }

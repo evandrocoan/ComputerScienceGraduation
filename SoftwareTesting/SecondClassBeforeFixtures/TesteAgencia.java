@@ -1,58 +1,58 @@
-package br.ufsc.ine.leb.sistemaBancario.testes;
 
-import static org.junit.Assert.*;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.ufsc.ine.leb.sistemaBancario.Agencia;
 import br.ufsc.ine.leb.sistemaBancario.Banco;
-import br.ufsc.ine.leb.sistemaBancario.Conta;
 import br.ufsc.ine.leb.sistemaBancario.Moeda;
 import br.ufsc.ine.leb.sistemaBancario.SistemaBancario;
-import br.ufsc.ine.leb.sistemaBancario.ValorMonetario;
-import br.ufsc.ine.leb.sistemaBancario.Dinheiro;
 
-public class TesteAgencia {
+public class TesteAgencia
+{
 
-	private Banco banco;
+    private Banco banco;
 
-	@Before
-	public void executedBeforeEach() {
-		SistemaBancario sistemaBancario = new SistemaBancario();
-		banco = sistemaBancario.criarBanco("Caixa Economica", Moeda.BRL);
-	}
+    @Before
+    public void executedBeforeEach()
+    {
+        final SistemaBancario sistemaBancario = new SistemaBancario();
+        this.banco = sistemaBancario.criarBanco( "Caixa Economica", Moeda.BRL );
+    }
 
-	@Test
-	public void criarCaixaEconomicaTrindade() throws Exception {
-		// Fixture Setup
-		// Exercise SUT
-		Agencia caixaEconomicaTrindade = banco.criarAgencia("Trindade");
-		// Result Verification
-		assertEquals("001", caixaEconomicaTrindade.obterIdentificador());
-		assertEquals("Trindade", caixaEconomicaTrindade.obterNome());
-		// Fixture Teardown
-	}
-	
-	@Test
-	public void criarDuasAgencias() throws Exception {
-		// Fixture Setup
-		Agencia trindade = banco.criarAgencia( "Trindade" );
-		Agencia serrinha = banco.criarAgencia( "Serrinha" );
-		// Exercise SUT
-		// Result Verification
-		assertEquals("001", trindade.obterIdentificador());
-		assertEquals("002", serrinha.obterIdentificador());
-		// Fixture Teardown
-	}
-	
-	@Test
-	public void agenciaCriacao() {
-		// Fixture Setup
-		// Exercise SUT
-		Agencia minhaAgencia = banco.criarAgencia("MinhaAgencia");
-		// Result Verification
-		assertNotNull(minhaAgencia);
-		// Fixture Teardown
-	}
+    @Test
+    public void criarCaixaEconomicaTrindade() throws Exception
+    {
+        // Fixture Setup
+        // Exercise SUT
+        final Agencia caixaEconomicaTrindade = this.banco.criarAgencia( "Trindade" );
+        // Result Verification
+        Assert.assertEquals( "001", caixaEconomicaTrindade.obterIdentificador() );
+        Assert.assertEquals( "Trindade", caixaEconomicaTrindade.obterNome() );
+        // Fixture Teardown
+    }
+
+    @Test
+    public void criarDuasAgencias() throws Exception
+    {
+        // Fixture Setup
+        final Agencia trindade = this.banco.criarAgencia( "Trindade" );
+        final Agencia serrinha = this.banco.criarAgencia( "Serrinha" );
+        // Exercise SUT
+        // Result Verification
+        Assert.assertEquals( "001", trindade.obterIdentificador() );
+        Assert.assertEquals( "002", serrinha.obterIdentificador() );
+        // Fixture Teardown
+    }
+
+    @Test
+    public void agenciaCriacao()
+    {
+        // Fixture Setup
+        // Exercise SUT
+        final Agencia minhaAgencia = this.banco.criarAgencia( "MinhaAgencia" );
+        // Result Verification
+        Assert.assertNotNull( minhaAgencia );
+        // Fixture Teardown
+    }
 }
