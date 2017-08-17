@@ -10,7 +10,6 @@ import br.ufsc.ine.leb.sistemaBancario.SistemaBancario;
 
 public class TesteAgencia
 {
-
     private Banco banco;
 
     @Before
@@ -21,27 +20,35 @@ public class TesteAgencia
     }
 
     @Test
-    public void criarCaixaEconomicaTrindade() throws Exception
+    public void criarCaixaEconomicaTrindade()
     {
         // Fixture Setup
-        // Exercise SUT
         final Agencia caixaEconomicaTrindade = this.banco.criarAgencia( "Trindade" );
+
+        // Exercise SUT
+        final boolean areEquals = "Trindade".equals( caixaEconomicaTrindade.obterIdentificador() );
+
         // Result Verification
-        Assert.assertEquals( "001", caixaEconomicaTrindade.obterIdentificador() );
-        Assert.assertEquals( "Trindade", caixaEconomicaTrindade.obterNome() );
+        Assert.assertTrue( areEquals );
+
         // Fixture Teardown
     }
 
     @Test
-    public void criarDuasAgencias() throws Exception
+    public void criarDuasAgenciasCodigo()
     {
         // Fixture Setup
         final Agencia trindade = this.banco.criarAgencia( "Trindade" );
         final Agencia serrinha = this.banco.criarAgencia( "Serrinha" );
+
         // Exercise SUT
+        final boolean areEqualsFirstAgency = "001".equals( trindade.obterIdentificador() );
+        final boolean areEqualsSecondAgency = "002".equals( serrinha.obterIdentificador() );
+
         // Result Verification
-        Assert.assertEquals( "001", trindade.obterIdentificador() );
-        Assert.assertEquals( "002", serrinha.obterIdentificador() );
+        Assert.assertTrue( areEqualsFirstAgency );
+        Assert.assertTrue( areEqualsSecondAgency );
+
         // Fixture Teardown
     }
 
@@ -49,10 +56,13 @@ public class TesteAgencia
     public void agenciaCriacao()
     {
         // Fixture Setup
+
         // Exercise SUT
         final Agencia minhaAgencia = this.banco.criarAgencia( "MinhaAgencia" );
+
         // Result Verification
         Assert.assertNotNull( minhaAgencia );
+
         // Fixture Teardown
     }
 }
