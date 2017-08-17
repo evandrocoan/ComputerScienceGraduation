@@ -7,7 +7,6 @@ import br.ufsc.ine.leb.sistemaBancario.Moeda;
 
 public class TesteDinheiro
 {
-
     @Test
     public void dinheiroCriacao()
     {

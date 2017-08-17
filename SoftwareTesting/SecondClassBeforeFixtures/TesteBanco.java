@@ -9,7 +9,6 @@ import br.ufsc.ine.leb.sistemaBancario.SistemaBancario;
 
 public class TesteBanco
 {
-
     SistemaBancario sistema;
 
     @Before
@@ -29,10 +28,13 @@ public class TesteBanco
     public void bancoCriacao()
     {
         // Fixture Setup
+
         // Exercise SUT
         final Banco meuBanco = this.criarBanco();
+
         // Result Verification
         Assert.assertNotNull( meuBanco );
+
         // Fixture Teardown
     }
 }
