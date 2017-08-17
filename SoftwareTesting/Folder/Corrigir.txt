@@ -1,0 +1,11 @@
+
+Mover as criações dos objetos do Fixture, para o SUT
+
+E quebrar os testes de soma de data em 4 testes um para cada data.
+
+        DateHoursum = DateHoursum.plusMonths( 1 );
+        DateHoursum = DateHoursum.plusDays( 1 );
+        DateHoursum = DateHoursum.plusHours( 1 );
+        DateHoursum = DateHoursum.plusMinutes( 1 );
+
+
