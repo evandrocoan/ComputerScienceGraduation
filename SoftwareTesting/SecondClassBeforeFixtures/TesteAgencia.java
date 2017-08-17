@@ -26,7 +26,7 @@ public class TesteAgencia
         final Agencia caixaEconomicaTrindade = this.banco.criarAgencia( "Trindade" );
 
         // Exercise SUT
-        final boolean areEquals = "Trindade".equals( caixaEconomicaTrindade.obterIdentificador() );
+        final boolean areEquals = "Trindade".equals( caixaEconomicaTrindade.obterNome() );
 
         // Result Verification
         Assert.assertTrue( areEquals );
