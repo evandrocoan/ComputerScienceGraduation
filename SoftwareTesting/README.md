@@ -1,9 +1,8 @@
-﻿2017-2_ Tópicos Especiais em Aplicações Tecnológicas I
+﻿2017-2_ Special Topics in Technological Applications I
 
 ==========================
 
-Repositório para os trabalhos da disciplina de Tópicos Especiais em Aplicações Tecnológicas I,
-Professora. Patrícia Vilain, 2017/2.
-
+`2017-2_ Tópicos Especiais em Aplicações Tecnológicas I`, Repository for the works of the discipline
+of Special Topics in Technological Applications I.
 
 
