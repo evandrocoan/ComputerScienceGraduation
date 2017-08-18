@@ -22,7 +22,7 @@ public class TesteAgencia
     @Test
     public void criarCaixaEconomicaTrindade()
     {
-        // Fixture Setup
+        // Fixture Setup, implicit
         final Agencia caixaEconomicaTrindade = this.banco.criarAgencia( "Trindade" );
 
         // Exercise SUT
@@ -37,7 +37,7 @@ public class TesteAgencia
     @Test
     public void criarDuasAgenciasCodigo()
     {
-        // Fixture Setup
+        // Fixture Setup, implicit
         final Agencia trindade = this.banco.criarAgencia( "Trindade" );
         final Agencia serrinha = this.banco.criarAgencia( "Serrinha" );
 
@@ -57,11 +57,41 @@ public class TesteAgencia
     {
         // Fixture Setup
 
-        // Exercise SUT
+        // Exercise SUT, implicit
         final Agencia minhaAgencia = this.banco.criarAgencia( "MinhaAgencia" );
 
         // Result Verification
         Assert.assertNotNull( minhaAgencia );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void agenciaCriacaoNome()
+    {
+        // Fixture Setup, inline
+        final String nome = "MinhaAgencia";
+
+        // Exercise SUT, implicit
+        final Agencia minhaAgencia = this.banco.criarAgencia( nome );
+
+        // Result Verification
+        Assert.assertNotNull( nome, minhaAgencia.obterNome() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void agenciaCriarConta()
+    {
+        // Fixture Setup, inline
+        final String nome = "MinhaAgencia";
+
+        // Exercise SUT, implicit
+        final Agencia minhaAgencia = this.banco.criarAgencia( nome );
+
+        // Result Verification
+        Assert.assertNotNull( nome, minhaAgencia.obterNome() );
 
         // Fixture Teardown
     }

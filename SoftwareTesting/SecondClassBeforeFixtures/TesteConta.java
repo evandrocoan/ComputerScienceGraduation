@@ -4,12 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.ufsc.ine.leb.sistemaBancario.Agencia;
-import br.ufsc.ine.leb.sistemaBancario.Banco;
 import br.ufsc.ine.leb.sistemaBancario.Conta;
 import br.ufsc.ine.leb.sistemaBancario.Dinheiro;
-import br.ufsc.ine.leb.sistemaBancario.Entrada;
-import br.ufsc.ine.leb.sistemaBancario.Moeda;
-import br.ufsc.ine.leb.sistemaBancario.SistemaBancario;
+import br.ufsc.ine.leb.sistemaBancario.Transacao;
 import br.ufsc.ine.leb.sistemaBancario.ValorMonetario;
 
 public class TesteConta
@@ -19,9 +16,8 @@ public class TesteConta
     @Before
     public void executedBeforeEach()
     {
-        final SistemaBancario sistemaBancario = new SistemaBancario();
-        final Banco caixaEconomica = sistemaBancario.criarBanco( "Caixa Economica", Moeda.BRL );
-        this.agencia = caixaEconomica.criarAgencia( "Agencia" );
+        // Helper class
+        this.agencia = Helper.criarAgencia();
     }
 
     @Test
@@ -29,7 +25,7 @@ public class TesteConta
     {
         // Fixture Setup
 
-        // Exercise SUT
+        // Exercise SUT, implicit
         final Conta minhaConta = this.agencia.criarConta( "Conta Test" );
 
         // Result Verification
@@ -39,21 +35,98 @@ public class TesteConta
     }
 
     @Test
-    public void realizarTransacao()
+    public void obterTitular()
     {
         // Fixture Setup
-        final Conta saida = this.agencia.criarConta( "Conta Saida" );
-        final Conta entrada = this.agencia.criarConta( "Conta Entrada" );
 
-        final Dinheiro quantia = new Dinheiro( Moeda.BRL, 1500, 0 );
-        ValorMonetario esperado = new ValorMonetario( Moeda.BRL );
-
-        // Exercise SUT
-        esperado = esperado.somar( quantia );
-        entrada.adicionarTransacao( new Entrada( saida, quantia ) );
+        // Exercise SUT, implicit
+        final Conta minhaConta = this.agencia.criarConta( "Conta Test" );
 
         // Result Verification
-        Assert.assertEquals( esperado, entrada.calcularSaldo() );
+        Assert.assertEquals( "Conta Test", minhaConta.obterTitular() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void obterAgencia()
+    {
+        // Fixture Setup
+
+        // Exercise SUT, implicit
+        final Conta minhaConta = this.agencia.criarConta( "Conta Test" );
+
+        // Result Verification
+        Assert.assertEquals( this.agencia, minhaConta.obterAgencia() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void obterSaldo()
+    {
+        // Fixture Setup
+        final ValorMonetario valorEsperado = Helper.criarValorMonetario( 0 );
+
+        // Exercise SUT, implicit
+        final Conta minhaConta = this.agencia.criarConta( "Conta Test" );
+
+        // Result Verification
+        Assert.assertEquals( valorEsperado, minhaConta.calcularSaldo() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void obterIdentificador()
+    {
+        // Fixture Setup
+        final String titular = "Conta Test";
+        final String valorEsperado = Helper.criarIdentificador( 1, titular );
+
+        // Exercise SUT, implicit
+        final Conta minhaConta = this.agencia.criarConta( titular );
+
+        // Result Verification
+        Assert.assertEquals( valorEsperado, minhaConta.obterIdentificador() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void adicionarTransacaoEntrada()
+    {
+        // Fixture Setup
+        final int valor = 500;
+        final ValorMonetario valorEsperado = Helper.criarValorMonetario( valor );
+
+        final Conta minhaConta = this.agencia.criarConta( "Titular" );
+        final Transacao transacao = Helper.criarTransacaoEntrada( valor );
+
+        // Exercise SUT, implicit
+        minhaConta.adicionarTransacao( transacao );
+
+        // Result Verification
+        Assert.assertEquals( valorEsperado, minhaConta.calcularSaldo() );
+
+        // Fixture Teardown
+    }
+
+    @Test
+    public void adicionarTransacaoSaida()
+    {
+        // Fixture Setup
+        final int valor = 500;
+        final Dinheiro valorEsperado = Helper.criarDinheiro( valor );
+
+        final Conta minhaConta = this.agencia.criarConta( "Titular" );
+        final Transacao transacao = Helper.criarTransacaoSaida( valor );
+
+        // Exercise SUT, implicit
+        minhaConta.adicionarTransacao( transacao );
+
+        // Result Verification
+        Assert.assertEquals( valorEsperado.negativo(), minhaConta.calcularSaldo().obterQuantia().negativo() );
 
         // Fixture Teardown
     }
