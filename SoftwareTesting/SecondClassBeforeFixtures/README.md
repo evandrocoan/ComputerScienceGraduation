@@ -15,14 +15,15 @@ Hence unzip the file and put the `src.br` folder on `../` root folder. Tree stru
 ```
 $ tree
 .
-├── FirstClassJunitIndroduction.java
+├── FirstClassJunitIndroduction
+│   └── FirstClassJunitIndroduction.java
 ├── Libraries
 │   ├── hamcrest-core-1.3.jar
 │   ├── joda-time-2.9.9.jar
 │   └── junit-4.12.jar
 ├── README.md
 ├── SecondClassBeforeFixtures
-│   ├── Corrigir.txt
+│   ├── Helper.java
 │   ├── README.md
 │   ├── TesteAgencia.java
 │   ├── TesteBanco.java
@@ -51,7 +52,7 @@ $ tree
                         ├── TransacaoNaoRealizada.java
                         └── ValorMonetario.java
 
-16 directories, 47 files
+10 directories, 26 files
 ```
 
 
