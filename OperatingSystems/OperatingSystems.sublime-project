@@ -14,10 +14,10 @@
         {
             "working_dir": "$project_path/TeachingEpos",
             // "selector_old": "source.matlab, source.octave", // comment this to build from everywhere
-            
+
             "name": "Build Main File",
-            "cmd": ["sh", "choose_a_compiler.sh", "producer_consumer.cc"],
-            
+            "cmd": ["sh", "choose_a_compiler.sh", "philosophers_dinner.cc"],
+
             "variants":
             [
                 {
@@ -32,7 +32,7 @@
                     ]
                 }
             ],
-            
+
             "target": "ansi_color_build",
             "syntax": "Packages/ANSIescape/ANSI.tmLanguage"
         }
