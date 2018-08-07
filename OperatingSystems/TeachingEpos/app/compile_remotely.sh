@@ -19,7 +19,7 @@ sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu ../../TeachingEpos/* $EPOS_COM
 APPLICATION_TO_RUN=$(echo $1 | cut -d'.' -f 1)
 
 
-REMOTE_COMMAND_TO_RUN="cd /home/evandro.coan/2016-2_OperatingSystems/TeachingEpos;
+REMOTE_COMMAND_TO_RUN="cd /home/evandro.coan/OperatingSystems/TeachingEpos;
 pwd;
 sh compile_and_run.sh $APPLICATION_TO_RUN;"
 
