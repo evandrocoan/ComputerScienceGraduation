@@ -4,7 +4,12 @@
         {
             "folder_exclude_patterns":
             [
-                "EposMotes_SmartObjects"
+                "EposMotes_SmartObjects",
+                "2015-1",
+                "ICs",
+                "SPs",
+                "Week8_Implementation",
+                "Week9",
             ],
             "path": "."
         }
