@@ -40,6 +40,10 @@ export EPOS=/place/here/the/path/to/epos/path
 # This configures the system to compile the EPOS applications
 export PATH=/usr/local/arm/gcc/bin:$EPOS/bin:$PATH
 ```
+1. Run these commands:
+```
+sudo apt-get install bin86
+```
 
 
 
