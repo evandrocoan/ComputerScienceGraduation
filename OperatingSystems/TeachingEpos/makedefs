@@ -68,7 +68,7 @@ avr8_COMP_PREFIX        := /usr/local/avr/gcc-4.4.4/bin/avr-
 COMP_PREFIX		= $($(ARCH)_COMP_PREFIX)
 
 # Boot Memory Map
-MACH_TRAITS	= $(INCLUDE)/machine/$(MACH)/$(MMOD)_traits.h 
+MACH_TRAITS	= $(INCLUDE)/machine/$(MACH)/$(MMOD)_traits.h
 MEM_BASE	= $(call GETTK,MEM_BASE,$(MACH_TRAITS))
 MEM_TOP		= $(call GETTK,MEM_TOP,$(MACH_TRAITS))
 MEM_SIZE	= $(shell echo "(`printf "%d" $(MEM_TOP)` + 1 - `printf "%d" $(MEM_BASE)`) / 1024"|bc)
@@ -85,18 +85,18 @@ BOOT_LENGTH_MAX = $(call GETTK,BOOT_LENGTH_MAX,$(MACH_TRAITS))
 #Machine specifics
 pc_CC_FLAGS             := -Wa,--32
 pc_AS_FLAGS             := --32
-pc_LD_FLAGS             := 
+pc_LD_FLAGS             :=
 pc_EMULATOR             = qemu-system-i386 -smp $(CPUS) -m $(MEM_SIZE)k -nographic -no-reboot -fda
 
-cortex_m_CC_FLAGS       := -mcpu=cortex-m3 -mthumb -mno-thumb-interwork -mfpu=fpa #-Wa,-mimplicit-it=arm -marm 
+cortex_m_CC_FLAGS       := -mcpu=cortex-m3 -mthumb -mno-thumb-interwork -mfpu=fpa #-Wa,-mimplicit-it=arm -marm
 cortex_m_AS_FLAGS       := -mcpu=cortex-m3 -mthumb -mfpu=fpa
-cortex_m_LD_FLAGS       := 
+cortex_m_LD_FLAGS       :=
 cortex_m_EMULATOR       = timeout --preserve-status --foreground 20s qemu-system-arm -cpu cortex-m3 -machine lm3s811evb -m $(MEM_SIZE)k -nographic -no-reboot -kernel
 
 atmega_CC_FLAGS         := -mmcu=atmega128 -Wno-inline
 atmega_AS_FLAGS         := -mmcu=atmega128
 atmega_LD_FLAGS         := -m avr5
-atmega_EMULATOR         = 
+atmega_EMULATOR         =
 
 $(MACH)_CODE_NAME       := .init
 $(MACH)_DATA_NAME       := .ctors
@@ -116,20 +116,20 @@ else
 MACH_EMULATOR           = $($(MACH)_EMULATOR)
 endif
 MACH_DEBUGGER           = $(TERM) gdb -ex "target remote:1234" -ex "set confirm off"
-ifneq ($(wildcard $(IMG)/$(MACH)_setup),) 
+ifneq ($(wildcard $(IMG)/$(MACH)_setup),)
 MACH_DEBUGGER           := $(MACH_DEBUGGER) -ex "add-symbol-file $(call DBSEC,$(SRC)/setup/$(MACH)_setup,.text)"
 endif
-ifneq ($(wildcard $(IMG)/$(MACH)_init),) 
+ifneq ($(wildcard $(IMG)/$(MACH)_init),)
 MACH_DEBUGGER           := $(MACH_DEBUGGER) -ex "add-symbol-file $(call DBSEC,$(SRC)/init/$(MACH)_init,.text)"
 endif
-ifneq ($(wildcard $(IMG)/$(MACH)_system),) 
+ifneq ($(wildcard $(IMG)/$(MACH)_system),)
 MACH_DEBUGGER           := $(MACH_DEBUGGER) -ex "add-symbol-file $(call DBSEC,$(SRC)/system/$(MACH)_system,.text)"
 endif
 
 # Architecture specifics
 ARCH_LITTLE	:= little
 ARCH_BIG	:= big
-ARCH_TRAITS	= $(INCLUDE)/architecture/$(ARCH)/traits.h 
+ARCH_TRAITS	= $(INCLUDE)/architecture/$(ARCH)/traits.h
 ARCH_ENDIANESS	= $(ARCH_$(call GETTK,ENDIANESS,$(ARCH_TRAITS)))
 ARCH_WORD_SIZE	= $(call GETTK,WORD_SIZE,$(ARCH_TRAITS))
 ARCH_CLOCK	= $(call GETTK,CLOCK,$(ARCH_TRAITS))
@@ -141,7 +141,7 @@ TCCFLAGS	:= -m32 -Wall -O2 -I$(INCLUDE)
 TCXX		:= g++ -c -ansi -fno-exceptions -std=c++0x
 TCXXFLAGS	:= -m32 -Wall -O2 -I$(INCLUDE)
 
-TCPP		:= gcc -E 
+TCPP		:= gcc -E
 TCPPFLAGS	:= -I$(INCLUDE)
 
 TLD		:= gcc
@@ -152,7 +152,7 @@ ACC		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
 ACXX		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
 AF77		= $(BIN)/eposcc $(MACH_CC_FLAGS) -c -ansi -O2
 ALD		= $(BIN)/eposcc --$(MODE) $(MACH_LD_FLAGS)
-ALDFLAGS	:= --gc-sections 
+ALDFLAGS	:= --gc-sections
 
 # Tools and flags to compile the system
 AR		= $(COMP_PREFIX)ar
@@ -161,7 +161,7 @@ ARFLAGS		:= rcs
 AS		= $(COMP_PREFIX)as
 ASFLAGS		= $(MACH_AS_FLAGS)
 
-CC		= $(COMP_PREFIX)gcc -ansi -c 
+CC		= $(COMP_PREFIX)gcc -ansi -c
 CCFLAGS		= $(MACH_CC_FLAGS) -O2 -nostdinc -Wall -Werror -I$(INCLUDE)
 CCLIB		= `$(CC) $(MACH_CC_FLAGS) -print-file-name=`
 
@@ -176,9 +176,9 @@ CLEANDIR	:= rm -rf
 
 DD		:= dd
 
-DEBUGGER	= $(MACH_DEBUGGER) 
+DEBUGGER	= $(MACH_DEBUGGER)
 
-EMULATOR	= $(MACH_EMULATOR) 
+EMULATOR	= $(MACH_EMULATOR)
 
 INSTALL		:= install
 
@@ -265,7 +265,7 @@ lib%.o: lib%.cc
 		$(CLEAN) $<.tmp
 
 %.key: %.cc
-		$(EPOSANL) $< 
+		$(EPOSANL) $<
 
 %.key: %.c
 		$(EPOSANL) $<
