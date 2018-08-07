@@ -10,7 +10,9 @@
 # export EPOS_COMPILER_MACHINE_PASS=123
 # export EPOS_COMPILER_MACHINE_ADDRESS=user.name@so.user.name.vms.ufsc.br
 #
-sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu ../../TeachingEpos/* $EPOS_COMPILER_MACHINE_ADDRESS:~/2016-2_OperatingSystems/TeachingEpos
+sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu ../../TeachingEpos/* $EPOS_COMPILER_MACHINE_ADDRESS:~/OperatingSystems/TeachingEpos
+
+# sshpass -p $EPOS_COMPILER_MACHINE_PASS unison ../../TeachingEpos ssh://$EPOS_COMPILER_MACHINE_ADDRESS//home/evandro.coan/OperatingSystems/TeachingEpos
 
 
 # Get the application name
