@@ -49,10 +49,10 @@ void Semaphore::v()
     }
     else
     {
-        auto running_thread = this->threads_em_espera.remove();
+        auto running_thread_link = this->threads_em_espera.remove();
 
         // put thread on the ready queue
-        Thread::_ready.insert(running_thread->_link);
+        Thread::_ready.insert(running_thread_link);
     }
     this->end_atomic();
 }
