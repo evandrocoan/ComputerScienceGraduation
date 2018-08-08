@@ -6,7 +6,7 @@ __BEGIN_SYS
 
 Semaphore::Semaphore(int v): _value(v)
 {
-    db<Synchronizer>(TRC) << "Semaphore(value=" << _value << ") => " << this << endl;
+    db<Synchronizer>(TRC) << "Semaphore(value=" << this->_value << ") => " << this << endl;
 }
 
 
@@ -18,40 +18,43 @@ Semaphore::~Semaphore()
 
 void Semaphore::p()
 {
-    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ",value=" << _value << ")" << endl;
+    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ",value=" << this->_value << ")" << endl;
 
     // Disable all interrupts
-    reg(IER, 0);
+    this->begin_atomic();
 
-    if(_value > 0)
+    if(this->_value > 0)
     {
-        fdec(_value);
-        reg(IER, 1);
+        fdec(this->_value);
+        this->end_atomic();
         return;
     }
 
-    this->threads_em_espera.insert(Thread::_running);
+    this->threads_em_espera.insert(Thread::_running->_link);
     sleep();
-    reg(IER, 1);
+    this->end_atomic();
 }
 
 
 void Semaphore::v()
 {
-    db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << _value << ")" << endl;
+    db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << this->_value << ")" << endl;
 
     // Disable all interrupts
-    reg(IER, 0);
+    this->begin_atomic();
 
-    if(this->queue.empty())
+    if(this->threads_em_espera.empty())
     {
-        finc(_value);
+        finc(this->_value);
     }
     else
     {
         auto running_thread = this->threads_em_espera.remove();
-        wakeup();
+
+        // put thread on the ready queue
+        Thread::_ready.insert(running_thread->_link);
     }
+    this->end_atomic();
 }
 
 __END_SYS

@@ -16,6 +16,7 @@ class Thread
 {
     friend class Init_First;
     friend class System;
+    friend class Semaphore;
     friend class Synchronizer_Common;
     friend class Alarm;
     friend class IA32;

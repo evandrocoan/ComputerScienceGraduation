@@ -35,6 +35,16 @@
                         "--command",
                         "sh compile_and_run.sh philosophers_dinner.cc"
                     ]
+                },
+
+                {
+                    "name": "Compile and Run",
+                    "cmd":
+                    [
+                        "sh",
+                        "compile_and_run.sh",
+                        "philosophers_dinner.cc"
+                    ]
                 }
             ],
 
