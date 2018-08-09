@@ -8,7 +8,7 @@
 __BEGIN_SYS
 
 class CPU_Common
-{	
+{
 protected:
     static const bool BIG_ENDIAN = (Traits<CPU>::ENDIANESS == Traits<CPU>::BIG);
 

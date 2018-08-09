@@ -6,7 +6,7 @@ OBJS := $(subst .cc,.o,$(shell find *.cc))
 
 all:		$(LIBMACH)
 
-$(LIBMACH):	$(LIBMACH)($(OBJS))	
+$(LIBMACH):	$(LIBMACH)($(OBJS))
 
 clean:
 		$(CLEAN) *.o

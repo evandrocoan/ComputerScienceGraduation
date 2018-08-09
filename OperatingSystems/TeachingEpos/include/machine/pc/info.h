@@ -110,7 +110,7 @@ public:
         unsigned int cpu_clock;
         unsigned int bus_clock;
     };
-        
+
 public:
     friend Debug & operator<<(Debug & db, const System_Info<PC> & si);
 

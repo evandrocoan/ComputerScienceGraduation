@@ -14,7 +14,9 @@ class Semaphore: protected Synchronizer_Common
 public:
     Semaphore(int v = 1);
     ~Semaphore();
-	Ordered_Queue<Thread> threads_em_espera;
+
+	// Ordered_Queue<Integer2>::Element
+    Ordered_Queue<Thread>::Element threads_em_espera;
     void p();
     void v();
 

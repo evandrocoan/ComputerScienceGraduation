@@ -14,8 +14,8 @@ public:
     // MC6845 I/O ports
     typedef CPU::IO_Port IO_Port;
     enum {
-        ADDR_REG  = 0x03d4, // Address 
-        DATA_REG  = 0x03d5, // Data 
+        ADDR_REG  = 0x03d4, // Address
+        DATA_REG  = 0x03d5, // Data
         CTRL_REG  = 0x03d8, // Control [0,0,BLK,GR_HR,VOUT,B/W,GR,TX_HR]
         COLOR_REG = 0x03d9, // Color [0,0,PLT,BR,B-BG-FG]
         STAT_REG  = 0x03da  // Status [0,0,0,0,VR,LPS,LPT,EN]
@@ -54,7 +54,7 @@ class PC_Display: public Display_Common, private MC6845
 {
     friend class PC_Setup;
     friend class First_Object;
-    
+
 private:
     static const unsigned int FB = Traits<PC_Display>::FRAME_BUFFER_ADDRESS;
     static const int LINES = Traits<PC_Display>::LINES;
@@ -104,7 +104,7 @@ public:
             putc(*s++);
     }
 
-    static void clear() { 
+    static void clear() {
         for(unsigned int i = 0; i < LINES * COLUMNS; i++)
             _frame_buffer[i] = NORMAL | ' ';
         MC6845::position(0);
@@ -144,7 +144,7 @@ private:
         for(unsigned int i = (LINES - 1) * COLUMNS; i < LINES * COLUMNS; i++)
             _frame_buffer[i] = NORMAL | ' ';
     }
-    
+
     static void init() {
         remap();
     }

@@ -11,6 +11,6 @@ $(MACH)_setup:	$(MACH)_setup.o
 
 install:	$(MACH)_setup
 		$(INSTALL) $< $(IMG)
-		
+
 clean:
 		$(CLEAN) *.o *_setup

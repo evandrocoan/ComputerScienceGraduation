@@ -18,7 +18,7 @@ __BEGIN_UTIL
 class Observer;
 
 class Observed
-{ 
+{
     friend class Observer;
 
 private:
@@ -29,7 +29,7 @@ protected:
         db<Observed>(TRC) << "Observed() => " << this << endl;
     }
 
-public: 
+public:
     ~Observed() {
         db<Observed>(TRC) << "~Observed(this=" << this << ")" << endl;
     }
@@ -38,20 +38,20 @@ public:
     virtual void detach(Observer * o);
     virtual bool notify();
 
-private: 
+private:
     Simple_List<Observer> _observers;
-}; 
+};
 
 class Observer
-{ 
+{
     friend class Observed;
 
-protected: 
+protected:
     Observer(): _link(this) {
         db<Observer>(TRC) << "Observer() => " << this << endl;
     }
 
-public: 
+public:
     ~Observer() {
         db<Observer>(TRC) << "~Observer(this=" << this << ")" << endl;
     }
@@ -122,9 +122,9 @@ public:
     virtual void detach(Conditional_Observer<T> * o, T c);
     virtual bool notify(T c);
 
-private: 
+private:
     Simple_Ordered_List<Conditional_Observer<T>, T> _observers;
-}; 
+};
 
 template<typename T>
 class Conditional_Observer
@@ -137,12 +137,12 @@ public:
 public:
     Conditional_Observer(): _link(this) {
         db<Observer>(TRC) << "Observer() => " << this << endl;
-    } 
+    }
 
     ~Conditional_Observer() {
         db<Observer>(TRC) << "~Observer(this=" << this << ")" << endl;
     }
-    
+
     virtual void update(Conditionally_Observed<T> * o, T c) = 0;
 
 private:
@@ -267,5 +267,5 @@ private:
 };
 
 __END_UTIL
- 
+
 #endif

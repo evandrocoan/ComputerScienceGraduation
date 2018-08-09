@@ -57,15 +57,15 @@ void test_simple_list ()
             cout << ", ";
     }
     cout << endl;
-    cout << "Removing the element whose value is " << o[N/2] << " => " 
+    cout << "Removing the element whose value is " << o[N/2] << " => "
          << *l.remove(&o[N/2])->object() << endl;
     cout << "Removing the list's head => " << *l.remove_head()->object()
          << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => " 
+    cout << "Removing the element whose value is " << o[N/4] << " => "
          << *l.remove(&o[N/4])->object() << endl;
     cout << "Removing the list's tail => " << *l.remove_tail()->object()
          << endl;
-    cout << "Trying to remove an element that is not on the list => " 
+    cout << "Trying to remove an element that is not on the list => "
          << l.remove(&o[N+1]) << endl;
     cout << "Removing all remaining elements => ";
     while(l.size() > 0) {
@@ -79,7 +79,7 @@ void test_simple_list ()
         delete e[i];
 }
 
-void test_simple_grouping_list() 
+void test_simple_grouping_list()
 {
     cout << "\nThis is a simple grouping list of integers:" << endl;
     Simple_Grouping_List<int> l;
@@ -120,7 +120,7 @@ void test_simple_grouping_list()
             cout << ", ";
     }
     cout << endl;
-    cout << "The list has now " << l.size() << " elements that group " 
+    cout << "The list has now " << l.size() << " elements that group "
          << l.grouped_size() << " elements in total" << endl;
     cout << "They are: ";
     for(Simple_Grouping_List<int>::Iterator i = l.begin(); i != l.end(); i++) {
@@ -129,7 +129,7 @@ void test_simple_grouping_list()
             cout << ", ";
     }
     cout << endl;
-    cout << "Allocating 1 element from the list => "; 
+    cout << "Allocating 1 element from the list => ";
     d1 = l.search_decrementing(1);
     if(d1) {
         cout << *(d1->object() + d1->size()) << endl;
@@ -139,7 +139,7 @@ void test_simple_grouping_list()
         }
     } else
         cout << "failed!" << endl;
-    cout << "Allocating 6 more elements from the list => "; 
+    cout << "Allocating 6 more elements from the list => ";
     d1 = l.search_decrementing(6);
     if(d1) {
         cout << *(d1->object() + d1->size());
@@ -150,7 +150,7 @@ void test_simple_grouping_list()
         cout << endl;
     } else
         cout << "failed!" << endl;
-    cout << "Allocating " << N * 2 << " more elements from the list => "; 
+    cout << "Allocating " << N * 2 << " more elements from the list => ";
     d1 = l.search_decrementing(N * 2);
     if(d1) {
         cout << *(d1->object() + d1->size());
@@ -161,7 +161,7 @@ void test_simple_grouping_list()
         cout << endl;
     } else
         cout << "failed!" << endl;
-    cout << "Allocating " << (N * 2)-7 << " more elements from the list => "; 
+    cout << "Allocating " << (N * 2)-7 << " more elements from the list => ";
     d1 = l.search_decrementing((N * 2) - 7);
     if(d1) {
         cout << *(d1->object() + d1->size());
@@ -172,7 +172,7 @@ void test_simple_grouping_list()
         cout << endl;
     } else
         cout << "failed!" << endl;
-    cout << "The list has now " << l.size() << " elements that group " 
+    cout << "The list has now " << l.size() << " elements that group "
          << l.grouped_size() << " elements in total" << endl;
 }
 
@@ -200,15 +200,15 @@ void test_list ()
             cout << ", ";
     }
     cout << endl;
-    cout << "Removing the element whose value is " << o[N/2] << " => " 
+    cout << "Removing the element whose value is " << o[N/2] << " => "
          << *l.remove(&o[N/2])->object() << endl;
     cout << "Removing the list's head => " << *l.remove_head()->object()
          << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => " 
+    cout << "Removing the element whose value is " << o[N/4] << " => "
          << *l.remove(&o[N/4])->object() << endl;
     cout << "Removing the list's tail => " << *l.remove_tail()->object()
          << endl;
-    cout << "Trying to remove an element that is not on the list => " 
+    cout << "Trying to remove an element that is not on the list => "
          << l.remove(&o[N+1]) << endl;
     cout << "Removing all remaining elements => ";
     while(l.size() > 0) {
@@ -246,15 +246,15 @@ void test_ordered_list ()
             cout << ", ";
     }
     cout << endl;
-    cout << "Removing the element whose value is " << o[N/2] << " => " 
+    cout << "Removing the element whose value is " << o[N/2] << " => "
          << *l.remove(&o[N/2])->object() << endl;
     cout << "Removing the list's head => " << *l.remove_head()->object()
          << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => " 
+    cout << "Removing the element whose value is " << o[N/4] << " => "
          << *l.remove(&o[N/4])->object() << endl;
     cout << "Removing the list's tail => " << *l.remove_tail()->object()
          << endl;
-    cout << "Trying to remove an element that is not on the list => " 
+    cout << "Trying to remove an element that is not on the list => "
          << l.remove(&o[N+1]) << endl;
     cout << "Removing all remaining elements => ";
     while(l.size() > 0) {
@@ -292,15 +292,15 @@ void test_relative_list ()
             cout << ", ";
     }
     cout << endl;
-    cout << "Removing the element whose value is " << o[N/2] << " => " 
+    cout << "Removing the element whose value is " << o[N/2] << " => "
          << *l.remove(&o[N/2])->object() << endl;
     cout << "Removing the list's head => " << *l.remove_head()->object()
          << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => " 
+    cout << "Removing the element whose value is " << o[N/4] << " => "
          << *l.remove(&o[N/4])->object() << endl;
     cout << "Removing the list's tail => " << *l.remove_tail()->object()
          << endl;
-    cout << "Trying to remove an element that is not on the list => " 
+    cout << "Trying to remove an element that is not on the list => "
          << l.remove(&o[N+1]) << endl;
     cout << "Removing all remaining elements => ";
     while(l.size() > 0) {
@@ -314,7 +314,7 @@ void test_relative_list ()
         delete e[i];
 }
 
-void test_grouping_list() 
+void test_grouping_list()
 {
     cout << "\nThis is a grouping list of 32-byte buffers:" << endl;
     Grouping_List<char> l;
@@ -399,6 +399,6 @@ void test_grouping_list()
         cout << endl;
     } else
         cout << "failed!" << endl;
-    cout << "The list has now " << l.size() << " elements that group " 
+    cout << "The list has now " << l.size() << " elements that group "
          << l.grouped_size() << " elements in total" << endl;
 }

@@ -10,7 +10,7 @@ void PC_Timer::init()
     db<Init, Timer>(TRC) << "Timer::init()" << endl;
 
     CPU::int_disable();
-    
+
     Engine::config(0, Engine::clock() / FREQUENCY);
 
     IC::int_vector(IC::INT_TIMER, int_handler);

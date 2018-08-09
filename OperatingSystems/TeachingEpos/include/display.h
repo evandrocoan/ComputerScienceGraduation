@@ -80,7 +80,7 @@ public:
         puti(_line);
         put(';');
         puti(_column);
-        put('H');	
+        put('H');
     }
 
 private:
@@ -96,14 +96,14 @@ private:
     static void puti(unsigned char value) {
         unsigned char digit = '0';
         while(value >= 100) {
-            digit++;     
+            digit++;
             value -= 100;
         }
         put(digit);
-    
+
         digit = '0';
         while(value >= 10) {
-            digit++; 
+            digit++;
             value -= 10;
         }
         put(digit);

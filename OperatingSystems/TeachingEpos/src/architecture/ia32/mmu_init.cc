@@ -9,15 +9,15 @@ void IA32_MMU::init()
 {
     System_Info<PC> * si = System::info();
 
-    db<Init, IA32_MMU>(INF) << "IA32_MMU::memory={base=" 
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::memory={base="
         		    << reinterpret_cast<void *>(si->pmm.mem_base) << ",size="
         		    << (si->bm.mem_top - si->bm.mem_base) / 1024
         		    << "KB}" << endl;
-    db<Init, IA32_MMU>(INF) << "IA32_MMU::free1={base=" 
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::free1={base="
         		    << reinterpret_cast<void *>(si->pmm.free1_base) << ",size="
         		    << (si->pmm.free1_top - si->pmm.free1_base) / 1024
         		    << "KB}" << endl;
-    db<Init, IA32_MMU>(INF) << "IA32_MMU::free2={base=" 
+    db<Init, IA32_MMU>(INF) << "IA32_MMU::free2={base="
         		    << reinterpret_cast<void *>(si->pmm.free2_base) << ",size="
         		    << (si->pmm.free2_top - si->pmm.free2_base) / 1024
         		    << "KB}" << endl;
@@ -25,7 +25,7 @@ void IA32_MMU::init()
                             << reinterpret_cast<void *>(si->pmm.free3_base) << ",size="
                             << (si->pmm.free3_top - si->pmm.free3_base) / 1024
                             << "KB}" << endl;
-    
+
     // BIG WARING HERE: INIT (i.e. this program) will be part of the free
     // storage after the following is executed, but it will remain alive
     // This only works because the _free.insert_merging() only

@@ -10,7 +10,7 @@ volatile unsigned int PC::_n_cpus;
 // Class methods
 void PC::panic()
 {
-    CPU::int_disable(); 
+    CPU::int_disable();
     Display::position(24, 73);
     Display::puts("PANIC!");
     if(Traits<System>::reboot)

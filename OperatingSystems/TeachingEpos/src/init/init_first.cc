@@ -43,7 +43,7 @@ public:
 };
 
 // Global object "init_first" must be constructed last in the context of the
-// OS, for it activates the first application thread (usually main()) 
+// OS, for it activates the first application thread (usually main())
 Init_First init_first;
 
 __END_SYS

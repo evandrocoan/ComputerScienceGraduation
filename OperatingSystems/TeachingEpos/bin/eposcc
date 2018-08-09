@@ -107,7 +107,7 @@ for arg in "$@" ; do
 	output_file="$arg"
 	continue
     fi
-    case "$arg" in 
+    case "$arg" in
     -c)
 	all_args="$all_args $arg"
 	compile_flgs="$compile_flgs $arg"
@@ -160,7 +160,7 @@ for arg in "$@" ; do
    	    os_is_builtin=1
 	fi
 	;;
-    --library)	
+    --library)
 	if [ $os_is_kernel = 1 -o $os_is_builtin = 1 -o $os_is_linux = 1 ] ; then
 	    echo "--builtin, --kernel, --library and --linux cannot be used together!"
 	    exit -1
@@ -207,7 +207,7 @@ for arg in "$@" ; do
 	echo "   $my_name -c -O -Llibrary_path -Iheader_path -o foo foo.c"
 	exit 1
 	;;
-    *\"*) 
+    *\"*)
 	all_args="$all_args `echo $arg | sed 's/\"/\\\"/g'`"
 	compile_flgs="$compile_flgs `echo $arg | sed 's/\"/\\\"/g'`"
 	link_flgs="$link_flgs `echo $arg | sed 's/\"/\\\"/g'`"
@@ -315,7 +315,7 @@ if [ $os_is_kernel = 1 ] ; then
 	LINK_OBJN=$LINK_OBJN_BUILTIN
 	LINK_LIBS=$LINK_LIBS_BUILTIN
 fi
-	
+
 linker=$LINKER
 link_flgs="$link_flgs $LINK_FLGS"
 link_objs="$LINK_OBJI $link_objs $LINK_OBJN"
@@ -383,7 +383,7 @@ if [ $need_compile = 1 ] ; then
     $do_echo $compiler $compile_flgs $compile_args $input_file
     $do_exec $compiler $compile_flgs $compile_args $input_file
     status=$?
-    if [ $status != 0 ] ; then 
+    if [ $status != 0 ] ; then
 	exit $status
     fi
 fi

@@ -81,12 +81,12 @@ public:
     unsigned int size() const {
         return _vector.size() + _synonyms.size();
     }
-    
+
     void insert(Element * e) {
         if(!_vector.insert(e, e->key() % SIZE))
             _synonyms.insert(e);
     }
-    
+
     Element * remove(Element * e) {
         if(_vector.remove(e))
             return e;
@@ -98,21 +98,21 @@ public:
             return e;
         return _synonyms.remove(obj);
     }
-    
+
     Element * search(const Object_Type * obj) {
         Element * e = _vector.search(obj);
         if(e)
             return e;
         return _synonyms.search(obj);
     }
-    
+
     Element * search_key(const Key & key) {
         Element * e = _vector[key % SIZE];
         if(e && (e->key() == key))
             return e;
         return _synonyms.search_rank(key);
     }
-    
+
     Element * remove_key(const Key & key) {
         Element * e = _vector[key % SIZE];
         if(e && (e->key() == key))
@@ -148,7 +148,7 @@ public:
         	return false;
         return true;
     }
-    
+
     unsigned int size() const {
         int size = 0;
         for(int i; i < SIZE; i++)
@@ -159,7 +159,7 @@ public:
     void insert(Element * e) {
         _table[e->key() % SIZE].insert(e);
     }
-    
+
     Element * remove(Element * e) {
         return _table[e->key() % SIZE].remove(e);
     }
@@ -171,7 +171,7 @@ public:
         }
         return 0;
     }
-    
+
     Element * search(const Object_Type * obj) {
         for(int i = 0; i < SIZE; i++) {
             Element * e = _table[i].search(obj);
@@ -180,11 +180,11 @@ public:
         }
         return 0;
     }
-    
+
     Element * search_key(const Key & key) {
         return _table[key % SIZE].search_rank(key);
     }
-    
+
     Element * remove_key(const Key & key) {
         return _table[key % SIZE].remove_rank(key);
     }
@@ -199,5 +199,5 @@ private:
 };
 
 __END_UTIL
- 
+
 #endif

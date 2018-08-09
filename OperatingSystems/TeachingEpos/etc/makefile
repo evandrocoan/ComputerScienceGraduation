@@ -15,7 +15,7 @@ all: $(APP)/$(APPLICATION)_traits.h eposcc.conf eposmkbi.conf $(INCLUDE)/system/
 
 $(APP)/$(APPLICATION)_traits.h:
 		$(INSTALL) $(INCLUDE)/system/traits.h $@
-		
+
 eposcc.conf: FORCE
 		@echo "MODE=$(MODE)" > $@
 		@echo "ARCH=$(ARCH)" >> $@

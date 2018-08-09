@@ -7,11 +7,11 @@ __BEGIN_SYS
 PC_RTC::Date PC_RTC::date()
 {
     unsigned int tmp = reg(SECONDS);
-    Date date(reg(YEAR), reg(MONTH), reg(DAY), 
+    Date date(reg(YEAR), reg(MONTH), reg(DAY),
               reg(HOURS), reg(MINUTES), tmp);
 
     if(tmp != reg(SECONDS)) // RTC update in between?
-        date = Date(reg(YEAR), reg(MONTH), reg(DAY), 
+        date = Date(reg(YEAR), reg(MONTH), reg(DAY),
         	    reg(HOURS), reg(MINUTES), reg(SECONDS));
 
     date.adjust_year(1900);

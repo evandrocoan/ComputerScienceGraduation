@@ -449,7 +449,7 @@ extern "C"
 
         return str;
     }
-    
+
     int utoa(unsigned long v,char * dst)
     {
         int i=0,j;
@@ -461,7 +461,7 @@ extern "C"
             dst[i - 1 - j] = '0' + (v % 10);
         return i;
     }
-    
+
     int atoi(const char *s)
     {
         int i;

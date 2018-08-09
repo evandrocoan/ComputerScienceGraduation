@@ -1,7 +1,7 @@
 // EPOS Debug Utility Declarations
 
 #ifndef __debug_h
-#define __debug_h 
+#define __debug_h
 
 #include <utility/ostream.h>
 
@@ -12,7 +12,7 @@ class Debug
 public:
     template<typename T>
     Debug & operator<<(T p) { kerr << p; return *this; }
-}; 
+};
 
 class Null_Debug
 {
@@ -33,36 +33,36 @@ class Select_Debug<false>: public Null_Debug {};
 enum Debug_Error {ERR = 1};
 
 template<typename T>
-inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)> 
+inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)>
 db(Debug_Error l)
 {
     extern OStream::Err error;
 
     Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)>() << begl;
     Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)>() << error;
-    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)>(); 
+    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::error)>();
 }
 
 template<typename T1, typename T2>
-inline Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)> 
+inline Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)>
 db(Debug_Error l)
 {
     extern OStream::Err error;
 
     Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)>() << begl;
     Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)>() << error;
-    return Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)>(); 
+    return Select_Debug<((Traits<T1>::debugged || Traits<T2>::debugged) && Traits<Debug>::error)>();
 }
 
 // Warning
 enum Debug_Warning {WRN = 2};
 
 template<typename T>
-inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::warning)> 
+inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::warning)>
 db(Debug_Warning l)
 {
     Select_Debug<(Traits<T>::debugged && Traits<Debug>::warning)>() << begl;
-    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::warning)>(); 
+    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::warning)>();
 }
 
 template<typename T1, typename T2>
@@ -77,11 +77,11 @@ db(Debug_Warning l)
 enum Debug_Info {INF = 3};
 
 template<typename T>
-inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::info)> 
+inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::info)>
 db(Debug_Info l)
 {
     Select_Debug<(Traits<T>::debugged && Traits<Debug>::info)>() << begl;
-    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::info)>(); 
+    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::info)>();
 }
 
 template<typename T1, typename T2>
@@ -96,11 +96,11 @@ db(Debug_Info l)
 enum Debug_Trace {TRC = 4};
 
 template<typename T>
-inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::trace)> 
+inline Select_Debug<(Traits<T>::debugged && Traits<Debug>::trace)>
 db(Debug_Trace l)
 {
     Select_Debug<(Traits<T>::debugged && Traits<Debug>::trace)>() << begl;
-    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::trace)>(); 
+    return Select_Debug<(Traits<T>::debugged && Traits<Debug>::trace)>();
 }
 
 template<typename T1, typename T2>

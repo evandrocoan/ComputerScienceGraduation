@@ -27,8 +27,8 @@ public:
     }
 
     Elf32_Addr segment_address(int i) {
-        return (i > segments()) ? 0 
-        : seg(i)->p_align ? seg(i)->p_vaddr 
+        return (i > segments()) ? 0
+        : seg(i)->p_align ? seg(i)->p_vaddr
         : (seg(i)->p_vaddr & ~(seg(i)->p_align - 1));
     }
 
@@ -48,5 +48,5 @@ private:
 };
 
 __END_UTIL
- 
+
 #endif
