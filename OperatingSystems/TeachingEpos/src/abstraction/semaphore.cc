@@ -30,7 +30,7 @@ void Semaphore::p()
         return;
     }
 
-    this->threads_em_espera.insert(Thread::_running->_link);
+    this->threads_em_espera.insert(&Thread::_running->_link);
     sleep();
     this->end_atomic();
 }
@@ -49,7 +49,7 @@ void Semaphore::v()
     }
     else
     {
-        auto running_thread_link = this->threads_em_espera.remove();
+        EPOS::S::U::List_Elements::Doubly_Linked_Ordered<EPOS::S::Thread, unsigned int>* running_thread_link = this->threads_em_espera.remove();
 
         // put thread on the ready queue
         Thread::_ready.insert(running_thread_link);

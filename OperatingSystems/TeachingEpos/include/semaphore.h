@@ -15,8 +15,7 @@ public:
     Semaphore(int v = 1);
     ~Semaphore();
 
-	// Ordered_Queue<Integer2>::Element
-    Ordered_Queue<Thread>::Element threads_em_espera;
+    Thread::Queue threads_em_espera;
     void p();
     void v();
 
