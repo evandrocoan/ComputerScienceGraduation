@@ -26,7 +26,7 @@ showTheElapsedSeconds()
     isFloat_returnValue=$?
 
     # Print help when it is not passed a second command line argument integer
-    if [ $isFloat_returnValue -eq 1 ]
+    if [ $isFloat_returnValue -eq 1 ] && ! [ -z $scriptStartSecond ]
     then
         scripExecutionTimeResult=$(awk "BEGIN {printf \"%.2f\",$(date +%s.%N)-$scriptStartSecond}")
         printf "Took '%s' seconds to run the script '%s'.\n" "$scripExecutionTimeResult" "$1"
