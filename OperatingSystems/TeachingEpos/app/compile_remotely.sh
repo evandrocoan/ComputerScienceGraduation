@@ -15,7 +15,8 @@ popd > /dev/null
 #
 sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu $SCRIPT_FOLDER_PATH/../../TeachingEpos/* $EPOS_COMPILER_MACHINE_ADDRESS:~/OperatingSystems/TeachingEpos
 
-# sshpass -p $EPOS_COMPILER_MACHINE_PASS unison ../../TeachingEpos ssh://$EPOS_COMPILER_MACHINE_ADDRESS//home/evandro.coan/OperatingSystems/TeachingEpos
+# https://tech.tiq.cc/2016/04/how-to-use-unison-for-automated-two-way-file-synchronization-on-linux-ubuntu-and-windows-and-android/
+# sshpass -p $EPOS_COMPILER_MACHINE_PASS unison $SCRIPT_FOLDER_PATH/../../TeachingEpos ssh://$EPOS_COMPILER_MACHINE_ADDRESS//home/evandro.coan/OperatingSystems/TeachingEpos -auto
 
 
 # Get the application name
