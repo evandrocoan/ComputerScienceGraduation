@@ -22,7 +22,14 @@ protected:
     void begin_atomic() { Thread::lock(); }
     void end_atomic() { Thread::unlock(); }
 
-    void sleep() { Thread::yield(); } // implicit unlock()
+    /**
+     * Tries to put the current curring thread to sleep.
+     */
+    void sleep()
+    {
+        Thread::yield(); // implicit unlock()
+    }
+
     void wakeup() { end_atomic(); }
     void wakeup_all() { end_atomic(); }
 };
