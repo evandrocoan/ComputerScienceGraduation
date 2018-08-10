@@ -132,11 +132,11 @@ void Thread::resume()
 
     db<Thread>(TRC) << "Thread::resume(this=" << this << ")" << endl;
 
-   _suspended.remove(this);
-   _state = READY;
-   _ready.insert(&_link);
+    _suspended.remove(this);
+    _state = READY;
+    _ready.insert(&_link);
 
-   unlock();
+    unlock();
 }
 
 
