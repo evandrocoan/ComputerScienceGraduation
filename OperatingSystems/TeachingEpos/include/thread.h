@@ -80,6 +80,13 @@ public:
     void resume();
 
     static Thread * volatile self() { return running(); }
+
+    /**
+     * In computer science, yield is an action that occurs in a computer program during
+     * multithreading, of forcing a processor to relinquish control of the current running thread,
+     * and sending it to the end of the running queue, of the same scheduling priority.
+     * https://en.wikipedia.org/wiki/Yield_(multithreading)
+     */
     static void yield();
     static void exit(int status = 0);
 
@@ -96,9 +103,43 @@ protected:
     static void reschedule();
     static void time_slicer(const IC::Interrupt_Id & interrupt);
 
+    /**
+     * Change the current CPU thread context.
+     *
+     * Dynamic: a Dynamic Criterion is recalculated at run-time to constantly reflect the police in
+     * force. There are two moments at which a Dynamic Criterion can be recalculated: at `dispatch`
+     * and at release. For Aperiodic Threads, for which no period is defined, it is done when the
+     * Thread leaves the CPU (i.e. another Thread is `dispatched`). For Periodic Threads,
+     * recalculating at `dispatch` would not be adequate, since jobs of other Threads will still be
+     * released before the next activation and they may influence on the calculations. Therefore,
+     * Periodic Threads subjected to Dynamic Criteria are reevaluated before the release of each
+     * job. Earliest Deadline First is Dynamic Criterion. https://epos.lisha.ufsc.br/EPOS+2+User+Guide
+     *
+     * @param `prev` the thread currently running
+     * @param `next` the thread which will be running
+     */
     static void dispatch(Thread * prev, Thread * next);
 
+    /**
+     * Halts the CPU.
+     *
+     * @return what?
+     */
     static int idle();
+
+    /**
+     * Called when you kill your system somehow.
+     */
+    static void death()
+    {
+        unlock();
+
+        while( true )
+        {
+            db<Thread>(ERR) << "Thread::yield(running=" << _running << "); ";
+            db<Thread>(ERR) << "ERROR: You killed your system as the only running thread is going to sleep indefinitely!" << endl;
+        }
+    }
 
 private:
     static void init();
