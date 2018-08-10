@@ -15,12 +15,12 @@ public:
     Semaphore(int v = 1);
     ~Semaphore();
 
-    Thread::Queue threads_em_espera;
     void p();
     void v();
 
 private:
     volatile int _value;
+    Thread::Queue _threads_em_espera;
 };
 
 
