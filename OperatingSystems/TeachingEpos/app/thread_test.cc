@@ -6,7 +6,7 @@
 
 using namespace EPOS;
 
-const int iterations = 100;
+const int iterations = 2;
 
 int func_a(void);
 int func_b(void);
