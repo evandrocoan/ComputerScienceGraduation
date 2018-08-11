@@ -179,6 +179,7 @@ DEBUGGER	= $(MACH_DEBUGGER)
 
 EMULATOR	= $(MACH_EMULATOR)
 
+MKDIR       := mkdir -p
 INSTALL		:= install
 
 LD              = $(COMP_PREFIX)ld
