@@ -24,6 +24,3 @@
 *.out
 *.app
 
-/tools/eposmkbi/eposmkbi
-/bin/eposmkbi
-/TeachingEpos/app/*_traits.h

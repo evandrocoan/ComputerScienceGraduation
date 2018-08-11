@@ -6,3 +6,7 @@
 # Compilation cache file
 .epos_flag_file.txt
 
+/bin/**
+/app/*_traits.h
+/tools/eposmkbi/eposmkbi
+
