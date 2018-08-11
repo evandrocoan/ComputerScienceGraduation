@@ -76,6 +76,13 @@ public:
 
     int join();
     void pass();
+
+    /**
+     * Stops/start the current thread from/to running. This must to be called in a atomic block.
+     */
+    void sleep();
+    void wake();
+
     void suspend();
     void resume();
 

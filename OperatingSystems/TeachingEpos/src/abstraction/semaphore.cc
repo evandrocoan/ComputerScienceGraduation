@@ -30,7 +30,9 @@ void Semaphore::p()
         return;
     }
 
-    threads_em_espera.insert(&Thread::_running->_link);
+    Thread::_running->sleep();
+    _threads_em_espera.insert(&Thread::_running->_link);
+
     sleep();
     end_atomic();
 }
@@ -43,17 +45,18 @@ void Semaphore::v()
     // Disable all interrupts
     begin_atomic();
 
-    if(threads_em_espera.empty())
+    if(_threads_em_espera.empty())
     {
         finc(_value);
     }
     else
     {
-        EPOS::S::U::List_Elements::Doubly_Linked_Ordered<EPOS::S::Thread, unsigned int>* running_thread_link = threads_em_espera.remove();
-
         // put thread on the ready queue
-        Thread::_ready.insert(running_thread_link);
+        EPOS::S::U::List_Elements::Doubly_Linked_Ordered<EPOS::S::Thread, unsigned int>* running_thread_link = _threads_em_espera.remove();
+        running_thread_link->object()->wake();
     }
+
+    wakeup();
     end_atomic();
 }
 

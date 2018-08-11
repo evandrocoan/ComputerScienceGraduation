@@ -102,6 +102,26 @@ void Thread::pass()
 }
 
 
+void Thread::sleep()
+{
+    db<Thread>(TRC) << "Thread::sleep(this=" << this << ")" << endl;
+
+    if(_running != this)
+        _ready.remove(this);
+
+    _state = WAITING;
+}
+
+
+void Thread::wake()
+{
+    db<Thread>(TRC) << "Thread::wake(this=" << this << ")" << endl;
+
+    _state = READY;
+    _ready.insert(&_link);
+}
+
+
 void Thread::suspend()
 {
     lock();
