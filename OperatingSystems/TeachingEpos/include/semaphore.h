@@ -28,6 +28,9 @@ public:
     void p();
     void v();
 
+    void lock()   { p(); }
+    void unlock() { v(); }
+
 private:
     volatile int _value;
     Thread::Queue _threads_em_espera;

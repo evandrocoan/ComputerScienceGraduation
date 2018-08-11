@@ -11,7 +11,7 @@ using namespace EPOS;
 
 const int iterations = 10;
 
-Mutex table;
+Semaphore table;
 
 Thread * phil[5];
 Semaphore * chopstick[5];
