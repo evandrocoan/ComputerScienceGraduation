@@ -9,4 +9,5 @@
 /bin/**
 /app/*_traits.h
 /tools/eposmkbi/eposmkbi
+/src/boot/pc_boot
 
