@@ -231,6 +231,31 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 }
 
 
+void Thread::dispatch_hidden()
+{
+    db<Thread>(TRC) << "Thread::dispatch_hidden(running_thread=" << _running << ")" << endl;
+
+    // Remove the current thread from running, without adding it to the _ready threads queue.
+    if(!_ready.empty())
+    {
+        Thread * prev = _running;
+
+        _running = _ready.remove()->object();
+        _running->_state = RUNNING;
+
+        dispatch(prev, _running);
+    }
+    else
+    {
+        // Otherwise, warns the user that something could be wrong
+        db<Thread>(WRN) << "Thread::dispatch_hidden() WARNING: The system will be in a deadlock state "
+                << "if no hardware interruptions exit the idle state." << endl;
+
+        Thread::idle();
+    }
+}
+
+
 void Thread::dispatch(Thread * prev, Thread * next)
 {
     if(prev != next) {

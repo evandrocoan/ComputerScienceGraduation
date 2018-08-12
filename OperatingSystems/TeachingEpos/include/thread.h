@@ -128,6 +128,12 @@ protected:
     static void dispatch(Thread * prev, Thread * next);
 
     /**
+     * Call the scheduler to remove the current thread from running, without adding it to the _ready
+     * threads queue.
+     */
+    static void dispatch_hidden();
+
+    /**
      * Halts the CPU.
      *
      * @return what?

@@ -27,13 +27,12 @@ protected:
      *
      * If there are no threads ready to run, set the CPU to run in a idle state, see: CPU::idle()
      */
-    Thread* sleep()
+    void sleep()
     {
         begin_atomic();
         db<Synchronizer_Common>(TRC) << "Synchronizer_Common::sleep()" << endl;
         Thread * running_thread = Thread::running();
         running_thread->sleep();
-        return running_thread;
     }
 
     void wakeup() { end_atomic(); }
