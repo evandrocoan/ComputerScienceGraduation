@@ -31,7 +31,7 @@ APPLICATION_TO_RUN=$(echo $1 | cut -d'.' -f 1)
 # REMOTE_COMMAND_TO_RUN="cd /home/evandro.coan/OperatingSystems/TeachingEpos;
 REMOTE_COMMAND_TO_RUN="cd $TARGET_DIRECTORY;
 pwd;
-sh compile_and_run.sh $APPLICATION_TO_RUN;"
+sh compile_and_run.sh $APPLICATION_TO_RUN $2;"
 
 
 sshpass -p $EPOS_COMPILER_MACHINE_PASS ssh $EPOS_COMPILER_MACHINE_ADDRESS $REMOTE_COMMAND_TO_RUN;
