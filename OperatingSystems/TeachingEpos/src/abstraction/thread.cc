@@ -104,7 +104,8 @@ void Thread::pass()
 
 void Thread::sleep()
 {
-    db<Thread>(TRC) << "Thread::sleep(this=" << this << ")" << endl;
+    db<Thread>(TRC) << "Thread::sleep(this=" << this << ", _ready.size=" << _ready.size()
+            << ", _ready=" << &_ready << ", _suspended=" << &_suspended << ")" << endl;
 
     if(_running != this)
         _ready.remove(this);

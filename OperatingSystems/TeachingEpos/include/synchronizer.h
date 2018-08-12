@@ -23,11 +23,17 @@ protected:
     void end_atomic() { Thread::unlock(); }
 
     /**
-     * Tries to put the current curring thread to sleep.
+     * Put the current curring thread to sleep, by scheduling the next thread ready to run.
+     *
+     * If there are no threads ready to run, set the CPU to run in a idle state, see: CPU::idle()
      */
-    void sleep()
+    Thread* sleep()
     {
-        Thread::yield(); // implicit unlock()
+        begin_atomic();
+        db<Synchronizer_Common>(TRC) << "Synchronizer_Common::sleep()" << endl;
+        Thread * running_thread = Thread::running();
+        running_thread->sleep();
+        return running_thread;
     }
 
     void wakeup() { end_atomic(); }

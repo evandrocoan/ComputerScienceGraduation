@@ -15,8 +15,8 @@ int main()
 {
     cout << "Starting thread manual uniting tests..." << endl << endl;
 
-    cout << "Thread::_ready.size " << Thread::_ready.size() << endl;
-    cout << "Thread::_suspended.size " << Thread::_suspended.size() << endl;
+    // cout << "Thread::_ready.size " << Thread::_ready.size() << endl;
+    // cout << "Thread::_suspended.size " << Thread::_suspended.size() << endl;
 
     Thread * a = new Thread(&func_a, 'a');
     Thread * b = new Thread(&func_a, 'b');
@@ -33,7 +33,7 @@ int main()
 int func_a(char character)
 {
     table.lock();
-    cout << "Thread running=func_" << character << "..." << endl;
+    cout << "Thread running=func_" << (int)character << "..." << endl;
 
     for(int i = 0; i < 2; i++)
     {
@@ -47,5 +47,5 @@ int func_a(char character)
     }
 
     table.unlock();
-    return 10;
+    return character;
 }

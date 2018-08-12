@@ -888,7 +888,9 @@ public:
 
     void insert(Element * e) {
         db<Lists>(TRC) << "Ordered_List::insert(e=" << e
-                       << ") => {p=" << (e ? e->prev() : (void *) -1)
+                       << ") list: " << this
+                       << ") size: " << this->size()
+                       << "=> {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
                        << "}" << endl;

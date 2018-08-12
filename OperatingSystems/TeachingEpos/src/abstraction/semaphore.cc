@@ -18,7 +18,8 @@ Semaphore::~Semaphore()
 
 void Semaphore::p()
 {
-    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ",value=" << _value << ")" << endl;
+    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ", value=" << _value
+            << ", _threads_em_espera=" << &_threads_em_espera << ")" << endl;
 
     // Disable all interrupts
     begin_atomic();
@@ -30,20 +31,35 @@ void Semaphore::p()
         return;
     }
 
-    Thread::_running->sleep();
-    _threads_em_espera.insert(&Thread::_running->_link);
+    Thread * running_thread = sleep();
+    _threads_em_espera.insert(&running_thread->_link);
 
-    sleep();
+    if(!Thread::_ready.empty()) {
+        Thread * prev = running_thread;
+
+        Thread::_running = Thread::_ready.remove()->object();
+        Thread::_running->_state = Thread::RUNNING;
+
+        Thread::dispatch(prev, Thread::_running);
+    } else
+    {
+        db<Semaphore>(WRN) << "Thread::sleep WARNING: The system will be in a deadlock state "
+                << "if no hardware interruptions exit the idle state." << endl;
+
+        Thread::idle();
+    }
+
     end_atomic();
 }
 
 
 void Semaphore::v()
 {
-    db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << _value << ")" << endl;
-
     // Disable all interrupts
     begin_atomic();
+
+    db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << _value
+            << ", _threads_em_espera=" << _threads_em_espera.size() << ")" << endl;
 
     if(_threads_em_espera.empty())
     {
