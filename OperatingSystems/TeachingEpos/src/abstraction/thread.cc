@@ -53,6 +53,7 @@ Thread::~Thread()
 
     db<Thread>(TRC) << "~Thread(this=" << this
                     << ",state=" << _state
+                    << ",locked_list=" << _locked_list
                     << ",priority=" << _link.rank()
                     << ",stack={b=" << reinterpret_cast<void *>(_stack)
                     << ",context={b=" << _context
@@ -61,8 +62,12 @@ Thread::~Thread()
     _ready.remove(this);
     _suspended.remove(this);
 
-    unlock();
+    if( _locked_list )
+    {
+        _locked_list->remove( this );
+    }
 
+    unlock();
     kfree(_stack);
 }
 

@@ -27,6 +27,9 @@ int main()
     cout << "Thread A exited with status " << status_a << endl;
     cout << "Thread B exited with status " << status_b << endl;
 
+    delete a;
+    delete b;
+
     cout << endl << "Ending thread manual uniting tests..." << endl;
 }
 
@@ -43,7 +46,7 @@ int func_a(char character)
         }
 
         cout << endl;
-        Alarm::delay(5000000);
+        Alarm::delay(500000);
     }
 
     table.unlock();

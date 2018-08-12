@@ -34,6 +34,8 @@ public:
 private:
     volatile int _value;
     Thread::Queue _threads_waiting;
+
+    void free_thread(Thread*);
 };
 
 

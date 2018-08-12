@@ -167,6 +167,15 @@ protected:
 
 private:
 // public:
+    /**
+     * When this thread is locked by some synchronizer, this variable is set pointing to it's
+     * synchronizer list, allowing the thread destructor remove itself from the synchronizer list.
+     *
+     * This works because a thread can only be blocked by one synchronizer at time, as if the thread
+     * is blocked, there is no way it can call another synchronizer to block it too.
+     */
+    Queue * _locked_list;
+
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;
@@ -175,7 +184,7 @@ private:
 
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _link(this, NORMAL)
+: _state(READY), _link(this, NORMAL), _locked_list(0)
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);
@@ -184,7 +193,7 @@ inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
 
 template<typename ... Tn>
 inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... an)
-: _state(conf.state), _link(this, conf.priority)
+: _state(conf.state), _link(this, conf.priority), _locked_list(0)
 {
     constructor_prolog(conf.stack_size);
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);
