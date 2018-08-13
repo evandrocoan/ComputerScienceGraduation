@@ -23,7 +23,7 @@ protected:
     void end_atomic() { Thread::unlock(); }
 
     /**
-     * Put the current curring thread to sleep, by scheduling the next thread ready to run.
+     * Put the current running thread to sleep, by scheduling the next thread ready to run.
      *
      * If there are no threads ready to run, set the CPU to run in a idle state, see: CPU::idle()
      */

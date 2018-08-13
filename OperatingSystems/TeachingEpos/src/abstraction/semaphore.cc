@@ -77,7 +77,7 @@ void Semaphore::v()
     db<Synchronizer>(TRC) << "Semaphore::v(this=" << this << ",value=" << _value
             << ", _threads_waiting=" << _threads_waiting.size() << ")" << endl;
 
-    // If there are no more queues on hold, increment the available counter for the semaphore
+    // If there are no more elements on the queue, increment the available counter for the semaphore
     if(_threads_waiting.empty())
     {
         finc(_value);
