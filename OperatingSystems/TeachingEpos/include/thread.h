@@ -32,13 +32,28 @@ protected:
     typedef CPU::Context Context;
 
 public:
-    // Thread State
+    /** Thread States
+     *
+     * Avoids infinite loop in case someone calls join() after deleting this thread, by
+     * adding the FINISHING as the first state.
+     *
+     * Because after calling delete, the value of _state will output 0, I do not know why it does
+     * it. I tried setting _state to the FINISHING on the destructor, but it had not effect
+     * and its value still being always 0.
+     *
+     * Then, as it seems _state is always being 0, then add the FINISHING as the first on this enum,
+     * making the join condition (_state != FINISHING) to fail and stop the infinity loop by the
+     * thread deletion before the join().
+     *
+     * There is a infinity loop because the join() implementation is just a yield() call, which will
+     * run forever as the thread is deleted and will not change or do anything anymore.
+     */
     enum State {
+        FINISHING,
         RUNNING,
         READY,
         SUSPENDED,
-        WAITING,
-        FINISHING
+        WAITING
     };
 
     // Thread Priority
@@ -172,7 +187,7 @@ private:
      * synchronizer list, allowing the thread destructor remove itself from the synchronizer list.
      *
      * This works because a thread can only be blocked by one synchronizer at time, as if the thread
-     * is blocked, there is no way it can call another synchronizer to block it too.
+     * is blocked, there is no way it can call another synchronizer to block it again.
      */
     Queue * _locked_list;
 
