@@ -152,6 +152,7 @@ template<> struct Type<Chronometer> { static const Type_Id ID = CHRONOMETER_ID; 
 template<> struct Type<Alarm> { static const Type_Id ID = ALARM_ID; };
 template<> struct Type<Delay> { static const Type_Id ID = ALARM_ID; };
 
+
 template<> struct Type<Utility> { static const Type_Id ID = UTILITY_ID; };
 
 __END_SYS
