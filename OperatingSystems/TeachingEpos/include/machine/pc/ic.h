@@ -177,53 +177,53 @@ public:
 
     // Memory-mapped registers
     enum {
-        ID =			0x020,	// Task priority
-        VERSION =		0x030,	// Task priority
-        TPR =			0x080,	// Task priority
-        APR =			0x090,	// Arbitration priority
-        PPR =			0x0a0,	// Processor priority
-        EOI =			0x0b0,	// End of interrupt
-        RRR =			0x0c0,	// Remote read
-        LDR =			0x0d0,	// Logical destination
-        DFR =			0x0e0,	// Destination format
-        SVR =			0x0f0,	// Spurious interrupt vector
-        ISR0_32 =		0x100,	// In-service
-        ISR32_63 =		0x110,	// In-service
-        ISR64_95 =		0x120,	// In-service
-        ISR96_127 =		0x130,	// In-service
-        ISR128_159 =		0x140,	// In-service
-        ISR160_191 =		0x150,	// In-service
-        ISR192_223 =		0x160,	// In-service
-        ISR224_255 =		0x170,	// In-service
-        TMR0_32 =		0x180,	// Trigger mode
-        TMR32_63 =		0x190,	// Trigger mode
-        TMR64_95 =		0x1a0,	// Trigger mode
-        TMR96_127 =		0x1b0,	// Trigger mode
-        TMR128_159 =		0x1c0,	// Trigger mode
-        TMR160_191 =		0x1d0,	// Trigger mode
-        TMR192_223 =		0x1e0,	// Trigger mode
-        TMR224_255 =		0x1f0,	// Trigger mode
-        IRR0_32 =		0x200,	// Interrupt request
-        IRR32_63 =		0x210,	// Interrupt request
-        IRR64_95 =		0x220,	// Interrupt request
-        IRR96_127 =		0x230,	// Interrupt request
-        IRR128_159 =		0x240,	// Interrupt request
-        IRR160_191 =		0x250,	// Interrupt request
-        IRR192_223 =		0x260,	// Interrupt request
-        IRR224_255 =		0x270,	// Interrupt request
-        ESR =			0x280,	// Error status
-        LVT_CMCI =		0x2f0,	// LVT CMCI
-        ICR0_31 =		0x300,	// Interrupt command
-        ICR32_63 =		0x310,	// Interrupt command
-        LVT_TIMER =		0x320,	// LVT timer
-        LVT_THERMAL =		0x330,	// LVT thermal sensor
-        LVT_PERF =		0x340,	// LVT performance monitor
-        LVT_LINT0 =		0x350,	// LVT interrupt line 0
-        LVT_LINT1 =		0x360,	// LVT interrupt line 1
-        LVT_ERROR =		0x370,	// LVT error
-        TIMER_INITIAL =		0x380,	// Timer's initial count
-        TIMER_CURRENT =		0x390,	// Timer's current count
-        TIMER_PRESCALE =	0x3e0	// Timer's BUS CLOCK prescaler
+        ID =			0x020,	// Task priority 
+        VERSION =		0x030,	// Task priority 
+        TPR =			0x080,	// Task priority 
+        APR =			0x090,	// Arbitration priority 
+        PPR =			0x0a0,	// Processor priority 
+        EOI =			0x0b0,	// End of interrupt 
+        RRR =			0x0c0,	// Remote read 
+        LDR =			0x0d0,	// Logical destination 
+        DFR =			0x0e0,	// Destination format 
+        SVR =			0x0f0,	// Spurious interrupt vector 
+        ISR0_32 =		0x100,	// In-service 
+        ISR32_63 =		0x110,	// In-service 
+        ISR64_95 =		0x120,	// In-service 
+        ISR96_127 =		0x130,	// In-service 
+        ISR128_159 =		0x140,	// In-service 
+        ISR160_191 =		0x150,	// In-service 
+        ISR192_223 =		0x160,	// In-service 
+        ISR224_255 =		0x170,	// In-service 
+        TMR0_32 =		0x180,	// Trigger mode 
+        TMR32_63 =		0x190,	// Trigger mode 
+        TMR64_95 =		0x1a0,	// Trigger mode 
+        TMR96_127 =		0x1b0,	// Trigger mode 
+        TMR128_159 =		0x1c0,	// Trigger mode 
+        TMR160_191 =		0x1d0,	// Trigger mode 
+        TMR192_223 =		0x1e0,	// Trigger mode 
+        TMR224_255 =		0x1f0,	// Trigger mode 
+        IRR0_32 =		0x200,	// Interrupt request 
+        IRR32_63 =		0x210,	// Interrupt request 
+        IRR64_95 =		0x220,	// Interrupt request 
+        IRR96_127 =		0x230,	// Interrupt request 
+        IRR128_159 =		0x240,	// Interrupt request 
+        IRR160_191 =		0x250,	// Interrupt request 
+        IRR192_223 =		0x260,	// Interrupt request 
+        IRR224_255 =		0x270,	// Interrupt request 
+        ESR =			0x280,	// Error status 
+        LVT_CMCI =		0x2f0,	// LVT CMCI 
+        ICR0_31 =		0x300,	// Interrupt command 
+        ICR32_63 =		0x310,	// Interrupt command 
+        LVT_TIMER =		0x320,	// LVT timer 
+        LVT_THERMAL =		0x330,	// LVT thermal sensor 
+        LVT_PERF =		0x340,	// LVT performance monitor 
+        LVT_LINT0 =		0x350,	// LVT interrupt line 0 
+        LVT_LINT1 =		0x360,	// LVT interrupt line 1 
+        LVT_ERROR =		0x370,	// LVT error 
+        TIMER_INITIAL =		0x380,	// Timer's initial count 
+        TIMER_CURRENT =		0x390,	// Timer's current count 
+        TIMER_PRESCALE =	0x3e0	// Timer's BUS CLOCK prescaler 
     };
 
     // Flags
@@ -339,7 +339,7 @@ public:
 
     static void reset(Log_Addr addr = LOCAL_APIC_LOG_ADDR) {
         // APIC must be on very early in the boot process, so it is
-        // subject to memory remappings. We also cannot be sure about
+        // subject to memory remappings. We also cannot be sure about 
         // global constructors here
         remap(addr);
         if(Traits<System>::multicore) {
@@ -365,17 +365,17 @@ public:
         write(LVT_TIMER, v);
     }
 
-    static void enable_timer() {
+    static void enable_timer() { 
         write(LVT_TIMER, read(LVT_TIMER) & ~TIMER_MASKED);
     }
-    static void disable_timer() {
+    static void disable_timer() { 
         write(LVT_TIMER, read(LVT_TIMER) | TIMER_MASKED);
     }
 
     static Reg32 read_timer() {
         return read(TIMER_CURRENT);
     }
-
+    
     static void reset_timer() {
         disable();
         write(TIMER_CURRENT, read(TIMER_INITIAL));

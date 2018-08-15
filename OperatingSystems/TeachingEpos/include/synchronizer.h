@@ -11,7 +11,11 @@ __BEGIN_SYS
 class Synchronizer_Common
 {
 protected:
+    typedef Thread::Queue Queue;
+
+protected:
     Synchronizer_Common() {}
+    ~Synchronizer_Common() { begin_atomic(); wakeup_all(); }
 
     // Atomic operations
     bool tsl(volatile bool & lock) { return CPU::tsl(lock); }
@@ -22,21 +26,12 @@ protected:
     void begin_atomic() { Thread::lock(); }
     void end_atomic() { Thread::unlock(); }
 
-    /**
-     * Put the current running thread to sleep, by scheduling the next thread ready to run.
-     *
-     * If there are no threads ready to run, set the CPU to run in a idle state, see: CPU::idle()
-     */
-    void sleep()
-    {
-        begin_atomic();
-        db<Synchronizer_Common>(TRC) << "Synchronizer_Common::sleep()" << endl;
-        Thread * running_thread = Thread::running();
-        running_thread->sleep();
-    }
+    void sleep() { Thread::sleep(&_queue); }
+    void wakeup() { Thread::wakeup(&_queue); }
+    void wakeup_all() { Thread::wakeup_all(&_queue); }
 
-    void wakeup() { end_atomic(); }
-    void wakeup_all() { end_atomic(); }
+protected:
+    Queue _queue;
 };
 
 __END_SYS

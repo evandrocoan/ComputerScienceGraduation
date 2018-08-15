@@ -36,6 +36,6 @@ int main()
             cout << " failed (" << c << ", should be " << i << ")!" << endl;
     }
     cout << " passed!" << endl;
-
+    
     return 0;
 }

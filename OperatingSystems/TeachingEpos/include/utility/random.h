@@ -21,7 +21,7 @@ private:
 
 public:
     Random() {}
-
+        
     static unsigned long random() {
         _seed = ((_seed * A) + C) % M; //_seed = (_seed << 1) ^ n;
         return _seed;

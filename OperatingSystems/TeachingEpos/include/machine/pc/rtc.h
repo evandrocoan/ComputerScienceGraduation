@@ -41,7 +41,7 @@ public:
         REG_B		= 0x0b, // Control/Status Register B
         REG_C		= 0x0c, // Control/Status Register C
         REG_D		= 0x0d, // Control/Status Register D
-        CMOS     	= 0x0e,
+        CMOS     	= 0x0e, 
         // Layout used by BIOS
         CMOS_DIAGNOSTIC	= CMOS + 0, // POST diagnostic
         CMOS_POWER_DONW	= CMOS + 1, // Status of system power-down
@@ -100,7 +100,7 @@ public:
     };
 
 public:
-    MC146818() {}
+    MC146818() {} 
 
     static unsigned char reg(Address a) {
         CPU::out8(ADDR, a);
@@ -134,7 +134,7 @@ private:
     static const unsigned int EPOCH_DAYS = Traits<PC_RTC>::EPOCH_DAYS;
 
 public:
-    PC_RTC() {}
+    PC_RTC() {} 
 
     static Date date();
     static void date(const Date & d);

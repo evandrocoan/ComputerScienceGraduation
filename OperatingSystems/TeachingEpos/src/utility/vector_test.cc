@@ -48,15 +48,15 @@ int main()
     }
     cout << "" << endl;
 
-    cout << "Removing the element whose value is " << o[N/2] << " => "
+    cout << "Removing the element whose value is " << o[N/2] << " => " 
          << *v.remove(&o[N/2])->object() << "" << endl;
     cout << "Removing the second element => " << *v.remove(1)->object()
          << "" << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => "
+    cout << "Removing the element whose value is " << o[N/4] << " => " 
          << *v.remove(&o[N/4])->object() << "" << endl;
     cout << "Removing the last element => " << *v.remove(N - 1)->object()
          << "" << endl;
-    cout << "Trying to remove an element that is not on the vector => "
+    cout << "Trying to remove an element that is not on the vector => " 
          << v.remove(&o[N/2]) << "" << endl;
     cout << "Removing all remaining elements => ";
     for(int i = 0; i < N; i++) {

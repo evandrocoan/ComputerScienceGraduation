@@ -39,7 +39,7 @@ $(MACH)_system_builtin: $(OBJS)
 		-l$(LUTIL) -lgcc
 		$(INSTALL) application_scaffold.o $(MACH)_application.o
 
-$(MACH)_system_kernel: $(OBJS)
+$(MACH)_system_kernel: $(OBJS) 
 		$(LD) $(LDFLAGS) -L$(CCLIB) --nmagic \
 		--section-start $(MACH_CODE_NAME)=$(SYS_CODE_ADDR) \
 		--section-start $(MACH_DATA_NAME)=$(SYS_DATA_ADDR) \
@@ -50,9 +50,9 @@ $(MACH)_system_kernel: $(OBJS)
 		--whole-archive \
 		-l$(LSYS) -l$(LMACH) -l$(LARCH) \
 		--no-whole-archive \
-		-l$(LUTIL) -lgcc
+		-l$(LUTIL) -lgcc 
 		$(LD) $(LDFLAGS) -i application_scaffold.o -o $(MACH)_application.o
-
+		
 clean:
 		$(CLEAN) *.o *_system
 

@@ -14,7 +14,7 @@ ifndef APPLICATION
 else
 		$(MAKE) all1
 endif
-
+		
 all1: $(SUBDIRS)
 
 $(SUBDIRS): FORCE
@@ -81,7 +81,7 @@ clean1: FORCE
 		(cd img && $(MAKECLEAN))
 		(cd src && $(MAKECLEAN))
 		find $(LIB) -maxdepth 1 -type f -exec $(CLEAN) {} \;
-
+		
 veryclean: clean
 		(cd tools && $(MAKECLEAN))
 		find $(LIB) -maxdepth 1 -type f -exec $(CLEAN) {} \;
@@ -99,16 +99,14 @@ dist: veryclean
 		find $(TOP) -name ".*project" -exec $(CLEAN) {} \;
 		find $(TOP) -name CVS -type d -print | xargs $(CLEANDIR)
 		find $(TOP) -name .svn -type d -print | xargs $(CLEANDIR)
-		find $(TOP) -name "*.h" -print | xargs sed -i "1r $(TOP)/LICENSE"
-		find $(TOP) -name "*.cc" -print | xargs sed -i "1r $(TOP)/LICENSE"
+		find $(TOP) -name "*.h" -print | xargs sed -i "1r $(TOP)/LICENSE" 
+		find $(TOP) -name "*.cc" -print | xargs sed -i "1r $(TOP)/LICENSE" 
 		sed -e 's/^\/\//#/' LICENSE > LICENSE.mk
-		find $(TOP) -name "makedefs" -print | xargs sed -i "1r $(TOP)/LICENSE.mk"
+		find $(TOP) -name "makedefs" -print | xargs sed -i "1r $(TOP)/LICENSE.mk" 
 		find $(TOP) -name "makefile" -print | xargs sed -i "1r $(TOP)/LICENSE.mk"
-		$(CLEAN) LICENSE.mk
+		$(CLEAN) LICENSE.mk 
 		sed -e 's/^\/\//#/' LICENSE > LICENSE.as
-		find $(TOP) -name "*.S" -print | xargs sed -i "1r $(TOP)/LICENSE.as"
-		$(CLEAN) LICENSE.as
+		find $(TOP) -name "*.S" -print | xargs sed -i "1r $(TOP)/LICENSE.as" 
+		$(CLEAN) LICENSE.as 
 
 FORCE:
-	$(MKDIR) $(BIN)
-	$(MKDIR) $(LIB)

@@ -35,7 +35,7 @@ namespace List_Elements
 
     public:
         Pointer(const T * o): _object(o) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
     private:
@@ -77,12 +77,12 @@ namespace List_Elements
 
     public:
         Singly_Linked(const T * o): _object(o), _next(0) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
         Element * next() const { return _next; }
         void next(Element * e) { _next = e; }
-
+    
     private:
         const T * _object;
         Element * _next;
@@ -100,7 +100,7 @@ namespace List_Elements
 
     public:
         Singly_Linked_Ordered(const T * o, const R & r = 0): _object(o), _rank(r), _next(0) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
         Element * next() const { return _next; }
@@ -138,7 +138,7 @@ namespace List_Elements
         void size(unsigned int l) { _size = l; }
         void shrink(unsigned int n) { _size -= n; }
         void expand(unsigned int n) { _size += n; }
-
+    
     private:
         const T * _object;
         unsigned int _size;
@@ -155,14 +155,14 @@ namespace List_Elements
 
     public:
         Doubly_Linked(const T * o): _object(o), _prev(0), _next(0) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
         Element * prev() const { return _prev; }
         Element * next() const { return _next; }
         void prev(Element * e) { _prev = e; }
         void next(Element * e) { _next = e; }
-
+    
     private:
         const T * _object;
         Element * _prev;
@@ -180,7 +180,7 @@ namespace List_Elements
 
     public:
         Doubly_Linked_Ordered(const T * o,  const R & r = 0): _object(o), _rank(r), _prev(0), _next(0) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
         Element * prev() const { return _prev; }
@@ -199,7 +199,7 @@ namespace List_Elements
         Element * _prev;
         Element * _next;
     };
-
+    
     // Scheduling List Element
     template<typename T, typename R = Rank>
     class Doubly_Linked_Scheduling
@@ -211,7 +211,7 @@ namespace List_Elements
 
     public:
         Doubly_Linked_Scheduling(const T * o,  const R & r = 0): _object(o), _rank(r), _prev(0), _next(0) {}
-
+    
         T * object() const { return const_cast<T *>(_object); }
 
         Element * prev() const { return _prev; }
@@ -254,7 +254,7 @@ namespace List_Elements
         void size(unsigned int l) { _size = l; }
         void shrink(unsigned int n) { _size -= n; }
         void expand(unsigned int n) { _size += n; }
-
+    
     private:
         const T * _object;
         unsigned int _size;
@@ -320,7 +320,7 @@ namespace List_Iterators
 
         Iterator & operator--() { _current = _current->prev(); return *this; }
         Iterator operator--(int) { Iterator tmp = *this; --*this; return tmp; }
-
+        
         bool operator==(const Iterator & i) const { return _current == i._current; }
         bool operator!=(const Iterator & i) const { return _current != i._current; }
 
@@ -372,7 +372,7 @@ public:
             _size++;
         }
     }
-
+    
     Element * remove() { return remove_head(); }
 
     Element * remove(Element * e) {
@@ -385,8 +385,8 @@ public:
                 for(; p && p->next() && (p->next() != e); p = p->next());
                 if(p)
                     p->next(e->next());
-                if(e == _tail)
-                    _tail = p;
+        if(e == _tail)
+            _tail = p;
                 _size--;
             }
         return e;
@@ -416,13 +416,13 @@ public:
             return remove(e);
         return 0;
     }
-
+    
     Element * search(const Object_Type * obj) {
         Element * e = _head;
             for(; e && (e->object() != obj); e = e->next());
             return e;
     }
-
+    
 protected:
     bool last() const { return (_size == 1); }
 
@@ -455,8 +455,8 @@ private:
 
 
 // Singly-Linked, Ordered List
-template<typename T,
-          typename R = List_Element_Rank,
+template<typename T, 
+          typename R = List_Element_Rank, 
           typename El = List_Elements::Singly_Linked_Ordered<T, R>,
           bool relative = false>
 class Simple_Ordered_List: public Simple_List<T, El>
@@ -477,7 +477,7 @@ public:
     using Base::begin;
     using Base::end;
     using Base::remove_head;
-
+    
     void insert(Element * e) {
         if(empty())
             insert_first(e);
@@ -503,7 +503,7 @@ public:
             }
         }
     }
-
+    
     Element * remove() { return remove_head(); }
 
     Element * remove(Element * e) {
@@ -519,7 +519,7 @@ public:
             return remove(e);
         return 0;
     }
-
+    
     Element * search_rank(const Rank_Type & rank) {
         Element * e = head();
         for(; e && (e->rank() != rank); e = e->next());
@@ -536,7 +536,7 @@ public:
 
 
 // Singly-Linked, Relative Ordered List
-template<typename T,
+template<typename T, 
           typename R = List_Element_Rank,
           typename El = List_Elements::Singly_Linked_Ordered<T, R> >
 class Simple_Relative_List: public Simple_Ordered_List<T, R, El, true> {};
@@ -572,13 +572,13 @@ public:
         for(; e && (e->size() < s); e = e->next());
         return e;
     }
-
+    
     Element * search_left(const Object_Type * obj) {
         Element * e = head();
         for(; e && (e->object() + e->size() != obj); e = e->next());
         return e;
     }
-
+    
     void insert_merging(Element * e, Element ** m1, Element ** m2) {
         _grouped_size += e->size();
         *m1 = *m2 = 0;
@@ -595,7 +595,7 @@ public:
         } else
             insert_tail(e);
     }
-
+    
     Element * search_decrementing(unsigned int s) {
         Element * e = search_size(s);
         if(e) {
@@ -606,7 +606,7 @@ public:
         }
         return e;
     }
-
+    
 private:
     unsigned int _grouped_size;
 };
@@ -627,17 +627,17 @@ public:
 
     bool empty() const { return (_size == 0); }
     unsigned int size() const { return _size; }
-
+    
     Element * head() { return _head; }
     Element * tail() { return _tail; }
-
+    
     Iterator begin() { return Iterator(_head); }
     Iterator end() { return Iterator(0); }
 
     void insert(Element * e) { insert_tail(e); }
 
     void insert_head(Element * e) {
-        db<Lists>(TRC) << "List::insert_head(e=" << e
+        db<Lists>(TRC) << "List::insert_head(e=" << e 
                        << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
@@ -661,7 +661,7 @@ public:
     }
 
     void insert_tail(Element * e) {
-        db<Lists>(TRC) << "List::insert_tail(e=" << e
+        db<Lists>(TRC) << "List::insert_tail(e=" << e 
                        << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
@@ -683,11 +683,11 @@ public:
         print_head();
         print_tail();
     }
-
+    
     Element * remove() { return remove_head(); }
 
     Element * remove(Element * e) {
-        db<Lists>(TRC) << "List::remove(e=" << e
+        db<Lists>(TRC) << "List::remove(e=" << e 
                        << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
@@ -762,13 +762,13 @@ public:
             return remove(e);
         return 0;
     }
-
+    
     Element * search(const Object_Type * obj) {
         Element * e = _head;
         for(; e && (e->object() != obj); e = e->next());
         return e;
     }
-
+    
 protected:
     bool last() const { return (_size == 1); }
 
@@ -799,7 +799,7 @@ protected:
     }
 
     void insert_first(Element * e) {
-        db<Lists>(TRC) << "List::insert_first(e=" << e
+        db<Lists>(TRC) << "List::insert_first(e=" << e 
                        << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
@@ -836,7 +836,7 @@ protected:
     }
 
     void print_head() {
-        db<Lists>(INF) << "List[" << this << "]::head=" << head()
+        db<Lists>(INF) << "List[" << this << "]::head=" << head() 
                        << " => {p=" << (head() ? head()->prev() : (void *) -1)
                        << ",o=" << (head() ? head()->object() : (void *) -1)
                        << ",n=" << (head() ? head()->next() : (void *) -1)
@@ -844,7 +844,7 @@ protected:
     }
 
     void print_tail() {
-        db<Lists>(INF) << "List[" << this << "]::tail=" << tail()
+        db<Lists>(INF) << "List[" << this << "]::tail=" << tail() 
                        << " => {p=" << (tail() ? tail()->prev() : (void *) -1)
                        << ",o=" << (tail() ? tail()->object() : (void *) -1)
                        << ",n=" << (tail() ? tail()->next() : (void *) -1)
@@ -887,10 +887,8 @@ public:
     using Base::search;
 
     void insert(Element * e) {
-        db<Lists>(TRC) << "Ordered_List::insert(e=" << e
-                       << ") list: " << this
-                       << ") size: " << this->size()
-                       << "=> {p=" << (e ? e->prev() : (void *) -1)
+        db<Lists>(TRC) << "Ordered_List::insert(e=" << e 
+                       << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
                        << "}" << endl;
@@ -919,15 +917,15 @@ public:
             }
         }
     }
-
-    Element * remove() {
+    
+    Element * remove() { 
         db<Lists>(TRC) << "Ordered_List::remove()" << endl;
 
         return Base::remove_head();
     }
 
     Element * remove(Element * e) {
-        db<Lists>(TRC) << "Ordered_List::remove(e=" << e
+        db<Lists>(TRC) << "Ordered_List::remove(e=" << e 
                        << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
@@ -949,7 +947,7 @@ public:
         else
             return 0;
     }
-
+    
     Element * search_rank(const Rank_Type & rank) {
         Element * e = head();
         for(; e && (e->rank() != rank); e = e->next());
@@ -1077,7 +1075,7 @@ private:
 
 
 // Doubly-Linked, Grouping List
-template<typename T,
+template<typename T, 
           typename El = List_Elements::Doubly_Linked_Grouping<T> >
 class Grouping_List: public List<T, El>
 {
@@ -1105,19 +1103,19 @@ public:
     using Base::print_tail;
 
     unsigned int grouped_size() const { return _grouped_size; }
-
+    
     Element * search_size(unsigned int s) {
         Element * e = head();
         for(; e && (e->size() < sizeof(Element) + s) && (e->size() != s); e = e->next());
         return e;
     }
-
+    
     Element * search_left(const Object_Type * obj) {
         Element * e = head();
         for(; e && (e->object() + e->size() != obj); e = e->next());
         return e;
     }
-
+    
     void insert_merging(Element * e, Element ** m1, Element ** m2) {
         db<Lists>(TRC) << "Grouping_List::insert_merging(e=" << e << ")" << endl;
 
@@ -1138,7 +1136,7 @@ public:
             *m2 = e;
         }
     }
-
+    
     Element * search_decrementing(unsigned int s) {
         db<Lists>(TRC) << "Grouping_List::search_decrementing(s=" << s << ")" << endl;
         print_head();
@@ -1154,11 +1152,11 @@ public:
 
         return e;
     }
-
+    
 private:
     unsigned int _grouped_size;
 };
 
 __END_UTIL
-
+ 
 #endif

@@ -29,7 +29,7 @@ public:
     bool insert(Element * e, unsigned int i) {
         if(_vector[i])
             return false;
-
+        
         _vector[i] = e;
         _size++;
         return true;
@@ -63,19 +63,19 @@ public:
             }
         return 0;
     }
-
+    
     Element * search(const Object_Type * obj) {
         for(unsigned int i = 0; i < SIZE; i++)
             if(_vector[i]->object() == obj)
         	return _vector[i];
         return 0;
     }
-
+    
 private:
     unsigned int _size;
     Element * _vector[SIZE];
 };
 
 __END_UTIL
-
+ 
 #endif

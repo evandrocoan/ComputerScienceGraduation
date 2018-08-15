@@ -53,7 +53,6 @@ Thread::~Thread()
 
     db<Thread>(TRC) << "~Thread(this=" << this
                     << ",state=" << _state
-                    << ",locked_list=" << _locked_list
                     << ",priority=" << _link.rank()
                     << ",stack={b=" << reinterpret_cast<void *>(_stack)
                     << ",context={b=" << _context
@@ -62,25 +61,107 @@ Thread::~Thread()
     _ready.remove(this);
     _suspended.remove(this);
 
-    if( _locked_list )
-    {
-        _locked_list->remove( this );
-    }
+    if(_waiting)
+        _waiting->remove(this);
 
+    // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
+    // Isso não adianta, só deixei como exemplo. Se uma thread joinada for deletada, mesmo que ela
+    // desbloqueie as threads esperando por ela, essas outras threads continuarão no loop do join.
+    // Na verdade teremos até um erro acontecendo, pois essas threads acordadas irão tentar acessar
+    // o atributo _state da thread joinada (deletada) e isso vai levar a um comportamento indefinido.
+    if(_joined)
+        _join.broadcast();
+        ???;
+    // Pensar em um jeito de corrigir esse método acima pro caso de variáveis de condição em que várias
+    // thread podem joinar uma outra thread específica.
+
+    // RELATIVO A IMPLEMENTAÇÃO ONDE UMA THREAD PODE SER JOINADA APENAS POR UMA OUTRA THREAD
+    // Quando uma thread for deletada, e ela estiver joinando alguma outra thread, precisamos notificar a
+    // thread joinada que não é mais necessário acordar ninguém ao terminar.
+    if(_joining)
+        // O modo como notificamos a thread joinada que ela não precisa desbloquear ninguém ao terminar é
+        // definindo _join como 0.
+        _joining->_joined = 0; 
+
+    // AINDA RELATIVO A IMPLEMENTAÇÃO ONDE UMA THREAD PODE SER JOIANDA APENAS POR UMA OUTRA THREAD
+    // Quando uma thread for deletada, e ela estiver sendo joinada por alguma outra thread, precisamos
+    // notificar a thread joinadara que a thread joinada foi deletada e resumir a thread joinadora.  
+    if(_joined){
+        // Explicar por que decidimos utilizar suspend() e não algum tipo de sleep().
+        _joined->_joining = 0;
+        _joined->resume();
+    }
+    
     unlock();
+
     kfree(_stack);
 }
 
 
 int Thread::join()
 {
+    // Ainda não comprei esses locks e unlocks, não vejo como eles poderiam eventualmente funcionar em 
+    // ambientes multicore.
     lock();
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
 
-    while(_state != FINISHING)
-        yield(); // implicit unlock()
 
+    // IMPLEMENTAÇÃO COM VARIÁVEL DE CONDIÇÃO - UMA THREAD PODE SER JOINADA POR MÚLTIPLAS THREADS
+    // Escolhemos utilizar uma variável de condição para implementar o join pois esse tipo de técnica de
+    // sincronização faz exatamente o que precisamos que uma técnica desse tipo faça para os seguintes eventos
+    // ocorram após uma thread (joinadora) (necessáriamente a thread em execução) joinar outra thread (joinada).
+
+    // 1 - A thread joinadora verifica se a thread joinada já terminou, se sim então join retorna o valor de
+    // retorno (ou saída) da thread joinada.
+    // 2 - Se não então, a thread joinadora precisa ser adicionada, nesse caso por si mesma, a uma fila de 
+    // espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada termine.
+
+
+    // Li em um livro que devemos utilizar while em vez de if (Precisamos de 1-2 parágrafos pra justficar isso)
+    while(_state != FINISHING) 
+        // Como dito anteriormente, escolhemos por utilizar uma variável de condição para implementar o join.
+        // Para que a thread joinadora seja inserida na lita de espera e colocada para dormir ela executa um
+        // _join.wait();
+        // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar 
+        // Thread::exit(), onde será realizado um _join.signal();
+        // OBS: Como a thread joinadora chama o método join do objeto da thread joianda, as operações wait() e
+        // signal() atuam na mesma variável de condição _join.
+        
+        // Precisamos avaliar a necessidade de adicionar um mutex, que precisa ser compartilhado por ambas
+        // thraed joinadora e joinada e que controlará o acesso a signal e wait. Essa abordagem corretamente
+        // mesmo em sistemas multicores, com várias threads rodando simultâneamnte.
+        // Só não sei ainda onde ficaria esse mutex, atribute da thread?
+        // Talvez não seja necessário pelo modo como essa variável de condição é implementada, mas ainda
+        // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
+        
+        //mutex.lock();
+        _joining = ???;
+        _join.wait();  
+        //mutex.unlock();
+
+    // IMPLEMENTAÇÃO COM THREAD* - UMA THREAD PODE SER JOINADA POR APENAS UMA THREAD
+    // Inicialmente pretendiamos utilizar uma variável de condição, mas surgiram vários problemas que
+    // nos estimularam a não permitir que uma thread pudesse ser joidnaa por multiplas outras threads, 
+    // e para esse comportamento não faz sentido a utilização de variável de condição, pois estariámos 
+    // utilizando uma lista para armazernar no máximo uma única thread.
+
+    // PThreads: Joining with a thread that has already being joined causes undefined behaviour.
+    
+    while(_state != FINISHING){
+        // Explicar porque a thread joinada precisa saber quem à está joinando.
+        _joining = _running; 
+        // Explicar porque a thread joinadora precisa saber quem ela está joinando.
+        _running->_joined = this;
+        // Suspender running. Explicar porque suspend e não algum tipo de sleep.
+        _running->suspend();
+        // Se a thread foi suspensa porquê a therad joinada foi deletada, então retornamos um código de erro.
+        if (_running->joined == 0)
+            // Avaliar se códigos de erro servem pra algo, talvez seja melhor retornar lixo mesmo.
+            return -1;      
+    }
+
+    // Mesma coisa do lock(), não vejo que utilidade tem sistemas multicores.
     unlock();
 
     return *reinterpret_cast<int *>(_stack);
@@ -104,27 +185,6 @@ void Thread::pass()
     dispatch(prev, this);
 
     unlock();
-}
-
-
-void Thread::sleep()
-{
-    db<Thread>(TRC) << "Thread::sleep(this=" << this << ", _ready.size=" << _ready.size()
-            << ", _ready=" << &_ready << ", _suspended=" << &_suspended << ")" << endl;
-
-    if(_running != this)
-        _ready.remove(this);
-
-    _state = WAITING;
-}
-
-
-void Thread::wake()
-{
-    db<Thread>(TRC) << "Thread::wake(this=" << this << ")" << endl;
-
-    _state = READY;
-    _ready.insert(&_link);
 }
 
 
@@ -158,11 +218,11 @@ void Thread::resume()
 
     db<Thread>(TRC) << "Thread::resume(this=" << this << ")" << endl;
 
-    _suspended.remove(this);
-    _state = READY;
-    _ready.insert(&_link);
+   _suspended.remove(this);
+   _state = READY;
+   _ready.insert(&_link);
 
-    unlock();
+   unlock();
 }
 
 
@@ -205,6 +265,15 @@ void Thread::exit(int status)
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
 
+        // Quando uma thread está sendo terminada, ela precisa acordar a thread que a joinou e está esperando
+        // seu término, para isso ela executa um _join.signal();
+        //prev->_join.signal() // Somente um join por thread permitido.
+
+
+        // Quando uma thread está sendo terminada, ela precisa acordar as threads que a joinaram e
+        // estão esperando pelo seu término, para fazer isso ela executa um _join.broadcast(). 
+        prev.join.broadcast(); // Múltiplos joins permitidos para a mesma thread.
+
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
 
@@ -223,6 +292,71 @@ void Thread::exit(int status)
     unlock();
 }
 
+void Thread::sleep(Queue * q)
+{
+    db<Thread>(TRC) << "Thread::sleep(running=" << running() << ",q=" << q << ")" << endl;
+
+    // lock() must be called before entering this method
+    assert(locked());
+
+    while(_ready.empty())
+        idle();
+
+    Thread * prev = running();
+    prev->_state = WAITING;
+    prev->_waiting = q;
+    q->insert(&prev->_link);
+
+    _running = _ready.remove()->object();
+    _running->_state = RUNNING;
+
+    dispatch(prev, _running);
+
+    unlock();
+}
+
+
+void Thread::wakeup(Queue * q)
+{
+    db<Thread>(TRC) << "Thread::wakeup(running=" << running() << ",q=" << q << ")" << endl;
+
+    // lock() must be called before entering this method
+    assert(locked());
+
+    if(!q->empty()) {
+        Thread * t = q->remove()->object();
+        t->_state = READY;
+        t->_waiting = 0;
+        _ready.insert(&t->_link);
+    }
+
+    unlock();
+
+    if(preemptive)
+        reschedule();
+}
+
+
+void Thread::wakeup_all(Queue * q)
+{
+    db<Thread>(TRC) << "Thread::wakeup_all(running=" << running() << ",q=" << q << ")" << endl;
+
+    // lock() must be called before entering this method
+    assert(locked());
+
+    while(!q->empty()) {
+        Thread * t = q->remove()->object();
+        t->_state = READY;
+        t->_waiting = 0;
+        _ready.insert(&t->_link);
+    }
+
+    unlock();
+
+    if(preemptive)
+        reschedule();
+}
+
 
 void Thread::reschedule()
 {
@@ -233,31 +367,6 @@ void Thread::reschedule()
 void Thread::time_slicer(const IC::Interrupt_Id & i)
 {
     reschedule();
-}
-
-
-void Thread::dispatch_hidden()
-{
-    db<Thread>(TRC) << "Thread::dispatch_hidden(running_thread=" << _running << ")" << endl;
-
-    // Remove the current thread from running, without adding it to the _ready threads queue.
-    if(!_ready.empty())
-    {
-        Thread * prev = _running;
-
-        _running = _ready.remove()->object();
-        _running->_state = RUNNING;
-
-        dispatch(prev, _running);
-    }
-    else
-    {
-        // Otherwise, warns the user that something could be wrong
-        db<Thread>(WRN) << "Thread::dispatch_hidden() WARNING: The system will be in a deadlock state "
-                << "if no hardware interruptions exit the idle state." << endl;
-
-        Thread::idle();
-    }
 }
 
 

@@ -5,7 +5,7 @@
 
 __BEGIN_UTIL
 
-void * SREC::entry()
+void * SREC::entry() 
 {
       srec_t srec;
       int pos;
@@ -22,10 +22,10 @@ void * SREC::entry()
           pos++;
       }
       return ((void *) (0x0));
-}
+}    
 
 
-int SREC::segment_size(int i)
+int SREC::segment_size(int i) 
 {
       int seg_size = 0;
       int pos = 0;
@@ -104,7 +104,7 @@ int SREC::load_segment(int i, void * addr)
 };
 
 
-bool SREC::srec_decode(srec_t *srec, char *_line)
+bool SREC::srec_decode(srec_t *srec, char *_line) 
 {
       int len, pos = 0, count, alen, sum = 0;
       unsigned char *line = (unsigned char *)_line;

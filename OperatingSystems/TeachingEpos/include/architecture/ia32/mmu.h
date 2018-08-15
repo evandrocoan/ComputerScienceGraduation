@@ -68,11 +68,11 @@ public:
     };
 
     // Page_Table
-    class Page_Table
+    class Page_Table 
     {
     public:
         Page_Table() {}
-
+        
         PT_Entry & operator[](unsigned int i) { return _entry[i]; }
 
         void map(int from, int to, const IA32_Flags & flags) {
@@ -122,7 +122,7 @@ public:
             db << "\n}";
             return db;
         }
-
+        
     private:
         PT_Entry _entry[PT_ENTRIES];
     };
@@ -136,7 +136,7 @@ public:
         Chunk(unsigned int bytes, const Flags & flags): _from(0), _to(pages(bytes)), _pts(page_tables(_to - _from)), _flags(IA32_Flags(flags)), _pt(calloc(_pts)) {
             if(flags & IA32_Flags::CT)
         	_pt->map_contiguous(_from, _to, _flags);
-            else
+            else 
         	_pt->map(_from, _to, _flags);
         }
 
@@ -200,7 +200,7 @@ public:
     typedef Page_Table Page_Directory;
 
     // Directory (for Address_Space)
-    class Directory
+    class Directory 
     {
     public:
         Directory() : _pd(calloc(1)), _free(true) {
@@ -211,7 +211,7 @@ public:
         Directory(Page_Directory * pd) : _pd(pd), _free(false) {}
 
         ~Directory() { if(_free) free(_pd); }
-
+        
         Phy_Addr pd() const { return _pd; }
 
         void activate() const { IA32::pdp(reinterpret_cast<IA32::Reg32>(_pd)); }
@@ -294,13 +294,13 @@ public:
             memcpy(_log_addr, d, s);
             db<IA32_MMU>(TRC) << "IA32_MMU::DMA_Buffer(phy=" << *this << " <= " << d << endl;
         }
-
+        
         Log_Addr log_address() const { return _log_addr; }
 
         friend Debug & operator<<(Debug & db, const DMA_Buffer & b) {
             db << "{phy=" << b.phy_address()
                << ",log=" << b.log_address()
-               << ",size=" << b.size()
+               << ",size=" << b.size() 
                << ",flags=" << b.flags() << "}";
             return db;
         }
@@ -333,12 +333,12 @@ public:
 
         memset(phy2log(phy), 0, sizeof(Frame) * frames);
 
-        return phy;
+        return phy;	
     }
 
     static void free(Phy_Addr frame, int n = 1) {
         // Clean up MMU flags in frame address
-        frame = indexes(frame);
+        frame = indexes(frame); 
 
         db<IA32_MMU>(TRC) << "IA32_MMU::free(frame=" << frame << ",n=" << n << ")" << endl;
 

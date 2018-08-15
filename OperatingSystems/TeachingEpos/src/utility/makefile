@@ -6,7 +6,7 @@ OBJS := $(subst .cc,.o,$(shell find *.cc | grep -v test))
 
 all:		$(LIBUTIL)
 
-$(LIBUTIL):	$(LIBUTIL)($(OBJS))
+$(LIBUTIL):	$(LIBUTIL)($(OBJS))	
 
 
 clean:

@@ -116,13 +116,13 @@ public:
         SEG_TSS0        = (SEG_PRE  | SEG_TSS   | SEG_DPL2 | SEG_DPL1 )
     };
 
-    // DPL/RPL for application (user) and system (supervisor) modes
+    // DPL/RPL for application (user) and system (supervisor) modes 
     enum {
         PL_APP = 3, // GDT, RPL=3
         PL_SYS = 0  // GDT, RPL=0
     };
 
-    // GDT Layout
+    // GDT Layout 
     enum GDT_Layout { // GCC BUG (anonymous enum in templates)
         GDT_NULL      = 0,
         GDT_FLT_CODE  = 1,
@@ -155,13 +155,13 @@ public:
           g_d_0_a_limit_19_16(((f & SEG_NOSYS) ? (SEG_4K | SEG_32) : 0) | ((Reg8)(l >> 16))), base_31_24((Reg8)(b >> 24)) {}
 
         friend Debug & operator<<(Debug & db, const GDT_Entry & g) {
-            db << "{bas=" << (void *)((g.base_31_24 << 24) | (g.base_23_16 << 16) | g.base_15_00)
+            db << "{bas=" << (void *)((g.base_31_24 << 24) | (g.base_23_16 << 16) | g.base_15_00) 
                << ",lim=" << (void *)(((g.g_d_0_a_limit_19_16 & 0xf) << 16) | g.limit_15_00)
-               << ",p=" << (g.p_dpl_s_type >> 7)
+               << ",p=" << (g.p_dpl_s_type >> 7) 
                << ",dpl=" << ((g.p_dpl_s_type >> 5) & 0x3)
                << ",s=" << ((g.p_dpl_s_type >> 4) & 0x1)
                << ",typ=" << (g.p_dpl_s_type & 0xf)
-               << ",g=" << (g.g_d_0_a_limit_19_16 >> 7)
+               << ",g=" << (g.g_d_0_a_limit_19_16 >> 7) 
                << ",d=" << ((g.g_d_0_a_limit_19_16 >> 6) & 0x1)
                << ",a=" << ((g.g_d_0_a_limit_19_16 >> 4) & 0x1) << "}";
             return db;
@@ -188,7 +188,7 @@ public:
         friend Debug & operator<<(Debug & db, const IDT_Entry & i) {
             db << "{sel=" << i.selector
                << ",off=" << (void *)i.offset()
-               << ",p=" << (i.p_dpl_0_d_1_1_0 >> 7)
+               << ",p=" << (i.p_dpl_0_d_1_1_0 >> 7) 
                << ",dpl=" << ((i.p_dpl_0_d_1_1_0 >> 5) & 0x3)
                << ",d=" << ((i.p_dpl_0_d_1_1_0 >> 4) & 0x1) << "}";
             return db;
@@ -310,21 +310,6 @@ public:
     static Hertz bus_clock() { return _bus_clock; }
 
     static void int_enable() { ASM("sti"); }
-
-    /**
-     * CLI is commonly used as a synchronization mechanism in uniprocessor systems. For example, a CLI
-     * is used in operating systems to disable interrupts so kernel code (typically a driver) can
-     * avoid race conditions with an interrupt handler. Note that CLI only affects the interrupt flag
-     * for the processor on which it is executed; in multiprocessor systems, executing a CLI
-     * instruction does not disable interrupts on other processors. Thus, a driver/interrupt handler
-     * race condition can still occur because other processors may service interrupts and execute the
-     * offending interrupt handler. For these systems, other synchronization mechanisms such as locks
-     * must be used in addition to CLI/STI to prevent all race conditions.
-     *
-     * Because the HLT instruction halts until an interrupt occurs, the combination of a CLI followed
-     * by a HLT is commonly used to intentionally hang the computer.
-     * https://en.wikipedia.org/wiki/Interrupt_flag
-     */
     static void int_disable() { ASM("cli"); }
     static bool int_enabled() { return (flags() & FLAG_IF); }
     static bool int_disabled() { return !int_enabled(); }
@@ -420,7 +405,7 @@ public:
              "		call	1f					\n"
              "1:	popl	%%eax		# ret. addr.		\n"
              "		movl	%%eax,%0				\n"
-             "		popl	%%eax					\n"
+             "		popl	%%eax					\n" 
              : "=o"(value) : );
         return value;
     }
@@ -468,7 +453,7 @@ public:
         *b = base;
         ASM("lgdt %0" : : "m"(aux[0]));
     }
-
+ 
     static void idtr(Reg16 * limit, Reg32 * base) {
         volatile Reg8 aux[6];
         volatile Reg16 * l = reinterpret_cast<volatile Reg16 *>(&aux[0]);

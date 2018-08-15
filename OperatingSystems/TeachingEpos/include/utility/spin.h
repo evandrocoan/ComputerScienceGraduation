@@ -15,7 +15,7 @@ public:
     static void not_booting() { _not_booting = true; }
 
 private:
-    static bool _not_booting;
+    static bool _not_booting; 
 };
 
 // Recursive Spin Lock
@@ -32,7 +32,7 @@ public:
 
         db<Spin>(TRC) << "Spin::acquire[SPIN=" << this
         	      << ",ID=" << me
-        	      << "]() => {owner=" << _owner
+        	      << "]() => {owner=" << _owner 
         	      << ",level=" << _level << "}" << endl;
     }
 
@@ -41,7 +41,7 @@ public:
             _owner = 0;
 
         db<Spin>(TRC) << "Spin::release[SPIN=" << this
-        	      << "]() => {owner=" << _owner
+        	      << "]() => {owner=" << _owner 
         	      << ",level=" << _level << "}" << endl;
     }
 

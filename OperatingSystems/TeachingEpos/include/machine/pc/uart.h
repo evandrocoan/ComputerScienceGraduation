@@ -56,9 +56,9 @@ public:
         reg(DLH, div >> 8);
         dlab(false);
 
-        // Set data word length (5, 6, 7 or 8)
+        // Set data word length (5, 6, 7 or 8)	
         Reg8 lcr = dbits - 5;
-
+            
         // Set parity (0 [no], 1 [odd], 2 [even])
         if(par) {
             lcr |= 1 << 3;
@@ -72,14 +72,14 @@ public:
 
         // Enables Tx and Rx FIFOs, clear them, set trigger to 14 bytes
         reg(FCR, 0xc7);
-
+            
         // Set DTR, RTS and OUT2 of MCR
         reg(MCR, reg(MCR) | 0x0b);
     }
-
+        
     void config(unsigned int * brate, unsigned int * dbits, unsigned int * par, unsigned int * sbits) {
         // Get clock divisor
-        dlab(true);
+        dlab(true); 
         *brate = CLOCK * ((reg(DLH) << 8) | reg(DLL));
         dlab(false);
 
@@ -105,7 +105,7 @@ public:
         reg(IER, reg(IER) & ~(receive | (send << 1) | (line << 2) | (modem << 3)));
     }
 
-    void reset() {
+    void reset() { 
         // Reconfiguring the UART implicitly resets it
         unsigned int b, db, p, sb;
         config(&b, &db, &p, &sb);

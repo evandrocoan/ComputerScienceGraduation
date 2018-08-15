@@ -7,7 +7,7 @@ __BEGIN_SYS
 
 // Conditional Type
 template<bool condition, typename Then, typename Else>
-struct IF
+struct IF 
 { typedef Then Result; };
 
 template<typename Then, typename Else>
@@ -32,8 +32,8 @@ struct Nil_Case {};
 
 template<int tag_, typename Type_, typename Next_ = Nil_Case>
 struct CASE
-{
-    enum { tag = tag_ };
+{ 
+    enum { tag = tag_ }; 
     typedef Type_ Type;
     typedef Next_ Next;
 };
@@ -42,8 +42,8 @@ template<int tag, typename Case>
 class SWITCH
 {
     typedef typename Case::Next Next_Case;
-    enum {
-        case_tag = Case::tag,
+    enum { 
+        case_tag = Case::tag, 
         found = ( case_tag == tag || case_tag == DEFAULT  )
     };
 public:
@@ -61,7 +61,7 @@ public:
 
 // EQUALty of Types
 template<typename T1, typename T2>
-struct EQUAL
+struct EQUAL 
 { enum { Result = false }; };
 
 template<typename T>
@@ -109,9 +109,9 @@ public:
 
 template<>
 class LIST<>
-{
+{ 
 public:
-    enum { Length = 0 };
+    enum { Length = 0 }; 
 
     template<int Index, int Current = 0>
     struct Get

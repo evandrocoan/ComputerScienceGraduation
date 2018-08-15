@@ -60,7 +60,7 @@ void Condition::broadcast() {
 //     }
 
 //     void wait() {
-// 	db<Synchronizer>(TRC) << "Condition::wait(this=" << this
+// 	db<Synchronizer>(TRC) << "Condition::wait(this=" << this 
 //  			      << ",wt=" << _wait
 //  			      << ",sg=" << _signal << ")" << endl;
 // 	int rank = finc(_wait);
@@ -68,14 +68,14 @@ void Condition::broadcast() {
 // 	    sleep();
 //     }
 //     void signal() {
-// 	db<Synchronizer>(TRC) << "Condition::signal(this=" << this
+// 	db<Synchronizer>(TRC) << "Condition::signal(this=" << this 
 // 			      << ",wt=" << _wait
 // 			      << ",sg=" << _signal << ")" << endl;
 // 	finc(_signal);
 // 	wakeup();
 //     }
 //     void broadcast() { // warning: overflow is not being handled!
-// 	db<Synchronizer>(TRC) << "Condition::broadcast(this=" << this
+// 	db<Synchronizer>(TRC) << "Condition::broadcast(this=" << this 
 // 			      << ",wt=" << _wait
 // 			      << ",sg=" << _signal << ")" << endl;
 // 	_signal = _wait + 1;
@@ -107,20 +107,20 @@ void Condition::broadcast() {
 //     }
 
 //     void wait() {
-// 	db<Condition>(TRC) << "Condition::wait(this=" << this
+// 	db<Condition>(TRC) << "Condition::wait(this=" << this 
 // 			  << ",ts=" << _time_stamp << ")" << endl;
 // 	int ts = finc(_time_stamp);
 // 	while(tsl(_not_condition) && (ts > _broadcast))
 // 	    sleep();
 //     }
 //     void signal() {
-// 	db<Condition>(TRC) << "Condition::signal(this=" << this
+// 	db<Condition>(TRC) << "Condition::signal(this=" << this 
 // 			  << ",ts=" << _time_stamp << ")" << endl;
 // 	_not_condition = false;
 // 	wakeup();
 //     }
 //     void broadcast() {
-// 	db<Condition>(TRC) << "Condition::broadcast(this=" << this
+// 	db<Condition>(TRC) << "Condition::broadcast(this=" << this 
 // 			  << ",ts=" << _time_stamp << ")" << endl;
 // 	_broadcast = finc(_time_stamp);
 // 	wakeup_all();

@@ -54,17 +54,17 @@ void test_few_synonyms_hash()
     }
     cout << "" << endl;
 
-    cout << "Removing the element whose value is " << o[N/2] << " => "
+    cout << "Removing the element whose value is " << o[N/2] << " => " 
          << *h.remove(&o[N/2])->object() << "" << endl;
-    cout << "Removing the element whose key is " << 1 << " => "
+    cout << "Removing the element whose key is " << 1 << " => " 
          << *h.remove_key(1)->object() << "" << endl;
-    cout << "Removing the element whose key is " << 11 << " => "
+    cout << "Removing the element whose key is " << 11 << " => " 
          << *h.remove_key(11)->object() << "" << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => "
+    cout << "Removing the element whose value is " << o[N/4] << " => " 
          << *h.remove(&o[N/4])->object() << "" << endl;
-    cout << "Removing the element whose key is " << N-1 << " => "
+    cout << "Removing the element whose key is " << N-1 << " => " 
          << *h.remove_key(N-1)->object() << "" << endl;
-    cout << "Trying to remove an element that is not on the hash => "
+    cout << "Trying to remove an element that is not on the hash => " 
          << h.remove(&o[N/2]) << "" << endl;
 
     cout << "The hash table has now " << h.size() << " elements:" << endl;
@@ -115,17 +115,17 @@ void test_many_synonyms_hash()
     }
     cout << "" << endl;
 
-    cout << "Removing the element whose value is " << o[N/2] << " => "
+    cout << "Removing the element whose value is " << o[N/2] << " => " 
          << *h.remove(&o[N/2])->object() << "" << endl;
-    cout << "Removing the element whose key is " << 1 << " => "
+    cout << "Removing the element whose key is " << 1 << " => " 
          << *h.remove_key(1)->object() << "" << endl;
-    cout << "Removing the element whose key is " << 11 << " => "
+    cout << "Removing the element whose key is " << 11 << " => " 
          << *h.remove_key(11)->object() << "" << endl;
-    cout << "Removing the element whose value is " << o[N/4] << " => "
+    cout << "Removing the element whose value is " << o[N/4] << " => " 
          << *h.remove(&o[N/4])->object() << "" << endl;
-    cout << "Removing the element whose key is " << N-1 << " => "
+    cout << "Removing the element whose key is " << N-1 << " => " 
          << *h.remove_key(N-1)->object() << "" << endl;
-    cout << "Trying to remove an element that is not on the hash => "
+    cout << "Trying to remove an element that is not on the hash => " 
          << h.remove(&o[N/2]) << "" << endl;
 
     cout << "The hash table has now " << h.size() << " elements:" << endl;
