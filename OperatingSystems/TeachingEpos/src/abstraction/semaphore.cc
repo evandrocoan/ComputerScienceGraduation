@@ -18,8 +18,14 @@ Semaphore::~Semaphore()
 
 void Semaphore::p()
 {
-    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ",value=" << _value << ")" << endl;
+    db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ", value=" << _value
+            << ", _threads_waiting=" << &_threads_waiting << ")" << endl;
 
+    // Disables all interrupts because the scheduler can put another thread to run in the middle of
+    // our operation. This is the solution adopted for single core processors. This solution is not
+    // suitable for multi-core processors because we need to disable interrupts for all processors,
+    // which could degrade performance greatly and can be cumbersome. For multi-core processors,
+    // hardware support is required with assembly instructions specifically for synchronization.
     begin_atomic();
     if(fdec(_value) < 1)
         sleep(); // implicit end_atomic()

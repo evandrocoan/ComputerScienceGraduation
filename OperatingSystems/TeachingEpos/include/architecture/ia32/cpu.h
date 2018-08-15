@@ -309,6 +309,20 @@ public:
     static Hertz clock() { return _cpu_clock; }
     static Hertz bus_clock() { return _bus_clock; }
 
+    /**
+     * CLI is commonly used as a synchronization mechanism in uniprocessor systems. For example, a CLI
+     * is used in operating systems to disable interrupts so kernel code (typically a driver) can
+     * avoid race conditions with an interrupt handler. Note that CLI only affects the interrupt flag
+     * for the processor on which it is executed; in multiprocessor systems, executing a CLI
+     * instruction does not disable interrupts on other processors. Thus, a driver/interrupt handler
+     * race condition can still occur because other processors may service interrupts and execute the
+     * offending interrupt handler. For these systems, other synchronization mechanisms such as locks
+     * must be used in addition to CLI/STI to prevent all race conditions.
+     *
+     * Because the HLT instruction halts until an interrupt occurs, the combination of a CLI followed
+     * by a HLT is commonly used to intentionally hang the computer.
+     * https://en.wikipedia.org/wiki/Interrupt_flag
+     */
     static void int_enable() { ASM("sti"); }
     static void int_disable() { ASM("cli"); }
     static bool int_enabled() { return (flags() & FLAG_IF); }
