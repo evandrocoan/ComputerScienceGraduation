@@ -111,9 +111,7 @@ protected:
     Context * volatile _context;
     volatile State _state;
     Queue * _waiting;
-    Queue * _joining; // Many-Join Não vejo isso funcionar
-    Thread * _joining; // Single Join
-    Thread * _joined;  // Single Join
+    bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
     Queue::Element _link;
 
     static Scheduler_Timer * _timer;

@@ -65,15 +65,14 @@ Thread::~Thread()
         _waiting->remove(this);
 
     // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
-    // Isso não adianta, só deixei como exemplo. Se uma thread joinada for deletada, mesmo que ela
-    // desbloqueie as threads esperando por ela, essas outras threads continuarão no loop do join.
-    // Na verdade teremos até um erro acontecendo, pois essas threads acordadas irão tentar acessar
-    // o atributo _state da thread joinada (deletada) e isso vai levar a um comportamento indefinido.
-    if(_joined)
+    // Como agora colocamos im IF, as thraed pode ser acordada e não ocorrerão erros,
+    // no entando, o valor de retorno da thread joinada não é mais confiável.
+    if(_joined){
         _join.broadcast();
-        ???;
-    // Pensar em um jeito de corrigir esse método acima pro caso de variáveis de condição em que várias
-    // thread podem joinar uma outra thread específica.
+    }
+        
+/*
+    Esquecer
 
     // RELATIVO A IMPLEMENTAÇÃO ONDE UMA THREAD PODE SER JOINADA APENAS POR UMA OUTRA THREAD
     // Quando uma thread for deletada, e ela estiver joinando alguma outra thread, precisamos notificar a
@@ -91,7 +90,8 @@ Thread::~Thread()
         _joined->_joining = 0;
         _joined->resume();
     }
-    
+*/
+
     unlock();
 
     kfree(_stack);
@@ -100,8 +100,8 @@ Thread::~Thread()
 
 int Thread::join()
 {
-    // Ainda não comprei esses locks e unlocks, não vejo como eles poderiam eventualmente funcionar em 
-    // ambientes multicore.
+    // Lock e unlock funcionam em sistemas multicore porque não fazem apenas suspender interrupções,
+    // também possuem spins locks para oferecer garantias para esse tipo de ambiente.
     lock();
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
@@ -117,9 +117,8 @@ int Thread::join()
     // 2 - Se não então, a thread joinadora precisa ser adicionada, nesse caso por si mesma, a uma fila de 
     // espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada termine.
 
-
-    // Li em um livro que devemos utilizar while em vez de if (Precisamos de 1-2 parágrafos pra justficar isso)
-    while(_state != FINISHING) 
+    /* Explicar porque decidimos utilizar if e não while (por causa do delete.)*/
+    if(_state != FINISHING)  
         // Como dito anteriormente, escolhemos por utilizar uma variável de condição para implementar o join.
         // Para que a thread joinadora seja inserida na lita de espera e colocada para dormir ela executa um
         // _join.wait();
@@ -136,9 +135,12 @@ int Thread::join()
         // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
         
         //mutex.lock();
-        _joining = ???;
+        _joined = true;
         _join.wait();  
         //mutex.unlock();
+
+
+    /* Esquecer
 
     // IMPLEMENTAÇÃO COM THREAD* - UMA THREAD PODE SER JOINADA POR APENAS UMA THREAD
     // Inicialmente pretendiamos utilizar uma variável de condição, mas surgiram vários problemas que
@@ -161,8 +163,10 @@ int Thread::join()
             return -1;      
     }
 
-    // Mesma coisa do lock(), não vejo que utilidade tem sistemas multicores.
+    */
+
     unlock();
+
 
     return *reinterpret_cast<int *>(_stack);
 }
