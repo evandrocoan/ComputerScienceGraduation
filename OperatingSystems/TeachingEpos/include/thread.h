@@ -111,7 +111,9 @@ protected:
     Context * volatile _context;
     volatile State _state;
     Queue * _waiting;
-    Queue * _joining;
+    Queue * _joining; // Many-Join Não vejo isso funcionar
+    Thread * _joining; // Single Join
+    Thread * _joined;  // Single Join
     Queue::Element _link;
 
     static Scheduler_Timer * _timer;
