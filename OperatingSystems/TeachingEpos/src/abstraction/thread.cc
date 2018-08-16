@@ -65,8 +65,13 @@ Thread::~Thread()
         _waiting->remove(this);
 
     // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
-    // Como agora colocamos im IF, as thraed pode ser acordada e não ocorrerão erros,
-    // no entando, o valor de retorno da thread joinada não é mais confiável.
+    // Como agora colocamos im IF, as threads podem ser acordadas e não ocorrerão erros,
+    // no entanto, o valor de retorno da thread joinada não é mais confiável, por que
+    // depois de deletar um object em C++, não se pode tentar acessar seus atributos ou
+    // métodos, por que eles já foram deletados :/
+    // 
+    // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por
+    // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
     if(_joined){
         _join.broadcast();
     }
