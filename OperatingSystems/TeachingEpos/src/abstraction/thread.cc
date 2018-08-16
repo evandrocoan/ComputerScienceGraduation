@@ -23,7 +23,6 @@ Thread::Queue Thread::_suspended;
 void Thread::constructor_prolog(unsigned int stack_size)
 {
     lock();
-
     _stack = reinterpret_cast<char *>(kmalloc(stack_size));
 }
 
@@ -88,6 +87,23 @@ int Thread::join()
     // Lock e unlock funcionam em sistemas multicore porque não fazem apenas suspender interrupções,
     // também possuem spins locks para oferecer garantias para esse tipo de ambiente.
     lock();
+
+    // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
+    // Assim, salvamos memória, caso nunca ninguém de join()
+    if( !_joined )
+    {    
+        // Colocamos a construção do _join aqui ao invés da initialization list no header thread.h
+        // por causa do error: forward declaration of 'struct EPOS::S::Condition'
+        // https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
+        // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
+        // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
+        // dependência cíclica: 
+        //   Thread -> Synchronizer_Common -> Condition
+        //   Condition <- Synchronizer_Common <- Thread
+        //   
+        // _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+        this->_join = new (kmalloc(sizeof(Condition))) Condition();
+    }
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
 
