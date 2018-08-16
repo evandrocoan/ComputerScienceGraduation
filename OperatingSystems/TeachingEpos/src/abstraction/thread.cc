@@ -75,7 +75,7 @@ Thread::~Thread()
     if(_joined){
         _join->broadcast();
     }
-        
+
     unlock();
 
     kfree(_stack);
@@ -93,16 +93,47 @@ int Thread::join()
     if( !_joined )
     {    
         // Colocamos a construção do _join aqui ao invés da initialization list no header thread.h
-        // por causa do error: forward declaration of 'struct EPOS::S::Condition'
-        // https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
+        // por causa do erro: 
+        //      forward declaration of 'struct EPOS::S::Condition'
+        //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
+        // 
         // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
         // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
         // dependência cíclica: 
         //   Thread -> Synchronizer_Common -> Condition
         //   Condition <- Synchronizer_Common <- Thread
-        //   
-        // _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
-        this->_join = new (kmalloc(sizeof(Condition))) Condition();
+        //  
+        // Tentamos fazer a instanciação da variável _join com `new Condition`, mas não compilava dando
+        // o seguinte erro na hora da que o linker executa:
+        //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
+        //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
+        //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
+        //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
+        //
+        // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
+        //      By default, the Arduino IDE and libraries does not use the operator new and operator
+        //      delete. It does support malloc() and free(). So the solution is to implement new
+        //      and delete operators for yourself, to use these functions.
+        //      http://forum.arduino.cc/index.php?topic=41485.0
+        //     
+        // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
+        // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
+        // disponível durante a inicialização do sistema ou para o sistema.
+        // 
+        // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
+        // a seguinte linha:
+        //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+        //
+        // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
+        _join = new (kmalloc(sizeof(Condition))) Condition();
+
+        // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
+        // 
+        // Depois de ler os seguintes links:
+        //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
+        //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
+        // 
+        // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
     }
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
@@ -114,23 +145,36 @@ int Thread::join()
 
     // 1 - A thread joinadora verifica se a thread joinada já terminou, se sim então join retorna o valor de
     // retorno (ou saída) da thread joinada.
+    // 
     // 2 - Se não então, a thread joinadora precisa ser adicionada, nesse caso por si mesma, a uma fila de 
     // espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada termine.
 
     /* Explicar porque decidimos utilizar if e não while (por causa do delete.)*/
-   if(_state != FINISHING)  
-   {
-        // Como dito anteriormente, escolhemos por utilizar uma variável de condição para implementar o join.
-        // Para que a thread joinadora seja inserida na lita de espera e colocada para dormir ela executa um
-        // _join->wait();
-        // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar 
+    // Antes de bloquear a execução com a variável de condição, verificamos se a thread atual já
+    // não finalizou sua execução ou se foi deletada.
+    // 
+    // Quando um thread finaliza sua execução, possui seu valor de _state setado para zero. Mas este
+    // valor também é zerado quando a thread é deletada com operador delete, mesmo que ela não tenha
+    // sido finaliza ainda, indo para estado de FINISHING. Isso acontece por que o destrutor da
+    // classe thread zera todos os dados no espaço de endereçamento da thread, para proteger suas
+    // informações, o que causo o valor do estado em _state virar 0, igual a valor da enumeração FINISHING 
+    if(_state != FINISHING)  
+    {
+        // Como dito anteriormente, escolhemos por utilizar uma variável de condição para
+        // implementar o join. Para que a thread joinadora seja inserida na lista de espera e
+        // colocada para dormir quando ela executa um _join->wait();
+        // 
+        // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar
         // Thread::exit(), onde será realizado um _join->signal();
-        // OBS: Como a thread joinadora chama o método join do objeto da thread joianda, as operações wait() e
-        // signal() atuam na mesma variável de condição _join->
-        
-        // Precisamos avaliar a necessidade de adicionar um mutex, que precisa ser compartilhado por ambas
-        // thraed joinadora e joinada e que controlará o acesso a signal e wait. Essa abordagem corretamente
-        // mesmo em sistemas multicores, com várias threads rodando simultâneamnte.
+        // 
+        // OBS: Como a thread joinadora chama o método join do objeto da thread joianda, as
+        // operações wait() e signal() atuam na mesma variável de condição _join->
+
+        // Precisamos avaliar a necessidade de adicionar um mutex, que precisa ser compartilhado por
+        // ambas threads joinadora e joinada e que controlará o acesso a signal e wait. Essa
+        // abordagem corretamente mesmo em sistemas multicores, com várias threads rodando
+        // simultaneamente.
+        // 
         // Só não sei ainda onde ficaria esse mutex, atribute da thread?
         // Talvez não seja necessário pelo modo como essa variável de condição é implementada, mas ainda
         // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
@@ -240,10 +284,10 @@ void Thread::exit(int status)
         Thread * prev = _running;
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
-        // Quando uma thread está sendo terminada, ela precisa acordar as threads que a joinaram e
-        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast(). 
-        // Múltiplos joins permitidos para a mesma thread.
-        prev->_join->broadcast(); 
+        // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
+        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
+        // Múltiplos joins são permitidos para a mesma thread.
+        prev->_join->broadcast();
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
