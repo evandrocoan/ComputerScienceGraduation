@@ -71,27 +71,6 @@ Thread::~Thread()
         _join.broadcast();
     }
         
-/*
-    Esquecer
-
-    // RELATIVO A IMPLEMENTAÇÃO ONDE UMA THREAD PODE SER JOINADA APENAS POR UMA OUTRA THREAD
-    // Quando uma thread for deletada, e ela estiver joinando alguma outra thread, precisamos notificar a
-    // thread joinada que não é mais necessário acordar ninguém ao terminar.
-    if(_joining)
-        // O modo como notificamos a thread joinada que ela não precisa desbloquear ninguém ao terminar é
-        // definindo _join como 0.
-        _joining->_joined = 0; 
-
-    // AINDA RELATIVO A IMPLEMENTAÇÃO ONDE UMA THREAD PODE SER JOIANDA APENAS POR UMA OUTRA THREAD
-    // Quando uma thread for deletada, e ela estiver sendo joinada por alguma outra thread, precisamos
-    // notificar a thread joinadara que a thread joinada foi deletada e resumir a thread joinadora.  
-    if(_joined){
-        // Explicar por que decidimos utilizar suspend() e não algum tipo de sleep().
-        _joined->_joining = 0;
-        _joined->resume();
-    }
-*/
-
     unlock();
 
     kfree(_stack);
@@ -118,7 +97,7 @@ int Thread::join()
     // espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada termine.
 
     /* Explicar porque decidimos utilizar if e não while (por causa do delete.)*/
-    if(_state != FINISHING)  
+   // if(_state != FINISHING)  
         // Como dito anteriormente, escolhemos por utilizar uma variável de condição para implementar o join.
         // Para que a thread joinadora seja inserida na lita de espera e colocada para dormir ela executa um
         // _join.wait();
@@ -134,36 +113,8 @@ int Thread::join()
         // Talvez não seja necessário pelo modo como essa variável de condição é implementada, mas ainda
         // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
         
-        //mutex.lock();
         _joined = true;
         _join.wait();  
-        //mutex.unlock();
-
-
-    /* Esquecer
-
-    // IMPLEMENTAÇÃO COM THREAD* - UMA THREAD PODE SER JOINADA POR APENAS UMA THREAD
-    // Inicialmente pretendiamos utilizar uma variável de condição, mas surgiram vários problemas que
-    // nos estimularam a não permitir que uma thread pudesse ser joidnaa por multiplas outras threads, 
-    // e para esse comportamento não faz sentido a utilização de variável de condição, pois estariámos 
-    // utilizando uma lista para armazernar no máximo uma única thread.
-
-    // PThreads: Joining with a thread that has already being joined causes undefined behaviour.
-    
-    while(_state != FINISHING){
-        // Explicar porque a thread joinada precisa saber quem à está joinando.
-        _joining = _running; 
-        // Explicar porque a thread joinadora precisa saber quem ela está joinando.
-        _running->_joined = this;
-        // Suspender running. Explicar porque suspend e não algum tipo de sleep.
-        _running->suspend();
-        // Se a thread foi suspensa porquê a therad joinada foi deletada, então retornamos um código de erro.
-        if (_running->joined == 0)
-            // Avaliar se códigos de erro servem pra algo, talvez seja melhor retornar lixo mesmo.
-            return -1;      
-    }
-
-    */
 
     unlock();
 
@@ -268,15 +219,10 @@ void Thread::exit(int status)
         Thread * prev = _running;
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
-
-        // Quando uma thread está sendo terminada, ela precisa acordar a thread que a joinou e está esperando
-        // seu término, para isso ela executa um _join.signal();
-        //prev->_join.signal() // Somente um join por thread permitido.
-
-
         // Quando uma thread está sendo terminada, ela precisa acordar as threads que a joinaram e
         // estão esperando pelo seu término, para fazer isso ela executa um _join.broadcast(). 
-        prev.join.broadcast(); // Múltiplos joins permitidos para a mesma thread.
+        // Múltiplos joins permitidos para a mesma thread.
+        prev->_join.broadcast(); 
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;

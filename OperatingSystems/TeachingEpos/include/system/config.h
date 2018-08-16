@@ -11,7 +11,7 @@
 #define ARCH ia32
 #define MACH pc
 #define MMOD legacy
-#define APPL producer_consumer
+#define APPL philosophers_dinner
 #define __mode_library__
 #define __arch_ia32__
 #define __mach_pc__

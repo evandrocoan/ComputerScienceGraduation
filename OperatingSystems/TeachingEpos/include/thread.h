@@ -7,6 +7,7 @@
 #include <cpu.h>
 #include <machine.h>
 #include <system/kmalloc.h>
+#include <condition.h>
 
 extern "C" { void __exit(); }
 
@@ -146,7 +147,7 @@ protected:
     static int idle();
 
     /**
-     * Called when you kill your system somehow.
+     * Called when you kill your system somehow. ???
      */
     static void death()
     {
@@ -168,6 +169,7 @@ protected:
     volatile State _state;
     Queue * _waiting;
     bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
+    Condition _join; // Variável de condição utilizada para joins. // Circular Dependency problem
     Queue::Element _link;
 
     static Scheduler_Timer * _timer;
@@ -183,6 +185,8 @@ private:
      */
     // Queue * _locked_list;
 
+    // ?? já temos a lista _waiting ali em protected.
+
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;
@@ -191,7 +195,7 @@ private:
 
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _waiting(0), _link(this, NORMAL)
+: _state(READY), _waiting(0), _link(this, NORMAL), _joined(0) // Explicar
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);
@@ -200,7 +204,7 @@ inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
 
 template<typename ... Tn>
 inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... an)
-: _state(conf.state), _waiting(0), _link(this, conf.priority)
+: _state(conf.state), _waiting(0), _link(this, conf.priority), _joined(0) // Explicar
 {
     constructor_prolog(conf.stack_size);
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);
