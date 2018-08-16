@@ -31,22 +31,20 @@ protected:
     typedef CPU::Context Context;
 
 public:
-    /** Thread States
-     *
-     * Avoids infinite loop in case someone calls join() after deleting this thread, by
-     * adding the FINISHING as the first state.
-     *
-     * Because after calling delete, the value of _state will output 0, I do not know why it does
-     * it. I tried setting _state to the FINISHING on the destructor, but it had not effect
-     * and its value still being always 0.
-     *
-     * Then, as it seems _state is always being 0, then add the FINISHING as the first on this enum,
-     * making the join condition (_state != FINISHING) to fail and stop the infinity loop by the
-     * thread deletion before the join().
-     *
-     * There is a infinity loop because the join() implementation is just a yield() call, which will
-     * run forever as the thread is deleted and will not change or do anything anymore.
-     */
+    // Colocar o FINISHING dessa enumeração como o primeiro estado evita lock infinito no caso de
+    // alguém chamar join() após excluir essa thread. 
+    // 
+    // Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
+    // classe thread zero todos os dados na memória que pertencem a thread. Isso é útil para
+    // proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
+    // de endereçamento da thread.
+    // 
+    // Então, como _state sempre será 0, adiciona-se o FINISHING como o primeiro elemento nesta
+    // enumeração, fazendo com que a condição de junção (_state! = FINISHING) falhe e o join não
+    // bloqueie a execução da thread.
+    // 
+    // Havia um ciclo infinito porque a implementação de join() era apenas uma chamada yield(), que
+    // será executada para sempre, já que o thread é excluída e não irá mudar ou fazer mais nada.
     enum State {
         FINISHING,
         RUNNING,
