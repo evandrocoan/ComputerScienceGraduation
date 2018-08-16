@@ -7,9 +7,15 @@
 #include <cpu.h>
 #include <machine.h>
 #include <system/kmalloc.h>
-#include <condition.h>
 
 extern "C" { void __exit(); }
+
+// Protótipo de ponteiro para resolver o problema da dependência circular entre:
+//   Thread -> Synchronizer_Common -> Condition
+//   Condition <- Synchronizer_Common <- Thread
+//   
+// A dependência circular acontece por que... bla bla... completar...
+class Condition;
 
 __BEGIN_SYS
 
@@ -165,15 +171,7 @@ protected:
     char * _stack;
     Context * volatile _context;
     volatile State _state;
-    Queue * _waiting;
-    bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
-    Condition _join; // Variável de condição utilizada para joins. // Circular Dependency problem
-    Queue::Element _link;
 
-    static Scheduler_Timer * _timer;
-
-private:
-// public:
     /**
      * When this thread is locked by some synchronizer, this variable is set pointing to it's
      * synchronizer list, allowing the thread destructor remove itself from the synchronizer list.
@@ -181,28 +179,45 @@ private:
      * This works because a thread can only be blocked by one synchronizer at time, as if the thread
      * is blocked, there is no way it can call another synchronizer to block it again.
      */
-    // Queue * _locked_list;
+    Queue * _waiting;
 
-    // ?? já temos a lista _waiting ali em protected.
+    bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
+    Condition* _join; // Variável de condição utilizada para joins. // Circular Dependency problem
+    Queue::Element _link;
+    static Scheduler_Timer * _timer;
 
+private:
+// public:
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;
 };
 
-
+/**
+ * Explicar _join and _joined
+ *
+ * Colocamos _joined e _join antes entre _waiting e _link por que essa é a ordem na qual eles estão
+ * declarados na classe, e C++ solta um warning: 
+ *     warning: 'EPOS::S::Thread::_link' will be initialized after
+ * 
+ * > Having you member initialization list in some other order may be confusing to the programmer
+ * who might not be aware of which order is followed, or might not be aware that the members were
+ * declared in a different order and therefore might expect the order of member initialization to be
+ * the order of member initialization list - which it isn't in your case. The purpose of the warning
+ * is to highlight this fact. This fact may be very important in cases where initialization of one
+ * member depends on another. https://stackoverflow.com/questions/47464164/will-be-initialized-after-warning-fix
+ */
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _waiting(0), _link(this, NORMAL), _joined(0) // Explicar
+: _state(READY), _waiting(0), _joined(0), _join(), _link(this, NORMAL)
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);
     constructor_epilog(entry, STACK_SIZE);
 }
-
 template<typename ... Tn>
 inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... an)
-: _state(conf.state), _waiting(0), _link(this, conf.priority), _joined(0) // Explicar
+: _state(conf.state), _waiting(0), _joined(0), _join(), _link(this, conf.priority)  
 {
     constructor_prolog(conf.stack_size);
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);

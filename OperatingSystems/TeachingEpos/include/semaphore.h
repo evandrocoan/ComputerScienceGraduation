@@ -26,6 +26,13 @@ public:
     void p();
     void v();
 
+    /**
+     * Permite trocar um mutex por semáforo, somente mudando a instanciação de `Mutex table` para
+     * `Semaphore table`, Assim, ficou fácil trocar entre um semáforo e o mutex.
+     */
+    void lock()   { p(); }
+    void unlock() { v(); }
+
 private:
     volatile int _value;
 };

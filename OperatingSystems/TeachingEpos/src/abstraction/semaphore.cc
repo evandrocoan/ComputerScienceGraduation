@@ -19,7 +19,7 @@ Semaphore::~Semaphore()
 void Semaphore::p()
 {
     db<Synchronizer>(TRC) << "Semaphore::p(this=" << this << ", value=" << _value
-            << ", =" << &_queue << ")" << endl;
+            << ", _queue=" << &_queue << ")" << endl;
 
     // Disables all interrupts because the scheduler can put another thread to run in the middle of
     // our operation. This is the solution adopted for single core processors. This solution is not

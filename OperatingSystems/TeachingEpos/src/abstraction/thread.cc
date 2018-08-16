@@ -3,6 +3,7 @@
 #include <system/kmalloc.h>
 #include <machine.h>
 #include <thread.h>
+#include <condition.h>
 
 // This_Thread class attributes
 __BEGIN_UTIL
@@ -73,7 +74,7 @@ Thread::~Thread()
     // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por
     // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
     if(_joined){
-        _join.broadcast();
+        _join->broadcast();
     }
         
     unlock();
@@ -90,7 +91,6 @@ int Thread::join()
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
 
-
     // IMPLEMENTAÇÃO COM VARIÁVEL DE CONDIÇÃO - UMA THREAD PODE SER JOINADA POR MÚLTIPLAS THREADS
     // Escolhemos utilizar uma variável de condição para implementar o join pois esse tipo de técnica de
     // sincronização faz exatamente o que precisamos que uma técnica desse tipo faça para os seguintes eventos
@@ -102,14 +102,15 @@ int Thread::join()
     // espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada termine.
 
     /* Explicar porque decidimos utilizar if e não while (por causa do delete.)*/
-   // if(_state != FINISHING)  
+   if(_state != FINISHING)  
+   {
         // Como dito anteriormente, escolhemos por utilizar uma variável de condição para implementar o join.
         // Para que a thread joinadora seja inserida na lita de espera e colocada para dormir ela executa um
-        // _join.wait();
+        // _join->wait();
         // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar 
-        // Thread::exit(), onde será realizado um _join.signal();
+        // Thread::exit(), onde será realizado um _join->signal();
         // OBS: Como a thread joinadora chama o método join do objeto da thread joianda, as operações wait() e
-        // signal() atuam na mesma variável de condição _join.
+        // signal() atuam na mesma variável de condição _join->
         
         // Precisamos avaliar a necessidade de adicionar um mutex, que precisa ser compartilhado por ambas
         // thraed joinadora e joinada e que controlará o acesso a signal e wait. Essa abordagem corretamente
@@ -119,11 +120,10 @@ int Thread::join()
         // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
         
         _joined = true;
-        _join.wait();  
+        _join->wait();  
+    }
 
     unlock();
-
-
     return *reinterpret_cast<int *>(_stack);
 }
 
@@ -225,9 +225,9 @@ void Thread::exit(int status)
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
         // Quando uma thread está sendo terminada, ela precisa acordar as threads que a joinaram e
-        // estão esperando pelo seu término, para fazer isso ela executa um _join.broadcast(). 
+        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast(). 
         // Múltiplos joins permitidos para a mesma thread.
-        prev->_join.broadcast(); 
+        prev->_join->broadcast(); 
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
