@@ -184,8 +184,6 @@ protected:
     bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
     Condition* _join; // Variável de condição utilizada para realizar joins. // Problemas de dependência circular
     
-    // Queue * _joining;
-    
     Queue::Element _link;
     static Scheduler_Timer * _timer;
 

@@ -151,6 +151,9 @@ int Thread::join()
             // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
             _join = new (kmalloc(sizeof(Condition))) Condition();
 
+            // Ver sobre o placement new do C++, onde você pode passar o endereço onde você quer
+            // que o objeto seja alocado como
+
             // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
             // 
             // Depois de ler os seguintes links:
@@ -244,6 +247,7 @@ void Thread::yield()
 
     db<Thread>(TRC) << "Thread::yield(running=" << _running << ") state=[" << _running->_state << "]" << endl;
 
+    // Pensar sobre trazer o _state != FINISHING pra ca, faz mais sentido
     if(!_ready.empty()) {
         Thread * prev = _running;
         prev->_state = READY;
@@ -257,52 +261,6 @@ void Thread::yield()
         idle();
 
     unlock();
-}
-
-
-void Thread::sleep(Queue * q)
-{
-    db<Thread>(TRC) << "Thread::sleep(running=" << running() << ",q=" << q << ")" << endl;
-
-    // lock() must be called before entering this method
-    assert(locked());
-
-    while(_ready.empty())
-        idle();
-
-    Thread * prev = running();
-    prev->_state = WAITING;
-    prev->_waiting = q;
-    q->insert(&prev->_link);
-
-    _running = _ready.remove()->object();
-    _running->_state = RUNNING;
-
-    dispatch(prev, _running);
-
-    unlock();
-}
-
-
-void Thread::wakeup(Queue * q)
-{
-    db<Thread>(TRC) << "Thread::wakeup(running=" << running() << ",q=" << q << ")" << endl;
-
-    // lock() must be called before entering this method
-    assert(locked());
-
-    if(!q->empty()) {
-        Thread * t = q->remove()->object();
-        t->_state = READY;
-        t->_waiting = 0;
-        _ready.insert(&t->_link);
-    }
-
-    unlock();
-
-    // 2 artigos 
-    if(preemptive && _running->_state != FINISHING)
-        reschedule();
 }
 
 void Thread::exit(int status)
@@ -353,6 +311,52 @@ void Thread::exit(int status)
     unlock();
 }
 
+
+void Thread::sleep(Queue * q)
+{
+    db<Thread>(TRC) << "Thread::sleep(running=" << running() << ",q=" << q << ")" << endl;
+
+    // lock() must be called before entering this method
+    assert(locked());
+
+    while(_ready.empty())
+        idle();
+
+    Thread * prev = running();
+    prev->_state = WAITING;
+    prev->_waiting = q;
+    q->insert(&prev->_link);
+
+    _running = _ready.remove()->object();
+    _running->_state = RUNNING;
+
+    dispatch(prev, _running);
+
+    unlock();
+}
+
+
+void Thread::wakeup(Queue * q)
+{
+    db<Thread>(TRC) << "Thread::wakeup(running=" << running() << ",q=" << q << ")" << endl;
+
+    // lock() must be called before entering this method
+    assert(locked());
+
+    if(!q->empty()) {
+        Thread * t = q->remove()->object();
+        t->_state = READY;
+        t->_waiting = 0;
+        _ready.insert(&t->_link);
+    }
+
+    unlock();
+
+    // 2 artigos 
+    if(preemptive && _running->_state != FINISHING)
+        reschedule();
+}
+
 void Thread::wakeup_all(Queue * q)
 {
     db<Thread>(TRC) << "Thread::wakeup_all(running=" << running() << ",q=" << q << ")" << endl;
@@ -360,20 +364,14 @@ void Thread::wakeup_all(Queue * q)
     // lock() must be called before entering this method
     assert(locked());
 
-
-        db<Thread>(WRN) << 1 << endl;
-
     while(!q->empty()) {
-                db<Thread>(WRN) << 2 << endl;
         Thread * t = q->remove()->object();
         t->_state = READY;
         t->_waiting = 0;
         _ready.insert(&t->_link);
     }
-        db<Thread>(WRN) << 3 << endl;
 
     unlock();
-        db<Thread>(WRN) << 4 << endl;
 
     // Running só estará no estado FINISHING durante a execução deste wakeup_all() caso este wakeup_all() seja o executado
     // pelo broadcast() do método exit(), que acorda as threads que joinaram a thread running.
@@ -382,12 +380,8 @@ void Thread::wakeup_all(Queue * q)
     // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado 
     // para running mesmo caso seu estado seja FINISHING, onde a flag preemptive esteja ativada.
     // Fazendo com que uma thread fosse escolada novamente mesmo após invocar exit()
-    if(preemptive && _running->_state != FINISHING){
-                db<Thread>(WRN) << 5 << endl;
-
+    if(preemptive && _running->_state != FINISHING)
         reschedule();
-    }
-            db<Thread>(WRN) << 6 << endl;
 
 }
 
