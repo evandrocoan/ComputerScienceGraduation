@@ -42,9 +42,9 @@ public:
     // alguém chamar join() após excluir essa thread. 
     // 
     // Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
-    // classe thread zero todos os dados na memória que pertencem a thread. Isso é útil para
+    // classe thread zero todos os dados na memória que pertencem a thread (?). Isso é útil para
     // proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
-    // de endereçamento da thread.
+    // de endereçamento da thread. 
     // 
     // Então, como _state sempre será 0, adiciona-se o FINISHING como o primeiro elemento nesta
     // enumeração, fazendo com que a condição de junção (_state! = FINISHING) falhe e o join não
@@ -174,7 +174,7 @@ protected:
 
     /**
      * When this thread is locked by some synchronizer, this variable is set pointing to it's
-     * synchronizer list, allowing the thread destructor remove itself from the synchronizer list.
+     * synchronizer list, allowing the thread destructor to remove itself from the synchronizer list.
      *
      * This works because a thread can only be blocked by one synchronizer at time, as if the thread
      * is blocked, there is no way it can call another synchronizer to block it again.
@@ -182,7 +182,10 @@ protected:
     Queue * _waiting;
 
     bool _joined;  // Boolean que indica se essa thread está sendo joinada por outra(s).
-    Condition* _join; // Variável de condição utilizada para joins. // Circular Dependency problem
+    Condition* _join; // Variável de condição utilizada para realizar joins. // Problemas de dependência circular
+    
+    // Queue * _joining;
+    
     Queue::Element _link;
     static Scheduler_Timer * _timer;
 
@@ -209,7 +212,7 @@ private:
  */
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _waiting(0), _joined(0), _link(this, NORMAL)
+: _state(READY), _waiting(0), _joined(0), /* _joining(0)*/ _link(this, NORMAL)
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);

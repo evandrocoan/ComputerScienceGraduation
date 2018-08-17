@@ -85,56 +85,8 @@ Thread::~Thread()
 int Thread::join()
 {
     // Lock e unlock funcionam em sistemas multicore porque não fazem apenas suspender interrupções,
-    // também possuem spins locks para oferecer garantias para esse tipo de ambiente.
+    // também possuem spins locks para oferecer garantias de atomicidade ambientes desse tipo.
     lock();
-
-    // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
-    // Assim, salvamos memória, caso nunca ninguém de join()
-    if( !_joined )
-    {    
-        // Colocamos a construção do _join aqui ao invés da initialization list no header thread.h
-        // por causa do erro: 
-        //      forward declaration of 'struct EPOS::S::Condition'
-        //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
-        // 
-        // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
-        // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
-        // dependência cíclica: 
-        //   Thread -> Synchronizer_Common -> Condition
-        //   Condition <- Synchronizer_Common <- Thread
-        //  
-        // Tentamos fazer a instanciação da variável _join com `new Condition`, mas não compilava dando
-        // o seguinte erro na hora da que o linker executa:
-        //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
-        //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
-        //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
-        //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
-        //
-        // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
-        //      By default, the Arduino IDE and libraries does not use the operator new and operator
-        //      delete. It does support malloc() and free(). So the solution is to implement new
-        //      and delete operators for yourself, to use these functions.
-        //      http://forum.arduino.cc/index.php?topic=41485.0
-        //     
-        // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
-        // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
-        // disponível durante a inicialização do sistema ou para o sistema.
-        // 
-        // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
-        // a seguinte linha:
-        //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
-        //
-        // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
-        _join = new (kmalloc(sizeof(Condition))) Condition();
-
-        // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
-        // 
-        // Depois de ler os seguintes links:
-        //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
-        //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
-        // 
-        // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
-    }
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
 
@@ -160,27 +112,66 @@ int Thread::join()
     // informações, o que causo o valor do estado em _state virar 0, igual a valor da enumeração FINISHING 
     if(_state != FINISHING)  
     {
+        // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
+        // Assim, salvamos memória, caso nunca ninguém de join()
+        if( !_joined )
+        {    
+            // Colocamos a construção do _join aqui em vez de na initialization list no header thread.h
+            // por causa do erro: 
+            //      forward declaration of 'struct EPOS::S::Condition'
+            //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
+            // 
+            // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
+            // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
+            // dependência cíclica: 
+            //   Thread -> Synchronizer_Common -> Condition
+            //   Condition <- Synchronizer_Common <- Thread
+            //  
+            // Tentamos fazer ajoianda instanciação da variável _join com `new Condition`, mas não compilava dando
+            // o seguinte erro na hora da que o linker executa:
+            //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
+            //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
+            //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
+            //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
+            //
+            // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
+            //      By default, the Arduino IDE and libraries does not use the operator new and operator
+            //      delete. It does support malloc() and free(). So the solution is to implement new
+            //      and delete operators for yourself, to use these functions.
+            //      http://forum.arduino.cc/index.php?topic=41485.0
+            //     
+            // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
+            // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
+            // disponível durante a inicialização do sistema ou para o sistema.
+            // 
+            // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
+            // a seguinte linha:joianda
+            //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+            //
+            // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
+            _join = new (kmalloc(sizeof(Condition))) Condition();
+
+            // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
+            // 
+            // Depois de ler os seguintes links:
+            //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
+            //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
+            // 
+            // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
+        }
+
         // Como dito anteriormente, escolhemos por utilizar uma variável de condição para
         // implementar o join. Para que a thread joinadora seja inserida na lista de espera e
-        // colocada para dormir quando ela executa um _join->wait();
+        // colocada para dormir quando executar um _join->wait();
         // 
         // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar
         // Thread::exit(), onde será realizado um _join->signal();
         // 
-        // OBS: Como a thread joinadora chama o método join do objeto da thread joianda, as
-        // operações wait() e signal() atuam na mesma variável de condição _join->
-
-        // Precisamos avaliar a necessidade de adicionar um mutex, que precisa ser compartilhado por
-        // ambas threads joinadora e joinada e que controlará o acesso a signal e wait. Essa
-        // abordagem corretamente mesmo em sistemas multicores, com várias threads rodando
-        // simultaneamente.
-        // 
-        // Só não sei ainda onde ficaria esse mutex, atribute da thread?
-        // Talvez não seja necessário pelo modo como essa variável de condição é implementada, mas ainda
-        // precisamos avaliar isso, pois não tenho certeza se ela, nesse estado atual do código, funciona.
-        
+        // OBS: Como a thread joinadora chama o método join do objeto da thread joinada, as
+        // operações wait() e signal() atuam na mesma variável de condição _join
         _joined = true;
-        _join->wait();  
+        _join->wait(); 
+
     }
 
     unlock();
@@ -251,7 +242,7 @@ void Thread::yield()
 {
     lock();
 
-    db<Thread>(TRC) << "Thread::yield(running=" << _running << ")" << endl;
+    db<Thread>(TRC) << "Thread::yield(running=" << _running << ") state=[" << _running->_state << "]" << endl;
 
     if(!_ready.empty()) {
         Thread * prev = _running;
@@ -268,44 +259,6 @@ void Thread::yield()
     unlock();
 }
 
-
-void Thread::exit(int status)
-{
-    lock();
-
-    db<Thread>(TRC) << "Thread::exit(status=" << status << ") [running=" << running() << "]" << endl;
-
-    while(_ready.empty() && !_suspended.empty())
-        idle(); // implicit unlock();
-
-    lock();
-
-    if(!_ready.empty()) {
-        Thread * prev = _running;
-        prev->_state = FINISHING;
-        *reinterpret_cast<int *>(prev->_stack) = status;
-        // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
-        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
-        // Múltiplos joins são permitidos para a mesma thread.
-        prev->_join->broadcast();
-
-        _running = _ready.remove()->object();
-        _running->_state = RUNNING;
-
-        dispatch(prev, _running);
-    } else {
-        db<Thread>(WRN) << "The last thread in the system has exited!" << endl;
-        if(reboot) {
-            db<Thread>(WRN) << "Rebooting the machine ..." << endl;
-            Machine::reboot();
-        } else {
-            db<Thread>(WRN) << "Halting the CPU ..." << endl;
-            CPU::halt();
-        }
-    }
-
-    unlock();
-}
 
 void Thread::sleep(Queue * q)
 {
@@ -347,10 +300,58 @@ void Thread::wakeup(Queue * q)
 
     unlock();
 
-    if(preemptive)
+    // 2 artigos 
+    if(preemptive && _running->_state != FINISHING)
         reschedule();
 }
 
+void Thread::exit(int status)
+{
+    lock();
+
+    db<Thread>(TRC) << "Thread::exit(status=" << status << ") [running=" << running() << "]" << endl;
+
+    while(_ready.empty() && !_suspended.empty())
+        idle(); // implicit unlock();
+
+    lock();
+
+    // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam outras thredas para executar
+    // Ou caso existam threads esperando pelo seu término por terem joinado ela anteriormente
+    // Caso hajam threads nela para executar, bloqueada na variável de condição, escondidas do sistema operacional
+    if(!_ready.empty() || _running->_joined) {
+        Thread * prev = _running;
+        prev->_state = FINISHING;
+        *reinterpret_cast<int *>(prev->_stack) = status;
+        // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
+        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
+        // Múltiplos joins são permitidos para a mesma thread.
+        db<Thread>(TRC) << "Thread : [running=" << running() << "] [_joined=" << prev->_joined << "]" << endl;
+
+        // Com esse braodcast nós acordamos as thraeds que deram join em prev e estão esperando por seu término
+        // Caso nehuma thread tenha dado join em prev, broadcast não acorda nenhuma thread.
+        if (_running->_joined){
+            prev->_join->broadcast();
+            prev->_joined = false;
+        }
+
+        _running = _ready.remove()->object();
+        _running->_state = RUNNING;
+
+        dispatch(prev, _running);
+    } else {
+        db<Thread>(WRN) << "The last thread in the system has exited!" << endl;
+        if(reboot) {
+            db<Thread>(WRN) << "Rebooting the machine ..." << endl;
+            Machine::reboot();
+        } else {
+            db<Thread>(WRN) << "Halting the CPU ..." << endl;
+            CPU::halt();
+        }
+    }
+
+    unlock();
+}
 
 void Thread::wakeup_all(Queue * q)
 {
@@ -359,17 +360,35 @@ void Thread::wakeup_all(Queue * q)
     // lock() must be called before entering this method
     assert(locked());
 
+
+        db<Thread>(WRN) << 1 << endl;
+
     while(!q->empty()) {
+                db<Thread>(WRN) << 2 << endl;
         Thread * t = q->remove()->object();
         t->_state = READY;
         t->_waiting = 0;
         _ready.insert(&t->_link);
     }
+        db<Thread>(WRN) << 3 << endl;
 
     unlock();
+        db<Thread>(WRN) << 4 << endl;
 
-    if(preemptive)
+    // Running só estará no estado FINISHING durante a execução deste wakeup_all() caso este wakeup_all() seja o executado
+    // pelo broadcast() do método exit(), que acorda as threads que joinaram a thread running.
+    // Caso a fila de pronto estjea vazia, não faz sentido a thread abrir mão da 
+
+    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado 
+    // para running mesmo caso seu estado seja FINISHING, onde a flag preemptive esteja ativada.
+    // Fazendo com que uma thread fosse escolada novamente mesmo após invocar exit()
+    if(preemptive && _running->_state != FINISHING){
+                db<Thread>(WRN) << 5 << endl;
+
         reschedule();
+    }
+            db<Thread>(WRN) << 6 << endl;
+
 }
 
 
