@@ -7,7 +7,7 @@
 
 using namespace EPOS;
 
-const int iterations = 100;
+const int iterations = 5;
 
 OStream cout;
 
