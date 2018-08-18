@@ -74,6 +74,13 @@ Thread::~Thread()
     // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
     if(_joined){
         _join->broadcast();
+
+        // Libera a memória alocada para pela variável de condição depois que todas as threads em
+        // espera são acordadas.
+        // 
+        // Não encontrei nenhum outro lugar do EPOS fazendo a deleção dos objectos criados pelo
+        // operador new replacement. Por isso não estou chamando ele aqui.
+        // delete _join;
     }
 
     unlock();
@@ -110,12 +117,18 @@ int Thread::join()
     // sido finaliza ainda, indo para estado de FINISHING. Isso acontece por que o destrutor da
     // classe thread zera todos os dados no espaço de endereçamento da thread, para proteger suas
     // informações, o que causo o valor do estado em _state virar 0, igual a valor da enumeração FINISHING 
-    if(_state != FINISHING)  
+    // 
+    // Utilizamos `Thread::running() != this` para impedir que uma thread dê join em si mesma, i.e.,
+    // this->join(). Por que se ela fizer isso, o programa iria para para sempre já que ela sairia
+    // de dentro das filas do sistema operacional e entraria dentro da sua si na fila da variável
+    // de condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço de memória
+    // perdida, i.e., leaked memory.
+    if(_state != FINISHING && Thread::running() != this)
     {
         // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
         // Assim, salvamos memória, caso nunca ninguém de join()
         if( !_joined )
-        {    
+        {
             // Colocamos a construção do _join aqui em vez de na initialization list no header thread.h
             // por causa do erro: 
             //      forward declaration of 'struct EPOS::S::Condition'
@@ -151,16 +164,42 @@ int Thread::join()
             // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
             _join = new (kmalloc(sizeof(Condition))) Condition();
 
-            // Ver sobre o placement new do C++, onde você pode passar o endereço onde você quer
-            // que o objeto seja alocado como
-
             // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
             // 
             // Depois de ler os seguintes links:
+            //     http://www.cplusplus.com/reference/new/operator%20new/
             //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
             //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
             // 
             // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
+            // Depois de ler: https://stackoverflow.com/questions/222557/what-uses-are-there-for-placement-new
+            // 
+            // Consigo entender que EPOS tem uma piscina de alocação de memória, e essa é a sintaxe
+            // do C++ para alocar os objetos nessa piscina e esse operador new é chamado de
+            // `placement new operator`. Isto é, EPOS pré-aloca uma região de memória e utiliza o
+            // placement new operator para alocar os objectos nessa memória´ao invés de invocar o
+            // operador de new convencional e alocar um novo pedaço de memória na heap. i.e.,
+            // placement new operator constrói um objecto em um buffer pré-alocado.
+            // 
+            // No link: https://www.avrfreaks.net/forum/avr-c-micro-how?name=PNphpBB2&file=viewtopic&t=59453
+            // Ele diz que para programar para um arduíno e compilar com g++ 4, é preciso definir
+            // meus próprio operator de new e delete.
+            // 
+            // A de acordo com http://www.devx.com/tips/Tip/12582 a vantagem do placement new
+            // operator é não há perigo de falha de alocação, pois a memória já foi alocada e a
+            // construção de um objeto em um buffer pré-alocado leva menos tempo.
+            // 
+            // Assim, para sistemas de tempo real, não queremos que ocorra alocação e dealocação de
+            // memória dinamicamente por que não há garantias de quanto tempo isso irá tomar. Então,
+            // com o placement new podemos pré-alocar um grande pedaço de memória previamente e
+            // utilizar-mos o placement new para colocar esses novos objectos nela.
+            // 
+            // O link https://forum.arduino.cc/index.php?topic=74145.0 diz: In an embedded system,
+            // you always have to know the upper limit on whatever it is you're trying to do, and
+            // you have to enforce that limit somehow. The "softer" behavior of traditional new and
+            // delete aren't usually applicable, so I prefer to use fixed buffers and placement new.
+            // 
+            // 
         }
 
         // Como dito anteriormente, escolhemos por utilizar uma variável de condição para

@@ -12,6 +12,12 @@ extern "C"
     void free(void *);
 }
 
+// De acordo com https://forum.arduino.cc/index.php?topic=74145.0
+// 
+// new
+//    void * operator new (size_t size) { return malloc (size); }
+// placement new
+//    void * operator new (size_t size, void * ptr) { return ptr; }
 inline void * operator new(size_t s, void * a) { return a; }
 inline void * operator new[](size_t s, void * a) { return a; }
 
