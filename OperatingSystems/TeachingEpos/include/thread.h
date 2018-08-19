@@ -14,7 +14,18 @@ extern "C" { void __exit(); }
 //   Thread -> Synchronizer_Common -> Condition
 //   Condition <- Synchronizer_Common <- Thread
 //   
-// A dependência circular acontece por que... bla bla... completar...
+// A dependência circular acontece por que Condition deriva da interface Synchronizer_Common que
+// inclui este header `thread.h`. Isso é um problema por que em C++, para se poder instanciar um
+// objecto, i.e., chamar seu construtor, é necessário conhecer a implementação completa da classe.
+// Entretanto, no caso em a classe A inclui a classe B e a classe B incluia a classe A, temos um
+// impasse por que quando a classe A for incluir a classe B, ela não conseguirá por que a definição
+// da classe A ainda não está completa e a classe B precisa dela completa. Assim a classe A não
+// consegue incluir a classe B.
+// 
+// A solução para esse problema em C++ é fazer com que a classe B não precise da definição completa
+// da classe A. Isso é possível declarando no header da classe B, o protótipo da classe A e não
+// inicializando a classe A no header da classe B, mas sim em seu .cpp, e então utiliza-se classe A
+// como um ponteiro e não como um objeto na stack.
 class Condition;
 
 __BEGIN_SYS
@@ -217,7 +228,7 @@ private:
  */
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _waiting(0), _joined(0), /* _joining(0)*/ _link(this, NORMAL)
+: _state(READY), _waiting(0), _joined(0), _link(this, NORMAL)
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);
@@ -226,7 +237,7 @@ inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
 
 template<typename ... Tn>
 inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... an)
-: _state(conf.state), _waiting(0), _joined(0), _link(this, conf.priority)  
+: _state(conf.state), _waiting(0), _joined(0), _link(this, conf.priority)
 {
     constructor_prolog(conf.stack_size);
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);

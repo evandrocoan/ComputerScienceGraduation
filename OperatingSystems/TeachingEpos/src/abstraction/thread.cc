@@ -24,6 +24,7 @@ Thread::Queue Thread::_suspended;
 void Thread::constructor_prolog(unsigned int stack_size)
 {
     lock();
+
     _stack = reinterpret_cast<char *>(kmalloc(stack_size));
 }
 
@@ -255,6 +256,7 @@ int Thread::join()
     }
 
     unlock();
+
     return *reinterpret_cast<int *>(_stack);
 }
 
@@ -340,6 +342,7 @@ void Thread::yield()
     unlock();
 }
 
+
 void Thread::exit(int status)
 {
     lock();
@@ -351,20 +354,23 @@ void Thread::exit(int status)
 
     lock();
 
-    // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam outras thredas para executar
-    // Ou caso existam threads esperando pelo seu término por terem joinado ela anteriormente
-    // Caso hajam threads nela para executar, bloqueada na variável de condição, escondidas do sistema operacional
+    // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam
+    // outras thredas para executar. Ou caso existam threads esperando pelo seu término por terem
+    // joinado ela anteriormente. Caso hajam threads nela para executar, bloqueada na variável de
+    // condição, escondidas do sistema operacional.
     if(!_ready.empty() || _running->_joined) {
         Thread * prev = _running;
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
+
         // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
         // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
         // Múltiplos joins são permitidos para a mesma thread.
         db<Thread>(TRC) << "Thread : [running=" << running() << "] [_joined=" << prev->_joined << "]" << endl;
 
-        // Com esse braodcast nós acordamos as thraeds que deram join em prev e estão esperando por seu término
-        // Caso nehuma thread tenha dado join em prev, broadcast não acorda nenhuma thread.
+        // Com esse braodcast nós acordamos as thraeds que deram join em prev e estão esperando por
+        // seu término. Caso nehuma thread tenha dado join em prev, broadcast não acorda nenhuma
+        // thread.
         if (_running->_joined){
             prev->_join->broadcast();
             prev->_joined = false;
@@ -387,7 +393,6 @@ void Thread::exit(int status)
 
     unlock();
 }
-
 
 void Thread::sleep(Queue * q)
 {
@@ -429,10 +434,11 @@ void Thread::wakeup(Queue * q)
 
     unlock();
 
-    // 2 artigos 
+    // Veja a explicação disso em wakeup_all()
     if(preemptive && _running->_state != FINISHING)
         reschedule();
 }
+
 
 void Thread::wakeup_all(Queue * q)
 {
@@ -450,16 +456,16 @@ void Thread::wakeup_all(Queue * q)
 
     unlock();
 
-    // Running só estará no estado FINISHING durante a execução deste wakeup_all() caso este wakeup_all() seja o executado
-    // pelo broadcast() do método exit(), que acorda as threads que joinaram a thread running.
-    // Caso a fila de pronto estjea vazia, não faz sentido a thread abrir mão da 
-
-    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado 
-    // para running mesmo caso seu estado seja FINISHING, onde a flag preemptive esteja ativada.
-    // Fazendo com que uma thread fosse escolada novamente mesmo após invocar exit()
+    // Running só estará no estado FINISHING durante a execução deste wakeup_all() caso este
+    // wakeup_all() seja o executado pelo broadcast() do método exit(), que acorda as threads que
+    // joinaram a thread running. Assim, caso a fila de pronto esteja vazia, não faz sentido a
+    // thread abrir mão da CPU.
+    // 
+    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
+    // para running mesmo caso seu estado seja FINISHING e a flag preemptive esteja ativada. Fazendo
+    // com que uma thread fosse escolada novamente mesmo após invocar exit()
     if(preemptive && _running->_state != FINISHING)
         reschedule();
-
 }
 
 
