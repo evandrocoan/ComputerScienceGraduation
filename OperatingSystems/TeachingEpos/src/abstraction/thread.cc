@@ -268,8 +268,7 @@ void Thread::pass()
     db<Thread>(TRC) << "Thread::pass(this=" << this << ")" << endl;
 
     Thread * prev = _running;
-    prev->_state = READY;
-    _ready.insert(&prev->_link);
+    add_to_ready(prev);
 
     _ready.remove(this);
     _state = RUNNING;
@@ -312,10 +311,27 @@ void Thread::resume()
     db<Thread>(TRC) << "Thread::resume(this=" << this << ")" << endl;
 
    _suspended.remove(this);
-   _state = READY;
-   _ready.insert(&_link);
+   add_to_ready(this);
 
    unlock();
+}
+
+
+void Thread::add_to_ready(Thread* prev)
+{
+    // A atual thread _running estará no estado FINISHING durante a execução, quando ele executar o
+    // método broadcast() no método exit() para acorda as threads que joinaram a thread _running.
+    // 
+    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
+    // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada em
+    // wakeup_all(), fazendo com que uma thread fosse escolada novamente mesmo após ter invocado
+    // exit(), i.e., uma thread que já terminou era escalonada novamente pelo escalonador por que o
+    // método yield() coloca ela na fila de _ready.
+    if(prev->_state != FINISHING) 
+    {
+        prev->_state = READY;
+        _ready.insert(&prev->_link);
+    }
 }
 
 
@@ -328,20 +344,7 @@ void Thread::yield()
 
     if(!_ready.empty()) {
         Thread * prev = _running;
-
-        // A atual thread _running estará no estado FINISHING durante a execução deste yield(), quando o
-        // yield() for executado pelo broadcast() no método exit() que acorda as threads que joinaram a
-        // thread em _running.
-        // 
-        // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
-        // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada em
-        // wakeup_all(), fazendo com que uma thread fosse escolada novamente mesmo após ter invocado
-        // exit(), i.e., uma thread que já terminou era escalonada novamente pelo escalonador por que o
-        // método yield() coloca ela na fila de _ready.
-        if(prev->_state != FINISHING) { 
-            prev->_state = READY;
-            _ready.insert(&prev->_link);
-        }
+        add_to_ready(prev);
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
@@ -438,9 +441,8 @@ void Thread::wakeup(Queue * q)
 
     if(!q->empty()) {
         Thread * t = q->remove()->object();
-        t->_state = READY;
         t->_waiting = 0;
-        _ready.insert(&t->_link);
+        add_to_ready(t);
     }
 
     unlock();
@@ -459,9 +461,8 @@ void Thread::wakeup_all(Queue * q)
 
     while(!q->empty()) {
         Thread * t = q->remove()->object();
-        t->_state = READY;
         t->_waiting = 0;
-        _ready.insert(&t->_link);
+        add_to_ready(t);
     }
 
     unlock();

@@ -184,6 +184,7 @@ protected:
 
 private:
     static void init();
+    static void add_to_ready(Thread* prev);
 
 protected:
     char * _stack;
