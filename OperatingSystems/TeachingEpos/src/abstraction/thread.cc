@@ -289,8 +289,7 @@ void Thread::suspend()
     if(_running != this)
         _ready.remove(this);
 
-    _state = SUSPENDED;
-    _suspended.insert(&_link);
+    add_to_suspended(this);
 
     if((_running == this) && !_ready.empty()) {
         _running = _ready.remove()->object();
@@ -317,6 +316,21 @@ void Thread::resume()
 }
 
 
+void Thread::add_to_suspended(Thread* prev)
+{
+    // Veja a explicação em add_to_ready(). Depois daquele problema, forçasse aqui a verificação
+    // do estado anterior da thread antes de adicionar ela na fila de _suspended.
+    if(prev->_state != FINISHING) 
+    {
+        prev->_state = SUSPENDED;
+        _suspended.insert(&prev->_link);
+    }
+    else
+    {
+        db<Thread>(ERR) << "ERROR: A FINISHING thread is trying to be suspended (this=" << prev << ")!" << endl;
+    }
+}
+
 void Thread::add_to_ready(Thread* prev)
 {
     // A atual thread _running estará no estado FINISHING durante a execução, quando ele executar o
@@ -331,6 +345,10 @@ void Thread::add_to_ready(Thread* prev)
     {
         prev->_state = READY;
         _ready.insert(&prev->_link);
+    }
+    else
+    {
+        db<Thread>(ERR) << "ERROR: A finished thread is trying to run again (this=" << prev << ")!" << endl;
     }
 }
 
@@ -369,7 +387,7 @@ void Thread::exit(int status)
     lock();
 
     // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam
-    // outras thredas para executar. Ou caso existam threads esperando pelo seu término por terem
+    // outras threads para executar. Ou caso existam threads esperando pelo seu término por terem
     // joinado ela anteriormente. Caso hajam threads nela para executar, bloqueada na variável de
     // condição, escondidas do sistema operacional. 
     if(!_ready.empty() || _running->_joined) {
@@ -382,8 +400,8 @@ void Thread::exit(int status)
         // Múltiplos joins são permitidos para a mesma thread.
         db<Thread>(TRC) << "Thread : [running=" << running() << "] [_joined=" << prev->_joined << "]" << endl;
 
-        // Com esse braodcast nós acordamos as thraeds que deram join em prev e estão esperando por
-        // seu término. Caso nehuma thread tenha dado join em prev, broadcast não acorda nenhuma
+        // Com esse broadcast nós acordamos as threads que deram join em prev e estão esperando por
+        // seu término. Caso nenhuma thread tenha dado join em prev, broadcast não acorda nenhuma
         // thread.
         if (_running->_joined){
             prev->_join->broadcast();
@@ -447,8 +465,14 @@ void Thread::wakeup(Queue * q)
 
     unlock();
 
-    if(preemptive)
-        reschedule();
+    // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
+    // problema descrito na função add_to_ready(Thread*).
+    // 
+    // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
+    // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
+    // 
+    // if(preemptive)
+    //     reschedule();
 }
 
 
@@ -467,8 +491,14 @@ void Thread::wakeup_all(Queue * q)
 
     unlock();
 
-    if(preemptive)
-        reschedule();
+    // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
+    // problema descrito na função add_to_ready(Thread*).
+    // 
+    // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
+    // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
+    // 
+    // if(preemptive)
+    //     reschedule();
 }
 
 
