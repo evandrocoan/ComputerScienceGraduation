@@ -10,7 +10,7 @@ Semaphore table;
 int func_a(char);
 
 /**
- * Este teste cria 2 threads, na thread main() e espera 0.5 segundos. Nesse tempo, tanto a thread A
+ * Este teste cria 2 threads na thread main() e espera 0.5 segundos. Nesse tempo, tanto a thread A
  * e thread B vão executando e fazendo seu trabalho. O trabalho que as threads A e B fazem é
  * imprimir um texto na tela pelo tempo de 1 segundo. Depois de passados 0.5 segundos, a thread
  * main() deletada a thread B e faz join na thread A. Uma vez que a thread A termina, é a vez da
