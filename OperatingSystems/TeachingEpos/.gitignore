@@ -1,5 +1,3 @@
-
-
 # Ignore the svn stuff
 .svn
 
@@ -9,7 +7,12 @@
 /bin/**
 /app/*_traits.h
 /tools/eposmkbi/eposmkbi
+
 /src/boot/pc_boot
+/src/setup/pc_setup
+
+/etc/eposcc.conf
+/etc/eposmkbi.conf
 
 /app/philosophers_dinner
 /app/epos.test
