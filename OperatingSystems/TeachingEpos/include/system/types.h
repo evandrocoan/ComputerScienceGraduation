@@ -22,7 +22,7 @@ extern "C"
 //    void * operator new (size_t size, void * ptr) { return ptr; }
 // 
 // Portanto, como abaixo vemos somente as assinaturas de um placement new, concluo que o EPOS não
-// prove assinaturas para o operator de new quando o sistema está sendo inicializado internamente.
+// disponibiliza assinaturas para o operator de new quando o sistema está sendo inicializado internamente.
 inline void * operator new(size_t s, void * a) { return a; }
 inline void * operator new[](size_t s, void * a) { return a; }
 

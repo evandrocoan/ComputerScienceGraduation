@@ -137,113 +137,121 @@ int Thread::join()
     // de dentro das filas do sistema operacional e entraria dentro da sua si na fila da variável de
     // condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço de memória perdida,
     // i.e., leaked memory.
-    if(_state != FINISHING && Thread::running() != this)
+    if(_state != FINISHING)
     {
-        // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
-        // Assim, salvamos memória, caso nunca ninguém de join()
-        if( !_joined )
+        if( Thread::running() == this )
         {
-            // Colocamos a construção do _join aqui em vez de na initialization list no header thread.h
-            // por causa do erro: 
-            //      forward declaration of 'struct EPOS::S::Condition'
-            //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
-            // 
-            // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
-            // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
-            // dependência cíclica: 
-            //   Thread -> Synchronizer_Common -> Condition
-            //   Condition <- Synchronizer_Common <- Thread
-            //  
-            // Tentamos fazer ajoianda instanciação da variável _join com `new Condition`, mas não
-            // compilava dando o seguinte erro na hora da que o linker executa:
-            //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
-            //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
-            //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
-            //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
-            //
-            // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
-            //      By default, the Arduino IDE and libraries does not use the operator new and operator
-            //      delete. It does support malloc() and free(). So the solution is to implement new
-            //      and delete operators for yourself, to use these functions.
-            //      http://forum.arduino.cc/index.php?topic=41485.0
-            //     
-            // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
-            // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
-            // disponível durante a inicialização do sistema ou para o sistema.
-            // 
-            // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
-            // a seguinte linha:
-            //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
-            //
-            // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
-            // _join = new (kmalloc(sizeof(Condition))) Condition();
-            // 
-            // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
-            // 
-            // Depois de ler os seguintes links:
-            //     http://www.cplusplus.com/reference/new/operator%20new/
-            //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
-            //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
-            // 
-            // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
-            // Depois de ler: https://stackoverflow.com/questions/222557/what-uses-are-there-for-placement-new
-            // 
-            // Depois de pesquisar muito, entendi por que o new tradicional não está funcionando. 
-            // Por que como EPOS não tem acesso ao STL/STD libraries, ele não tem um operator de
-            // new definido. Assim, temos que incluir/criar a definição de um operador de new.
-            // EPOS define o operador de new tradicional no arquivo `utility/malloc.h` que não
-            // estava incluído aqui nesse arquivo. Mas agora que adicionei seu include aqui,
-            // consigo utilizar normalmente o operator de new tradicional.
-            // 
-            // Portanto, a resposta encontra na internet anteriormente estava correta, o erro
-            // "undefined reference to `operator new(unsigned long)`" acontece quando não existe a
-            // definição de um operador de new.
-            // 
-            // Não utilizamos a piscina do sistema operacional por que não entendemos qual a
-            // vantagem ou desvantagem de utilizar essa piscina, por que não entendemos o seu
-            // funcionamento.
-            // 
-            // O link https://forum.arduino.cc/index.php?topic=74145.0 diz isso sobre new placement:
-            //     Em um sistema embarcado, você sempre precisa saber o limite máximo de tudo o que
-            //     está tentando fazer e, de alguma forma, é necessário impor esse limite. O
-            //     comportamento "mais suave" do tradicional new e do delete normalmente não é
-            //     aplicável, então eu prefiro usar buffers fixos e novos posicionamentos.
-            // 
-            // Assim, não sabemos se devemos utilizar o placement new ou o new tradicional.
-            _join = new Condition();
-
-            // Consigo entender que EPOS tem uma piscina de alocação de memória, e essa é a sintaxe
-            // do C++ para alocar os objetos nessa piscina e esse operador new é chamado de
-            // `placement new operator`. Isto é, EPOS pré-aloca uma região de memória e utiliza o
-            // placement new operator para alocar os objectos nessa memória´ao invés de invocar o
-            // operador de new convencional e alocar um novo pedaço de memória na heap. i.e.,
-            // placement new operator constrói um objecto em um buffer pré-alocado.
-            // 
-            // No link: https://www.avrfreaks.net/forum/avr-c-micro-how?name=PNphpBB2&file=viewtopic&t=59453
-            // Ele diz que para programar para um arduíno e compilar com g++ 4, é preciso definir
-            // meus próprio operator de new e delete.
-            // 
-            // A de acordo com http://www.devx.com/tips/Tip/12582 a vantagem do placement new
-            // operator é não há perigo de falha de alocação, pois a memória já foi alocada e a
-            // construção de um objeto em um buffer pré-alocado leva menos tempo.
-            // 
-            // Assim, para sistemas de tempo real, não queremos que ocorra alocação e dealocação de
-            // memória dinamicamente por que não há garantias de quanto tempo isso irá tomar. Então,
-            // com o placement new podemos pré-alocar um grande pedaço de memória previamente e
-            // utilizar-mos o placement new para colocar esses novos objectos nela.
+            db<Thread>(ERR) << "ERROR: Thread trying to join itself, join(this=" << this << ")" << endl;
         }
+        else
+        {
+            // Lazy initialization, somente inicializa a variável _join quando alguém for dar join
+            // Assim, salvamos memória, caso nunca ninguém de join(), por exemplo, em um sistema que
+            // a thread principal somente inicializa alguns serviços contínuos que nunca terminam.
+            if( !_joined )
+            {
+                // Colocamos a construção do _join aqui em vez de na initialization list no header thread.h
+                // por causa do erro: 
+                //      forward declaration of 'struct EPOS::S::Condition'
+                //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
+                // 
+                // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
+                // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
+                // dependência cíclica: 
+                //   Thread -> Synchronizer_Common -> Condition
+                //   Condition <- Synchronizer_Common <- Thread
+                //  
+                // Tentamos fazer ajoianda instanciação da variável _join com `new Condition`, mas não
+                // compilava dando o seguinte erro na hora da que o linker executa:
+                //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
+                //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
+                //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
+                //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
+                //
+                // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
+                //      By default, the Arduino IDE and libraries does not use the operator new and operator
+                //      delete. It does support malloc() and free(). So the solution is to implement new
+                //      and delete operators for yourself, to use these functions.
+                //      http://forum.arduino.cc/index.php?topic=41485.0
+                //     
+                // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
+                // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
+                // disponível durante a inicialização do sistema ou para o sistema.
+                // 
+                // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
+                // a seguinte linha:
+                //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+                //
+                // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
+                // _join = new (kmalloc(sizeof(Condition))) Condition();
+                // 
+                // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
+                // 
+                // Depois de ler os seguintes links:
+                //     http://www.cplusplus.com/reference/new/operator%20new/
+                //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
+                //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
+                // 
+                // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
+                // Depois de ler: https://stackoverflow.com/questions/222557/what-uses-are-there-for-placement-new
+                // 
+                // Depois de pesquisar muito, entendi por que o new tradicional não está funcionando. 
+                // Por que como EPOS não tem acesso ao STL/STD libraries, ele não tem um operator de
+                // new definido. Assim, temos que incluir/criar a definição de um operador de new.
+                // EPOS define o operador de new tradicional no arquivo `utility/malloc.h` que não
+                // estava incluído aqui nesse arquivo. Mas agora que adicionei seu include aqui,
+                // consigo utilizar normalmente o operator de new tradicional.
+                // 
+                // Portanto, a resposta encontra na internet anteriormente estava correta, o erro
+                // "undefined reference to `operator new(unsigned long)`" acontece quando não existe a
+                // definição de um operador de new.
+                // 
+                // Não utilizamos a piscina do sistema operacional por que não entendemos qual a
+                // vantagem ou desvantagem de utilizar essa piscina, por que não entendemos o seu
+                // funcionamento.
+                // 
+                // O link https://forum.arduino.cc/index.php?topic=74145.0 diz isso sobre new placement:
+                //     Em um sistema embarcado, você sempre precisa saber o limite máximo de tudo o que
+                //     está tentando fazer e, de alguma forma, é necessário impor esse limite. O
+                //     comportamento "mais suave" do tradicional new e do delete normalmente não é
+                //     aplicável, então eu prefiro usar buffers fixos e novos posicionamentos.
+                // 
+                // Assim, não sabemos se devemos utilizar o placement new ou o new tradicional.
+                _join = new Condition();
 
-        // Como dito anteriormente, escolhemos por utilizar uma variável de condição para
-        // implementar o join. Para que a thread joinadora seja inserida na lista de espera e
-        // colocada para dormir quando executar um _join->wait();
-        // 
-        // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar
-        // Thread::exit(), onde será realizado um _join->signal();
-        // 
-        // OBS: Como a thread joinadora chama o método join do objeto da thread joinada, as
-        // operações wait() e signal() atuam na mesma variável de condição _join
-        _joined = true;
-        _join->wait(); 
+                // Consigo entender que EPOS tem uma piscina de alocação de memória, e essa é a sintaxe
+                // do C++ para alocar os objetos nessa piscina e esse operador new é chamado de
+                // `placement new operator`. Isto é, EPOS pré-aloca uma região de memória e utiliza o
+                // placement new operator para alocar os objectos nessa memória´ao invés de invocar o
+                // operador de new convencional e alocar um novo pedaço de memória na heap. i.e.,
+                // placement new operator constrói um objecto em um buffer pré-alocado.
+                // 
+                // No link: https://www.avrfreaks.net/forum/avr-c-micro-how?name=PNphpBB2&file=viewtopic&t=59453
+                // Ele diz que para programar para um arduíno e compilar com g++ 4, é preciso definir
+                // meus próprio operator de new e delete.
+                // 
+                // A de acordo com http://www.devx.com/tips/Tip/12582 a vantagem do placement new
+                // operator é não há perigo de falha de alocação, pois a memória já foi alocada e a
+                // construção de um objeto em um buffer pré-alocado leva menos tempo.
+                // 
+                // Assim, para sistemas de tempo real, não queremos que ocorra alocação e dealocação de
+                // memória dinamicamente por que não há garantias de quanto tempo isso irá tomar. Então,
+                // com o placement new podemos pré-alocar um grande pedaço de memória previamente e
+                // utilizar-mos o placement new para colocar esses novos objectos nela.
+            }
+
+            // Como dito anteriormente, escolhemos por utilizar uma variável de condição para
+            // implementar o join. Para que a thread joinadora seja inserida na lista de espera e
+            // colocada para dormir quando executar um _join->wait();
+            // 
+            // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar
+            // Thread::exit(), onde será realizado um _join->signal();
+            // 
+            // OBS: Como a thread joinadora chama o método join do objeto da thread joinada, as
+            // operações wait() e signal() atuam na mesma variável de condição _join
+            _joined = true;
+            _join->wait(); 
+        }
     }
 
     unlock();

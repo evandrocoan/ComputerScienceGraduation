@@ -10,12 +10,15 @@ OStream cout;
 
 int func_a(char);
 Thread * a;
+Semaphore table;
 
 int main()
 {
     cout << "Starting thread manual uniting tests..." << endl << endl;
 
     a = new Thread(&func_a, 'a');
+    table.lock();
+
     int status_a = a->join();
     cout << "Thread A exited with status " << status_a << endl;
 
@@ -26,7 +29,10 @@ int main()
 int func_a(char character)
 {
     cout << "Thread running=func_" << (int)character << "..." << endl;
-    a->join();
 
-    return 0;
+    int status_a = a->join();
+    cout << "I successfully joined myself with status " << status_a << endl;
+
+    table.unlock();
+    return character;
 }
