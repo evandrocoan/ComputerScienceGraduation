@@ -326,11 +326,22 @@ void Thread::yield()
 
     db<Thread>(TRC) << "Thread::yield(running=" << _running << ") state=[" << _running->_state << "]" << endl;
 
-    // Pensar sobre trazer o _state != FINISHING pra ca, faz mais sentido
     if(!_ready.empty()) {
         Thread * prev = _running;
-        prev->_state = READY;
-        _ready.insert(&prev->_link);
+
+        // A atual thread _running estará no estado FINISHING durante a execução deste yield(), quando o
+        // yield() for executado pelo broadcast() no método exit() que acorda as threads que joinaram a
+        // thread em _running.
+        // 
+        // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
+        // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada em
+        // wakeup_all(), fazendo com que uma thread fosse escolada novamente mesmo após ter invocado
+        // exit(), i.e., uma thread que já terminou era escalonada novamente pelo escalonador por que o
+        // método yield() coloca ela na fila de _ready.
+        if(prev->_state != FINISHING) { 
+            prev->_state = READY;
+            _ready.insert(&prev->_link);
+        }
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
@@ -357,7 +368,7 @@ void Thread::exit(int status)
     // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam
     // outras thredas para executar. Ou caso existam threads esperando pelo seu término por terem
     // joinado ela anteriormente. Caso hajam threads nela para executar, bloqueada na variável de
-    // condição, escondidas do sistema operacional.
+    // condição, escondidas do sistema operacional. 
     if(!_ready.empty() || _running->_joined) {
         Thread * prev = _running;
         prev->_state = FINISHING;
@@ -434,8 +445,7 @@ void Thread::wakeup(Queue * q)
 
     unlock();
 
-    // Veja a explicação disso em wakeup_all()
-    if(preemptive && _running->_state != FINISHING)
+    if(preemptive)
         reschedule();
 }
 
@@ -456,15 +466,7 @@ void Thread::wakeup_all(Queue * q)
 
     unlock();
 
-    // Running só estará no estado FINISHING durante a execução deste wakeup_all() caso este
-    // wakeup_all() seja o executado pelo broadcast() do método exit(), que acorda as threads que
-    // joinaram a thread running. Assim, caso a fila de pronto esteja vazia, não faz sentido a
-    // thread abrir mão da CPU.
-    // 
-    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
-    // para running mesmo caso seu estado seja FINISHING e a flag preemptive esteja ativada. Fazendo
-    // com que uma thread fosse escolada novamente mesmo após invocar exit()
-    if(preemptive && _running->_state != FINISHING)
+    if(preemptive)
         reschedule();
 }
 
