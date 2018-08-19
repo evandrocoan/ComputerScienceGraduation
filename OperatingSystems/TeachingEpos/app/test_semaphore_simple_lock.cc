@@ -1,5 +1,3 @@
-// EPOS Thread Test Program
-
 #include <utility/ostream.h>
 #include <thread.h>
 #include <alarm.h>

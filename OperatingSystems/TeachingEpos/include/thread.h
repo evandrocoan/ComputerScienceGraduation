@@ -52,6 +52,13 @@ public:
     // 
     // Havia um ciclo infinito porque a implementação de join() era apenas uma chamada yield(), que
     // será executada para sempre, já que o thread é excluída e não irá mudar ou fazer mais nada.
+    // 
+    // Entretanto, colocar o valor de FINISHING no início da enumeração não é um solução definitiva
+    // por que caso a memória volte a ser alocada por um outro processo, estariamos lendo um valor
+    // provavelmente diferente de zero. Assim, o problema original voltaria a ocorrer.
+    // 
+    // Uma solução definitiva para impedir esse tipo de problema, seria lançar uma exceção quando o
+    // um aplicativo tentar acessar um endereço de memória através de um ponteiro que foi deletado.
     enum State {
         FINISHING,
         RUNNING,
