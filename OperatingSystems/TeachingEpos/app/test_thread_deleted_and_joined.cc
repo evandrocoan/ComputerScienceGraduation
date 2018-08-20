@@ -13,12 +13,12 @@ int func_a(char);
  * Este teste cria 2 threads na thread main() e espera 0.5 segundos. Nesse tempo, tanto a thread A
  * e thread B vão executando e fazendo seu trabalho. O trabalho que as threads A e B fazem é
  * imprimir um texto na tela pelo tempo de 1 segundo. Depois de passados 0.5 segundos, a thread
- * main() deletada a thread B e faz join na thread A. Uma vez que a thread A termina, é a vez da
- * thread B fazer join. Como ela já foi deletada, essa operação é indefinida.
+ * main() deletada a thread B e faz join na thread A. Uma vez que a thread A termina, é a vez de
+ * fazer join na thread B. Como ela já foi deletada, essa operação é indefinida.
  *
  * Se este código for executado na implementação original, isso faria com que o sistema ficasse em
  * uma espera ocupada infinitamente. Nessa nova implementação, ele simplesmente continua como se nada
- * tivesse acontecido.
+ * tivesse acontecido. Entretanto, vemos lixo no valor de retorno da thread B.
  *
  * Exemplo de saída:
  * Starting thread manual Unit Tests...

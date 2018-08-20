@@ -14,7 +14,11 @@ int func_a(char);
  * thread principal faz um delay de 0.5 segundos, considerados suficientes para que a thread A
  * já tenha terminado sua execução quando a thread principal realizar o join().
  *
- * Exemplo de saída:
+ * Em uma execução correta, vemos o código de saída da thread A, sem que ela bloqueie a execução
+ * do programa. Em uma execução incorreta, o sistema poderia bloquear novamente e/ou o valor de
+ * retorna da thread A seria incorreto.
+ *
+ * Exemplo de saída correta:
  * Starting thread manual Unit Tests...
  * 
  * Thread running=func_97...

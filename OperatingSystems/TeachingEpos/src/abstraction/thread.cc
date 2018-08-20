@@ -360,6 +360,21 @@ void Thread::add_to_ready(Thread* prev)
     // uma thread fosse escolada novamente mesmo após ter invocado exit(), i.e., uma thread que já
     // terminou era escalonada novamente pelo escalonador por que o método yield() coloca ela na
     // fila de _ready.
+    // 
+    // Isso não causa mais problemas por que comentamos o código da flag preemptive() que
+    // simplesmente faz uma chamada para yield(). Assim, se retirarmos essa verificação, não veremos
+    // mais esse problema. Entretanto, se mantermos isso e descomentar-mos a flag preemptive() no
+    // método de wakeup_all(), veremos a mensagem de erro abaixo sendo emitida toda vez que uma
+    // thread terminar e acordar quem esteja esperando por ela terminar.
+    // 
+    // Caso verificação da condição de preemptive() nos métodos wakeup() e wakeup_all() sejam
+    // necessárias, podemos então comentar a mensagem de erro abaixo ou então não permitir que eles
+    // chamem reschedule() -> yield(), assim não causam nem a mensagem de erro ou o problema de uma
+    // thread que está no estado de FINISHING ser adicionada na fila de _ready.
+    // 
+    // Tais problemas não existiam na implementação original com yield() por que nela, não existe
+    // uma variável de condição que chama um broadcast() -> wakeup_all() quando o método exit() é
+    // chamado.
     if(prev->_state != FINISHING) 
     {
         prev->_state = READY;
