@@ -11,7 +11,7 @@ int func_a(char);
 
 int main()
 {
-    cout << "Starting thread manual uniting tests..." << endl << endl;
+    cout << "Starting thread manual Unit Tests..." << endl << endl;
 
     // cout << "Thread::_ready.size " << Thread::_ready.size() << endl;
     // cout << "Thread::_suspended.size " << Thread::_suspended.size() << endl;
@@ -28,7 +28,7 @@ int main()
     delete a;
     delete b;
 
-    cout << endl << "Ending thread manual uniting tests..." << endl;
+    cout << endl << "Ending thread manual Unit Tests..." << endl;
 }
 
 int func_a(char character)

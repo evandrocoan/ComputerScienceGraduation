@@ -22,7 +22,7 @@ int func_b(char);
  * contexto.
  *
  * Exemplo de saída:
- * Starting thread manual uniting tests...
+ * Starting thread manual Unit Tests...
  * 
  * Thread running=func_97...
  * Thread running=func_98...
@@ -36,13 +36,13 @@ int func_b(char);
  * join(100) Master Thread exited with status 90
  * join(101) Master Thread exited with status 90
  * 
- * Ending thread manual uniting tests...
+ * Ending thread manual Unit Tests...
  * The last thread in the system has exited!
  * Rebooting the machine ...
  */
 int main()
 {
-    cout << "Starting thread manual uniting tests..." << endl << endl;
+    cout << "Starting thread manual Unit Tests..." << endl << endl;
     master_thread = new Thread(&func_a, 'Z');
     Thread * threads[5];
 
@@ -57,7 +57,7 @@ int main()
     }
 
     delete master_thread;
-    cout << endl << "Ending thread manual uniting tests..." << endl;
+    cout << endl << "Ending thread manual Unit Tests..." << endl;
 }
 
 int func_a(char character)

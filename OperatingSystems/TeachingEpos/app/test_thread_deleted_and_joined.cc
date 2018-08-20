@@ -21,7 +21,7 @@ int func_a(char);
  * tivesse acontecido.
  *
  * Exemplo de saída:
- * Starting thread manual uniting tests...
+ * Starting thread manual Unit Tests...
  * 
  * Thread running=func_97...
  * aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -29,13 +29,13 @@ int func_a(char);
  * Thread A exited with status 97
  * Thread B exited with status 1527039107
  * 
- * Ending thread manual uniting tests...
+ * Ending thread manual Unit Tests...
  * The last thread in the system has exited!
  * Rebooting the machine ...
  */
 int main()
 {
-    cout << "Starting thread manual uniting tests..." << endl << endl;
+    cout << "Starting thread manual Unit Tests..." << endl << endl;
 
     Thread * a = new Thread(&func_a, 'a');
     Thread * b = new Thread(&func_a, 'b');
@@ -51,7 +51,7 @@ int main()
 
     delete a;
 
-    cout << endl << "Ending thread manual uniting tests..." << endl;
+    cout << endl << "Ending thread manual Unit Tests..." << endl;
 }
 
 int func_a(char character)

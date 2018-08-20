@@ -15,18 +15,18 @@ int func_a(char);
  * já tenha terminado sua execução quando a thread principal realizar o join().
  *
  * Exemplo de saída:
- * Starting thread manual uniting tests...
+ * Starting thread manual Unit Tests...
  * 
  * Thread running=func_97...
  * Thread A exited with status 97
  * 
- * Ending thread manual uniting tests...
+ * Ending thread manual Unit Tests...
  * The last thread in the system has exited!
  * Rebooting the machine ...
  */
 int main()
 {
-    cout << "Starting thread manual uniting tests..." << endl << endl;
+    cout << "Starting thread manual Unit Tests..." << endl << endl;
 
     Thread * a = new Thread(&func_a, 'a');
     Alarm::delay(500000);
@@ -35,7 +35,7 @@ int main()
     cout << "Thread A exited with status " << status_a << endl;
 
     delete a;
-    cout << endl << "Ending thread manual uniting tests..." << endl;
+    cout << endl << "Ending thread manual Unit Tests..." << endl;
 }
 
 int func_a(char character)
