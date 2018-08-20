@@ -186,6 +186,7 @@ private:
     static void init();
     static void add_to_ready(Thread*);
     static void add_to_suspended(Thread*);
+    static void wakeup_joined_threads(Thread*);
 
 protected:
     char * _stack;

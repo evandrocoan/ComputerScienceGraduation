@@ -66,16 +66,17 @@ Thread::~Thread()
     if(_waiting)
         _waiting->remove(this);
 
-    // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
-    // Como agora colocamos im IF, as threads podem ser acordadas e não ocorrerão erros,
-    // no entanto, o valor de retorno da thread joinada não é mais confiável, por que
-    // depois de deletar um object em C++, não se pode tentar acessar seus atributos ou
-    // métodos, por que eles já foram deletados :/
-    // 
-    // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por
-    // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
-    if(_joined){
-        _join->broadcast();
+    if(_joined)
+    {
+        // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS 
+        // 
+        // As threads podem ser acordadas e não ocorrerão erros, no entanto, o valor de retorno da
+        // thread joinada não é mais confiável, por que depois de deletar um objeto em C++, não se
+        // pode tentar acessar seus atributos ou métodos, por que eles já foram deletados :/
+        // 
+        // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por ela
+        // terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
+        wakeup_joined_threads(this);
 
         // Libera a memória alocada para pela variável de condição depois que todas as threads em
         // espera são acordadas.
@@ -83,14 +84,32 @@ Thread::~Thread()
         // Não encontrei nenhum outro lugar do EPOS fazendo a deleção dos objectos criados pelo
         // operador new replacement. Por isso não estou chamando ele aqui.
         // 
-        // Entretanto, como agora o objeto não é mais alocada na piscina de memória do EPOS, e sim
-        // na heap, temos que fazer a deleção de seu ponteiro.
+        // Entretanto, como agora o objeto não é mais alocada na piscina de memória do EPOS com
+        // replacement new, e sim na heap com o tradicional new, temos que fazer a deleção de seu
+        // ponteiro.
         delete _join;
     }
 
     unlock();
 
     kfree(_stack);
+}
+
+
+void Thread::wakeup_joined_threads(Thread* joined_thread)
+{
+    // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
+    // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
+    // Múltiplos joins são permitidos para a mesma thread.
+    db<Thread>(TRC) << "Thread : [joined_thread=" << joined_thread
+            << "] [_joined=" << joined_thread->_joined << "]" << endl;
+
+    // Com esse broadcast nós acordamos as threads que deram join em joined_thread e estão esperando
+    // por seu término. Caso nenhuma thread tenha dado join em joined_thread, broadcast não acorda
+    // nenhuma thread.
+    if(joined_thread->_joined) {
+        joined_thread->_join->broadcast();
+    }
 }
 
 
@@ -132,14 +151,13 @@ int Thread::join()
     // classe thread zera todos os dados no espaço de endereçamento da thread, para proteger suas
     // informações, o que causo o valor do estado em _state virar 0, igual a valor da enumeração
     // FINISHING
-    // 
-    // Utilizamos `Thread::running() != this` para impedir que uma thread dê join em si mesma, i.e.,
-    // this->join(). Por que se ela fizer isso, o programa iria parar para sempre já que ela sairia
-    // de dentro das filas do sistema operacional e entraria dentro da sua si na fila da variável de
-    // condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço de memória perdida,
-    // i.e., leaked memory.
     if(_state != FINISHING)
     {
+        // Utilizamos `Thread::running() == this` para impedir que uma thread dê join em si mesma, i.e.,
+        // this->join(). Por que se ela fizer isso, o programa iria parar para sempre já que ela sairia
+        // de dentro das filas do sistema operacional e entraria dentro da sua si na fila da variável de
+        // condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço de memória perdida,
+        // i.e., leaked memory.
         if( Thread::running() == this )
         {
             db<Thread>(ERR) << "ERROR: Thread trying to join itself, join(this=" << this << ")" << endl;
@@ -161,7 +179,7 @@ int Thread::join()
                 // dependência cíclica: 
                 //   Thread -> Synchronizer_Common -> Condition
                 //   Condition <- Synchronizer_Common <- Thread
-                //  
+                // 
                 // Tentamos fazer ajoianda instanciação da variável _join com `new Condition`, mas não
                 // compilava dando o seguinte erro na hora da que o linker executa:
                 //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
@@ -318,7 +336,7 @@ void Thread::resume()
 
 void Thread::add_to_suspended(Thread* prev)
 {
-    // Veja a explicação em add_to_ready(). Depois daquele problema, forçasse aqui a verificação
+    // Veja a explicação em add_to_ready(). Depois daquele problema, força-se aqui a verificação
     // do estado anterior da thread antes de adicionar ela na fila de _suspended.
     if(prev->_state != FINISHING) 
     {
@@ -334,13 +352,14 @@ void Thread::add_to_suspended(Thread* prev)
 void Thread::add_to_ready(Thread* prev)
 {
     // A atual thread _running estará no estado FINISHING durante a execução, quando ele executar o
-    // método broadcast() no método exit() para acorda as threads que joinaram a thread _running.
+    // método broadcast() no método exit() para acordar as threads que joinaram a ela.
     // 
     // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
-    // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada em
-    // wakeup_all(), fazendo com que uma thread fosse escolada novamente mesmo após ter invocado
-    // exit(), i.e., uma thread que já terminou era escalonada novamente pelo escalonador por que o
-    // método yield() coloca ela na fila de _ready.
+    // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada na
+    // chamada de um wakeup_all() vindo do método exit() ou do destrutor da Thread, fazendo com que
+    // uma thread fosse escolada novamente mesmo após ter invocado exit(), i.e., uma thread que já
+    // terminou era escalonada novamente pelo escalonador por que o método yield() coloca ela na
+    // fila de _ready.
     if(prev->_state != FINISHING) 
     {
         prev->_state = READY;
@@ -388,25 +407,14 @@ void Thread::exit(int status)
 
     // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam
     // outras threads para executar. Ou caso existam threads esperando pelo seu término por terem
-    // joinado ela anteriormente. Caso hajam threads nela para executar, bloqueada na variável de
-    // condição, escondidas do sistema operacional. 
+    // joinado ela anteriormente, i.e., caso hajam threads nela para executar, bloqueada na variável
+    // de condição, escondidas do sistema operacional.
     if(!_ready.empty() || _running->_joined) {
         Thread * prev = _running;
         prev->_state = FINISHING;
         *reinterpret_cast<int *>(prev->_stack) = status;
 
-        // Quando uma thread termina sua execução, ela precisa acordar as threads que a joinaram e
-        // estão esperando pelo seu término, para fazer isso ela executa um _join->broadcast().
-        // Múltiplos joins são permitidos para a mesma thread.
-        db<Thread>(TRC) << "Thread : [running=" << running() << "] [_joined=" << prev->_joined << "]" << endl;
-
-        // Com esse broadcast nós acordamos as threads que deram join em prev e estão esperando por
-        // seu término. Caso nenhuma thread tenha dado join em prev, broadcast não acorda nenhuma
-        // thread.
-        if (_running->_joined){
-            prev->_join->broadcast();
-            prev->_joined = false;
-        }
+        wakeup_joined_threads(prev);
 
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
