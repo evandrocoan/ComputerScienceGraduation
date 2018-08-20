@@ -339,7 +339,6 @@ void Thread::add_to_ready(Thread* prev)
     // Esse caminho seria: 
     // exit() -> if(_joined) -> wakeup_all() -> if (preemptive) -> yield()
     // OBS: O overhead de um if adicionado à toda inserção de thread na fila de pronto pode ser um problema.
-
     if(prev->_state != FINISHING)
     {
         prev->_state = READY;
