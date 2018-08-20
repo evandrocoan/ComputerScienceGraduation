@@ -17,7 +17,7 @@ extern "C" { void __exit(); }
 // A dependência circular acontece por que Condition deriva da interface Synchronizer_Common que
 // inclui este header `thread.h`. Isso é um problema por que em C++, para se poder instanciar um
 // objecto, i.e., chamar seu construtor, é necessário conhecer a implementação completa da classe.
-// Entretanto, no caso em a classe A inclui a classe B e a classe B incluia a classe A, temos um
+// Entretanto, no caso em a classe A inclui a classe B e a classe B inclui a classe A, temos um
 // impasse por que quando a classe A for incluir a classe B, ela não conseguirá por que a definição
 // da classe A ainda não está completa e a classe B precisa dela completa. Assim a classe A não
 // consegue incluir a classe B.
@@ -26,6 +26,19 @@ extern "C" { void __exit(); }
 // da classe A. Isso é possível declarando no header da classe B, o protótipo da classe A e não
 // inicializando a classe A no header da classe B, mas sim em seu .cpp, e então utiliza-se classe A
 // como um ponteiro e não como um objeto na stack.
+// 
+// class A
+// {
+//     B b; // aqui, a definição da classe B não é conhecida
+//     A() b() {}
+// };
+// 
+// class B
+// {
+//     A a;
+//     B() a() {}
+// };
+
 class Condition;
 
 __BEGIN_SYS
@@ -216,8 +229,6 @@ private:
 };
 
 /**
- * Explicar _join and _joined
- *
  * Colocamos _joined e _join entre _waiting e _link por que essa é a ordem na qual eles estão
  * declarados na classe, e C++ solta um warning: 
  *     warning: 'EPOS::S::Thread::_link' will be initialized after

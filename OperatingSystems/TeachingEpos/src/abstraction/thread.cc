@@ -68,22 +68,22 @@ Thread::~Thread()
 
     if(_joined)
     {
-        // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS 
-        // 
+        // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
+        //
         // As threads podem ser acordadas e não ocorrerão erros, no entanto, o valor de retorno da
         // thread joinada não é mais confiável, por que depois de deletar um objeto em C++, não se
         // pode tentar acessar seus atributos ou métodos, por que eles já foram deletados :/
-        // 
-        // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por ela
-        // terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
+        //
+        // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por
+        // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
         wakeup_joined_threads(this);
 
         // Libera a memória alocada para pela variável de condição depois que todas as threads em
         // espera são acordadas.
-        // 
-        // Não encontrei nenhum outro lugar do EPOS fazendo a deleção dos objectos criados pelo
+        //
+        // Não encontrei nenhum outro lugar do EPOS fazendo a deleção dos objetos criados pelo
         // operador new replacement. Por isso não estou chamando ele aqui.
-        // 
+        //
         // Entretanto, como agora o objeto não é mais alocada na piscina de memória do EPOS com
         // replacement new, e sim na heap com o tradicional new, temos que fazer a deleção de seu
         // ponteiro.
@@ -127,24 +127,24 @@ int Thread::join()
     // os seguintes eventos ocorram após uma thread (joinadora) (necessariamente a thread em
     // execução) joinar outra thread (joinada). Essa implementação é a sugerida pelo seguinte livro:
     // ???????????????????????????
-    // 
+    //
     // 1 - A thread joinadora verifica se a thread joinada já terminou, se sim então join retorna o
     // valor de retorno (ou saída) da thread joinada.
-    // 
+    //
     // 2 - Se não então, a thread joinadora precisa ser adicionada, nesse caso por si mesma, a uma
     // fila de espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada
     // termine.
-    // 
+    //
     // Utilizamos um if e não while como no programa original por que agora utilizamos a variável de
     // condição que faz o bloqueio da execução da thread até que ela termine, assim, fica
     // desnecessário utilizar um while(_state != FINISHING), pois ele sempre irá falhar na segunda
     // tentativa quando thread terminar, já que seu estado será trocado para FINISHING.
-    // 
+    //
     // Antes de bloquear a execução com a variável de condição, verificamos se a thread atual já não
     // finalizou sua execução ou se foi deletada. A verificação de se ela foi deletado é feita
     // implicitamente por que quando isso acontece, o valor de seu estado é setado para 0 que é
     // igual ao valor de FINISHING, assim sabemos sempre quando ela foi deletada.
-    // 
+    //
     // Quando um thread finaliza sua execução, possui seu valor de _state setado para zero. Mas este
     // valor também é zerado quando a thread é deletada com operador delete, mesmo que ela não tenha
     // sido finaliza ainda, indo para estado de FINISHING. Isso acontece por que o destrutor da
@@ -153,11 +153,11 @@ int Thread::join()
     // FINISHING
     if(_state != FINISHING)
     {
-        // Utilizamos `Thread::running() == this` para impedir que uma thread dê join em si mesma, i.e.,
-        // this->join(). Por que se ela fizer isso, o programa iria parar para sempre já que ela sairia
-        // de dentro das filas do sistema operacional e entraria dentro da sua si na fila da variável de
-        // condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço de memória perdida,
-        // i.e., leaked memory.
+        // Utilizamos `Thread::running() == this` para impedir que uma thread dê join em si mesma,
+        // i.e., this->join(). Por que se ela fizer isso, o programa iria parar para sempre já que
+        // ela sairia de dentro das filas do sistema operacional e entraria dentro da sua si na fila
+        // da variável de condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço
+        // de memória perdida, i.e., leaked memory.
         if( Thread::running() == this )
         {
             db<Thread>(ERR) << "ERROR: Thread trying to join itself, join(this=" << this << ")" << endl;
@@ -169,107 +169,115 @@ int Thread::join()
             // a thread principal somente inicializa alguns serviços contínuos que nunca terminam.
             if( !_joined )
             {
-                // Colocamos a construção do _join aqui em vez de na initialization list no header thread.h
-                // por causa do erro: 
+                // Colocamos a construção do _join aqui em vez de na initialization list no header
+                // thread.h por causa do erro:
                 //      forward declaration of 'struct EPOS::S::Condition'
                 //      https://stackoverflow.com/questions/9840109/error-forward-declaration-of-struct
-                // 
-                // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá, somente
-                // incluímos o protótipo da classe Condition() e não a sua declaração completa, devido a
-                // dependência cíclica: 
-                //   Thread -> Synchronizer_Common -> Condition
-                //   Condition <- Synchronizer_Common <- Thread
-                // 
-                // Tentamos fazer ajoianda instanciação da variável _join com `new Condition`, mas não
+                //
+                // Não podemos inicializar a classe Condition() no arquivo thread.h por que lá,
+                // somente incluímos o protótipo da classe Condition() e não a sua declaração
+                // completa, devido a dependência cíclica:
+                //     Thread -> Synchronizer_Common -> Condition
+                //     Condition <- Synchronizer_Common <- Thread
+                //
+                // Tentamos fazer a instanciação da variável _join com `new Condition`, mas não
                 // compilava dando o seguinte erro na hora da que o linker executa:
                 //      /bin/eposcc -Wa,--32 -c -ansi -O2  -o doctesting.o doctesting.cc
                 //      /bin/eposcc --library  --gc-sections  -o doctesting doctesting.o
-                //      /lib/libsys_ia32.a(thread.o): In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
-                //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): undefined reference to `operator new(unsigned long)'
+                //      /lib/libsys_ia32.a(thread.o): 
+                //               In function `EPOS::S::Thread::constructor_prolog(unsigned int)':
+                //      thread.cc:(.text._ZN4EPOS1S6Thread18constructor_prologEj+0x15): 
+                //               undefined reference to `operator new(unsigned long)'
                 //
                 // Então, pesquisamos sobre isso no google e encontramos o seguinte link:
-                //      By default, the Arduino IDE and libraries does not use the operator new and operator
-                //      delete. It does support malloc() and free(). So the solution is to implement new
-                //      and delete operators for yourself, to use these functions.
+                //
+                //      By default, the Arduino IDE and libraries does not use the operator new and
+                //      operator delete. It does support malloc() and free(). So the solution is to
+                //      implement new and delete operators for yourself, to use these functions.
                 //      http://forum.arduino.cc/index.php?topic=41485.0
-                //     
-                // Concluo que o EPOS tem implementado o operador de new, por que utilizamos ele nas
-                // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não está
-                // disponível durante a inicialização do sistema ou para o sistema.
-                // 
-                // Olhando como as outras partes do sistema que fazem new encontrei o arquivo thread_init.cc com
-                // a seguinte linha:
-                //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+                //    
+                // Conclui-se que o EPOS tem implementado o operador de new, por que utilizamos ele nas
+                // aplicações de exemplo como producer_consumer.cc, mas por algum motivo ele não
+                // está disponível durante a inicialização do sistema ou para o sistema.
+                //
+                // Olhando como as outras partes do sistema que fazem new encontrei o arquivo
+                // thread_init.cc com a seguinte linha:
+                //      _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, 
+                //                 time_slicer);
                 //
                 // Então utilizei a mesma sintaxe aqui, e o new funcionou sem erros:
                 // _join = new (kmalloc(sizeof(Condition))) Condition();
-                // 
+                //
                 // O método kmalloc faz o que? E por que new tem 2 parâmetros separados por espaço?
-                // 
+                //
                 // Depois de ler os seguintes links:
                 //     http://www.cplusplus.com/reference/new/operator%20new/
                 //     https://stackoverflow.com/questions/39496343/why-isnt-new-implemented-with-template
-                //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new-delete-operators
-                // 
-                // Descobri que EPOS tem sua própria implementação de new definida nos arquivos types.h e malloc.h
-                // Depois de ler: https://stackoverflow.com/questions/222557/what-uses-are-there-for-placement-new
-                // 
-                // Depois de pesquisar muito, entendi por que o new tradicional não está funcionando. 
-                // Por que como EPOS não tem acesso ao STL/STD libraries, ele não tem um operator de
+                //     https://stackoverflow.com/questions/8186018/how-to-properly-replace-global-new
+                //
+                // Descobri que EPOS tem sua própria implementação de new definida nos arquivos
+                // types.h e malloc.h depois de ler:
+                // https://stackoverflow.com/questions/222557/what-uses-are-there-for-placement-new
+                //
+                // Depois de pesquisar muito, entendi por que o new tradicional não está funcionando.
+                // Por que como EPOS não tem acesso ao STL/STD libraries, ele não tem um operador de
                 // new definido. Assim, temos que incluir/criar a definição de um operador de new.
                 // EPOS define o operador de new tradicional no arquivo `utility/malloc.h` que não
                 // estava incluído aqui nesse arquivo. Mas agora que adicionei seu include aqui,
-                // consigo utilizar normalmente o operator de new tradicional.
-                // 
+                // consigo utilizar normalmente o operador de new tradicional.
+                //
                 // Portanto, a resposta encontra na internet anteriormente estava correta, o erro
-                // "undefined reference to `operator new(unsigned long)`" acontece quando não existe a
-                // definição de um operador de new.
-                // 
+                // "undefined reference to `operator new(unsigned long)`" acontece quando não existe
+                // a definição de um operador de new.
+                //
                 // Não utilizamos a piscina do sistema operacional por que não entendemos qual a
                 // vantagem ou desvantagem de utilizar essa piscina, por que não entendemos o seu
                 // funcionamento.
-                // 
-                // O link https://forum.arduino.cc/index.php?topic=74145.0 diz isso sobre new placement:
-                //     Em um sistema embarcado, você sempre precisa saber o limite máximo de tudo o que
-                //     está tentando fazer e, de alguma forma, é necessário impor esse limite. O
-                //     comportamento "mais suave" do tradicional new e do delete normalmente não é
-                //     aplicável, então eu prefiro usar buffers fixos e novos posicionamentos.
-                // 
+                //
+                // O link https://forum.arduino.cc/index.php?topic=74145.0 diz isso sobre new
+                //     placement: Em um sistema embarcado, você sempre precisa saber o limite máximo
+                //     de tudo o que está tentando fazer e, de alguma forma, é necessário impor esse
+                //     limite. O comportamento "mais suave" do tradicional new e do delete
+                //     normalmente não é aplicável, então eu prefiro usar buffers fixos e novos
+                //     posicionamentos.
+                //
                 // Assim, não sabemos se devemos utilizar o placement new ou o new tradicional.
                 _join = new Condition();
 
-                // Consigo entender que EPOS tem uma piscina de alocação de memória, e essa é a sintaxe
-                // do C++ para alocar os objetos nessa piscina e esse operador new é chamado de
-                // `placement new operator`. Isto é, EPOS pré-aloca uma região de memória e utiliza o
-                // placement new operator para alocar os objectos nessa memória´ao invés de invocar o
-                // operador de new convencional e alocar um novo pedaço de memória na heap. i.e.,
-                // placement new operator constrói um objecto em um buffer pré-alocado.
-                // 
-                // No link: https://www.avrfreaks.net/forum/avr-c-micro-how?name=PNphpBB2&file=viewtopic&t=59453
+                // Consigo entender que EPOS tem uma piscina de alocação de memória, e essa é a
+                // sintaxe do C++ para alocar os objetos nessa piscina e esse operador new é chamado
+                // de `placement new operador`. Isto é, EPOS pré-aloca uma região de memória e
+                // utiliza o placement new operador para alocar os objetos nessa memória´ao invés
+                // de invocar o operador de new convencional e alocar um novo pedaço de memória na
+                // heap. i.e., placement new operador constrói um objeto em um buffer pré-alocado.
+                //
+                // No link: 
+                // https://www.avrfreaks.net/forum/avr-c-micro-how?name=PNphpBB2&file=viewtopic&t=59453
                 // Ele diz que para programar para um arduíno e compilar com g++ 4, é preciso definir
-                // meus próprio operator de new e delete.
-                // 
+                // meus próprio operador de new e delete.
+                //
                 // A de acordo com http://www.devx.com/tips/Tip/12582 a vantagem do placement new
-                // operator é não há perigo de falha de alocação, pois a memória já foi alocada e a
+                // operador é não há perigo de falha de alocação, pois a memória já foi alocada e a
                 // construção de um objeto em um buffer pré-alocado leva menos tempo.
-                // 
-                // Assim, para sistemas de tempo real, não queremos que ocorra alocação e dealocação de
-                // memória dinamicamente por que não há garantias de quanto tempo isso irá tomar. Então,
-                // com o placement new podemos pré-alocar um grande pedaço de memória previamente e
-                // utilizar-mos o placement new para colocar esses novos objectos nela.
+                //
+                // Assim, para sistemas de tempo real, não queremos que ocorra alocação e dealocação
+                // de memória dinamicamente por que não há garantias de quanto tempo isso irá tomar.
+                // Então, com o placement new podemos pré-alocar um grande pedaço de memória
+                // previamente e utilizar-mos o placement new para colocar esses novos objetos
+                // nela.
             }
 
             // Como dito anteriormente, escolhemos por utilizar uma variável de condição para
             // implementar o join. Para que a thread joinadora seja inserida na lista de espera e
             // colocada para dormir quando executar um _join->wait();
-            // 
-            // Agora ela só será acordada e removida da lista de espera quando a thread joinada executar
-            // Thread::exit(), onde será realizado um _join->signal();
-            // 
+            //
+            // Agora ela só será acordada e removida da lista de espera quando a thread joinada
+            // executar Thread::exit(), onde será realizado um _join->signal();
+            //
             // OBS: Como a thread joinadora chama o método join do objeto da thread joinada, as
             // operações wait() e signal() atuam na mesma variável de condição _join
             _joined = true;
-            _join->wait(); 
+            _join->wait();
         }
     }
 
@@ -327,10 +335,10 @@ void Thread::resume()
 
     db<Thread>(TRC) << "Thread::resume(this=" << this << ")" << endl;
 
-   _suspended.remove(this);
-   add_to_ready(this);
+    _suspended.remove(this);
+    add_to_ready(this);
 
-   unlock();
+    unlock();
 }
 
 
@@ -338,44 +346,46 @@ void Thread::add_to_suspended(Thread* prev)
 {
     // Veja a explicação em add_to_ready(). Depois daquele problema, força-se aqui a verificação
     // do estado anterior da thread antes de adicionar ela na fila de _suspended.
-    if(prev->_state != FINISHING) 
+    if(prev->_state != FINISHING)
     {
         prev->_state = SUSPENDED;
         _suspended.insert(&prev->_link);
     }
     else
     {
-        db<Thread>(ERR) << "ERROR: A FINISHING thread is trying to be suspended (this=" << prev << ")!" << endl;
+        db<Thread>(ERR) << "ERROR: A FINISHING thread is trying to be suspended (this=" 
+                << prev << ")!" << endl;
     }
 }
+
 
 void Thread::add_to_ready(Thread* prev)
 {
     // A atual thread _running estará no estado FINISHING durante a execução, quando ele executar o
     // método broadcast() no método exit() para acordar as threads que joinaram a ela.
-    // 
+    //
     // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
     // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada na
     // chamada de um wakeup_all() vindo do método exit() ou do destrutor da Thread, fazendo com que
     // uma thread fosse escolada novamente mesmo após ter invocado exit(), i.e., uma thread que já
     // terminou era escalonada novamente pelo escalonador por que o método yield() coloca ela na
     // fila de _ready.
-    // 
+    //
     // Isso não causa mais problemas por que comentamos o código da flag preemptive() que
     // simplesmente faz uma chamada para yield(). Assim, se retirarmos essa verificação, não veremos
     // mais esse problema. Entretanto, se mantermos isso e descomentar-mos a flag preemptive() no
     // método de wakeup_all(), veremos a mensagem de erro abaixo sendo emitida toda vez que uma
     // thread terminar e acordar quem esteja esperando por ela terminar.
-    // 
+    //
     // Caso verificação da condição de preemptive() nos métodos wakeup() e wakeup_all() sejam
     // necessárias, podemos então comentar a mensagem de erro abaixo ou então não permitir que eles
     // chamem reschedule() -> yield(), assim não causam nem a mensagem de erro ou o problema de uma
     // thread que está no estado de FINISHING ser adicionada na fila de _ready.
-    // 
+    //
     // Tais problemas não existiam na implementação original com yield() por que nela, não existe
     // uma variável de condição que chama um broadcast() -> wakeup_all() quando o método exit() é
     // chamado.
-    if(prev->_state != FINISHING) 
+    if(prev->_state != FINISHING)
     {
         prev->_state = READY;
         _ready.insert(&prev->_link);
@@ -392,7 +402,8 @@ void Thread::yield()
 {
     lock();
 
-    db<Thread>(TRC) << "Thread::yield(running=" << _running << ") state=[" << _running->_state << "]" << endl;
+    db<Thread>(TRC) << "Thread::yield(running=" << _running << ") state=[" 
+            << _running->_state << "]" << endl;
 
     if(!_ready.empty()) {
         Thread * prev = _running;
@@ -449,6 +460,7 @@ void Thread::exit(int status)
     unlock();
 }
 
+
 void Thread::sleep(Queue * q)
 {
     db<Thread>(TRC) << "Thread::sleep(running=" << running() << ",q=" << q << ")" << endl;
@@ -490,10 +502,10 @@ void Thread::wakeup(Queue * q)
 
     // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
     // problema descrito na função add_to_ready(Thread*).
-    // 
+    //
     // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
     // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
-    // 
+    //
     // if(preemptive)
     //     reschedule();
 }
@@ -516,10 +528,10 @@ void Thread::wakeup_all(Queue * q)
 
     // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
     // problema descrito na função add_to_ready(Thread*).
-    // 
+    //
     // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
     // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
-    // 
+    //
     // if(preemptive)
     //     reschedule();
 }
