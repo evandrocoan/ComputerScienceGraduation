@@ -31,33 +31,13 @@ protected:
     typedef CPU::Context Context;
 
 public:
-    // Colocar o FINISHING dessa enumeração como o primeiro estado evita lock infinito no caso de
-    // alguém chamar join() após excluir essa thread. 
-    // 
-    // Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
-    // classe thread zero todos os dados na memória que pertencem a thread (?). Isso é útil para
-    // proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
-    // de endereçamento da thread. 
-    // 
-    // Então, como _state sempre será 0, adiciona-se o FINISHING como o primeiro elemento nesta
-    // enumeração, fazendo com que a condição de junção (_state! = FINISHING) falhe e o join não
-    // bloqueie a execução da thread.
-    // 
-    // Havia um ciclo infinito porque a implementação de join() era apenas uma chamada yield(), que
-    // será executada para sempre, já que o thread é excluída e não irá mudar ou fazer mais nada.
-    // 
-    // Entretanto, colocar o valor de FINISHING no início da enumeração não é um solução definitiva
-    // por que caso a memória volte a ser alocada por um outro processo, estariamos lendo um valor
-    // provavelmente diferente de zero. Assim, o problema original voltaria a ocorrer.
-    // 
-    // Uma solução definitiva para impedir esse tipo de problema, seria lançar uma exceção quando o
-    // um aplicativo tentar acessar um endereço de memória através de um ponteiro que foi deletado.
+    // Thread State
     enum State {
-        FINISHING,
         RUNNING,
         READY,
         SUSPENDED,
-        WAITING
+        WAITING,
+        FINISHING
     };
 
     // Thread Priority
@@ -99,13 +79,6 @@ public:
     void resume();
 
     static Thread * volatile self() { return running(); }
-
-    /**
-     * In computer science, yield is an action that occurs in a computer program during
-     * multithreading, of forcing a processor to relinquish control of the current running thread,
-     * and sending it to the end of the running queue, of the same scheduling priority.
-     * https://en.wikipedia.org/wiki/Yield_(multithreading)
-     */
     static void yield();
     static void exit(int status = 0);
 
@@ -126,28 +99,8 @@ protected:
     static void reschedule();
     static void time_slicer(const IC::Interrupt_Id & interrupt);
 
-    /**
-     * Change the current CPU thread context.
-     *
-     * Dynamic: a Dynamic Criterion is recalculated at run-time to constantly reflect the police in
-     * force. There are two moments at which a Dynamic Criterion can be recalculated: at `dispatch`
-     * and at release. For Aperiodic Threads, for which no period is defined, it is done when the
-     * Thread leaves the CPU (i.e. another Thread is `dispatched`). For Periodic Threads,
-     * recalculating at `dispatch` would not be adequate, since jobs of other Threads will still be
-     * released before the next activation and they may influence on the calculations. Therefore,
-     * Periodic Threads subjected to Dynamic Criteria are reevaluated before the release of each
-     * job. Earliest Deadline First is Dynamic Criterion. https://epos.lisha.ufsc.br/EPOS+2+User+Guide
-     *
-     * @param `prev` the thread currently running
-     * @param `next` the thread which will be running
-     */
     static void dispatch(Thread * prev, Thread * next);
 
-    /**
-     * Halts the CPU.
-     *
-     * @return what?
-     */
     static int idle();
 
 private:
@@ -157,14 +110,6 @@ protected:
     char * _stack;
     Context * volatile _context;
     volatile State _state;
-
-    /**
-     * When this thread is locked by some synchronizer, this variable is set pointing to it's
-     * synchronizer list, allowing the thread destructor to remove itself from the synchronizer list.
-     *
-     * This works because a thread can only be blocked by one synchronizer at time, as if the thread
-     * is blocked, there is no way it can call another synchronizer to block it again.
-     */
     Queue * _waiting;
     Thread * volatile _joining;
     Queue::Element _link;
@@ -172,24 +117,12 @@ protected:
     static Scheduler_Timer * _timer;
 
 private:
-// public:
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;
 };
 
-/**
- * Colocamos _joined e _join entre _waiting e _link por que essa é a ordem na qual eles estão
- * declarados na classe, e C++ solta um warning: 
- *     warning: 'EPOS::S::Thread::_link' will be initialized after
- * 
- * > Having you member initialization list in some other order may be confusing to the programmer
- * who might not be aware of which order is followed, or might not be aware that the members were
- * declared in a different order and therefore might expect the order of member initialization to be
- * the order of member initialization list - which it isn't in your case. The purpose of the warning
- * is to highlight this fact. This fact may be very important in cases where initialization of one
- * member depends on another. https://stackoverflow.com/questions/47464164/will-be-initialized-after-warning-fix
- */
+
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
 : _state(READY), _waiting(0), _joining(0), _link(this, NORMAL)

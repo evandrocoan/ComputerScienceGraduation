@@ -385,10 +385,10 @@ public:
                 for(; p && p->next() && (p->next() != e); p = p->next());
                 if(p)
                     p->next(e->next());
-                if(e == _tail)
-                    _tail = p;
-                        _size--;
-                    }
+        if(e == _tail)
+            _tail = p;
+                _size--;
+            }
         return e;
     }
 
@@ -887,10 +887,8 @@ public:
     using Base::search;
 
     void insert(Element * e) {
-        db<Lists>(TRC) << "Ordered_List::insert(e=" << e
-                       << ") list: " << this
-                       << ") size: " << this->size()
-                       << "=> {p=" << (e ? e->prev() : (void *) -1)
+        db<Lists>(TRC) << "Ordered_List::insert(e=" << e 
+                       << ") => {p=" << (e ? e->prev() : (void *) -1)
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
                        << "}" << endl;
