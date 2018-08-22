@@ -68,17 +68,20 @@ Thread::~Thread()
 
     if(_joined)
     {
-        _state = FINISHING;
-        // Caso uma thread sendo joinada seja deletada, as threads esperando por seu término
-        // podem ser acordadas sem problemas, no entanto, o valor de retorno da thread joinada
-        // não é mais confiável, porque acessos a métodos e atributos de objetos já deletadas
-        // tem comportamento indefinido.
+        // RESPECTIVO A IMPLEMENTAÇÃO ONDE UMA THRAED POR SER JOINADAS POR MUITAS
+        //
+        // As threads podem ser acordadas e não ocorrerão erros, no entanto, o valor de retorno da
+        // thread joinada não é mais confiável, por que depois de deletar um objeto em C++, não se
+        // pode tentar acessar seus atributos ou métodos, por que eles já foram deletados :/
+        //
+        // Quando deletamos uma thread, temos que liberar todas as threads que estão esperando por
+        // ela terminar, por que agora que deletamos ela, ela nunca mais vai terminar.
         wakeup_joined_threads(this);
 
-        // Precisamos também liberar a memória alocada para a variável de condição criada na hora
-        // do join.
+        // Libera a memória alocada para pela variável de condição depois que todas as threads em
+        // espera são acordadas.
         //
-        // Não encontramos nenhum outro lugar do EPOS fazendo a deleção dos objetos criados pelo
+        // Não encontrei nenhum outro lugar do EPOS fazendo a deleção dos objetos criados pelo
         // operador new replacement. Por isso não estou chamando ele aqui.
         //
         // Entretanto, como agora o objeto não é mais alocada na piscina de memória do EPOS com
@@ -102,7 +105,8 @@ void Thread::wakeup_joined_threads(Thread* joined_thread)
             << "] [_joined=" << joined_thread->_joined << "]" << endl;
 
     // Com esse broadcast nós acordamos as threads que deram join em joined_thread e estão esperando
-    // por seu término. Caso nenhuma thread tenha dado join em joined_thread nada acontece
+    // por seu término. Caso nenhuma thread tenha dado join em joined_thread, broadcast não acorda
+    // nenhuma thread.
     if(joined_thread->_joined) {
         joined_thread->_join->broadcast();
     }
@@ -111,28 +115,49 @@ void Thread::wakeup_joined_threads(Thread* joined_thread)
 
 int Thread::join()
 {
-    // Lock e unlock funcionam em sistemas multicore porque fazem mais do que apenas suspender interrupções
+    // Lock e unlock funcionam em sistemas multicore porque não fazem apenas suspender interrupções,
+    // também possuem spins locks para oferecer garantias de atomicidade ambientes desse tipo.
     lock();
 
     db<Thread>(TRC) << "Thread::join(this=" << this << ",state=" << _state << ")" << endl;
 
+    // IMPLEMENTAÇÃO COM VARIÁVEL DE CONDIÇÃO - UMA THREAD PODE SER JOINADA POR MÚLTIPLAS THREADS
     // Escolhemos utilizar uma variável de condição para implementar o join pois esse tipo de
-    // técnica de sincronização faz exatamente o que precisamos, bloqueia threads até que uma 
-    // condição se torne verdadeira, nesse caso, que o estado da thread se torne FINISHING. 
-    // Após já termos escolhido essa abordagem, encontramos um exemplo de implementação de join
-    // com variável de condição no livro Operating Systems: Three Easy Pieces, o que nos deu
-    // mais confiança na nossa escolha.
+    // técnica de sincronização faz exatamente o que precisamos que uma técnica desse tipo faça para
+    // os seguintes eventos ocorram após uma thread (joinadora) (necessariamente a thread em
+    // execução) joinar outra thread (joinada). Essa implementação é a sugerida pelo seguinte livro:
+    // ???????????????????????????
+    //
+    // 1 - A thread joinadora verifica se a thread joinada já terminou, se sim então join retorna o
+    // valor de retorno (ou saída) da thread joinada.
+    //
+    // 2 - Se não então, a thread joinadora precisa ser adicionada, nesse caso por si mesma, a uma
+    // fila de espera e ser colocada para dormir, novamente por si mesma, até que a thread joinada
+    // termine.
     //
     // Utilizamos um if e não while como no programa original por que agora utilizamos a variável de
     // condição que faz o bloqueio da execução da thread até que ela termine, assim, fica
     // desnecessário utilizar um while(_state != FINISHING), pois ele sempre irá falhar na segunda
     // tentativa quando thread terminar, já que seu estado será trocado para FINISHING.
     //
-    // Antes de bloquear a execução com a variável de condição, verificamos se a thread atual já terminou. 
+    // Antes de bloquear a execução com a variável de condição, verificamos se a thread atual já não
+    // finalizou sua execução ou se foi deletada. A verificação de se ela foi deletado é feita
+    // implicitamente por que quando isso acontece, o valor de seu estado é setado para 0 que é
+    // igual ao valor de FINISHING, assim sabemos sempre quando ela foi deletada.
+    //
+    // Quando um thread finaliza sua execução, possui seu valor de _state setado para zero. Mas este
+    // valor também é zerado quando a thread é deletada com operador delete, mesmo que ela não tenha
+    // sido finaliza ainda, indo para estado de FINISHING. Isso acontece por que o destrutor da
+    // classe thread zera todos os dados no espaço de endereçamento da thread, para proteger suas
+    // informações, o que causo o valor do estado em _state virar 0, igual a valor da enumeração
+    // FINISHING
     if(_state != FINISHING)
     {
         // Utilizamos `Thread::running() == this` para impedir que uma thread dê join em si mesma,
-        // i.e., this->join(), para que uma thread não fique bloqueada indefinidamente.
+        // i.e., this->join(). Por que se ela fizer isso, o programa iria parar para sempre já que
+        // ela sairia de dentro das filas do sistema operacional e entraria dentro da sua si na fila
+        // da variável de condição. E uma vez lá dentro ela sairá jamais e seria somente um pedaço
+        // de memória perdida, i.e., leaked memory.
         if( Thread::running() == this )
         {
             db<Thread>(ERR) << "ERROR: Thread trying to join itself, join(this=" << this << ")" << endl;
@@ -247,7 +272,10 @@ int Thread::join()
             // colocada para dormir quando executar um _join->wait();
             //
             // Agora ela só será acordada e removida da lista de espera quando a thread joinada
-            // executar Thread::exit() ou caso for deletada.
+            // executar Thread::exit(), onde será realizado um _join->signal();
+            //
+            // OBS: Como a thread joinadora chama o método join do objeto da thread joinada, as
+            // operações wait() e signal() atuam na mesma variável de condição _join
             _joined = true;
             _join->wait();
         }
@@ -333,13 +361,30 @@ void Thread::add_to_suspended(Thread* prev)
 
 void Thread::add_to_ready(Thread* prev)
 {
-    // Agora se faz necessário verificar se o estado da thread sendo inserida na lista de pronto não é FINISHING, pois 
-    // existe pelo menos um caminho que leva uma thread terminando (executando o método exit) a executar um yield(), e que 
-    // se não tratado, colocará a thread terminando na fila de pronto.
-    // Esse caminho seria: 
-    // exit() -> if(_joined) -> wakeup_all() -> if (preemptive) -> yield()
-    // OBS: O overhead de um if adicionado à toda inserção de thread na fila de pronto pode ser um problema.
-
+    // A atual thread _running estará no estado FINISHING durante a execução, quando ele executar o
+    // método broadcast() no método exit() para acordar as threads que joinaram a ela.
+    //
+    // Adicionamos _running != FINISHING para solucionar o problema do método yield() ser invocado
+    // para uma thread que tenha seu estado como FINISHING, quando flag preemptive esteja ativada na
+    // chamada de um wakeup_all() vindo do método exit() ou do destrutor da Thread, fazendo com que
+    // uma thread fosse escolada novamente mesmo após ter invocado exit(), i.e., uma thread que já
+    // terminou era escalonada novamente pelo escalonador por que o método yield() coloca ela na
+    // fila de _ready.
+    //
+    // Isso não causa mais problemas por que comentamos o código da flag preemptive() que
+    // simplesmente faz uma chamada para yield(). Assim, se retirarmos essa verificação, não veremos
+    // mais esse problema. Entretanto, se mantermos isso e descomentar-mos a flag preemptive() no
+    // método de wakeup_all(), veremos a mensagem de erro abaixo sendo emitida toda vez que uma
+    // thread terminar e acordar quem esteja esperando por ela terminar.
+    //
+    // Caso verificação da condição de preemptive() nos métodos wakeup() e wakeup_all() sejam
+    // necessárias, podemos então comentar a mensagem de erro abaixo ou então não permitir que eles
+    // chamem reschedule() -> yield(), assim não causam nem a mensagem de erro ou o problema de uma
+    // thread que está no estado de FINISHING ser adicionada na fila de _ready.
+    //
+    // Tais problemas não existiam na implementação original com yield() por que nela, não existe
+    // uma variável de condição que chama um broadcast() -> wakeup_all() quando o método exit() é
+    // chamado.
     if(prev->_state != FINISHING)
     {
         prev->_state = READY;
@@ -386,10 +431,10 @@ void Thread::exit(int status)
 
     lock();
 
-    // Foi necessário adicionar uma nova condição (_running->_joined) para que o método exit
-    // não termine a execução da aplicação caso existam threads esperando o término da thread
-    // que está executando exit. Nesse caso, essas threads devem ser acordadas para que possam
-    // disputar a CPU e executar.
+    // Uma thread pode querer "entrar no exit" caso a fila de pronto não esteja vazia e existam
+    // outras threads para executar. Ou caso existam threads esperando pelo seu término por terem
+    // joinado ela anteriormente, i.e., caso hajam threads nela para executar, bloqueada na variável
+    // de condição, escondidas do sistema operacional.
     if(!_ready.empty() || _running->_joined) {
         Thread * prev = _running;
         prev->_state = FINISHING;
@@ -455,8 +500,14 @@ void Thread::wakeup(Queue * q)
 
     unlock();
 
-    if(preemptive)
-         reschedule();
+    // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
+    // problema descrito na função add_to_ready(Thread*).
+    //
+    // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
+    // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
+    //
+    // if(preemptive)
+    //     reschedule();
 }
 
 
@@ -475,8 +526,14 @@ void Thread::wakeup_all(Queue * q)
 
     unlock();
 
-    if(preemptive)
-        reschedule();
+    // Não vejo nenhum motivo para isso estar aqui, a não ser para dar dor de cabeça e causar o
+    // problema descrito na função add_to_ready(Thread*).
+    //
+    // Se você for querer ativar isso aqui, vai ter que desativar a mensagem de erro na função
+    // add_to_ready(Thread*), por que ela vai começar a aparecer nas condições descritas lá.
+    //
+    // if(preemptive)
+    //     reschedule();
 }
 
 
