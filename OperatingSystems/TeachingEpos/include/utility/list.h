@@ -894,6 +894,7 @@ public:
                        << ",o=" << (e ? e->object() : (void *) -1)
                        << ",n=" << (e ? e->next() : (void *) -1)
                        << "}" << endl;
+
         if(empty())
             insert_first(e);
         else {
