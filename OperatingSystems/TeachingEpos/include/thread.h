@@ -65,7 +65,7 @@ public:
     // Colocar o FINISHING dessa enumeração como o primeiro estado evita lock infinito no caso de
     // alguém chamar join() após excluir essa thread. 
     // 
-    // Porque depois de chamar delete, o valor de _state será 0, por que o o destrutor da
+    // Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
     // classe thread zero todos os dados na memória que pertencem a thread (?). Isso é útil para
     // proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
     // de endereçamento da thread. 
