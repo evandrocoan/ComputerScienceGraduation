@@ -34,12 +34,13 @@ template<> struct Traits<Build>
 
 
 // Utilities
-template<> struct Traits<Debug>
+template<> struct Traits<Debug>: public Traits<void>
 {
     static const bool error   = true;
     static const bool warning = true;
-    static const bool info    = false;
-    static const bool trace   = false;
+    static const bool info    = hysterically_debugged;
+    static const bool trace   = hysterically_debugged;
+    // static const bool trace   = true;
 };
 
 template<> struct Traits<Lists>: public Traits<void>
@@ -76,7 +77,7 @@ template<> struct Traits<Init>: public Traits<void>
 template<> struct Traits<Serial_Display>: public Traits<void>
 {
     static const bool enabled = true;
-    static const int COLUMNS = 80;
+    static const int COLUMNS = 8000;
     static const int LINES = 24;
     static const int TAB_SIZE = 8;
 };
