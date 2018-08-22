@@ -51,5 +51,10 @@
             "target": "ansi_color_build",
             "syntax": "Packages/ANSIescape/ANSI.tmLanguage"
         }
-    ]
+    ],
+    "settings":
+    {
+        "ensure_newline_at_eof_on_save": false,
+        "trim_trailing_white_space_on_save": false,
+    },
 }
