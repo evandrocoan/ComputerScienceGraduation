@@ -341,6 +341,14 @@ public:
     static Reg32 fr() { return eax(); }
     static void fr(const Reg32 sp) { eax(sp); }
 
+    /**
+     * EIP is a register in x86 architectures (32bit). It holds the "extended instruction pointer"
+     * for the stack. In other words, it tells the computer where to go next to execute the next
+     * command and controls the flow of a program. 
+     * 
+     * Research Assembly language to get a better understanding of how registers work. Skull
+     * Security has a good primer. https://security.stackexchange.com/questions/129499/what-does-eip-stand-for
+     */
     static Log_Addr ip() { return eip(); }
 
     static Reg32 pdp() { return cr3() ; }
@@ -424,6 +432,22 @@ public:
         return value;
     }
 
+    /**
+     * WP Write Protect (bit 16 of CR0) — When set, inhibits supervisor-level procedures from
+     * writing into readonly pages; when clear, allows supervisor-level procedures to write into
+     * read-only pages (regardless of the U/S bit setting; see Section 4.1.3 and Section 4.6). This
+     * flag facilitates implementation of the copy-on-write method of creating a new process
+     * (forking) used by operating systems such as UNIX.
+     * https://stackoverflow.com/questions/15275059/whats-the-purpose-of-x86-cr0-wp-bit
+     * 
+     * Typical use of CR3 in address translation with 4 KiB pages Used when virtual addressing is
+     * enabled, hence when the PG bit is set in CR0. CR3 enables the processor to translate linear
+     * addresses into physical addresses by locating the page directory and page tables for the
+     * current task. Typically, the upper 20 bits of CR3 become the page directory base register
+     * (PDBR), which stores the physical address of the first page directory entry. If the PCIDE bit
+     * in CR4 is set, the lowest 12 bits are used for the process-context identifier (PCID)
+     * https://en.wikipedia.org/wiki/Control_register
+     */
     static Reg32 cr0() {
         Reg32 value; ASM("movl %%cr0, %0" : "=r"(value) :); return value;
     }
@@ -449,6 +473,16 @@ public:
         ASM("movl %0, %%cr4" : : "r"(value));
     }
 
+    /**
+     * The Global Descriptor Table (GDT) is a table in memory that defines the processor's memory
+     * segments. The GDT sets the behavior of the segment registers and helps to ensure that
+     * protected mode operates smoothly.
+     *
+     * The GDT is pointed to by a special register in the x86 chip, the GDT Register, or simply the
+     * GDTR. The GDTR is 48 bits long. The lower 16 bits tell the size of the GDT, and the upper 32
+     * bits tell the location of the GDT in memory. Here is a layout of the GDTR:
+     * |LIMIT|----BASE---- https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table
+     */
     static void gdtr(Reg16 * limit, Reg32 * base) {
         volatile Reg8 aux[6];
         volatile Reg16 * l = reinterpret_cast<volatile Reg16 *>(&aux[0]);
