@@ -38,6 +38,7 @@ public:
 
         This_Thread::not_booting();
 
+        Thread::_initialized = true;
         Thread::running()->_context->load();
     }
 };

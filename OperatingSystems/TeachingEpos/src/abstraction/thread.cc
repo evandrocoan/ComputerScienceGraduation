@@ -12,6 +12,7 @@ __END_UTIL
 __BEGIN_SYS
 
 // Class attributes
+bool Thread::_initialized;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
@@ -196,20 +197,18 @@ void Thread::exit(int status)
 
     lock();
 
-    if(_ready.empty()) {
-        if(!_suspended.empty()) {
-            while(_ready.empty())
-                idle(); // implicit unlock();
-            lock();
-        } else { // _ready.empty() && _suspended.empty()
-            db<Thread>(WRN) << "The last thread in the system has exited!\n";
-            if(reboot) {
-                db<Thread>(WRN) << "Rebooting the machine ...\n";
-                Machine::reboot();
-            } else {
-                db<Thread>(WRN) << "Halting the CPU ...\n";
-                CPU::halt();
-            }
+    // _ready.size() == 1 somente quando a única thread existente é idle
+    // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
+    if(_ready.size() < 2 && _suspended.empty() && _initialized) {
+        db<Thread>(WRN) << "The last thread in the system has exited!\n";
+        // Thread::kill_idle_thread();
+
+        if(reboot) {
+            db<Thread>(WRN) << "Rebooting the machine ...\n";
+            Machine::reboot();
+        } else {
+            db<Thread>(WRN) << "Halting the CPU ...\n";
+            CPU::halt();
         }
     } else {
         _running = _ready.remove()->object();
@@ -335,7 +334,7 @@ int Thread::idle()
 }
 
 
-int Thread::idle_function() 
+int idle_function() 
 {
     db<Thread>(TRC) << "Starting the idle thread..." << endl;
     
@@ -360,7 +359,7 @@ void Thread::setup_idle_thread()
 
     // Initializa a idle thread com estado running para que ela não seja colocada em nenhuma outra
     // lista de threads pelo construtor.
-    _idle = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::IDLE), &Thread::idle_function);
+    _idle = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::IDLE), &idle_function);
     db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
 
     // Se descomentar essa linha, a thread principal não executa
