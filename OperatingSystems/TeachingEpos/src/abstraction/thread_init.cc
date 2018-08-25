@@ -9,6 +9,8 @@ __BEGIN_SYS
 
 void Thread::init()
 {
+    Thread::setup_idle_thread();
+
     // The installation of the scheduler timer handler must precede the
     // creation of threads, since the constructor can induce a reschedule
     // and this in turn can call timer->reset()

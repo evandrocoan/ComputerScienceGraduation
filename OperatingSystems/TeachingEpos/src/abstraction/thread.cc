@@ -289,18 +289,22 @@ void Thread::wakeup_all(Queue * q)
 
 void Thread::reschedule()
 {
+    db<Thread>(TRC) << "Thread::reschedule()" << endl;
     yield();
 }
 
 
 void Thread::time_slicer(const IC::Interrupt_Id & i)
 {
+    db<Thread>(TRC) << "Thread::time_slicer(Interrupt_Id=" << i << ")" << endl;
     reschedule();
 }
 
 
 void Thread::dispatch(Thread * prev, Thread * next)
 {
+    db<Thread>(TRC) << "Thread::dispatch(prev=" << prev << ",next=" << next << ")" << endl;
+
     if(prev != next) {
         if(prev->_state == RUNNING)
             prev->_state = READY;
@@ -349,7 +353,7 @@ int Thread::idle_function()
 }
 
 
-void Thread::setup_idle_thread() 
+void Thread::setup_idle_thread()
 {
     db<Thread>(TRC) << "Starting the Thread::setup_idle_thread()" << endl;
     // if( _idle ) return;

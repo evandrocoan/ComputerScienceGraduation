@@ -30,7 +30,7 @@ int func_a(char);
  */
 int main()
 {
-    Thread::setup_idle_thread();
+    // Thread::setup_idle_thread();
 
     cout << "Starting thread manual Unit Tests..." << endl << endl;
 
