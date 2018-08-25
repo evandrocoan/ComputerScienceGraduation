@@ -15,6 +15,7 @@ __BEGIN_SYS
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
+Thread* volatile Thread::_idle;
 Thread::Queue Thread::_ready;
 Thread::Queue Thread::_suspended;
 
@@ -328,6 +329,48 @@ int Thread::idle()
 
     return 0;
 }
+
+
+int Thread::idle_function() 
+{
+    db<Thread>(TRC) << "Starting the idle thread..." << endl;
+    
+    while(true)
+    {
+        db<Thread>(TRC) << "idle_function()" << endl;
+        db<Thread>(INF) << "THERE ARE NO RUNNABLE THREADS AT THE MOMENT!" << endl;
+        db<Thread>(INF) << "HALTING THE CPU ..." << endl;
+
+        CPU::int_enable();
+        CPU::halt();
+    }
+
+    return 0;
+}
+
+
+void Thread::setup_idle_thread() 
+{
+    db<Thread>(TRC) << "Starting the Thread::setup_idle_thread()" << endl;
+    // if( _idle ) return;
+
+    // Initializa a idle thread com estado running para que ela não seja colocada em nenhuma outra
+    // lista de threads pelo construtor.
+    _idle = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::IDLE), &Thread::idle_function);
+    db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
+
+    // Se descomentar essa linha, a thread principal não executa
+    _idle->_state = Thread::READY;
+    _ready.insert(&_idle->_link);
+}
+
+
+void Thread::kill_idle_thread() 
+{
+    db<Thread>(TRC) << "Starting the Thread::kill_idle_thread()" << endl;
+    delete _idle;
+}
+
 
 __END_SYS
 

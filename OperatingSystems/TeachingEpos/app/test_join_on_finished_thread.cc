@@ -30,6 +30,8 @@ int func_a(char);
  */
 int main()
 {
+    Thread::setup_idle_thread();
+
     cout << "Starting thread manual Unit Tests..." << endl << endl;
 
     Thread * a = new Thread(&func_a, 'a');
@@ -40,6 +42,8 @@ int main()
 
     delete a;
     cout << endl << "Ending thread manual Unit Tests..." << endl;
+
+    Thread::kill_idle_thread();
 }
 
 int func_a(char character)
