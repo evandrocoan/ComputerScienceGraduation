@@ -201,7 +201,10 @@ void Thread::exit(int status)
     // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
     if(_ready.size() < 2 && _suspended.empty() && _initialized) {
         db<Thread>(WRN) << "The last thread in the system has exited!\n";
+
         // Thread::kill_idle_thread();
+        // kill_idle_thread() chama ~Thread que no final reativa as interrupções
+        // lock();
 
         if(reboot) {
             db<Thread>(WRN) << "Rebooting the machine ...\n";
@@ -361,7 +364,7 @@ int idle_function()
 void Thread::setup_idle_thread()
 {
     db<Thread>(TRC) << "Starting the Thread::setup_idle_thread()" << endl;
-    // if( _idle ) return;
+    if( _idle ) return;
 
     // Initializa a idle thread com estado running para que ela não seja colocada em nenhuma outra
     // lista de threads pelo construtor.
@@ -377,7 +380,12 @@ void Thread::setup_idle_thread()
 void Thread::kill_idle_thread() 
 {
     db<Thread>(TRC) << "Starting the Thread::kill_idle_thread()" << endl;
-    delete _idle;
+
+    if( _idle )
+    {
+        delete _idle;
+        _idle = 0;
+    }
 }
 
 
