@@ -8,6 +8,21 @@ extern "C" { void __epos_app_entry(); }
 
 __BEGIN_SYS
 
+int idle_function() 
+{
+    while(true)
+    {
+        db<Thread>(TRC) << "idle_function()" << endl;
+        db<Thread>(INF) << "THERE ARE NO RUNNABLE THREADS AT THE MOMENT!" << endl;
+        db<Thread>(INF) << "HALTING THE CPU ..." << endl;
+
+        CPU::int_enable();
+        CPU::halt();
+    }
+
+    return 0;
+}
+
 class Init_First
 {
 private:
@@ -35,6 +50,11 @@ public:
         db<Init>(INF) << "INIT ends here!" << endl;
 
         db<Init, Thread>(INF) << "Dispatching the first thread: " << Thread::running() << endl;
+
+        Thread* idle = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::IDLE), &idle_function);
+
+        // Se descomentar essa linha, a thread principal não executa
+        // Thread::_ready.insert(&idle->_link);
 
         This_Thread::not_booting();
 

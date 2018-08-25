@@ -61,11 +61,13 @@ public:
     };
 
     // Thread Priority
+    // https://stackoverflow.com/questions/1855459/maximum-value-of-int
     typedef unsigned int Priority;
     enum {
         HIGH = 0,
         NORMAL = 15,
-        LOW = 31
+        LOW = 31,
+        IDLE = 100
     };
 
     // Thread Configuration
