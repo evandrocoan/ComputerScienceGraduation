@@ -296,7 +296,13 @@ void Thread::reschedule()
 void Thread::time_slicer(const IC::Interrupt_Id & i)
 {
     db<Thread>(TRC) << "Thread::time_slicer(Interrupt_Id=" << i << ")" << endl;
-    reschedule();
+
+    // Isso estava sendo chamado antes que a primeira thread do sistema fosse criada/escalonada e
+    // causava com que a idle thread iniciasse a execução.
+    if(_initialized)
+    {
+        reschedule();
+    }
 }
 
 

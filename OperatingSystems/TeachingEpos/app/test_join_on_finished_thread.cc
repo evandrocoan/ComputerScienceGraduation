@@ -43,7 +43,7 @@ int main()
     delete a;
     cout << endl << "Ending thread manual Unit Tests..." << endl;
 
-    Thread::kill_idle_thread();
+    // Thread::kill_idle_thread();
 }
 
 int func_a(char character)
