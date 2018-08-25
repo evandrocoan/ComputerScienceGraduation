@@ -148,13 +148,6 @@ protected:
      */
     static void dispatch(Thread * prev, Thread * next);
 
-    /**
-     * Halts the CPU.
-     *
-     * @return what?
-     */
-    static int idle();
-
 private:
     static void init();
     static bool _initialized;

@@ -130,9 +130,6 @@ void Thread::suspend()
     _suspended.insert(&_link);
 
     if(_running == this) {
-        while(_ready.empty())
-            idle();
-
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
 
@@ -164,17 +161,14 @@ void Thread::yield()
 
     db<Thread>(TRC) << "Thread::yield(running=" << _running << ")" << endl;
 
-    if(!_ready.empty()) {
-        Thread * prev = _running;
-        prev->_state = READY;
-        _ready.insert(&prev->_link);
+    Thread * prev = _running;
+    prev->_state = READY;
+    _ready.insert(&prev->_link);
 
-        _running = _ready.remove()->object();
-        _running->_state = RUNNING;
+    _running = _ready.remove()->object();
+    _running->_state = RUNNING;
 
-        dispatch(prev, _running);
-    } else
-        idle();
+    dispatch(prev, _running);
 
     unlock();
 }
@@ -229,9 +223,6 @@ void Thread::sleep(Queue * q)
 
     // lock() must be called before entering this method
     assert(locked());
-
-    while(_ready.empty())
-        idle();
 
     Thread * prev = running();
     prev->_state = WAITING;
@@ -326,20 +317,6 @@ void Thread::dispatch(Thread * prev, Thread * next)
     }
 
     unlock();
-}
-
-
-int Thread::idle()
-{
-    db<Thread>(TRC) << "Thread::idle()" << endl;
-
-    db<Thread>(INF) << "There are no runnable threads at the moment!" << endl;
-    db<Thread>(INF) << "Halting the CPU ..." << endl;
-
-    CPU::int_enable();
-    CPU::halt();
-
-    return 0;
 }
 
 
