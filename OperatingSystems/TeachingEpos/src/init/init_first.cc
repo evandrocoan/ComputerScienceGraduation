@@ -30,7 +30,7 @@ public:
         // before Init_Application, to construct main()'s global objects.
         Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::NORMAL), reinterpret_cast<int (*)()>(__epos_app_entry));
 
-        db<Init>(INF) << "done!" << endl;
+        db<Init>(INF) << "done Initializing the first thread!" << endl;
 
         db<Init>(INF) << "INIT ends here!" << endl;
 

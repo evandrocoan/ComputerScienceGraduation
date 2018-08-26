@@ -20,7 +20,7 @@ public:
 	db<Init>(INF) << "Initializing application's heap" << endl;
 	Application::_heap = new (&Application::_preheap[0]) Heap(MMU::alloc(MMU::pages(HEAP_SIZE)), HEAP_SIZE);
 
-	db<Init>(INF) << "done!" << endl;
+	db<Init>(INF) << "done Initializing application's heap!" << endl;
     }
 };
 
