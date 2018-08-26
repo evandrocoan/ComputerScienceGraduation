@@ -95,9 +95,6 @@ public:
     const volatile Priority & priority() const { return _link.rank(); }
     void priority(const Priority & p);
 
-    static void setup_idle();
-    static void kill_idle();
-
     int join();
     void pass();
     void suspend();
@@ -151,6 +148,10 @@ protected:
 private:
     static void init();
     static bool _initialized;
+
+    static int idle_function();
+    static void setup_idle();
+    static void kill_idle();
 
 protected:
     char * _stack;

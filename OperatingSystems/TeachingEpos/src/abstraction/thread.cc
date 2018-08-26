@@ -335,7 +335,7 @@ void Thread::dispatch(Thread * prev, Thread * next)
 }
 
 
-int idle_function() 
+int Thread::idle_function() 
 {
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
@@ -355,37 +355,19 @@ int idle_function()
 
 void Thread::setup_idle()
 {
-    db<Thread>(TRC) << "Starting the Thread::setup_idle_thread()" << endl;
-    
-    // Comentei esse if porque de acordo com o que o Prof. diz em aula, nós precisamos ter controle total
-    // do que acontece com o sistema, e não encher de if para coisas que desconhecemos.
-    // Então o ideal é garantir que nunca acontece de chegarmos aqui após a thread idle já ter sido criada
-    //if( _idle ) 
-    //    return;
+    db<Thread>(TRC) << "Starting the Thread::setup_idle()" << endl;
 
-    // Initializa a idle thread com estado running para que ela não seja colocada em nenhuma outra
-    // lista de threads pelo construtor.
+    Thread* _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle_function);
 
-    // Nesse trabalho com certeza teremos que explicar o (kmalloc ...)
-    _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(RUNNING, IDLE), &idle_function);
     db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
-
-    // Se descomentar essa linha, a thread principal não executa
-    // Bem, talvez seja algum problema no construtor
-    _idle->_state = READY;
-    _ready.insert(&_idle->_link);
 }
 
 
 void Thread::kill_idle() 
 {
-    db<Thread>(TRC) << "Starting the Thread::kill_idle_thread()" << endl;
+    db<Thread>(TRC) << "Starting the Thread::kill_idle()" << endl;
 
-    if( _idle )
-    {
-        delete _idle;
-        _idle = 0;
-    }
+    delete _idle;
 }
 
 
