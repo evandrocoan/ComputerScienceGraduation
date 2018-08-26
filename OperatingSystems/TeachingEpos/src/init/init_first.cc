@@ -38,8 +38,11 @@ public:
 
         This_Thread::not_booting();
 
-        // Thread::_initialized = true;
-        Thread::_timer->enable();
+        if(Thread::preemptive)
+        {
+            // Thread::_initialized = true;
+            Thread::_timer->enable();
+        }
 
         Thread::running()->_context->load();
     }
