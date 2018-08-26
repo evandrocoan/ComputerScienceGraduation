@@ -307,6 +307,7 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 
     // Isso estava sendo chamado antes que a primeira thread do sistema fosse criada/escalonada e
     // causava com que a idle thread iniciasse a execução.
+    // Ok, mas precisamos explicar melhor, talvez tenha relação com os comentários do arquivo thread_init.cc
     if(_initialized)
     {
         reschedule();
@@ -352,23 +353,31 @@ int idle_function()
 }
 
 
-void Thread::setup_idle_thread()
+void Thread::setup_idle()
 {
     db<Thread>(TRC) << "Starting the Thread::setup_idle_thread()" << endl;
-    if( _idle ) return;
+    
+    // Comentei esse if porque de acordo com o que o Prof. diz em aula, nós precisamos ter controle total
+    // do que acontece com o sistema, e não encher de if para coisas que desconhecemos.
+    // Então o ideal é garantir que nunca acontece de chegarmos aqui após a thread idle já ter sido criada
+    //if( _idle ) 
+    //    return;
 
     // Initializa a idle thread com estado running para que ela não seja colocada em nenhuma outra
     // lista de threads pelo construtor.
-    _idle = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::IDLE), &idle_function);
+
+    // Nesse trabalho com certeza teremos que explicar o (kmalloc ...)
+    _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(RUNNING, IDLE), &idle_function);
     db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
 
     // Se descomentar essa linha, a thread principal não executa
-    _idle->_state = Thread::READY;
+    // Bem, talvez seja algum problema no construtor
+    _idle->_state = READY;
     _ready.insert(&_idle->_link);
 }
 
 
-void Thread::kill_idle_thread() 
+void Thread::kill_idle() 
 {
     db<Thread>(TRC) << "Starting the Thread::kill_idle_thread()" << endl;
 

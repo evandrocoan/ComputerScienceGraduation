@@ -95,8 +95,8 @@ public:
     const volatile Priority & priority() const { return _link.rank(); }
     void priority(const Priority & p);
 
-    static void setup_idle_thread();
-    static void kill_idle_thread();
+    static void setup_idle();
+    static void kill_idle();
 
     int join();
     void pass();
@@ -172,7 +172,7 @@ protected:
 
 private:
 // public:
-    static Thread * volatile _idle;
+    static Thread * volatile _idle; // Quando usamos volatile precisamos explicar o porque
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;

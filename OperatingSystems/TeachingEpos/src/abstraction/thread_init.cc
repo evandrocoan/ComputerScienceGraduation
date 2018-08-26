@@ -9,7 +9,8 @@ __BEGIN_SYS
 
 void Thread::init()
 {
-    Thread::setup_idle_thread();
+    // Quando der forward pra classe Thread precisamos explicar o motivo
+    Thread::setup_idle();
 
     // The installation of the scheduler timer handler must precede the
     // creation of threads, since the constructor can induce a reschedule
