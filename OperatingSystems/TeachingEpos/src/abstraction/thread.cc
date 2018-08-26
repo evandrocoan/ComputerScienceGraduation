@@ -95,6 +95,7 @@ int Thread::join()
     return *reinterpret_cast<int *>(_stack);
 }
 
+
 /**
  * Hands the CPU over to this Thread. This function can be used to implement user-level schedulers.
  * A Thread can be created with a higher priority to act as the scheduler. EPOS scheduler will
@@ -321,7 +322,7 @@ void Thread::dispatch(Thread * prev, Thread * next)
 }
 
 
-int Thread::idle() 
+int Thread::idle()
 {
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
