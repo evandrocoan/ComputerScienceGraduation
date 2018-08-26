@@ -208,7 +208,6 @@ void Thread::exit(int status)
     // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
     if(_ready.size() < 2 && _suspended.empty() && _initialized) {
         db<Thread>(WRN) << "The last thread in the system has exited!\n";
-        Thread::kill_idle();
 
         if(reboot) {
             db<Thread>(WRN) << "Rebooting the machine ...\n";
@@ -356,27 +355,6 @@ void Thread::setup_idle()
     Thread* _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle_function);
 
     db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
-}
-
-
-void Thread::kill_idle() 
-{
-    db<Thread>(TRC) << "Starting the Thread::kill_idle()" << endl;
-    Thread * _idle;
-
-    // delete _idle; chama ~Thread() que no final reativa as interrupções, por isso, desligar o
-    // timer do escalonador para que ele não tente escalonar nada mais e atrapalhe/interrompa o
-    // nosso processor de destruição
-    _timer->disable();
-
-    if(!_ready.empty()) {
-        _idle = _ready.remove()->object();
-        delete _idle;
-    }
-
-    // Agora the a interrupções foram desligadas novamente, podemos ligar o timer do escalonador
-    lock();
-    _timer->disable();
 }
 
 

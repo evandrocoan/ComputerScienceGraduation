@@ -151,7 +151,6 @@ private:
 
     static int idle_function();
     static void setup_idle();
-    static void kill_idle();
 
 protected:
     char * _stack;
