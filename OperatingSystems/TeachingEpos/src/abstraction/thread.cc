@@ -199,7 +199,7 @@ void Thread::exit(int status)
 
     // _ready.size() == 1 somente quando a única thread existente é idle
     // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
-    if(_ready.size() < 2 && _suspended.empty()) { // && _initialized
+    if(_ready.size() <= Machine::n_cpus() && _suspended.empty()) { // && _initialized
         db<Thread>(WRN) << "The last thread in the system has exited!\n";
 
         if(reboot) {
@@ -336,16 +336,6 @@ int Thread::idle_function()
     }
 
     return 0;
-}
-
-
-void Thread::setup_idle()
-{
-    db<Thread>(TRC) << "Starting the Thread::setup_idle()" << endl;
-
-    Thread* _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle_function);
-
-    db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
 }
 
 

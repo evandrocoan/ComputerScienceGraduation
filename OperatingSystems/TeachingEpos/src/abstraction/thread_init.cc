@@ -10,7 +10,16 @@ __BEGIN_SYS
 void Thread::init()
 {
     db<Thread>(TRC) << "Thread::init()" << endl;
-    setup_idle();
+
+    db<Thread>(TRC) << "Starting the Thread::setup_idle()" << endl;
+    Thread* _idle;
+
+    for( int cpu_count = Machine::n_cpus(); cpu_count > 0; cpu_count-- )
+    {
+        _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle_function);
+
+        db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
+    }
 
     // The installation of the scheduler timer handler must precede the
     // creation of threads, since the constructor can induce a reschedule

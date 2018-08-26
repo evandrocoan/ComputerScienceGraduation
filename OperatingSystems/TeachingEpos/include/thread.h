@@ -150,7 +150,6 @@ private:
     // static bool _initialized;
 
     static int idle_function();
-    static void setup_idle();
 
 protected:
     char * _stack;
