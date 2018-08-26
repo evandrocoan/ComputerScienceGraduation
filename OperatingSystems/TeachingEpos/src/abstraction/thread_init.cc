@@ -16,7 +16,7 @@ void Thread::init()
 
     for( int cpu_count = Machine::n_cpus(); cpu_count > 0; cpu_count-- )
     {
-        _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle_function);
+        _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle);
 
         db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
     }

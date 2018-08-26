@@ -321,13 +321,13 @@ void Thread::dispatch(Thread * prev, Thread * next)
 }
 
 
-int Thread::idle_function() 
+int Thread::idle() 
 {
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
     while(true)
     {
-        db<Thread>(TRC) << "IDLE_FUNCTION()" << endl;
+        db<Thread>(TRC) << "IDLE()" << endl;
         db<Thread>(INF) << "THERE ARE NO RUNNABLE THREADS AT THE MOMENT!" << endl;
         db<Thread>(INF) << "HALTING THE CPU ..." << endl;
 

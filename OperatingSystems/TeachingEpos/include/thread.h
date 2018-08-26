@@ -149,7 +149,7 @@ private:
     static void init();
     // static bool _initialized;
 
-    static int idle_function();
+    static int idle();
 
 protected:
     char * _stack;
