@@ -147,7 +147,7 @@ protected:
 
 private:
     static void init();
-    static bool _initialized;
+    // static bool _initialized;
 
     static int idle_function();
     static void setup_idle();

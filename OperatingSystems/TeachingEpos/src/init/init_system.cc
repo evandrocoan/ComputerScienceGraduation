@@ -33,7 +33,7 @@ public:
         // Initialize system abstractions
         db<Init>(INF) << "Initializing system abstractions: " << endl;
         System::init();
-        db<Init>(INF) << "done!" << endl;
+        db<Init>(INF) << "Done initializing system abstractions!" << endl;
 
         // Randomize the Random Numbers Generator's seed
         if(Traits<Random>::enabled) {
@@ -46,7 +46,7 @@ public:
             db<Init>(INF) << "done!" << endl;
         }
 
-        // Initialization continues at init_first
+        // db<Init>(INF) << "Initialization continues at init_first.cc!" << endl;
     }
 };
 

@@ -12,7 +12,7 @@ __END_UTIL
 __BEGIN_SYS
 
 // Class attributes
-bool Thread::_initialized;
+// bool Thread::_initialized;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
@@ -206,7 +206,7 @@ void Thread::exit(int status)
 
     // _ready.size() == 1 somente quando a única thread existente é idle
     // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
-    if(_ready.size() < 2 && _suspended.empty() && _initialized) {
+    if(_ready.size() < 2 && _suspended.empty()) { // && _initialized
         db<Thread>(WRN) << "The last thread in the system has exited!\n";
 
         if(reboot) {
@@ -303,10 +303,8 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
     // Isso estava sendo chamado antes que a primeira thread do sistema fosse criada/escalonada e
     // causava com que a idle thread iniciasse a execução.
     // Ok, mas precisamos explicar melhor, talvez tenha relação com os comentários do arquivo thread_init.cc
-    if(_initialized)
-    {
-        reschedule();
-    }
+    // if(_initialized)
+    reschedule();
 }
 
 
