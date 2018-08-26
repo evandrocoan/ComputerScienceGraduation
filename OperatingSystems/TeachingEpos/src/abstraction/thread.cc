@@ -109,16 +109,12 @@ void Thread::pass()
 
     db<Thread>(TRC) << "Thread::pass(this=" << this << ")" << endl;
 
-    // Corrigido o problema da idle thread nunca executar por que a running thread era inserido na
-    // fila de _ready antes de se retirar a nova thread, causando com que a thread atual sempre
-    // fosse reescalonada por que ela sempre terá uma prioridade maior do que a idle thread.
     Thread * prev = _running;
-    _ready.remove(this);
-
-    _state = RUNNING;
     prev->_state = READY;
-
     _ready.insert(&prev->_link);
+
+    _ready.remove(this);
+    _state = RUNNING;
     _running = this;
 
     dispatch(prev, this);
@@ -171,16 +167,13 @@ void Thread::yield()
 
     db<Thread>(TRC) << "Thread::yield(running=" << _running << ")" << endl;
 
-    // Corrigido o problema da idle thread nunca executar por que a running thread era inserido na
-    // fila de _ready antes de se retirar a nova thread, causando com que a thread atual sempre
-    // fosse reescalonada por que ela sempre terá uma prioridade maior do que a idle thread.
     Thread * prev = _running;
-    _running = _ready.remove()->object();
-
     prev->_state = READY;
+    _ready.insert(&prev->_link);
+
+    _running = _ready.remove()->object();
     _running->_state = RUNNING;
 
-    _ready.insert(&prev->_link);
     dispatch(prev, _running);
 
     unlock();
