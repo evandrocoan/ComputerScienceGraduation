@@ -173,7 +173,6 @@ protected:
 
 private:
 // public:
-    static Thread * volatile _idle; // Quando usamos volatile precisamos explicar o porque
     static Thread * volatile _running;
     static Queue _ready;
     static Queue _suspended;

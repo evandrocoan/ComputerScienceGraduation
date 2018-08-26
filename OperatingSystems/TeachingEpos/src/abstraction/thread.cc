@@ -16,7 +16,6 @@ bool Thread::_initialized;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
-Thread* volatile Thread::_idle;
 Thread::Queue Thread::_ready;
 Thread::Queue Thread::_suspended;
 
@@ -366,8 +365,12 @@ void Thread::setup_idle()
 void Thread::kill_idle() 
 {
     db<Thread>(TRC) << "Starting the Thread::kill_idle()" << endl;
+    Thread * _idle;
 
-    delete _idle;
+    if(!_ready.empty()) {
+        _idle = _ready.remove()->object();
+        delete _idle;
+    }
 }
 
 
