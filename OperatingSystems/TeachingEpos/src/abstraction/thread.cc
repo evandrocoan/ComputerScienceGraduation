@@ -12,6 +12,7 @@ __END_UTIL
 __BEGIN_SYS
 
 // Class attributes
+// bool Thread::_initialized;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
@@ -95,6 +96,14 @@ int Thread::join()
 }
 
 
+/**
+ * Hands the CPU over to this Thread. This function can be used to implement user-level schedulers.
+ * A Thread can be created with a higher priority to act as the scheduler. EPOS scheduler will
+ * always elect it, but it can in turn pass() the CPU to another Thread. Accounting is done for the
+ * Thread receiving the CPU, but timed scheduling criteria are not reset. In this way, the calling
+ * Thread is charged only for the time it took to hand the CPU over to another Thread, which
+ * inherits the CPU without further intervention from EPOS’ scheduler. https://epos.lisha.ufsc.br/EPOS+2+User+Guide
+ */
 void Thread::pass()
 {
     lock();
@@ -128,9 +137,6 @@ void Thread::suspend()
     _suspended.insert(&_link);
 
     if(_running == this) {
-        while(_ready.empty())
-            idle();
-
         _running = _ready.remove()->object();
         _running->_state = RUNNING;
 
@@ -162,17 +168,14 @@ void Thread::yield()
 
     db<Thread>(TRC) << "Thread::yield(running=" << _running << ")" << endl;
 
-    if(!_ready.empty()) {
-        Thread * prev = _running;
-        prev->_state = READY;
-        _ready.insert(&prev->_link);
+    Thread * prev = _running;
+    prev->_state = READY;
+    _ready.insert(&prev->_link);
 
-        _running = _ready.remove()->object();
-        _running->_state = RUNNING;
+    _running = _ready.remove()->object();
+    _running->_state = RUNNING;
 
-        dispatch(prev, _running);
-    } else
-        idle();
+    dispatch(prev, _running);
 
     unlock();
 }
@@ -195,20 +198,17 @@ void Thread::exit(int status)
 
     lock();
 
-    if(_ready.empty()) {
-        if(!_suspended.empty()) {
-            while(_ready.empty())
-                idle(); // implicit unlock();
-            lock();
-        } else { // _ready.empty() && _suspended.empty()
-            db<Thread>(WRN) << "The last thread in the system has exited!\n";
-            if(reboot) {
-                db<Thread>(WRN) << "Rebooting the machine ...\n";
-                Machine::reboot();
-            } else {
-                db<Thread>(WRN) << "Halting the CPU ...\n";
-                CPU::halt();
-            }
+    // _ready.size() == 1 somente quando a única thread existente é idle
+    // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
+    if(_ready.size() <= Machine::n_cpus() && _suspended.empty()) { // && _initialized
+        db<Thread>(WRN) << "The last thread in the system has exited!\n";
+
+        if(reboot) {
+            db<Thread>(WRN) << "Rebooting the machine ...\n";
+            Machine::reboot();
+        } else {
+            db<Thread>(WRN) << "Halting the CPU ...\n";
+            CPU::halt();
         }
     } else {
         _running = _ready.remove()->object();
@@ -226,9 +226,6 @@ void Thread::sleep(Queue * q)
 
     // lock() must be called before entering this method
     assert(locked());
-
-    while(_ready.empty())
-        idle();
 
     Thread * prev = running();
     prev->_state = WAITING;
@@ -288,18 +285,26 @@ void Thread::wakeup_all(Queue * q)
 
 void Thread::reschedule()
 {
+    db<Thread>(TRC) << "Thread::reschedule()" << endl;
     yield();
 }
 
 
 void Thread::time_slicer(const IC::Interrupt_Id & i)
 {
+    db<Thread>(TRC) << "Thread::time_slicer(Interrupt_Id=" << i << ")" << endl;
+
+    // Isso estava sendo chamado antes que a primeira thread do sistema fosse criada/escalonada e
+    // causava com que a idle thread iniciasse a execução.
+    // Ok, mas precisamos explicar melhor, talvez tenha relação com os comentários do arquivo thread_init.cc
+    // if(_initialized)
     reschedule();
 }
 
 
 void Thread::dispatch(Thread * prev, Thread * next)
 {
+
     if(prev != next) {
         if(prev->_state == RUNNING)
             prev->_state = READY;
@@ -311,6 +316,8 @@ void Thread::dispatch(Thread * prev, Thread * next)
 
         CPU::switch_context(&prev->_context, next->_context);
     }
+    else
+        db<Thread>(TRC) << "Thread::dispatch(prev=" << prev << ",next=" << next << ")" << endl;
 
     unlock();
 }
@@ -318,16 +325,21 @@ void Thread::dispatch(Thread * prev, Thread * next)
 
 int Thread::idle()
 {
-    db<Thread>(TRC) << "Thread::idle()" << endl;
+    db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
-    db<Thread>(INF) << "There are no runnable threads at the moment!" << endl;
-    db<Thread>(INF) << "Halting the CPU ..." << endl;
+    while(true)
+    {
+        db<Thread>(TRC) << "IDLE()" << endl;
+        db<Thread>(INF) << "THERE ARE NO RUNNABLE THREADS AT THE MOMENT!" << endl;
+        db<Thread>(INF) << "HALTING THE CPU ..." << endl;
 
-    CPU::int_enable();
-    CPU::halt();
+        CPU::int_enable();
+        CPU::halt();
+    }
 
     return 0;
 }
+
 
 __END_SYS
 

@@ -25,12 +25,23 @@ public:
 
         db<Init>(INF) << "Initializing the first thread: " << endl;
 
-        // If EPOS is not a kernel, then adjust the application entry point to __epos_app_entry,
-        // which will directly call main(). In this case, _init will have already been called,
-        // before Init_Application, to construct main()'s global objects.
-        Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::NORMAL), reinterpret_cast<int (*)()>(__epos_app_entry));
+        if(Traits<Thread>::enabled)
+        {
+            // If EPOS is not a kernel, then adjust the application entry point to __epos_app_entry,
+            // which will directly call main(). In this case, _init will have already been called,
+            // before Init_Application, to construct main()'s global objects.
+            Thread* user_application = new (kmalloc(sizeof(Thread))) Thread(reinterpret_cast<int (*)()>(__epos_app_entry));
 
-        db<Init>(INF) << "done!" << endl;
+            db<Init, Thread>(INF) << "Created the user application: " << user_application << endl;
+
+            Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::NORMAL), &Thread::init);
+        }
+        else
+        {
+            Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::NORMAL), reinterpret_cast<int (*)()>(__epos_app_entry));
+        }
+
+        db<Init>(INF) << "done Initializing the first thread!" << endl;
 
         db<Init>(INF) << "INIT ends here!" << endl;
 
