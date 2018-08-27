@@ -31,27 +31,29 @@ protected:
     typedef CPU::Context Context;
 
 public:
-    // Colocar o FINISHING dessa enumeração como o primeiro estado evita lock infinito no caso de
-    // alguém chamar join() após excluir essa thread. 
-    // 
-    // Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
-    // classe thread zero todos os dados na memória que pertencem a thread (?). Isso é útil para
-    // proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
-    // de endereçamento da thread. 
-    // 
-    // Então, como _state sempre será 0, adiciona-se o FINISHING como o primeiro elemento nesta
-    // enumeração, fazendo com que a condição de junção (_state! = FINISHING) falhe e o join não
-    // bloqueie a execução da thread.
-    // 
-    // Havia um ciclo infinito porque a implementação de join() era apenas uma chamada yield(), que
-    // será executada para sempre, já que o thread é excluída e não irá mudar ou fazer mais nada.
-    // 
-    // Entretanto, colocar o valor de FINISHING no início da enumeração não é um solução definitiva
-    // por que caso a memória volte a ser alocada por um outro processo, estariamos lendo um valor
-    // provavelmente diferente de zero. Assim, o problema original voltaria a ocorrer.
-    // 
-    // Uma solução definitiva para impedir esse tipo de problema, seria lançar uma exceção quando o
-    // um aplicativo tentar acessar um endereço de memória através de um ponteiro que foi deletado.
+    /**
+     * Colocar o FINISHING dessa enumeração como o primeiro estado evita lock infinito no caso de
+     * alguém chamar join() após excluir essa thread.
+     *
+     * Porque depois de chamar delete, o valor de _state irá gerar 0, por que o o destrutor da
+     * classe thread zero todos os dados na memória que pertencem a thread (?). Isso é útil para
+     * proteger dados confidenciais como chaves criptográfica que podem estar alocadas no espaço
+     * de endereçamento da thread.
+     *
+     * Então, como _state sempre será 0, adiciona-se o FINISHING como o primeiro elemento nesta
+     * enumeração, fazendo com que a condição de junção (_state! = FINISHING) falhe e o join não
+     * bloqueie a execução da thread.
+     *
+     * Havia um ciclo infinito porque a implementação de join() era apenas uma chamada yield(), que
+     * será executada para sempre, já que o thread é excluída e não irá mudar ou fazer mais nada.
+     *
+     * Entretanto, colocar o valor de FINISHING no início da enumeração não é um solução definitiva
+     * por que caso a memória volte a ser alocada por um outro processo, estariamos lendo um valor
+     * provavelmente diferente de zero. Assim, o problema original voltaria a ocorrer.
+     *
+     * Uma solução definitiva para impedir esse tipo de problema, seria lançar uma exceção quando o
+     * um aplicativo tentar acessar um endereço de memória através de um ponteiro que foi deletado.
+     */
     enum State {
         FINISHING,
         RUNNING,
@@ -64,10 +66,11 @@ public:
     // https://stackoverflow.com/questions/1855459/maximum-value-of-int
     typedef unsigned int Priority;
     enum {
-        HIGH = 0,
-        NORMAL = 15,
-        LOW = 31,
-        IDLE = 100
+        MAIN   = 0,
+        HIGH   = 1,
+        NORMAL = (unsigned(1) << (sizeof(int) * 8 - 1)) - 4,
+        LOW    = (unsigned(1) << (sizeof(int) * 8 - 1)) - 3,
+        IDLE   = (unsigned(1) << (sizeof(int) * 8 - 1)) - 2
     };
 
     // Thread Configuration
@@ -145,11 +148,10 @@ protected:
      */
     static void dispatch(Thread * prev, Thread * next);
 
-private:
-    static int init();
-    // static bool _initialized;
-
     static int idle();
+
+private:
+    static void init();
 
 protected:
     char * _stack;
@@ -167,6 +169,7 @@ protected:
     Thread * volatile _joining;
     Queue::Element _link;
 
+    static volatile unsigned int _thread_count;
     static Scheduler_Timer * _timer;
 
 private:
@@ -176,11 +179,12 @@ private:
     static Queue _suspended;
 };
 
+
 /**
  * Colocamos _joined e _join entre _waiting e _link por que essa é a ordem na qual eles estão
- * declarados na classe, e C++ solta um warning: 
+ * declarados na classe, e C++ solta um warning:
  *     warning: 'EPOS::S::Thread::_link' will be initialized after
- * 
+ *
  * > Having you member initialization list in some other order may be confusing to the programmer
  * who might not be aware of which order is followed, or might not be aware that the members were
  * declared in a different order and therefore might expect the order of member initialization to be

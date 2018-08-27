@@ -12,7 +12,7 @@ __END_UTIL
 __BEGIN_SYS
 
 // Class attributes
-// bool Thread::_initialized;
+volatile unsigned int Thread::_thread_count;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
@@ -23,6 +23,8 @@ Thread::Queue Thread::_suspended;
 void Thread::constructor_prolog(unsigned int stack_size)
 {
     lock();
+
+    _thread_count++;
 
     _stack = reinterpret_cast<char *>(kmalloc(stack_size));
 }
@@ -40,11 +42,16 @@ void Thread::constructor_epilog(const Log_Addr & entry, unsigned int stack_size)
 
     switch(_state) {
         case RUNNING: break;
+        case READY: _ready.insert(&_link); break;
         case SUSPENDED: _suspended.insert(&_link); break;
-        default: _ready.insert(&_link);
+        case WAITING: break;
+        case FINISHING: break;
     }
 
-    unlock();
+    if(preemptive && (_state == READY) && (_link.rank() != IDLE))
+        reschedule();
+    else
+        unlock();
 }
 
 
@@ -58,6 +65,9 @@ Thread::~Thread()
                     << ",stack={b=" << reinterpret_cast<void *>(_stack)
                     << ",context={b=" << _context
                     << "," << *_context << "})" << endl;
+
+    if(_state != FINISHING)
+        _thread_count--;
 
     _ready.remove(this);
     _suspended.remove(this);
@@ -191,6 +201,8 @@ void Thread::exit(int status)
     prev->_state = FINISHING;
     *reinterpret_cast<int *>(prev->_stack) = status;
 
+    _thread_count--;
+
     if(prev->_joining) {
         prev->_joining->resume();
         prev->_joining = 0;
@@ -198,24 +210,10 @@ void Thread::exit(int status)
 
     lock();
 
-    // _ready.size() == 1 somente quando a única thread existente é idle
-    // futuramente fazer _ready.size() == CPUS_COUNT por que serão criados uma thread para cada CPU
-    if(_ready.size() <= Machine::n_cpus() && _suspended.empty()) { // && _initialized
-        db<Thread>(WRN) << "The last thread in the system has exited!\n";
+    _running = _ready.remove()->object();
+    _running->_state = RUNNING;
 
-        if(reboot) {
-            db<Thread>(WRN) << "Rebooting the machine ...\n";
-            Machine::reboot();
-        } else {
-            db<Thread>(WRN) << "Halting the CPU ...\n";
-            CPU::halt();
-        }
-    } else {
-        _running = _ready.remove()->object();
-        _running->_state = RUNNING;
-
-        dispatch(prev, _running);
-    }
+    dispatch(prev, _running);
 
     unlock();
 }
@@ -304,7 +302,6 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 
 void Thread::dispatch(Thread * prev, Thread * next)
 {
-
     if(prev != next) {
         if(prev->_state == RUNNING)
             prev->_state = READY;
@@ -327,19 +324,26 @@ int Thread::idle()
 {
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
-    while(true)
-    {
-        db<Thread>(TRC) << "IDLE()" << endl;
-        db<Thread>(INF) << "THERE ARE NO RUNNABLE THREADS AT THE MOMENT!" << endl;
-        db<Thread>(INF) << "HALTING THE CPU ..." << endl;
+    while(_thread_count > 1) { // someone else besides idle
+        if(Traits<Thread>::trace_idle)
+            db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
 
         CPU::int_enable();
         CPU::halt();
     }
 
+    CPU::int_disable();
+    db<Thread>(WRN) << "The last thread has exited!" << endl;
+    if(reboot) {
+        db<Thread>(WRN) << "Rebooting the machine ..." << endl;
+        Machine::reboot();
+    } else {
+        db<Thread>(WRN) << "Halting the machine ..." << endl;
+        CPU::halt();
+    }
+
     return 0;
 }
-
 
 __END_SYS
 

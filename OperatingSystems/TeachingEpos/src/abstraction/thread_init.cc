@@ -7,19 +7,10 @@
 
 __BEGIN_SYS
 
-int Thread::init()
+void Thread::init()
 {
     db<Thread>(TRC) << "Thread::init()" << endl;
-
-    db<Thread>(TRC) << "Starting the Thread::setup_idle()" << endl;
-    Thread* _idle;
-
-    for( int cpu_count = Machine::n_cpus(); cpu_count > 0; cpu_count-- )
-    {
-        _idle = new (kmalloc(sizeof(Thread))) Thread(Configuration(READY, IDLE), &Thread::idle);
-
-        db<Thread>(TRC) << "The idle thread pointer is: " << _idle << endl;
-    }
+    db<Thread>(TRC) << "Machine::n_cpus()=" << Machine::n_cpus() << endl;
 
     // The installation of the scheduler timer handler must precede the
     // creation of threads, since the constructor can induce a reschedule
@@ -27,11 +18,8 @@ int Thread::init()
     // Letting reschedule() happen during thread creation is harmless, since
     // MAIN is created first and dispatch won't replace it nor by itself
     // neither by IDLE (which has a lower priority)
-    if(Thread::preemptive)
+    if(preemptive)
         _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
-
-    return 0;
 }
-
 
 __END_SYS
