@@ -7,7 +7,7 @@
 
 __BEGIN_SYS
 
-void Thread::init()
+int Thread::init()
 {
     db<Thread>(TRC) << "Thread::init()" << endl;
 
@@ -28,10 +28,10 @@ void Thread::init()
     // MAIN is created first and dispatch won't replace it nor by itself
     // neither by IDLE (which has a lower priority)
     if(Thread::preemptive)
-    {
         _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
-        _timer->disable();
-    }
+
+    return 0;
 }
+
 
 __END_SYS

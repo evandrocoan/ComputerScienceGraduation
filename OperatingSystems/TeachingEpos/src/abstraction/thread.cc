@@ -304,7 +304,6 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 
 void Thread::dispatch(Thread * prev, Thread * next)
 {
-    db<Thread>(TRC) << "Thread::dispatch(prev=" << prev << ",next=" << next << ")" << endl;
 
     if(prev != next) {
         if(prev->_state == RUNNING)
@@ -317,6 +316,8 @@ void Thread::dispatch(Thread * prev, Thread * next)
 
         CPU::switch_context(&prev->_context, next->_context);
     }
+    else
+        db<Thread>(TRC) << "Thread::dispatch(prev=" << prev << ",next=" << next << ")" << endl;
 
     unlock();
 }

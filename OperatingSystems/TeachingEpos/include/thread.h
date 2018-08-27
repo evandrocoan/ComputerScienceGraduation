@@ -146,7 +146,7 @@ protected:
     static void dispatch(Thread * prev, Thread * next);
 
 private:
-    static void init();
+    static int init();
     // static bool _initialized;
 
     static int idle();
