@@ -151,7 +151,7 @@ protected:
     static int idle();
 
 private:
-    static void init();
+    static int init();
 
 protected:
     char * _stack;
