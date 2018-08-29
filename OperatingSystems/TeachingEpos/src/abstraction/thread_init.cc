@@ -12,7 +12,6 @@ int Thread::init()
     db<Thread>(TRC) << "Thread::init()" << endl;
     db<Thread>(TRC) << "Machine::n_cpus()=" << Machine::n_cpus() << endl;
 
-    db<Thread>(TRC) << "Starting the Thread::setup_idle()" << endl;
     Thread* _idle;
 
     for( int cpu_count = Machine::n_cpus(); cpu_count > 0; cpu_count-- )
@@ -29,6 +28,9 @@ int Thread::init()
     // MAIN is created first and dispatch won't replace it nor by itself
     // neither by IDLE (which has a lower priority)
     _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
+
+    db<Thread>(TRC) << "done Thread::init()! _timer=" << _timer << endl;
+    return 0;
 }
 
 __END_SYS
