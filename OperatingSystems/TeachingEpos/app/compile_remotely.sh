@@ -21,8 +21,15 @@ TARGET_DIRECTORY='~/OperatingSystems/TeachingEpos'
 # Just ensures the directory is created
 sshpass -p $EPOS_COMPILER_MACHINE_PASS ssh $EPOS_COMPILER_MACHINE_ADDRESS mkdir -p $TARGET_DIRECTORY
 
+IS_VERYCLEAN=$2
+
+if [ -z $IS_VERYCLEAN ];
+then
+    DELETE_COMMAND="--delete"
+fi
+
 # The command which will actually send the files
-SYNCHRONIZER_COMMAND="sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu --delete $SCRIPT_FOLDER_PATH/../../TeachingEpos/* $EPOS_COMPILER_MACHINE_ADDRESS:$TARGET_DIRECTORY"
+SYNCHRONIZER_COMMAND="sshpass -p $EPOS_COMPILER_MACHINE_PASS rsync -rvu $DELETE_COMMAND $SCRIPT_FOLDER_PATH/../../TeachingEpos/* $EPOS_COMPILER_MACHINE_ADDRESS:$TARGET_DIRECTORY"
 
 # Alternative command using unison
 # https://tech.tiq.cc/2016/04/how-to-use-unison-for-automated-two-way-file-synchronization-on-linux-ubuntu-and-windows-and-android/
@@ -35,7 +42,6 @@ eval $SYNCHRONIZER_COMMAND
 # Get the application name
 APPLICATION_TO_RUN=$(echo $1 | cut -d'.' -f 1)
 
-IS_VERYCLEAN=$2
 
 # Clean everything to be sure it is the right thing
 if [ -z $IS_VERYCLEAN ];
