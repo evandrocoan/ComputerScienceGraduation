@@ -331,8 +331,7 @@ int Thread::idle()
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
     while(_thread_count > Machine::n_cpus()) { // someone else besides idle
-        if(Traits<Thread>::trace_idle)
-            db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
+        if(Traits<Thread>::trace_idle) db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
 
         CPU::int_enable();
         CPU::halt();
