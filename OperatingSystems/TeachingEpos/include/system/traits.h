@@ -11,10 +11,12 @@ struct Traits
 {
     static const bool enabled = true;
     static const bool debugged = true;
+
     // static const bool dispatch_debugged = true;
+    // static const bool hysterically_debugged = true;
+
     static const bool dispatch_debugged = false;
-    static const bool hysterically_debugged = true;
-    // static const bool hysterically_debugged = false;
+    static const bool hysterically_debugged = false;
 };
 
 template<> struct Traits<Build>
@@ -131,7 +133,7 @@ template<> struct Traits<Thread>: public Traits<void>
 
 template<> struct Traits<Alarm>: public Traits<void>
 {
-    static const bool visible = hysterically_debugged;
+    static const bool visible = false;
 };
 
 template<> struct Traits<Synchronizer>: public Traits<void>

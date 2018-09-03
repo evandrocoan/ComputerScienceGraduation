@@ -4,6 +4,7 @@
 #define __thread_h
 
 #include <utility/queue.h>
+#include <utility/handler.h>
 #include <cpu.h>
 #include <machine.h>
 #include <system/kmalloc.h>
@@ -59,8 +60,7 @@ public:
         RUNNING,
         READY,
         SUSPENDED,
-        WAITING,
-        WAITING2
+        WAITING
     };
 
     // Thread Priority
@@ -210,6 +210,20 @@ inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... 
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);
     constructor_epilog(entry, conf.stack_size);
 }
+
+
+// An event handler that triggers a thread (see handler.h)
+class Thread_Handler : public Handler
+{
+public:
+    Thread_Handler(Thread * h) : _handler(h) {}
+    ~Thread_Handler() {}
+
+    void operator()() { _handler->resume(); }
+
+private:
+    Thread * _handler;
+};
 
 __END_SYS
 

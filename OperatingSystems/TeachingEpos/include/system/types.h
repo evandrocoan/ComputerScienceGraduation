@@ -32,6 +32,7 @@ class Dummy;
 class Bitmaps;
 class CRC;
 class ELF;
+class Handler;
 class Hashes;
 class Heaps;
 class Debug;
