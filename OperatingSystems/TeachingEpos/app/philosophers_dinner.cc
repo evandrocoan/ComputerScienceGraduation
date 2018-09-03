@@ -9,9 +9,9 @@
 
 using namespace EPOS;
 
-const int iterations = 4;
+const int iterations = 10;
 
-Semaphore table;
+Mutex table;
 
 Thread * phil[5];
 Semaphore * chopstick[5];
@@ -63,8 +63,6 @@ int main()
 
     for(int i = 0; i < 5; i++)
         chopstick[i] = new Semaphore;
-
-    Alarm::delay(1000000);
 
     phil[0] = new Thread(&philosopher, 0,  5, 32);
     phil[1] = new Thread(&philosopher, 1, 10, 44);

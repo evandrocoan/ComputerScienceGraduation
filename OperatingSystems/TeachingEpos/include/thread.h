@@ -59,7 +59,8 @@ public:
         RUNNING,
         READY,
         SUSPENDED,
-        WAITING
+        WAITING,
+        WAITING2
     };
 
     // Thread Priority
@@ -151,7 +152,7 @@ protected:
     static int idle();
 
 private:
-    static void init();
+    static int init();
 
 protected:
     char * _stack;

@@ -203,8 +203,43 @@ public:
     };
     static const unsigned int IDT_ENTRIES = 256;
 
-    // TSS no longer used, since software context switch is faster
-    // it's left here for reference
+    /**
+     * TSS no longer used, since software context switch is faster
+     * it's left here for reference
+     *
+     * The task state segment (TSS) is a special structure on x86-based computers which holds
+     * information about a task. It is used by the operating system kernel for task management.
+     * Specifically, the following information is stored in the TSS:
+     *
+     * Processor register state
+     * I/O port permissions
+     * Inner-level stack pointers
+     * Previous TSS link
+     * All this information should be stored at specific locations within the TSS as specified in the IA-32 manuals.
+     * https://en.wikipedia.org/wiki/Task_state_segment
+     *
+     * Hardware vs. software 
+     * Context switching can be performed primarily by software or hardware.
+     * Some processors, like the Intel 80386 and its successors,[5] have hardware support for
+     * context switches, by making use of a special data segment designated the task state segment
+     * or TSS. A task switch can be explicitly triggered with a CALL or JMP instruction targeted at
+     * a TSS descriptor in the global descriptor table. It can occur implicitly when an interrupt or
+     * exception is triggered if there's a task gate in the interrupt descriptor table. When a task
+     * switch occurs the CPU can automatically load the new state from the TSS.
+     *
+     * As with other tasks performed in hardware, one would expect this to be rather fast; however,
+     * mainstream operating systems, including Windows and Linux,[6] do not use this feature. This
+     * is mainly due to two reasons:
+     *
+     * Hardware context switching does not save all the registers (only general purpose registers,
+     * not floating point registers — although the TS bit is automatically turned on in the CR0
+     * control register, resulting in a fault when executing floating point instructions and giving
+     * the OS the opportunity to save and restore the floating point state as needed).
+     *
+     * Associated performance issues, e.g., software context switching can be selective and store
+     * only those registers that need storing, whereas hardware context switching stores nearly all
+     * registers whether they are required or not. https://en.wikipedia.org/wiki/Context_switch
+     */
     struct TSS {
         Reg16 back_link;
         Reg16 zero1;
@@ -345,7 +380,7 @@ public:
      * EIP is a register in x86 architectures (32bit). It holds the "extended instruction pointer"
      * for the stack. In other words, it tells the computer where to go next to execute the next
      * command and controls the flow of a program. 
-     * 
+     *
      * Research Assembly language to get a better understanding of how registers work. Skull
      * Security has a good primer. https://security.stackexchange.com/questions/129499/what-does-eip-stand-for
      */
@@ -439,7 +474,7 @@ public:
      * flag facilitates implementation of the copy-on-write method of creating a new process
      * (forking) used by operating systems such as UNIX.
      * https://stackoverflow.com/questions/15275059/whats-the-purpose-of-x86-cr0-wp-bit
-     * 
+     *
      * Typical use of CR3 in address translation with 4 KiB pages Used when virtual addressing is
      * enabled, hence when the PG bit is set in CR0. CR3 enables the processor to translate linear
      * addresses into physical addresses by locating the page directory and page tables for the

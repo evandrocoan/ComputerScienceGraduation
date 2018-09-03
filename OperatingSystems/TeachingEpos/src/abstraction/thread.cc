@@ -45,10 +45,16 @@ void Thread::constructor_epilog(const Log_Addr & entry, unsigned int stack_size)
         case READY: _ready.insert(&_link); break;
         case SUSPENDED: _suspended.insert(&_link); break;
         case WAITING: break;
+        case WAITING2: 
+        {
+            _ready.insert(&_link);
+            _state = READY;
+            return;
+        }
         case FINISHING: break;
     }
 
-    if(preemptive && (_state == READY) && (_link.rank() != IDLE))
+    if(preemptive && (_state == READY) && (_link.rank() != IDLE) && (_thread_count > Machine::n_cpus() && _timer))
         reschedule();
     else
         unlock();
@@ -324,9 +330,8 @@ int Thread::idle()
 {
     db<Thread>(TRC) << "STARTING THE IDLE THREAD..." << endl;
 
-    while(_thread_count > 1) { // someone else besides idle
-        if(Traits<Thread>::trace_idle)
-            db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
+    while(_thread_count > Machine::n_cpus()) { // someone else besides idle
+        if(Traits<Thread>::trace_idle) db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
 
         CPU::int_enable();
         CPU::halt();
