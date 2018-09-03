@@ -58,6 +58,9 @@ private:
     Handler * _handler;
     int _times; 
     Queue::Element _link;
+    
+    static int _next_handler(Handler *);
+    Thread::Priority _priority;
 
     static Alarm_Timer * _timer;
     static volatile Tick _elapsed;

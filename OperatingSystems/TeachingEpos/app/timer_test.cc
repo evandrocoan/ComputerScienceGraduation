@@ -13,11 +13,15 @@ void handler(const IC::Interrupt_Id &i)
 {
     static int elapsed;
 
-    int lin, col;
-    Display::position(&lin, &col);
-    Display::position(0, 60 + Machine::cpu_id() * 2);
-    Display::putc((elapsed++ % 10) + 48);
-    Display::position(lin, col);
+    // int lin, col;
+    // Display::position(&lin, &col);
+    // Display::position(0, 60 + Machine::cpu_id() * 2);
+    // Display::putc((elapsed % 10) + 48);
+    // Display::position(lin, col);
+
+    elapsed++;
+    cout << "User_Timer::handler elapsed: " << elapsed << endl;
+    while(true) cout<< "death=" << elapsed << endl;
 }
 
 int main()

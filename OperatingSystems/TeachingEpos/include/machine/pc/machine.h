@@ -29,6 +29,7 @@ public:
     PC() {}
 
     static void delay(const RTC::Microsecond & time) {
+        db<PC>(TRC) << "PC::delay(time=" << time << ")" << endl;
         TSC::Time_Stamp end = TSC::time_stamp() + time * (TSC::frequency() / 1000000);
         while(end > TSC::time_stamp());
     }

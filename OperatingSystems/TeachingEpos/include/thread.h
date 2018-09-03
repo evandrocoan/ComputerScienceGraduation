@@ -59,7 +59,8 @@ public:
         RUNNING,
         READY,
         SUSPENDED,
-        WAITING
+        WAITING,
+        WAITING2
     };
 
     // Thread Priority

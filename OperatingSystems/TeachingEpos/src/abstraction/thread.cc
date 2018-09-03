@@ -45,6 +45,12 @@ void Thread::constructor_epilog(const Log_Addr & entry, unsigned int stack_size)
         case READY: _ready.insert(&_link); break;
         case SUSPENDED: _suspended.insert(&_link); break;
         case WAITING: break;
+        case WAITING2: 
+        {
+            _ready.insert(&_link);
+            _state = READY;
+            return;
+        }
         case FINISHING: break;
     }
 

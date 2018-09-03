@@ -5,7 +5,7 @@
 
 using namespace EPOS;
 
-const int iterations = 2;
+const int iterations = 1;
 
 void func_a(void);
 void func_b(void);
@@ -34,6 +34,7 @@ int main()
 
 void func_a()
 {
+    // while(true) cout<< "death" << endl;
     for(int i = 0; i < 79; i++)
         cout << "a";
     cout << endl;
