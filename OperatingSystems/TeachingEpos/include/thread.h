@@ -103,6 +103,7 @@ public:
     void pass();
     void suspend();
     void resume();
+    void delete_me();
 
     static Thread * volatile self() { return running(); }
 
@@ -153,6 +154,7 @@ protected:
 
 private:
     static int init();
+    bool _delete_me;
 
 protected:
     char * _stack;
@@ -176,6 +178,7 @@ protected:
 private:
 // public:
     static Thread * volatile _running;
+    static Queue _deletion_queue;
     static Queue _ready;
     static Queue _suspended;
 };

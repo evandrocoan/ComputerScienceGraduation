@@ -49,6 +49,8 @@ public:
 
         This_Thread::not_booting();
 
+        Thread::running()->delete_me();
+
         Thread::running()->_context->load();
     }
 };

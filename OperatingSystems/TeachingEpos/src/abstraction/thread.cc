@@ -14,8 +14,11 @@ __BEGIN_SYS
 // Class attributes
 volatile unsigned int Thread::_thread_count;
 Scheduler_Timer * Thread::_timer;
+bool _clear_queue;
+bool _delete_me;
 
 Thread* volatile Thread::_running;
+Thread::Queue Thread::_deletion_queue;
 Thread::Queue Thread::_ready;
 Thread::Queue Thread::_suspended;
 
@@ -219,9 +222,24 @@ void Thread::exit(int status)
     _running = _ready.remove()->object();
     _running->_state = RUNNING;
 
+    if( prev->_delete_me )
+    {
+        db<Thread>(TRC) << "Thread::exit(_delete_me=" << prev << ")" << endl;
+
+        // reset the clear queue flag because we just added a new non-exiting element
+        _clear_queue = false;
+        _deletion_queue.insert(&prev->_link);
+    }
+
     dispatch(prev, _running);
 
     unlock();
+}
+
+void Thread::delete_me()
+{
+    db<Thread>(TRC) << "Thread::delete_me(this=" << this << ")" << endl;
+    this->_delete_me = true;
 }
 
 void Thread::sleep(Queue * q)
@@ -309,6 +327,30 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 void Thread::dispatch(Thread * prev, Thread * next)
 {
     if(prev != next) {
+        if(!_deletion_queue.empty())
+        {
+            db<Thread>(INF) << "Thread::_deletion_queue=" << &_deletion_queue 
+                    << ", size=" << _deletion_queue.size() 
+                    << ", _clear_queue=" << _clear_queue 
+                    << endl;
+
+            if( _clear_queue )
+            {
+                Thread * clear;
+                _clear_queue = false;
+
+                while( !_deletion_queue.empty() )
+                {
+                    clear = _deletion_queue.remove()->object();
+                    delete clear;
+                }
+            }
+            else
+            {
+                _clear_queue = true;
+            }
+        }
+
         if(prev->_state == RUNNING)
             prev->_state = READY;
         next->_state = RUNNING;

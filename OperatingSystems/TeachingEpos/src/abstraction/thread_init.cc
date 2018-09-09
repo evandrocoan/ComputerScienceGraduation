@@ -31,6 +31,9 @@ int Thread::init()
         _timer = new (kmalloc(sizeof(Scheduler_Timer))) Scheduler_Timer(QUANTUM, time_slicer);
 
     db<Thread>(TRC) << "done Thread::init()! _timer=" << _timer << endl;
+
+    Thread::self()->delete_me();
+
     return 0;
 }
 
