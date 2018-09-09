@@ -222,7 +222,7 @@ void Thread::exit(int status)
 
     if( prev->_delete_me )
     {
-        db<Thread>(TRC) << "Thread::exit(_delete_me=" << prev << ")" << endl;
+        db<Thread>(TRC) << "Thread::exit(_delete_me=" << prev << ",size=" << _deletion_queue.size() + 1 << ")" << endl;
         _deletion_queue.insert(&prev->_link);
     }
 
@@ -233,7 +233,7 @@ void Thread::exit(int status)
 
 void Thread::delete_me()
 {
-    db<Thread>(TRC) << "Thread::delete_me(this=" << this << ")" << endl;
+    db<Thread>(TRC) << "Thread::delete_me(this=" << this << ",size=" << _deletion_queue.size() << ")" << endl;
     this->_delete_me = true;
 }
 
