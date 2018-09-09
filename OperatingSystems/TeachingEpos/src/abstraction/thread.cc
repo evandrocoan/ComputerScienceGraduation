@@ -66,11 +66,17 @@ Thread::~Thread()
                     << ",context={b=" << _context
                     << "," << *_context << "})" << endl;
 
+    // Precondition: no delete Thread::self()
+    assert(running() != this);
+
     if(_state != FINISHING)
         _thread_count--;
 
-    _ready.remove(this);
-    _suspended.remove(this);
+    if(_state == READY)
+        _ready.remove(&this->_link);
+
+    if(_state == SUSPENDED)
+        _suspended.remove(&this->_link);
 
     if(_waiting)
         _waiting->remove(this);
