@@ -14,7 +14,6 @@ __BEGIN_SYS
 // Class attributes
 volatile unsigned int Thread::_thread_count;
 Scheduler_Timer * Thread::_timer;
-bool Thread::_clear_queue;
 
 Thread* volatile Thread::_running;
 Thread::Queue Thread::_deletion_queue;
@@ -224,9 +223,6 @@ void Thread::exit(int status)
     if( prev->_delete_me )
     {
         db<Thread>(TRC) << "Thread::exit(_delete_me=" << prev << ")" << endl;
-
-        // reset the clear queue flag because we just added a new non-exiting element
-        _clear_queue = false;
         _deletion_queue.insert(&prev->_link);
     }
 
@@ -326,30 +322,6 @@ void Thread::time_slicer(const IC::Interrupt_Id & i)
 void Thread::dispatch(Thread * prev, Thread * next)
 {
     if(prev != next) {
-        if(!_deletion_queue.empty())
-        {
-            db<Thread>(INF) << "Thread::_deletion_queue=" << &_deletion_queue 
-                    << ", size=" << _deletion_queue.size() 
-                    << ", _clear_queue=" << _clear_queue 
-                    << endl;
-
-            if( _clear_queue )
-            {
-                Thread * clear;
-                _clear_queue = false;
-
-                while( !_deletion_queue.empty() )
-                {
-                    clear = _deletion_queue.remove()->object();
-                    delete clear;
-                }
-            }
-            else
-            {
-                _clear_queue = true;
-            }
-        }
-
         if(prev->_state == RUNNING)
             prev->_state = READY;
         next->_state = RUNNING;
@@ -373,10 +345,13 @@ int Thread::idle()
 
     while(_thread_count > Machine::n_cpus()) { // someone else besides idle
         if(Traits<Thread>::trace_idle) db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
+        if(!_deletion_queue.empty()) clear_delete_queue();
 
         CPU::int_enable();
         CPU::halt();
     }
+
+    if(!_deletion_queue.empty()) clear_delete_queue();
 
     CPU::int_disable();
     db<Thread>(WRN) << "The last thread has exited!" << endl;
@@ -389,6 +364,21 @@ int Thread::idle()
     }
 
     return 0;
+}
+
+void Thread::clear_delete_queue()
+{
+    db<Thread>(INF) << "Thread::clear_delete_queue(_deletion_queue=" << &_deletion_queue 
+            << ", size=" << _deletion_queue.size() 
+            << ")" << endl;
+
+    Thread * clear;
+
+    while( !_deletion_queue.empty() )
+    {
+        clear = _deletion_queue.remove()->object();
+        delete clear;
+    }
 }
 
 __END_SYS

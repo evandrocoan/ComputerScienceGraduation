@@ -105,6 +105,7 @@ public:
     void resume();
     void delete_me();
 
+    static void clear_delete_queue();
     static Thread * volatile self() { return running(); }
 
     /**
@@ -154,7 +155,6 @@ protected:
 
 private:
     static int init();
-    static bool _clear_queue;
     bool _delete_me;
 
 protected:
