@@ -47,19 +47,19 @@ public:
     Element * remove(Element * e) {
         for(unsigned int i = 0; i < SIZE; i++)
             if(_vector[i] == e) {
-        	_vector[i] = 0;
-        	_size--;
-        	return e;
+            	_vector[i] = 0;
+            	_size--;
+            	return e;
             }
         return 0;
     }
     Element * remove(const Object_Type * obj) {
         for(unsigned int i = 0; i < SIZE; i++)
             if(_vector[i]->object() == obj) {
-        	Element * e = _vector[i];
-        	_vector[i] = 0;
-        	_size--;
-        	return e;
+            	Element * e = _vector[i];
+            	_vector[i] = 0;
+            	_size--;
+            	return e;
             }
         return 0;
     }
