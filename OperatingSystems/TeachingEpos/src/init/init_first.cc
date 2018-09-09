@@ -31,6 +31,8 @@ public:
 
             db<Init, Thread>(INF) << "Created the user application: " << user_application << endl;
 
+            user_application->delete_me();
+
             Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::MAIN), &Thread::init);
         }
         else
