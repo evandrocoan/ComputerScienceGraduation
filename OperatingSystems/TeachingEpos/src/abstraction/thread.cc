@@ -377,6 +377,7 @@ void Thread::clear_delete_queue()
     while( !_deletion_queue.empty() )
     {
         clear = _deletion_queue.remove()->object();
+        db<Thread>(INF) << "Thread::clear_delete_queue(deleting=" << clear << ")" << endl;
         delete clear;
     }
 }
