@@ -14,8 +14,7 @@ __BEGIN_SYS
 // Class attributes
 volatile unsigned int Thread::_thread_count;
 Scheduler_Timer * Thread::_timer;
-bool _clear_queue;
-bool _delete_me;
+bool Thread::_clear_queue;
 
 Thread* volatile Thread::_running;
 Thread::Queue Thread::_deletion_queue;

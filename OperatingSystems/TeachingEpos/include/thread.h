@@ -154,6 +154,7 @@ protected:
 
 private:
     static int init();
+    static bool _clear_queue;
     bool _delete_me;
 
 protected:
@@ -185,7 +186,7 @@ private:
 
 
 /**
- * Colocamos _joined e _join entre _waiting e _link por que essa é a ordem na qual eles estão
+ * Colocamos _delete_me antes de _state por que essa é a ordem na qual eles estão
  * declarados na classe, e C++ solta um warning:
  *     warning: 'EPOS::S::Thread::_link' will be initialized after
  *
@@ -198,7 +199,7 @@ private:
  */
 template<typename ... Tn>
 inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
-: _state(READY), _waiting(0), _joining(0), _link(this, NORMAL)
+: _delete_me(false), _state(READY), _waiting(0), _joining(0), _link(this, NORMAL)
 {
     constructor_prolog(STACK_SIZE);
     _context = CPU::init_stack(_stack + STACK_SIZE, &__exit, entry, an ...);
@@ -207,7 +208,7 @@ inline Thread::Thread(int (* entry)(Tn ...), Tn ... an)
 
 template<typename ... Tn>
 inline Thread::Thread(const Configuration & conf, int (* entry)(Tn ...), Tn ... an)
-: _state(conf.state), _waiting(0), _joining(0), _link(this, conf.priority)
+: _delete_me(false), _state(conf.state), _waiting(0), _joining(0), _link(this, conf.priority)
 {
     constructor_prolog(conf.stack_size);
     _context = CPU::init_stack(_stack + conf.stack_size, &__exit, entry, an ...);
