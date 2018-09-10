@@ -380,15 +380,15 @@ public:
             remove_last();
         else if(e == _head)
             remove_head();
-            else {
-                Element * p = _head;
-                for(; p && p->next() && (p->next() != e); p = p->next());
-                if(p)
-                    p->next(e->next());
-                if(e == _tail)
-                    _tail = p;
-                        _size--;
-                    }
+        else {
+            Element * p = _head;
+            for(; p && p->next() && (p->next() != e); p = p->next());
+            if(p)
+                p->next(e->next());
+            if(e == _tail)
+                _tail = p;
+            _size--;
+        }
         return e;
     }
 

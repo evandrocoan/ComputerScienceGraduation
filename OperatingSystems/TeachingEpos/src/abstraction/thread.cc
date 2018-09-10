@@ -16,6 +16,7 @@ volatile unsigned int Thread::_thread_count;
 Scheduler_Timer * Thread::_timer;
 
 Thread* volatile Thread::_running;
+Thread::Queue Thread::_deletion_queue;
 Thread::Queue Thread::_ready;
 Thread::Queue Thread::_suspended;
 
@@ -66,11 +67,17 @@ Thread::~Thread()
                     << ",context={b=" << _context
                     << "," << *_context << "})" << endl;
 
+    // Precondition: no delete Thread::self()
+    assert(running() != this);
+
     if(_state != FINISHING)
         _thread_count--;
 
-    _ready.remove(this);
-    _suspended.remove(this);
+    if(_state == READY)
+        _ready.remove(&this->_link);
+
+    if(_state == SUSPENDED)
+        _suspended.remove(&this->_link);
 
     if(_waiting)
         _waiting->remove(this);
@@ -213,9 +220,21 @@ void Thread::exit(int status)
     _running = _ready.remove()->object();
     _running->_state = RUNNING;
 
+    if( prev->_delete_me )
+    {
+        db<Thread>(TRC) << "Thread::exit(_delete_me=" << prev << ",size=" << _deletion_queue.size() + 1 << ")" << endl;
+        _deletion_queue.insert(&prev->_link);
+    }
+
     dispatch(prev, _running);
 
     unlock();
+}
+
+void Thread::delete_me()
+{
+    db<Thread>(TRC) << "Thread::delete_me(this=" << this << ",size=" << _deletion_queue.size() << ")" << endl;
+    this->_delete_me = true;
 }
 
 void Thread::sleep(Queue * q)
@@ -326,10 +345,13 @@ int Thread::idle()
 
     while(_thread_count > Machine::n_cpus()) { // someone else besides idle
         if(Traits<Thread>::trace_idle) db<Thread>(TRC) << "Thread::idle(this=" << running() << ")" << endl;
+        if(!_deletion_queue.empty()) clear_delete_queue();
 
         CPU::int_enable();
         CPU::halt();
     }
+
+    if(!_deletion_queue.empty()) clear_delete_queue();
 
     CPU::int_disable();
     db<Thread>(WRN) << "The last thread has exited!" << endl;
@@ -342,6 +364,25 @@ int Thread::idle()
     }
 
     return 0;
+}
+
+bool Thread::clear_delete_queue()
+{
+    db<Thread>(INF) << "Thread::clear_delete_queue(_deletion_queue=" << &_deletion_queue 
+            << ", size=" << _deletion_queue.size() 
+            << ")" << endl;
+
+    Thread * clear;
+    bool is_cleaned = !_deletion_queue.empty();
+
+    while( !_deletion_queue.empty() )
+    {
+        clear = _deletion_queue.remove()->object();
+        db<Thread>(INF) << "Thread::clear_delete_queue(deleting=" << clear << ")" << endl;
+        delete clear;
+    }
+
+    return is_cleaned;
 }
 
 __END_SYS

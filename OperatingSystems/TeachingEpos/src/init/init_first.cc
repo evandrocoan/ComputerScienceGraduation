@@ -31,6 +31,8 @@ public:
 
             db<Init, Thread>(INF) << "Created the user application: " << user_application << endl;
 
+            user_application->delete_me();
+
             Thread::_running = new (kmalloc(sizeof(Thread))) Thread(Thread::Configuration(Thread::RUNNING, Thread::MAIN), &Thread::init);
         }
         else
@@ -48,6 +50,8 @@ public:
         db<Init, Thread>(INF) << "Dispatching the first thread: " << Thread::running() << endl;
 
         This_Thread::not_booting();
+
+        Thread::running()->delete_me();
 
         Thread::running()->_context->load();
     }
