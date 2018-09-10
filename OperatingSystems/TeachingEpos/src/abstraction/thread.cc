@@ -75,15 +75,15 @@ Thread::~Thread()
         exit(-1);
         break;
     case READY:
-        _ready.remove(this);
+        _ready.remove(&this->_link);
         _thread_count--;
         break;
     case SUSPENDED:
-        _suspended.remove(this);
+        _suspended.remove(&this->_link);
         _thread_count--;
         break;
     case WAITING:
-        _waiting->remove(this);
+        _waiting->remove(&this->_link);
         _thread_count--;
         break;
     case FINISHING: // Already called exit()
