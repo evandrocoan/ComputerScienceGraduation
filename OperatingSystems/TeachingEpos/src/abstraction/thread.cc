@@ -366,13 +366,14 @@ int Thread::idle()
     return 0;
 }
 
-void Thread::clear_delete_queue()
+bool Thread::clear_delete_queue()
 {
     db<Thread>(INF) << "Thread::clear_delete_queue(_deletion_queue=" << &_deletion_queue 
             << ", size=" << _deletion_queue.size() 
             << ")" << endl;
 
     Thread * clear;
+    bool is_cleaned = !_deletion_queue.empty();
 
     while( !_deletion_queue.empty() )
     {
@@ -380,6 +381,8 @@ void Thread::clear_delete_queue()
         db<Thread>(INF) << "Thread::clear_delete_queue(deleting=" << clear << ")" << endl;
         delete clear;
     }
+
+    return is_cleaned;
 }
 
 __END_SYS
