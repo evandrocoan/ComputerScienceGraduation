@@ -4,3 +4,9 @@
 [submodule "SoftwareTesting/Libraries"]
 	path = SoftwareTesting/Libraries
 	url = https://github.com/evandrocoan/SoftwareTestingLibraries
+[submodule "OperatingSystems/EposAsynchronousCriticalSections"]
+	path = OperatingSystems/EposAsynchronousCriticalSections
+	url = https://github.com/evandrocoan/EposAsynchronousCriticalSections
+[submodule "OperatingSystems/EposSmartObjects"]
+	path = OperatingSystems/EposSmartObjects
+	url = https://github.com/evandrocoan/EposSmartObjects
